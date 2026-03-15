@@ -1,0 +1,4 @@
+interface:
+  display_name: "FinMCP Analyst Workflows"
+  short_description: "Run practical stock analysis workflows with FinMCP tools."
+  default_prompt: "Use finmcp-analyst-workflows to analyze tickers end-to-end with price, fundamentals, earnings, analyst view, options context, and concise risk notes."

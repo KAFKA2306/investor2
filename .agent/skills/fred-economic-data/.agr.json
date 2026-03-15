@@ -1,0 +1,8 @@
+{
+  "id": "remote:github:K-Dense-AI/claude-scientific-skills/fred-economic-data",
+  "tool": "antigravity",
+  "installed_name": "fred-economic-data",
+  "type": "remote",
+  "handle": "K-Dense-AI/claude-scientific-skills/fred-economic-data",
+  "source": "github"
+}

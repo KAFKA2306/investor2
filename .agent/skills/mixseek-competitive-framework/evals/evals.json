@@ -1,0 +1,11 @@
+{
+  "skill_name": "mixseek-competitive-framework",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "LesAgent が 3 つの Qlib シグナル式を提案しました。これらを競争型フレームワークで評価してください。\n\n候補 1: formula_1 = \"Mean($close, 5) / Mean($close, 20)\"\nfactor_id: \"MOM-5-20\"\neconomic_mechanism: \"5-day vs 20-day momentum\"\n\n候補 2: formula_2 = \"-(Mean($close,1)/Mean($close,5)-1) * Rank(Std($close,5))\"\nfactor_id: \"REV-VOL\"\neconomic_mechanism: \"mean reversion × volatility rank\"\n\n候補 3: formula_3 = \"Rank(Mean($volume, 3) / Mean($volume, 20))\"\nfactor_id: \"VOL-RATIO\"\neconomic_mechanism: \"short-term vs long-term volume ratio\"\n\nバックテスト期間: 2024-01-01 から 2025-12-31\n評価対象: 日本株 300 銘柄\nリバランス頻度: 日次\n\nSharpe ratio に基づいてランキングし、勝者シグナルを CqoAgent 入力形式で出力してください。",
+      "expected_output": "勝者シグナルのオブジェクト（factor_id, formula, economic_mechanism, performance metrics）と全候補のランキング配列。出力形式は SKILL.md で定義された JSON スキーマに準拠する。",
+      "files": []
+    }
+  ]
+}

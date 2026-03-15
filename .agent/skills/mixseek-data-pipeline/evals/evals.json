@@ -1,0 +1,11 @@
+{
+  "skill_name": "mixseek-data-pipeline",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Prepare market data for backtesting with this configuration:\n\ndata_config:\n  start_date: \"2024-01-01\"\n  end_date: \"2025-12-31\"\n  universe: \"jp_stocks_300\"\n  data_sources:\n    - name: \"j_quants\"\n      fields: [\"open\", \"high\", \"low\", \"close\", \"volume\"]\n\nsplit_config:\n  train_end_date: \"2025-06-30\"\n  eval_start_date: \"2025-07-01\"\n\nLoad data, clean (handle missing/duplicates), calculate returns/volatility, split into train/eval, validate quality. Return dataset paths and quality report per SKILL.md.",
+      "expected_output": "JSON object with train_dataset (path, period, shape), eval_dataset (path, period, shape), quality_report (missing_rate, coverage, continuity checks), and metadata. Missing rate <8%, coverage >95%.",
+      "files": []
+    }
+  ]
+}

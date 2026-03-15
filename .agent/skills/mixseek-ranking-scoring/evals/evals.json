@@ -1,0 +1,11 @@
+{
+  "skill_name": "mixseek-ranking-scoring",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Rank these 3 backtested candidates by Sharpe ratio:\n\ncandidates:\n  - factor_id: \"REV-VOL\", sharpe: 2.15, ic: 0.0424, max_drawdown: 0.128\n  - factor_id: \"MOM-5-20\", sharpe: 1.45, ic: 0.0291, max_drawdown: 0.156\n  - factor_id: \"VOL-RATIO\", sharpe: 0.92, ic: 0.0118, max_drawdown: 0.198\n\nranking_config:\n  primary_metric: \"sharpe\"\n  tie_breaker: \"ic\"\n  direction: \"descending\"\n\nReturn winner object and full rankings array with deltas from winner. Output per SKILL.md JSON schema.",
+      "expected_output": "Winner: REV-VOL (rank 1, sharpe 2.15). Rankings array with all candidates ranked and delta_from_winner computed. Must include competition metadata.",
+      "files": []
+    }
+  ]
+}
