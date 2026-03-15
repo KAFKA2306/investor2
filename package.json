@@ -1,0 +1,34 @@
+{
+  "name": "finance-investor",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "lint": "bun ./node_modules/@biomejs/biome/bin/biome check src tests",
+    "format": "bun ./node_modules/@biomejs/biome/bin/biome format src tests --write",
+    "test": "bun test tests",
+    "typecheck": "tsc --noEmit",
+    "start": "bun src/index.ts",
+    "agent:unified": "bun src/agents/unified/unified_agent.ts",
+    "edinet": "bun scripts/edinet_cli.ts",
+    "jquants:warm-cache": "bun scripts/jquants_cache_warm.ts",
+    "db:migrate": "bun src/db/scripts/migrate_to_postgres.ts"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.4",
+    "@types/bun": "latest",
+    "@types/js-yaml": "^4.0.9",
+    "@types/node": "^25.3.2",
+    "tsx": "^4.21.0"
+  },
+  "dependencies": {
+    "@google/genai": "^1.43.0",
+    "@polymarket/clob-client": "^5.7.0",
+    "apache-arrow": "^21.1.0",
+    "ethers": "^6.16.0",
+    "js-yaml": "^4.1.1",
+    "pg": "^8.19.0",
+    "rxjs": "^7.8.2",
+    "zod": "^4.3.6"
+  }
+}
