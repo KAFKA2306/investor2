@@ -13,6 +13,30 @@ tasks:
     cmds:
       - bun src/io/get.ts
 
+  cache:view:
+    desc: 📊 投資家向け キャッシュ概要表示（マーケットデータ、企業情報、取引データの統計）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/commands/print_cache_statistics.ts
+
+  edinet:fetch:all:
+    desc: 🏢 EDINET全企業データ取得（過去365日分）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/commands/sync_edinet_companies.ts
+
+  jquants:fetch:latest:
+    desc: 📈 J-Quants最新データ取得（過去2年分のマーケットデータ）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/commands/sync_jquants_latest_prices.ts
+
+  dashboard:dev:
+    desc: 📊 投資家向けダッシュボード開発サーバー（Hono + HTMX + Tailwind）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun --hot src/dashboard/investor_dashboard_server.ts
+
   default:
     desc: list tasks
     cmds:
