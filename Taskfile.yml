@@ -1,0 +1,661 @@
+version: "3"
+
+vars:
+  TS_DIR: .
+  DASHBOARD_DIR: src/dashboard
+  API_PORT: '{{default "8787" .API_PORT}}'
+  UI_PORT: '{{default "5173" .UI_PORT}}'
+  VIEWER_PORT: '{{default "3400" .VIEWER_PORT}}'
+
+tasks:
+  get:all:
+    desc: run src/io/get.ts and fetch all data to cache/
+    cmds:
+      - bun src/io/get.ts
+
+  default:
+    desc: list tasks
+    cmds:
+      - task --list-all
+
+  deps:
+    desc: install TS and dashboard dependencies
+    cmds:
+      - task: deps:ts
+      - task: deps:dashboard
+
+  deps:ts:
+    desc: install TS dependencies
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun install
+
+  deps:dashboard:
+    desc: install dashboard dependencies
+    dir: "{{.DASHBOARD_DIR}}"
+    cmds:
+      - npm install
+
+  setup:
+    desc: setup
+    cmds:
+      - task: deps
+      - task: python:uv:sync
+
+  python:uv:sync:
+    desc: sync Python environment with uv
+    cmds:
+      - bash -lc 'set -euo pipefail; cache_root="${TMPDIR:-/tmp}/ts-agent-cache"; uv_cache_dir="$cache_root/uv"; mkdir -p "$cache_root" "$uv_cache_dir"; UV_CACHE_DIR="$uv_cache_dir" XDG_CACHE_HOME="$cache_root" uv sync'
+
+  qa:
+    desc: format and lint TS
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run format
+      - bun run lint
+
+  check:
+    desc: run all checks
+    cmds:
+      - task: lint
+      - task: format
+      - task: typecheck
+      - task: test
+      - bash scripts/self_healing_lint.sh
+      - task: check:python
+
+  check:python:
+    desc: Python ruff and type check
+    cmds:
+      - task: ruff:check
+      - task: ty:check
+
+  ruff:format:
+    desc: run ruff format
+    cmds:
+      - uv run ruff format .
+
+  ruff:check:
+    desc: run ruff check
+    cmds:
+      - uv run ruff check .
+
+  ty:check:
+    desc: run pyright
+    cmds:
+      - uv run pyright
+
+  allocation:run:
+    desc: run the portfolio allocator
+    cmds:
+      - uv run python main.py
+
+  qa:fast:
+    desc: lint
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run lint
+
+  format:
+    desc: format
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run format
+
+  lint:
+    desc: lint
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run lint
+
+  typecheck:
+    desc: type check TS
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run typecheck
+
+  maintenance:gc:
+    desc: "Autonomous Garbage Collector: Cleaning up unused files and rot ✨"
+    cmds:
+      - bash -lc 'find . -name "*.tmp" -mtime +1 -delete'
+      - bash -lc 'find . -type f -empty -not -path "*/.*" -delete'
+      - task: check
+
+  validate:runtime:
+    desc: runtime config validation
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run validate:runtime
+
+  test:
+    desc: test
+    cmds:
+      - task: test:ts
+
+  test:ts:
+    desc: TS unit tests
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run test
+
+  smoke:
+    desc: workflow smoke checks
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run smoke:proof-layers
+      - bun run smoke:dynamic-universe
+      - bun run smoke:verification-contract
+
+  api:
+    desc: start API
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - UQTL_API_PORT={{.API_PORT}} bun run start:api
+
+  ui:
+    desc: start UI
+    dir: "{{.DASHBOARD_DIR}}"
+    cmds:
+      - npm run dev -- --host 127.0.0.1 --port {{.UI_PORT}}
+
+  viewer:
+    desc: start claude-code-viewer
+    cmds:
+      - claude-code-viewer --port {{.VIEWER_PORT}}
+
+  view:
+    desc: start API and UI
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          cleanup() {
+            [ -n "${api_pid:-}" ] && kill "$api_pid" 2>/dev/null || true;
+            [ -n "${ui_pid:-}" ] && kill "$ui_pid" 2>/dev/null || true;
+            fuser -k {{.API_PORT}}/tcp 2>/dev/null || true;
+            fuser -k {{.UI_PORT}}/tcp 2>/dev/null || true;
+          };
+          trap cleanup EXIT INT TERM;
+          (cd {{.TS_DIR}} && UQTL_API_PORT={{.API_PORT}} bun run start:api) & api_pid=$!;
+          (cd {{.DASHBOARD_DIR}} && npm run dev -- --host 127.0.0.1 --port {{.UI_PORT}}) & ui_pid=$!;
+          wait "$ui_pid"'
+
+  llm:local:qwen:
+    desc: start local Qwen server with vLLM
+    vars:
+      LLM_PORT: '{{default "8000" .LLM_PORT}}'
+      LLM_MODEL: '{{default "/home/kafka/finance/investor/llm/qwen3.5-9b/models/cyankiwi/Qwen3.5-9B-AWQ-BF16-INT4" .LLM_MODEL}}'
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          export LD_LIBRARY_PATH=/home/kafka/finance/investor/.venv/lib/python3.12/site-packages/nvidia/nvjitlink/lib:${LD_LIBRARY_PATH:-};
+          uv run vllm serve "{{.LLM_MODEL}}" --served-model-name "Qwen/Qwen3.5-9B" --host 127.0.0.1 --port "{{.LLM_PORT}}" --max-model-len 2048 --kv-cache-dtype fp8 --gpu-memory-utilization 0.82 --enforce-eager --max-num-seqs 1 --limit-mm-per-prompt '\''{"image":0,"video":0}'\'' --disable-log-stats'
+
+  pipeline:orchestrate:
+    desc: run verification JSON and main app
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run experiments:verification-json
+      - bun run start
+
+  pipeline:verify:
+    desc: API verification
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run verify:api
+
+  pipeline:discover:
+    desc: alpha discovery
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run experiments:alpha-discovery
+
+  pipeline:benchmark:
+    desc: benchmark backtest
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run pipeline:backtest
+
+  pipeline:analyze:
+    desc: analyze factors
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run pipeline:ab
+
+  pipeline:mine:
+    desc: mine factors
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run pipeline:mine
+
+  pipeline:verification-plot:
+    desc: generate verification plot
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bash -lc 'v=$(bun -e "import { core } from \"./src/system/app_runtime_core.ts\"; console.log(core.config.paths.verification)"); rm -f "$v/standard_verification_data.json"'
+      - bun run experiments:verification-json
+      - bash -lc 'set -euo pipefail; v=$(bun -e "import { core } from \"./src/system/app_runtime_core.ts\"; console.log(core.config.paths.verification)"); cache_root="${TMPDIR:-/tmp}/ts-agent-cache"; uv_cache_dir="$cache_root/uv"; mkdir -p "$cache_root" "$uv_cache_dir"; VERIFICATION_DIR="$v" UV_CACHE_DIR="$uv_cache_dir" XDG_CACHE_HOME="$cache_root" bun run experiments:verification-plot'
+      - bash -lc 'v=$(bun -e "import { core } from \"./src/system/app_runtime_core.ts\"; console.log(core.config.paths.verification)"); test -f "$v/standard_verification_data.json"'
+      - bash -lc 'v=$(bun -e "import { core } from \"./src/system/app_runtime_core.ts\"; console.log(core.config.paths.verification)"); f=$(uv run python3 -c "import json,sys;print(json.load(open(sys.argv[1]))[\"fileName\"])" "$v/standard_verification_data.json"); test -n "$f" && test -f "$v/$f"'
+
+  pipeline:edinet-daily:
+    desc: run EDINET daily pipeline
+    dir: "{{.TS_DIR}}"
+    vars:
+      FROM: '{{default "2023-01-01" .FROM}}'
+      TO: '{{default "2025-12-31" .TO}}'
+      LIMIT: '{{default "3000" .LIMIT}}'
+      TOP_K: '{{default "5" .TOP_K}}'
+      MIN_SIGNALS: '{{default "4" .MIN_SIGNALS}}'
+      TRADE_LAG_DAYS: '{{default "2" .TRADE_LAG_DAYS}}'
+    cmds:
+      - bun run experiments:10k-features -- --from {{.FROM}} --to {{.TO}} --metadata-only --indexed-only
+      - bun run experiments:build-macro-regime
+      - bun run experiments:kb-build -- --limit {{.LIMIT}}
+      - bun run experiments:kb-backtest -- --with-gates --top-k {{.TOP_K}} --min-signals-per-day {{.MIN_SIGNALS}} --trade-lag-days {{.TRADE_LAG_DAYS}}
+
+  pipeline:edinet-io-verify:
+    desc: verify EDINET I/O
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run experiments:verify-edinet-io
+
+  pipeline:edinet-io-repair:
+    desc: repair EDINET event features and verify I/O
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run experiments:repair-edinet-event-features
+      - bun run experiments:verify-edinet-io
+
+  pipeline:edinet-daily:strict:
+    desc: run EDINET daily pipeline with I/O gate
+    vars:
+      FROM: '{{default "2023-01-01" .FROM}}'
+      TO: '{{default "2025-12-31" .TO}}'
+      LIMIT: '{{default "3000" .LIMIT}}'
+      TOP_K: '{{default "5" .TOP_K}}'
+      MIN_SIGNALS: '{{default "4" .MIN_SIGNALS}}'
+      TRADE_LAG_DAYS: '{{default "2" .TRADE_LAG_DAYS}}'
+    cmds:
+      - task: pipeline:edinet-daily
+        vars:
+          FROM: "{{.FROM}}"
+          TO: "{{.TO}}"
+          LIMIT: "{{.LIMIT}}"
+          TOP_K: "{{.TOP_K}}"
+          MIN_SIGNALS: "{{.MIN_SIGNALS}}"
+          TRADE_LAG_DAYS: "{{.TRADE_LAG_DAYS}}"
+      - task: pipeline:edinet-io-verify
+
+  pipeline:proof-layers:
+    desc: run proof layer checks
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run smoke:proof-layers
+
+  run:newalphasearch:cycle:
+    desc: run one alpha search cycle
+    cmds:
+      - task: pipeline:proof-layers
+      - task: pipeline:verify
+      - task: pipeline:orchestrate
+      - task: pipeline:discover
+      - task: pipeline:analyze
+      - task: pipeline:verification-plot
+      - task: pipeline:mine
+    # Phase 3: Playbook学習型パイプライン再設計 (2026-03-10)
+    # ✅ Step 1: フィードバックループ修復 — ADOPTED/REJECTED を Playbook に自動記録
+    # ✅ Step 2: SELECTEDシード分類 — REJECTED のみ forbidden, SELECTED は再利用可
+    # ✅ Step 3: mixseek-competitive-framework 統合 — Sharpe 上位1位を選択して処理
+
+  run:newalphasearch:
+    desc: run alpha search loop
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          cycles="${ALPHA_LOOP_MAX_CYCLES:-3}";
+          input_channel="${UQTL_INPUT_CHANNEL:-task}";
+          if [ "$cycles" -lt 1 ]; then
+            cycles=1;
+          fi;
+          ALPHA_LOOP_MAX_CYCLES="$cycles" UQTL_INPUT_CHANNEL="$input_channel" UQTL_NL_INPUT="${UQTL_NL_INPUT:-}" UQTL_NL_INPUT_FILE="${UQTL_NL_INPUT_FILE:-}" task run:newalphasearch:loop'
+
+  run:newalphasearch:nl:
+    desc: run alpha search from natural language input
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          prompt="${NL_INPUT:-${UQTL_NL_INPUT:-}}";
+          if [ -z "${prompt}" ]; then
+            echo "[run:newalphasearch:nl] NL_INPUT or UQTL_NL_INPUT is required";
+            exit 1;
+          fi;
+          UQTL_NL_INPUT="$prompt" UQTL_INPUT_CHANNEL="${UQTL_INPUT_CHANNEL:-codex}" task run:newalphasearch'
+
+  run:newalphasearch:loop:
+    desc: run alpha search loop with evidence gates
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          max_cycles="${ALPHA_LOOP_MAX_CYCLES:-3}";
+          sleep_sec="${ALPHA_LOOP_SLEEP_SEC:-0}";
+          max_failures="${ALPHA_LOOP_MAX_FAILURES:-1}";
+          input_channel="${UQTL_INPUT_CHANNEL:-task}";
+          nl_input="${UQTL_NL_INPUT:-}";
+          nl_input_file="${UQTL_NL_INPUT_FILE:-}";
+          if [ -z "$nl_input" ] && [ -n "$nl_input_file" ] && [ -f "$nl_input_file" ]; then
+            nl_input="$(cat "$nl_input_file")";
+          fi;
+          run_scope="$(date +%Y%m%dT%H%M%S)_$$";
+          seen_signatures_file="${UQTL_SEEN_SIGNATURES_FILE:-/tmp/uqtl_seen_selected_alpha_signatures_${run_scope}.txt}";
+          if [ -n "${UQTL_SEEN_SIGNATURES_FILE:-}" ]; then
+            touch "$seen_signatures_file";
+          else
+            : > "$seen_signatures_file";
+          fi;
+          if [ "$max_cycles" -lt 1 ]; then
+            max_cycles=1;
+          fi;
+          cycle=0;
+          failures=0;
+          while true; do
+            cycle=$((cycle+1));
+            run_id="uqtl_$(date +%Y%m%dT%H%M%S)_${cycle}";
+            before_count=$(find -L logs/unified -maxdepth 1 -type f -name "log_*.json" 2>/dev/null | wc -l | tr -d " ");
+            before_plot_ts=$(f=$(ls -1t ts-agent/data/VERIF_*.png 2>/dev/null | head -n1); if [ -n "$f" ]; then stat -c %Y "$f"; else echo 0; fi);
+            echo "[loop] cycle=${cycle} run_id=${run_id} channel=${input_channel} nl_input_len=${#nl_input} started_at=$(date -Is)";
+            if UQTL_RUN_ID="$run_id" UQTL_LOOP_ITERATION="$cycle" UQTL_INPUT_CHANNEL="$input_channel" UQTL_NL_INPUT="$nl_input" task run:newalphasearch:cycle; then
+              after_count=$(find -L logs/unified -maxdepth 1 -type f -name "log_*.json" 2>/dev/null | wc -l | tr -d " ");
+              after_plot_ts=$(f=$(ls -1t ts-agent/data/VERIF_*.png 2>/dev/null | head -n1); if [ -n "$f" ]; then stat -c %Y "$f"; else echo 0; fi);
+              if [ "$after_count" -le "$before_count" ]; then
+                echo "[loop] cycle=${cycle} status=fail reason=no_new_logs before=${before_count} after=${after_count}";
+                failures=$((failures+1));
+                if [ "$failures" -ge "$max_failures" ]; then
+                  echo "[loop] termination_reason=max_failures_reached";
+                  exit 1;
+                fi
+              else
+                latest_file=$(ls -1t logs/unified/log_*.json | head -n1);
+                selected_count=$(uv run python3 -c "import json,sys; j=json.load(open(sys.argv[1], encoding=\"utf-8\")); print(len((j.get(\"payload\") or {}).get(\"selected\", [])))" "$latest_file");
+                if [ "${selected_count}" -lt 1 ]; then
+                  echo "[loop] cycle=${cycle} status=fail reason=no_selected_alpha latest=${latest_file}";
+                  failures=$((failures+1));
+                  if [ "$failures" -ge "$max_failures" ]; then
+                    echo "[loop] termination_reason=max_failures_reached";
+                    exit 1;
+                  fi
+                else
+                  new_alpha_found=0;
+                  while IFS= read -r signature; do
+                    [ -z "$signature" ] && continue;
+                    if ! grep -Fxq "$signature" "$seen_signatures_file"; then
+                      new_alpha_found=1;
+                    fi
+                    echo "$signature" >> "$seen_signatures_file";
+                  done < <(uv run python3 -c "import json,sys; j=json.load(open(sys.argv[1], encoding=\"utf-8\")); payload=(j.get(\"payload\") or {}); details=payload.get(\"selectedDetails\") or []; out=[]; [out.append(\"hash:\"+str((d or {}).get(\"ideaHash\",\"\")).strip()) for d in details if str((d or {}).get(\"ideaHash\",\"\")).strip()]; [out.append(\"id:\"+str(x)) for x in (payload.get(\"selected\") or [])] if not out else None; [print(v) for v in out]" "$latest_file")
+                  sort -u "$seen_signatures_file" -o "$seen_signatures_file";
+                  if [ "$new_alpha_found" -ne 1 ]; then
+                    echo "[loop] cycle=${cycle} status=fail reason=no_new_alpha_detected latest=${latest_file}";
+                    failures=$((failures+1));
+                    if [ "$failures" -ge "$max_failures" ]; then
+                      echo "[loop] termination_reason=max_failures_reached";
+                      exit 1;
+                    fi
+                  else
+                    if [ "${after_plot_ts}" -le "${before_plot_ts}" ]; then
+                      echo "[loop] cycle=${cycle} status=fail reason=no_new_plot before_ts=${before_plot_ts} after_ts=${after_plot_ts}";
+                      failures=$((failures+1));
+                      if [ "$failures" -ge "$max_failures" ]; then
+                        echo "[loop] termination_reason=max_failures_reached";
+                        exit 1;
+                      fi
+                    else
+                      echo "[loop] cycle=${cycle} evidence=new_log before=${before_count} after=${after_count} selected=${selected_count} plot_ts=${after_plot_ts}";
+                      failures=0;
+                      echo "[loop] cycle=${cycle} status=ok";
+                    fi
+                  fi
+                fi
+              fi
+            else
+              failures=$((failures+1));
+              echo "[loop] cycle=${cycle} status=fail failures=${failures}/${max_failures}";
+              if [ "$failures" -ge "$max_failures" ]; then
+                echo "[loop] termination_reason=max_failures_reached";
+                exit 1;
+              fi
+            fi
+            if [ "$max_cycles" -gt 0 ] && [ "$cycle" -ge "$max_cycles" ]; then
+              echo "[loop] termination_reason=max_cycles_reached";
+              break;
+            fi
+            if [ "$sleep_sec" -gt 0 ]; then
+              echo "[loop] sleeping=${sleep_sec}s";
+              sleep "$sleep_sec";
+            fi
+          done'
+
+  run:
+    desc: run the main workflow
+    cmds:
+      - task: run:newalphasearch
+      - task: pipeline:orchestrate
+      - task: pipeline:benchmark
+
+  run:quick:
+    desc: run a quick workflow
+    cmds:
+      - task: pipeline:proof-layers
+      - task: pipeline:verify
+      - task: pipeline:discover
+      - task: pipeline:benchmark
+      - task: pipeline:verification-plot
+
+  jquants:warm-all:start:
+    desc: start full J-Quants cache warm
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          cd /home/kafka/finance/investor;
+          chmod +x ts-agent/scripts/jquants_warm_all_runner.sh;
+          nohup ts-agent/scripts/jquants_warm_all_runner.sh >/tmp/jquants_warm_until_finish.nohup 2>&1 &
+          echo $! > /tmp/jquants_warm_until_finish.pid;
+          echo "PID=$(cat /tmp/jquants_warm_until_finish.pid)"'
+
+  jquants:warm-all:status:
+    desc: show J-Quants warm status
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          if [ ! -f /tmp/jquants_warm_until_finish.pid ]; then
+            echo "PID file not found";
+            exit 0;
+          fi;
+          pid=$(cat /tmp/jquants_warm_until_finish.pid);
+          if ps -p "$pid" >/dev/null 2>&1; then
+            echo "runner=alive pid=$pid";
+            ps -fp "$pid";
+          else
+            echo "runner=dead pid=$pid";
+          fi;
+          if [ -f /tmp/jquants_warm_until_finish.log ]; then
+            last_line=$(tail -n 1 /tmp/jquants_warm_until_finish.log || true);
+            last_time=$(grep -Eo "[0-9]{4}-[0-9]{2}-[0-9]{2}T[^ ]+" /tmp/jquants_warm_until_finish.log | tail -n 1 || true);
+            aborted=$(grep -E "abortedByRateLimit" /tmp/jquants_warm_until_finish.log | tail -n 1 || true);
+            echo "last_log_time=${last_time:-unknown}";
+            echo "last_log_line=${last_line:-none}";
+            echo "last_aborted_line=${aborted:-unknown}";
+          else
+            echo "log=missing";
+          fi'
+
+  jquants:warm-all:log:
+    desc: show J-Quants warm logs
+    cmds:
+      - bash -lc 'tail -n 120 /tmp/jquants_warm_until_finish.log'
+
+  jquants:warm-all:stop:
+    desc: stop J-Quants warm job
+    cmds:
+      - bash -lc 'if [ -f /tmp/jquants_warm_until_finish.pid ]; then kill "$(cat /tmp/jquants_warm_until_finish.pid)" 2>/dev/null || true; rm -f /tmp/jquants_warm_until_finish.pid; echo "stopped"; else echo "PID file not found"; fi'
+
+  jquants:warm-all:guarantee:
+    desc: assert J-Quants cache hit rate
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          cd /home/kafka/finance/investor/ts-agent;
+          set -a;
+          source ./.env;
+          set +a;
+          from="${FROM:-2021-03-01}";
+          to="${TO:-$(date +%F)}";
+          max_units="${MAX_UNITS:-0}";
+          args=(--mode date --from "$from" --to "$to" --date-order desc --req-per-30sec 1 --max-rate-limit-errors 0);
+          if [ "$max_units" -gt 0 ]; then
+            args+=(--max-units "$max_units");
+          fi;
+          echo "[guarantee] first run";
+          out1=$(bun run jquants:warm-cache "${args[@]}" 2>&1);
+          printf "%s\n" "$out1" > /tmp/jquants_warm_guarantee_run1.log;
+          echo "[guarantee] second run";
+          out2=$(bun run jquants:warm-cache "${args[@]}" 2>&1);
+          printf "%s\n" "$out2" > /tmp/jquants_warm_guarantee_run2.log;
+          summary=$(printf "%s\n" "$out2" | grep "^JQUANTS_WARM_SUMMARY_JSON=" | tail -n 1 | cut -d= -f2-);
+          if [ -z "$summary" ]; then
+            echo "No summary marker found in second run output";
+            exit 1;
+          fi;
+          uv run python3 -c "import json,sys; s=json.loads(sys.argv[1]); hit=float(s.get(\"hitRatePct\",0)); aborted=bool(s.get(\"abortedByRateLimit\",True)); print(json.dumps({\"ok\": (hit>=99 and not aborted), \"hitRatePct\": hit, \"abortedByRateLimit\": aborted}, ensure_ascii=False)); raise SystemExit(0 if (hit>=99 and not aborted) else 1)" "$summary"'
+
+  db:test:
+    desc: test Postgres connection
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run db:test
+
+  db:migrate:
+    desc: migrate database
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run db:migrate
+
+  clean:logs:
+    desc: clean logs
+    cmds:
+      - rm -rf logs/unified/*
+      - rm -rf ts-agent/logs/cache/*
+
+  research:qlib:eval:
+    desc: "Test qlib formula evaluator with multi-symbol/multi-date data"
+    cmds:
+      - |
+        echo '{
+          "market_data": [
+            {"symbol":"6501.T","date":"2024-01-02","close":100,"macro_iip":0.5},
+            {"symbol":"6501.T","date":"2024-01-03","close":102,"macro_iip":0.6},
+            {"symbol":"6501.T","date":"2024-01-04","close":101,"macro_iip":0.4},
+            {"symbol":"7203.T","date":"2024-01-02","close":200,"macro_iip":0.5},
+            {"symbol":"7203.T","date":"2024-01-03","close":198,"macro_iip":0.4},
+            {"symbol":"7203.T","date":"2024-01-04","close":205,"macro_iip":0.7}
+          ],
+          "factors": [
+            {"id":"MACRO-MOM","formula":"Ref($macro_iip,1)/$close"},
+            {"id":"PRICE-REV","formula":"-1 * (Ref($close,1)/$close-1)"}
+          ]
+        }' | uv run python ts-agent/src/research/qlib_factor_eval.py
+
+  research:qlib:benchmark:
+    desc: run Qlib benchmark with LightGBM
+    vars:
+      CSV_PATH: '{{default "ts-agent/data/qlib_export.csv" .CSV_PATH}}'
+    cmds:
+      - uv run python ts-agent/src/research/qlib_benchmark.py --csv {{.CSV_PATH}}
+
+  polymarket:install:
+    desc: install Polymarket SDK dependencies
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun add @polymarket/clob-client ethers
+
+  polymarket:arb:
+    desc: run Polymarket arbitrage bot (use DRY_RUN=true for simulation)
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/agents/polymarket_arb_agent.ts
+
+  polymarket:bot:
+    desc: run the Quant-level Polymarket Trading Bot Swarm
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/agents/polymarket_trading_bot.ts
+
+
+
+  polymarket:extract-targets:
+    desc: extract real-time top profit traders from Polymarket leaderboard
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/scripts/extract_polymarket_targets.ts
+
+  polymarket:imitate:
+    desc: Real-time quantitative imitation of top Polymarket walets
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/agents/quant_imitation_agent.ts
+
+  polymarket:validate:
+    desc: validate Polymarket data via Zod schema enforcement
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bash -lc "set -a; [ -f ./.env ] && . ./.env; set +a; bun src/scripts/validate_polymarket_data.ts {{.CLI_ARGS}}"
+
+  polymarket:test:
+    desc: run polymarket agent tests
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun test src/agents/polymarket
+
+  polymarket:check:
+    desc: type check and lint polymarket code
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun ./node_modules/@biomejs/biome/bin/biome check --config ../config/biome.json src/agents/polymarket src/io/polymarket src/domain/polymarket
+
+  run:polymarket:backtest:
+    desc: run polymarket rolling backtest (90d default, 3 periods with 30d overlap)
+    dir: "{{.TS_DIR}}"
+    vars:
+      WINDOW_DAYS: '{{.WINDOW_DAYS | default "90"}}'
+      OVERLAP_DAYS: '{{.OVERLAP_DAYS | default "30"}}'
+      NUM_MARKETS: '{{.NUM_MARKETS | default "50"}}'
+    cmds:
+      - cmd: >
+          bash -lc 'set -euo pipefail;
+          window_days="${WINDOW_DAYS:-90}";
+          overlap_days="${OVERLAP_DAYS:-30}";
+          num_markets="${NUM_MARKETS:-50}";
+          echo "[run:polymarket:backtest] Starting rolling backtest...";
+          echo "  Window: ${window_days} days";
+          echo "  Overlap: ${overlap_days} days";
+          echo "  Markets: ${num_markets}";
+          bun run src/agents/polymarket/run_backtest.ts \
+            --window-days "$window_days" \
+            --overlap-days "$overlap_days" \
+            --num-markets "$num_markets"'
+
+  run:polymarket:backtest:quick:
+    desc: run quick polymarket backtest (30d, 1 period)
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun run src/agents/polymarket/run_backtest.ts \
+          --window-days 30 \
+          --overlap-days 0 \
+          --num-markets 20
+
+  run:polymarket:
+    desc: full polymarket workflow (test → check → backtest)
+    cmds:
+      - task: polymarket:test
+      - task: polymarket:check
+      - task: run:polymarket:backtest
+
