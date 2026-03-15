@@ -4,6 +4,12 @@ import { existsSync, readdirSync, statSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import yaml from "js-yaml";
 import { getScreenerData } from "./screener_data";
+import {
+	searchCompanies,
+	getCompanyList,
+	getCompanyDetail,
+	getCompanyCount,
+} from "./edinet_data";
 
 const app = new Hono();
 const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
@@ -860,42 +866,26 @@ app.get("/api/screener/sectors", async (c) => {
 });
 
 // API: Company search
-app.get("/api/company/search", async (c) => {
-	const q = c.req.query("q") || "";
+// API: Company list
+app.get("/api/company/list", async (c) => {
+	const page = parseInt(c.req.query("page") || "0", 10);
+	const limit = 20;
+	const offset = page * limit;
 
-	// Mock data
-	const sampleCompanies = [
-		{
-			code: "E00001",
-			name: "トヨタ自動車",
-			docs: 45,
-		},
-		{
-			code: "E00002",
-			name: "ソニー",
-			docs: 38,
-		},
-	];
-
-	const filtered = q
-		? sampleCompanies.filter(
-				(c) =>
-					c.code.includes(q) || c.name.toLowerCase().includes(q.toLowerCase()),
-			)
-		: sampleCompanies;
+	const companies = await getCompanyList(limit, offset);
 
 	return c.html(`
     <div class="grid gap-4">
-      ${filtered
+      ${companies
 				.map(
 					(comp) => `
         <div class="card bg-white shadow">
           <div class="card-body">
             <h3 class="card-title">${comp.name}</h3>
-            <p class="text-sm text-gray-600">EDINET コード: <code>${comp.code}</code></p>
-            <p>提出文書: <strong>${comp.docs}</strong> 件</p>
+            <p class="text-sm text-gray-600">EDINET コード: <code>${comp.edinetCode}</code></p>
+            <p>業種: <strong>${comp.sector || "不明"}</strong> | 市場: <strong>${comp.market || "不明"}</strong></p>
             <div class="card-actions justify-end">
-              <button class="btn btn-sm btn-primary">詳細</button>
+              <a href="/edinet/${comp.edinetCode}" class="btn btn-sm btn-primary">詳細</a>
             </div>
           </div>
         </div>
@@ -903,6 +893,174 @@ app.get("/api/company/search", async (c) => {
 				)
 				.join("")}
     </div>
+  `);
+});
+
+// API: Company search
+app.get("/api/company/search", async (c) => {
+	const q = c.req.query("q") || "";
+	const companies = await searchCompanies(q);
+
+	return c.html(`
+    <div class="grid gap-4">
+      ${companies
+				.map(
+					(comp) => `
+        <div class="card bg-white shadow">
+          <div class="card-body">
+            <h3 class="card-title">${comp.name}</h3>
+            <p class="text-sm text-gray-600">EDINET コード: <code>${comp.edinetCode}</code></p>
+            <p>業種: <strong>${comp.sector || "不明"}</strong> | 市場: <strong>${comp.market || "不明"}</strong></p>
+            <div class="card-actions justify-end">
+              <a href="/edinet/${comp.edinetCode}" class="btn btn-sm btn-primary">詳細</a>
+            </div>
+          </div>
+        </div>
+      `,
+				)
+				.join("")}
+    </div>
+  `);
+});
+
+// Page: Company detail
+app.get("/edinet/:code", async (c) => {
+	const code = c.req.param("code");
+	const company = await getCompanyDetail(code);
+
+	if (!company) {
+		return c.html(`
+      <div class="alert alert-error">
+        <span>企業が見つかりません: ${code}</span>
+      </div>
+    `);
+	}
+
+	return c.html(`
+    <!DOCTYPE html>
+    <html lang="ja" data-theme="light">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>${company.name} - EDINET</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+      <div class="navbar bg-base-100 shadow">
+        <div class="flex-1">
+          <a class="btn btn-ghost text-2xl">📈 投資家向けダッシュボード</a>
+        </div>
+        <div class="flex-none gap-2">
+          <a href="/" class="btn btn-sm btn-ghost">ダッシュボード</a>
+          <a href="/screener" class="btn btn-sm btn-ghost">銘柄検索</a>
+          <a href="/company" class="btn btn-sm btn-primary">企業情報</a>
+        </div>
+      </div>
+
+      <div class="max-w-7xl mx-auto p-6">
+        <div class="mb-6">
+          <a href="/company" class="btn btn-sm btn-ghost">← 企業一覧に戻る</a>
+        </div>
+
+        <!-- Company Header -->
+        <div class="card bg-white shadow mb-6">
+          <div class="card-body">
+            <h1 class="text-4xl font-bold">${company.name}</h1>
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <p class="text-sm text-gray-600">EDINET コード</p>
+                <p class="text-xl font-semibold">${company.edinetCode}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-600">業種</p>
+                <p class="text-xl font-semibold">${company.sector || "不明"}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-600">市場</p>
+                <p class="text-xl font-semibold">${company.market || "不明"}</p>
+              </div>
+              <div>
+                <p class="text-sm text-gray-600">上場日</p>
+                <p class="text-xl font-semibold">${company.listingDate || "不明"}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Intelligence Section -->
+        ${
+					company.intelligence
+						? `
+          <div class="card bg-white shadow mb-6">
+            <div class="card-body">
+              <h2 class="card-title">企業知見</h2>
+              ${
+								company.intelligence.overview
+									? `<div class="mb-4">
+                  <h3 class="text-lg font-semibold mb-2">概要</h3>
+                  <p>${company.intelligence.overview}</p>
+                </div>`
+									: ""
+							}
+              ${
+								company.intelligence.risks &&
+								company.intelligence.risks.length > 0
+									? `<div class="mb-4">
+                  <h3 class="text-lg font-semibold mb-2">リスク要因</h3>
+                  <ul class="list-disc list-inside">
+                    ${company.intelligence.risks.map((risk) => `<li>${risk}</li>`).join("")}
+                  </ul>
+                </div>`
+									: ""
+							}
+            </div>
+          </div>
+        `
+						: ""
+				}
+
+        <!-- Documents Section -->
+        ${
+					company.documents && company.documents.length > 0
+						? `
+          <div class="card bg-white shadow">
+            <div class="card-body">
+              <h2 class="card-title">提出文書（最新10件）</h2>
+              <div class="overflow-x-auto">
+                <table class="table table-compact w-full">
+                  <thead>
+                    <tr>
+                      <th>報告日</th>
+                      <th>文書区分</th>
+                      <th>様式コード</th>
+                      <th>対象期間</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${company.documents
+											.map(
+												(doc) => `
+                      <tr>
+                        <td>${doc.dateOfReport}</td>
+                        <td>${doc.secName}</td>
+                        <td><code>${doc.formCode}</code></td>
+                        <td>${doc.periodStart ? doc.periodStart + " ～ " + doc.periodEnd : "通年"}</td>
+                      </tr>
+                    `,
+											)
+											.join("")}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        `
+						: ""
+				}
+      </div>
+    </body>
+    </html>
   `);
 });
 
