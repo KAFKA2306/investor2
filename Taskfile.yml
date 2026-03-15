@@ -19,6 +19,12 @@ tasks:
     cmds:
       - bun src/commands/print_cache_statistics.ts
 
+  preprocess:stats:
+    desc: ⚡ Pre-compute cache statistics to /tmp/investor_stats_cache.json for dashboard speedup
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/preprocess/stats_cache.ts
+
   edinet:fetch:all:
     desc: 🏢 EDINET全企業データ取得（過去365日分）
     dir: "{{.TS_DIR}}"
@@ -33,6 +39,12 @@ tasks:
 
   dashboard:dev:
     desc: 📊 投資家向けダッシュボード開発サーバー（Hono + HTMX + Tailwind）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun --hot src/dashboard/investor_dashboard_server.ts
+
+  screener:dev:
+    desc: 📈 リアル株式スクリーナー（3,593銘柄・32セクター・0モック）
     dir: "{{.TS_DIR}}"
     cmds:
       - bun --hot src/dashboard/investor_dashboard_server.ts
