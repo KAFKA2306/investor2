@@ -945,6 +945,7 @@ app.get("/edinet/:code", async (c) => {
       <title>${company.name} - EDINET</title>
       <script src="https://cdn.tailwindcss.com"></script>
       <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+      <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     </head>
     <body>
       <div class="navbar bg-base-100 shadow">
@@ -1077,6 +1078,51 @@ app.get("/edinet/:code", async (c) => {
 										: ""
 								}
               </div>
+            </div>
+          </div>
+        `
+						: ""
+				}
+
+        <!-- Financial Chart Section -->
+        ${
+					company.financial
+						? `
+          <div class="card bg-white shadow mb-6">
+            <div class="card-body">
+              <h2 class="card-title">財務指標チャート</h2>
+              <div class="w-full" style="max-height: 300px;">
+                <canvas id="financialChart"></canvas>
+              </div>
+              <script>
+                const ctx = document.getElementById('financialChart').getContext('2d');
+                new Chart(ctx, {
+                  type: 'bar',
+                  data: {
+                    labels: ['EPS', 'BPS', '売上高', '純利益', '自己資本', '総資産'],
+                    datasets: [{
+                      label: '${company.financial.periodEnd || "財務指標"}',
+                      data: [
+                        ${company.financial.eps || 0},
+                        ${company.financial.bps || 0},
+                        ${(company.financial.netSales || 0) * 100},
+                        ${(company.financial.profit || 0) * 100},
+                        ${(company.financial.equity || 0) * 100},
+                        ${(company.financial.totalAssets || 0) * 100}
+                      ],
+                      backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
+                      borderRadius: 4
+                    }]
+                  },
+                  options: {
+                    indexAxis: 'x',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: true } },
+                    scales: { y: { beginAtZero: true } }
+                  }
+                });
+              </script>
             </div>
           </div>
         `
