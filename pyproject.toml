@@ -1,0 +1,69 @@
+[project]
+name = "finance-investor"
+version = "0.1.0"
+description = "Consolidated finance investor workspace"
+readme = "README.md"
+requires-python = ">= 3.12"
+dependencies = [
+    "anthropic",
+    "backoff",
+    "browser-use",
+    "ghat",
+    "langchain-openai",
+    "loguru",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "pdfminer.six",
+    "pillow",
+    "playwright",
+    "polars",
+    "protobuf",
+    "pydantic",
+    "pyqlib",
+    "pyright",
+    "python-dotenv",
+    "pyyaml",
+    "requests",
+    "ruff",
+    "setuptools",
+    "tqdm",
+    "accelerate",
+    "autoawq",
+    "compressed-tensors",
+    "huggingface-hub[cli]",
+    "torch",
+    "torchvision",
+    "transformers",
+    "vllm",
+    "chronos-forecasting",
+    "timesfm",
+    "datasets",
+    "japanize-matplotlib",
+    "matplotlib-fontja",
+    "pytest",
+    "scikit-learn",
+]
+
+[tool.uv]
+managed = true
+
+[tool.ruff]
+line-length = 120
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W", "UP", "B"]
+ignore = ["E501"] # Line too long (handled by line-length/formatter)
+
+[tool.pyright]
+include = ["ts-agent/src", "llm"]
+exclude = ["**/node_modules", "**/__pycache__", ".venv"]
+typeCheckingMode = "basic"
+pythonVersion = "3.12"
+pythonPlatform = "Linux"
+reportMissingImports = "none"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py", "*_test.py"]
