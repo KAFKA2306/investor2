@@ -1,0 +1,10 @@
+default_source = "github"
+tools = ["claude", "antigravity"]
+dependencies = [
+    {handle = "K-Dense-AI/claude-scientific-skills/fred-economic-data", type = "skill"},
+ ]
+
+[[source]]
+name = "github"
+type = "git"
+url = "https://github.com/{owner}/{repo}.git"
