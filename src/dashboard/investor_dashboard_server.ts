@@ -585,6 +585,7 @@ app.get("/screener", async (c) => {
                 <input
                   type="text"
                   id="search-input"
+                  name="search-input"
                   placeholder="検索..."
                   class="input input-bordered w-full"
                   hx-trigger="keyup changed delay:500ms"
@@ -600,6 +601,7 @@ app.get("/screener", async (c) => {
                 </label>
                 <select
                   id="sector-select"
+                  name="sector-select"
                   class="select select-bordered w-full"
                   hx-trigger="change"
                   hx-get="/api/screener"
@@ -617,6 +619,7 @@ app.get("/screener", async (c) => {
                 </label>
                 <select
                   id="market-select"
+                  name="market-select"
                   class="select select-bordered w-full"
                   hx-trigger="change"
                   hx-get="/api/screener"

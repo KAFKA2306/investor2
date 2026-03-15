@@ -1,0 +1,20 @@
+{
+  "skill_name": "frontend-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I have a stock screener with a search input and sector/market filters. When users select a filter, the API should receive the values, but nothing happens. The inputs have IDs but no name attributes. Fix this.",
+      "expected_output": "Explain why name attributes are required for HTMX, provide corrected HTML with proper name attributes on all form inputs."
+    },
+    {
+      "id": 2,
+      "prompt": "Build an email validation form with HTMX. User types email → server validates → shows error or success message inline. Include both client and server code.",
+      "expected_output": "Complete form HTML with HTMX validation, TypeScript server endpoint, error/success response patterns."
+    },
+    {
+      "id": 3,
+      "prompt": "Create a contact form with multiple validation rules: email format, phone number (digits only), message length (min 10 chars). Show errors below each field in real-time.",
+      "expected_output": "Form HTML with field-level validation, server-side validation logic, inline error display with DaisyUI styling."
+    }
+  ]
+}
