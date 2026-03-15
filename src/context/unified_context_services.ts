@@ -10,7 +10,7 @@ import {
 	BaseEventSchema,
 	type EventType,
 	type UQTLEvent,
-} from "../schemas.ts";
+} from "../shared/schemas.ts";
 import { paths } from "../system/path_registry.ts";
 
 export class ContextPlaybook {
