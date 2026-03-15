@@ -597,7 +597,7 @@ app.get("/screener", async (c) => {
                   hx-trigger="keyup changed delay:500ms"
                   hx-get="/api/screener"
                   hx-target="#results"
-                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                  hx-include="#search-input,#sector-select,#market-select"
                   hx-swap="innerHTML"
                 />
               </div>
@@ -613,7 +613,7 @@ app.get("/screener", async (c) => {
                   hx-trigger="change"
                   hx-get="/api/screener"
                   hx-target="#results"
-                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                  hx-include="#search-input,#sector-select,#market-select"
                   hx-swap="innerHTML"
                 >
                   <option value="">読み込み中...</option>
@@ -631,7 +631,7 @@ app.get("/screener", async (c) => {
                   hx-trigger="change"
                   hx-get="/api/screener"
                   hx-target="#results"
-                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                  hx-include="#search-input,#sector-select,#market-select"
                 >
                   <option value="">すべて</option>
                   <option value="プライム">プライム</option>
@@ -826,9 +826,11 @@ app.get("/api/screener", async (c) => {
 
 function renderPagination(page: number, totalPages: number): string {
 	const buttons = [];
+	const hxAttrs =
+		'hx-include="#search-input,#sector-select,#market-select" hx-swap="innerHTML"';
 	if (page > 1) {
 		buttons.push(
-			`<button hx-get="/api/screener?page=${page - 1}" hx-target="#results" class="btn btn-sm">← 前</button>`,
+			`<button hx-get="/api/screener?page=${page - 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">← 前</button>`,
 		);
 	}
 
@@ -838,13 +840,13 @@ function renderPagination(page: number, totalPages: number): string {
 		i++
 	) {
 		buttons.push(
-			`<button hx-get="/api/screener?page=${i}" hx-target="#results" class="btn btn-sm ${i === page ? "btn-primary" : ""}">${i}</button>`,
+			`<button hx-get="/api/screener?page=${i}" hx-target="#results" ${hxAttrs} class="btn btn-sm ${i === page ? "btn-primary" : ""}">${i}</button>`,
 		);
 	}
 
 	if (page < totalPages) {
 		buttons.push(
-			`<button hx-get="/api/screener?page=${page + 1}" hx-target="#results" class="btn btn-sm">次 →</button>`,
+			`<button hx-get="/api/screener?page=${page + 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">次 →</button>`,
 		);
 	}
 
