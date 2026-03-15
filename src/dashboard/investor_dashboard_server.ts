@@ -535,6 +535,62 @@ app.post("/api/refresh", async (c) => {
 
 // Stock Screener view
 app.get("/screener", async (c) => {
+	const data = await getScreenerData();
+	const pageSize = 50;
+	const pageData = data.slice(0, pageSize);
+	const totalPages = Math.ceil(data.length / pageSize);
+
+	const resultsHtml = `
+    <div class="card bg-white shadow">
+      <div class="card-body">
+        <h2 class="card-title">検索結果: ${data.length} 件（1/${totalPages}ページ）</h2>
+        <div class="overflow-x-auto">
+          <table class="table table-zebra table-sm">
+            <thead>
+              <tr>
+                <th>コード</th>
+                <th>企業名</th>
+                <th>業種</th>
+                <th>市場</th>
+                <th>株価(¥)</th>
+                <th>時価総額(億)</th>
+                <th>PER</th>
+                <th>PBR</th>
+                <th>ROE(%)</th>
+                <th>売上高(億)</th>
+                <th>営業利益率(%)</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${pageData
+								.map(
+									(stock) => `
+                <tr class="hover">
+                  <td><code class="text-sm">${stock.code}</code></td>
+                  <td><strong class="text-sm">${stock.name}</strong></td>
+                  <td><span class="badge badge-sm badge-secondary">${stock.sectorName}</span></td>
+                  <td class="text-xs">${stock.market}</td>
+                  <td>¥${stock.price.toLocaleString()}</td>
+                  <td>${stock.marketCap.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
+                  <td>${isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
+                  <td>${isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
+                  <td class="${stock.roe > 0 ? "text-green-600" : "text-red-600"}">
+                    ${isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
+                  </td>
+                  <td>${stock.netSales.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
+                  <td>${isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
+                </tr>
+              `,
+								)
+								.join("")}
+            </tbody>
+          </table>
+        </div>
+        ${totalPages > 1 ? renderPagination(1, totalPages) : ""}
+      </div>
+    </div>
+  `;
+
 	return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
@@ -643,7 +699,7 @@ app.get("/screener", async (c) => {
               <button
                 hx-get="/api/screener"
                 hx-target="#results"
-                hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                hx-include="#search-input,#sector-select,#market-select"
                 hx-swap="innerHTML"
                 class="btn btn-primary w-full mt-4"
               >
@@ -654,10 +710,8 @@ app.get("/screener", async (c) => {
 
           <!-- Results Table -->
           <div class="lg:col-span-3">
-            <div id="results" hx-trigger="load" hx-get="/api/screener" hx-swap="innerHTML">
-              <div class="flex justify-center items-center h-64">
-                <div class="loading loading-spinner loading-lg"></div>
-              </div>
+            <div id="results">
+              ${resultsHtml}
             </div>
           </div>
         </div>
