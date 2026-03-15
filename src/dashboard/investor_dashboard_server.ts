@@ -988,32 +988,95 @@ app.get("/edinet/:code", async (c) => {
           </div>
         </div>
 
-        <!-- Intelligence Section -->
+        <!-- Governance Section -->
         ${
-					company.intelligence
+					company.governance
 						? `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
-              <h2 class="card-title">企業知見</h2>
-              ${
-								company.intelligence.overview
-									? `<div class="mb-4">
-                  <h3 class="text-lg font-semibold mb-2">概要</h3>
-                  <p>${company.intelligence.overview}</p>
+              <h2 class="card-title">ガバナンス</h2>
+              <div class="grid grid-cols-1 gap-4">
+                ${Object.entries(company.governance)
+									.slice(0, 5)
+									.map(([key, value]) => {
+										const displayKey = key.replace(/([A-Z])/g, " $1").trim();
+										return `<div>
+                  <p class="text-sm text-gray-600">${displayKey}</p>
+                  <p class="font-semibold">${String(value).slice(0, 100)}</p>
+                </div>`;
+									})
+									.join("")}
+              </div>
+            </div>
+          </div>
+        `
+						: ""
+				}
+
+        <!-- Financial Section -->
+        ${
+					company.financial
+						? `
+          <div class="card bg-white shadow mb-6">
+            <div class="card-body">
+              <h2 class="card-title">財務概要</h2>
+              <p class="text-sm text-gray-600 mb-4">期末: ${company.financial.periodEnd || "不明"}</p>
+              <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                ${
+									company.financial.eps !== null &&
+									company.financial.eps !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">EPS</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.eps === "number" ? company.financial.eps.toFixed(2) : "N/A"}</p>
                 </div>`
-									: ""
-							}
-              ${
-								company.intelligence.risks &&
-								company.intelligence.risks.length > 0
-									? `<div class="mb-4">
-                  <h3 class="text-lg font-semibold mb-2">リスク要因</h3>
-                  <ul class="list-disc list-inside">
-                    ${company.intelligence.risks.map((risk) => `<li>${risk}</li>`).join("")}
-                  </ul>
+										: ""
+								}
+                ${
+									company.financial.bps !== null &&
+									company.financial.bps !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">BPS</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.bps === "number" ? company.financial.bps.toFixed(2) : "N/A"}</p>
                 </div>`
-									: ""
-							}
+										: ""
+								}
+                ${
+									company.financial.netSales !== null &&
+									company.financial.netSales !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">売上高</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.netSales === "number" ? company.financial.netSales.toFixed(1) : "N/A"}億</p>
+                </div>`
+										: ""
+								}
+                ${
+									company.financial.profit !== null &&
+									company.financial.profit !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">純利益</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.profit === "number" ? company.financial.profit.toFixed(1) : "N/A"}億</p>
+                </div>`
+										: ""
+								}
+                ${
+									company.financial.equity !== null &&
+									company.financial.equity !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">自己資本</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.equity === "number" ? company.financial.equity.toFixed(1) : "N/A"}億</p>
+                </div>`
+										: ""
+								}
+                ${
+									company.financial.totalAssets !== null &&
+									company.financial.totalAssets !== undefined
+										? `<div>
+                  <p class="text-xs text-gray-600">総資産</p>
+                  <p class="text-lg font-bold">¥${typeof company.financial.totalAssets === "number" ? company.financial.totalAssets.toFixed(1) : "N/A"}億</p>
+                </div>`
+										: ""
+								}
+              </div>
             </div>
           </div>
         `
@@ -1022,42 +1085,21 @@ app.get("/edinet/:code", async (c) => {
 
         <!-- Documents Section -->
         ${
-					company.documents && company.documents.length > 0
+					company.documentCount && company.documentCount > 0
 						? `
           <div class="card bg-white shadow">
             <div class="card-body">
-              <h2 class="card-title">提出文書（最新10件）</h2>
-              <div class="overflow-x-auto">
-                <table class="table table-compact w-full">
-                  <thead>
-                    <tr>
-                      <th>報告日</th>
-                      <th>文書区分</th>
-                      <th>様式コード</th>
-                      <th>対象期間</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    ${company.documents
-											.map(
-												(doc) => `
-                      <tr>
-                        <td>${doc.dateOfReport}</td>
-                        <td>${doc.secName}</td>
-                        <td><code>${doc.formCode}</code></td>
-                        <td>${doc.periodStart ? doc.periodStart + " ～ " + doc.periodEnd : "通年"}</td>
-                      </tr>
-                    `,
-											)
-											.join("")}
-                  </tbody>
-                </table>
+              <h2 class="card-title">提出文書</h2>
+              <p class="text-sm text-gray-600 mb-4"><strong>${company.documentCount}</strong> 件の提出文書があります</p>
+              <div class="alert alert-info">
+                <span>EDINET 提出文書は /edinet/docs ディレクトリに保存されています</span>
               </div>
             </div>
           </div>
         `
 						: ""
 				}
+
       </div>
     </body>
     </html>
