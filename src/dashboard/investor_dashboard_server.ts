@@ -598,6 +598,7 @@ app.get("/screener", async (c) => {
                   hx-get="/api/screener"
                   hx-target="#results"
                   hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                  hx-swap="innerHTML"
                 />
               </div>
 
@@ -643,6 +644,7 @@ app.get("/screener", async (c) => {
                 hx-get="/api/screener"
                 hx-target="#results"
                 hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                hx-swap="innerHTML"
                 class="btn btn-primary w-full mt-4"
               >
                 リセット
@@ -652,7 +654,7 @@ app.get("/screener", async (c) => {
 
           <!-- Results Table -->
           <div class="lg:col-span-3">
-            <div id="results" hx-trigger="load" hx-get="/api/screener">
+            <div id="results" hx-trigger="load" hx-get="/api/screener" hx-swap="innerHTML">
               <div class="flex justify-center items-center h-64">
                 <div class="loading loading-spinner loading-lg"></div>
               </div>
@@ -708,11 +710,13 @@ app.get("/company", async (c) => {
                 hx-trigger="keyup changed delay:500ms"
                 hx-get="/api/company/search?q={value}"
                 hx-target="#company-results"
+                hx-swap="innerHTML"
                 class="input input-bordered w-full"
               />
               <button
                 hx-get="/api/company/list"
                 hx-target="#company-results"
+                hx-swap="innerHTML"
                 class="btn btn-primary"
               >
                 検索
