@@ -1,0 +1,26 @@
+# 🐾 Claude Code への「見ちゃダメ！」リスト 🐾
+
+# フォルダたち
+node_modules/
+dist/
+build/
+.git/
+.vscode/
+.idea/
+
+# ロックファイル (超重量級！)
+uv.lock
+*-lock.yaml
+bun.lock
+package-lock.json
+
+# ts-agent 関連の重たいデータ
+ts-agent/data/
+ts-agent/cache/
+*.log
+*.sqlite
+
+# その他
+.env*
+temp/
+tmp/

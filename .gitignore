@@ -1,0 +1,55 @@
+# Dependency directories
+node_modules/
+.venv/
+venv/
+
+# Build and output directories
+build/
+dist/
+wheels/
+
+# Python cache and compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.ruff_cache/
+
+# General caches and temporary files
+.cache/
+.bun/
+.worktrees/
+*.sqlite
+*.sqlite3
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+copcon/
+gha-creds-*.json
+
+# Logs, artifacts, and agent outputs
+logs/
+.agent/logs/
+artifacts/
+artifact/
+.gemini/
+.claude/
+.serena/
+
+# Data and models
+**/data/
+edinet2dataset/edinet_corpus/
+llm/*/models/
+llm/*/downloads/
+*.safetensors
+*.bin
+*.pt
+*.gguf
+*.awq
+
+# OS & Editor
+.vscode/
+.idea/
+.DS_Store

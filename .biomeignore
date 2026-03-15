@@ -1,0 +1,8 @@
+dist
+**/dist/**
+node_modules
+**/node_modules/**
+.venv
+**/.venv/**
+src/experiments/foundation_models/.venv
+src/model_registry/.venv
