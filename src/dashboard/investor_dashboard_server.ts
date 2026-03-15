@@ -3,6 +3,7 @@ import { serveStatic } from "hono/bun";
 import { existsSync, readdirSync, statSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import yaml from "js-yaml";
+import { getScreenerData } from "./screener_data";
 
 const app = new Hono();
 const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
@@ -29,6 +30,12 @@ interface CacheStatistics {
 	lastUpdated: string;
 	totalSizeGb: number;
 }
+
+let cachedStats: CacheStatistics | null = null;
+let lastStatsUpdate = 0;
+const STATS_CACHE_TTL = 30000;
+const JSON_CACHE_TTL = 3_600_000;
+const JSON_CACHE_PATH = "/tmp/investor_stats_cache.json";
 
 function formatBytes(bytes: number): string {
 	if (bytes === 0) return "0 B";
@@ -134,45 +141,25 @@ function getEdinetStats(): CacheStatistics["edinet"] {
 	let documentCount = 0;
 
 	try {
-		const cacheDbPath = resolve(CACHE_ROOT, "cache/fundamental/edinet.sqlite");
-		if (existsSync(cacheDbPath)) {
-			const cacheContent = readFileSync(cacheDbPath, "utf-8");
-			const matches = cacheContent.match(/"edinetCode":"[^"]+"/g) || [];
-			const uniqueCodes = new Set(
-				matches.map((m) => m.match(/"([^"]+)"$/)?.[1]),
-			);
-			companyCount = Math.max(uniqueCodes.size, 0);
+		if (existsSync(edinetDir)) {
+			const items = readdirSync(edinetDir);
+			companyCount = items.filter((item) => !item.startsWith(".")).length;
 
-			const docMatches = cacheContent.match(/"docID":"[^"]+"/g) || [];
-			documentCount = new Set(docMatches.map((m) => m.match(/"([^"]+)"$/)?.[1]))
-				.size;
-		}
-	} catch {
-		// Fallback to directory scan
-	}
-
-	if (companyCount === 0) {
-		try {
-			if (existsSync(edinetDir)) {
-				const items = readdirSync(edinetDir);
-				companyCount = items.filter((item) => !item.startsWith(".")).length;
-
-				for (const company of items) {
-					const companyPath = resolve(edinetDir, company);
-					try {
-						const stat = statSync(companyPath);
-						if (stat.isDirectory()) {
-							const docs = readdirSync(companyPath);
-							documentCount += docs.filter((d) => !d.startsWith(".")).length;
-						}
-					} catch {
-						// continue
+			for (const company of items) {
+				const companyPath = resolve(edinetDir, company);
+				try {
+					const stat = statSync(companyPath);
+					if (stat.isDirectory()) {
+						const docs = readdirSync(companyPath);
+						documentCount += docs.filter((d) => !d.startsWith(".")).length;
 					}
+				} catch {
+					// continue
 				}
 			}
-		} catch {
-			// continue
 		}
+	} catch {
+		// continue
 	}
 
 	const sizeGb = getDirectorySize(edinetDir) / (1024 * 1024 * 1024);
@@ -216,11 +203,9 @@ function getLastUpdated(): string {
 
 	for (const dir of dirs) {
 		try {
-			if (existsSync(dir)) {
-				const stat = statSync(dir);
-				if (stat.mtimeMs > latestTime) {
-					latestTime = stat.mtimeMs;
-				}
+			const stat = statSync(dir);
+			if (stat.mtimeMs > latestTime) {
+				latestTime = stat.mtimeMs;
 			}
 		} catch {
 			// continue
@@ -230,14 +215,146 @@ function getLastUpdated(): string {
 	return latestTime > 0 ? new Date(latestTime).toISOString() : "Never updated";
 }
 
-function getStats(): CacheStatistics {
-	return {
-		marketData: getMarketDataStats(),
-		edinet: getEdinetStats(),
-		sqlite: getSqliteStats(),
-		lastUpdated: getLastUpdated(),
-		totalSizeGb: 0,
-	};
+async function getStats(): Promise<CacheStatistics> {
+	const now = Date.now();
+
+	// L1: in-memory cache (30s TTL)
+	if (cachedStats && now - lastStatsUpdate < STATS_CACHE_TTL) {
+		return cachedStats;
+	}
+
+	// L2: pre-computed JSON file (1h TTL)
+	if (existsSync(JSON_CACHE_PATH)) {
+		try {
+			const fileData = JSON.parse(
+				readFileSync(JSON_CACHE_PATH, "utf-8"),
+			) as CacheStatistics & { generatedAt?: number };
+			const fileAge = now - (fileData.generatedAt || 0);
+			if (fileAge < JSON_CACHE_TTL) {
+				cachedStats = fileData;
+				lastStatsUpdate = now;
+				return cachedStats;
+			}
+		} catch {
+			// JSON file corrupted or unreadable, fall through to subprocess
+		}
+	}
+
+	// L3: subprocess fallback (current behavior, ~5s)
+	try {
+		const proc = Bun.spawn(
+			["bun", "run", "src/commands/print_cache_statistics.ts"],
+			{
+				cwd: process.cwd(),
+				stdio: ["inherit", "pipe", "inherit"],
+			},
+		);
+
+		const output = await new Response(proc.stdout).text();
+
+		const parseNumber = (text: string, pattern: string): number => {
+			const match = text.match(pattern);
+			if (!match) return 0;
+			return parseInt(match[1]!.replace(/,/g, ""), 10);
+		};
+
+		const parseFloat_ = (text: string, pattern: string): number => {
+			const match = text.match(pattern);
+			if (!match) return 0;
+			return parseFloat(match[1]!);
+		};
+
+		const parseDate = (
+			text: string,
+			pattern: string,
+		): { start: string; end: string } | null => {
+			const match = text.match(pattern);
+			if (!match) return null;
+			const [start, end] = match[1]!.split(" ～ ");
+			return { start: start.trim(), end: end?.trim() || "" };
+		};
+
+		cachedStats = {
+			marketData: {
+				stocks: parseNumber(output, /📈 カバー銘柄:\s+([\d,]+)/),
+				priceRecords: parseNumber(output, /📊 価格データ:\s+([\d.]+)k/),
+				finRecords: parseNumber(output, /💼 財務データ:\s+([\d.]+)k/),
+				dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/),
+				sizeGb:
+					parseFloat_(
+						output,
+						/マーケットデータ[^容量]*容量:\s+([\d.]+)\s*[KMGT]B/,
+					) || 0,
+			},
+			edinet: {
+				companyCount: parseNumber(output, /🏛️\s+カバー企業:\s+([\d,]+)/),
+				documentCount: parseNumber(output, /📄 企業文書:\s+([\d,]+)/),
+				sizeGb:
+					parseFloat_(
+						output,
+						/企業情報 \([^)]*\)[^容量]*容量:\s+([\d.]+)\s*([KMGT]B)/,
+					) || 0,
+			},
+			sqlite: {
+				market: parseFloat_(
+					output,
+					/📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+				)
+					? {
+							sizeGb:
+								parseFloat_(
+									output,
+									/📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+								) / 1024,
+						}
+					: null,
+				edinet: parseFloat_(
+					output,
+					/🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+				)
+					? {
+							sizeGb:
+								parseFloat_(
+									output,
+									/🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+								) / 1024,
+						}
+					: null,
+				yahoocache: parseFloat_(
+					output,
+					/🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+				)
+					? {
+							sizeGb:
+								parseFloat_(
+									output,
+									/🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+								) / 1024,
+						}
+					: null,
+			},
+			lastUpdated: new Date().toISOString(),
+			totalSizeGb: parseFloat_(output, /🎯 総容量:\s+([\d.]+)\s*GB/),
+		};
+		lastStatsUpdate = now;
+	} catch (error) {
+		console.error("Failed to get stats:", error);
+		cachedStats = {
+			marketData: {
+				stocks: 0,
+				priceRecords: 0,
+				finRecords: 0,
+				dateRange: null,
+				sizeGb: 0,
+			},
+			edinet: { companyCount: 0, documentCount: 0, sizeGb: 0 },
+			sqlite: { market: null, edinet: null, yahoocache: null },
+			lastUpdated: "Error",
+			totalSizeGb: 0,
+		};
+	}
+
+	return cachedStats;
 }
 
 // Render stats as HTML
@@ -338,7 +455,7 @@ function renderStatsCards(stats: CacheStatistics): string {
 
 // Dashboard page
 app.get("/", async (c) => {
-	const stats = getStats();
+	const stats = await getStats();
 	return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
@@ -378,18 +495,20 @@ app.get("/", async (c) => {
 
 // API: Get stats
 app.get("/api/stats", async (c) => {
-	const stats = getStats();
+	const stats = await getStats();
 	return c.html(renderStatsCards(stats));
 });
 
 // API: Refresh cache (trigger task get:all)
 app.post("/api/refresh", async (c) => {
 	try {
+		cachedStats = null;
+		lastStatsUpdate = 0;
 		const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
 			cwd: process.cwd(),
 		});
 		const output = await new Response(proc.stdout).text();
-		const stats = getStats();
+		const stats = await getStats();
 
 		return c.html(`
       <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
@@ -410,9 +529,6 @@ app.post("/api/refresh", async (c) => {
 
 // Stock Screener view
 app.get("/screener", async (c) => {
-	const marketData = getMarketDataStats();
-	const stats = getStats();
-
 	return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
@@ -423,6 +539,23 @@ app.get("/screener", async (c) => {
       <script src="https://cdn.tailwindcss.com"></script>
       <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
       <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+      <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+          const select = document.getElementById('sector-select');
+          try {
+            const res = await fetch('/api/screener/sectors');
+            const sectors = await res.json();
+            let html = '<option value="">すべて</option>';
+            for (const s of sectors) {
+              html += '<option value="' + s.code + '">' + s.name + '</option>';
+            }
+            select.innerHTML = html;
+          } catch (e) {
+            console.error('Failed to load sectors:', e);
+            select.innerHTML = '<option value="">エラー</option>';
+          }
+        });
+      </script>
     </head>
     <body>
       <div class="navbar bg-base-100 shadow">
@@ -439,41 +572,83 @@ app.get("/screener", async (c) => {
       <div class="max-w-7xl mx-auto p-6">
         <h1 class="text-4xl font-bold mb-6">📊 銘柄スクリーニング</h1>
 
-        <!-- Filter Form -->
-        <div class="card bg-white shadow mb-6">
-          <div class="card-body">
-            <h2 class="card-title">検索条件</h2>
-            <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
-              <input
-                type="text"
-                placeholder="銘柄コード or 企業名"
-                id="search"
-                hx-trigger="keyup changed delay:500ms"
-                hx-get="/api/screener?q={value}"
-                hx-target="#results"
-                class="input input-bordered w-full"
-              />
-              <select class="select select-bordered">
-                <option>業種: すべて</option>
-                <option>電機</option>
-                <option>化学</option>
-                <option>自動車</option>
-              </select>
-              <input type="number" placeholder="時価総額(億)" class="input input-bordered" />
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          <!-- Filter Sidebar -->
+          <div class="card bg-white shadow h-fit">
+            <div class="card-body">
+              <h2 class="card-title text-lg">フィルター</h2>
+
+              <div class="form-control">
+                <label class="label">
+                  <span class="label-text">銘柄コード/企業名</span>
+                </label>
+                <input
+                  type="text"
+                  id="search-input"
+                  placeholder="検索..."
+                  class="input input-bordered w-full"
+                  hx-trigger="keyup changed delay:500ms"
+                  hx-get="/api/screener"
+                  hx-target="#results"
+                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                />
+              </div>
+
+              <div class="form-control mt-4">
+                <label class="label">
+                  <span class="label-text">業種</span>
+                </label>
+                <select
+                  id="sector-select"
+                  class="select select-bordered w-full"
+                  hx-trigger="change"
+                  hx-get="/api/screener"
+                  hx-target="#results"
+                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                  hx-swap="innerHTML"
+                >
+                  <option value="">読み込み中...</option>
+                </select>
+              </div>
+
+              <div class="form-control mt-4">
+                <label class="label">
+                  <span class="label-text">市場</span>
+                </label>
+                <select
+                  id="market-select"
+                  class="select select-bordered w-full"
+                  hx-trigger="change"
+                  hx-get="/api/screener"
+                  hx-target="#results"
+                  hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                >
+                  <option value="">すべて</option>
+                  <option value="プライム">プライム</option>
+                  <option value="スタンダード">スタンダード</option>
+                  <option value="グロース">グロース</option>
+                </select>
+              </div>
+
               <button
-                hx-get="/api/screener?mode=all"
+                hx-get="/api/screener"
                 hx-target="#results"
-                class="btn btn-primary"
+                hx-include="[id='search-input'],[id='sector-select'],[id='market-select']"
+                class="btn btn-primary w-full mt-4"
               >
-                検索
+                リセット
               </button>
             </div>
           </div>
-        </div>
 
-        <!-- Results Table -->
-        <div id="results" hx-trigger="load" hx-get="/api/screener">
-          <div class="loading loading-spinner loading-lg"></div>
+          <!-- Results Table -->
+          <div class="lg:col-span-3">
+            <div id="results" hx-trigger="load" hx-get="/api/screener">
+              <div class="flex justify-center items-center h-64">
+                <div class="loading loading-spinner loading-lg"></div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </body>
@@ -483,7 +658,8 @@ app.get("/screener", async (c) => {
 
 // Company Finder view
 app.get("/company", async (c) => {
-	const edinet = getEdinetStats();
+	const stats = await getStats();
+	const edinet = stats.edinet;
 
 	return c.html(`
     <!DOCTYPE html>
@@ -550,76 +726,77 @@ app.get("/company", async (c) => {
 
 // API: Stock Screener results
 app.get("/api/screener", async (c) => {
-	const q = c.req.query("q") || "";
-	const marketData = getMarketDataStats();
+	const data = await getScreenerData();
+	const q = c.req.query("search-input") || "";
+	const sector = c.req.query("sector-select") || "";
+	const market = c.req.query("market-select") || "";
 
-	// Mock data - 実装時は実際のデータを返す
-	const sampleStocks = [
-		{
-			code: "7203",
-			name: "トヨタ自動車",
-			sector: "自動車",
-			price: 3250,
-			marketcap: 45000,
-			per: 12.5,
-			roe: 15.2,
-		},
-		{
-			code: "6758",
-			name: "ソニーグループ",
-			sector: "電機",
-			price: 13820,
-			marketcap: 18000,
-			per: 18.3,
-			roe: 22.1,
-		},
-		{
-			code: "9984",
-			name: "ソフトバンクグループ",
-			sector: "通信",
-			price: 3945,
-			marketcap: 22000,
-			per: 11.2,
-			roe: 25.4,
-		},
-	];
+	let filtered = data;
 
-	const filtered = q
-		? sampleStocks.filter(
-				(s) =>
-					s.code.includes(q) || s.name.toLowerCase().includes(q.toLowerCase()),
-			)
-		: sampleStocks;
+	if (q) {
+		const lower = q.toLowerCase();
+		filtered = filtered.filter(
+			(s) =>
+				s.code.includes(q) ||
+				s.name.toLowerCase().includes(lower) ||
+				s.sectorName.toLowerCase().includes(lower),
+		);
+	}
+
+	if (sector) {
+		filtered = filtered.filter((s) => s.sectorCode === sector);
+	}
+
+	if (market) {
+		filtered = filtered.filter((s) => s.market === market);
+	}
+
+	const pageSize = 50;
+	const page = parseInt(c.req.query("page") || "1", 10);
+	const start = (page - 1) * pageSize;
+	const end = start + pageSize;
+	const pageData = filtered.slice(start, end);
+	const totalPages = Math.ceil(filtered.length / pageSize);
 
 	return c.html(`
     <div class="card bg-white shadow">
       <div class="card-body">
-        <h2 class="card-title">検索結果: ${filtered.length} 件</h2>
+        <h2 class="card-title">検索結果: ${filtered.length} 件（${page}/${totalPages}ページ）</h2>
         <div class="overflow-x-auto">
-          <table class="table table-zebra">
+          <table class="table table-zebra table-sm">
             <thead>
               <tr>
                 <th>コード</th>
                 <th>企業名</th>
                 <th>業種</th>
-                <th>株価</th>
+                <th>市場</th>
+                <th>株価(¥)</th>
                 <th>時価総額(億)</th>
                 <th>PER</th>
-                <th>ROE</th>
+                <th>PBR</th>
+                <th>ROE(%)</th>
+                <th>売上高(億)</th>
+                <th>営業利益率(%)</th>
               </tr>
             </thead>
             <tbody>
-              ${filtered
+              ${pageData
 								.map(
 									(stock) => `
                 <tr class="hover">
-                  <td><code>${stock.code}</code></td>
-                  <td><strong>${stock.name}</strong></td>
-                  <td><span class="badge badge-secondary">${stock.sector}</span></td>
+                  <td><code class="text-sm">${stock.code}</code></td>
+                  <td><strong class="text-sm">${stock.name}</strong></td>
+                  <td><span class="badge badge-sm badge-secondary">${stock.sectorName}</span></td>
+                  <td class="text-xs">${stock.market}</td>
                   <td>¥${stock.price.toLocaleString()}</td>
-                  <td>${stock.marketcap.toLocaleString()}</td>
-                  <td>${stock.per.toFixed(1)}x</td>
-                  <td class="text-green-600">${stock.roe.toFixed(1)}%</td>
+                  <td>${stock.marketCap.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
+                  <td>${isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
+                  <td>${isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
+                  <td class="${stock.roe > 0 ? "text-green-600" : "text-red-600"}">
+                    ${isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
+                  </td>
+                  <td>${stock.netSales.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
+                  <td>${isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
                 </tr>
               `,
 								)
@@ -627,9 +804,56 @@ app.get("/api/screener", async (c) => {
             </tbody>
           </table>
         </div>
+
+        ${totalPages > 1 ? renderPagination(page, totalPages) : ""}
       </div>
     </div>
   `);
+});
+
+function renderPagination(page: number, totalPages: number): string {
+	const buttons = [];
+	if (page > 1) {
+		buttons.push(
+			`<button hx-get="/api/screener?page=${page - 1}" hx-target="#results" class="btn btn-sm">← 前</button>`,
+		);
+	}
+
+	for (
+		let i = Math.max(1, page - 2);
+		i <= Math.min(totalPages, page + 2);
+		i++
+	) {
+		buttons.push(
+			`<button hx-get="/api/screener?page=${i}" hx-target="#results" class="btn btn-sm ${i === page ? "btn-primary" : ""}">${i}</button>`,
+		);
+	}
+
+	if (page < totalPages) {
+		buttons.push(
+			`<button hx-get="/api/screener?page=${page + 1}" hx-target="#results" class="btn btn-sm">次 →</button>`,
+		);
+	}
+
+	return `<div class="flex justify-center gap-2 mt-4">${buttons.join("")}</div>`;
+}
+
+// API: Get all sectors
+app.get("/api/screener/sectors", async (c) => {
+	const data = await getScreenerData();
+	const sectorsMap = new Map<string, string>(); // sectorCode -> sectorName
+
+	for (const stock of data) {
+		if (!sectorsMap.has(stock.sectorCode)) {
+			sectorsMap.set(stock.sectorCode, stock.sectorName);
+		}
+	}
+
+	const sectors = Array.from(sectorsMap.entries())
+		.map(([code, name]) => ({ code, name }))
+		.sort((a, b) => a.name.localeCompare(b.name));
+
+	return c.json(sectors);
 });
 
 // API: Company search
