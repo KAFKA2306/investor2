@@ -1,7 +1,10 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import yaml from "js-yaml";
+import { ConfigSchema } from "../shared/config_schema";
 
-const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
 const apiKey = process.env.JQUANTS_API_KEY?.trim();
 
 interface JquantsBar {
@@ -28,9 +31,9 @@ interface JquantsResponse {
 }
 
 async function main() {
-	console.log("\n" + "━".repeat(70));
+	console.log(`\n${"━".repeat(70)}`);
 	console.log("📈 J-Quants 最新マーケットデータ取得");
-	console.log("━".repeat(70) + "\n");
+	console.log(`${"━".repeat(70)}\n`);
 
 	if (!apiKey) {
 		console.error("❌ エラー: JQUANTS_API_KEY 環境変数が設定されていません");
@@ -91,7 +94,7 @@ async function main() {
 				// Handle rate limit (429)
 				if (response.status === 429) {
 					if (retryCount < maxRetries) {
-						const waitTime = Math.pow(2, retryCount) * 5000; // 5s, 10s, 20s
+						const waitTime = 2 ** retryCount * 5000; // 5s, 10s, 20s
 						console.warn(
 							`⚠️  ${code}: レート制限 (429) - ${waitTime}ms 待機中...`,
 						);
@@ -140,7 +143,7 @@ async function main() {
 
 			// Rate limit: 100ms per stock, plus exponential backoff for 429
 			await new Promise((r) => setTimeout(r, 500));
-		} catch (error) {
+		} catch (_error) {
 			console.warn(`⚠️  ${code}: エラー発生`);
 		}
 	}
@@ -168,7 +171,7 @@ async function main() {
 	console.log(`  • バーデータ: ${allBars.length.toLocaleString()} 件`);
 	console.log(`  • 期間: ${fromDate} ～ ${toDate}`);
 	console.log(`  • 保存先: ${csvPath}`);
-	console.log("━".repeat(70) + "\n");
+	console.log(`${"━".repeat(70)}\n`);
 }
 
 main().catch(console.error);

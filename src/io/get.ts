@@ -2,8 +2,11 @@ import { Database } from "bun:sqlite";
 import { mkdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import yaml from "js-yaml";
+import { ConfigSchema } from "../shared/config_schema";
 
-const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
 
 const dbPaths = [
 	config.paths.cacheMarketsPolymarket,

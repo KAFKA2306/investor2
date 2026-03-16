@@ -1,18 +1,16 @@
-import { Hono } from "hono";
-import { serveStatic } from "hono/bun";
-import { existsSync, readdirSync, statSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
+import { Hono } from "hono";
 import yaml from "js-yaml";
-import { getScreenerData } from "./screener_data";
 import {
-	searchCompanies,
-	getCompanyList,
 	getCompanyDetail,
-	getCompanyCount,
+	getCompanyList,
+	searchCompanies,
 } from "./edinet_data";
+import { getScreenerData } from "./screener_data";
 
 const app = new Hono();
-const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
+const _config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
 const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
 
 interface CacheStatistics {
@@ -48,7 +46,7 @@ function formatBytes(bytes: number): string {
 	const k = 1024;
 	const sizes = ["B", "KB", "MB", "GB", "TB"];
 	const i = Math.floor(Math.log(bytes) / Math.log(k));
-	return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+	return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
 function getFileSize(path: string): number {
@@ -81,7 +79,7 @@ function getDirectorySize(dirPath: string): number {
 	}
 }
 
-function getMarketDataStats(): CacheStatistics["marketData"] {
+function _getMarketDataStats(): CacheStatistics["marketData"] {
 	const jquantsDir = resolve(CACHE_ROOT, "jquants");
 	const stockListPath = resolve(jquantsDir, "stock_list.csv");
 	const priceCsvPath = resolve(jquantsDir, "raw_stock_price.csv");
@@ -141,7 +139,7 @@ function getMarketDataStats(): CacheStatistics["marketData"] {
 	};
 }
 
-function getEdinetStats(): CacheStatistics["edinet"] {
+function _getEdinetStats(): CacheStatistics["edinet"] {
 	const edinetDir = resolve(CACHE_ROOT, "edinet");
 	let companyCount = 0;
 	let documentCount = 0;
@@ -173,7 +171,7 @@ function getEdinetStats(): CacheStatistics["edinet"] {
 	return { companyCount, documentCount, sizeGb };
 }
 
-function getSqliteStats() {
+function _getSqliteStats() {
 	const cacheDir = resolve(CACHE_ROOT, "cache");
 	const stats: CacheStatistics["sqlite"] = {
 		market: null,
@@ -198,7 +196,7 @@ function getSqliteStats() {
 	return stats;
 }
 
-function getLastUpdated(): string {
+function _getLastUpdated(): string {
 	const dirs = [
 		resolve(CACHE_ROOT, "cache"),
 		resolve(CACHE_ROOT, "jquants"),
@@ -258,26 +256,27 @@ async function getStats(): Promise<CacheStatistics> {
 
 		const output = await new Response(proc.stdout).text();
 
-		const parseNumber = (text: string, pattern: string): number => {
+		const parseNumber = (text: string, pattern: RegExp): number => {
 			const match = text.match(pattern);
-			if (!match) return 0;
-			return parseInt(match[1]!.replace(/,/g, ""), 10);
+			const match1 = match?.[1];
+			return match1 ? parseInt(match1.replace(/,/g, ""), 10) : 0;
 		};
 
-		const parseFloat_ = (text: string, pattern: string): number => {
+		const parseFloat_ = (text: string, pattern: RegExp): number => {
 			const match = text.match(pattern);
-			if (!match) return 0;
-			return parseFloat(match[1]!);
+			const match1 = match?.[1];
+			return match1 ? parseFloat(match1) : 0;
 		};
 
 		const parseDate = (
 			text: string,
-			pattern: string,
+			pattern: RegExp,
 		): { start: string; end: string } | null => {
 			const match = text.match(pattern);
-			if (!match) return null;
-			const [start, end] = match[1]!.split(" ～ ");
-			return { start: start.trim(), end: end?.trim() || "" };
+			const match1 = match?.[1];
+			if (!match1) return null;
+			const [start, end] = match1.split(" ～ ");
+			return { start: start.trim(), end: (end || "").trim() };
 		};
 
 		cachedStats = {
@@ -285,7 +284,7 @@ async function getStats(): Promise<CacheStatistics> {
 				stocks: parseNumber(output, /📈 カバー銘柄:\s+([\d,]+)/),
 				priceRecords: parseNumber(output, /📊 価格データ:\s+([\d.]+)k/),
 				finRecords: parseNumber(output, /💼 財務データ:\s+([\d.]+)k/),
-				dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/),
+				dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/u),
 				sizeGb:
 					parseFloat_(
 						output,
@@ -513,7 +512,7 @@ app.post("/api/refresh", async (c) => {
 		const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
 			cwd: process.cwd(),
 		});
-		const output = await new Response(proc.stdout).text();
+		const _output = await new Response(proc.stdout).text();
 		const stats = await getStats();
 
 		return c.html(`
@@ -572,13 +571,13 @@ app.get("/screener", async (c) => {
                   <td class="text-xs">${stock.market}</td>
                   <td>¥${stock.price.toLocaleString()}</td>
                   <td>${stock.marketCap.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
-                  <td>${isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
-                  <td>${isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
+                  <td>${Number.isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
+                  <td>${Number.isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
                   <td class="${stock.roe > 0 ? "text-green-600" : "text-red-600"}">
-                    ${isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
+                    ${Number.isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
                   </td>
                   <td>${stock.netSales.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
-                  <td>${isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
+                  <td>${Number.isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
                 </tr>
               `,
 								)
@@ -858,13 +857,13 @@ app.get("/api/screener", async (c) => {
                   <td class="text-xs">${stock.market}</td>
                   <td>¥${stock.price.toLocaleString()}</td>
                   <td>${stock.marketCap.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
-                  <td>${isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
-                  <td>${isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
+                  <td>${Number.isNaN(stock.per) ? "N/A" : stock.per.toFixed(1)}x</td>
+                  <td>${Number.isNaN(stock.pbr) ? "N/A" : stock.pbr.toFixed(2)}x</td>
                   <td class="${stock.roe > 0 ? "text-green-600" : "text-red-600"}">
-                    ${isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
+                    ${Number.isNaN(stock.roe) ? "N/A" : stock.roe.toFixed(1)}%
                   </td>
                   <td>${stock.netSales.toLocaleString("ja-JP", { maximumFractionDigits: 0 })}</td>
-                  <td>${isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
+                  <td>${Number.isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
                 </tr>
               `,
 								)

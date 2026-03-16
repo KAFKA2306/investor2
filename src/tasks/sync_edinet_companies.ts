@@ -1,14 +1,17 @@
 import { Database } from "bun:sqlite";
 import { readFileSync } from "node:fs";
 import yaml from "js-yaml";
+import { ConfigSchema } from "../shared/config_schema";
 
-const config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
 const apiKey = process.env.EDINET_API_KEY;
 
 async function main() {
-	console.log("\n" + "━".repeat(70));
+	console.log(`\n${"━".repeat(70)}`);
 	console.log("🏢 EDINET全企業データ取得開始");
-	console.log("━".repeat(70) + "\n");
+	console.log(`${"━".repeat(70)}\n`);
 
 	if (!apiKey) {
 		console.error("❌ エラー: EDINET_API_KEY 環境変数が設定されていません");
@@ -91,7 +94,7 @@ async function main() {
 		if (!byCompany.has(code)) {
 			byCompany.set(code, []);
 		}
-		byCompany.get(code)!.push(doc);
+		byCompany.get(code)?.push(doc);
 	}
 
 	console.log(`🏛️  対象企業: ${byCompany.size.toLocaleString()} 社\n`);
@@ -114,7 +117,7 @@ async function main() {
 		rank++;
 	}
 
-	console.log("\n" + "━".repeat(70));
+	console.log(`\n${"━".repeat(70)}`);
 	console.log(`📝 詳細:`);
 	console.log(`  • 総ドキュメント数: ${allDocs.length.toLocaleString()}`);
 	console.log(`  • カバー企業数: ${byCompany.size.toLocaleString()}`);
@@ -122,7 +125,7 @@ async function main() {
 		`  • 平均ドキュメント/企業: ${(allDocs.length / byCompany.size).toFixed(1)}`,
 	);
 	console.log(`  • キャッシュ位置: ${config.paths.cacheFundamentalEdinet}`);
-	console.log("━".repeat(70) + "\n");
+	console.log(`${"━".repeat(70)}\n`);
 
 	db.close();
 }
