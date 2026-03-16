@@ -1,3 +1,8 @@
+---
+name: trading-strategies
+description: Mean reversion, statistical arbitrage, pairs trading, and portfolio hedging strategies with risk limits
+---
+
 # Trading Strategies & Risk Management Skill
 
 平均回帰 (Mean Reversion)、統計的裁定 (Statistical Arbitrage)、およびポートフォリオのヘッジ戦略に関する専門知見。

@@ -1,3 +1,8 @@
+---
+name: edinet
+description: Retrieve and parse Japanese EDINET financial documents (annual/quarterly reports) with ticker mapping and risk extraction
+---
+
 # Edinet Financial Document Retrieval Skill
 
 日本の金融庁が提供する EDINET (Electronic Disclosure for Investors' NETwork) から、有価証券報告書等の財務書類を効率的に取得・解析するための専門知見。

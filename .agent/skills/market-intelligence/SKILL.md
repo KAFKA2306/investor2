@@ -1,3 +1,8 @@
+---
+name: market-intelligence
+description: Detect whale movements, latent economic signals, event-driven opportunities across on-chain and macro data
+---
+
 # Market Intelligence & Signal Detection Skill
 
 オンチェーンデータ（クジラの動き）、ニュースイベント、および潜在的な経済シグナルを検出し、投資機会を特定するための専門知見。

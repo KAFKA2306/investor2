@@ -1,3 +1,8 @@
+---
+name: polymarket
+description: Execute prediction market trades on Polymarket CLOB with Kelly-criterion position sizing and event-driven strategies
+---
+
 # Polymarket Trading Bot Skill
 
 Polymarket の CLOB (Central Limit Order Book) と連携し、効率的な予測市場取引を行うための専門知見。

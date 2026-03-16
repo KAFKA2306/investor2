@@ -1,3 +1,8 @@
+---
+name: system-ops-expert
+description: Knowledge consolidation workflow for extracting implemented design decisions into permanent SKILL.md guides
+---
+
 # Knowledge Consolidation Guidelines
 
 To keep the workspace clean and maximize agent trigger rates, implemented design knowledge must be extracted from temporary planning files into permanent `SKILL.md` files.

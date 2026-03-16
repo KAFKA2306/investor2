@@ -1,3 +1,8 @@
+---
+name: fundamental-analysis
+description: Macro-top-down analysis, dividend trap detection, sentiment vs fundamentals divergence, cash flow auditing
+---
+
 # Fundamental & Macro Analysis Skill
 
 マクロ経済指標の分析、企業のファンダメンタルズ評価、および市場センチメントの監査に関する専門知見。

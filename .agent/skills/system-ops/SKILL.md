@@ -1,3 +1,8 @@
+---
+name: system-ops
+description: Runtime config management, telemetry logging, quality gate criteria for alpha factor auditing
+---
+
 # System Operations & Runtime Skill
 
 金融分析システムの実行時設定、テレメトリ、品質管理に関する専門知見。

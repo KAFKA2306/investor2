@@ -1,3 +1,8 @@
+---
+name: alpha-mining
+description: Qlib alpha formula generation, validation, and optimization with AAARTS authenticity guarantees
+---
+
 # Alpha Mining & Qlib Optimization Skill
 
 Qlib 形式のアルファ数式の生成、バリデーション、および最適化に関する専門知見。
