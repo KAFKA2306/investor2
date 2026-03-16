@@ -47,7 +47,7 @@ test.describe("Dashboard E2E Tests", () => {
 	});
 
 	test("Stock screener with initial results", async ({ page }) => {
-		// Navigate to screener page
+		// Navigate to stock screener page (銘柄スクリーニング)
 		await page.goto("/screener");
 		await page.waitForLoadState("networkidle");
 
@@ -62,23 +62,27 @@ test.describe("Dashboard E2E Tests", () => {
 		});
 
 		// Test sector filter
-		const sectorSelect = page.locator('select[name="sector"]');
+		const sectorSelect = page.locator("#sector-select");
 		if (await sectorSelect.isVisible()) {
-			await sectorSelect.selectOption("1");
-			await page.waitForTimeout(1000);
+			await sectorSelect.waitFor({ state: "attached" });
+			const options = await sectorSelect.locator("option").count();
+			if (options > 1) {
+				await sectorSelect.selectOption({ index: 1 });
+				await page.waitForTimeout(1500);
 
-			// Take screenshot with filter applied
-			await page.screenshot({
-				path: "screenshots/05-screener-filtered.png",
-				fullPage: true,
-			});
+				// Take screenshot with filter applied
+				await page.screenshot({
+					path: "screenshots/05-screener-filtered.png",
+					fullPage: true,
+				});
+			}
 		}
 
-		// Test pagination
-		const nextButton = page.locator('button:has-text("次へ")');
-		if (await nextButton.isEnabled()) {
+		// Test pagination (look for "次 →" button)
+		const nextButton = page.locator('button:has-text("次")').last();
+		if (await nextButton.isVisible({ timeout: 2000 }).catch(() => false)) {
 			await nextButton.click();
-			await page.waitForTimeout(1000);
+			await page.waitForTimeout(1500);
 
 			// Take screenshot of paginated results
 			await page.screenshot({

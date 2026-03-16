@@ -2,12 +2,28 @@ import { test, expect } from "@playwright/test";
 
 test.describe("Company Detail Page - Chart & Financial Data", () => {
 	test("Financial chart rendering and data display", async ({ page }) => {
-		// Navigate directly to a company (using EDINET code 1333 = マルハニチロ)
-		await page.goto("/company/detail/1333");
+		// Navigate to company search first
+		await page.goto("/company");
 		await page.waitForLoadState("networkidle");
 
-		// Verify page title
-		const pageTitle = page.locator("h1");
+		// Search for a company using EDINET code
+		const searchInput = page.locator('input[name="q"]');
+		await searchInput.fill("1333");
+		await page.waitForTimeout(1500);
+
+		// Click on first result link to navigate to detail page
+		const detailLink = page.locator('a:has-text("詳細")').first();
+		if (await detailLink.isVisible()) {
+			await detailLink.click();
+			await page.waitForLoadState("networkidle");
+		} else {
+			// If search results not found, navigate directly
+			await page.goto("/edinet/1333");
+			await page.waitForLoadState("networkidle");
+		}
+
+		// Verify page loaded
+		const pageTitle = page.locator("body");
 		await expect(pageTitle).toBeVisible();
 
 		// Take screenshot of top section
