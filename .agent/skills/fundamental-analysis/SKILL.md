@@ -1,6 +1,6 @@
 ---
 name: fundamental-analysis
-description: Macro-top-down analysis, dividend trap detection, sentiment vs fundamentals divergence, cash flow auditing
+description: Fundamental analysis and macro-top-down investing framework for detecting dividend traps, sentiment/fundamentals divergences, and cash flow quality issues. Use when conducting equity research with macro regime context, screening for dividend safety risks, detecting mean-reversion opportunities in mispriced fundamentals, or auditing cash flow quality before investment decisions.
 ---
 
 # Fundamental & Macro Analysis Skill

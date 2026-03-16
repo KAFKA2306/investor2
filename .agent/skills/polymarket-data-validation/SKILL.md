@@ -1,6 +1,6 @@
 ---
 name: polymarket-data-validation
-description: Validate Polymarket event data integrity, detect anomalous odds, and ensure schema compliance before trading execution
+description: Validate Polymarket event data integrity, detect anomalous odds (Z-score outliers, stale quotes), and ensure schema compliance before trading execution. Use when quality-gating market data before live trading, detecting data feed anomalies, validating event schemas against live Polymarket API responses, or auditing historical quote integrity for backtests.
 ---
 
 # Polymarket Data Validation Skill

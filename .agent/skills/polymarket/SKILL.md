@@ -1,6 +1,6 @@
 ---
 name: polymarket
-description: Execute prediction market trades on Polymarket CLOB with Kelly-criterion position sizing and event-driven strategies
+description: Execute prediction market trades on Polymarket CLOB with Kelly-criterion position sizing and event-driven strategies. Use when deploying prediction market trading algorithms, executing trades with optimal position sizing, managing exposure to event-driven alpha signals, or backtesting trading strategies on implied probability curves.
 ---
 
 # Polymarket Trading Bot Skill

@@ -1,6 +1,6 @@
 ---
 name: polymarket-alpha-miner
-description: Extract time-series alpha signals from Polymarket event calendars, implied probabilities, and order flow dynamics specific to prediction markets
+description: Extract time-series alpha signals from Polymarket event calendars, implied probabilities, and order flow dynamics. Use when mining alpha from prediction market microstructure, detecting regime changes in event probabilities, backtesting alpha hypotheses on Polymarket data, or identifying mispriced outcomes relative to consensus forecasts.
 ---
 
 # Polymarket Alpha Miner Skill

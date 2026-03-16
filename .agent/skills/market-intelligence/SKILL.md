@@ -1,6 +1,6 @@
 ---
 name: market-intelligence
-description: Detect whale movements, latent economic signals, event-driven opportunities across on-chain and macro data
+description: Detect whale movements, latent economic signals, and event-driven opportunities across on-chain and macro data. Use when monitoring large investor position changes (13F filings), hunting alpha from macro regime shifts, detecting anomalies in market structure (flows, correlations, volatility regimes), tracking earnings calendar catalysts, or identifying short-squeeze candidates.
 ---
 
 # Market Intelligence & Signal Detection Skill

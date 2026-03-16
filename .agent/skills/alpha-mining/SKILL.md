@@ -1,6 +1,6 @@
 ---
 name: alpha-mining
-description: Qlib alpha formula generation, validation, and optimization with AAARTS authenticity guarantees
+description: MANDATORY TRIGGER: Invoke for alpha factor discovery, formula generation, and backtesting within Qlib. Use when mining novel alpha factors, validating factor authenticity via AAARTS quality gates, optimizing factor performance, or preparing alpha candidates for production deployment. Essential for Ralph Loop workflows.
 ---
 
 # Alpha Mining & Qlib Optimization Skill

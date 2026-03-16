@@ -1,6 +1,6 @@
 ---
 name: trading-strategies
-description: Mean reversion, statistical arbitrage, pairs trading, and portfolio hedging strategies with risk limits
+description: Mean reversion, statistical arbitrage, pairs trading, and portfolio hedging strategies with risk limits. Use when designing mean-reversion alpha factors, backtesting statistical arbitrage setups, constructing pairs trading hedges, building portfolio-level risk management rules, or evaluating hedging effectiveness across regimes.
 ---
 
 # Trading Strategies & Risk Management Skill

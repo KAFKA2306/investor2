@@ -1,6 +1,6 @@
 ---
 name: system-ops
-description: Runtime config management, telemetry logging, quality gate criteria for alpha factor auditing
+description: Runtime config management, telemetry logging, and quality gate criteria for alpha factor auditing. Use when deploying agents in production, configuring environment variables for different execution modes, monitoring pipeline health via telemetry, auditing alpha factors against CDD standards, or enforcing architectural layer boundaries in runtime systems.
 ---
 
 # System Operations & Runtime Skill

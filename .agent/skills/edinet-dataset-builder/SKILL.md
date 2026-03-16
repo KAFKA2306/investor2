@@ -1,6 +1,6 @@
 ---
 name: edinet-dataset-builder
-description: Build PIT-clean time-series financial datasets from EDINET documents with handling of missing values, corporate actions, and cross-period alignment
+description: Build PIT-clean time-series financial datasets from EDINET documents with handling of missing values, corporate actions, and cross-period alignment. Use when constructing historical financial data for backtesting, aligning quarterly/annual statements into continuous time-series, handling corporate actions (splits, mergers) with point-in-time accuracy, or preparing training data for machine learning models.
 ---
 
 # EDINET Dataset Builder Skill

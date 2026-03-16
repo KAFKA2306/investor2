@@ -1,6 +1,6 @@
 ---
 name: edinet
-description: Retrieve and parse Japanese EDINET financial documents (annual/quarterly reports) with ticker mapping and risk extraction
+description: Retrieve and parse Japanese EDINET financial documents (annual/quarterly reports) with ticker mapping and risk extraction. Use when sourcing Japanese equity data, extracting regulatory filings for PIT-clean datasets, identifying material risks from 10-K equivalents, or enriching J-Quants data with fundamental context. Pair with edinet-dataset-builder for time-series construction.
 ---
 
 # Edinet Financial Document Retrieval Skill
