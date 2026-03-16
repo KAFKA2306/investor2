@@ -37,7 +37,8 @@ artifact/
 .gemini/
 .claude/
 .serena/
-
+verify*
+debug*
 # Data and models
 **/data/
 edinet2dataset/edinet_corpus/

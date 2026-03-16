@@ -4,12 +4,12 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "bun ./node_modules/@biomejs/biome/bin/biome check src tests",
-    "format": "bun ./node_modules/@biomejs/biome/bin/biome format src tests --write",
+    "lint": "bun ./node_modules/@biomejs/biome/bin/biome check src",
+    "format": "bun ./node_modules/@biomejs/biome/bin/biome format src --write",
     "test": "bun test tests",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun x tsc --noEmit",
     "start": "bun src/index.ts",
     "agent:unified": "bun src/agents/unified/unified_agent.ts",
     "edinet": "bun scripts/edinet_cli.ts",
@@ -19,14 +19,17 @@
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
     "@playwright/test": "^1.58.2",
+    "@types/adm-zip": "^0.5.7",
     "@types/bun": "latest",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.3.2",
+    "@types/xml2js": "^0.4.14",
     "tsx": "^4.21.0"
   },
   "dependencies": {
     "@google/genai": "^1.43.0",
     "@polymarket/clob-client": "^5.7.0",
+    "adm-zip": "^0.5.16",
     "apache-arrow": "^21.1.0",
     "better-sqlite3": "^12.8.0",
     "ethers": "^6.16.0",
