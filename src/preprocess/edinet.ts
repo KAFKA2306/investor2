@@ -1,9 +1,14 @@
-import { existsSync, readdirSync, readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import yaml from "js-yaml";
+import { ConfigSchema } from "../shared/schema";
 
-const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
-const EDINET_DIR = resolve(CACHE_ROOT, "edinet");
-const JQUANTS_DIR = resolve(CACHE_ROOT, "jquants");
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
+
+const EDINET_DIR = config.paths.edinet;
+const JQUANTS_DIR = config.paths.data;
 
 let intelligenceMap: Record<string, unknown> | null = null;
 let governanceMap: Record<string, Record<string, CompanyGovernance>> | null =
@@ -45,17 +50,8 @@ let financialDataMap: Map<string, RawFinancialRecord[]> | null = null;
 function getIntelligenceMap(): Record<string, unknown> {
 	if (!intelligenceMap) {
 		const path = resolve(EDINET_DIR, "edinet_10k_intelligence_map.json");
-		if (!existsSync(path)) {
-			console.warn(`EDINET intelligence map not found at ${path}`);
-			return {};
-		}
-		try {
-			const content = readFileSync(path, "utf-8");
-			intelligenceMap = JSON.parse(content);
-		} catch (error) {
-			console.error(`Failed to load EDINET intelligence map: ${error}`);
-			intelligenceMap = {};
-		}
+		const content = readFileSync(path, "utf-8");
+		intelligenceMap = JSON.parse(content);
 	}
 	return intelligenceMap || {};
 }
@@ -63,17 +59,8 @@ function getIntelligenceMap(): Record<string, unknown> {
 function getGovernanceMap(): Record<string, Record<string, CompanyGovernance>> {
 	if (!governanceMap) {
 		const path = resolve(EDINET_DIR, "edinet_governance_map.json");
-		if (!existsSync(path)) {
-			console.warn(`EDINET governance map not found at ${path}`);
-			return {};
-		}
-		try {
-			const content = readFileSync(path, "utf-8");
-			governanceMap = JSON.parse(content);
-		} catch (error) {
-			console.error(`Failed to load EDINET governance map: ${error}`);
-			governanceMap = {};
-		}
+		const content = readFileSync(path, "utf-8");
+		governanceMap = JSON.parse(content);
 	}
 	return governanceMap || {};
 }
@@ -91,17 +78,8 @@ function getXbrlTextMap(): Record<
 > {
 	if (!xbrlTextMap) {
 		const path = resolve(EDINET_DIR, "edinet_xbrl_text_map.json");
-		if (!existsSync(path)) {
-			console.warn(`EDINET XBRL text map not found at ${path}`);
-			return {};
-		}
-		try {
-			const content = readFileSync(path, "utf-8");
-			xbrlTextMap = JSON.parse(content);
-		} catch (error) {
-			console.error(`Failed to load EDINET XBRL text map: ${error}`);
-			xbrlTextMap = {};
-		}
+		const content = readFileSync(path, "utf-8");
+		xbrlTextMap = JSON.parse(content);
 	}
 	return xbrlTextMap || {};
 }
@@ -110,42 +88,34 @@ function getStockListMap(): Map<string, StockListEntry> {
 	if (!stockListMap) {
 		stockListMap = new Map();
 		const path = resolve(JQUANTS_DIR, "raw_stock_list.csv");
-		if (!existsSync(path)) {
-			console.warn(`Stock list not found at ${path}`);
-			return stockListMap;
-		}
-		try {
-			const content = readFileSync(path, "utf-8");
-			const lines = content.split("\n");
+		const content = readFileSync(path, "utf-8");
+		const lines = content.split("\n");
 
-			for (let i = 1; i < lines.length; i++) {
-				const line = lines[i]?.trim();
-				if (!line) continue;
+		for (let i = 1; i < lines.length; i++) {
+			const line = lines[i]?.trim();
+			if (!line) continue;
 
-				const parts = line.split(",");
-				if (parts.length < 2) continue;
+			const parts = line.split(",");
+			if (parts.length < 2) continue;
 
-				const code5digit = parts[0]?.trim();
-				const code4digit = code5digit.slice(0, 4);
-				const name = parts[1]?.trim();
-				const sector = parts[7]?.trim();
-				const market = parts[8]?.trim();
+			const code5digit = parts[0]?.trim();
+			const code4digit = code5digit.slice(0, 4);
+			const name = parts[1]?.trim();
+			const sector = parts[7]?.trim();
+			const market = parts[8]?.trim();
 
-				stockListMap.set(code4digit, {
-					name,
-					sector,
-					market,
-					code5digit,
-				});
-				stockListMap.set(code5digit, {
-					name,
-					sector,
-					market,
-					code5digit,
-				});
-			}
-		} catch (error) {
-			console.error(`Failed to load stock list: ${error}`);
+			stockListMap.set(code4digit, {
+				name,
+				sector,
+				market,
+				code5digit,
+			});
+			stockListMap.set(code5digit, {
+				name,
+				sector,
+				market,
+				code5digit,
+			});
 		}
 	}
 	return stockListMap;
@@ -155,78 +125,68 @@ function getFinancialDataMap(): Map<string, RawFinancialRecord[]> {
 	if (!financialDataMap) {
 		financialDataMap = new Map();
 		const path = resolve(JQUANTS_DIR, "raw_stock_fin.csv");
-		if (!existsSync(path)) {
-			console.warn(`Financial data not found at ${path}`);
-			return financialDataMap;
-		}
-		try {
-			const content = readFileSync(path, "utf-8");
-			const lines = content.split("\n");
+		const content = readFileSync(path, "utf-8");
+		const lines = content.split("\n");
 
-			const dataByCode = new Map<string, RawFinancialRecord[]>();
+		const dataByCode = new Map<string, RawFinancialRecord[]>();
 
-			for (let i = 1; i < lines.length; i++) {
-				const line = lines[i]?.trim();
-				if (!line) continue;
+		for (let i = 1; i < lines.length; i++) {
+			const line = lines[i]?.trim();
+			if (!line) continue;
 
-				const parts = line.split(",");
-				if (parts.length < 43) continue;
+			const parts = line.split(",");
+			if (parts.length < 43) continue;
 
-				const localCode = parts[26]?.trim();
-				const docType = parts[42]?.trim();
+			const localCode = parts[26]?.trim();
+			const docType = parts[42]?.trim();
 
-				if (
-					!localCode ||
-					!docType ||
-					!docType.includes("FYFinancialStatements")
-				) {
-					continue;
-				}
-
-				const disclosedDate = parts[1]?.trim();
-				if (!disclosedDate) continue;
-
-				const eps = parts[13] ? parseFloat(parts[13]) : null;
-				const bps = parts[4] ? parseFloat(parts[4]) : null;
-				const netSales = parts[28] ? parseInt(parts[28], 10) : null;
-				const operatingProfit = parts[31] ? parseInt(parts[31], 10) : null;
-				const profit = parts[33] ? parseInt(parts[33], 10) : null;
-				const equity = parts[14] ? parseInt(parts[14], 10) : null;
-				const totalAssets = parts[40] ? parseInt(parts[40], 10) : null;
-				const periodEnd = parts[10]?.trim() || "";
-
-				const record = {
-					localCode,
-					disclosedDate,
-					eps: !Number.isNaN(eps as number) ? eps : null,
-					bps: !Number.isNaN(bps as number) ? bps : null,
-					netSales: !Number.isNaN(netSales as number) ? netSales : null,
-					operatingProfit: !Number.isNaN(operatingProfit as number)
-						? operatingProfit
-						: null,
-					profit: !Number.isNaN(profit as number) ? profit : null,
-					equity: !Number.isNaN(equity as number) ? equity : null,
-					totalAssets: !Number.isNaN(totalAssets as number)
-						? totalAssets
-						: null,
-					periodEnd,
-				};
-
-				if (!dataByCode.has(localCode)) {
-					dataByCode.set(localCode, []);
-				}
-				dataByCode.get(localCode)?.push(record);
+			if (
+				!localCode ||
+				!docType ||
+				!docType.includes("FYFinancialStatements")
+			) {
+				continue;
 			}
 
-			for (const [code, records] of dataByCode) {
-				records.sort((a, b) => a.disclosedDate.localeCompare(b.disclosedDate));
-				dataByCode.set(code, records.slice(-5));
-			}
+			const disclosedDate = parts[1]?.trim();
+			if (!disclosedDate) continue;
 
-			financialDataMap = dataByCode;
-		} catch (error) {
-			console.error(`Failed to load financial data: ${error}`);
+			const eps = parts[13] ? parseFloat(parts[13]) : null;
+			const bps = parts[4] ? parseFloat(parts[4]) : null;
+			const netSales = parts[28] ? parseInt(parts[28], 10) : null;
+			const operatingProfit = parts[31] ? parseInt(parts[31], 10) : null;
+			const profit = parts[33] ? parseInt(parts[33], 10) : null;
+			const equity = parts[14] ? parseInt(parts[14], 10) : null;
+			const totalAssets = parts[40] ? parseInt(parts[40], 10) : null;
+			const periodEnd = parts[10]?.trim() || "";
+
+			const record = {
+				localCode,
+				disclosedDate,
+				eps: !Number.isNaN(eps as number) ? eps : null,
+				bps: !Number.isNaN(bps as number) ? bps : null,
+				netSales: !Number.isNaN(netSales as number) ? netSales : null,
+				operatingProfit: !Number.isNaN(operatingProfit as number)
+					? operatingProfit
+					: null,
+				profit: !Number.isNaN(profit as number) ? profit : null,
+				equity: !Number.isNaN(equity as number) ? equity : null,
+				totalAssets: !Number.isNaN(totalAssets as number) ? totalAssets : null,
+				periodEnd,
+			};
+
+			if (!dataByCode.has(localCode)) {
+				dataByCode.set(localCode, []);
+			}
+			dataByCode.get(localCode)?.push(record);
 		}
+
+		for (const [code, records] of dataByCode) {
+			records.sort((a, b) => a.disclosedDate.localeCompare(b.disclosedDate));
+			dataByCode.set(code, records.slice(-5));
+		}
+
+		financialDataMap = dataByCode;
 	}
 	return financialDataMap;
 }
@@ -235,18 +195,14 @@ function getDocumentsForCompany(edinetCode: string): string[] {
 	const docsDir = resolve(EDINET_DIR, "docs");
 	const docs: string[] = [];
 
-	try {
-		const files = readdirSync(docsDir);
-		for (const file of files) {
-			if (
-				file.includes(edinetCode) ||
-				file.includes(edinetCode.padStart(5, "0"))
-			) {
-				docs.push(file);
-			}
+	const files = readdirSync(docsDir);
+	for (const file of files) {
+		if (
+			file.includes(edinetCode) ||
+			file.includes(edinetCode.padStart(5, "0"))
+		) {
+			docs.push(file);
 		}
-	} catch {
-		// docs directory may not exist
 	}
 
 	return docs.sort().slice(0, 10);
@@ -300,7 +256,12 @@ export async function searchCompanies(query: string): Promise<CompanyInfo[]> {
 
 	const q = query.toLowerCase();
 
-	for (const code of Object.keys(intel)) {
+	const codes =
+		Object.keys(intel).length > 0
+			? Object.keys(intel)
+			: Array.from(stockList.keys());
+
+	for (const code of codes) {
 		const stockInfo = stockList.get(code);
 		const name = stockInfo?.name || code;
 
@@ -326,8 +287,13 @@ export async function getCompanyList(
 	const stockList = getStockListMap();
 	const companies: CompanyInfo[] = [];
 
+	const codes =
+		Object.keys(intel).length > 0
+			? Object.keys(intel)
+			: Array.from(stockList.keys());
+
 	let idx = 0;
-	for (const code of Object.keys(intel)) {
+	for (const code of codes) {
 		if (idx < offset) {
 			idx++;
 			continue;
@@ -432,5 +398,11 @@ export async function getCompanyDetail(
 
 export async function getCompanyCount(): Promise<number> {
 	const intel = getIntelligenceMap();
-	return Object.keys(intel).length;
+	const stockList = getStockListMap();
+
+	if (Object.keys(intel).length > 0) {
+		return Object.keys(intel).length;
+	}
+
+	return stockList.size;
 }

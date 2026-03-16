@@ -92,17 +92,12 @@ async function extractEdinetXbrlText() {
 
 			// Handle ZIP format
 			if (xbrlContent.startsWith("PK")) {
-				try {
-					const zip = new AdmZip(Buffer.from(xbrlContent, "binary"));
-					const xbrlEntry = zip
-						.getEntries()
-						.find((e) => e.entryName.endsWith(".xbrl"));
-					if (xbrlEntry) {
-						xbrlContent = xbrlEntry.getData().toString("utf8");
-					}
-				} catch (zipError) {
-					console.warn(`⚠️  Failed to unzip ${row.key}: ${zipError}`);
-					continue;
+				const zip = new AdmZip(Buffer.from(xbrlContent, "binary"));
+				const xbrlEntry = zip
+					.getEntries()
+					.find((e) => e.entryName.endsWith(".xbrl"));
+				if (xbrlEntry) {
+					xbrlContent = xbrlEntry.getData().toString("utf8");
 				}
 			}
 
@@ -121,18 +116,16 @@ async function extractEdinetXbrlText() {
 
 			let edinetCode = null;
 			for (const metaRow of metadataRows) {
-				try {
-					const metadata = JSON.parse(metaRow.value);
-					if (metadata.results && Array.isArray(metadata.results)) {
-						const doc = metadata.results.find(
-							(d: { docID: string; filerID?: string }) => d.docID === docID,
-						);
-						if (doc?.filerID) {
-							edinetCode = doc.filerID;
-							break;
-						}
+				const metadata = JSON.parse(metaRow.value);
+				if (metadata.results && Array.isArray(metadata.results)) {
+					const doc = metadata.results.find(
+						(d: { docID: string; filerID?: string }) => d.docID === docID,
+					);
+					if (doc?.filerID) {
+						edinetCode = doc.filerID;
+						break;
 					}
-				} catch {}
+				}
 			}
 
 			if (!edinetCode) continue;
@@ -156,9 +149,7 @@ async function extractEdinetXbrlText() {
 				console.log(`✓ Processed ${processed} documents...`);
 			}
 		} catch (error) {
-			console.warn(
-				`⚠️  Failed to process ${row.key}: ${error instanceof Error ? error.message : error}`,
-			);
+			console.error(`❌ Error processing document ${row.key}:`, error);
 		}
 	}
 
