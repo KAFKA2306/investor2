@@ -1160,41 +1160,33 @@ app.get("/edinet/:code", async (c) => {
                 const periods = chartData.map(d => d.periodEnd || d.disclosedDate);
                 const ctx = document.getElementById('financialChart').getContext('2d');
                 new Chart(ctx, {
-                  type: 'line',
+                  type: 'bar',
                   data: {
                     labels: periods,
                     datasets: [
                       {
                         label: 'EPS (¥)',
                         data: chartData.map(d => d.eps || null),
-                        borderColor: '#3b82f6',
-                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
-                        tension: 0.3,
-                        fill: true
+                        backgroundColor: '#3b82f6',
+                        yAxisID: 'y1'
                       },
                       {
                         label: '売上高 (億円)',
-                        data: chartData.map(d => d.netSales ? d.netSales / 100000000 : null),
-                        borderColor: '#f59e0b',
-                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
-                        tension: 0.3,
-                        fill: false
+                        data: chartData.map(d => d.netSales || null),
+                        backgroundColor: '#f59e0b',
+                        yAxisID: 'y2'
                       },
                       {
                         label: '純利益 (億円)',
-                        data: chartData.map(d => d.profit ? d.profit / 100000000 : null),
-                        borderColor: '#ef4444',
-                        backgroundColor: 'rgba(239, 68, 68, 0.05)',
-                        tension: 0.3,
-                        fill: false
+                        data: chartData.map(d => d.profit || null),
+                        backgroundColor: '#ef4444',
+                        yAxisID: 'y3'
                       },
                       {
                         label: '自己資本 (億円)',
-                        data: chartData.map(d => d.equity ? d.equity / 100000000 : null),
-                        borderColor: '#8b5cf6',
-                        backgroundColor: 'rgba(139, 92, 246, 0.05)',
-                        tension: 0.3,
-                        fill: false
+                        data: chartData.map(d => d.equity || null),
+                        backgroundColor: '#8b5cf6',
+                        yAxisID: 'y4'
                       }
                     ]
                   },
@@ -1205,7 +1197,34 @@ app.get("/edinet/:code", async (c) => {
                       legend: { display: true, position: 'top' }
                     },
                     scales: {
-                      y: { beginAtZero: true }
+                      x: { stacked: false },
+                      y1: {
+                        type: 'linear',
+                        position: 'left',
+                        title: { display: true, text: 'EPS (¥)' },
+                        beginAtZero: true
+                      },
+                      y2: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: '売上高 (億円)' },
+                        beginAtZero: true,
+                        grid: { drawOnChartArea: false }
+                      },
+                      y3: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: '純利益 (億円)' },
+                        beginAtZero: true,
+                        grid: { drawOnChartArea: false }
+                      },
+                      y4: {
+                        type: 'linear',
+                        position: 'right',
+                        title: { display: true, text: '自己資本 (億円)' },
+                        beginAtZero: true,
+                        grid: { drawOnChartArea: false }
+                      }
                     }
                   }
                 });
