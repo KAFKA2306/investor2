@@ -25,17 +25,23 @@ tasks:
     cmds:
       - bun src/preprocess/stats_cache.ts
 
-  edinet:fetch:all:
-    desc: 🏢 EDINET全企業データ取得（過去365日分）
+  preprocess:edinet:xbrl:text:
+    desc: 📄 XBRL テキスト抽出（業務説明・リスク要因） → edinet_xbrl_text_map.json
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun src/tasks/sync_edinet_companies.ts
+      - bun src/preprocess/edinet_xbrl_text_extraction.ts
+
+  edinet:fetch:all:
+    desc: 🏢 EDINET全企業データ取得（過去3年分統合）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - GET_MODE=edinet bun src/io/get.ts
 
   jquants:fetch:latest:
-    desc: 📈 J-Quants最新データ取得（過去2年分のマーケットデータ）
+    desc: 📈 J-Quants最新データ取得（過去2年分キャッシュ+CSV出力）
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun src/tasks/sync_jquants_latest_prices.ts
+      - GET_MODE=jquants bun src/io/get.ts
 
   dashboard:dev:
     desc: 📊 投資家向けダッシュボード開発サーバー（Hono + HTMX + Tailwind）
@@ -97,7 +103,6 @@ tasks:
       - task: format
       - task: typecheck
       - task: test
-      - bash scripts/self_healing_lint.sh
       - task: check:python
 
   check:python:
