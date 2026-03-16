@@ -987,7 +987,7 @@ app.get("/api/company/search", async (c) => {
 // Page: Company detail
 app.get("/edinet/:code", async (c) => {
 	const code = c.req.param("code");
-	const company = await getCompanyDetail(code);
+	const company = await getCompanyDetail(code, true);
 
 	if (!company) {
 		return c.html(`

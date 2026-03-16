@@ -344,35 +344,14 @@ export async function getCompanyDetail(
 		}));
 	}
 
-	// Get company overview from intelligence map (fallback to XBRL if needed)
-	if (intelData) {
+	// Fetch XBRL data if requested (primary source)
+	if (includeXBRL) {
+		const xbrlData = await fetchAndParseXBRL(edinetCode);
 		detail.overview = {
-			businessDescription: intelData.overview || intelData.business_description,
-			risks: intelData.risks || intelData.risk_factors,
-			products: intelData.products || intelData.business_segments,
+			businessDescription: xbrlData?.businessDescription,
+			risks: xbrlData?.riskFactors,
+			products: xbrlData?.managementDiscussion,
 		};
-	}
-
-	// Fetch XBRL data if requested and no data exists
-	if (
-		includeXBRL &&
-		(!detail.overview || !detail.overview.businessDescription)
-	) {
-		try {
-			const xbrlData = await fetchAndParseXBRL(edinetCode);
-			if (xbrlData) {
-				detail.overview = {
-					...detail.overview,
-					businessDescription:
-						xbrlData.businessDescription ||
-						detail.overview?.businessDescription,
-					risks: xbrlData.riskFactors || detail.overview?.risks,
-					products: xbrlData.managementDiscussion || detail.overview?.products,
-				};
-			}
-		} catch {
-			console.warn(`Failed to fetch XBRL data for ${edinetCode}`);
-		}
 	}
 
 	// Get document count
