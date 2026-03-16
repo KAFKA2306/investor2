@@ -3,7 +3,7 @@
 > **重要**: このドキュメントは、全データ・ログの唯一の真実の源（Single Source of Truth）です。
 > このファイルを読まずに直接パスをハードコードしてはいけません！❌
 
-**最終更新**: 2026-03-02 | **実装状況**: ✅ 完全実装
+**最終更新**: 2026-03-17 | **実装状況**: ⚠️ 部分実装（PathRegistry未実装、ハードコード残存）
 
 ---
 
@@ -60,129 +60,75 @@
 
 ---
 
-## 🔗 PathRegistry 参照 (推奨)
+## 🔗 パス管理（現状）
 
-**絶対にハードコードしないこと！** 代わりに `PathRegistry` を使用：
+### ✅ 真実の源 (SSOT): config/default.yaml
+
+現在、`config/default.yaml` の `paths:` セクションがパスの唯一の正しい源です。
+
+```yaml
+paths:
+  # Core roots (new centralized location)
+  data: /mnt/d/investor_all_cached_data/jquants
+  logs: /mnt/d/investor_all_cached_data/logs
+  verification: /mnt/d/investor_all_cached_data/outputs
+  cache: /mnt/d/investor_all_cached_data/cache
+  edinet: /mnt/d/investor_all_cached_data/edinet
+  preprocessed: /mnt/d/investor_all_cached_data/preprocessed
+  # ... 約25個のサブパスキー
+```
+
+### ⚠️ 未実装: PathRegistry
+
+`src/system/path_registry.ts` は**未実装**です。将来のリファクタリング時に以下を検討してください：
 
 ```typescript
-import { paths } from './src/system/path_registry.ts';
+// 理想形（未実装）
+import { ConfigSchema } from '../shared/schema.ts';
+import yaml from 'js-yaml';
 
-// ✅ 推奨
-const dataPath = paths.dataRoot;              // /mnt/d/investor_all_cached_data/jquants
-const cachePath = paths.cacheRoot;            // /mnt/d/investor_all_cached_data/cache
-const edinetDb = paths.edinetCacheSqlite;     // /mnt/d/investor_all_cached_data/edinet/cache.sqlite
-const memDb = paths.memorySqlite;             // /mnt/d/investor_all_cached_data/cache/memory.sqlite
-const outputs = paths.verificationRoot;       // /mnt/d/investor_all_cached_data/outputs
-const logs = paths.unifiedLogDir;             // /mnt/d/investor_all_cached_data/logs/unified
+const config = ConfigSchema.parse(
+  yaml.load(readFileSync('config/default.yaml'))
+);
+
+// 使用例
+const dataPath = config.paths.data;
+const cachePath = config.paths.cache;
 ```
 
-**使用可能なフィールド一覧**:
-```typescript
-// Core roots
-paths.dataRoot                       // /mnt/d/investor_all_cached_data/jquants
-paths.logsRoot                       // /mnt/d/investor_all_cached_data/logs
-paths.verificationRoot               // /mnt/d/investor_all_cached_data/outputs
-paths.cacheRoot                      // /mnt/d/investor_all_cached_data/cache
-paths.edinetRoot                     // /mnt/d/investor_all_cached_data/edinet
-paths.preprocessedRoot               // /mnt/d/investor_all_cached_data/preprocessed
+### ❌ 既知のハードコード箇所（修正待ち）
 
-// Market data
-paths.marketdataRoot                 // /mnt/d/investor_all_cached_data/jquants
-paths.marketdataPricesGz             // ...jquants/raw_stock_price.csv.gz
-paths.marketdataFinGz                // ...jquants/raw_stock_fin.csv.gz
-paths.marketdataListGz               // ...jquants/stock_list.csv.gz
-paths.marketdataStatementsDir        // ...jquants/raw_statements
+現在、以下のファイルで `/mnt/d/investor_all_cached_data` がハードコードされています：
 
-// SQLite caches
-paths.marketCacheSqlite              // ...cache/market_cache.sqlite
-paths.marketdataSqlite               // ...cache/marketdata.sqlite
-paths.httpCacheSqlite                // ...cache/http_cache.sqlite
-paths.yahooCacheSqlite               // ...cache/yahoo_finance_cache.sqlite
-paths.jquantsPeadCacheSqlite         // ...cache/jquants_pead_cache.sqlite
-paths.uqtlSqlite                     // ...cache/uqtl.sqlite
-paths.memorySqlite                   // ...cache/memory.sqlite
-paths.alphaKnowledgebaseSqlite       // ...cache/alpha_knowledgebase.sqlite
+| ファイル | 行 | 説明 |
+|---|---|---|
+| `src/dashboard/server.ts` | 17 | `const CACHE_ROOT = "/mnt/d/investor_all_cached_data"` |
+| `src/preprocess/edinet.ts` | 4 | `const CACHE_ROOT = "/mnt/d/investor_all_cached_data"` |
+| `src/tasks/stats.ts` | 26 | `const CACHE_ROOT = "/mnt/d/investor_all_cached_data"` |
+| `src/preprocess/text.ts` | TBD | EDINET テキスト抽出 |
+| `src/io/get.ts` | TBD | データ取得 |
+| `src/preprocess/screener.ts` | TBD | スクリーナーデータ |
 
-// EDINET
-paths.edinetCacheSqlite              // ...edinet/cache.sqlite
-paths.edinetSearchSqlite             // ...edinet/search.sqlite
-paths.edinetDocsDir                  // ...edinet/docs
-
-// Logs
-paths.unifiedLogDir                  // ...logs/unified
-```
+**推奨**: ConfigSchema 経由でパスを取得する標準パターンを採用する（将来）。
 
 ---
 
-## 🔐 環境変数オーバーライド
-
-ローカル環境やテスト環境で異なるパスを使用する場合は、環境変数でオーバーライド可能：
-
-```bash
-export UQTL_DATA_ROOT=/custom/path/to/jquants
-export UQTL_LOGS_ROOT=/custom/path/to/logs
-export UQTL_VERIFICATION_ROOT=/custom/path/to/outputs
-export UQTL_CACHE_ROOT=/custom/path/to/cache
-export UQTL_EDINET_ROOT=/custom/path/to/edinet
-export UQTL_PREPROCESSED_ROOT=/custom/path/to/preprocessed
-
-# パイプライン実行
-task run:newalphasearch
-```
-
----
-
-## 📋 後方互換シンボリックリンク (移行期間)
-
-外部スクリプトの互換性のため、以下のシンボリックリンクが自動作成されます：
-
-| 旧パス | 新パス（実体） |
-|---|---|
-| `/mnt/d/marketdata` | `→ /mnt/d/investor_all_cached_data/jquants` |
-| `logs/cache` | `→ /mnt/d/investor_all_cached_data/cache` |
-| `logs/unified` | `→ /mnt/d/investor_all_cached_data/logs/unified` |
-| `ts-agent/data` | `→ /mnt/d/investor_all_cached_data/outputs` |
-
----
-
-## ✅ チェックリスト：新コード追加時
+## 📋 チェックリスト：新コード追加時
 
 新しいデータアクセスコードを追加する場合は、**必ず**以下をチェック：
 
-- [ ] `PathRegistry` から適切なフィールドを使用している
 - [ ] ハードコードされたパスがないか検索: `grep -r "/mnt/d" src/ --include="*.ts"` ❌
 - [ ] 相対パスや `process.cwd()` ベースのパス推測がないか確認 ❌
-- [ ] `default.yaml` に新しいパスが必要な場合は記載し、`PathRegistry` に追加 ✅
-- [ ] テストで異なるパスが必要な場合は環境変数で指定 ✅
-
----
-
-## 🚀 移行スクリプト参照
-
-全データは以下のスクリプトで `/mnt/d/investor_all_cached_data/` に統合されました：
-
-```bash
-bash scripts/migrate_data_to_d_drive.sh
-```
-
-**スクリプト内容**:
-1. ターゲットディレクトリ作成
-2. J-Quants マーケットデータ移行 (rsync)
-3. EDINET キャッシュ・ドキュメント移行
-4. SQLite キャッシュ移行
-5. memory.sqlite 移行
-6. 前処理済みデータ移行
-7. パイプライン出力移行
-8. 監査ログ移行 (unified/experiments/verification)
-9. 後方互換シンボリックリンク作成
+- [ ] `config/default.yaml` に新しいパスが必要な場合は記載 ✅
+- [ ] **将来**: PathRegistry 実装後は、ConfigSchema 経由でパスを取得 ✅
 
 
 ---
 
 ## 📖 関連ドキュメント
 
-- `ts-agent/src/config/default.yaml` — パス設定 (原始値)
-- `ts-agent/src/system/path_registry.ts` — PathRegistry 実装
+- `config/default.yaml` — パス設定の真実の源
+- `src/shared/schema.ts` — ConfigSchema 定義
 - `CLAUDE.md` — プロジェクト全体の指針
-- `docs/diagrams/` — アーキテクチャ図
+- `docs/specs/CODEBASE_STATUS.md` — 実装済み・未実装の ファイル一覧
 

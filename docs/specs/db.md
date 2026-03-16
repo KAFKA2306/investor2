@@ -6,29 +6,22 @@ This document defines the Postgres architecture that serves as the primary home 
 
 Data is organized into 8 schemas because logical isolation prevents namespace collisions and simplifies access control.
 
-1. ref (Reference Data)
-Master data for instruments and venues because global identifiers must be consistent across all layers.
+| Schema | 説明 | 実装状態 | 用途 |
+|---|---|---|---|
+| **ref** | Reference Data | ⚠️ 計画中 | Master data for instruments and venues because global identifiers must be consistent across all layers. |
+| **ingest** | Ingest Data | ⚠️ 計画中 | Raw data from external providers because uninterpreted data must be preserved for audit. |
+| **research** | Research Data | ⚠️ 計画中 | Processed documents and sentiment scores because research efficiency depends on pre-parsed text. |
+| **feature** | Feature Store | ⚠️ 計画中 | Calculated alpha source features because versioned features are required to prevent signal decay analysis errors. |
+| **signal** | Signal Data | ⚠️ 計画中 | Strategy intentions and signal lineage because the system must record the "Family Tree" of every decision. |
+| **eval** | Evaluation Data | ⚠️ 計画中 | Backtest results and outcome analysis because profitability is the only metric that matters for verification. |
+| **exec** | Execution Data | ⚠️ 計画中 | Orders and fills because execution quality must be audited against market impact. |
+| **obs** | Observability | ⚠️ 計画中 | Audit logs and system events because observability is the primary defense against systemic failure. |
 
-2. ingest (Ingest Data)
-Raw data from external providers because uninterpreted data must be preserved for audit.
+### Current Implementation Status
 
-3. research (Research Data)
-Processed documents and sentiment scores because research efficiency depends on pre-parsed text.
+As of 2026-03-17, Postgres integration is in **Phase 2: Dual Write** with compat schema for legacy compatibility. All schemas are planned but not yet in production use.
 
-4. feature (Feature Store)
-Calculated alpha source features because versioned features are required to prevent signal decay analysis errors.
-
-5. signal (Signal Data)
-Strategy intentions and signal lineage because the system must record the "Family Tree" of every decision.
-
-6. eval (Evaluation Data)
-Backtest results and outcome analysis because profitability is the only metric that matters for verification.
-
-7. exec (Execution Data)
-Orders and fills because execution quality must be audited against market impact.
-
-8. obs (Observability)
-Audit logs and system events because observability is the primary defense against systemic failure.
+**Recommendation**: Consult `config/default.yaml` for current SQLite cache locations, which remain the operational source of truth during the transition period.
 
 ## Integration Phases
 

@@ -1,5 +1,7 @@
 # Alpha Discovery Execution Runbook
 
+> ⚠️ 注記: 本ドキュメント内のコマンド（`task pipeline:...`, `task run:newalphasearch` など）は `/home/kafka/finance/investor` リポジトリで実行してください。`investor2` リポジトリではなく、メインリポジトリのパイプラインを参照しています。
+
 This document provides the operational procedures for the alpha factor discovery process because systematic execution and knowledge capture are required to maintain competitive edge.
 
 ## Alpha Discovery Cycle

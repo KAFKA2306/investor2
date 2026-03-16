@@ -1,5 +1,7 @@
 # Polymarket Trading Bot — Verification Checklist
 
+> ⚠️ 注記: 本ドキュメント内のファイルパス（`ts-agent/src/...` など）は `/home/kafka/finance/investor` リポジトリを参照しています。`investor2` リポジトリではなく、メインの `investor` リポジトリで実行してください。
+
 **Last Verified**: 2026-03-10
 **Implementation Status**: ✅ COMPLETE (Tasks 1-10)
 **Test Coverage**: 56+ tests passing
