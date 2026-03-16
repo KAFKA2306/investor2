@@ -217,8 +217,13 @@ export interface FinancialData {
 
 export interface CompanyDetail extends CompanyInfo {
 	governance?: CompanyGovernance;
-	financial?: FinancialData;
+	financial?: FinancialData[] | FinancialData;
 	documentCount?: number;
+	overview?: {
+		businessDescription?: string;
+		risks?: string;
+		products?: string;
+	};
 }
 
 export async function searchCompanies(query: string): Promise<CompanyInfo[]> {
@@ -320,21 +325,29 @@ export async function getCompanyDetail(
 	}
 
 	// Get financial data (convert from raw units to 億円)
-	const finData = financialData.get(localCode) || financialData.get(edinetCode);
-	if (finData) {
-		detail.financial = {
-			eps: finData.eps || undefined,
-			bps: finData.bps || undefined,
-			netSales: finData.netSales ? finData.netSales / 100000000 : undefined,
-			operatingProfit: finData.operatingProfit
-				? finData.operatingProfit / 100000000
+	const finDataArray =
+		financialData.get(localCode) || financialData.get(edinetCode);
+	if (finDataArray && Array.isArray(finDataArray)) {
+		detail.financial = finDataArray.map((d) => ({
+			eps: d.eps || undefined,
+			bps: d.bps || undefined,
+			netSales: d.netSales ? d.netSales / 100000000 : undefined,
+			operatingProfit: d.operatingProfit
+				? d.operatingProfit / 100000000
 				: undefined,
-			profit: finData.profit ? finData.profit / 100000000 : undefined,
-			equity: finData.equity ? finData.equity / 100000000 : undefined,
-			totalAssets: finData.totalAssets
-				? finData.totalAssets / 100000000
-				: undefined,
-			periodEnd: finData.periodEnd,
+			profit: d.profit ? d.profit / 100000000 : undefined,
+			equity: d.equity ? d.equity / 100000000 : undefined,
+			totalAssets: d.totalAssets ? d.totalAssets / 100000000 : undefined,
+			periodEnd: d.periodEnd,
+		}));
+	}
+
+	// Get company overview from intelligence map
+	if (intelData) {
+		detail.overview = {
+			businessDescription: intelData.overview || intelData.business_description,
+			risks: intelData.risks || intelData.risk_factors,
+			products: intelData.products || intelData.business_segments,
 		};
 	}
 
