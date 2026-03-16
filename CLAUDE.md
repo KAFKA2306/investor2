@@ -48,29 +48,25 @@ See `DATA_STRUCTURE.md` for the unified architecture mappings.
 **.agent/ (agent resources):**
 - `agr.toml` — Agent Resource manifest
 
-**src/ (code — MUST be properly organized):**
+**src/ (code — ACCEPT DISTRIBUTION, NO NEW AGENT DIR):**
 ```
 src/
-├── domain/         # Business logic, domain models
-├── io/             # Data input/output (APIs, files, DB reads)
-├── agents/         # Multi-agent implementations
-├── system/         # System layer (orchestration, config)
-├── db/             # Database operations, repositories
-├── providers/      # External data sources (APIs, caching)
-├── skills/         # AI skill implementations
-├── features/       # Feature implementations (market data enrichment)
-├── utils/          # Generic utilities
-├── tasks/          # CLI task implementations (called by Taskfile)
-├── ui/             # Frontend code
+├── commands/       # Taskfile-driven CLI scripts (data sync, stats)
+├── dashboard/      # Frontend & UI
+├── features/       # Feature implementations (enrichment, calculations)
+├── io/             # Data input/output (APIs, files, DB, gateways)
+├── utils/          # Generic utilities & helpers
+├── shared/         # Shared code, constants, helpers
+├── preprocess/     # Data preprocessing pipelines
+├── context/        # Context/memory management
 ├── schemas.ts      # Unified Zod schemas (MANDATORY: single file)
-└── index.ts        # Entry point, re-exports
+└── index.ts        # Entry point
 ```
 
-**CRITICAL RULES**:
-1. ❌ **NO "commands/" directory** — Use `src/tasks/` instead (Taskfile is the interface)
-2. ❌ **NO file prefixes** — Use directory structure (`src/domain/foo.ts`, NOT `src/domain_foo.ts`)
-3. ✅ **Proper nesting** — Each layer has its own directory; flatten avoids discoverability loss
-4. ✅ **Index files** — Each subdirectory has an `index.ts` for clean re-exports
+**KEY PRINCIPLE**:
+- ✅ **Accept current distribution** — src/agents/ NOT created; agent implementations stay distributed (agents_*.ts)
+- ✅ **src/commands/** — REQUIRED for Taskfile task implementations
+- ⚠️ **File prefixes** — Minimize but accept where established (e.g., `agents_polymarket_orchestrator.ts`)
 
 ## 📦 Unified Schemas (MANDATORY)
 
