@@ -17,19 +17,19 @@ tasks:
     desc: 📊 投資家向け キャッシュ概要表示（マーケットデータ、企業情報、取引データの統計）
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun src/tasks/print_cache_statistics.ts
+      - bun src/tasks/stats.ts
 
   preprocess:stats:
     desc: ⚡ Pre-compute cache statistics to /tmp/investor_stats_cache.json for dashboard speedup
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun src/preprocess/stats_cache.ts
+      - bun src/tasks/stats.ts
 
   preprocess:edinet:xbrl:text:
     desc: 📄 XBRL テキスト抽出（業務説明・リスク要因） → edinet_xbrl_text_map.json
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun src/preprocess/edinet_xbrl_text_extraction.ts
+      - bun src/preprocess/text.ts
 
   edinet:fetch:all:
     desc: 🏢 EDINET全企業データ取得（過去3年分統合）
@@ -47,13 +47,13 @@ tasks:
     desc: 📊 投資家向けダッシュボード開発サーバー（Hono + HTMX + Tailwind）
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun --hot src/dashboard/investor_dashboard_server.ts
+      - bun --hot src/dashboard/server.ts
 
   screener:dev:
     desc: 📈 リアル株式スクリーナー（3,593銘柄・32セクター・0モック）
     dir: "{{.TS_DIR}}"
     cmds:
-      - bun --hot src/dashboard/investor_dashboard_server.ts
+      - bun --hot src/dashboard/server.ts
 
   default:
     desc: list tasks
