@@ -22,28 +22,31 @@ interface CacheStatistics {
 	totalSizeGb: number;
 }
 
-const proc = Bun.spawn(
-	["bun", "run", "src/tasks/print_cache_statistics.ts"],
-	{ cwd: process.cwd(), stdio: ["inherit", "pipe", "inherit"] },
-);
+const proc = Bun.spawn(["bun", "run", "src/tasks/print_cache_statistics.ts"], {
+	cwd: process.cwd(),
+	stdio: ["inherit", "pipe", "inherit"],
+});
 
 const output = await new Response(proc.stdout).text();
 
 const parseNumber = (pattern: RegExp): number => {
 	const m = output.match(pattern);
-	return m ? parseInt(m[1]!.replace(/,/g, ""), 10) : 0;
+	const match1 = m?.[1];
+	return match1 ? parseInt(match1.replace(/,/g, ""), 10) : 0;
 };
 
 const parseFloat_ = (pattern: RegExp): number => {
 	const m = output.match(pattern);
-	return m ? parseFloat(m[1]!) : 0;
+	const match1 = m?.[1];
+	return match1 ? parseFloat(match1) : 0;
 };
 
 const parseDate = (pattern: RegExp): { start: string; end: string } | null => {
 	const m = output.match(pattern);
-	if (!m) return null;
-	const [start, end] = m[1]!.split(" ～ ");
-	return { start: start.trim(), end: end?.trim() || "" };
+	const match1 = m?.[1];
+	if (!match1) return null;
+	const [start, end] = match1.split(" ～ ");
+	return { start: start.trim(), end: (end || "").trim() };
 };
 
 const stats: CacheStatistics = {
