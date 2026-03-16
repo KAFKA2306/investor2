@@ -1,38 +1,28 @@
 ---
 name: edinet-dataset-builder
-description: >
-  MANDATORY TRIGGER: Invoke for any EDINET-related workflow, including Japanese
-  filing download, XBRL/TSV parsing, financial statement extraction, dataset
-  labeling, and EDINET-Bench replication. If the request mentions EDINET,
-  Japanese filings, XBRL, or fundamental dataset building, this
-  skill must be used immediately.
+description: Build PIT-clean time-series financial datasets from EDINET documents with handling of missing values, corporate actions, and cross-period alignment
 ---
 
 # EDINET Dataset Builder Skill
 
-This skill provides the operational framework for collecting financial filings from the Japanese EDINET system and building high-quality machine learning datasets (EDINET-Bench).
+EDINET から取得した複数期間の財務データを、Point-in-Time (PIT) クリーニング と時系列統合を行い、分析用データセットを構築するための専門知見。
 
-## 🚀 When to Use
-- When bulk downloading financial reports (Security Reports, Quarterly Reports) from Japanese corporations.
-- When extracting and structuring corporate financial data (e.g., Balance Sheets, Income Statements) or non-financial text blocks.
-- When constructing custom datasets for quantitative tasks such as fraud detection, earnings forecasting, or industry classification.
+## 専門知識 (Expertise)
 
-## 📖 Usage Instructions
+- **PIT クリーニング**: 決算発表日を基準に、各データポイントの有効期限（知られていた情報のみ使用）を厳格に管理。
+- **欠損値処理**: 未報告項目、提出遅延、フォーマット変更に対応。補間か除外かを文脈に応じて判定。
+- **企業行動調整**: 株式分割、増減資、M&A の前後でデータスケーリングを正確に行う。
+- **時系列マージ**: 複数の報告書形式（年報、四半期報、臨時報）を統一的な時系列に統合。
 
-### Report Retrieval and Parsing
-- Input: Target company identifiers, observation period (start_date/end_date), and target extraction categories.
-- Procedure: 
-    1. Use `downloader.py` to fetch identifying documents to local storage because raw XBRL files must be available for offline validation.
-    2. Employ `parser.py` to extract target items from TSV/XBRL formats because LLMs require structured text to perform sentiment or fundamental analysis.
-- Output: Structured financial and textual data in TSV or JSON format.
+## ワークフロー (Workflows)
 
-## 🛡️ Strict Rules
+1. **Metadata Extraction**: 各 EDINET 書類から発表日、基準日、会計期間を抽出。
+2. **Data Standardization**: 会計基準の変更（IFRS 移行等）に対応し、単一の会計系統に統一。
+3. **Corporate Actions Registry**: 配当支払日、分割実施日等のイベント列から、データ調整係数を計算。
+4. **Time-Series Assembly**: 欠損を埋めつつ、PIT ルールに基づき有効データのみを時系列として出力。
 
-1.  API Key Compliance: Ensure the `EDINET_API_KEY` is correctly configured in the environment because unauthorized access or missing credentials will terminate the data fetch pipeline.
-2.  Path Management: Adhere to the `where-to-save` guidelines because saving large datasets to the D-drive is mandatory to prevent local filesystem disk-full crashes.
-3.  Fail-Fast Principle: Do not attempt to bypass or silently "fix" parsing errors because malformed data leads to "garbage-in/garbage-out" scenarios that invalidate alpha signals.
+## ベストプラクティス
 
-## Best Practices
-- EDINET-Bench Replication: Utilize standard scripts under `scripts/` to reproduce benchmark datasets because consistent baselines are required to measure model improvement.
-- LLM Integration: For complex tasks like fraud detection, automate labeling by pipe-lining extracted text to LLM prompts because the semantic nuances of financial filings require intelligent interpretation.
-- Fidelity over Coverage: Prioritize the accuracy of parsed financial fields over total filing coverage because one high-quality signal is more valuable than a thousand noisy ones.
+- データ調整係数（例：分割比率）は常にメタデータとして保持し、後から追跡可能にすること。
+- PIT ルール違反（未来情報の混入）は自動検出し、該当区間を quarantine すること。
+- キャッシュ層（`SQLite` 等）で処理済みの書類とそのバージョンを管理し、重複処理を回避。
