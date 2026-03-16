@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { resolve } from "node:path";
+import { fetchAndParseXBRL } from "./xbrl_parser";
 
 const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
 const EDINET_DIR = resolve(CACHE_ROOT, "edinet");
@@ -288,6 +289,7 @@ export async function getCompanyList(
 
 export async function getCompanyDetail(
 	edinetCode: string,
+	includeXBRL: boolean = false,
 ): Promise<CompanyDetail | null> {
 	const intel = getIntelligenceMap();
 	const governance = getGovernanceMap();
@@ -342,13 +344,35 @@ export async function getCompanyDetail(
 		}));
 	}
 
-	// Get company overview from intelligence map
+	// Get company overview from intelligence map (fallback to XBRL if needed)
 	if (intelData) {
 		detail.overview = {
 			businessDescription: intelData.overview || intelData.business_description,
 			risks: intelData.risks || intelData.risk_factors,
 			products: intelData.products || intelData.business_segments,
 		};
+	}
+
+	// Fetch XBRL data if requested and no data exists
+	if (
+		includeXBRL &&
+		(!detail.overview || !detail.overview.businessDescription)
+	) {
+		try {
+			const xbrlData = await fetchAndParseXBRL(edinetCode);
+			if (xbrlData) {
+				detail.overview = {
+					...detail.overview,
+					businessDescription:
+						xbrlData.businessDescription ||
+						detail.overview?.businessDescription,
+					risks: xbrlData.riskFactors || detail.overview?.risks,
+					products: xbrlData.managementDiscussion || detail.overview?.products,
+				};
+			}
+		} catch {
+			console.warn(`Failed to fetch XBRL data for ${edinetCode}`);
+		}
 	}
 
 	// Get document count
