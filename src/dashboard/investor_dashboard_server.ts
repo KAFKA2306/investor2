@@ -1050,6 +1050,51 @@ app.get("/edinet/:code", async (c) => {
           </div>
         </div>
 
+        <!-- Overview Section (XBRL Text) -->
+        ${
+					company.overview
+						? `
+          <div class="card bg-white shadow mb-6">
+            <div class="card-body">
+              <h2 class="card-title">企業概要（テキスト情報）</h2>
+              <div class="space-y-4">
+                ${
+									company.overview.businessDescription
+										? `
+                <div>
+                  <h3 class="font-semibold text-gray-800 mb-2">事業内容</h3>
+                  <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.businessDescription).slice(0, 500)}</p>
+                </div>
+                `
+										: ""
+								}
+                ${
+									company.overview.risks
+										? `
+                <div>
+                  <h3 class="font-semibold text-gray-800 mb-2">リスク要因</h3>
+                  <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.risks).slice(0, 500)}</p>
+                </div>
+                `
+										: ""
+								}
+                ${
+									company.overview.products
+										? `
+                <div>
+                  <h3 class="font-semibold text-gray-800 mb-2">事業セグメント</h3>
+                  <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.products).slice(0, 500)}</p>
+                </div>
+                `
+										: ""
+								}
+              </div>
+            </div>
+          </div>
+        `
+						: ""
+				}
+
         <!-- Governance Section -->
         ${
 					company.governance
