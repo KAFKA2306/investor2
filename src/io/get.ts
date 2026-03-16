@@ -141,6 +141,59 @@ async function syncEdinet() {
 	}
 }
 
+async function syncEdinetXbrl() {
+	console.log(
+		"📡 [EDINET XBRL] Downloading XBRL files for recent documents...",
+	);
+	const apiKey = process.env.EDINET_API_KEY;
+	if (!apiKey) return;
+
+	const db = dbs.fundamentalEdinet;
+	const dates = getDates(365);
+
+	for (const date of dates) {
+		const cacheKey = `https://api.edinet-fsa.go.jp/api/v2/documents.json?date=${date}&type=2&Subscription-Key=${apiKey}`;
+		const row = db
+			.query("SELECT value FROM http_cache WHERE key = ?")
+			.get(cacheKey) as { value: string } | undefined;
+
+		if (!row) continue;
+
+		const metadata = JSON.parse(row.value);
+		if (!metadata.results?.length) continue;
+
+		for (const doc of metadata.results) {
+			const docID = doc.docID;
+			const xbrlUrl = `https://api.edinet-fsa.go.jp/api/v2/documents/${docID}?type=1&Subscription-Key=${apiKey}`;
+
+			const existingRow = db
+				.query("SELECT value FROM http_cache WHERE key = ?")
+				.get(xbrlUrl) as { value: string } | undefined;
+
+			if (existingRow) continue;
+
+			try {
+				const response = await fetch(xbrlUrl);
+				if (!response.ok) {
+					if (response.status === 404) continue;
+					throw new Error(`HTTP ${response.status}: ${xbrlUrl}`);
+				}
+
+				const xbrlContent = await response.text();
+				db.run(
+					"INSERT OR REPLACE INTO http_cache (key, value, created_at) VALUES (?, ?, ?)",
+					[xbrlUrl, JSON.stringify({ content: xbrlContent }), Date.now()],
+				);
+
+				console.log(`✓ [XBRL] ${docID}`);
+				await new Promise((r) => setTimeout(r, 300));
+			} catch (error) {
+				console.warn(`⚠️  [XBRL] Failed for ${docID}: ${error}`);
+			}
+		}
+	}
+}
+
 async function syncYahoo() {
 	console.log("📡 [Yahoo Finance] Syncing full history (Max Range)...");
 	const db = dbs.marketsYahoo;
@@ -192,6 +245,16 @@ async function syncFred() {
 }
 
 async function getAll() {
+	const mode = process.env.GET_MODE || "all";
+
+	if (mode === "xbrl-only") {
+		console.log("🚀 [get:xbrl] Starting EDINET XBRL-Only Acquisition...");
+		await syncEdinet();
+		await syncEdinetXbrl();
+		console.log("✨ [get:xbrl] EDINET XBRL acquisition complete.");
+		return;
+	}
+
 	console.log(
 		"🚀 [get:all] Starting Unified Historical Acquisition (v2 Ready)...",
 	);
@@ -206,6 +269,10 @@ async function getAll() {
 	await syncJquants("markets");
 	await syncJquants("fundamental");
 	await syncEdinet();
+
+	if (mode !== "skip-xbrl") {
+		await syncEdinetXbrl();
+	}
 
 	console.log("✨ [get:all] Unified historical acquisition complete.");
 }
