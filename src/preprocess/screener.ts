@@ -1,8 +1,12 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
+import yaml from "js-yaml";
+import { ConfigSchema } from "../shared/schema";
 
-const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
-const JQUANTS_DIR = resolve(CACHE_ROOT, "jquants");
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
+const JQUANTS_DIR = config.paths.data;
 
 interface StockRecord {
 	code: string; // 4-digit (padded)
