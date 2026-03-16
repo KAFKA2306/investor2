@@ -1,17 +1,48 @@
-import { readFileSync, readdirSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { fetchAndParseXBRL } from "./xbrl_parser";
 
 const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
 const EDINET_DIR = resolve(CACHE_ROOT, "edinet");
 const JQUANTS_DIR = resolve(CACHE_ROOT, "jquants");
 
-let intelligenceMap: Record<string, any> | null = null;
-let governanceMap: Record<string, any> | null = null;
-let stockListMap: Map<string, any> | null = null;
-let financialDataMap: Map<string, any> | null = null;
+let intelligenceMap: Record<string, unknown> | null = null;
+let governanceMap: Record<string, Record<string, CompanyGovernance>> | null =
+	null;
+let xbrlTextMap: Record<
+	string,
+	Record<
+		string,
+		{
+			businessDescription?: string;
+			riskFactors?: string;
+			managementDiscussion?: string;
+		}
+	>
+> | null = null;
 
-function getIntelligenceMap(): Record<string, any> {
+interface StockListEntry {
+	name: string;
+	sector: string;
+	market: string;
+	code5digit: string;
+}
+let stockListMap: Map<string, StockListEntry> | null = null;
+
+interface RawFinancialRecord {
+	localCode: string;
+	disclosedDate: string;
+	eps: number | null;
+	bps: number | null;
+	netSales: number | null;
+	operatingProfit: number | null;
+	profit: number | null;
+	equity: number | null;
+	totalAssets: number | null;
+	periodEnd: string;
+}
+let financialDataMap: Map<string, RawFinancialRecord[]> | null = null;
+
+function getIntelligenceMap(): Record<string, unknown> {
 	if (!intelligenceMap) {
 		const path = resolve(EDINET_DIR, "edinet_10k_intelligence_map.json");
 		if (!existsSync(path)) {
@@ -26,10 +57,10 @@ function getIntelligenceMap(): Record<string, any> {
 			intelligenceMap = {};
 		}
 	}
-	return intelligenceMap;
+	return intelligenceMap || {};
 }
 
-function getGovernanceMap(): Record<string, any> {
+function getGovernanceMap(): Record<string, Record<string, CompanyGovernance>> {
 	if (!governanceMap) {
 		const path = resolve(EDINET_DIR, "edinet_governance_map.json");
 		if (!existsSync(path)) {
@@ -44,10 +75,38 @@ function getGovernanceMap(): Record<string, any> {
 			governanceMap = {};
 		}
 	}
-	return governanceMap;
+	return governanceMap || {};
 }
 
-function getStockListMap(): Map<string, any> {
+function getXbrlTextMap(): Record<
+	string,
+	Record<
+		string,
+		{
+			businessDescription?: string;
+			riskFactors?: string;
+			managementDiscussion?: string;
+		}
+	>
+> {
+	if (!xbrlTextMap) {
+		const path = resolve(EDINET_DIR, "edinet_xbrl_text_map.json");
+		if (!existsSync(path)) {
+			console.warn(`EDINET XBRL text map not found at ${path}`);
+			return {};
+		}
+		try {
+			const content = readFileSync(path, "utf-8");
+			xbrlTextMap = JSON.parse(content);
+		} catch (error) {
+			console.error(`Failed to load EDINET XBRL text map: ${error}`);
+			xbrlTextMap = {};
+		}
+	}
+	return xbrlTextMap || {};
+}
+
+function getStockListMap(): Map<string, StockListEntry> {
 	if (!stockListMap) {
 		stockListMap = new Map();
 		const path = resolve(JQUANTS_DIR, "raw_stock_list.csv");
@@ -66,9 +125,9 @@ function getStockListMap(): Map<string, any> {
 				const parts = line.split(",");
 				if (parts.length < 2) continue;
 
-				const code5digit = parts[0]!.trim();
+				const code5digit = parts[0]?.trim();
 				const code4digit = code5digit.slice(0, 4);
-				const name = parts[1]!.trim();
+				const name = parts[1]?.trim();
 				const sector = parts[7]?.trim();
 				const market = parts[8]?.trim();
 
@@ -92,7 +151,7 @@ function getStockListMap(): Map<string, any> {
 	return stockListMap;
 }
 
-function getFinancialDataMap(): Map<string, any> {
+function getFinancialDataMap(): Map<string, RawFinancialRecord[]> {
 	if (!financialDataMap) {
 		financialDataMap = new Map();
 		const path = resolve(JQUANTS_DIR, "raw_stock_fin.csv");
@@ -104,7 +163,7 @@ function getFinancialDataMap(): Map<string, any> {
 			const content = readFileSync(path, "utf-8");
 			const lines = content.split("\n");
 
-			const dataByCode = new Map<string, any[]>();
+			const dataByCode = new Map<string, RawFinancialRecord[]>();
 
 			for (let i = 1; i < lines.length; i++) {
 				const line = lines[i]?.trim();
@@ -139,22 +198,24 @@ function getFinancialDataMap(): Map<string, any> {
 				const record = {
 					localCode,
 					disclosedDate,
-					eps: !isNaN(eps as number) ? eps : null,
-					bps: !isNaN(bps as number) ? bps : null,
-					netSales: !isNaN(netSales as number) ? netSales : null,
-					operatingProfit: !isNaN(operatingProfit as number)
+					eps: !Number.isNaN(eps as number) ? eps : null,
+					bps: !Number.isNaN(bps as number) ? bps : null,
+					netSales: !Number.isNaN(netSales as number) ? netSales : null,
+					operatingProfit: !Number.isNaN(operatingProfit as number)
 						? operatingProfit
 						: null,
-					profit: !isNaN(profit as number) ? profit : null,
-					equity: !isNaN(equity as number) ? equity : null,
-					totalAssets: !isNaN(totalAssets as number) ? totalAssets : null,
+					profit: !Number.isNaN(profit as number) ? profit : null,
+					equity: !Number.isNaN(equity as number) ? equity : null,
+					totalAssets: !Number.isNaN(totalAssets as number)
+						? totalAssets
+						: null,
 					periodEnd,
 				};
 
 				if (!dataByCode.has(localCode)) {
 					dataByCode.set(localCode, []);
 				}
-				dataByCode.get(localCode)!.push(record);
+				dataByCode.get(localCode)?.push(record);
 			}
 
 			for (const [code, records] of dataByCode) {
@@ -196,13 +257,14 @@ export interface CompanyInfo {
 	name: string;
 	sector?: string;
 	market?: string;
+	listingDate?: string;
 }
 
 export interface CompanyGovernance {
 	boardComposition?: string;
 	executiveCompensation?: string;
 	riskManagement?: string;
-	[key: string]: any;
+	[key: string]: unknown;
 }
 
 export interface FinancialData {
@@ -344,14 +406,21 @@ export async function getCompanyDetail(
 		}));
 	}
 
-	// Fetch XBRL data if requested (primary source)
+	// Use cached XBRL text if available
 	if (includeXBRL) {
-		const xbrlData = await fetchAndParseXBRL(edinetCode);
-		detail.overview = {
-			businessDescription: xbrlData?.businessDescription,
-			risks: xbrlData?.riskFactors,
-			products: xbrlData?.managementDiscussion,
-		};
+		const textMap = getXbrlTextMap();
+		const companyTexts = textMap[edinetCode];
+		if (companyTexts) {
+			const latestDocId = Object.keys(companyTexts).sort().reverse()[0];
+			if (latestDocId) {
+				const textData = companyTexts[latestDocId];
+				detail.overview = {
+					businessDescription: textData.businessDescription,
+					risks: textData.riskFactors,
+					products: textData.managementDiscussion,
+				};
+			}
+		}
 	}
 
 	// Get document count

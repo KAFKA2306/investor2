@@ -1,8 +1,8 @@
 import { Database } from "bun:sqlite";
-import { mkdirSync, readFileSync } from "node:fs";
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname } from "node:path";
 import yaml from "js-yaml";
-import { ConfigSchema } from "../shared/config_schema";
+import { ConfigSchema } from "../shared/schema";
 
 const config = ConfigSchema.parse(
 	yaml.load(readFileSync("config/default.yaml", "utf-8")),
@@ -16,7 +16,7 @@ const dbPaths = [
 	config.paths.cacheFundamentalEdinet,
 	config.paths.cacheMacroEstat,
 	config.paths.cacheMacroFred,
-];
+].filter((p): p is string => !!p);
 
 for (const path of dbPaths) {
 	mkdirSync(dirname(path), { recursive: true });
@@ -44,7 +44,11 @@ Object.values(dbs).forEach((db) => {
   `);
 });
 
-async function fetchWithCache(db: any, url: string, options: any = {}) {
+async function fetchWithCache(
+	db: Database,
+	url: string,
+	options: RequestInit = {},
+) {
 	const row = db.query("SELECT value FROM http_cache WHERE key = ?").get(url) as
 		| { value: string }
 		| undefined;
@@ -53,7 +57,12 @@ async function fetchWithCache(db: any, url: string, options: any = {}) {
 	console.log(`[FETCH] ${url}`);
 	const response = await fetch(url, options);
 	if (!response.ok) {
-		if (response.status === 404) return null;
+		if (
+			response.status === 404 ||
+			response.status === 400 ||
+			response.status === 403
+		)
+			return null;
 		throw new Error(`HTTP ${response.status}: ${url}`);
 	}
 	const data = await response.json();
@@ -100,12 +109,23 @@ async function syncJquants(mode: "markets" | "fundamental") {
 	const db = mode === "markets" ? dbs.marketsJquants : dbs.fundamentalJquants;
 	const baseUrl = "https://api.jquants.com/v2";
 	const headers = { "x-api-key": apiKey };
-	const dates = getDates(365);
 
-	console.log(`📡 [J-Quants v2] Syncing ${mode} (${dates.length} days)...`);
+	const now = new Date();
+	const to = now.toISOString().split("T")[0];
+	const backfillDays = mode === "markets" ? 730 : 365; // Markets: 2y, Fundamental: 1y
+	const from = new Date(now.getTime() - backfillDays * 24 * 60 * 60 * 1000)
+		.toISOString()
+		.split("T")[0];
+
+	console.log(`📡 [J-Quants v2] Syncing ${mode} Bulk (${from} ～ ${to})...`);
 
 	if (mode === "markets") {
+		// Master
 		await fetchWithCache(db, `${baseUrl}/equities/master`, { headers });
+
+		// Bulk Prices: Group by code if necessary, or fetch daily for topix?
+		// Note: J-Quants v2 daily is more efficient for all symbols.
+		const dates = getDates(backfillDays);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/equities/bars/daily?date=${d}`, {
@@ -116,8 +136,14 @@ async function syncJquants(mode: "markets" | "fundamental") {
 				`${baseUrl}/indices/bars/daily/topix?date=${d}`,
 				{ headers },
 			);
+			// Rate limit: ~2 requests per second to avoid 429
+			await new Promise((r) => setTimeout(r, 500));
 		}
+
+		// Export CSV for the "latest" consumers
+		await exportJquantsToCsv(db);
 	} else {
+		const dates = getDates(365);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/fins/summary?date=${d}`, {
@@ -125,6 +151,32 @@ async function syncJquants(mode: "markets" | "fundamental") {
 			});
 		}
 	}
+}
+
+async function exportJquantsToCsv(db: Database) {
+	console.log("💾 [J-Quants] Exporting latest prices to CSV...");
+	const csvPath = `${config.paths.data}/raw_stock_price_latest.csv`;
+
+	// We gather all bars from recent daily bar JSONs in cache
+	// 500 dates should cover ~2 years of trading days
+	const rows = db
+		.query(
+			"SELECT key, value FROM http_cache WHERE key LIKE '%/equities/bars/daily?date=%' ORDER BY key DESC LIMIT 500",
+		)
+		.all() as Array<{ key: string; value: string }>;
+
+	let csvContent = "Code,Date,Close,Volume\n";
+	for (const row of rows) {
+		const data = JSON.parse(row.value);
+		if (!data.data) continue;
+		for (const bar of data.data) {
+			csvContent += `${bar.Code},${bar.Date},${bar.AdjustmentClose},${bar.AdjustmentVolume}\n`;
+		}
+	}
+
+	mkdirSync(dirname(csvPath), { recursive: true });
+	writeFileSync(csvPath, csvContent);
+	console.log(`✅ [J-Quants] CSV Exported: ${csvPath}`);
 }
 
 async function syncEdinet() {
@@ -135,13 +187,34 @@ async function syncEdinet() {
 	const db = dbs.fundamentalEdinet;
 	const dates = getDates(1095);
 
+	let _allDocsFoundCount = 0;
+	const byCompany = new Map<string, unknown[]>();
+
 	for (const date of dates) {
-		await fetchWithCache(
-			db,
-			`https://api.edinet-fsa.go.jp/api/v2/documents.json?date=${date}&type=2&Subscription-Key=${apiKey}`,
-		);
+		const url = `https://api.edinet-fsa.go.jp/api/v2/documents.json?date=${date}&type=2&Subscription-Key=${apiKey}`;
+		const data = await fetchWithCache(db, url);
+
+		if (data?.results) {
+			_allDocsFoundCount += data.results.length;
+			for (const doc of data.results) {
+				const code = doc.edinetCode;
+				if (code) {
+					if (!byCompany.has(code)) byCompany.set(code, []);
+					byCompany.get(code)?.push(doc);
+				}
+			}
+		}
 		await new Promise((r) => setTimeout(r, 50));
 	}
+
+	// Ranking Output
+	console.log(`\n🏢 [EDINET] Unified Ranking (Top 10):`);
+	const sorted = Array.from(byCompany.entries())
+		.sort((a, b) => b[1].length - a[1].length)
+		.slice(0, 10);
+	sorted.forEach(([code, docs], i) => {
+		console.log(`  ${i + 1}. ${code}: ${docs.length} docs`);
+	});
 }
 
 async function syncEdinetXbrl() {
@@ -249,6 +322,20 @@ async function syncFred() {
 
 async function getAll() {
 	const mode = process.env.GET_MODE || "all";
+
+	if (mode === "edinet") {
+		console.log("🚀 [get:edinet] Starting EDINET Sync...");
+		await syncEdinet();
+		await syncEdinetXbrl();
+		return;
+	}
+
+	if (mode === "jquants") {
+		console.log("🚀 [get:jquants] Starting J-Quants Sync...");
+		await syncJquants("markets");
+		await syncJquants("fundamental");
+		return;
+	}
 
 	if (mode === "xbrl-only") {
 		console.log("🚀 [get:xbrl] Starting EDINET XBRL-Only Acquisition...");

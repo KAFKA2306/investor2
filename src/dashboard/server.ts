@@ -6,11 +6,13 @@ import {
 	getCompanyDetail,
 	getCompanyList,
 	searchCompanies,
-} from "./edinet_data";
-import { getScreenerData } from "./screener_data";
+} from "../preprocess/edinet";
+import { getScreenerData } from "../preprocess/screener";
 
 const app = new Hono();
-const _config = yaml.load(readFileSync("config/default.yaml", "utf-8")) as any;
+const _config = yaml.load(
+	readFileSync("config/default.yaml", "utf-8"),
+) as Record<string, unknown>;
 const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
 
 interface CacheStatistics {
@@ -1122,70 +1124,74 @@ app.get("/edinet/:code", async (c) => {
         <!-- Financial Section -->
         ${
 					company.financial
-						? `
+						? (
+								() => {
+									const latestFin = Array.isArray(company.financial)
+										? company.financial[company.financial.length - 1]
+										: company.financial;
+									if (!latestFin) return "";
+									return `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
               <h2 class="card-title">財務概要</h2>
-              <p class="text-sm text-gray-600 mb-4">期末: ${company.financial.periodEnd || "不明"}</p>
+              <p class="text-sm text-gray-600 mb-4">期末: ${latestFin.periodEnd || "不明"}</p>
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 ${
-									company.financial.eps !== null &&
-									company.financial.eps !== undefined
+									latestFin.eps !== null && latestFin.eps !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">EPS</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.eps === "number" ? company.financial.eps.toFixed(2) : "N/A"}</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.eps === "number" ? latestFin.eps.toFixed(2) : "N/A"}</p>
                 </div>`
 										: ""
 								}
                 ${
-									company.financial.bps !== null &&
-									company.financial.bps !== undefined
+									latestFin.bps !== null && latestFin.bps !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">BPS</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.bps === "number" ? company.financial.bps.toFixed(2) : "N/A"}</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.bps === "number" ? latestFin.bps.toFixed(2) : "N/A"}</p>
                 </div>`
 										: ""
 								}
                 ${
-									company.financial.netSales !== null &&
-									company.financial.netSales !== undefined
+									latestFin.netSales !== null &&
+									latestFin.netSales !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">売上高</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.netSales === "number" ? company.financial.netSales.toFixed(1) : "N/A"}億</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.netSales === "number" ? latestFin.netSales.toFixed(1) : "N/A"}億</p>
                 </div>`
 										: ""
 								}
                 ${
-									company.financial.profit !== null &&
-									company.financial.profit !== undefined
+									latestFin.profit !== null && latestFin.profit !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">純利益</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.profit === "number" ? company.financial.profit.toFixed(1) : "N/A"}億</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.profit === "number" ? latestFin.profit.toFixed(1) : "N/A"}億</p>
                 </div>`
 										: ""
 								}
                 ${
-									company.financial.equity !== null &&
-									company.financial.equity !== undefined
+									latestFin.equity !== null && latestFin.equity !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">自己資本</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.equity === "number" ? company.financial.equity.toFixed(1) : "N/A"}億</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.equity === "number" ? latestFin.equity.toFixed(1) : "N/A"}億</p>
                 </div>`
 										: ""
 								}
                 ${
-									company.financial.totalAssets !== null &&
-									company.financial.totalAssets !== undefined
+									latestFin.totalAssets !== null &&
+									latestFin.totalAssets !== undefined
 										? `<div>
                   <p class="text-xs text-gray-600">総資産</p>
-                  <p class="text-lg font-bold">¥${typeof company.financial.totalAssets === "number" ? company.financial.totalAssets.toFixed(1) : "N/A"}億</p>
+                  <p class="text-lg font-bold">¥${typeof latestFin.totalAssets === "number" ? latestFin.totalAssets.toFixed(1) : "N/A"}億</p>
                 </div>`
 										: ""
 								}
               </div>
             </div>
           </div>
-        `
+        `;
+								}
+							)()
 						: ""
 				}
 
