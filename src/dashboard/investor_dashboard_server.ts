@@ -249,7 +249,7 @@ async function getStats(): Promise<CacheStatistics> {
 	// L3: subprocess fallback (current behavior, ~5s)
 	try {
 		const proc = Bun.spawn(
-			["bun", "run", "src/commands/print_cache_statistics.ts"],
+			["bun", "run", "src/tasks/print_cache_statistics.ts"],
 			{
 				cwd: process.cwd(),
 				stdio: ["inherit", "pipe", "inherit"],
@@ -1261,4 +1261,5 @@ app.get("/edinet/:code", async (c) => {
 export default {
 	fetch: app.fetch,
 	port: 3000,
+	idleTimeout: 120,
 };

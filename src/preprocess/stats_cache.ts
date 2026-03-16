@@ -23,7 +23,7 @@ interface CacheStatistics {
 }
 
 const proc = Bun.spawn(
-	["bun", "run", "src/commands/print_cache_statistics.ts"],
+	["bun", "run", "src/tasks/print_cache_statistics.ts"],
 	{ cwd: process.cwd(), stdio: ["inherit", "pipe", "inherit"] },
 );
 

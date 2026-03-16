@@ -53,3 +53,4 @@ llm/*/downloads/
 .vscode/
 .idea/
 .DS_Storetsconfig.tsbuildinfo
+screenshots/
