@@ -16,14 +16,18 @@ test.describe("Dashboard E2E Tests", () => {
 		const searchInput = page.locator('input[name="q"]');
 		await searchInput.fill("マルハニチロ");
 
-		// Wait for HTMX to trigger search and display results
-		await page.waitForTimeout(1500);
-		await page.waitForLoadState("networkidle");
+		// Wait for HTMX request to complete - watch for network activity
+		await page.waitForResponse(
+			(response) =>
+				response.url().includes("/api/company/search") &&
+				response.status() === 200,
+		);
 
-		// Verify results are displayed
-		const results = page.locator(".card");
-		const count = await results.count();
-		expect(count).toBeGreaterThan(0);
+		await page.waitForTimeout(500);
+
+		// Verify results are displayed in the results container
+		const resultsContainer = page.locator("#company-results");
+		await expect(resultsContainer).toContainText("マルハニチロ");
 
 		// Take screenshot with search results
 		await page.screenshot({
@@ -31,8 +35,9 @@ test.describe("Dashboard E2E Tests", () => {
 			fullPage: true,
 		});
 
-		// Click on first result to navigate to detail page
-		await results.first().click();
+		// Click on first detail link
+		const detailLink = page.locator('a:has-text("詳細")').first();
+		await detailLink.click();
 		await page.waitForLoadState("networkidle");
 
 		// Verify detail page loaded

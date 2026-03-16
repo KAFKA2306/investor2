@@ -103,7 +103,7 @@ function getFinancialDataMap(): Map<string, any> {
 			const content = readFileSync(path, "utf-8");
 			const lines = content.split("\n");
 
-			const latestByCode = new Map<string, any>();
+			const dataByCode = new Map<string, any[]>();
 
 			for (let i = 1; i < lines.length; i++) {
 				const line = lines[i]?.trim();
@@ -126,36 +126,42 @@ function getFinancialDataMap(): Map<string, any> {
 				const disclosedDate = parts[1]?.trim();
 				if (!disclosedDate) continue;
 
-				const existing = latestByCode.get(localCode);
+				const eps = parts[13] ? parseFloat(parts[13]) : null;
+				const bps = parts[4] ? parseFloat(parts[4]) : null;
+				const netSales = parts[28] ? parseInt(parts[28], 10) : null;
+				const operatingProfit = parts[31] ? parseInt(parts[31], 10) : null;
+				const profit = parts[33] ? parseInt(parts[33], 10) : null;
+				const equity = parts[14] ? parseInt(parts[14], 10) : null;
+				const totalAssets = parts[40] ? parseInt(parts[40], 10) : null;
+				const periodEnd = parts[10]?.trim() || "";
 
-				if (!existing || existing.disclosedDate < disclosedDate) {
-					const eps = parts[13] ? parseFloat(parts[13]) : null;
-					const bps = parts[4] ? parseFloat(parts[4]) : null;
-					const netSales = parts[28] ? parseInt(parts[28], 10) : null;
-					const operatingProfit = parts[31] ? parseInt(parts[31], 10) : null;
-					const profit = parts[33] ? parseInt(parts[33], 10) : null;
-					const equity = parts[14] ? parseInt(parts[14], 10) : null;
-					const totalAssets = parts[40] ? parseInt(parts[40], 10) : null;
-					const periodEnd = parts[10]?.trim() || "";
+				const record = {
+					localCode,
+					disclosedDate,
+					eps: !isNaN(eps as number) ? eps : null,
+					bps: !isNaN(bps as number) ? bps : null,
+					netSales: !isNaN(netSales as number) ? netSales : null,
+					operatingProfit: !isNaN(operatingProfit as number)
+						? operatingProfit
+						: null,
+					profit: !isNaN(profit as number) ? profit : null,
+					equity: !isNaN(equity as number) ? equity : null,
+					totalAssets: !isNaN(totalAssets as number) ? totalAssets : null,
+					periodEnd,
+				};
 
-					latestByCode.set(localCode, {
-						localCode,
-						disclosedDate,
-						eps: !isNaN(eps as number) ? eps : null,
-						bps: !isNaN(bps as number) ? bps : null,
-						netSales: !isNaN(netSales as number) ? netSales : null,
-						operatingProfit: !isNaN(operatingProfit as number)
-							? operatingProfit
-							: null,
-						profit: !isNaN(profit as number) ? profit : null,
-						equity: !isNaN(equity as number) ? equity : null,
-						totalAssets: !isNaN(totalAssets as number) ? totalAssets : null,
-						periodEnd,
-					});
+				if (!dataByCode.has(localCode)) {
+					dataByCode.set(localCode, []);
 				}
+				dataByCode.get(localCode)!.push(record);
 			}
 
-			financialDataMap = latestByCode;
+			for (const [code, records] of dataByCode) {
+				records.sort((a, b) => a.disclosedDate.localeCompare(b.disclosedDate));
+				dataByCode.set(code, records.slice(-5));
+			}
+
+			financialDataMap = dataByCode;
 		} catch (error) {
 			console.error(`Failed to load financial data: ${error}`);
 		}

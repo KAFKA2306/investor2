@@ -1147,40 +1147,66 @@ app.get("/edinet/:code", async (c) => {
 
         <!-- Financial Chart Section -->
         ${
-					company.financial
+					company.financial && Array.isArray(company.financial)
 						? `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
-              <h2 class="card-title">財務指標チャート</h2>
-              <div class="w-full" style="max-height: 300px;">
+              <h2 class="card-title">財務指標の推移</h2>
+              <div class="w-full" style="max-height: 400px;">
                 <canvas id="financialChart"></canvas>
               </div>
               <script>
+                const chartData = ${JSON.stringify(company.financial)};
+                const periods = chartData.map(d => d.periodEnd || d.disclosedDate);
                 const ctx = document.getElementById('financialChart').getContext('2d');
                 new Chart(ctx, {
-                  type: 'bar',
+                  type: 'line',
                   data: {
-                    labels: ['EPS', 'BPS', '売上高', '純利益', '自己資本', '総資産'],
-                    datasets: [{
-                      label: '${company.financial.periodEnd || "財務指標"}',
-                      data: [
-                        ${company.financial.eps || 0},
-                        ${company.financial.bps || 0},
-                        ${(company.financial.netSales || 0) * 100},
-                        ${(company.financial.profit || 0) * 100},
-                        ${(company.financial.equity || 0) * 100},
-                        ${(company.financial.totalAssets || 0) * 100}
-                      ],
-                      backgroundColor: ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#ec4899'],
-                      borderRadius: 4
-                    }]
+                    labels: periods,
+                    datasets: [
+                      {
+                        label: 'EPS (¥)',
+                        data: chartData.map(d => d.eps || null),
+                        borderColor: '#3b82f6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.05)',
+                        tension: 0.3,
+                        fill: true
+                      },
+                      {
+                        label: '売上高 (億円)',
+                        data: chartData.map(d => d.netSales ? d.netSales / 100000000 : null),
+                        borderColor: '#f59e0b',
+                        backgroundColor: 'rgba(245, 158, 11, 0.05)',
+                        tension: 0.3,
+                        fill: false
+                      },
+                      {
+                        label: '純利益 (億円)',
+                        data: chartData.map(d => d.profit ? d.profit / 100000000 : null),
+                        borderColor: '#ef4444',
+                        backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                        tension: 0.3,
+                        fill: false
+                      },
+                      {
+                        label: '自己資本 (億円)',
+                        data: chartData.map(d => d.equity ? d.equity / 100000000 : null),
+                        borderColor: '#8b5cf6',
+                        backgroundColor: 'rgba(139, 92, 246, 0.05)',
+                        tension: 0.3,
+                        fill: false
+                      }
+                    ]
                   },
                   options: {
-                    indexAxis: 'x',
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: { legend: { display: true } },
-                    scales: { y: { beginAtZero: true } }
+                    plugins: {
+                      legend: { display: true, position: 'top' }
+                    },
+                    scales: {
+                      y: { beginAtZero: true }
+                    }
                   }
                 });
               </script>
