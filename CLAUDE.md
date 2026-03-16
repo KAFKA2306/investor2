@@ -135,13 +135,20 @@ NOT from `src/schemas/*`
 Use the `schema-management` SKILL to enforce this rule during code review.
 Pre-commit: `grep -r "from.*schemas/" src --include="*.ts" | grep -v "src/schemas.ts"` should return 0 results.
 
-## 🎯 Skill Management (CRITICAL)
+## 🎯 Skill & Agent Management (CRITICAL)
 
+### Skill Management
 - **Canonical source**: `.agent/skills/<name>/SKILL.md` (managed by `agr`)
 - `.claude/skills/` is a **symlink** to `.agent/skills/` — physically the same directory
 - **Edit only** `.agent/skills/` — `.claude/skills/` reflects changes instantly
 - Each SKILL.md requires YAML frontmatter: `name` + English `description` with trigger phrases
-- **TypeScript runtime skills** (different from above): `ts-agent/src/skills/` — see `typescript-agent-skills` SKILL.md
+- **All 40 skills** must have frontmatter (non-negotiable for agent trigger system)
+
+### Agent Management
+- ✅ **Only in `.agent/`** — skills, workflows, hooks (agr-managed)
+- ❌ **NOT in src/** — no TypeScript or Python agent implementations
+- ❌ **NOT in separate agent files** — use skills + workflows for orchestration
+- Agent orchestration via: `.agent/workflows/newalphasearch.md`, `.agent/skills/claude-expertise-bridge/SKILL.md`
 
 ### Critical SKILLs
 
@@ -151,6 +158,7 @@ Pre-commit: `grep -r "from.*schemas/" src --include="*.ts" | grep -v "src/schema
 | `fail-fast-coding-rules` | Enforce CDD patterns (no try-catch, let errors cascade) |
 | `where-to-save` | Enforce PathRegistry for all file operations |
 | `harness-governance` | Enforce repository hygiene and ADR enforcement |
+| `claude-expertise-bridge` | Meta-skill for agent orchestration & decision logic |
 
 ---
 
