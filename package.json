@@ -7,6 +7,8 @@
     "lint": "bun ./node_modules/@biomejs/biome/bin/biome check src tests",
     "format": "bun ./node_modules/@biomejs/biome/bin/biome format src tests --write",
     "test": "bun test tests",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
     "start": "bun src/index.ts",
     "agent:unified": "bun src/agents/unified/unified_agent.ts",
@@ -16,6 +18,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
+    "@playwright/test": "^1.58.2",
     "@types/bun": "latest",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.3.2",
