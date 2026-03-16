@@ -3,17 +3,20 @@ import { resolve } from "node:path";
 import { Hono } from "hono";
 import yaml from "js-yaml";
 import {
+	getCompanyCount,
 	getCompanyDetail,
 	getCompanyList,
 	searchCompanies,
 } from "../preprocess/edinet";
 import { getScreenerData } from "../preprocess/screener";
 
+import { ConfigSchema } from "../shared/schema";
+
 const app = new Hono();
-const _config = yaml.load(
-	readFileSync("config/default.yaml", "utf-8"),
-) as Record<string, unknown>;
-const CACHE_ROOT = "/mnt/d/investor_all_cached_data";
+const config = ConfigSchema.parse(
+	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+);
+const CACHE_ROOT_DIR = resolve(config.paths.data, "..");
 
 interface CacheStatistics {
 	marketData: {
@@ -52,37 +55,24 @@ function formatBytes(bytes: number): string {
 }
 
 function getFileSize(path: string): number {
-	try {
-		return statSync(path).size;
-	} catch {
-		return 0;
-	}
+	return statSync(path).size;
 }
 
 function getDirectorySize(dirPath: string): number {
-	if (!existsSync(dirPath)) return 0;
-	try {
-		const files = readdirSync(dirPath, { recursive: true });
-		let totalSize = 0;
-		for (const file of files) {
-			const filePath = resolve(dirPath, file as string);
-			try {
-				const stat = statSync(filePath);
-				if (stat.isFile()) {
-					totalSize += stat.size;
-				}
-			} catch {
-				// skip
-			}
+	const files = readdirSync(dirPath, { recursive: true });
+	let totalSize = 0;
+	for (const file of files) {
+		const filePath = resolve(dirPath, file as string);
+		const stat = statSync(filePath);
+		if (stat.isFile()) {
+			totalSize += stat.size;
 		}
-		return totalSize;
-	} catch {
-		return 0;
 	}
+	return totalSize;
 }
 
 function _getMarketDataStats(): CacheStatistics["marketData"] {
-	const jquantsDir = resolve(CACHE_ROOT, "jquants");
+	const jquantsDir = config.paths.data;
 	const stockListPath = resolve(jquantsDir, "stock_list.csv");
 	const priceCsvPath = resolve(jquantsDir, "raw_stock_price.csv");
 	const finCsvPath = resolve(jquantsDir, "raw_stock_fin.csv");
@@ -92,40 +82,22 @@ function _getMarketDataStats(): CacheStatistics["marketData"] {
 	let finRecords = 0;
 	let dateRange: { start: string; end: string } | null = null;
 
-	try {
-		if (existsSync(stockListPath)) {
-			const data = readFileSync(stockListPath, "utf-8");
-			stocks = data.split("\n").length - 2;
+	const listData = readFileSync(stockListPath, "utf-8");
+	stocks = listData.split("\n").length - 2;
+
+	const priceData = readFileSync(priceCsvPath, "utf-8");
+	const lines = priceData.split("\n");
+	priceRecords = Math.max(0, lines.length - 2);
+	if (lines.length > 2) {
+		const firstLine = lines[1]?.split(",")[1] || "";
+		const lastLine = lines[lines.length - 2]?.split(",")[1] || "";
+		if (firstLine && lastLine) {
+			dateRange = { start: firstLine, end: lastLine };
 		}
-	} catch {
-		// continue
 	}
 
-	try {
-		if (existsSync(priceCsvPath)) {
-			const data = readFileSync(priceCsvPath, "utf-8");
-			const lines = data.split("\n");
-			priceRecords = Math.max(0, lines.length - 2);
-			if (lines.length > 2) {
-				const firstLine = lines[1]?.split(",")[1] || "";
-				const lastLine = lines[lines.length - 2]?.split(",")[1] || "";
-				if (firstLine && lastLine) {
-					dateRange = { start: firstLine, end: lastLine };
-				}
-			}
-		}
-	} catch {
-		// continue
-	}
-
-	try {
-		if (existsSync(finCsvPath)) {
-			const data = readFileSync(finCsvPath, "utf-8");
-			finRecords = data.split("\n").length - 2;
-		}
-	} catch {
-		// continue
-	}
+	const finData = readFileSync(finCsvPath, "utf-8");
+	finRecords = finData.split("\n").length - 2;
 
 	const sizeGb =
 		getFileSize(priceCsvPath) +
@@ -142,30 +114,20 @@ function _getMarketDataStats(): CacheStatistics["marketData"] {
 }
 
 function _getEdinetStats(): CacheStatistics["edinet"] {
-	const edinetDir = resolve(CACHE_ROOT, "edinet");
+	const edinetDir = config.paths.edinet;
 	let companyCount = 0;
 	let documentCount = 0;
 
-	try {
-		if (existsSync(edinetDir)) {
-			const items = readdirSync(edinetDir);
-			companyCount = items.filter((item) => !item.startsWith(".")).length;
+	const items = readdirSync(edinetDir);
+	companyCount = items.filter((item) => !item.startsWith(".")).length;
 
-			for (const company of items) {
-				const companyPath = resolve(edinetDir, company);
-				try {
-					const stat = statSync(companyPath);
-					if (stat.isDirectory()) {
-						const docs = readdirSync(companyPath);
-						documentCount += docs.filter((d) => !d.startsWith(".")).length;
-					}
-				} catch {
-					// continue
-				}
-			}
+	for (const company of items) {
+		const companyPath = resolve(edinetDir, company);
+		const stat = statSync(companyPath);
+		if (stat.isDirectory()) {
+			const docs = readdirSync(companyPath);
+			documentCount += docs.filter((d) => !d.startsWith(".")).length;
 		}
-	} catch {
-		// continue
 	}
 
 	const sizeGb = getDirectorySize(edinetDir) / (1024 * 1024 * 1024);
@@ -174,7 +136,7 @@ function _getEdinetStats(): CacheStatistics["edinet"] {
 }
 
 function _getSqliteStats() {
-	const cacheDir = resolve(CACHE_ROOT, "cache");
+	const cacheDir = config.paths.cache;
 	const stats: CacheStatistics["sqlite"] = {
 		market: null,
 		edinet: null,
@@ -189,32 +151,22 @@ function _getSqliteStats() {
 
 	for (const { key, path } of sqliteFiles) {
 		const fullPath = resolve(cacheDir, path);
-		if (existsSync(fullPath)) {
-			const size = getFileSize(fullPath) / (1024 * 1024 * 1024);
-			stats[key] = { sizeGb: size };
-		}
+		const size = getFileSize(fullPath) / (1024 * 1024 * 1024);
+		stats[key] = { sizeGb: size };
 	}
 
 	return stats;
 }
 
 function _getLastUpdated(): string {
-	const dirs = [
-		resolve(CACHE_ROOT, "cache"),
-		resolve(CACHE_ROOT, "jquants"),
-		resolve(CACHE_ROOT, "edinet"),
-	];
+	const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
 
 	let latestTime = 0;
 
 	for (const dir of dirs) {
-		try {
-			const stat = statSync(dir);
-			if (stat.mtimeMs > latestTime) {
-				latestTime = stat.mtimeMs;
-			}
-		} catch {
-			// continue
+		const stat = statSync(dir);
+		if (stat.mtimeMs > latestTime) {
+			latestTime = stat.mtimeMs;
 		}
 	}
 
@@ -248,13 +200,10 @@ async function getStats(): Promise<CacheStatistics> {
 
 	// L3: subprocess fallback (current behavior, ~5s)
 	try {
-		const proc = Bun.spawn(
-			["bun", "run", "src/tasks/print_cache_statistics.ts"],
-			{
-				cwd: process.cwd(),
-				stdio: ["inherit", "pipe", "inherit"],
-			},
-		);
+		const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts"], {
+			cwd: process.cwd(),
+			stdio: ["inherit", "pipe", "inherit"],
+		});
 
 		const output = await new Response(proc.stdout).text();
 
@@ -455,7 +404,7 @@ function renderStatsCards(stats: CacheStatistics): string {
 
     <div class="bg-gray-50 rounded-lg p-4 text-sm text-gray-600">
       <div>🕒 最終更新: ${stats.lastUpdated}</div>
-      <div>📍 キャッシュ位置: ${CACHE_ROOT}</div>
+      <div>📍 キャッシュ位置: ${CACHE_ROOT_DIR}</div>
     </div>
   `;
 }
@@ -724,8 +673,7 @@ app.get("/screener", async (c) => {
 
 // Company Finder view
 app.get("/company", async (c) => {
-	const stats = await getStats();
-	const edinet = stats.edinet;
+	const companyCount = await getCompanyCount();
 
 	return c.html(`
     <!DOCTYPE html>
@@ -784,7 +732,7 @@ app.get("/company", async (c) => {
         <!-- Company List -->
         <div id="company-results">
           <div class="alert alert-info">
-            <span>カバー企業: <strong>${edinet.companyCount.toLocaleString()}</strong> 社</span>
+            <span>カバー企業: <strong>${companyCount.toLocaleString()}</strong> 社</span>
           </div>
         </div>
       </div>
@@ -936,6 +884,14 @@ app.get("/api/company/list", async (c) => {
 
 	const companies = await getCompanyList(limit, offset);
 
+	if (companies.length === 0) {
+		return c.html(`
+      <div class="alert alert-warning">
+        <span>該当する企業がありません</span>
+      </div>
+    `);
+	}
+
 	return c.html(`
     <div class="grid gap-4">
       ${companies
@@ -962,6 +918,14 @@ app.get("/api/company/list", async (c) => {
 app.get("/api/company/search", async (c) => {
 	const q = c.req.query("q") || "";
 	const companies = await searchCompanies(q);
+
+	if (companies.length === 0) {
+		return c.html(`
+      <div class="alert alert-warning">
+        <span>「${q}」に該当する企業がありません</span>
+      </div>
+    `);
+	}
 
 	return c.html(`
     <div class="grid gap-4">
