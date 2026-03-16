@@ -48,7 +48,29 @@ See `DATA_STRUCTURE.md` for the unified architecture mappings.
 **.agent/ (agent resources):**
 - `agr.toml` — Agent Resource manifest
 
-**Rule**: Do NOT add files to root. New configs go to `config/`. Biome config must stay JSON (not YAML).
+**src/ (code — MUST be properly organized):**
+```
+src/
+├── domain/         # Business logic, domain models
+├── io/             # Data input/output (APIs, files, DB reads)
+├── agents/         # Multi-agent implementations
+├── system/         # System layer (orchestration, config)
+├── db/             # Database operations, repositories
+├── providers/      # External data sources (APIs, caching)
+├── skills/         # AI skill implementations
+├── features/       # Feature implementations (market data enrichment)
+├── utils/          # Generic utilities
+├── tasks/          # CLI task implementations (called by Taskfile)
+├── ui/             # Frontend code
+├── schemas.ts      # Unified Zod schemas (MANDATORY: single file)
+└── index.ts        # Entry point, re-exports
+```
+
+**CRITICAL RULES**:
+1. ❌ **NO "commands/" directory** — Use `src/tasks/` instead (Taskfile is the interface)
+2. ❌ **NO file prefixes** — Use directory structure (`src/domain/foo.ts`, NOT `src/domain_foo.ts`)
+3. ✅ **Proper nesting** — Each layer has its own directory; flatten avoids discoverability loss
+4. ✅ **Index files** — Each subdirectory has an `index.ts` for clean re-exports
 
 ## 📦 Unified Schemas (MANDATORY)
 
@@ -133,6 +155,47 @@ Pre-commit: `grep -r "from.*schemas/" src --include="*.ts" | grep -v "src/schema
 | `fail-fast-coding-rules` | Enforce CDD patterns (no try-catch, let errors cascade) |
 | `where-to-save` | Enforce PathRegistry for all file operations |
 | `harness-governance` | Enforce repository hygiene and ADR enforcement |
+
+---
+
+## 🚨 Guardrail Registry (Failure Prevention)
+
+**Purpose**: Record all detected failure patterns so AI never repeats the same bug twice.
+
+**Implementation**:
+- When a failure occurs, document it in a **Guardrail note** (inline in CLAUDE.md under this section, or as an ADR in `docs/adr/`)
+- **Example pattern to record**:
+  ```
+  GUARD-001: Alpha formula without normalization
+  → Failure: Formula lacks Rank() or CS_ZScore() normalization
+  → Fix: Always append Rank() before final return
+  → Enforced by: alpha-mining SKILL, Phase 1 validation
+  ```
+
+---
+
+## 📊 Experiment Tracking (EXP / child-exp)
+
+**2-Level Experiment Hierarchy**:
+- **EXP** (Major Cycle): Large changes (prompt redesign, new SKILL, workflow overhaul, domain pivot).
+  - Use: `task run:newalphasearch --exp "EXP-YYYYMMDD-NNN: [Title]"`
+  - Log to: `EXP_SUMMARY.md` (Experiment Index section).
+
+- **child-exp** (Micro-Iteration): Small tweaks within an EXP (threshold ±5%, single operator swap, prompt rewording).
+  - Use: `task run:newalphasearch --child-exp "EXP-child-YYYYMMDD-NNN: [Change]"`
+  - Log to: Parent EXP section (collapse child exps to keep index readable).
+
+**Metrics to Track**:
+1. Sharpe Ratio (baseline: ≥1.5)
+2. Information Coefficient (baseline: ≥0.04)
+3. Max Drawdown (absolute ceiling: ≤0.10)
+4. Candidate Generation Rate (unique formulas per cycle)
+5. GO/HOLD/PIVOT distribution
+
+**Decision Logic**:
+- ✅ **GO**: All thresholds passed → Deploy immediately.
+- 🔀 **HOLD**: 1-2 metrics marginal → child-exp refinement.
+- 🔄 **PIVOT**: 2+ critical failures → Ralph Loop domain switch.
 
 ---
 *For task-specific commands and setup, see [OPERATIONS.md](file:///home/kafka/finance/investor/docs/OPERATIONS.md).*
