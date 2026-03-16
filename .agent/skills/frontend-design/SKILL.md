@@ -1,10 +1,11 @@
 ---
 name: frontend-design
 description: |
-  Build responsive, production-ready web interfaces with Tailwind CSS, DaisyUI, and HTMX.
-  Use this skill whenever the user mentions: designing UI layouts, building forms with HTMX,
-  implementing responsive design, styling web pages, form validation, or frontend architecture.
-  Include this skill for any discussion of web interface design, even if not explicitly requested.
+  [PROJECT-SPECIFIC] Build responsive, production-ready web interfaces with Tailwind CSS, DaisyUI, and HTMX.
+  This project uses Tailwind CSS + DaisyUI + HTMX stack (NOT React/shadcn).
+  Use this skill whenever the user mentions: HTMX form integration, Tailwind responsive design,
+  DaisyUI components, form validation with server-side rendering, or HTML-based frontend architecture.
+  Include this skill for any discussion of web interface design in this project context.
 compatibility: Requires Tailwind CDN, DaisyUI CDN, HTMX
 ---
 

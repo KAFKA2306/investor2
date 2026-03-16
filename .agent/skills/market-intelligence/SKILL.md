@@ -20,3 +20,27 @@ description: Detect whale movements, latent economic signals, event-driven oppor
 ## ベストプラクティス
 - シグナルは単一のソースに依存せず、常に複数の独立したソース（オンチェーンとオフチェーンの両方）で裏付けを取ること。
 - 「偽のシグナル（ウォッシュトレード等）」を排除するためのフィルタリング基準を厳格に適用すること。
+
+## 実装リファレンス (Implementation Reference)
+
+### 利用可能なデータソース (Available Data Sources)
+- **J-Quants**: 日本株データ、リアルタイム価格・マーケット指標
+- **EDINET**: 日本の上場企業決算・監査報告書（`task edinet:fetch` で取得）
+- **Fred Economic Data**: US マクロ経済指標（金利、失業率等）
+- **Yahoo Finance**: グローバル株価・為替データ
+
+### 実行コマンド (Commands)
+```
+task pipeline:verify          # パイプライン全体の整合性確認
+task stats:summarize          # 市場統計サマリー生成
+task polymarket:fetch         # Polymarket 予測市場データ取得
+```
+
+### エージェント連携
+- **whale-watcher-agent**: 13F ファイリングから大口投資家のポジション変化を検出
+- **macro-top-down-agent**: マクロ環境分析・セクター相関検出
+- **event-driven-analyst-agent**: 短期イベント機会（スクイーズ候補、M&A レーダー）
+
+### データ検証スキル
+- 不整合検出: `polymarket-data-validation`
+- スキーマ定義: `src/schemas.ts` 参照

@@ -27,25 +27,19 @@ Produce deterministic, parseable output from vLLM with minimum moving parts.
 - Keep context length small first, then increase only when required.
 
 ## Failure Triage Order
-1. Model/API mismatch
-- Symptom: unknown architecture, unsupported args.
-- Action: use a Qwen3.5-compatible vLLM build and remove unsupported constructor args.
+1. Empty/non-JSON output (vllm-io responsibility)
+- Symptom: `JSONDecodeError` or blank text in valid model invocation.
+- Action: constrain prompt to exact schema output and use `<think>\n</think>\n` assistant prefix.
 
-2. CUDA library mismatch
-- Symptom: `libcusparse` or `nvjitlink` symbol errors.
-- Action: prepend `.venv` nvjitlink path to `LD_LIBRARY_PATH`.
-
-3. KV cache exhaustion
+2. KV cache exhaustion (vllm-io responsibility)
 - Symptom: no available memory/cache blocks.
 - Action: reduce model len, keep single sequence, keep eager mode.
 
-4. Empty/non-JSON output
-- Symptom: `JSONDecodeError` or blank text.
-- Action: constrain prompt to exact schema output and use `<think>\n</think>\n` assistant prefix.
+3. Hardware/startup errors (→ delegate to qwen-local-inference)
+- Symptom: CUDA symbol errors (`libcusparse`, `nvjitlink`), multiprocessing bootstrap RuntimeError, model architecture mismatch.
+- Action: **See `qwen-local-inference` skill** for GPU initialization and process bootstrap handling.
 
-5. Multiprocessing bootstrap error (WSL)
-- Symptom: spawn bootstrapping RuntimeError.
-- Action: wrap entrypoint with `if __name__ == '__main__':`.
+**Note**: vllm-io scope is *after* successful model startup. Hardware-layer errors (CUDA, multiprocessing, model loading) are handled by `qwen-local-inference`.
 
 ## Run Pattern
 1. Build prompt.

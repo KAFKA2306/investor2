@@ -26,3 +26,22 @@ Polymarket の市場データ品質を確保し、異常値検出と整合性チ
 - 検証エラーは即座に propagate（suppress しない）。異常は早期に検出すべき。
 - 複数の独立したチェック（スキーマ、統計、キャッシュ鮮度）を並行実行し、1 つでも失敗すれば REJECT。
 - 検証パイプラインの出力は `CanonicalLog` 形式で記録し、後追い監査を可能にすること。
+
+## リファレンス (Reference)
+
+### スキーマ定義
+**ファイル**: `src/schemas.ts`
+- `PolymarketEventSchema`: イベント、オッズ、メタデータの統一スキーマ
+- `PolymarketMarketSchema`: マーケット単位の整合性検証
+
+### 実行
+```
+task polymarket:validate    # 全イベント・オッズの整合性確認
+```
+
+### エラー回復戦略
+| 異常パターン | 対応 |
+|---|---|
+| スキーマ不一致 | REJECT - 修正なしで propagate |
+| Z-score > 3σ | ALERT - アノマリー検出ログ出力、取引は慎重に進める |
+| キャッシュ古い | REFRESH - API 再クエリ、最新データで再検証 |

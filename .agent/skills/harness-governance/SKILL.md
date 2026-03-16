@@ -11,10 +11,10 @@ This skill enforces the **Harness Engineering** best practices via external exec
 
 When triggered, you MUST immediately rely on the following external sources of truth:
 
-1. **Repository Rules & Structure**: Execute `view_file` on `AGENTS.md`. It contains the complete, up-to-date governance rules (Crash-Driven Development, deterministic quality, etc.).
-2. **Hygiene & Linting**: Execute `run_command` with `bash scripts/self_healing_lint.sh`. Follow the instructions provided in its output EXACTLY.
-3. **Garbage Collection**: If rotting files or dead code are suspected, execute `run_command` with `task maintenance:gc`.
-4. **Architecture Decisions**: Execute `list_dir` on `docs/adr/`. Any architectural change MUST be recorded here.
+1. **Repository Rules & Structure**: Refer to `AGENTS.md` and `CLAUDE.md`. They contain the complete, up-to-date governance rules (Crash-Driven Development, deterministic quality, etc.).
+2. **Code Quality & Linting**: Use `harness-quality-pipeline` skill to install and run hooks. Biome config (`config/biome.json`) defines all lint/format rules.
+3. **Garbage Collection**: If rotting files or dead code are suspected, investigate manually. Remove only after verifying they are truly unused.
+4. **Architecture Decisions**: Review `docs/adr/`. Any architectural change MUST be recorded there.
 
 ## ⚠️ CRITICAL INSTRUCTION
 
