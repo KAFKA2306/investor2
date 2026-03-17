@@ -1,7 +1,13 @@
 import { readdirSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import yaml from "js-yaml";
-import { ConfigSchema } from "../shared/schema";
+import {
+	type CompanyDetail,
+	type CompanyGovernance,
+	type CompanyInfo,
+	ConfigSchema,
+	type FinancialData,
+} from "../schemas";
 
 const config = ConfigSchema.parse(
 	yaml.load(readFileSync("config/default.yaml", "utf-8")),
@@ -208,42 +214,7 @@ function getDocumentsForCompany(edinetCode: string): string[] {
 	return docs.sort().slice(0, 10);
 }
 
-export interface CompanyInfo {
-	edinetCode: string;
-	name: string;
-	sector?: string;
-	market?: string;
-	listingDate?: string;
-}
-
-export interface CompanyGovernance {
-	boardComposition?: string;
-	executiveCompensation?: string;
-	riskManagement?: string;
-	[key: string]: unknown;
-}
-
-export interface FinancialData {
-	eps?: number | null;
-	bps?: number | null;
-	netSales?: number | null;
-	operatingProfit?: number | null;
-	profit?: number | null;
-	equity?: number | null;
-	totalAssets?: number | null;
-	periodEnd?: string;
-}
-
-export interface CompanyDetail extends CompanyInfo {
-	governance?: CompanyGovernance;
-	financial?: FinancialData[] | FinancialData;
-	documentCount?: number;
-	overview?: {
-		businessDescription?: string;
-		risks?: string;
-		products?: string;
-	};
-}
+export type { CompanyInfo, CompanyGovernance, FinancialData, CompanyDetail };
 
 export async function searchCompanies(query: string): Promise<CompanyInfo[]> {
 	const intel = getIntelligenceMap();
