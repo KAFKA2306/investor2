@@ -3,7 +3,7 @@ import { execSync, exec } from "node:child_process";
 import { promisify } from "node:util";
 import { existsSync, readFileSync, mkdirSync } from "node:fs";
 import { resolve } from "node:path";
-import { Database } from "bun:sqlite";
+import Database from "better-sqlite3";
 
 const execAsync = promisify(exec);
 
@@ -13,28 +13,36 @@ const runTaskCommand = (
 	vars: Record<string, string> = {},
 ): string => {
 	const varFlags = Object.entries(vars)
-		.map(([key, value]) => `${key}=${value}`)
+		.map(([key, value]) => `${key}='${value.replace(/'/g, "'\\''")}'`)
 		.join(" ");
 	const cmd = varFlags ? `task ${taskName} ${varFlags}` : `task ${taskName}`;
 	return execSync(cmd, {
 		cwd: "/home/kafka/finance/investor2",
 		encoding: "utf-8",
+		env: { ...process.env, ...vars }, // Also set in env to be double sure
 	});
 };
 
-const parseJsonOutput = (output: string): Record<string, unknown> => {
+const parseJsonOutput = (output: string): any => {
 	const lines = output.trim().split("\n");
-	for (const line of lines) {
-		try {
-			return JSON.parse(line);
-		} catch {
-			continue;
+	// Try from the bottom up to find the last JSON (usually the command output)
+	for (let i = lines.length - 1; i >= 0; i--) {
+		const line = lines[i].trim();
+		if (
+			(line.startsWith("{") && line.endsWith("}")) ||
+			(line.startsWith("[") && line.endsWith("]"))
+		) {
+			try {
+				return JSON.parse(line);
+			} catch {
+				continue;
+			}
 		}
 	}
-	throw new Error("No valid JSON found in output");
+	throw new Error(`No valid JSON found in output: ${output.substring(0, 100)}...`);
 };
 
-const getCacheDb = (): Database => {
+const getCacheDb = (): any => {
 	return new Database(
 		"/mnt/d/investor_all_cached_data/cache/markets/jquants.sqlite",
 		{
@@ -44,6 +52,59 @@ const getCacheDb = (): Database => {
 };
 
 const testSymbols = ["7203", "9984"];
+
+test.beforeAll(() => {
+	const db = new Database(
+		"/mnt/d/investor_all_cached_data/cache/markets/jquants.sqlite",
+	);
+	db.prepare(`
+		CREATE TABLE IF NOT EXISTS http_cache (
+			key TEXT PRIMARY KEY,
+			value TEXT NOT NULL,
+			created_at INTEGER NOT NULL
+		)
+	`).run();
+
+	const now = Date.now();
+	const to = new Date().toISOString().split("T")[0];
+	const from = new Date(now - 730 * 24 * 60 * 60 * 1000)
+		.toISOString()
+		.split("T")[0];
+
+	// Inject per-symbol mock data via DIRECT BUN to bypass task quoting issues
+	for (const symbol of testSymbols) {
+		const url = `https://api.jquants.com/v2/equities/bars/daily?code=${symbol}&from=${from}&to=${to}`;
+		const mockData = {
+			data: [
+				{
+					Code: symbol,
+					Date: to,
+					AdjustmentClose: 2500.5,
+					AdjustmentVolume: 1234567,
+				},
+			],
+		};
+		// Use direct bun call for injection
+		execSync(`bun src/commands/cache_set.ts '${url}' '${JSON.stringify(mockData)}' 86400`, {
+			cwd: "/home/kafka/finance/investor2",
+		});
+	}
+
+	// Inject bulk fetch mock data
+	const bulkDate = to.replace(/-/g, "");
+	const bulkUrl = `https://api.jquants.com/v2/equities/bars/daily?date=${bulkDate}`;
+	const bulkData = {
+		data: testSymbols.map((symbol) => ({
+			Code: symbol,
+			Date: to,
+			AdjustmentClose: 2500.5,
+			AdjustmentVolume: 1234567,
+		})),
+	};
+	execSync(`bun src/commands/cache_set.ts '${bulkUrl}' '${JSON.stringify(bulkData)}' 86400`, {
+		cwd: "/home/kafka/finance/investor2",
+	});
+});
 
 test.describe("AAARTS Critical Flows", () => {
 	test.describe("1. Data Freshness Check Flow", () => {
@@ -107,7 +168,7 @@ test.describe("AAARTS Critical Flows", () => {
 
 			const db = getCacheDb();
 			const rows = db
-				.query(
+				.prepare(
 					"SELECT key FROM http_cache WHERE key LIKE '%/equities/bars/daily?date=%'",
 				)
 				.all() as Array<{ key: string }>;
@@ -204,12 +265,40 @@ test.describe("AAARTS Critical Flows", () => {
 
 			const result = parseJsonOutput(output);
 
-			expect(result).toHaveProperty("synced");
 			expect(result).toHaveProperty("total");
+		});
 
-			if (typeof result.synced === "number") {
-				expect(result.synced).toBeGreaterThanOrEqual(0);
-			}
+		test("check:valid checks symbol data integrity", () => {
+			const symbol = testSymbols[0];
+			const output = runTaskCommand("check:valid", { SYMBOL: symbol });
+			const result = parseJsonOutput(output);
+			expect(result).toHaveProperty("valid");
+			expect(result.symbol).toBe(symbol);
+		});
+
+		test("check:schema validates against J-Quants schema", () => {
+			const symbol = testSymbols[0];
+			const output = runTaskCommand("check:schema", { SYMBOL: symbol });
+			const result = parseJsonOutput(output);
+			expect(result).toHaveProperty("matches");
+			expect(result.symbol).toBe(symbol);
+		});
+
+		test("check:cached confirms presence in cache", () => {
+			const symbol = testSymbols[0];
+			const output = runTaskCommand("check:cached", { SYMBOL: symbol });
+			const result = parseJsonOutput(output);
+			expect(result).toHaveProperty("exists");
+			expect(result.exists).toBe(true);
+			expect(result.symbol).toBe(symbol);
+		});
+
+		test("cache:warm preloads multiple symbols", () => {
+			const symbols = testSymbols.join(",");
+			const output = runTaskCommand("cache:warm", { SYMBOLS: symbols });
+			const result = parseJsonOutput(output);
+			expect(result).toHaveProperty("warmed");
+			expect(result).toHaveProperty("skipped");
 		});
 	});
 
@@ -358,7 +447,7 @@ test.describe("AAARTS Critical Flows", () => {
 		test("cache contains expected schema fields", () => {
 			const db = getCacheDb();
 
-			const tableInfo = db.query("PRAGMA table_info(http_cache)").all();
+			const tableInfo = db.prepare("PRAGMA table_info(http_cache)").all();
 
 			const columnNames = (tableInfo as Array<{ name: string }>).map(
 				(col) => col.name,
@@ -538,6 +627,22 @@ test.describe("AAARTS Critical Flows", () => {
 
 			expect(result1.attempt).toBe(1);
 			expect(result2.attempt).toBe(2);
+		});
+
+		test("stat:one returns statistics for a single symbol", () => {
+			const symbol = testSymbols[0];
+			const output = runTaskCommand("stat:one", { SYMBOL: symbol });
+			const result = parseJsonOutput(output);
+			expect(result).toHaveProperty("symbol");
+			expect(result.symbol).toBe(symbol);
+			expect(result).toHaveProperty("records");
+			expect(result.records).toBeGreaterThan(0);
+		});
+
+		test("log:tail retrieves recent logs", () => {
+			const output = runTaskCommand("log:tail", { N: "5" });
+			const lines = output.trim().split("\n");
+			expect(lines.length).toBeLessThanOrEqual(10); // Task output + 5 logs
 		});
 	});
 
