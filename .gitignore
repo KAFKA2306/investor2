@@ -56,3 +56,7 @@ llm/*/downloads/
 .DS_Store
 tsconfig.tsbuildinfo
 screenshots/
+
+# Test output and reports
+playwright-report/
+test-results/
