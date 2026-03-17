@@ -1,9 +1,13 @@
-﻿---
+---
 name: vllm-qwen-agent-integration
 description: MANDATORY TRIGGER: Invoke when replacing OpenAI API usage with local vLLM-served Qwen3.5-9B in existing agents, including OPENAI_BASE_URL/OPENAI_MODEL wiring, provider-style alignment, end-to-end validation, and troubleshooting integration failures across config, endpoint format, and runtime behavior.
+origin: local-git-analysis
 ---
 
 # vLLM Qwen Agent Integration Skill
+
+## When to Use
+Use when working with vllm qwen agent integration related tasks.
 
 ## Goal
 Replace OpenAI endpoint dependency in agent workflows with local vLLM Qwen3.5-9B, without changing agent call sites.
@@ -13,7 +17,7 @@ Replace OpenAI endpoint dependency in agent workflows with local vLLM Qwen3.5-9B
 - vLLM runtime works on the current GPU.
 - `OpenAIThemeProvider` supports OpenAI-compatible endpoint switching.
 
-## Integration Contract
+## Core Concepts
 - Keep provider class usage unchanged in agents because modifying core agent logic for every backend change introduces regression risks and technical debt.
 - Switch backend by environment only because hardcoded provider names prevent seamless switching between Local GPU and Cloud Fallbacks.
 - Use OpenAI-compatible API surface because this allows us to leverage standard SDKs and existing prompt templates without redesign.
@@ -27,7 +31,7 @@ Set in repo-root `.env`:
 
 If provider auto-detect is trusted, `OPENAI_API_STYLE=auto` is acceptable.
 
-## Runtime Steps
+## Code Examples
 1. Start local vLLM server for Qwen3.5-9B.
 2. Export/confirm the environment variables above.
 3. Run agent workflow via Taskfile entry point.
@@ -53,7 +57,7 @@ If provider auto-detect is trusted, `OPENAI_API_STYLE=auto` is acceptable.
 4. vLLM startup/runtime failure
 - Apply `vllm-io` and `qwen-local-inference` skills for GPU/memory/CUDA fixes.
 
-## Done Criteria
+## Best Practices
 - Existing agent classes run unchanged.
 - Requests hit local vLLM endpoint.
 - Expected output schema or text contract is satisfied in at least one end-to-end run.

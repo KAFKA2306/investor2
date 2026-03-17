@@ -6,18 +6,19 @@ description: >
   API replacement, local model benchmarking, or vLLM troubleshooting. If the
   request mentions local model, Qwen, vLLM, GPU inference, or avoiding external
   API cost, this skill must be used.
+origin: local-git-analysis
 ---
 
 # Qwen Local Inference Skill
 
 This skill leverages Qwen 3.5 9B for rapid, secure, and cost-effective intelligence generation, specifically optimized for alpha factor discovery.
 
-## 🚀 When to Use
+## When to Use
 - When generating novel quantitative investment ideas or themes.
 - When utilizing local GPU resources (CUDA) for high-speed inference.
 - When requiring strictly formatted JSON output for downstream pipelines.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Running Inference
 - Input: System prompt, user prompt, and target JSON schema.
@@ -27,7 +28,7 @@ This skill leverages Qwen 3.5 9B for rapid, secure, and cost-effective intellige
     3. Execute the inference script.
 - Output: A validated JSON object conforming to the specified schema.
 
-## 🛡️ Iron Rules
+## Core Concepts
 
 1.  Dynamic Path Resolution: NEVER hardcode model paths because hardcoded strings break the inference loop when containers or volumes are remounted.
 2.  Fail-Fast Execution: DO NOT use `try-catch` blocks in business logic because hidden inference errors lead to empty or "hallucinated" alpha files that corrupt the knowledgebase.
@@ -81,3 +82,6 @@ prompt = (
 LD_LIBRARY_PATH=/home/kafka/finance/investor/.venv/lib/python3.12/site-packages/nvidia/nvjitlink/lib:$LD_LIBRARY_PATH \
 /home/kafka/finance/investor/.venv/bin/python llm/qwen3.5-9b/ace_qwen_verify.py
 ```
+## Best Practices
+- Follow project CDD conventions.
+

@@ -4,11 +4,15 @@ description: |
   Use when executing backtests on Qlib signal formulas to compute Sharpe ratio, IC, and max drawdown.
   Input: Qlib formula string, date range, universe. Output: performance metrics (Sharpe, IC, MaxDD).
   Integrates with mixseek-competitive-framework to evaluate individual signal candidates.
+origin: local-git-analysis
 ---
 
 # Mixseek Backtest Engine for TypeScript
 
-## Overview
+## When to Use
+Use when working with mixseek backtest engine related tasks.
+
+## Core Concepts
 
 Executes independent backtests on Qlib signal formulas, computing standardized performance metrics (Sharpe ratio, information coefficient, max drawdown). Used by mixseek-competitive-framework to rank candidates.
 
@@ -33,7 +37,7 @@ Executes independent backtests on Qlib signal formulas, computing standardized p
 }
 ```
 
-## Backtest Execution Pipeline
+## Code Examples
 
 ### Step 1: Formula Validation
 - Confirm Qlib syntax correctness
@@ -80,7 +84,7 @@ Aggregate over all days:
 }
 ```
 
-## Implementation Notes
+## Best Practices
 
 - **Deterministic**: Identical formula + data = identical results
 - **Fast**: Single formula evaluation (seconds)

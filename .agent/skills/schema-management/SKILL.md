@@ -5,19 +5,23 @@ description: >
   type definition, or validation logic. If the request involves data validation
   schemas, model definitions, API contracts, or request/response types, this skill
   must be used to enforce the unified schema architecture.
+origin: local-git-analysis
 ---
 
 # Unified Schema Management
 
 All data validation, type definitions, and model contracts are consolidated in a single source of truth.
 
-## 🚀 When to Use
+## When to Use
 
 - Adding new Zod schemas (API payloads, domain models, validation rules)
 - Creating TypeScript type definitions or interfaces that need validation
 - Defining request/response contracts for APIs or inter-agent communication
 - Implementing validation logic or schema inference
 - Reviewing code that instantiates schemas from other modules
+
+## Core Concepts
+- See rules and guidelines in this skill.
 
 ## 📍 Single Source of Truth
 
@@ -135,7 +139,7 @@ grep -r "from.*schemas/" src --include="*.ts" | grep -v "src/schemas.ts"
 ### Architecture Rule
 If any TypeScript file imports from a path matching `src/schemas/.*\.ts` (except `src/schemas.ts`), the import is a violation.
 
-## ✅ Best Practices
+## Best Practices
 
 1. **Keep Related Schemas Together**: Group by domain/feature, not by type
 2. **Document with Zod Descriptions**: Use `.describe()` for clarity
@@ -152,6 +156,10 @@ If any TypeScript file imports from a path matching `src/schemas/.*\.ts` (except
 | Use `interface` instead of `z.infer<typeof>` | Loss of validation; type safety gaps |
 | Import schema from wrong path | Module resolution error; CI/CD failure |
 
+origin: local-git-analysis
 ---
 
 **Reference**: `CLAUDE.md` project structure section defines consolidated schema architecture.
+## Code Examples
+Refer to usage instructions for implementation patterns.
+

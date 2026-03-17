@@ -4,11 +4,15 @@ description: |
   Use when aggregating backtest results across multiple signal candidates and ranking them by performance metrics.
   Input: array of performance metrics (Sharpe, IC, MaxDD). Output: ranked candidates with scores, winner metadata.
   Determines final competitive ranking and winner selection.
+origin: local-git-analysis
 ---
 
 # Mixseek Ranking & Scoring System
 
-## Overview
+## When to Use
+Use when working with mixseek ranking scoring related tasks.
+
+## Core Concepts
 
 Aggregates backtest results from multiple Qlib signal formulas and produces deterministic ranking based on performance metrics. Feeds ranking into competitive selection and CqoAgent audit.
 
@@ -42,7 +46,7 @@ Aggregates backtest results from multiple Qlib signal formulas and produces dete
 }
 ```
 
-## Ranking Pipeline
+## Code Examples
 
 ### Step 1: Validate Input
 - Check all candidates have required metrics
@@ -112,7 +116,7 @@ For each candidate, compute distance from winner:
 | **IC** | [-1, 1] | Information coefficient (rank correlation). >0.04 is meaningful |
 | **Max DD** | [0, 1] | Peak-to-trough drawdown. <0.15 is acceptable |
 
-## Implementation Notes
+## Best Practices
 
 - **Transparent**: All candidates ranked, deltas computed
 - **Deterministic**: Same input always produces same ranking

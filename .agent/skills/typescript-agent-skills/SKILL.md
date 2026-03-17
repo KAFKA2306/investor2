@@ -4,11 +4,15 @@ description: >
   Use when adding, modifying, or calling TypeScript runtime skills that agents
   invoke via `this.useSkill()`. Covers the skill registry, interface definition,
   built-in skills, and the distinction from Claude Code markdown skills.
+origin: local-git-analysis
 ---
 
 # TypeScript Runtime Skill System
 
-## 概念の区別（重要）
+## When to Use
+Use when working with typescript agent skills related tasks.
+
+## Core Concepts
 
 | 種別 | 場所 | 用途 |
 |---|---|---|
@@ -41,7 +45,7 @@ export interface Skill<TInput, TOutput> {
 }
 ```
 
-## エージェントからの呼び出し方
+## Code Examples
 
 ```typescript
 // BaseAgent を継承したエージェント内で
@@ -87,7 +91,7 @@ export const mySkill: Skill<Input, Output> = {
 モジュール評価時にすべての built-in スキルが登録される。
 Bun のモジュールシステムでは同一モジュールは一度しか評価されないため、二重登録は発生しない。
 
-## 禁止事項
+## Best Practices
 
 - `any` 型の使用（Biome エラー）→ generics `<TInput, TOutput>` を使う
 - `execute()` 内での try-catch（CDD 原則：クラッシュさせる）

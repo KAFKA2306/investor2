@@ -1,0 +1,65 @@
+{
+  "hooks": [
+    {
+      "trigger": "post-edit",
+      "event": "file-modified",
+      "actions": [
+        {
+          "name": "auto-format",
+          "command": "task format",
+          "description": "Auto-format edited files with Biome"
+        },
+        {
+          "name": "lint-check",
+          "command": "task lint",
+          "description": "Lint check after edit"
+        },
+        {
+          "name": "type-check",
+          "command": "task typecheck",
+          "description": "Type-check after edit with tsc"
+        }
+      ]
+    },
+    {
+      "trigger": "pre-commit",
+      "event": "git-commit",
+      "actions": [
+        {
+          "name": "full-check",
+          "command": "task check",
+          "description": "Run all checks before commit"
+        }
+      ]
+    },
+    {
+      "trigger": "session-persist",
+      "event": "session-end",
+      "actions": [
+        {
+          "name": "persist-learning",
+          "command": "task extract:patterns",
+          "description": "Extract reusable patterns for continuous learning"
+        }
+      ]
+    }
+  ],
+  "runtime_hooks": {
+    "description": "Active Claude Code hooks in .claude/settings.json (project-level)",
+    "PreToolUse": [
+      "console.log detection (TS/JS files)",
+      "Secret/credential detection (all files)",
+      "try-catch detection in business logic (CDD enforcement)",
+      "Dangerous rm -rf guard (Bash commands)"
+    ],
+    "PostToolUse": [
+      "CDD crash notification on non-zero exit codes",
+      "Auto-format via global ~/.claude/settings.json (biome, ruff, gofumpt)"
+    ]
+  },
+  "validation_rules": {
+    "description": "Language-specific rules in config/default.yaml under validation:",
+    "typescript": ["no try-catch in domain", "no console.log", "no 'as any'", "import from schemas.ts"],
+    "python": ["no bare except", "no catch-all in domain", "pydantic for models"]
+  }
+}

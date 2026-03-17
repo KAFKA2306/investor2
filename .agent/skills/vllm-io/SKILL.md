@@ -1,14 +1,18 @@
-﻿---
+---
 name: vllm-io
 description: MANDATORY TRIGGER: Invoke for any vLLM prompt/output integration task requiring parseable JSON/text, including chat template control, thinking-mode control, schema parsing, and runtime failure triage (JSONDecodeError, empty output, KV cache shortage, model-arch mismatch, CUDA symbol mismatch, multiprocessing startup errors).
+origin: local-git-analysis
 ---
 
 # vLLM I/O Skill
 
+## When to Use
+Use when working with vllm io related tasks.
+
 ## Objective
 Produce deterministic, parseable output from vLLM with minimum moving parts.
 
-## Input Contract
+## Core Concepts
 - Use explicit role blocks with model chat tokens because mismatched templates lead to degradation in reasoning capability.
 - End assistant prefix at the exact generation start point because extra whitespace or tokens can trigger unwanted "thinking" artifacts in JSON output.
 - Prepend `<think>\n</think>\n` when structured output is required because this forces the model to skip verbose internal monologues and jump directly to the result.
@@ -41,14 +45,14 @@ Produce deterministic, parseable output from vLLM with minimum moving parts.
 
 **Note**: vllm-io scope is *after* successful model startup. Hardware-layer errors (CUDA, multiprocessing, model loading) are handled by `qwen-local-inference`.
 
-## Run Pattern
+## Code Examples
 1. Build prompt.
 2. Run one inference.
 3. Parse and validate.
 4. If fail, apply exactly one fix from triage order.
 5. Re-run.
 
-## Done Criteria
+## Best Practices
 - Single run returns parseable output.
 - Required keys exist.
 - Re-run with same prompt yields same output shape.

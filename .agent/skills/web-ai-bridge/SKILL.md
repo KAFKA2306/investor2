@@ -1,13 +1,17 @@
 ---
 name: web-ai-bridge
 description: Mandatory bridge protocol for treating Web LLM GUIs (Gemini, ChatGPT, Copilot) as autonomous agentic inference engines. Trigger for any task involving browser-based AI automation, DOM-based prompt injection, real-time response scraping, or WebSocket bridge maintenance.
+origin: local-git-analysis
 ---
 
 # Web AI Bridge Protocol
 
 This skill defines the technical specifications for bypassing API limitations by using high-performance DOM manipulation to treat web-based AI interfaces as headless inference engines.
 
-## 1. Connection Architecture (WebSocket Bridge)
+## When to Use
+Use when working with web ai bridge related tasks.
+
+## Core Concepts
 
 - **Transport Layer**: Bidirectional WebSocket connection via `ws://127.0.0.1:6090`.
 - **Background Persistence (MV3)**: To bypass the 30-second Service Worker expiration in Chrome Manifest V3:
@@ -15,7 +19,7 @@ This skill defines the technical specifications for bypassing API limitations by
     - `port.postMessage` heartbeat every 25s.
 - **Context Isolation**: All UI overlays Must use Shadow DOM with `mode: "closed"` to prevent target site CSS leakage and DOM interference.
 
-## 2. Injection Protocol (4-Tier Input Strategy)
+## Code Examples
 
 To ensure reliable text delivery into `contenteditable` rich-text areas, the following fallback chain MUST be followed:
 
@@ -41,7 +45,7 @@ To ensure reliable text delivery into `contenteditable` rich-text areas, the fol
 | **ChatGPT** | `#prompt-textarea` | `button[data-testid="send-button"]` | `[data-message-author-role="assistant"]` |
 | **Copilot** | `textarea[placeholder*="Copilot"]` | `button[aria-label="Submit"]` | `[data-testid="chat-message"]` |
 
-## 5. Agentic Principles
+## Best Practices
 
 - **Human Emulation**: Always add a `300ms` delay after injection to allow the site to enable the Send button, and `1000ms` after submission to wait for the response DOM to initialize.
 - **Success Path Only**: Do not implement complex error handling; let the higher-level agent retry the inference if the bridge times out or returns empty data.

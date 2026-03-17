@@ -1,13 +1,17 @@
 ---
 name: fundamental-analysis
 description: Fundamental analysis and macro-top-down investing framework for detecting dividend traps, sentiment/fundamentals divergences, and cash flow quality issues. Use when conducting equity research with macro regime context, screening for dividend safety risks, detecting mean-reversion opportunities in mispriced fundamentals, or auditing cash flow quality before investment decisions.
+origin: local-git-analysis
 ---
 
 # Fundamental & Macro Analysis Skill
 
 マクロ経済指標の分析、企業のファンダメンタルズ評価、および市場センチメントの監査に関する専門知見。
 
-## 専門知識 (Expertise)
+## When to Use
+Use when working with fundamental analysis related tasks in this project.
+
+## Core Concepts
 - **Macro Top-Down (マクロ経済)**:
   - **主要指標**: CPI (インフレ)、政策金利、GDP 成長率、雇用統計。
   - **レジーム転換**: インフレ局面、デフレ局面、スタグフレーション局面の特定。
@@ -17,13 +21,13 @@ description: Fundamental analysis and macro-top-down investing framework for det
   - **Sentiment Discrepancy (センチメントの乖離)**: ファンダメンタルズは強いが、市場の過剰な悲観により過小評価されている銘柄。
   - **Cash Flow Analysis**: 営業キャッシュフロー、フリーキャッシュフローの健全性評価。
 
-## ワークフロー (Workflows)
+## Code Examples
 1. **Macro Scanning**: FRED, ECB などのデータソースに基づいた現在の経済フェーズの判定。
 2. **Correlation Mapping**: 資産クラス間の相関の歪みを検出し、平均回帰トレードの機会を探る。
 3. **Sentiment vs Funda Audit**: ニュース、SNS、アナリストレポートと財務諸表の矛盾点を抽出。
 4. **Safety Check**: 高配当銘柄の減配リスクや、負債急増銘柄の警告。
 
-## ベストプラクティス
+## Best Practices
 - マクロ分析は常に「過去の類似事例」と比較し、歴史的な再現性を確認すること。
 - 表面上の PER や PBR だけでなく、キャッシュフローの質を最優先すること。
 - センチメントが極端に悪い時は、「なぜ市場は間違っているのか」という反対仮説を常に立てること。

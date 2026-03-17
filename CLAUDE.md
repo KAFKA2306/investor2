@@ -202,4 +202,25 @@ Pre-commit: `grep -r "from.*schemas/" src --include="*.ts" | grep -v "src/schema
 - 🔄 **PIVOT**: 2+ critical failures → Ralph Loop domain switch.
 
 ---
+
+## 📖 ECC Integration (Phase 1)
+
+ECC (Extended Claude Code) patterns adopted under strict CDD compliance. ECC applies to **infrastructure layers only** (`src/io/`, hooks, `.agent/`). Business logic remains strict CDD.
+
+**Key documents**:
+- `docs/ECC_REFERENCE.md` — Pattern definitions (Tool Use Loop, Verification Loop, etc.)
+- `docs/SKILL_DEVELOPMENT_GUIDE.md` — Skill template, checklist, lifecycle
+- `docs/AGENT_PATTERNS.md` — Agent-specific pattern mappings
+- `docs/ECC_INTEGRATION_STRATEGY.md` — Full strategy with conflict analysis
+
+**ADRs**:
+- `docs/adr/004-ecc-integration.md` — ECC adoption decision (Option B: Phase 1 + Phase 2)
+- `docs/adr/003-agent-pattern-integration.md` — Agent pattern integration decision
+
+**Token optimization** (active):
+- `CLAUDE_AUTOCOMPACT_PCT_OVERRIDE=50`
+- Default model: Sonnet (routine), Opus (architectural)
+- Thinking token limit: 8000 max
+
+---
 *For task-specific commands and setup, see [OPERATIONS.md](file:///home/kafka/finance/investor/docs/OPERATIONS.md).*

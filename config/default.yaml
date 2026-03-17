@@ -199,6 +199,39 @@ pipelineBlueprint:
     sleepSec: 0
     maxFailures: 1
 
+validation:
+  typescript:
+    forbidden_patterns:
+      - pattern: "try\\s*\\{"
+        scope: [src/domain, src/features, src/commands]
+        reason: "CDD: no try-catch in business logic"
+      - pattern: "console\\.(log|debug|info)"
+        scope: [src/]
+        reason: "Use structured logging, not console output"
+      - pattern: "as\\s+any"
+        scope: [src/]
+        reason: "Avoid type erasure; use proper types or z.infer"
+    required_patterns:
+      - pattern: "from.*schemas"
+        scope: [src/domain, src/features]
+        reason: "Import schemas from unified src/schemas.ts"
+  python:
+    forbidden_patterns:
+      - pattern: "except\\s*:"
+        scope: [src/]
+        reason: "CDD: bare except prohibited"
+      - pattern: "except Exception"
+        scope: [src/domain]
+        reason: "CDD: no catch-all in domain logic"
+    required_patterns:
+      - pattern: "from pydantic"
+        scope: [src/domain]
+        reason: "Use pydantic for all data models"
+  thresholds:
+    max_function_lines: 50
+    max_file_lines: 500
+    max_cyclomatic_complexity: 10
+
 logging:
   envelope:
     version: v2

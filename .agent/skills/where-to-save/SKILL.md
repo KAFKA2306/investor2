@@ -6,18 +6,19 @@ description: >
   request includes save location, output directory, hardcoded path, or new data
   category, this skill must be used to enforce PathRegistry and D-drive storage
   rules.
+origin: local-git-analysis
 ---
 
 # Path Management (Where to Save) Skill
 
 This skill ensures that all data, logs, and artifacts are directed to their specified directories, maintaining project organization and performance.
 
-## 🚀 When to Use
+## When to Use
 - When saving new files (e.g., CSV, JSON, SQLite).
 - When retrieving or validating filesystem paths.
 - When offloading large datasets to the D-drive to manage local disk space.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Path Retrieval
 - Input: Data type (e.g., price, cache, log).
@@ -27,7 +28,7 @@ This skill ensures that all data, logs, and artifacts are directed to their spec
     3. Retrieve the target path because centralized resolution is mandatory for cross-OS compatibility (Windows vs. WSL).
 - Output: The correct absolute path, typically pointing to the D-drive.
 
-## 🛡️ Iron Rules
+## Core Concepts
 
 1.  NO HARDCODING: Explicitly writing paths like `/mnt/d/...` is prohibited because hardcoded paths will break as soon as the project is run on a different machine or user account.
 2.  PathRegistry Compliance: The `path_registry.ts` file is the SINGLE source of truth because multiple definitions of the same directory lead to data loss during system upgrades.

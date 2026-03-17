@@ -5,18 +5,19 @@ description: >
   logic that could add error handling behavior. If the task includes try-catch,
   except, fallback return values, silent failure, retry-in-app, or stack trace
   loss concerns, this skill must be used to enforce crash-driven rules.
+origin: local-git-analysis
 ---
 
 # Fail-Fast Coding Protocols (Crash-Driven Development)
 
 This skill defines the operational standards for error handling, ensuring that failures are transparent, localized, and immediately actionable.
 
-## 🚀 When to Use
+## When to Use
 - When implementing new business logic, algorithms, or data transformations.
 - During code review to evaluate the validity of error-handling patterns.
 - When debugging system behavior to ensure root causes are identified rapidly.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Implementation Strategy
 - Input: Target functional logic.
@@ -26,7 +27,7 @@ This skill defines the operational standards for error handling, ensuring that f
     3. Allow the system to crash immediately upon encountering an invalid state because a visible crash is safer than a "silent" calculation error in quant trading.
 - Output: Transparent code where failures produce clear stack traces and actionable feedback.
 
-## 🛡️ Strict Rules
+## Core Concepts
 
 1.  DIE INSTANTLY: Throw exceptions immediately upon detecting an anomaly because data corruption must not propagate to the backtest or execution engine.
 2.  NO `try-catch` IN BUSINESS LOGIC: Prohibit the use of `try-catch` blocks to mask potential failures because filters belong in the infrastructure, not the domain logic.

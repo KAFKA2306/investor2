@@ -6,20 +6,24 @@ description: >
   nested quoting may be interpreted by PowerShell first. If command behavior
   differs between direct Bash and PowerShell-launched Bash, this skill must be
   used before retrying.
+origin: local-git-analysis
 ---
 
 # PowerShell Bash Interop Skill
 
+## When to Use
+Use when working with powershell bash interop related tasks.
+
 ## Objective
 Prevent PowerShell from mutating Bash syntax.
 
-## Hard Rules
+## Core Concepts
 - Do not embed complex Bash directly in PowerShell double-quoted command strings because PowerShell will attempt to interpolate variables like `$HOME` or `$(...)` before passing them to Bash.
 - Do not rely on backslash escaping for Bash `$` in PowerShell because nested escaping rules are inconsistent across PowerShell versions and lead to "broken" shell scripts.
 - Do not keep Bash `$(...)` substitutions inside PowerShell-parsed strings because the outer shell will execute the substitution locally instead of inside the target environment.
 - For multi-line Bash, always write a script file first and execute it from WSL because file-based handoff avoids all shell-quoting edge cases and provides a clean audit trail.
 
-## Safe Patterns
+## Code Examples
 
 ### Pattern A: Script file handoff (default)
 1. Build script with a PowerShell single-quoted here-string.
@@ -59,6 +63,6 @@ wsl -d Ubuntu-22.04-LTS bash -lc 'cd /path && ls -la'
 - Cause: outer shell parsed delimiter or body.
 - Fix: keep here-doc only inside handed-off Bash script.
 
-## Done Criteria
+## Best Practices
 - Command reruns produce consistent behavior.
 - No PowerShell-side parse/interpolation error appears.

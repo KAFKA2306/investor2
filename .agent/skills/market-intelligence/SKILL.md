@@ -1,23 +1,27 @@
 ---
 name: market-intelligence
 description: Detect whale movements, latent economic signals, and event-driven opportunities across on-chain and macro data. Use when monitoring large investor position changes (13F filings), hunting alpha from macro regime shifts, detecting anomalies in market structure (flows, correlations, volatility regimes), tracking earnings calendar catalysts, or identifying short-squeeze candidates.
+origin: local-git-analysis
 ---
 
 # Market Intelligence & Signal Detection Skill
 
 オンチェーンデータ（クジラの動き）、ニュースイベント、および潜在的な経済シグナルを検出し、投資機会を特定するための専門知見。
 
-## 専門知識 (Expertise)
+## When to Use
+Use when working with market intelligence related tasks in this project.
+
+## Core Concepts
 - **Whale Watching**: 大口投資家のウォレット動向、CEX/DEX 間の資金移動、ステーブルコインの発行・回収。
 - **Latent Signals**: 表層的なニュースの裏に隠れた経済的トレンド、セクター間の相関変化。
 - **Event Analysis**: 決算発表、雇用統計、中央銀行の政策決定などのイベントが市場に与える短期・中期のインパクト評価。
 
-## ワークフロー (Workflows)
+## Code Examples
 1. **Trend Monitoring**: 主要なオンチェーン/オフチェーンデータソースの継続的監視。
 2. **Contextualization**: 検出された事象を、現在のマクロ環境や過去の類似事例と照らし合わせて解釈。
 3. **Signal Ranking**: 確信度、予想リターン、時間軸に基づいたシグナルの優先順位付け。
 
-## ベストプラクティス
+## Best Practices
 - シグナルは単一のソースに依存せず、常に複数の独立したソース（オンチェーンとオフチェーンの両方）で裏付けを取ること。
 - 「偽のシグナル（ウォッシュトレード等）」を排除するためのフィルタリング基準を厳格に適用すること。
 

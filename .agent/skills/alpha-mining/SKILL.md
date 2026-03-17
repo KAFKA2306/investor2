@@ -1,13 +1,17 @@
 ---
 name: alpha-mining
 description: MANDATORY TRIGGER: Invoke for alpha factor discovery, formula generation, and backtesting within Qlib. Use when mining novel alpha factors, validating factor authenticity via AAARTS quality gates, optimizing factor performance, or preparing alpha candidates for production deployment. Essential for Ralph Loop workflows.
+origin: local-git-analysis
 ---
 
 # Alpha Mining & Qlib Optimization Skill
 
 Qlib 形式のアルファ数式の生成、バリデーション、および最適化に関する専門知見。
 
-## 専門知識 (Expertise)
+## When to Use
+Use when working with alpha mining related tasks in this project.
+
+## Core Concepts
 - **Qlib Operator**: `$close`, `$open`, `Ref($close, 1)`, `Mean($close, 5)`, `Std($close, 10)` などの基本演算子。
 - **アルファ式の構文要件**: 無効な演算（0除算など）の回避、正規化（Rank, CS_ZScore）の適切な配置。
 - **パフォーマンス指標**: IC (Information Coefficient)、IR (Information Ratio)、ドローダウン、Sharpe Ratio の解釈。
@@ -79,7 +83,7 @@ Qlib 形式のアルファ数式の生成、バリデーション、および最
 - **Alpha Hunter Review**: P-Value が有意水準（通常 0.05 未満）を満たしているか。
 - **Regime Specialist Review**: 現在の市場レジーム（Bull/Bear/Uncertain）とアルファのロジックが合致しているか。
 
-## ワークフロー (Workflows)
+## Code Examples
 1. **Formula Generation**: LLM による新規アルファ式の提案。
 2. **Validation**: `dsl_validator.ts` による構文チェックと、`backtest_scorer.ts` による過去データ検証。
 3. **Strategic Reasoning**: 「Quality Gate」および「Council of Quants」による多角的な品質評価。
@@ -95,7 +99,7 @@ Qlib 形式のアルファ数式の生成、バリデーション、および最
   4. 一時的に Fitness Threshold を緩和（例：0.5 → 0.4、3サイクル）し、探索をブートストラップする。
 - **Logging**: ピボットの理由は必ず `REASON_DESC.md` (Novelty/Orthogonality, Metric Thresholds, Hypothesis Validity) に基づいて記録する。
 
-## ベストプラクティス
+## Best Practices
 - アルファ式は必ず `Rank(Formula)` または `CS_ZScore(Formula)` で断面正規化すること。
 - `Ref($close, -1)`（未来参照）が含まれていないか厳格にチェックすること。
 - 生成された式は `alpha_quality_optimizer_schema.ts` で型定義され、一貫性を保つこと。

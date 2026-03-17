@@ -4,11 +4,15 @@ description: |
   Use when preparing market data for backtesting—splitting into train/eval, handling missing values, and validating data quality.
   Input: date range, universe, data source. Output: clean datasets ready for backtesting.
   Ensures data integrity and separates training signals from evaluation periods.
+origin: local-git-analysis
 ---
 
 # Mixseek Data Pipeline
 
-## Overview
+## When to Use
+Use when working with mixseek data pipeline related tasks.
+
+## Core Concepts
 
 Prepares and validates market data for backtesting. Handles data splitting, missing value imputation, and quality assurance. Ensures train/eval separation to prevent data leakage.
 
@@ -41,7 +45,7 @@ Prepares and validates market data for backtesting. Handles data splitting, miss
 }
 ```
 
-## Data Pipeline
+## Code Examples
 
 ### Step 1: Data Loading
 - Fetch OHLCV data from specified sources (J-Quants, Yahoo Finance, etc.)
@@ -128,7 +132,7 @@ Volume spike > 5x:    Keep (may be signal)
 Price gap > 10%:      Investigate, keep if justified
 ```
 
-## Implementation Notes
+## Best Practices
 
 - **Deterministic**: Same input → same output
 - **Non-invasive**: Minimal data transformation

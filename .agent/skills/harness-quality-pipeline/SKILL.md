@@ -1,6 +1,7 @@
 ---
 name: harness-quality-pipeline
 description: Deploy comprehensive quality pipeline with hooks (format → lint → architecture check → CDD validation). Enforce layer boundaries and prevent defensive code patterns automatically. Use when setting up project quality gates, integrating linters with auto-fix, protecting architectural boundaries, or preventing AI-generated anti-patterns.
+origin: local-git-analysis
 ---
 
 # Harness Quality Pipeline Skill
@@ -11,6 +12,7 @@ Comprehensive automated quality assurance system with:
 - **Architecture Rules** — Layer boundary enforcement (ast-grep)
 - **CDD Validation** — Prevent defensive code patterns
 
+origin: local-git-analysis
 ---
 
 ## When to Use
@@ -27,9 +29,10 @@ Comprehensive automated quality assurance system with:
 - For one-off code cleanup
 - If you just need type checking (use tsc)
 
+origin: local-git-analysis
 ---
 
-## What Gets Deployed
+## Core Concepts
 
 ### Files Created
 1. `.agent/hooks/pre-tool-use.mjs` — Config protection
@@ -43,9 +46,10 @@ Comprehensive automated quality assurance system with:
 - PreToolUse blocks protected files (biome.json, tsconfig.json, etc.)
 - PostToolUse runs format → lint → architecture → CDD checks
 
+origin: local-git-analysis
 ---
 
-## How It Works
+## Code Examples
 
 ### Phase 1: Auto-Format (Biome)
 ```
@@ -103,6 +107,7 @@ Message: "Fix code, not config"
 Edit blocked (exit code 2)
 ```
 
+origin: local-git-analysis
 ---
 
 ## Quick Start
@@ -139,6 +144,7 @@ bash scripts/quality-check.sh
 node .agent/hooks/post-tool-use-enhanced.mjs
 ```
 
+origin: local-git-analysis
 ---
 
 ## Customization
@@ -177,6 +183,7 @@ Edit `ts-agent/biome.json`:
 }
 ```
 
+origin: local-git-analysis
 ---
 
 ## Anti-Patterns Detected
@@ -192,6 +199,7 @@ Edit `ts-agent/biome.json`:
 | Console.log in agents | WARNING | Use logger for structure |
 | Hardcoded paths | ERROR | Use PathRegistry for portability |
 
+origin: local-git-analysis
 ---
 
 ## Integration with Claude Code
@@ -206,6 +214,7 @@ If hooks don't run:
 2. Restart Claude Code session
 3. Check `.agent/hooks/` exists and is readable
 
+origin: local-git-analysis
 ---
 
 ## Troubleshooting
@@ -243,6 +252,7 @@ Edit hook to adjust regex patterns:
 const pattern = /^const\s+\w*mock\w*\s*=/; // More strict
 ```
 
+origin: local-git-analysis
 ---
 
 ## Performance
@@ -257,6 +267,7 @@ const pattern = /^const\s+\w*mock\w*\s*=/; // More strict
 
 Target: Full pipeline completes in <2 seconds per commit.
 
+origin: local-git-analysis
 ---
 
 ## References
@@ -266,6 +277,7 @@ Target: Full pipeline completes in <2 seconds per commit.
 - [Claude Code Hooks](https://claude.com/docs/claude-code)
 - [Crash-Driven Development (CDD)](https://zenn.dev/kafka2306/articles/11cd731eebded1)
 
+origin: local-git-analysis
 ---
 
 ## Next Steps
@@ -274,4 +286,8 @@ Target: Full pipeline completes in <2 seconds per commit.
 2. **Monitor** — Watch hook output for violations
 3. **Fix** — Address reported issues before committing
 4. **Iterate** — Add custom rules as team patterns emerge
+
+## Best Practices
+- Follow project CDD conventions.
+- Use PathRegistry for all file operations.
 

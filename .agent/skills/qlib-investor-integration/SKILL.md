@@ -8,13 +8,14 @@ description: >
   comparison, or dataset, handler, or workflow migration inside this codebase.
   Do not use this skill for generic qlib questions that are not tied to this
   repo.
+origin: local-git-analysis
 ---
 
 # Qlib Investor Integration
 
 Use this skill to decide whether qlib belongs in the current task, where it fits in this repo, and how to introduce it with minimal disruption.
 
-## When to use
+## When to Use
 - The user asks whether qlib is useful in this repo.
 - The user wants to compare qlib with the current TS or Bun pipeline.
 - The user wants to add qlib datasets, handlers, workflows, or backtests for this codebase.
@@ -27,7 +28,7 @@ Use this skill to decide whether qlib belongs in the current task, where it fits
 - **Model Registry**: `ts-agent/src/model_registry/models.json` registers `microsoft-qlib` as a recognized machine-learning-research platform.
 - **Task Runner**: `Taskfile.yml` includes `research:qlib:benchmark` for standardized execution.
 
-## Recommended use of qlib
+## Core Concepts
 - Use qlib as Python-side research infrastructure because it provides industry-standard ML models and time-series cross-validation that are complex to reinvent in TS.
 - Build a custom DataHandler around repo-owned daily features because maintaining a single source of truth for market data prevents signal-vs-backtest discrepancies.
 - Use qlib workflows to benchmark ML-based alphas because comparing new ideas against established baselines (e.g., LightGBM) is the only way to prove functional value.
@@ -49,7 +50,7 @@ This rule applies to all columns without exception:
 | `$kg_centrality` | `np.random.uniform(5, 36, ...)` | `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json` → `kgCentrality` |
 | `$ai_exposure` | any random value | `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json` → `aiExposure` |
 
-## Real EDINET Alt-Data — How to Load
+## Code Examples
 
 **Source**: `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json`
 
@@ -110,7 +111,7 @@ merged = pd.merge_asof(price_df, edinet_df, left_on="date", right_on="edinet_dat
 4. Execute via `task research:qlib:benchmark`.
 5. Audit results using Qlib's `R.save_objects` and persistence layer.
 
-## Decision rules
+## Best Practices
 - Prefer qlib when the task is dataset standardization, model benchmarking, or rolling evaluation.
 - Prefer existing TS code when the task is ingestion, orchestration, knowledgebase construction, or production-facing audit flow.
 - Compare before replacing.

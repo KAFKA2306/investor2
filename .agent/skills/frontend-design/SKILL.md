@@ -7,11 +7,15 @@ description: |
   DaisyUI components, form validation with server-side rendering, or HTML-based frontend architecture.
   Include this skill for any discussion of web interface design in this project context.
 compatibility: Requires Tailwind CDN, DaisyUI CDN, HTMX
+origin: local-git-analysis
 ---
 
 # Frontend Design Guide
 
-## HTMX Form Integration
+## When to Use
+Use when working with frontend design related tasks.
+
+## Core Concepts
 
 ### Critical: `name` attribute is required
 
@@ -172,7 +176,7 @@ app.post("/api/validate/email", (c) => {
 
 Empty response clears previous feedback.
 
-## Responsive Design with Tailwind + DaisyUI
+## Code Examples
 
 Use Tailwind's responsive prefixes:
 - `grid-cols-1` (mobile)
@@ -186,9 +190,10 @@ Use Tailwind's responsive prefixes:
 </div>
 ```
 
+origin: local-git-analysis
 ---
 
-## Checklist: Common HTMX Form Issues
+## Best Practices
 
 - [ ] All inputs/selects have `name` attribute (required for value transmission)
 - [ ] `hx-include` selector correctly targets elements by ID

@@ -6,18 +6,19 @@ description: >
   live-news validation, contamination-free protocol design, and risk/profit
   performance checks. If the request asks to validate, benchmark, or test an AI
   trader in real or near-real conditions, this skill must be used.
+origin: local-git-analysis
 ---
 
 # AI-Trader Real-Time Verification Skill
 
 This skill is designed to evaluate how autonomously an AI agent can perform in "live" market conditions, providing a rigorous benchmark for operational readiness.
 
-## 🚀 When to Use
+## When to Use
 - When testing an AI trader's "combat readiness" and generating performance rankings.
 - When measuring true capability by avoiding data contamination (ensuring the agent only acts on real-time information).
 - When validating autonomy across multiple asset classes, including US equities, Chinese equities, and Cryptocurrencies.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Running Real-Time Benchmarks
 - Input: AI agent inference engine, target markets, and verification window.
@@ -27,7 +28,7 @@ This skill is designed to evaluate how autonomously an AI agent can perform in "
     3. Collect and score trading outcomes because profitability is the ultimate verification of an agent's intelligence.
 - Output: A multi-dimensional evaluation report covering profitability and risk.
 
-## 🛡️ Strict Rules
+## Core Concepts
 
 1.  Data-Contamination Free: NEVER use future data or historical data present in the AI's training set because "hindsight bias" artificially inflates performance and leads to live-trading failure.
 2.  Search & Verify: Always cross-reference news and external data because LLM hallucinations can create "phantom" market events that don't exist in reality.

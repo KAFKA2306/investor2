@@ -8,6 +8,35 @@ vars:
   VIEWER_PORT: '{{default "3400" .VIEWER_PORT}}'
 
 tasks:
+  # Tier A: Atomic Operations
+  data:fetch:
+    desc: "Fetch 1 symbol from J-Quants"
+    cmds:
+      - bun src/commands/data_fetch.ts {{.SYMBOL}}
+    requires:
+      vars: [SYMBOL]
+
+  cache:get:
+    desc: "Get 1 cache value by key"
+    cmds:
+      - bun src/commands/cache_get.ts {{.KEY}}
+    requires:
+      vars: [KEY]
+
+  cache:set:
+    desc: "Set 1 cache value"
+    cmds:
+      - bun src/commands/cache_set.ts {{.KEY}} {{.VALUE}} {{.TTL | default ""}}
+    requires:
+      vars: [KEY, VALUE]
+
+  paths:resolve:
+    desc: "Resolve 1 path from config"
+    cmds:
+      - bun src/commands/paths_resolve.ts {{.PATH_KEY}}
+    requires:
+      vars: [PATH_KEY]
+
   get:all:
     desc: run src/io/get.ts and fetch all data to cache/
     cmds:
@@ -699,4 +728,85 @@ tasks:
       - task: polymarket:test
       - task: polymarket:check
       - task: run:polymarket:backtest
+
+  # Tier B: Check Operations (exit code 0/1)
+  check:cached:
+    desc: "Check if symbol is cached"
+    cmds:
+      - bun src/commands/check_cached.ts {{.SYMBOL}}
+    requires:
+      vars: [SYMBOL]
+
+  check:fresh:
+    desc: "Check if data is fresh (within N hours)"
+    cmds:
+      - bun src/commands/check_fresh.ts {{.SYMBOL}} {{.HOURS}}
+    requires:
+      vars: [SYMBOL, HOURS]
+
+  check:valid:
+    desc: "Check if symbol data is valid (schema + integrity)"
+    cmds:
+      - bun src/commands/check_valid.ts {{.SYMBOL}}
+    requires:
+      vars: [SYMBOL]
+
+  check:schema:
+    desc: "Check if symbol matches J-Quants daily bar schema"
+    cmds:
+      - bun src/commands/check_schema.ts {{.SYMBOL}}
+    requires:
+      vars: [SYMBOL]
+
+  # Tier C: Batch Operations (parallel)
+  fetch:batch:
+    desc: "Fetch multiple symbols in parallel"
+    cmds:
+      - bun src/commands/fetch_batch.ts {{.SYMBOLS}} {{.PARALLEL | default "--parallel 3"}}
+    requires:
+      vars: [SYMBOLS]
+
+  validate:batch:
+    desc: "Validate multiple symbols"
+    cmds:
+      - bun src/commands/validate_batch.ts {{.SYMBOLS}} {{.STOP_ON_ERROR | default ""}}
+    requires:
+      vars: [SYMBOLS]
+
+  cache:warm:
+    desc: "Preload cache for multiple symbols"
+    cmds:
+      - bun src/commands/cache_warm.ts {{.SYMBOLS}} {{.TTL | default "--ttl 86400"}} {{.PARALLEL | default "--parallel 3"}}
+    requires:
+      vars: [SYMBOLS]
+
+  sync:batch:
+    desc: "Sync data from specific source"
+    cmds:
+      - bun src/commands/sync_batch.ts {{.SYMBOLS}} {{.SOURCE | default "--source jquants"}} {{.PARALLEL | default "--parallel 3"}}
+    requires:
+      vars: [SYMBOLS, SOURCE]
+
+  # Tier D: Diagnostic Operations (lightweight, cache-only)
+  stat:one:
+    desc: "Show stats for 1 symbol (from cache)"
+    cmds:
+      - bun src/commands/stat_one.ts {{.SYMBOL}} {{.FORMAT | default "--format json"}}
+    requires:
+      vars: [SYMBOL]
+
+  stat:all:
+    desc: "Show stats for all symbols (from cache)"
+    cmds:
+      - bun src/commands/stat_all.ts {{.FORMAT | default "--format json"}}
+
+  log:tail:
+    desc: "Tail unified logs"
+    cmds:
+      - bun src/commands/log_tail.ts {{.N | default "20"}} {{.FILTER | default ""}}
+
+  health:check:
+    desc: "Lightweight health check (PathRegistry, Cache, Logs)"
+    cmds:
+      - bun src/commands/health_check.ts {{.DETAILED | default ""}}
 

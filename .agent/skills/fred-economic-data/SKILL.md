@@ -6,18 +6,19 @@ description: >
   detection, or macro features for quant models. If the user asks for FRED
   series IDs, macro time-series pulls, or historical/current macro comparisons,
   this skill must be used before any data fetch.
+origin: local-git-analysis
 ---
 
 # FRED Economic Data Access Skill
 
 This skill enables rapid access to over 800,000 economic time-series data points (GDP, unemployment, inflation, etc.) from FRED for comprehensive macro analysis.
 
-## 🚀 When to Use
+## When to Use
 - When fetching the latest macro-economic indicators (e.g., GDP, CPI, interest rates).
 - When analyzing market regimes by comparing historical economic data.
 - When monitoring economic release schedules to time trading strategies.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Economic Data Retrieval
 - Input: Series ID, observation period, and transformation method.
@@ -27,7 +28,7 @@ This skill enables rapid access to over 800,000 economic time-series data points
     3. Perform frequency aggregation as required because macro indicators must be aligned with equity market timeframes (e.g., daily) for correlation analysis.
 - Output: Structured time-series data containing date-value pairs.
 
-## 🛡️ Strict Rules
+## Core Concepts
 
 1.  API Key Management: NEVER hardcode the API key; access it via environment variables because source code is shared and security must be preserved.
 2.  Rate Limit Compliance: Do not exceed FRED API request limits because being blacklisted from FRED will disable the entire macro research pipeline.

@@ -6,19 +6,20 @@ description: >
   config, or credential lookups). If the request mentions OPENAI_API_KEY,
   OPENAI_BASE_URL, FRED_API_KEY, EDINET_API_KEY, J-Quants tokens, missing key,
   config error, or any secrets/path change, this skill must be used first.
+origin: local-git-analysis
 ---
 
 # Environment Management Skill (MANDATORY HOOK)
 
 This skill ensures the secure management of environment variables and project configurations.
 
-## 🚀 When to Use
+## When to Use
 - When defining new environment variables.
 - When handling secrets (e.g., API keys, database passwords).
 - When verifying or modifying global project configurations (Non-secrets).
 - IMPORTANT: This skill must be invoked BEFORE performing any work related to environment variables.
 
-## 📖 Usage Instructions
+## Code Examples
 
 ### Secret Management
 - Input: New credentials or API keys.
@@ -30,7 +31,7 @@ This skill ensures the secure management of environment variables and project co
 - Procedure: Define these in `config/default.yaml` because centralized configuration ensures that the entire agent fleet operates under a unified set of rules.
 - Output: Integrated and consistent configuration across the project.
 
-## 🛡️ Iron Rules
+## Core Concepts
 
 1.  NO PERSISTENT LOGGING OF SECRETS: Never print secrets to the console or logs because telemetry data is often stored in plain text and can be compromised.
 2.  NO HARDCODING: Never embed API keys or sensitive paths directly in source code because hardcoded values break environment portability and leak credentials.
