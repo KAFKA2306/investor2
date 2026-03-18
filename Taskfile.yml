@@ -297,6 +297,12 @@ tasks:
     cmds:
       - bun run pipeline:mine
 
+  pipeline:run:
+    desc: "AAARTS alpha discovery pipeline (maxCycles=1 by default)"
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/commands/pipeline_run.ts
+
   pipeline:verification-plot:
     desc: generate verification plot
     dir: "{{.TS_DIR}}"

@@ -1272,6 +1272,599 @@ app.get("/edinet/:code", async (c) => {
   `);
 });
 
+// AAARTS Pipeline Results Dashboard Routes
+app.get("/api/pipeline/results", async (c) => {
+	try {
+		const resultsPath = resolve(
+			config.paths.logs,
+			"..",
+			"pipeline_results.json",
+		);
+		if (!existsSync(resultsPath)) {
+			return c.json({ error: "No pipeline results found" }, 404);
+		}
+		const results = JSON.parse(readFileSync(resultsPath, "utf-8"));
+		return c.json(results);
+	} catch (error) {
+		return c.json(
+			{
+				error: `Failed to load results: ${error instanceof Error ? error.message : String(error)}`,
+			},
+			500,
+		);
+	}
+});
+
+app.get("/pipeline/results", async (c) => {
+	try {
+		const resultsPath = resolve(
+			config.paths.logs,
+			"..",
+			"pipeline_results.json",
+		);
+		if (!existsSync(resultsPath)) {
+			return c.html(
+				pipelineResultsHtml({
+					error:
+						"No pipeline results found. Run the pipeline first with: task pipeline:run",
+				}),
+			);
+		}
+
+		const report = JSON.parse(readFileSync(resultsPath, "utf-8"));
+		return c.html(pipelineResultsHtml({ report }));
+	} catch (error) {
+		return c.html(
+			pipelineResultsHtml({
+				error: `Failed to load results: ${error instanceof Error ? error.message : String(error)}`,
+			}),
+		);
+	}
+});
+
+function pipelineResultsHtml({
+	report,
+	error,
+}: {
+	report?: any;
+	error?: string;
+}): string {
+	if (error) {
+		return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAARTS Pipeline Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow rounded-lg p-8 max-w-md w-full">
+      <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
+        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 4v2"></path>
+        </svg>
+      </div>
+      <h3 class="mt-4 text-lg font-medium text-gray-900">Error</h3>
+      <p class="mt-2 text-sm text-gray-500">${error}</p>
+    </div>
+  </div>
+</body>
+</html>
+		`;
+	}
+
+	if (!report) {
+		return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAARTS Pipeline Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow rounded-lg p-8 max-w-md w-full">
+      <p class="text-gray-600">Loading...</p>
+    </div>
+  </div>
+</body>
+</html>
+		`;
+	}
+
+	const totalCycles = report.total_cycles;
+	const goCount = report.verdicts.filter((v: any) => v.verdict === "GO").length;
+	const holdCount = report.verdicts.filter(
+		(v: any) => v.verdict === "HOLD",
+	).length;
+	const pivotCount = report.verdicts.filter(
+		(v: any) => v.verdict === "PIVOT",
+	).length;
+
+	const executionTime = new Date(report.execution_timestamp).toLocaleString();
+	const avgConfidence =
+		(report.verdicts.reduce((sum: number, v: any) => sum + v.confidence, 0) /
+			totalCycles) *
+		100;
+
+	// Prepare data for cycle timeline chart
+	const cycleLabels = report.verdicts.map(
+		(_: any, idx: number) => `Cycle ${idx + 1}`,
+	);
+	const cycleVerdicts = report.verdicts.map((v: any) => {
+		if (v.verdict === "GO") return 1;
+		if (v.verdict === "HOLD") return 0.5;
+		return 0;
+	});
+
+	// Calculate average metrics per verdict type
+	const avgSharpeByVerdict = {
+		GO:
+			report.verdicts
+				.filter((v: any) => v.verdict === "GO")
+				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
+			Math.max(goCount, 1),
+		HOLD:
+			report.verdicts
+				.filter((v: any) => v.verdict === "HOLD")
+				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
+			Math.max(holdCount, 1),
+		PIVOT:
+			report.verdicts
+				.filter((v: any) => v.verdict === "PIVOT")
+				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
+			Math.max(pivotCount, 1),
+	};
+
+	return `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AAARTS Pipeline Results</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body class="bg-gray-50">
+  <div class="min-h-screen">
+    <!-- Header -->
+    <div class="bg-white shadow">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <h1 class="text-3xl font-bold text-gray-900">AAARTS Pipeline Results</h1>
+        <p class="mt-2 text-sm text-gray-600">Autonomous Agent-based Alpha Research and Trading System</p>
+        <p class="mt-1 text-xs text-gray-500">Automated discovery and validation of profitable trading factors using systematic backtesting and risk analysis</p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+      <!-- Execution Summary -->
+      <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Pipeline Execution Summary</h2>
+        <p class="text-sm text-gray-600 mb-4">Overview of this discovery cycle - how many factors were generated, tested, and their outcomes</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-gray-300">
+            <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Execution ID</p>
+            <p class="text-lg font-bold text-gray-900 font-mono">${report.execution_id.slice(0, 8)}...</p>
+            <p class="text-xs text-gray-500 mt-1">Unique identifier for audit trail</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-300">
+            <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Execution Time</p>
+            <p class="text-lg font-bold text-gray-900">${executionTime}</p>
+            <p class="text-xs text-gray-500 mt-1">When discovery cycle ran</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-purple-300">
+            <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Factors Tested</p>
+            <p class="text-lg font-bold text-gray-900">${totalCycles}</p>
+            <p class="text-xs text-gray-500 mt-1">Alpha hypotheses generated & backtested</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-green-300">
+            <p class="text-xs font-medium text-gray-600 uppercase tracking-wide">Total Runtime</p>
+            <p class="text-lg font-bold text-gray-900">${report.elapsed_seconds}s</p>
+            <p class="text-xs text-gray-500 mt-1">Execution time for all cycles</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verdict Distribution Charts -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- Doughnut Chart -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Verdict Distribution</h2>
+          <p class="text-xs text-gray-600 mb-4">How many factors passed (GO), need refinement (HOLD), or failed (PIVOT) the quality checks</p>
+          <div style="position: relative; height: 300px;">
+            <canvas id="verdictChart"></canvas>
+          </div>
+          <div class="mt-4 space-y-2 text-sm">
+            <div class="flex items-center p-2 bg-green-50 rounded">
+              <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+              <span class="text-gray-700"><strong>GO:</strong> ${goCount} factor${goCount !== 1 ? "s" : ""} (${((goCount / totalCycles) * 100).toFixed(1)}%) - Ready for deployment</span>
+            </div>
+            <div class="flex items-center p-2 bg-yellow-50 rounded">
+              <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
+              <span class="text-gray-700"><strong>HOLD:</strong> ${holdCount} factor${holdCount !== 1 ? "s" : ""} (${((holdCount / totalCycles) * 100).toFixed(1)}%) - Marginal, needs refinement</span>
+            </div>
+            <div class="flex items-center p-2 bg-red-50 rounded">
+              <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
+              <span class="text-gray-700"><strong>PIVOT:</strong> ${pivotCount} factor${pivotCount !== 1 ? "s" : ""} (${((pivotCount / totalCycles) * 100).toFixed(1)}%) - Failed, triggers domain re-init</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Verdict Timeline -->
+        <div class="bg-white shadow rounded-lg p-6">
+          <h2 class="text-xl font-semibold text-gray-900 mb-4">Verdict Timeline</h2>
+          <p class="text-xs text-gray-600 mb-4">Sequence of verdicts across cycles - shows discovery pattern and any trends</p>
+          <div style="position: relative; height: 300px;">
+            <canvas id="timelineChart"></canvas>
+          </div>
+          <div class="mt-2 text-xs text-gray-500 flex gap-4">
+            <div class="flex items-center"><div class="w-2 h-2 bg-green-500 rounded-full mr-1"></div>GO (1.0)</div>
+            <div class="flex items-center"><div class="w-2 h-2 bg-yellow-500 rounded-full mr-1"></div>HOLD (0.5)</div>
+            <div class="flex items-center"><div class="w-2 h-2 bg-red-500 rounded-full mr-1"></div>PIVOT (0.0)</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Performance Metrics Grid -->
+      <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Performance Metrics</h2>
+        <p class="text-sm text-gray-600 mb-4">Key insights into factor quality and discovery pipeline effectiveness across all tested hypotheses</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-300">
+            <p class="text-xs font-medium text-blue-600 uppercase tracking-wide">Average Confidence</p>
+            <p class="text-2xl font-bold text-blue-900">${avgConfidence.toFixed(1)}%</p>
+            <p class="text-xs text-gray-600 mt-2">Avg CQO confidence in verdicts<br/><em>Higher = more certain about decisions</em></p>
+          </div>
+          <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-300">
+            <p class="text-xs font-medium text-green-600 uppercase tracking-wide">Deployment Rate</p>
+            <p class="text-2xl font-bold text-green-900">${((goCount / totalCycles) * 100).toFixed(1)}%</p>
+            <p class="text-xs text-gray-600 mt-2">% of factors ready to trade<br/><em>Higher = better discovery quality</em></p>
+          </div>
+          <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-300">
+            <p class="text-xs font-medium text-yellow-600 uppercase tracking-wide">Risk-Adj Return (GO)</p>
+            <p class="text-2xl font-bold text-yellow-900">${avgSharpeByVerdict.GO.toFixed(2)}</p>
+            <p class="text-xs text-gray-600 mt-2">Avg Sharpe of approved factors<br/><em>Target ≥ 0.25, higher is better</em></p>
+          </div>
+          <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-300">
+            <p class="text-xs font-medium text-purple-600 uppercase tracking-wide">Risk-Adj Return (HOLD)</p>
+            <p class="text-2xl font-bold text-purple-900">${avgSharpeByVerdict.HOLD.toFixed(2)}</p>
+            <p class="text-xs text-gray-600 mt-2">Avg Sharpe of marginal factors<br/><em>Candidates for refinement</em></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verdict Filter -->
+      <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <div>
+            <h2 class="text-xl font-semibold text-gray-900">Detailed Results</h2>
+            <p class="text-xs text-gray-600 mt-1">Complete results for each tested factor. Click "Show" for detailed metrics and reasoning.</p>
+          </div>
+        </div>
+        <div class="mb-4 flex gap-2 flex-wrap">
+          <button onclick="filterVerdicts('all')" class="filter-btn px-4 py-2 rounded-lg font-medium text-sm bg-gray-200 text-gray-900 cursor-pointer hover:bg-gray-300 transition-colors" data-filter="all">All (${totalCycles})</button>
+          <button onclick="filterVerdicts('GO')" class="filter-btn px-4 py-2 rounded-lg font-medium text-sm bg-green-100 text-green-900 cursor-pointer hover:bg-green-200 transition-colors" data-filter="GO">GO (${goCount})</button>
+          <button onclick="filterVerdicts('HOLD')" class="filter-btn px-4 py-2 rounded-lg font-medium text-sm bg-yellow-100 text-yellow-900 cursor-pointer hover:bg-yellow-200 transition-colors" data-filter="HOLD">HOLD (${holdCount})</button>
+          <button onclick="filterVerdicts('PIVOT')" class="filter-btn px-4 py-2 rounded-lg font-medium text-sm bg-red-100 text-red-900 cursor-pointer hover:bg-red-200 transition-colors" data-filter="PIVOT">PIVOT (${pivotCount})</button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full" id="resultsTable">
+            <thead>
+              <tr class="border-b-2 border-gray-200 bg-gray-50">
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('cycle')" title="Iteration number of discovery cycle">
+                  Cycle <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('factor')" title="Unique identifier for this trading factor">
+                  Factor ID <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('verdict')" title="GO=Deploy, HOLD=Refine, PIVOT=Abandon">
+                  Verdict <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('sharpe')" title="Risk-adjusted return (higher is better). Target ≥ 0.25">
+                  Sharpe <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('ic')" title="Predictive power: correlation with future returns (0-0.1 typical)">
+                  IC <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('drawdown')" title="Worst peak-to-trough decline observed (lower is safer)">
+                  Drawdown <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900 cursor-pointer hover:bg-gray-100" onclick="sortTable('pvalue')" title="Statistical significance (lower = more significant). Max: ${report.config_thresholds.maxPValue}">
+                  p-value <span class="text-gray-400 text-xs">↕</span>
+                </th>
+                <th class="text-left px-4 py-3 font-semibold text-gray-900">Details</th>
+              </tr>
+            </thead>
+            <tbody id="tableBody">
+              ${report.verdicts
+								.map((verdict: any, idx: number) => {
+									const bgClass =
+										verdict.verdict === "GO"
+											? "bg-green-50"
+											: verdict.verdict === "HOLD"
+												? "bg-yellow-50"
+												: "bg-red-50";
+									const sharpePassed =
+										verdict.outcome.sharpe >= report.config_thresholds.minSharpe
+											? "✓"
+											: "✗";
+									const pvaluePassed =
+										verdict.outcome.p_value <=
+										report.config_thresholds.maxPValue
+											? "✓"
+											: "✗";
+									const drawdownPassed =
+										verdict.outcome.max_drawdown <=
+										report.config_thresholds.maxDrawdown
+											? "✓"
+											: "✗";
+									return `
+              <tr class="border-b border-gray-100 hover:${bgClass} data-row" data-verdict="${verdict.verdict}" data-cycle="${idx + 1}" data-factor="${verdict.outcome.factor_id}" data-sharpe="${verdict.outcome.sharpe}" data-ic="${verdict.outcome.ic}" data-drawdown="${verdict.outcome.max_drawdown}" data-pvalue="${verdict.outcome.p_value}">
+                <td class="px-4 py-3 text-gray-900">${idx + 1}</td>
+                <td class="px-4 py-3 font-mono text-sm text-gray-600">${verdict.outcome.factor_id}</td>
+                <td class="px-4 py-3">
+                  <span class="px-3 py-1 rounded-full text-sm font-semibold ${
+										verdict.verdict === "GO"
+											? "bg-green-100 text-green-800"
+											: verdict.verdict === "HOLD"
+												? "bg-yellow-100 text-yellow-800"
+												: "bg-red-100 text-red-800"
+									}">
+                    ${verdict.verdict}
+                  </span>
+                </td>
+                <td class="px-4 py-3 text-gray-900"><span title="Threshold: ${report.config_thresholds.minSharpe}">${verdict.outcome.sharpe.toFixed(3)}</span> ${sharpePassed}</td>
+                <td class="px-4 py-3 text-gray-900" title="Higher correlation = better predictive power">${verdict.outcome.ic.toFixed(4)}</td>
+                <td class="px-4 py-3 text-gray-900"><span title="Threshold: ${(report.config_thresholds.maxDrawdown * 100).toFixed(1)}%">${(verdict.outcome.max_drawdown * 100).toFixed(1)}%</span> ${drawdownPassed}</td>
+                <td class="px-4 py-3 text-gray-900"><span title="Threshold: ${report.config_thresholds.maxPValue}">${verdict.outcome.p_value.toFixed(4)}</span> ${pvaluePassed}</td>
+                <td class="px-4 py-3"><button class="text-blue-600 hover:text-blue-900 underline" onclick="toggleDetails(this)">Show</button></td>
+              </tr>
+              <tr class="details-row hidden border-b border-gray-100 bg-gray-50" data-cycle="${idx + 1}">
+                <td colspan="8" class="px-4 py-4">
+                  <div class="space-y-3">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">📈 Performance Analysis</h4>
+                        <div class="space-y-2 text-sm text-gray-600">
+                          <div class="bg-gray-50 p-2 rounded">
+                            <p><strong>Sharpe Ratio:</strong> <span class="font-mono text-gray-900">${verdict.outcome.sharpe.toFixed(3)}</span></p>
+                            <p class="text-xs mt-1">Returns earned per unit of risk. ${verdict.outcome.sharpe >= report.config_thresholds.minSharpe ? "✓ <strong>Passes</strong> - acceptable risk-return profile" : "✗ <strong>Fails</strong> - returns don't compensate risk"}</p>
+                          </div>
+                          <div class="bg-gray-50 p-2 rounded">
+                            <p><strong>Information Coefficient:</strong> <span class="font-mono text-gray-900">${verdict.outcome.ic.toFixed(4)}</span></p>
+                            <p class="text-xs mt-1">Predictive power for future stock returns (0.0-0.1 typical). Higher = more consistent alpha.</p>
+                          </div>
+                          <div class="bg-gray-50 p-2 rounded">
+                            <p><strong>Max Drawdown:</strong> <span class="font-mono text-gray-900">${(verdict.outcome.max_drawdown * 100).toFixed(1)}%</span></p>
+                            <p class="text-xs mt-1">Worst loss from peak. ${verdict.outcome.max_drawdown <= report.config_thresholds.maxDrawdown ? "✓ <strong>Acceptable</strong> - within risk budget" : "✗ <strong>Too Risky</strong> - exceeds tolerance"}</p>
+                          </div>
+                          <div class="bg-gray-50 p-2 rounded">
+                            <p><strong>Statistical Significance:</strong> <span class="font-mono text-gray-900">p=${verdict.outcome.p_value.toFixed(4)}</span></p>
+                            <p class="text-xs mt-1">Probability results are due to chance (lower = better). ${verdict.outcome.p_value <= report.config_thresholds.maxPValue ? "✓ <strong>Significant</strong> - likely real pattern" : "✗ <strong>Unreliable</strong> - may be noise"}</p>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <h4 class="font-semibold text-gray-900 mb-2">🎯 Verdict & Recommendation</h4>
+                        <div class="space-y-2 text-sm text-gray-600">
+                          <div class="p-3 rounded ${
+														verdict.verdict === "GO"
+															? "bg-green-50 border-l-4 border-green-400"
+															: verdict.verdict === "HOLD"
+																? "bg-yellow-50 border-l-4 border-yellow-400"
+																: "bg-red-50 border-l-4 border-red-400"
+													}">
+                            <p class="font-semibold ${verdict.verdict === "GO" ? "text-green-700" : verdict.verdict === "HOLD" ? "text-yellow-700" : "text-red-700"}">${verdict.verdict}</p>
+                            ${
+															verdict.verdict === "GO"
+																? "<p class='text-xs mt-1'>✓ <strong>Ready for deployment.</strong> All quality checks passed. Recommend adding to live trading portfolio.</p>"
+																: verdict.verdict === "HOLD"
+																	? "<p class='text-xs mt-1'>⏸ <strong>Marginal - needs refinement.</strong> Close to passing but not quite there. Consider parameter tuning or additional filtering.</p>"
+																	: "<p class='text-xs mt-1'>✗ <strong>Reject - critical failures.</strong> Triggers Ralph Loop. System will reinitialize discovery with different assumptions.</p>"
+														}
+                          </div>
+                          <div>
+                            <p><strong>CQO Confidence:</strong> <span class="font-mono text-gray-900">${(verdict.confidence * 100).toFixed(1)}%</span></p>
+                            <p class="text-xs text-gray-500">How confident the QO agent is in this verdict (higher = more certain)</p>
+                          </div>
+                          <div>
+                            <p><strong>Backtest Period:</strong> <span class="font-mono text-gray-900">${verdict.outcome.backtest_days} trading days</span></p>
+                            <p class="text-xs text-gray-500">Historical data used to validate factor performance</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+			  `;
+								})
+								.join("")}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Threshold Reference -->
+      <div class="bg-white shadow rounded-lg p-6 mb-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Quality Standards</h2>
+        <p class="text-sm text-gray-600 mb-4">Minimum criteria that factors must meet to receive a GO verdict. These controls ensure only robust, profitable factors are deployed:</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-300">
+            <p class="text-xs font-medium text-gray-700 uppercase tracking-wide">Min Risk-Adjusted Return</p>
+            <p class="text-2xl font-bold text-gray-900">${report.config_thresholds.minSharpe}</p>
+            <p class="text-xs text-gray-600 mt-2">Factors must deliver at least <strong>${report.config_thresholds.minSharpe}</strong> units of return per unit of risk taken. Lower values = easier bar to clear, but potentially less profitable.</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-green-300">
+            <p class="text-xs font-medium text-gray-700 uppercase tracking-wide">Max Significance Test (p-value)</p>
+            <p class="text-2xl font-bold text-gray-900">${report.config_thresholds.maxPValue}</p>
+            <p class="text-xs text-gray-600 mt-2">Results must be statistically significant at <strong>${(report.config_thresholds.maxPValue * 100).toFixed(0)}%</strong> confidence level. Higher threshold = higher risk of false discoveries.</p>
+          </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-red-300">
+            <p class="text-xs font-medium text-gray-700 uppercase tracking-wide">Max Acceptable Drawdown</p>
+            <p class="text-2xl font-bold text-gray-900">${(report.config_thresholds.maxDrawdown * 100).toFixed(1)}%</p>
+            <p class="text-xs text-gray-600 mt-2">Factor can lose at most <strong>${(report.config_thresholds.maxDrawdown * 100).toFixed(1)}%</strong> from peak to trough before failing risk control. Stricter limits reduce pain tolerance.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- How to Interpret Section -->
+      <div class="bg-gradient-to-br from-blue-50 to-indigo-50 shadow rounded-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">📊 How to Interpret Results</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">✅ What GO Means</h3>
+            <p class="text-gray-700">Factor passed all quality checks and is <strong>ready for live trading</strong>. Its historical performance suggests it will likely be profitable, and its risk characteristics are acceptable.</p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">⏸ What HOLD Means</h3>
+            <p class="text-gray-700">Factor shows promise but has <strong>marginal performance</strong>. Close to passing but needs refinement. Consider parameter adjustment or additional data before deployment.</p>
+          </div>
+          <div>
+            <h3 class="font-semibold text-gray-900 mb-2">❌ What PIVOT Means</h3>
+            <p class="text-gray-700">Factor failed critical tests. Triggers <strong>Ralph Loop</strong> - system re-initializes discovery with different assumptions. Indicates the current domain needs recalibration.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Verdict Distribution Doughnut Chart
+    const verdictCtx = document.getElementById('verdictChart').getContext('2d');
+    new Chart(verdictCtx, {
+      type: 'doughnut',
+      data: {
+        labels: ['GO', 'HOLD', 'PIVOT'],
+        datasets: [{
+          data: [${goCount}, ${holdCount}, ${pivotCount}],
+          backgroundColor: ['#10b981', '#f59e0b', '#ef4444'],
+          borderColor: ['#059669', '#d97706', '#dc2626'],
+          borderWidth: 2
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: 'bottom',
+            labels: { font: { size: 12 }, padding: 15 }
+          }
+        }
+      }
+    });
+
+    // Verdict Timeline Bar Chart
+    const timelineCtx = document.getElementById('timelineChart').getContext('2d');
+    new Chart(timelineCtx, {
+      type: 'bar',
+      data: {
+        labels: ${JSON.stringify(cycleLabels)},
+        datasets: [{
+          label: 'Verdict Score',
+          data: ${JSON.stringify(cycleVerdicts)},
+          backgroundColor: [${report.verdicts
+						.map((v: any) => {
+							if (v.verdict === "GO") return "'#10b981'";
+							if (v.verdict === "HOLD") return "'#f59e0b'";
+							return "'#ef4444'";
+						})
+						.join(",")}],
+          borderRadius: 4
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        indexAxis: totalCycles > 8 ? 'y' : 'x',
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 1,
+            ticks: { steps: 2 }
+          }
+        },
+        plugins: {
+          legend: { display: false }
+        }
+      }
+    });
+
+    let currentSortColumn = null;
+    let sortAscending = true;
+    let currentFilter = 'all';
+
+    function filterVerdicts(verdict) {
+      currentFilter = verdict;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.classList.toggle('ring-2', btn.dataset.filter === verdict);
+      });
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const rows = document.querySelectorAll('[data-row]');
+      rows.forEach(row => {
+        const rowVerdict = row.dataset.verdict;
+        const show = currentFilter === 'all' || rowVerdict === currentFilter;
+        row.style.display = show ? '' : 'none';
+        const detailRow = document.querySelector(\`.details-row[data-cycle="\${row.dataset.cycle}"]\`);
+        if (detailRow) detailRow.style.display = show ? '' : 'none';
+      });
+    }
+
+    function sortTable(column) {
+      const rows = Array.from(document.querySelectorAll('[data-row]:not([style*="display: none"])'));
+      const ascending = currentSortColumn === column ? !sortAscending : true;
+
+      rows.sort((a, b) => {
+        let aVal, bVal;
+        switch(column) {
+          case 'cycle': aVal = parseInt(a.dataset.cycle); bVal = parseInt(b.dataset.cycle); break;
+          case 'factor': aVal = a.dataset.factor; bVal = b.dataset.factor; break;
+          case 'verdict': aVal = a.dataset.verdict; bVal = b.dataset.verdict; break;
+          case 'sharpe': aVal = parseFloat(a.dataset.sharpe); bVal = parseFloat(b.dataset.sharpe); break;
+          case 'ic': aVal = parseFloat(a.dataset.ic); bVal = parseFloat(b.dataset.ic); break;
+          case 'drawdown': aVal = parseFloat(a.dataset.drawdown); bVal = parseFloat(b.dataset.drawdown); break;
+          case 'pvalue': aVal = parseFloat(a.dataset.pvalue); bVal = parseFloat(b.dataset.pvalue); break;
+        }
+        if (aVal < bVal) return ascending ? -1 : 1;
+        if (aVal > bVal) return ascending ? 1 : -1;
+        return 0;
+      });
+
+      const tbody = document.getElementById('tableBody');
+      rows.forEach(row => {
+        tbody.appendChild(row);
+        const detailRow = document.querySelector(\`.details-row[data-cycle="\${row.dataset.cycle}"]\`);
+        if (detailRow) tbody.appendChild(detailRow);
+      });
+
+      currentSortColumn = column;
+      sortAscending = ascending;
+    }
+
+    function toggleDetails(btn) {
+      const row = btn.closest('[data-row]');
+      const cycle = row.dataset.cycle;
+      const detailRow = document.querySelector(\`.details-row[data-cycle="\${cycle}"]\`);
+      detailRow.classList.toggle('hidden');
+      btn.textContent = detailRow.classList.contains('hidden') ? 'Show' : 'Hide';
+    }
+  </script>
+</body>
+</html>
+	`;
+}
+
 export default {
 	fetch: app.fetch,
 	port: 3000,

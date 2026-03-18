@@ -30,6 +30,24 @@ export const ConfigSchema = z.object({
 	polymarket: z.object({
 		clob_url: z.string(),
 	}),
+	pipelineBlueprint: z
+		.object({
+			verificationAcceptance: z
+				.object({
+					minSharpe: z.number(),
+					maxPValue: z.number(),
+					maxDrawdown: z.number(),
+				})
+				.optional(),
+			alphaLoop: z
+				.object({
+					maxCycles: z.number(),
+					sleepSec: z.number(),
+					maxFailures: z.number(),
+				})
+				.optional(),
+		})
+		.optional(),
 });
 
 export type Config = z.infer<typeof ConfigSchema>;
@@ -87,3 +105,62 @@ export const CompanyDetailSchema = CompanyInfoSchema.extend({
 });
 
 export type CompanyDetail = z.infer<typeof CompanyDetailSchema>;
+
+// ============================================================
+// AAARTS Alpha Discovery Pipeline
+// ============================================================
+
+export const AlphaCandidateSchema = z.object({
+	factor_id: z.string(),
+	formula: z.string(),
+	economic_mechanism: z.string(),
+});
+
+export type AlphaCandidate = z.infer<typeof AlphaCandidateSchema>;
+
+export const StandardOutcomeSchema = z.object({
+	sharpe: z.number(),
+	ic: z.number(),
+	max_drawdown: z.number(),
+	p_value: z.number(),
+	factor_id: z.string(),
+	backtest_days: z.number(),
+});
+
+export type StandardOutcome = z.infer<typeof StandardOutcomeSchema>;
+
+export const VerificationResultSchema = z.object({
+	verdict: z.enum(["GO", "HOLD", "PIVOT"]),
+	confidence: z.number(),
+	reasons: z.array(z.string()),
+	outcome: StandardOutcomeSchema,
+});
+
+export type VerificationResult = z.infer<typeof VerificationResultSchema>;
+
+export const CycleSummarySchema = z.object({
+	cycle: z.number(),
+	candidates_generated: z.number(),
+	go_count: z.number(),
+	hold_count: z.number(),
+	pivot_count: z.number(),
+	elapsed_ms: z.number(),
+});
+
+export type CycleSummary = z.infer<typeof CycleSummarySchema>;
+
+export const PipelineResultsReportSchema = z.object({
+	execution_id: z.string(),
+	execution_timestamp: z.string(),
+	total_cycles: z.number(),
+	elapsed_seconds: z.number(),
+	cycle_summaries: z.array(CycleSummarySchema),
+	verdicts: z.array(VerificationResultSchema),
+	config_thresholds: z.object({
+		minSharpe: z.number(),
+		maxPValue: z.number(),
+		maxDrawdown: z.number(),
+	}),
+});
+
+export type PipelineResultsReport = z.infer<typeof PipelineResultsReportSchema>;
