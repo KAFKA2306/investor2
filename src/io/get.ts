@@ -11,7 +11,10 @@ try {
 		const trimmed = line.trim();
 		if (!trimmed || trimmed.startsWith("#")) continue;
 		const [key, ...valueParts] = trimmed.split("=");
-		const value = valueParts.join("=").trim().replace(/^["']|["']$/g, "");
+		const value = valueParts
+			.join("=")
+			.trim()
+			.replace(/^["']|["']$/g, "");
 		if (key && value) {
 			process.env[key] = value;
 		}
@@ -126,9 +129,9 @@ async function syncJquants(mode: "markets" | "fundamental") {
 	const baseUrl = "https://api.jquants.com/v2";
 	const headers = { "x-api-key": apiKey };
 
-	// Expanded date range: 2020-01-01 to 2025-12-31 (6 years full range)
-	const from = "2020-01-01";
-	const to = "2025-12-31";
+	// Expanded date range: API subscription covers 2023-12-26 to 2025-12-26
+	const from = "2023-12-26";
+	const to = "2025-12-26";
 
 	console.log(`📡 [J-Quants v2] Syncing ${mode} Bulk (${from} ～ ${to})...`);
 
@@ -150,7 +153,9 @@ async function syncJquants(mode: "markets" | "fundamental") {
 
 		// Bulk Prices: Fetch daily bars for full date range
 		const dates = getDateRange(from, to);
-		console.log(`📡 [J-Quants] Fetching market data for ${dates.length} dates...`);
+		console.log(
+			`📡 [J-Quants] Fetching market data for ${dates.length} dates...`,
+		);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/equities/bars/daily?date=${d}`, {
@@ -161,15 +166,17 @@ async function syncJquants(mode: "markets" | "fundamental") {
 				`${baseUrl}/indices/bars/daily/topix?date=${d}`,
 				{ headers },
 			);
-			// Rate limit: 0.5 requests per second (2 second delay) to respect J-Quants API limits
-			await new Promise((r) => setTimeout(r, 2000));
+			// Rate limit: J-Quants API strict rate limiting (~1 req/sec per endpoint)
+			await new Promise((r) => setTimeout(r, 6000));
 		}
 
 		// Export CSV for the "latest" consumers
 		await exportJquantsToCsv(db);
 	} else {
 		const dates = getDateRange(from, to);
-		console.log(`📡 [J-Quants] Fetching fundamental data for ${dates.length} dates...`);
+		console.log(
+			`📡 [J-Quants] Fetching fundamental data for ${dates.length} dates...`,
+		);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/fins/summary?date=${d}`, {
