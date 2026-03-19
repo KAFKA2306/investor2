@@ -4,6 +4,22 @@ import { dirname } from "node:path";
 import yaml from "js-yaml";
 import { ConfigSchema } from "../shared/schema";
 
+// Load .env file
+try {
+	const envContent = readFileSync(".env", "utf-8");
+	for (const line of envContent.split("\n")) {
+		const trimmed = line.trim();
+		if (!trimmed || trimmed.startsWith("#")) continue;
+		const [key, ...valueParts] = trimmed.split("=");
+		const value = valueParts.join("=").trim().replace(/^["']|["']$/g, "");
+		if (key && value) {
+			process.env[key] = value;
+		}
+	}
+} catch (e) {
+	console.warn("⚠️  .env file not found, using environment variables only");
+}
+
 const config = ConfigSchema.parse(
 	yaml.load(readFileSync("config/default.yaml", "utf-8")),
 );
@@ -145,8 +161,8 @@ async function syncJquants(mode: "markets" | "fundamental") {
 				`${baseUrl}/indices/bars/daily/topix?date=${d}`,
 				{ headers },
 			);
-			// Rate limit: ~2 requests per second to avoid 429
-			await new Promise((r) => setTimeout(r, 500));
+			// Rate limit: 0.5 requests per second (2 second delay) to respect J-Quants API limits
+			await new Promise((r) => setTimeout(r, 2000));
 		}
 
 		// Export CSV for the "latest" consumers
