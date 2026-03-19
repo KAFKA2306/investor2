@@ -318,3 +318,53 @@ models:
       context7_library_id: /microsoft/qlib
       github: https://github.com/microsoft/qlib
       arxiv: https://arxiv.org/abs/2009.11189
+
+# ============================================================
+# Sector Spillover Strategy (US -> Japan)
+# ============================================================
+sector_spillover:
+  us_sectors:
+    - energy
+    - materials
+    - industrials
+    - consumer_discretionary
+    - consumer_staples
+    - healthcare
+    - financials
+    - it
+    - communication
+    - utilities
+    - real_estate
+  jp_sectors:
+    - "1000"
+    - "2000"
+    - "3000"
+    - "4000"
+    - "5000"
+    - "6000"
+    - "7000"
+    - "8000"
+    - "9000"
+    - "10000"
+    - "11000"
+    - "12000"
+    - "13000"
+    - "14000"
+    - "15000"
+    - "16000"
+    - "17000"
+  pca:
+    n_components: 3
+    regularization_alpha: 0.1
+    max_iterations: 100
+  signal:
+    long_threshold: 0.33
+    short_threshold: -0.33
+    neutral_threshold: 0.33
+  backtest:
+    initial_capital: 1000000
+    long_size: 0.30
+    short_size: 0.30
+    rebalance_frequency: "daily"
+    transaction_cost_bps: 5
+    data_cache_dir: "cache/sector_spillover"

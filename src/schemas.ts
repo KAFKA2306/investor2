@@ -30,6 +30,30 @@ export const ConfigSchema = z.object({
 	polymarket: z.object({
 		clob_url: z.string(),
 	}),
+	sector_spillover: z
+		.object({
+			us_sectors: z.array(z.string()).optional(),
+			jp_sectors: z.array(z.string()).optional(),
+			pca: z.object({
+				n_components: z.number().optional(),
+				regularization_alpha: z.number().optional(),
+				max_iterations: z.number().optional(),
+			}).optional(),
+			signal: z.object({
+				long_threshold: z.number().optional(),
+				short_threshold: z.number().optional(),
+				neutral_threshold: z.number().optional(),
+			}).optional(),
+			backtest: z.object({
+				initial_capital: z.number().optional(),
+				long_size: z.number().optional(),
+				short_size: z.number().optional(),
+				rebalance_frequency: z.string().optional(),
+				transaction_cost_bps: z.number().optional(),
+				data_cache_dir: z.string().optional(),
+			}).optional(),
+		})
+		.optional(),
 	pipelineBlueprint: z
 		.object({
 			verificationAcceptance: z
@@ -130,7 +154,7 @@ export const StandardOutcomeSchema = z.object({
 export type StandardOutcome = z.infer<typeof StandardOutcomeSchema>;
 
 export const VerificationResultSchema = z.object({
-	verdict: z.enum(["GO", "HOLD", "PIVOT"]),
+	verdict: z.union([z.literal("GO"), z.literal("HOLD"), z.literal("PIVOT")]),
 	confidence: z.number(),
 	reasons: z.array(z.string()),
 	outcome: StandardOutcomeSchema,
@@ -164,3 +188,87 @@ export const PipelineResultsReportSchema = z.object({
 });
 
 export type PipelineResultsReport = z.infer<typeof PipelineResultsReportSchema>;
+
+// ============================================================
+// Sector Spillover Strategy (US -> Japan)
+// ============================================================
+
+export const US11SectorsSchema = z.union([
+	z.literal("energy"),
+	z.literal("materials"),
+	z.literal("industrials"),
+	z.literal("consumer_discretionary"),
+	z.literal("consumer_staples"),
+	z.literal("healthcare"),
+	z.literal("financials"),
+	z.literal("it"),
+	z.literal("communication"),
+	z.literal("utilities"),
+	z.literal("real_estate"),
+]);
+
+export type US11Sectors = z.infer<typeof US11SectorsSchema>;
+
+export const JP17SectorsSchema = z.union([
+	z.literal("1000"), // 水産・農林業
+	z.literal("2000"), // 鉱業
+	z.literal("3000"), // 建設業
+	z.literal("4000"), // 食料品
+	z.literal("5000"), // 繊維製品
+	z.literal("6000"), // 紙・パルプ
+	z.literal("7000"), // 化学
+	z.literal("8000"), // 医薬品
+	z.literal("9000"), // 石油・石炭製品
+	z.literal("10000"), // ゴム製品
+	z.literal("11000"), // ガラス・土石製品
+	z.literal("12000"), // 鉄鋼
+	z.literal("13000"), // 非鉄金属
+	z.literal("14000"), // 金属製品
+	z.literal("15000"), // 機械
+	z.literal("16000"), // 電気機器
+	z.literal("17000"), // 輸送用機器
+]);
+
+export type JP17Sectors = z.infer<typeof JP17SectorsSchema>;
+
+export const SectorReturnsSchema = z.object({
+	date: z.string(),
+	sector: z.union([US11SectorsSchema, JP17SectorsSchema]),
+	return_pct: z.number(),
+});
+
+export type SectorReturns = z.infer<typeof SectorReturnsSchema>;
+
+export const RegularizedPCAResultSchema = z.object({
+	date: z.string(),
+	components: z.array(z.number()), // Latent factors
+	variance_explained: z.array(z.number()), // Variance per component
+	cumulative_variance: z.number(),
+});
+
+export type RegularizedPCAResult = z.infer<typeof RegularizedPCAResultSchema>;
+
+export const SectorSpilloverSignalSchema = z.object({
+	date: z.string(),
+	jp_sector: JP17SectorsSchema,
+	signal_score: z.number(), // -1.0 (strong short) to +1.0 (strong long)
+	signal_type: z.union([z.literal("long"), z.literal("neutral"), z.literal("short")]),
+	confidence: z.number(), // 0-1, higher = more confident
+	us_factor_contributions: z.record(z.string(), z.number()),
+});
+
+export type SectorSpilloverSignal = z.infer<typeof SectorSpilloverSignalSchema>;
+
+export const SpilloverBacktestResultSchema = z.object({
+	backtest_id: z.string(),
+	start_date: z.string(),
+	end_date: z.string(),
+	total_returns_pct: z.number(),
+	sharpe_ratio: z.number(),
+	max_drawdown_pct: z.number(),
+	win_rate: z.number(), // % of profitable trades
+	num_trades: z.number(),
+	strategy_name: z.string(),
+});
+
+export type SpilloverBacktestResult = z.infer<typeof SpilloverBacktestResultSchema>;

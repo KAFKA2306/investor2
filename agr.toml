@@ -1,0 +1,8 @@
+[project]
+name = "investor-ts"
+description = "Quantitative investment research and backtesting platform"
+
+[[skills]]
+name = "cache"
+source = ".agent/skills/cache"
+description = "Cache-first data usage guidance for avoiding redundant API calls"
