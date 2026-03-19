@@ -110,22 +110,31 @@ async function syncJquants(mode: "markets" | "fundamental") {
 	const baseUrl = "https://api.jquants.com/v2";
 	const headers = { "x-api-key": apiKey };
 
-	const now = new Date();
-	const to = now.toISOString().split("T")[0];
-	const backfillDays = mode === "markets" ? 730 : 365; // Markets: 2y, Fundamental: 1y
-	const from = new Date(now.getTime() - backfillDays * 24 * 60 * 60 * 1000)
-		.toISOString()
-		.split("T")[0];
+	// Expanded date range: 2020-01-01 to 2025-12-31 (6 years full range)
+	const from = "2020-01-01";
+	const to = "2025-12-31";
 
 	console.log(`📡 [J-Quants v2] Syncing ${mode} Bulk (${from} ～ ${to})...`);
+
+	// Generate all dates in the range from-to
+	function getDateRange(fromStr: string, toStr: string): string[] {
+		const dates: string[] = [];
+		const current = new Date(fromStr);
+		const end = new Date(toStr);
+		while (current <= end) {
+			dates.push(current.toISOString().split("T")[0]);
+			current.setDate(current.getDate() + 1);
+		}
+		return dates;
+	}
 
 	if (mode === "markets") {
 		// Master
 		await fetchWithCache(db, `${baseUrl}/equities/master`, { headers });
 
-		// Bulk Prices: Group by code if necessary, or fetch daily for topix?
-		// Note: J-Quants v2 daily is more efficient for all symbols.
-		const dates = getDates(backfillDays);
+		// Bulk Prices: Fetch daily bars for full date range
+		const dates = getDateRange(from, to);
+		console.log(`📡 [J-Quants] Fetching market data for ${dates.length} dates...`);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/equities/bars/daily?date=${d}`, {
@@ -143,7 +152,8 @@ async function syncJquants(mode: "markets" | "fundamental") {
 		// Export CSV for the "latest" consumers
 		await exportJquantsToCsv(db);
 	} else {
-		const dates = getDates(365);
+		const dates = getDateRange(from, to);
+		console.log(`📡 [J-Quants] Fetching fundamental data for ${dates.length} dates...`);
 		for (const date of dates) {
 			const d = date.replace(/-/g, "");
 			await fetchWithCache(db, `${baseUrl}/fins/summary?date=${d}`, {
