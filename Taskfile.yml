@@ -84,6 +84,12 @@ tasks:
     cmds:
       - bun --hot src/dashboard/server.ts
 
+  discord:bot:
+    desc: 🤖 Dexter JP Discord ボット起動（銘柄分析・ニュース配信・比較機能）
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - bun src/commands/discord_bot.ts
+
   default:
     desc: list tasks
     cmds:
@@ -831,6 +837,39 @@ tasks:
     vars:
       FROM: '{{default "2020-01-01" .FROM}}'
       TO: '{{default "2025-12-31" .TO}}'
+      HYPOTHESIS: '{{default "default" .HYPOTHESIS}}'
     cmds:
-      - bun src/commands/sector_spillover_backtest.ts --from {{.FROM}} --to {{.TO}}
+      - bun src/commands/sector_spillover_backtest.ts --from {{.FROM}} --to {{.TO}} --hypothesis {{.HYPOTHESIS}}
+
+  websearch:sync:
+    desc: "🔍 Tavily WebSearch でニュース・情報をキャッシュ同期"
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - WEBSEARCH_MODE=default bun src/io/websearch.ts
+
+  websearch:query:
+    desc: "🔍 Tavily で特定クエリを検索（QUERY 必須）"
+    dir: "{{.TS_DIR}}"
+    cmds:
+      - WEBSEARCH_MODE=query WEBSEARCH_QUERY="{{.QUERY}}" bun src/io/websearch.ts
+    requires:
+      vars: [QUERY]
+
+  dexter:research:
+    desc: "🤖 Dexter JP で銘柄分析レポートを生成（QUERY 必須）"
+    dir: /home/kafka/finance/dexter-jp
+    cmds:
+      - bun run start -- "{{.QUERY}}"
+    requires:
+      vars: [QUERY]
+
+  spillover:parallel:
+    desc: "Parallel run multiple hypotheses for sector spillover"
+    cmds:
+      - task: spillover:backtest
+        vars: { HYPOTHESIS: "overnight", FROM: "{{.FROM}}", TO: "{{.TO}}" }
+      - task: spillover:backtest
+        vars: { HYPOTHESIS: "intraday", FROM: "{{.FROM}}", TO: "{{.TO}}" }
+      - task: spillover:backtest
+        vars: { HYPOTHESIS: "default", FROM: "{{.FROM}}", TO: "{{.TO}}" }
 

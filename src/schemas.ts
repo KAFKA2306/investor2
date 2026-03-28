@@ -72,7 +72,32 @@ export const ConfigSchema = z.object({
 				.optional(),
 		})
 		.optional(),
-});
+		integrations: z
+			.object({
+				discord: z
+					.object({
+						enabled: z.boolean(),
+						tokenEnv: z.string(),
+						webhookUrlEnv: z.string(),
+						commandPrefix: z.string(),
+						maxMessageLength: z.number(),
+					})
+					.optional(),
+				slack: z
+					.object({
+						enabled: z.boolean(),
+						tokenEnv: z.string(),
+					})
+					.optional(),
+				line: z
+					.object({
+						enabled: z.boolean(),
+						channelAccessTokenEnv: z.string(),
+					})
+					.optional(),
+			})
+			.optional(),
+	});
 
 export type Config = z.infer<typeof ConfigSchema>;
 

@@ -33,6 +33,7 @@
     "adm-zip": "^0.5.16",
     "apache-arrow": "^21.1.0",
     "better-sqlite3": "^12.8.0",
+    "discord.js": "^14.25.1",
     "ethers": "^6.16.0",
     "hono": "^4.12.8",
     "js-yaml": "^4.1.1",

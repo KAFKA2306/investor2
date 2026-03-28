@@ -76,6 +76,7 @@ paths:
   cache: /mnt/d/investor_all_cached_data/cache
   edinet: /mnt/d/investor_all_cached_data/edinet
   preprocessed: /mnt/d/investor_all_cached_data/preprocessed
+  websearch: /mnt/d/investor_all_cached_data/websearch
 
   # J-Quants market data (under jquants root)
   marketdataRoot: /mnt/d/investor_all_cached_data/jquants
@@ -113,6 +114,8 @@ paths:
   cacheFundamentalEdinet: /mnt/d/investor_all_cached_data/cache/fundamental/edinet.sqlite
   cacheMacroEstat: /mnt/d/investor_all_cached_data/cache/macro/estat.sqlite
   cacheMacroFred: /mnt/d/investor_all_cached_data/cache/macro/fred.sqlite
+  cacheBacktestResults: /mnt/d/investor_all_cached_data/cache/backtest/results.sqlite
+  cacheWebSearch: /mnt/d/investor_all_cached_data/cache/websearch/tavily.sqlite
 
   # EDINET data (under edinet root)
   edinetDocsDir: /mnt/d/investor_all_cached_data/edinet/docs
@@ -140,6 +143,10 @@ providers:
   estat:
     enabled: true
     appIdEnv: ESTAT_APP_ID
+  tavily:
+    enabled: true
+    apiKeyEnv: TAVILY_API_KEY
+    maxResults: 5
   ai:
     enabled: true
     model: gpt-5-nano
@@ -358,13 +365,27 @@ sector_spillover:
     regularization_alpha: 0.1
     max_iterations: 100
   signal:
-    long_threshold: 0.33
-    short_threshold: -0.33
-    neutral_threshold: 0.33
+    long_threshold: 0.60
+    short_threshold: -0.60
+    neutral_threshold: 0.60
   backtest:
     initial_capital: 1000000
     long_size: 0.30
     short_size: 0.30
     rebalance_frequency: "daily"
-    transaction_cost_bps: 5
+    transaction_cost_bps: 50
     data_cache_dir: "cache/sector_spillover"
+
+integrations:
+  discord:
+    enabled: true
+    tokenEnv: DISCORD_TOKEN
+    webhookUrlEnv: DISCORD_WEBHOOK_URL
+    commandPrefix: "!"
+    maxMessageLength: 2000
+  slack:
+    enabled: false
+    tokenEnv: SLACK_BOT_TOKEN
+  line:
+    enabled: false
+    channelAccessTokenEnv: LINE_CHANNEL_ACCESS_TOKEN
