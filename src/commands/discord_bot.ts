@@ -1,5 +1,5 @@
+import { type DiscordConfig, initializeDiscordBot } from "../io/discord";
 import { config } from "./_config";
-import { initializeDiscordBot, type DiscordConfig } from "../io/discord";
 
 async function main() {
 	const discordConfig: DiscordConfig = {

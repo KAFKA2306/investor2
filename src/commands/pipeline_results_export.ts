@@ -1,13 +1,12 @@
+import { randomUUID } from "node:crypto";
 import { writeFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { randomUUID } from "crypto";
 import {
-	Config,
-	PipelineResultsReport,
+	type Config,
+	type PipelineResultsReport,
 	PipelineResultsReportSchema,
-	VerificationResult,
 } from "../schemas";
-import { PipelineOrchestrator } from "../system/pipeline_orchestrator";
+import type { PipelineOrchestrator } from "../system/pipeline_orchestrator";
 
 /**
  * Export pipeline results to JSON file for dashboard visualization
