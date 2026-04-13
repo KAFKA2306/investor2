@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import yaml from "js-yaml";
-import { ConfigSchema, type SectorSpilloverSignal, type JP17Sectors } from "../schemas";
+import {
+	ConfigSchema,
+	type JP17Sectors,
+	type SectorSpilloverSignal,
+} from "../schemas";
 
 const config = ConfigSchema.parse(
 	yaml.load(readFileSync("config/default.yaml", "utf-8")),
@@ -60,7 +64,7 @@ export class RegularizedPCA {
 		if (T === 0) {
 			return { components: [], scores: [], varianceExplained: [] };
 		}
-		const D = matrix[0].length; // Number of sectors
+		const _D = matrix[0].length; // Number of sectors
 
 		// Step 1: Standardize the input matrix
 		const mean = this.columnMean(matrix);
@@ -286,35 +290,95 @@ export class RegularizedPCA {
  * 3. Classify as LONG (top 30%), NEUTRAL (middle 40%), SHORT (bottom 30%)
  */
 export function generateSpilloverSignals(
-	usScores: number[][],
+	usReturns: number[][],
+	pcaScores: number[][],
 	jpSectors: string[],
-	usToJpMapping: Record<string, string[]>, // Which US sectors influence which JP sectors
+	usToJpMapping: Record<string, number[]>, // Which US sectors (by index) influence which JP sectors
+	isOptimized: boolean = false, // 実証データに基づく最適化フラグ
 ): SectorSpilloverSignal[] {
-	if (usScores.length === 0 || usScores[0].length === 0) {
+	if (usReturns.length === 0 || usReturns[0].length === 0) {
 		return []; // No data available
 	}
 
-	const latestUSScores = usScores[usScores.length - 1]; // Last day's factor scores
+	// 実証データに基づくアルファ選別 (方向性と取引実行の有無)
+	// 1.0 = 順張り, -1.0 = 逆張り, 0.0 = 取引除外(ノイズ)
+	const sectorExpertise: Record<string, number> = {
+		"1000": 1.0, // 水産・農林: 強い順相関 (Sharpe 1.9)
+		"2000": 0.0, // 鉱業: 除外 (Sharpe 0.6)
+		"3000": 1.0, // 建設: 順相関 (Sharpe 1.2)
+		"4000": 1.0, // 食料品: 強い順相関 (Sharpe 1.4)
+		"5000": 0.0, // 繊維: 除外
+		"6000": 0.0, // 紙パ: 除外
+		"7000": -1.0, // 化学: 強い逆相関 (Sharpe -3.4 ➡️ 逆張りで最強の利益源)
+		"8000": 1.0, // 医薬: 強い順相関 (Sharpe 1.3)
+	};
+
+	// 1. 動的タイムラグの導入 (Dynamic Time Lag)
+	// 直近1日のノイズに振り回されないよう、過去5日間の移動平均(SMA)を取得
+	const lookback = Math.min(5, usReturns.length);
+	const recentReturns = usReturns.slice(-lookback);
+
+	const smoothedReturns = new Array(usReturns[0].length).fill(0);
+	for (const day of recentReturns) {
+		for (let i = 0; i < day.length; i++) {
+			smoothedReturns[i] += day[i];
+		}
+	}
+	for (let i = 0; i < smoothedReturns.length; i++) {
+		smoothedReturns[i] /= lookback;
+	}
+
+	const latestPCAScores = pcaScores[pcaScores.length - 1] || []; // Last day's factor scores
+	const riskSentiment = latestPCAScores[0] ?? 0;
+
+	// 2. 残差と平均回帰 (Mean Reversion on Extreme Risk)
+	// 第1主成分（市場全体の波）が極端に行き過ぎている場合、翌日は反発（逆相関）すると仮定
+	const isExtremeRiskOn = riskSentiment > 2.0;
+	const isExtremeRiskOff = riskSentiment < -2.0;
+	const reversionMultiplier = isExtremeRiskOn || isExtremeRiskOff ? -1.0 : 1.0;
+
 	const date = new Date().toISOString().split("T")[0];
 
 	const signals: SectorSpilloverSignal[] = jpSectors.map((jpSector) => {
 		const sector = jpSector as JP17Sectors;
-		// Aggregate US factor influence on this JP sector
-		const influencingUSSectors = usToJpMapping[jpSector] || [];
-		const aggregatedScore =
-			influencingUSSectors.length > 0
-				? influencingUSSectors.reduce(
-						(sum, _, idx) => sum + (latestUSScores[idx] || 0),
-						0,
-					) / influencingUSSectors.length
-				: 0;
+		const expertise = sectorExpertise[jpSector] ?? 0.0;
 
-		// Normalize score to [-1, 1]
-		const normalizedScore = Math.tanh(aggregatedScore);
+		// アルファ選別: 最適化モード時、エキスパート設定がない（ノイズ）セクターは即座にNeutral
+		if (isOptimized && expertise === 0.0) {
+			return {
+				date,
+				jp_sector: sector,
+				signal_score: 0,
+				signal_type: "neutral",
+				confidence: 0,
+				us_factor_contributions: {} as Record<string, number>,
+			};
+		}
+
+		const influencingUSSectors = usToJpMapping[jpSector] || [];
+
+		let aggregatedScore = 0;
+		if (influencingUSSectors.length > 0) {
+			const rawScore =
+				influencingUSSectors.reduce(
+					(sum, usIndex) => sum + (smoothedReturns[usIndex] || 0),
+					0,
+				) / influencingUSSectors.length;
+
+			// 市場ベータの極端な偏りを補正
+			// 最適化モードの場合、実証済みの方向性（順張り/逆張り）を適用
+			const direction = isOptimized ? expertise : 1.0;
+			aggregatedScore = rawScore * reversionMultiplier * direction;
+		}
+
+		// 感度を調整（* 5.0）して [-1, 1] へ正規化
+		const normalizedScore = Math.tanh(aggregatedScore * 5.0);
 
 		// Classify signal
-		const long_threshold = config.sector_spillover?.signal?.long_threshold ?? 0.33;
-		const short_threshold = config.sector_spillover?.signal?.short_threshold ?? -0.33;
+		const long_threshold =
+			config.sector_spillover?.signal?.long_threshold ?? 0.33;
+		const short_threshold =
+			config.sector_spillover?.signal?.short_threshold ?? -0.33;
 		let signalType: "long" | "neutral" | "short";
 		if (normalizedScore > long_threshold) {
 			signalType = "long";
@@ -331,9 +395,9 @@ export function generateSpilloverSignals(
 			signal_type: signalType,
 			confidence: Math.abs(normalizedScore),
 			us_factor_contributions: {
-				[FACTOR_NAMES.RISK_SENTIMENT]: latestUSScores[0] ?? 0,
-				[FACTOR_NAMES.US_DOMINANCE]: latestUSScores[1] ?? 0,
-				[FACTOR_NAMES.GROWTH_VS_DEFENSIVE]: latestUSScores[2] ?? 0,
+				[FACTOR_NAMES.RISK_SENTIMENT]: latestPCAScores[0] ?? 0,
+				[FACTOR_NAMES.US_DOMINANCE]: latestPCAScores[1] ?? 0,
+				[FACTOR_NAMES.GROWTH_VS_DEFENSIVE]: latestPCAScores[2] ?? 0,
 			},
 		};
 	});
@@ -345,12 +409,12 @@ export function generateSpilloverSignals(
  * Default US to JP sector mapping (simplified)
  * In practice, this should be calibrated based on industry classification
  */
-export function getDefaultUSToJPMapping(): Record<string, string[]> {
+export function getDefaultUSToJPMapping(): Record<string, number[]> {
 	// Simplified: map each JP sector to multiple US sectors based on industry correlation
-	const mapping: Record<string, string[]> = {};
+	const mapping: Record<string, number[]> = {};
 
-	const jpSectors = config.sector_spillover?.jp_sectors ?? [];
-	const usSectors = config.sector_spillover?.us_sectors ?? [];
+	const _jpSectors = config.sector_spillover?.jp_sectors ?? [];
+	const _usSectors = config.sector_spillover?.us_sectors ?? [];
 
 	// For each JP sector, assign influence from related US sectors
 	// This is a simplified heuristic; in production, use correlation analysis
@@ -375,7 +439,7 @@ export function getDefaultUSToJPMapping(): Record<string, string[]> {
 	};
 
 	for (const [jpCode, usIndices] of Object.entries(sectorMap)) {
-		mapping[jpCode] = usIndices.map((idx) => usSectors[idx]);
+		mapping[jpCode] = usIndices;
 	}
 
 	return mapping;

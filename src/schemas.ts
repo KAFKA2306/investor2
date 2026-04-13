@@ -1,13 +1,19 @@
+import type { Database } from "bun:sqlite";
 import { z } from "zod";
 
-// ============================================================
-// Configuration
-// ============================================================
+export interface DatabaseRegistry {
+	marketsPolymarket: Database;
+	marketsJquants: Database;
+	marketsYahoo: Database;
+	fundamentalJquants: Database;
+	fundamentalEdinet: Database;
+	macroEstat: Database;
+	macroFred: Database;
+	[key: string]: Database;
+}
 
 export const ConfigSchema = z.object({
-	project: z.object({
-		name: z.string(),
-	}),
+	project: z.object({ name: z.string() }),
 	paths: z
 		.object({
 			data: z.string(),
@@ -16,6 +22,7 @@ export const ConfigSchema = z.object({
 			cache: z.string(),
 			edinet: z.string(),
 			preprocessed: z.string(),
+			cacheWebSearch: z.string().optional(),
 			cacheFundamentalEdinet: z.string(),
 			cacheMarketsPolymarket: z.string(),
 			cacheMarketsJquants: z.string(),
@@ -25,85 +32,77 @@ export const ConfigSchema = z.object({
 			cacheMacroFred: z.string().optional(),
 			macroFred: z.string().optional(),
 			cacheMarketSqlite: z.string().optional(),
+			marketdataPricesCsv: z.string().optional(),
+			marketdataFinCsv: z.string().optional(),
+			marketdataListCsv: z.string().optional(),
+			marketdataLabelsCsv: z.string().optional(),
+			cacheBacktestResults: z.string().optional(),
 		})
 		.passthrough(),
-	polymarket: z.object({
-		clob_url: z.string(),
-	}),
+	polymarket: z.object({ clob_url: z.string() }),
+	providers: z
+		.object({
+			tavily: z.object({ maxResults: z.number() }),
+		})
+		.optional(),
 	sector_spillover: z
 		.object({
-			us_sectors: z.array(z.string()).optional(),
-			jp_sectors: z.array(z.string()).optional(),
+			us_sectors: z.array(z.string()),
+			jp_sectors: z.array(z.string()),
 			pca: z.object({
-				n_components: z.number().optional(),
-				regularization_alpha: z.number().optional(),
-				max_iterations: z.number().optional(),
-			}).optional(),
+				n_components: z.number(),
+				regularization_alpha: z.number(),
+				max_iterations: z.number(),
+			}),
 			signal: z.object({
-				long_threshold: z.number().optional(),
-				short_threshold: z.number().optional(),
-				neutral_threshold: z.number().optional(),
-			}).optional(),
+				long_threshold: z.number(),
+				short_threshold: z.number(),
+				neutral_threshold: z.number(),
+			}),
 			backtest: z.object({
-				initial_capital: z.number().optional(),
-				long_size: z.number().optional(),
-				short_size: z.number().optional(),
-				rebalance_frequency: z.string().optional(),
-				transaction_cost_bps: z.number().optional(),
-				data_cache_dir: z.string().optional(),
-			}).optional(),
+				initial_capital: z.number(),
+				long_size: z.number(),
+				short_size: z.number(),
+				rebalance_frequency: z.string(),
+				transaction_cost_bps: z.number(),
+				data_cache_dir: z.string(),
+			}),
 		})
 		.optional(),
 	pipelineBlueprint: z
 		.object({
-			verificationAcceptance: z
-				.object({
-					minSharpe: z.number(),
-					maxPValue: z.number(),
-					maxDrawdown: z.number(),
-				})
+			verificationAcceptance: z.object({
+				minSharpe: z.number(),
+				maxPValue: z.number(),
+				maxDrawdown: z.number(),
+			}),
+			alphaLoop: z.object({
+				maxCycles: z.number(),
+				sleepSec: z.number(),
+				maxFailures: z.number(),
+			}),
+		})
+		.optional(),
+	integrations: z
+		.object({
+			discord: z.object({
+				enabled: z.boolean(),
+				tokenEnv: z.string(),
+				webhookUrlEnv: z.string(),
+				commandPrefix: z.string(),
+				maxMessageLength: z.number(),
+			}),
+			slack: z
+				.object({ enabled: z.boolean(), tokenEnv: z.string() })
 				.optional(),
-			alphaLoop: z
-				.object({
-					maxCycles: z.number(),
-					sleepSec: z.number(),
-					maxFailures: z.number(),
-				})
+			line: z
+				.object({ enabled: z.boolean(), channelAccessTokenEnv: z.string() })
 				.optional(),
 		})
 		.optional(),
-		integrations: z
-			.object({
-				discord: z
-					.object({
-						enabled: z.boolean(),
-						tokenEnv: z.string(),
-						webhookUrlEnv: z.string(),
-						commandPrefix: z.string(),
-						maxMessageLength: z.number(),
-					})
-					.optional(),
-				slack: z
-					.object({
-						enabled: z.boolean(),
-						tokenEnv: z.string(),
-					})
-					.optional(),
-				line: z
-					.object({
-						enabled: z.boolean(),
-						channelAccessTokenEnv: z.string(),
-					})
-					.optional(),
-			})
-			.optional(),
-	});
+});
 
 export type Config = z.infer<typeof ConfigSchema>;
-
-// ============================================================
-// EDINET Company & Financial Data
-// ============================================================
 
 export const CompanyInfoSchema = z.object({
 	edinetCode: z.string(),
@@ -154,10 +153,6 @@ export const CompanyDetailSchema = CompanyInfoSchema.extend({
 });
 
 export type CompanyDetail = z.infer<typeof CompanyDetailSchema>;
-
-// ============================================================
-// AAARTS Alpha Discovery Pipeline
-// ============================================================
 
 export const AlphaCandidateSchema = z.object({
 	factor_id: z.string(),
@@ -214,10 +209,6 @@ export const PipelineResultsReportSchema = z.object({
 
 export type PipelineResultsReport = z.infer<typeof PipelineResultsReportSchema>;
 
-// ============================================================
-// Sector Spillover Strategy (US -> Japan)
-// ============================================================
-
 export const US11SectorsSchema = z.union([
 	z.literal("energy"),
 	z.literal("materials"),
@@ -235,23 +226,23 @@ export const US11SectorsSchema = z.union([
 export type US11Sectors = z.infer<typeof US11SectorsSchema>;
 
 export const JP17SectorsSchema = z.union([
-	z.literal("1000"), // 水産・農林業
-	z.literal("2000"), // 鉱業
-	z.literal("3000"), // 建設業
-	z.literal("4000"), // 食料品
-	z.literal("5000"), // 繊維製品
-	z.literal("6000"), // 紙・パルプ
-	z.literal("7000"), // 化学
-	z.literal("8000"), // 医薬品
-	z.literal("9000"), // 石油・石炭製品
-	z.literal("10000"), // ゴム製品
-	z.literal("11000"), // ガラス・土石製品
-	z.literal("12000"), // 鉄鋼
-	z.literal("13000"), // 非鉄金属
-	z.literal("14000"), // 金属製品
-	z.literal("15000"), // 機械
-	z.literal("16000"), // 電気機器
-	z.literal("17000"), // 輸送用機器
+	z.literal("1000"),
+	z.literal("2000"),
+	z.literal("3000"),
+	z.literal("4000"),
+	z.literal("5000"),
+	z.literal("6000"),
+	z.literal("7000"),
+	z.literal("8000"),
+	z.literal("9000"),
+	z.literal("10000"),
+	z.literal("11000"),
+	z.literal("12000"),
+	z.literal("13000"),
+	z.literal("14000"),
+	z.literal("15000"),
+	z.literal("16000"),
+	z.literal("17000"),
 ]);
 
 export type JP17Sectors = z.infer<typeof JP17SectorsSchema>;
@@ -266,8 +257,8 @@ export type SectorReturns = z.infer<typeof SectorReturnsSchema>;
 
 export const RegularizedPCAResultSchema = z.object({
 	date: z.string(),
-	components: z.array(z.number()), // Latent factors
-	variance_explained: z.array(z.number()), // Variance per component
+	components: z.array(z.number()),
+	variance_explained: z.array(z.number()),
 	cumulative_variance: z.number(),
 });
 
@@ -276,9 +267,13 @@ export type RegularizedPCAResult = z.infer<typeof RegularizedPCAResultSchema>;
 export const SectorSpilloverSignalSchema = z.object({
 	date: z.string(),
 	jp_sector: JP17SectorsSchema,
-	signal_score: z.number(), // -1.0 (strong short) to +1.0 (strong long)
-	signal_type: z.union([z.literal("long"), z.literal("neutral"), z.literal("short")]),
-	confidence: z.number(), // 0-1, higher = more confident
+	signal_score: z.number(),
+	signal_type: z.union([
+		z.literal("long"),
+		z.literal("neutral"),
+		z.literal("short"),
+	]),
+	confidence: z.number(),
 	us_factor_contributions: z.record(z.string(), z.number()),
 });
 
@@ -291,9 +286,27 @@ export const SpilloverBacktestResultSchema = z.object({
 	total_returns_pct: z.number(),
 	sharpe_ratio: z.number(),
 	max_drawdown_pct: z.number(),
-	win_rate: z.number(), // % of profitable trades
+	win_rate: z.number(),
 	num_trades: z.number(),
 	strategy_name: z.string(),
+	hypothesis_id: z.string().optional(),
+	net_returns_pct: z.number().optional(),
+	tax_paid_pct: z.number().optional(),
+	num_winning_trades: z.number().optional(),
+	num_losing_trades: z.number().optional(),
+	sector_performance: z
+		.array(
+			z.object({
+				jp_sector: z.string(),
+				avg_return: z.number(),
+				volatility: z.number(),
+				sharpe: z.number(),
+				win_rate: z.number(),
+			}),
+		)
+		.optional(),
 });
 
-export type SpilloverBacktestResult = z.infer<typeof SpilloverBacktestResultSchema>;
+export type SpilloverBacktestResult = z.infer<
+	typeof SpilloverBacktestResultSchema
+>;

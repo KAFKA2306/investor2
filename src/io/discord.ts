@@ -1,11 +1,11 @@
 import {
-	Client,
-	GatewayIntentBits,
-	Message,
 	ChannelType,
+	Client,
 	EmbedBuilder,
+	GatewayIntentBits,
+	type Message,
+	MessageFlags,
 } from "discord.js";
-import type { Config } from "../schemas";
 import { searchWithTavily } from "./websearch";
 
 export interface DiscordConfig {
@@ -76,11 +76,10 @@ export class DiscordBot {
 			} else if (command === "help") {
 				await this.handleHelpCommand(message);
 			}
-		} catch (error) {
+		} catch (_error) {
 			await message
 				.reply({
 					content: "エラーが発生しました。しばらくしてからお試しください。",
-					flags: ["Ephemeral"],
 				})
 				.catch(() => {});
 		}
@@ -109,7 +108,6 @@ export class DiscordBot {
 		const reply = await message
 			.reply({
 				embeds: [embed],
-				flags: isPrivate ? [] : ["Ephemeral"],
 			})
 			.catch(() => null);
 
@@ -180,7 +178,8 @@ export class DiscordBot {
 		const ticker = args[0].toUpperCase();
 
 		try {
-			const results = await searchWithTavily(`${ticker} 株価 ニュース`);
+			const response = await searchWithTavily(`${ticker} 株価 ニュース`);
+			const results = response.results;
 
 			const headlines = results
 				.slice(0, 5)
@@ -194,7 +193,7 @@ export class DiscordBot {
 				.setTimestamp();
 
 			await message.reply({ embeds: [embed] }).catch(() => {});
-		} catch (error) {
+		} catch (_error) {
 			await message.reply("ニュース取得エラーが発生しました。").catch(() => {});
 		}
 	}
@@ -235,14 +234,25 @@ export class DiscordBot {
 
 	private async analyzeStock(ticker: string): Promise<StockAnalysis> {
 		try {
-			const results = await searchWithTavily(`${ticker} 株価 分析`);
+			const response = await searchWithTavily(
+				`${ticker} 最新 株価 分析 センチメント`,
+			);
+			const results = response.results;
+			const firstResult = results[0]?.content || "";
+
+			// シンプルな価格抽出（モックですが、Tavilyの結果に基づいています）
+			const priceMatch = firstResult.match(/[¥\d,]+\.?\d*/);
+			const price = priceMatch ? priceMatch[0] : "¥----";
 
 			return {
 				symbol: ticker,
 				name: ticker,
-				price: "¥XXXX.XX",
-				change: "+1.23%",
-				sentiment: "ポジティブ",
+				price,
+				change: firstResult.includes("+") ? "+N/A" : "-N/A",
+				sentiment:
+					firstResult.includes("好調") || firstResult.includes("買い")
+						? "ポジティブ"
+						: "中立/ボラティリティ高め",
 				newsHeadlines: results.slice(0, 3).map((r) => r.title),
 			};
 		} catch {
@@ -269,24 +279,16 @@ export class DiscordBot {
 	}
 
 	async sendMessage(channelId: string, content: string): Promise<void> {
-		try {
-			const channel = await this.client.channels.fetch(channelId);
-			if (channel?.isTextBased()) {
-				await channel.send(content);
-			}
-		} catch (error) {
-			throw error;
+		const channel = await this.client.channels.fetch(channelId);
+		if (channel?.isTextBased()) {
+			await (channel as any).send(content);
 		}
 	}
 
 	async sendEmbed(channelId: string, embed: EmbedBuilder): Promise<void> {
-		try {
-			const channel = await this.client.channels.fetch(channelId);
-			if (channel?.isTextBased()) {
-				await channel.send({ embeds: [embed] });
-			}
-		} catch (error) {
-			throw error;
+		const channel = await this.client.channels.fetch(channelId);
+		if (channel?.isTextBased()) {
+			await (channel as any).send({ embeds: [embed] });
 		}
 	}
 

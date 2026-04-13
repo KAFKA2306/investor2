@@ -1,13 +1,13 @@
-import { randomUUID } from "crypto";
+import { randomUUID } from "node:crypto";
 import {
-	AlphaCandidate,
+	type AlphaCandidate,
 	AlphaCandidateSchema,
-	Config,
-	CycleSummary,
+	type Config,
+	type CycleSummary,
 	CycleSummarySchema,
-	StandardOutcome,
+	type StandardOutcome,
 	StandardOutcomeSchema,
-	VerificationResult,
+	type VerificationResult,
 	VerificationResultSchema,
 } from "../schemas";
 
@@ -20,7 +20,7 @@ export class PipelineOrchestrator {
 	private config: Config;
 	private consecutiveFailures = 0;
 	private cycleResults: VerificationResult[] = [];
-	private domainContext = "";
+	private domainContext: string = randomUUID();
 
 	constructor(config: Config) {
 		this.config = config;
@@ -89,7 +89,7 @@ export class PipelineOrchestrator {
 
 			// Output cycle summary
 			const summary = CycleSummarySchema.parse(cycleSummary);
-			process.stdout.write(JSON.stringify(summary) + "\n");
+			process.stdout.write(`${JSON.stringify(summary)}\n`);
 		}
 	}
 
