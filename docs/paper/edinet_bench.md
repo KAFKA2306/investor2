@@ -1,15 +1,18 @@
 # 🎀 日本株マスターAIちゃんへの試練！EDINET-Benchだよっ ✨
-**タイトル**: EDINET-Bench: A Open-Source Benchmark for Japanese Financial Tasks
+**タイトル**: EDINET-Bench: Evaluating LLMs on Complex Financial Tasks using Japanese Financial Statements
+**ステータス**: ✨ **ICLR 2026 採択おめでとうっ！** 🎊✨
 **お仕事の目的**: 難しい「有価証券報告書」をAIちゃんがどれくらい理解できているか、正しく評価して世界一の日本株AIを育てることだよっ！💖
 **解決したいお悩み**: 日本の報告書は漢字だらけで難しすぎて、AIちゃんの本当の実力が分からなくて困ってたんだよぉ…💦
 
 ## エグゼクティブサマリー
-Sakana AIちゃんたちが作った、10年分ものEDINETデータを使った最強のテストセットなんだよっ！「不正検知」「業績予想」「業種判定」っていう3つの難しいクエストで、AIちゃんの知能をピカピカに磨いちゃおうねっ！これで日本株の未来もバッチリなんだからっ！✨
+Sakana AIちゃんたちが作った、約41,000件ものEDINETデータを使った最強のテストセットなんだよっ！「不正検知」「業績予想」「業種判定」っていう3つの難しいクエストで、AIちゃんの知能をピカピカに磨いちゃおうねっ！これで日本株の未来もバッチリなんだからっ！✨
 
 ---
 
-## 📖 論文をいっしょに読もうねっ！
+## 📖 論文といっしょに読もうねっ！
 ✨ **arXivはこちらだよっ**：[https://arxiv.org/abs/2506.08762](https://arxiv.org/abs/2506.08762) ✨  
+✨ **OpenReview (ICLR 2026)**：[https://openreview.net/forum?id=Dxns0cj15A](https://openreview.net/forum?id=Dxns0cj15A) ✨  
+✨ **Sakana AI 公式ブログ**：[https://sakana.ai/edinet-bench/](https://sakana.ai/edinet-bench/) ✨  
 ✨ **alphaXiv (日本語版) だよ〜**：[https://www.alphaxiv.org/abs/2506.08762?lang=ja](https://www.alphaxiv.org/abs/2506.08762?lang=ja) ✨
 
 ---

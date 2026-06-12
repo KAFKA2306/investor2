@@ -61,3 +61,19 @@ tasks:
     cmds:
       - rm -rf logs/*
       - rm -rf tmp/*
+  bench:edinet:download:
+    desc: Download EDINET-Bench dataset from Hugging Face
+    cmds:
+      - uv run huggingface-cli download SakanaAI/EDINET-Bench --repo-type dataset --local-dir cache/benchmarks/edinet-bench
+  bench:edinet:clone:
+    desc: Clone EDINET-Bench evaluation repository
+    cmds:
+      - git clone https://github.com/SakanaAI/EDINET-Bench.git docs/bench/edinet-bench
+  bench:edinet:verify:
+    desc: Verify EDINET-Bench data access
+    cmds:
+      - PYTHONPATH=. uv run python src/io/edinet_bench.py
+  bench:edinet:stats:
+    desc: Calculate EDINET-Bench dataset statistics
+    cmds:
+      - PYTHONPATH=. uv run python src/commands/edinet_bench_stats.py
