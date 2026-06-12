@@ -13,8 +13,8 @@ import {
 
 /**
  * PipelineOrchestrator
- * AAARTS alpha discovery pipeline orchestrator
- * Implements multi-cycle hypothesis generation, backtesting, and verification
+ * AAARTS (Autonomous Agentic Alpha Trade System) discovery pipeline
+ * Implements a self-improving agentic loop: hypothesis generation → backtesting → systematic verification
  */
 export class PipelineOrchestrator {
 	private config: Config;

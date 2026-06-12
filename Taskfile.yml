@@ -77,3 +77,16 @@ tasks:
     desc: Calculate EDINET-Bench dataset statistics
     cmds:
       - PYTHONPATH=. uv run python src/commands/edinet_bench_stats.py
+  bench:run:
+    desc: Run system evaluation on EDINET-Bench (Mock)
+    cmds:
+      - PYTHONPATH=. uv run python src/commands/bench_eval.py --samples {{.SAMPLES | default 5}} --task {{.TASK | default "all"}}
+  bench:ablation:
+    desc: Run ablation study (Financials vs Texts vs Combined)
+    cmds:
+      - PYTHONPATH=. uv run python src/commands/bench_ablation.py --samples {{.SAMPLES | default 20}}
+  bench:sakana:run:
+    desc: Run official Sakana AI EDINET-Bench evaluation
+    dir: docs/bench/edinet-bench
+    cmds:
+      - uv run python -m edinet_bench.predict --task {{.TASK | default "fraud_detection"}} --num_example {{.SAMPLES | default 3}} --model {{.MODEL | default "deepseek/deepseek-chat"}}

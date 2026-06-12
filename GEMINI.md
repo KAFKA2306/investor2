@@ -1,6 +1,6 @@
 Achieve the goal with MINIMAL changes. Extra changes introduce extra bugs and slow review. NO comments in code. Good code reads itself; comments rot and mislead. Respond clearly, specifically, and concisely. Vague answers waste time and create misunderstanding.
 
-# No Safety Nets
+# AAARTS: Autonomous Agentic Alpha Trade System
 NEVER write defensive code. NO error handling, NO dummy code, NO try-catch. Defensive code hides bugs and delays discovery. Focus on making the main logic succeed.
 - Build the minimal thing, run it, and let it crash. Real failures teach faster than hypothetical planning.
 - Implement the smallest possible structure and EXECUTE IMMEDIATELY. Speed of iteration beats depth of speculation.
