@@ -1,122 +1,121 @@
 # Autonomous Quant Logic Sequence (Operational Ideal)
 
-**Objective**: Establish a structural blueprint for the interaction between agents, from alpha generation to order execution.
-**Context**: To eliminate operational ambiguity and create a fully autonomous, self-improving pipeline.
+**Objective**: アルファ生成からオーダー実行までのエージェント間の相互作用の構造設計図を確立する。  
+**Context**: 運用上の曖昧さを排除し、完全に自律的で自己改善可能なパイプラインを構築する。
 
 ## Executive Summary
-This document outlines the interaction cycle between Gemini 3.0 Pro and specialized agents. It covers the end-to-end process: idea generation, Point-In-Time (PIT) data curation, AST-based strategy design, and Net-of-Costs backtesting. This recipe ensures every second of computation is directed toward discovering and deploying valid alpha.
+本稿は、Gemini 3.0 Proと専門エージェント間の相互作用サイクルを概説する。アイデア創出、Point-In-Time（PIT）データのキュレーション、ASTベースの戦略設計、Net-of-Costsバックテストといったエンドツーエンドのプロセスを網羅する。本手法は、計算のすべての秒を有効なアルファの発見と展開へ向けて活用することを保証する。
 
 ---
 
 ## Autonomous Quant Logic Sequence (Ideal Architecture)
 
-This diagram represents the localized standard for high-autonomy operations.
+このダイアグラムは、高度な自律運用を達成するための局所標準を表す。
 
 ```mermaid
 sequenceDiagram
     autonumber
-    actor User as Human Operator 🐣
-    participant Orch as Orchestrator 🎀
-    participant Mem as Memory Core 📖
-    participant Data as Data Engineer 🛠️
-    participant Res as Quant Researcher 🧪
-    participant Exec as Execution Agent 🚀
+    participant User as 人間オペレーター
+    participant Orch as オーケストレーター
+    participant Mem as メモリコア
+    participant Data as データエンジニア
+    participant Res as 量的研究者
+    participant Exec as 実行エージェント
 
-    Note left of Orch: Phase 1: Discovery & Contextualization 🔍
-    User->>Orch: Input requirements
-    Orch->>Mem: Retrieve historical context
-    Mem-->>Orch: Provide seeds and exclusion zones (failure history)
-    Orch->>Orch: Generate initial context (mission/constraints/memory/data/evaluation)
-    Orch->>Orch: Generate hypothesis & factor ideas 💡
-    Orch->>Mem: Save candidate ideas
-    Orch->>Data: Request PIT-consistent dataset
-    Data-->>Orch: Provide training dataset and context
-    Orch->>Orch: Validate data quality
-    alt Data Quality Fail
-        Orch->>Data: Request data regeneration
-        Data-->>Orch: Provide revised dataset
-        Orch->>Orch: Re-validate data
-    else Data Quality Pass
-        Orch->>Orch: Proceed to evaluation
+    Note left of Orch: Phase 1: Discovery & Contextualization
+    User->>Orch: 要件を入力
+    Orch->>Mem: 過去の文脈を取得
+    Mem-->>Orch: シードおよび除外ゾーン（失敗履歴）を提供
+    Orch->>Orch: 初期コンテキストを生成（任務/制約/メモリ/データ/評価）
+    Orch->>Orch: 仮説および因子案を生成
+    Orch->>Mem: 候補アイデアを保存
+    Orch->>Data: PIT一貫データセットを要求
+    Data-->>Orch: 学習データセットと文脈を提供
+    Orch->>Orch: データ品質を検証
+    alt データ品質不良
+        Orch->>Data: データ再生成を要求
+        Data-->>Orch: 修正データセットを提供
+        Orch->>Orch: データを再検証
+    else データ品質良好
+        Orch->>Orch: 評価へ進む
     end
-    Orch->>Mem: Commit data version and preprocessing parameters
+    Orch->>Mem: データバージョンと前処理パラメータを確定
     
-    Note left of Orch: Phase 2: Evaluation & Verification ⚖️
-    Orch->>Res: Dispatch candidate formula and dataset
-    Res->>Res: Design Trading Logic / Alpha AST / Allocation Strategy
-    Res->>Res: Select Foundation Model and Adaptation Policy
-    Res->>Res: Search for factors and validate formula
-    Res->>Res: Execute Net-of-Costs Backtest
-    Res-->>Orch: Return Strategy Pack (AST/Trading Rules/Allocation/KPIs) 🎁
-    Orch->>Orch: Evaluate against success criteria
-    alt Logic Error (Data Source)
-        Orch->>Data: Re-request dataset with corrections
-        Data-->>Orch: Revised dataset
-        Orch->>Res: Re-evaluate
-    else Logic Error (Model Configuration)
-        Orch->>Res: Request model reconfiguration
-        Res-->>Orch: New model configuration
-        Orch->>Res: Re-evaluate
-    else Criteria Met (PASS)
-        Orch->>Orch: Proceed to final vetting
+    Note left of Orch: Phase 2: Evaluation & Verification
+    Orch->>Res: 候補式とデータセットを送付
+    Res->>Res: 取引ロジック/アルファAST/割当戦略を設計
+    Res->>Res: 基盤モデルと適応ポリシーを選択
+    Res->>Res: 因子を探索し式を検証
+    Res->>Res: Net-of-Costsバックテストを実行
+    Res-->>Orch: 戦略パック（AST/取引ルール/割当/KPIs）を返却
+    Orch->>Orch: 成功基準に対して評価
+    alt ロジックエラー（データソース）
+        Orch->>Data: 修正を加えたデータセットを再要求
+        Data-->>Orch: 修正データセット
+        Orch->>Res: 再評価
+    else ロジックエラー（モデル設定）
+        Orch->>Res: モデル再構成を要求
+        Res-->>Orch: 新しいモデル設定
+        Orch->>Res: 再評価
+    else 基準達成
+        Orch->>Orch: 最終審査へ進む
     end
-    Orch->>Mem: Save verification results and model configuration
+    Orch->>Mem: 検証結果とモデル設定を保存
     
-    Note right of Orch: Final Vetting & Execution 💓
-    
-    alt Strategy Accepted 🎉
-        Orch->>Orch: Final pre-trade check (constraints/expiry/capacity)
+    Note right of Orch: Final Vetting & Execution
+    alt Strategy Accepted
+        Orch->>Orch: 最終プレトレード検査（制約/有効期限/容量）
         alt Execution GO
-            Orch->>Exec: Generate orders
-            Exec->>Exec: Execute and capture fills
-            Exec-->>Orch: Report execution results
-            Orch->>Mem: Record Order Plan / Execution / Audit / Drift
+            Orch->>Exec: 注文を生成
+            Exec->>Exec: 約定を取得して実行
+            Exec-->>Orch: 実行結果を報告
+            Orch->>Mem: 注文計画/実行/監査/ドリフトを記録
         else Execution HOLD
-            Orch->>Mem: Record HOLD reason (capacity limit, etc.)
+            Orch->>Mem: HOLD理由を記録（容量制限等）
         end
-    else Strategy Rejected (PIVOT) 😢
-        Orch->>Mem: Record rejection rationale and performance metrics
+    else Strategy Rejected (PIVOT)
+        Orch->>Mem: 拒否理由および性能指標を記録
     end
 ```
 
-## Structural Enhancements 💡
-1. **Pre-emptive Context**: Orchestrator aligns requirements and history before execution to minimize redundant computation.
-2. **Knowledge Archival**: Candidates are saved early to enable later retrieval and "cross-pollination" of ideas.
-3. **Reproducibility**: Preprocessing parameters are versioned alongside data to ensure consistent backtest results.
-4. **Integrated Design**: Trading logic, alpha, and allocation are designed co-dependently to maximize total system performance.
-5. **Value in Rejection**: Rejection rationales are treated as high-value data for the next search iteration.
+## Structural Enhancements
+1. **Pre-emptive Context**: 実行前に要件と履歴を整合させ、冗長な計算を最小化する。  
+2. **Knowledge Archival**: 候補を早期に保存し、後の取得およびアイデア間の相互参照を容易にする。  
+3. **Reproducibility**: データと前処理パラメータをバージョン管理し、バックテスト結果の一貫性を保証する。  
+4. **Integrated Design**: 取引ロジック、アルファ、アロケーションは、全体システムの性能を最大化するよう相互依存的に設計される。  
+5. **Value in Rejection**: 拒否の理由は、次の探索反復における高価値データとして扱われる。  
 
 ---
 
 ## 🎯 Core Alpha Discovery Loop (Operational Minimum)
-> See `docs/specs/alpha_discovery_runbook.md` and `docs/specs/autonomous.md` for details.
+> 詳細は、`docs/specs/alpha_discovery_runbook.md` および `docs/specs/autonomous.md` を参照のこと。
 
 ```mermaid
 sequenceDiagram
     autonumber
-    participant A as antigravity/codex
-    participant T as Taskfile
-    participant L as Loop Supervisor
-    participant O as Gemini/Qwen (Idea Gen)
-    participant V as Validation/Backtest
-    participant M as memory/ACE
-    participant U as unified log
-    participant P as plot writer
+    participant A as 反重力/コデックス
+    participant T as タスクファイル
+    participant L as ループ監視者
+    participant O as Gemini/Qwen（アイデア生成）
+    participant V as 検証/バックテスト
+    participant M as 記憶/ACE
+    participant U as 統合ログ
+    participant P as プロット作成
 
-    A->>T: Invoke with UQTL_INPUT_CHANNEL + UQTL_NL_INPUT
+    A->>T: UQTL_INPUT_CHANNEL + UQTL_NL_INPUT を用いて起動
     T->>L: run:newalphasearch:loop
-    L->>O: Generate next discovery theme
-    O-->>L: theme + feature_signature + idea_hash
-    L->>V: Execute validation and generate score
-    V-->>L: fitness/novelty/stability/adoption
-    L->>L: Orthogonality Check (novelty + hash + signature)
-    alt No Novelty
-        L->>O: Regenerate theme
-    else Novelty Pass
-        L->>M: Update theme/progress/policy
-        L->>U: Append alpha_discovery log
-        L->>P: Save cycle plot
-        P-->>L: Plot update complete
+    L->>O: 次の発見テーマを生成
+    O-->>L: テーマ + 特徴署名 + アイデアハッシュ
+    L->>V: 検証を実行しスコアを生成
+    V-->>L: 適合性/新規性/安定性/適応
+    L->>L: 独立性チェック（新規性+ハッシュ+署名）
+    alt 新規性なし
+        L->>O: テーマを再生成
+    else 新規性あり
+        L->>M: テーマ/進捗/方針を更新
+        L->>U: アルファディスカバリログを追記
+        L->>P: サイクルプロットを保存
+        P-->>L: プロット更新完了
     end
-    L->>L: Check failure threshold (Ralph Loop)
+    L->>L: 失敗閾値をチェック（Ralphループ）
 ```

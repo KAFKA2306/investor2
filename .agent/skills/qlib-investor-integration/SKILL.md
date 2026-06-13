@@ -1,4 +1,3 @@
----
 name: qlib-investor-integration
 description: >
   MANDATORY TRIGGER: Invoke only when a request is about using qlib with this
@@ -43,9 +42,9 @@ This rule applies to all columns without exception:
 
 | Column | Forbidden substitute | Required source |
 |---|---|---|
-| `$macro_cpi` | `np.cumsum(np.random.normal(...))` | 内閣府 e-Stat CPI 月次実績 |
-| `$macro_iip` | `np.cumsum(np.random.normal(...))` | 経済産業省 IIP 月次実績 |
-| `$macro_leverage_trend` | random walk scalar | OFR Hedge Fund Monitor（全銘柄スカラー → 使用禁止） |
+| `$macro_cpi` | `np.cumsum(np.random.normal(...))` | Cabinet Office e-Stat CPI monthly actuals |
+| `$macro_iip` | `np.cumsum(np.random.normal(...))` | METI IIP monthly actuals |
+| `$macro_leverage_trend` | random walk scalar | OFR Hedge Fund Monitor (scalar for all symbols — not allowed) |
 | `$segment_sentiment` | `np.random.normal(0.55, ...)` | `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json` → `sentiment` |
 | `$kg_centrality` | `np.random.uniform(5, 36, ...)` | `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json` → `kgCentrality` |
 | `$ai_exposure` | any random value | `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json` → `aiExposure` |
@@ -54,7 +53,7 @@ This rule applies to all columns without exception:
 
 **Source**: `/mnt/d/investor_all_cached_data/edinet/edinet_10k_intelligence_map.json`
 
-- **Coverage**: 646 銘柄, 年次更新（有価証券報告書ベース）
+- **Coverage**: 646 securities, annual updates (based on securities reports)
 - **Fields**: `sentiment` (0.0–1.0), `kgCentrality` (0–36), `aiExposure` (0–11)
 - **Join key**: stock code (string, no `.T` suffix) × report date
 

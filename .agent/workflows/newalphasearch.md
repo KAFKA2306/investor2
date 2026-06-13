@@ -1,18 +1,18 @@
----
 description: Autonomous Alpha Research Trading System (AAARTS) workflow using 4-layer guardrails, GO/HOLD/PIVOT logic, and the Ralph Loop to discover orthogonal alpha signals.
----
-
-# Autonomous Alpha Research Trading System (AAARTS) Workflow
-
-Objective: Leverage the AAARTS intelligence cycle to discover unique "orthogonal alpha" and ensure the autonomous evolution of the investment system.
-
-Context: Automating the alpha discovery process to adapt to changing market conditions without manual intervention.
 
 ---
 
-## 🏗️ AAARTS: 4-Layer Guardrails 🏗️
+# 自律型アルファ研究取引システム（AAARTS）ワークフロー
 
-This workflow operates across four logical layers to deliver high-quality alpha signals:
+目的: AAARTSの知性サイクルを活用して、独自の「正交アルファ」を発見し、投資システムの自律的進化を確保する。
+
+背景: アルファ発見プロセスを自動化し、市場条件の変化に対して手動介入なしに適応する。
+
+---
+
+## AAARTS：4層ガードレール
+
+本ワークフローは、品質の高いアルファ信号を提供するため、4つの論理的層にわたって機能する。
 
 ```mermaid
 flowchart TD
@@ -25,34 +25,34 @@ flowchart TD
 
 ---
 
-## 🚀 Entrypoints 🚀
+## エントリポイント
 
-*   🏃‍♀️ Standard Execution: `task run:newalphasearch` (Loop required) because the search engine is designed to find alpha over multi-cycle iterations.
-*   ♾️ Continuous Evolution: `task run:newalphasearch:loop` because market conditions change constantly and the system must adapt in real-time.
-*   🗣️ Natural Language Input: `task run:newalphasearch:nl` because human intuition and thematic ideas should be able to seed the autonomous search.
+*   標準実行: `task run:newalphasearch`（ループが必要）—検索エンジンは複数サイクルにわたりアルファを探索するよう設計されているため。
+*   継続的進化: `task run:newalphasearch:loop`—市場条件は常に変化するため、システムはリアルタイムで適応する必要がある。
+*   自然言語入力: `task run:newalphasearch:nl`—人間の直感およびテーマアイデアを自律的探索のシードとして活用できるようにする。
 
 ---
 
-## ⚖️ Audit: GO / HOLD / PIVOT ⚖️
+## 監査: GO / HOLD / PIVOT
 
-Each cycle subjects alpha candidates to a rigorous 8-point audit because deploying a low-quality factor to production can lead to significant financial loss.
+各サイクルにおいて、アルファ候補は8項目の厳格な監査を受ける。品質の低いファクターを本番に展開すると、重大な財務的損失につながる可能性がある。
 
-1.  Interpretation Consistency: Because the code must actually implement the intended logic. 🧩
-2.  Hypothesis Validity: Because without economic rationale, the signal is likely just statistical noise. 🧠
-3.  Metric Thresholds: Because we only deploy "Elite" alpha that meets our high Sharpe and IC standards. 📈
-4.  Orthogonality: Because redundant signals do not add marginal value and increase turnover cost. 🌈
-5.  Data Integrity: Because NaN values or bad data will corrupt the backtest results. 🛠️
-6.  Risk Sensitivity: Because hidden tail risk can wipe out months of gains in a single day. 🛡️
-7.  Implementation Feasibility: Because an alpha that cannot be executed in the real market is worthless. 🚀
-8.  Verdict: GO (Execute), HOLD (Validate), PIVOT (Redesign)
+1. 解釈の一貫性: 実装コードが意図したロジックを実際に実装していること。
+2. 仮説の妥当性: 経済的根拠がなければ、信号は統計的ノイズに過ぎない可能性がある。
+3. 指標閾値: 高いシャープレシオおよびIC基準を満たす「エリート」アルファのみを展開する。
+4. 直交性: 冗長な信号は付加的価値を生まず、取引回転コストを増加させる。
+5. データの整合性: NaN値や不良データはバックテスト結果を歪める。
+6. リスク感度: 隠れた尾部リスクは、一日で月間の利益を消失させる可能性がある。
+7. 実装可能性: 実市場で実行不能なアルファは無価値である。
+8. 判定: GO（実行）、HOLD（検証）、PIVOT（再設計）
 
 > [!TIP]
-> Ralph Loop: If consecutive search cycles fail (HOLD), trigger a PIVOT because the current domain has likely been exhausted of easy alpha.
+> Ralph Loop: 連続する探索サイクルが失敗（HOLD）した場合は、現在のドメインには容易なアルファが枯渇した可能性が高いため、PIVOTを発令する。
 
 ---
 
-## 🛡️ Safety Policy 🛡️
+## 安全ポリシー
 
-*   Threshold breaches trigger immediate termination because stopping the system is better than letting a corrupted state propagate.
-*   System state is broadcast to stdout because operators need real-time telemetry to understand why a cycle ended.
-*   Manual intervention is required to restart a terminated cycle because a safety breach indicates a root cause that an agent may not be able to fix autonomously.
+*   閾値を超えた場合は直ちに停止を発動する。腐敗した状態が伝播するよりも、停止する方が望ましい。
+*   システム状態は標準出力へブロードキャストされる。運用者はサイクル終了の理由を理解するためのリアルタイムのテレメトリを必要とする。
+*   停止したサイクルを再開するには手動介入が必要である。安全性の breachesは根本原因を示しており、エージェントが自律的に修正できない可能性がある。

@@ -1,11 +1,10 @@
-# 🎀 AAARTSちゃん実験設定ドラフト（Experimental Setup）セクションだよっ！ ✨
+# AAARTS実験設定ドラフト（Experimental Setup）セクション
 
-AAARTS (Autonomous Agentic Alpha Trade System) の NeurIPS 2026 向け論文用「Experimental Setup」セクションの英語ドラフトだよぉ！💖
-日本の財務諸表 (EDINET) や日本語特有の難しさ（漢字だらけなところとか！💦）に焦点を当てて、すっごくアカデミックでかっこいい英語で書いたからねっ！✨
+AAARTS (Autonomous Agentic Alpha Trade System) の NeurIPS 2026 向け論文における「Experimental Setup」セクションの英語ドラフトである。日本の財務諸表（EDINET）および日本語特有の難点（漢字の多さ等）に焦点を当て、学術的で厳密な英語表現で記述した。
 
 ---
 
-## 📝 NeurIPS LaTeX/Markdown Draft (English)
+## NeurIPS LaTeX/Markdown Draft (English)
 
 ```latex
 \section{Experimental Setup}
@@ -59,8 +58,10 @@ To demonstrate the efficacy of the AAARTS framework, we benchmark it against thr
 
 ---
 
-## 🎀 補足説明（Supplementary Notes）だよっ！ ✨
-1. **EDINET-Benchの構成**:
-   `earnings_forecast`クエストは、日本株に特化した有報のテキストと数値を統合して予測するクエストなんだよっ！
-2. **日本市場特化のポイント**:
-   日本語の複雑な文字コードや、IFRS/J-GAAPなどの会計基準の混在、そして有報が公表されてから投資判断に反映されるまでの厳密なタイムスタンプ管理（PIT）の難しさを英語でしっかり主張してるんだもんっ！
+## 補足説明（Supplementary Notes）
+
+1. EDINET-Benchの構成:
+   earnings_forecastクエストは、日本株に特化した有価証券報告書のテキストと数値を統合して予測を行うクエストである。
+
+2. 日本市場特化のポイント:
+   日本語の複雑な文字コード、IFRS/J-GAAPなどの会計基準の混在、そして有価証券報告書が公表されてから投資判断に反映されるまでの厳密なタイムスタンプ管理（PIT）の難しさを、英語において適切に主張している。

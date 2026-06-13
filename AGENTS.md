@@ -1,4 +1,4 @@
-# Repository Guidelines (Slim Mode ✨)
+# Repository Guidelines (Slim Mode)
 
 ## 📍 Key Locations
 

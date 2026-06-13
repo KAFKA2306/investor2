@@ -17,14 +17,14 @@ origin: local-git-analysis
 
 ## When to Use
 
-✅ Use when:
+Use when:
 - Setting up project quality gates
 - Integrating linters with auto-fix hooks
 - Enforcing architectural boundaries (domain ≠ IO)
 - Preventing AI-generated anti-patterns (try-catch, mock, null returns)
 - Protecting config files from agent tampering
 
-❌ Don't use:
+Don't use:
 - For simple linting (use Biome directly)
 - For one-off code cleanup
 - If you just need type checking (use tsc)
@@ -290,4 +290,3 @@ origin: local-git-analysis
 ## Best Practices
 - Follow project CDD conventions.
 - Use PathRegistry for all file operations.
-

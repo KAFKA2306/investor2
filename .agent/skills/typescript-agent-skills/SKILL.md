@@ -10,36 +10,36 @@ origin: local-git-analysis
 # TypeScript Runtime Skill System
 
 ## When to Use
-Use when working with typescript agent skills related tasks.
+Use for tasks related to TypeScript agent skills.
 
 ## Core Concepts
 
-| 種別 | 場所 | 用途 |
+| Type | Location | Purpose |
 |---|---|---|
-| **Claude Code スキル** | `.agent/skills/<name>/SKILL.md` | Claude Code が読む作業ガイダンス（markdown） |
-| **TypeScript ランタイムスキル** | `ts-agent/src/skills/` | エージェントが実行時に呼び出すコード |
+| **Claude Code Skill** | `.agent/skills/<name>/SKILL.md` | Guidance for Claude Code to read (markdown) |
+| **TypeScript Runtime Skill** | `ts-agent/src/skills/` | Code the agent calls at runtime |
 
-この SKILL.md は後者（TypeScript ランタイムスキル）を扱う。
+This SKILL.md handles the latter (TypeScript Runtime Skill).
 
-## ファイル構造
+## File Structure
 
 ```
 ts-agent/src/skills/
-├── types.ts          ← Skill<TInput, TOutput> インターフェース
-├── registry.ts       ← SkillRegistry シングルトン
-├── index.ts          ← built-in スキルの登録（side-effect import）
+├── types.ts          ← Skill<TInput, TOutput> interface
+├── registry.ts       ← SkillRegistry singleton
+├── index.ts          ← Registered built-in skills (side-effect import)
 └── builtin/
-    └── validate_qlib_formula.ts  ← qlib式構文検証スキル
+    └── validate_qlib_formula.ts  ← qlib expression syntax validation skill
 ```
 
-## Skill インターフェース
+## Skill Interface
 
 ```typescript
 import type { z } from "zod";
 
 export interface Skill<TInput, TOutput> {
   name: string;
-  description: string;  // LLMへの説明・ログ出力に使用
+  description: string;  // Used for explanations to the LLM and log output
   schema: z.ZodType<TInput>;
   execute(args: TInput): Promise<TOutput>;
 }
@@ -48,22 +48,22 @@ export interface Skill<TInput, TOutput> {
 ## Code Examples
 
 ```typescript
-// BaseAgent を継承したエージェント内で
+// Within an agent that inherits from BaseAgent
 const result = await this.useSkill<{ formula: string }, { valid: boolean; error?: string }>(
   "validate_qlib_formula",
   { formula: "Mean($close,20)/Mean($close,5)-1" }
 );
 ```
 
-## 新しいスキルの追加手順
+## Steps to Add a New Skill
 
-1. `ts-agent/src/skills/builtin/<skill_name>.ts` を作成
-2. Zod スキーマで入力型を定義
-3. `Skill<Input, Output>` を実装して `export`
-4. `ts-agent/src/skills/index.ts` に `skillRegistry.register(...)` を追加
+1. Create `ts-agent/src/skills/builtin/<skill_name>.ts`
+2. Define the input type with a Zod schema
+3. Implement `Skill<Input, Output>` and export it
+4. Add `skillRegistry.register(...)` in `ts-agent/src/skills/index.ts`
 
 ```typescript
-// builtin/my_skill.ts の例
+// Example of builtin/my_skill.ts
 import { z } from "zod";
 import type { Skill } from "../types.ts";
 
@@ -73,26 +73,24 @@ type Output = { result: string };
 
 export const mySkill: Skill<Input, Output> = {
   name: "my_skill",
-  description: "このスキルが何をするかの説明",
+  description: "Description of what this skill does.",
   schema: inputSchema,
   execute: async ({ value }) => ({ result: value.toUpperCase() }),
 };
 ```
 
-## 既存の built-in スキル
+## Existing Built-in Skills
 
-| name | 用途 |
+| name | Purpose |
 |---|---|
-| `validate_qlib_formula` | qlib式アルファ表現の構文検証。未知カラム・括弧不整合を検出する |
+| `validate_qlib_formula` | Validation of qlib formula syntax. Detect unknown columns and parentheses mismatches |
 
-## 初期化の仕組み
+## Initialization Mechanism
 
-`app_runtime_core.ts` が `import "../skills/index.ts"` をトップレベルで行い、
-モジュール評価時にすべての built-in スキルが登録される。
-Bun のモジュールシステムでは同一モジュールは一度しか評価されないため、二重登録は発生しない。
+`app_runtime_core.ts` imports `../skills/index.ts` at the top level, causing all built-in skills to be registered during module evaluation. In Bun's module system, the same module is evaluated only once, so duplicate registrations do not occur.
 
 ## Best Practices
 
-- `any` 型の使用（Biome エラー）→ generics `<TInput, TOutput>` を使う
-- `execute()` 内での try-catch（CDD 原則：クラッシュさせる）
-- skills 登録を `index.ts` 以外の場所で行う
+- Avoid using the any type (Biome error) — use generics `<TInput, TOutput>`.
+- Use try-catch inside `execute()` (CDD principle: crash on failure).
+- Register skills somewhere other than `index.ts`.

@@ -1,54 +1,66 @@
----
-description: Professional workflow for delivering verified frontends that maximize financial value and prioritize historical log visualization.
----
-
-# Frontend Verification, Update & Professional Workflow
-
-Objective: Ensure that frontend modifications perfectly visualize "Historical Insights (Alpha Trajectories)" and maximize the precision of investment decisions.
-Context: This workflow is independent of `/newalphasearch` (Autonomous Alpha Discovery) and specializes in Visualization and Audit (Audit/Visualization)—how to deliver discovery results to the user in the most valuable form.
+description: 財務価値の最大化と歴史的ログの可視化を優先する検証済みフロントエンドの提供に関する専門的ワークフロー。
 
 ---
 
-## 🤖 Agent Execution Steps
+# フロントエンド検証、更新および専門的ワークフロー
 
-// turbo-all
-Execute these steps with a focus on "Historical Log Visualization."
+目的: フロントエンドの変更が「Historical Insights (Alpha Trajectories)」を正確に可視化し、投資判断の精度を最大化することを保証する。
 
-### 1️⃣ Strategic Definition of Historical Log Utilization 🎯
-Define how the new UI transforms historical data into "Actionable Insights."
-- Agent Prompt:
-  - The `implementation_plan.md` must include the following "Historical Log View" requirements:
-    1. Comparability: How easily can different historical periods or strategies (Alphas) be compared?
-    2. Drill-down: Is there a seamless transition from overview summaries to specific daily details (e.g., raw EDINET filings)?
-    3. Historical Fidelity: Are cumulative returns and drawdowns displayed "truthfully" from past to present?
-
-### 2️⃣ Robust Implementation & Ultimate Type Safety 💻
-When handling mass historical logs, type safety and performance are paramount.
-- Agent Prompt:
-  - Use Strict TypeScript for mapping logic and enforce immediate data rejection via `Zod` for any malformed inputs.
-  - Execute `task check` to ensure maximum code purity.
-
-### 3️⃣ Time-Series Validation via Playwright 🌐
-Verify that historical data points are rendered correctly using automated UI testing.
-- Agent Prompt:
-  - Start the development server with `npm run dev` in `ts-agent/src/dashboard`.
-  - Use Playwright to "Select a Historical Date" and verify the daily logs and charts update correctly.
-  - Capture screenshots of historical Alpha discovery moments and submit them as evidence. 📸
-
-### 4️⃣ Physical Log-Storage Synchronization 👀
-Ensure the dashboard is 100% synchronized with the assets in the `logs/` directory.
-- Agent Prompt:
-  - Validate that `vite.config.ts` proxy settings correctly target deep hierarchy levels of historical logs.
-  - Confirm that logs from 1 month or 3 months ago are indexed and reflected in the charts immediately.
-
-### 5️⃣ Professional Reporting 🎁
-In the `walkthrough.md`, detail how the "Historical Log View" has been enhanced.
-- Agent Prompt:
-  - Provide before/after screenshots and report: "Historical Alpha behavior from 1 year ago is now fully transparent and navigable! 💎✨"
+背景: 本ワークフローは `/newalphasearch`（自律的アルファ探索）とは独立しており、可視化および監査を専門とする。ユーザーに対して得られた発見結果を最も価値の高い形で提供する方法を扱う。
 
 ---
 
-## 🧭 Mermaid Sequence
+## 1. 履歴ログ活用の戦略定義
+
+履歴データを新しいUIがどのように実用的な洞察へ変換するかを定義する。
+
+- エージェントの指示としては、以下を含むべきである:
+  - `implementation_plan.md` には以下の「Historical Log View」要件を必ず盛り込むこと:
+    1. 比較可能性: 異なる過去期間や戦略（アルファ）をどの程度容易に比較できるか。
+    2. ドリルダウン: 概要サマリーから特定の日次詳細（例: 生データのEDINET提出情報）へシームレスに遷移できること。
+    3. 過去の忠実度: 過去から現在までの累積リターンとドローダウンが正確に表示されること。
+
+---
+
+## 2. 堅牢な実装と最終的な型安全性
+
+大量の履歴ログを扱う際には、型安全性と性能が最重要である。
+
+- エージェントの指示として、マッピングロジックには Strict TypeScript を用い、入力の不正性に対しては `Zod` による即時拒否を徹底する。コードの純度を最大限に確保するため、`task check` を実行する。
+
+---
+
+## 3. Playwright を用いた時系列検証
+
+時系列データポイントが自動UIテストで正しく描画されていることを検証する。
+
+- エージェントの指示として、以下を実施する:
+  - `ts-agent/src/dashboard` において、`npm run dev` により開発サーバを起動する。
+  - Playwright を用いて履歴日付を選択し、日次ログおよびチャートが正しく更新されることを検証する。
+  - 履歴アルファ探索の瞬間の画面をキャプチャし、証拠資料として提出する。
+
+---
+
+## 4. 物理ログストレージの同期
+
+ダッシュボードが `logs/` ディレクトリ内の資産と完全に同期していることを確認する。
+
+- エージェントの指示として、以下を実施する:
+  - `vite.config.ts` のプロキシ設定が、過去の履歴ログの深い階層レベルを正しく対象としていることを検証する。
+  - 1か月前または3か月前のログが即座にインデックス化され、チャートへ反映されることを確認する。
+
+---
+
+## 5. 専門的な報告
+
+`walkthrough.md` において、「Historical Log View」がどのように強化されたかを詳細に記述する。
+
+- エージェントの指示として、事前および事後のスクリーンショットを提供し、報告として以下を提出する:
+  - 「1年前の Historical Alpha の挙動は現在完全に透明で、ナビゲーション可能である。」という点の事実関係を明示する。
+
+---
+
+## Mermaid Sequence
 ```mermaid
 sequenceDiagram
     autonumber
@@ -66,4 +78,4 @@ sequenceDiagram
 ```
 
 > [!IMPORTANT]
-> Visualizing the "Now" is standard. A professional unlocks the "Future" by decoding the "Past." 💎✨
+> 現在の可視化は標準である。過去を解釈することにより、未来を把握する。

@@ -6,27 +6,27 @@ origin: local-git-analysis
 
 # Polymarket Alpha Miner Skill
 
-Polymarket のイベントカレンダー、インプライド確率、オーダーフロー等から、予測市場特有の時系列シグナルを抽出するための専門知見。
+Polymarket event calendars, implied probabilities, and order flow data provide specialized knowledge for extracting time-series signals unique to prediction markets.
 
 ## When to Use
-Use when working with polymarket alpha miner related tasks in this project.
+Use for Polymarket alpha-miner-related tasks in this project.
 
 ## Core Concepts
 
-- **イベントカレンダー相関**: 決算発表、政策決定、スポーツイベント等の実現時刻と市場心理の変化を捉える。
-- **インプライド確率抽出**: オッズ（例： YES = 0.65, NO = 0.35）から、市場参加者の内在期待確率を逆算。
-- **流動性スケア**: マーケット深さ（Depth）とボリュームベース調整。流動性が薄い場合の信号の信頼度低下を定量化。
-- **オーダーフロー分析**: 大口買い・売りの時系列パターン（VWAP との乖離等）から、情報優位性の時間窓を推定。
+- **Event Calendar Correlation**: Capture the realization times of earnings announcements, policy decisions, sports events, and shifts in market sentiment.
+- **Implied Probability Extraction**: Derive market-implied probabilities from odds (e.g., YES = 0.65, NO = 0.35).
+- **Liquidity Scoring**: Apply market depth and volume-based adjustments. Quantify the reduction in signal reliability under low liquidity conditions.
+- **Order Flow Analysis**: From time-series patterns of large buys and sells (e.g., deviations from VWAP), estimate the time window of information advantage.
 
 ## Code Examples
 
-1. **Event Calendar Scanning**: 今後 N 日間のイベント、過去同時期のマーケット動向を検索。
-2. **Implied Probability Decomposition**: オッズから市場予想確率を算出、過去の実現頻度との乖離を計算（期待値）。
-3. **Order Flow Fingerprinting**: ブロック取引（大口）の時系列、価格インパクトを分析して、インサイダー情報を示唆するシグナルを検出。
-4. **Signal Strength Ranking**: イベント邁進度、流動性、ヒストリカル的中率に基づき、シグナルの信頼度スコアを出力。
+1. **Event Calendar Scanning**: Search for upcoming events in the next N days and past market trends for the corresponding period.
+2. **Implied Probability Decomposition**: Compute market-implied probabilities from odds and quantify deviations from historical realized frequencies (expectation).
+3. **Order Flow Fingerprinting**: Analyze time-series of block trades (large orders) and price impact to detect signals indicative of insider information.
+4. **Signal Strength Ranking**: Based on event progression, liquidity, and historical hit rate, output a signal confidence score.
 
 ## Best Practices
 
-- Polymarket のシグナルは「短期（< 1 週間）の Alpha」に特化。長期的なファンダメンタル分析の補足的な役割に留める。
-- 流動性が著しく低いマーケット（< $100k ADV）は、統計的信頼度の低さから signal generation の対象外とすること。
-- オーダーフロー分析は必ず複数時間枠（1 分、5 分、1 時間）で実施し、ノイズフロアと真のシグナルを区別。
+- Polymarket signals are specialized for short-term alpha (less than 1 week) and should function as a supplement to long-term fundamental analysis.
+- Markets with extremely low liquidity (<$100k ADV) should be excluded from signal generation due to low statistical reliability.
+- Order-flow analysis should always be conducted across multiple time frames (1 minute, 5 minutes, 1 hour) to distinguish the noise floor from true signals.

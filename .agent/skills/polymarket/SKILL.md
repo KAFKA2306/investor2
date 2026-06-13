@@ -6,21 +6,21 @@ origin: local-git-analysis
 
 # Polymarket Trading Bot Skill
 
-Polymarket の CLOB (Central Limit Order Book) と連携し、効率的な予測市場取引を行うための専門知見。
+Expert knowledge for efficiently trading prediction markets in coordination with Polymarket's CLOB (Central Limit Order Book).
 
 ## When to Use
-Use when working with polymarket related tasks in this project.
+Use when working with Polymarket-related tasks in this project.
 
 ## Core Concepts
-- **CLOB API の特性**: レート制限 (Rate Limits) の遵守、署名済み注文 (Signed Orders) の生成、ガスレス注文の管理。
-- **ベッティング戦略**: ケリー基準に基づく資金管理、オッズ歪みの検出、イベントドリブンなポジション解消。
-- **データ構造**: Zod スキーマを用いた Polymarket 固有のメッセージングのバリデーション。
+- **CLOB API characteristics**: adherence to rate limits, generation of signed orders, gasless order management.
+- **Betting strategies**: capital management based on the Kelly criterion, detection of odds distortions, event-driven position unwinding.
+- **Data structures**: Validation of Polymarket-specific messaging using Zod schemas.
 
 ## Code Examples
-1. **Market Discovery**: 進行中のイベント、流動性の高いマーケットの抽出。
-2. **Backtesting**: `backtest_core.ts` を用いた過去データの検証手順。
-3. **Execution**: ポジションのオープン、指値注文の更新、ストップロスの設定。
+1. **Market Discovery**: Extraction of ongoing events and high-liquidity markets.
+2. **Backtesting**: Procedures for validating historical data using `backtest_core.ts`.
+3. **Execution**: Opening positions, updating limit orders, and setting stop-losses.
 
 ## Best Practices
-- ポジションのオープン前には必ず `polymarket_schemas.ts` でデータ整合性を検証すること。
-- テレメトリログは `telemetry_logger.ts` を通じて記録し、異常検知を自動化すること。
+- Before opening a position, always validate data integrity with `polymarket_schemas.ts`.
+- Telemetry logs should be recorded via `telemetry_logger.ts`, automating anomaly detection.

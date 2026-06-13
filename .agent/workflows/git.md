@@ -1,73 +1,80 @@
----
-description: Magic rules for maintaining the world's cleanest code and ensuring a happy development flow for everyone.
+description: 世界最高水準のコード品質を維持し、全チームが円滑に開発を進行できるようにするためのルール。
 ---
 
 # Git Operations & Professional Cleanup Protocols
 
-Objective: Maintain the codebase in its highest state of purity and ensure seamless collaboration across the team.
-Context: To eliminate disorganized code and ambiguous commit histories, ensuring a safe and reliable development environment.
+目的：コードベースを最高水準の品質状態に維持し、チーム全体の協働を円滑に進めることである。  
+背景：乱雑なコードおよび曖昧なコミット履歴を排除し、安全で信頼性の高い開発環境を確保する。
 
 ---
 
-## 🤖 Agent Execution Steps
+## エージェント実行手順
 
-// turbo-all
-Follow these steps in sequence, verifying each "Done ✨" before proceeding.
+// turbo-all  
+以下を順次実行し、各ステップが完了したことを「完了」と表示されるのを確認の上、次へ進む。
 
-### 1️⃣ Code Purity Verification (Cleanup)
-Execute `task check` at the project root.
-(This invokes `bun run format` and `bun run lint` to ensure the code is pristine.)
-- Agent Prompt: 
-  - If errors occur, you are authorized to attempt self-correction up to 2 times.
-  - If resolution is not possible, report to the user immediately.
+### 1. コード純度検証（クリーンアップ）
+
+プロジェクトのルートで `task check` を実行する。  
+（これにより `bun run format` および `bun run lint` が呼び出され、コードを清浄な状態に保つ。）
+
+- エージェントへの指示：  
+  - エラーが発生した場合、自己修正を最大2回まで試みる権限を有する。  
+  - 解決が不可能な場合は、直ちにユーザーへ報告する。
 
 ---
 
 # Development Philosophy: Crash-Driven Development (CDD)
 
-Fail Fast, Fail Loud. Treat AI agents as professional colleagues: grant both the right to fail and the obligation to confront facts.
+速やかに失敗を認識し、重大な結果を伴って失敗する。AIエージェントを専門的同僚として扱い、失敗する権利と事実に向き合う義務の双方を認める。
 
-Reference: https://zenn.dev/kafka2306/articles/11cd731eebded1
-
----
-
-## Core Philosophy
-
-AI-generated code becomes MORE dangerous the more defensive it appears. Exception suppression creates false confidence. Stack traces are the ONLY objective fact connecting AI and human understanding.
-
-Principle: Simplicity + Transparency + Infrastructure Strength = True Robustness
+参考：https://zenn.dev/kafka2306/articles/11cd731eebded1
 
 ---
 
-## Rule 1: Exception Handling — Strict Minimization
+## 基本理念
 
-### MANDATORY RULES
+AI生成コードは、防御的に見えるほど危険性が高まる。例外の抑制は誤った自信を生み出す。スタックトレースは、AIと人間の理解を結ぶ唯一の客観的事実である。
 
-1.1 Business Logic Exception Handling: PROHIBITED
-- MUST NOT use `try-catch` in application business logic.
-- MUST NOT catch and suppress exceptions in data transformation functions.
-- MUST NOT return `None`, `False`, `empty`, or error codes to hide failures.
-- MUST NOT use logging as a substitute for crashes.
+原則：単純性 + 透明性 + インフラの堅牢性 = 真の堅牢性
 
-1.2 Let Errors Cascade
-- MUST propagate ALL unexpected exceptions immediately.
-- MUST output complete stack traces to stderr/stdout.
-- MUST NOT implement custom error handling at the application layer.
-- Stack traces MUST be unfiltered and complete.
+---
 
-1.3 Infrastructure-Only Resilience
-- Retry logic MUST live in Makefile, Docker, Kubernetes, or scheduler (Taskfile).
-- Timeout mechanisms MUST be infrastructure-level, NOT application code.
-- Health checks MUST be external to application logic.
+## 規則1：例外処理 — 厳格な最小化
 
-### VIOLATION CONSEQUENCES
-Suppressed exceptions create:
-- False debugging signals (misleading logs).
-- Lost root cause information (stack traces are destroyed).
-- Cascading hidden failures (errors compound invisibly).
-- Impossible AI debugging (no objective facts to analyze).
+### 必須ルール
 
-### STRICT IMPLEMENTATION
+1.1 業務ロジックにおける例外処理：禁止  
+- アプリケーションの業務ロジックに `try-catch` を使用してはならない。  
+- データ変換関数で例外を捕捉・抑制してはならない。  
+- 失敗を隠す目的で `None`、`False`、`empty`、またはエラーコードを返してはならない。  
+- クラッシュの代替としてログを使用してはならない。
+
+1.2 エラーの連鎖を許容する  
+- 予期せぬすべての例外を直ちに伝播させる。  
+- 完全なスタックトレースを標準エラー出力または標準出力へ出力する。  
+- アプリケーション層で独自のエラーハンドリングを実装してはならない。  
+- スタックトレースはフィルタリングなしで完全でなければならない。
+
+1.3 インフラストラクチャ専用のレジリエンス  
+- リトライロジックは Makefile、Docker、Kubernetes、またはスケジューラ（Taskfile）に含ませるべきである。  
+- タイムアウト機構はインフラストラクチャレベルで管理され、アプリケーションコードには含まれない。  
+- ヘルスチェックはアプリケーションロジックの外部で行われるべきである。
+
+---
+
+### 違反の影響
+
+抑制された例外は以下を生み出す。  
+- 誤解を招くデバッグ信号（不適切なログ）  
+- ルート原因情報の喪失（スタックトレースが破壊される）  
+- 隠れた失敗の連鎖（エラーが見えなくなる）  
+- AI によるデバッグの困難化（客観的事実が不足する）
+
+---
+
+### 厳格な実装例
+
 ```python
 # ❌ VIOLATION: Catch-and-suppress pattern
 def fetch_user(user_id):
@@ -86,64 +93,69 @@ def fetch_user(user_id):
 
 ---
 
-## Rule 2: Stack Traces — Inviolable Ground Truth
+## 規則2：スタックトレース — 不変の真実
 
-### MANDATORY RULES
+### 必須ルール
 
-2.1 Stack Traces Are Debugging Facts
-- MUST treat stack traces as the single source of truth.
-- MUST never suppress or abbreviate stack traces.
-- MUST NOT replace stack traces with log messages.
-- Every crash MUST produce complete frame information.
+2.1 スタックトレースはデバッグ上の事実  
+- スタックトレースを唯一の真実として扱う。  
+- スタックトレースを抑制したり省略してはならない。  
+- スタックトレースをログメッセージと置換してはならない。  
+- 全てのクラッシュは完全なフレーム情報を生成する。
 
-2.2 Diagnostic Logging is INSUFFICIENT
-- Logs are human-interpreted narratives (subjective).
-- Stack traces are machine-generated facts (objective).
-- Detailed logging CANNOT compensate for missing stack traces.
+2.2 診断用ログは不十分  
+- ログは人間が解釀する物語（主観的）。  
+- スタックトレースは機械生成の事実（客観的）。  
+- 詳細なログは、欠落したスタックトレースを補完できない。
 
-2.3 Root Cause Analysis Uses Stack Traces
-- MUST analyze from stack trace backward to source.
-- MUST NOT speculate from log messages.
-- Every debugging session MUST start with the full crash dump.
-
----
-
-## Rule 3: Separation of Concerns — Strict Boundary Enforcement
-
-### MANDATORY RULES
-
-3.1 Application Layer: Business Logic ONLY
-- MUST contain NO retry mechanisms, NO timeout logic, NO health checks, and NO circuit breakers.
-- MUST propagate errors immediately and completely.
-
-3.2 Infrastructure Layer: Resilience ONLY
-- Taskfile/Makefile: Retry loops, sequential execution, conditional logic.
-- Docker: Health checks, restart policies, entrypoint scripts.
-- Systemd: `Restart=`, `RestartSec=`, service dependencies.
-- Monitoring: Alerting, metrics collection.
+2.3 根本原因分析はスタックトレースを用いる  
+- スタックトレースから源泉へ遡って分析する。  
+- ログメッセージから推測してはならない。  
+- すべてのデバッグセッションは、完全なクラッシュダンプから開始する。
 
 ---
 
-### 2️⃣ Atomic Preservation (Git Staging & Commit)
-Once cleaned, stage changes atomically (minimal logical units).
-- Agent Prompt:
-  - DO NOT bundle multiple features into a single `git add .`.
-  - Use `git add -p` or specific file paths to stage meaningful atomic units.
-  - Separate "Documentation," "Logic Fixes," and "Refactors" into distinct commits.
-  - Use conventional prefixes: `feat:`, `fix:`, `docs:`, `refactor:`, `chore:`.
+## 規則3：関心の分離 — 厳格な境界の運用
 
-#### 💡 Specificity & Functional Intent
-Commit messages MUST be specific and describe the functional value achieved.
-- Combine technical precision with professional clarity.
+### 必須ルール
 
-### 3️⃣ Global Synchronization (Push & Verify)
-Finally, execute `git push` to synchronize changes.
-- Agent Prompt:
-  - If available, use `gh run list` to verify CI/CD "Success" status.
+3.1 アプリケーション層：業務ロジックのみ  
+- リトライ機構、タイムアウトロジック、ヘルスチェック、サーキットブレーカーを含んではならない。  
+- エラーを直ちにかつ完全に伝播させる。
+
+3.2 インフラストラクチャ層：レジリエンスのみ  
+- Taskfile/Makefile：リトライループ、逐次実行、条件式。  
+- Docker：ヘルスチェック、再起動ポリシー、エントリーポイントスクリプト。  
+- Systemd：Restart=、RestartSec=、サービス依存関係。  
+- モニタリング：アラート、メトリクス収集。
+
+---
+
+### 2️⃣ アトミック保存（Git ステージング＆コミット）
+
+クリーンアップ後、変更を原子的にステージする（最小の論理ユニット）。
+
+- エージェントへの指示：  
+  - 複数の機能を1つの `git add .` にまとめてはいけない。  
+  - meaningful な原子単位をステージするには `git add -p` または特定のファイルパスを使用する。  
+  - 「Documentation」「Logic Fixes」「Refactors」を別々のコミットとして分離する。  
+  - 慣例プレフィックスを使用する：`feat:`、`fix:`、`docs:`、`refactor:`、`chore:`。
+
+#### 💡 明確性と機能意図
+コミットメッセージは具体的で、達成された機能的価値を記述すべきである。  
+技術的な正確さと専門的な明瞭さを併せて持つよう心掛ける。
+
+---
+
+### 3️⃣ グローバル同期（Push & Verify）
+
+最終的に変更を同期するために `git push` を実行する。  
+エージェントへの指示：利用可能であれば `gh run list` を使用してCI/CDの「Success」状態を確認する。
 
 ---
 
 ## 🧭 Mermaid Sequence
+
 ```mermaid
 sequenceDiagram
     autonumber

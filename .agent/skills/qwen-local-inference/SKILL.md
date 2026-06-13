@@ -11,12 +11,12 @@ origin: local-git-analysis
 
 # Qwen Local Inference Skill
 
-This skill leverages Qwen 3.5 9B for rapid, secure, and cost-effective intelligence generation, specifically optimized for alpha factor discovery.
+This skill utilizes Qwen 3.5 9B to enable rapid, secure, and cost-efficient intelligence generation, with a specific focus on alpha-factor discovery.
 
 ## When to Use
-- When generating novel quantitative investment ideas or themes.
+- For generating novel quantitative investment ideas or themes.
 - When utilizing local GPU resources (CUDA) for high-speed inference.
-- When requiring strictly formatted JSON output for downstream pipelines.
+- When strictly formatted JSON output is required for downstream pipelines.
 
 ## Code Examples
 
@@ -30,15 +30,15 @@ This skill leverages Qwen 3.5 9B for rapid, secure, and cost-effective intellige
 
 ## Core Concepts
 
-1.  Dynamic Path Resolution: NEVER hardcode model paths because hardcoded strings break the inference loop when containers or volumes are remounted.
-2.  Fail-Fast Execution: DO NOT use `try-catch` blocks in business logic because hidden inference errors lead to empty or "hallucinated" alpha files that corrupt the knowledgebase.
-3.  Schema Validation: All LLM outputs MUST be validated using Zod or Pydantic because LLMs occasionally fail to follow formatting rules, and malformed JSON will crash the downstream orchestrator.
+1.  Dynamic Path Resolution: Do not hardcode model paths, because hard-coded strings break the inference loop when containers or volumes are remounted.
+2.  Fail-Fast Execution: Do not use `try-catch` blocks in business logic because hidden inference errors lead to empty or "hallucinated" alpha files that corrupt the knowledgebase.
+3.  Schema Validation: All LLM outputs must be validated using Zod or Pydantic because LLMs occasionally fail to follow formatting rules, and malformed JSON will crash the downstream orchestrator.
 
-## 🚀 Inference Engines
+## Inference Engines
 - vLLM (Recommended): Optimized for high throughput and parallel idea generation.
 - Transformers (Fallback): Used for flexibility in hardware-constrained environments.
 
-## 🔧 Qwen 3.5 Operational Troubleshooting (Verified: 2026-03-07)
+## Qwen 3.5 Operational Troubleshooting (Verified: 2026-03-07)
 
 ### Error Matrix and Resolutions
 
@@ -84,4 +84,3 @@ LD_LIBRARY_PATH=/home/kafka/finance/investor/.venv/lib/python3.12/site-packages/
 ```
 ## Best Practices
 - Follow project CDD conventions.
-

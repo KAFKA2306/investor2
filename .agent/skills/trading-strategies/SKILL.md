@@ -6,29 +6,29 @@ origin: local-git-analysis
 
 # Trading Strategies & Risk Management Skill
 
-平均回帰 (Mean Reversion)、統計的裁定 (Statistical Arbitrage)、およびポートフォリオのヘッジ戦略に関する専門知見。
+Expertise in Mean Reversion, Statistical Arbitrage, and Portfolio Hedging Strategies.
 
 ## When to Use
-Use when working with trading strategies related tasks in this project.
+Use for tasks related to trading strategies within this project.
 
 ## Core Concepts
-- **Mean Reversion (平均回帰)**:
-  - **Z-score**: 価格が移動平均からどれだけ乖離しているかの統計的尺度。通常 |Z| > 2 でエントリー検討。
-  - **指標**: RSI (相対力指数)、ボリンジャーバンド、移動平均乖離率。
-- **Statistical Arbitrage (統計的裁定)**:
-  - **Pairs Trading**: 同一セクター内の高い相関を持つ 2 銘柄間の価格乖離を利用したロング/ショート。
-  - **Co-integration**: 単なる相関ではなく、長期的な価格差の定常性を重視。
-- **Risk Hedging (リスクヘッジ)**:
-  - **テールリスク対策**: プットオプション、インバース ETF、VIX 関連商品によるダウンサイド保護。
-  - **ヘッジコスト管理**: プロテクションの対価としてのコスト（プレミアム等）を最小化する戦略設計。
+- **Mean Reversion**:
+  - **Z-score**: A statistical measure of how far price deviates from its moving average. Typically entries are considered when |Z| > 2.
+  - **Indicators**: RSI (Relative Strength Index), Bollinger Bands, moving-average deviation.
+- **Statistical Arbitrage**:
+  - **Pairs Trading**: A long/short strategy that exploits price divergence between two securities with high correlation within the same sector.
+  - **Cointegration**: Emphasizes the stationarity of long-run price differentials rather than simple correlation.
+- **Risk Hedging**:
+  - **Tail Risk Hedging**: Downside protection using put options, inverse ETFs, and VIX-related instruments.
+  - **Hedge Cost Management**: Strategy design to minimize the cost of protection (premiums, etc.).
 
 ## Code Examples
-1. **Opportunity Scanning**: RSI や Z-score による「売られすぎ/買われすぎ」銘柄のスクリーニング。
-2. **Pairs Selection**: 歴史的な相関データに基づく統計的裁定ペアの特定。
-3. **Hedge Design**: 現在のポートフォリオのベータ値やセクター偏重に基づいた最適なヘッジ手段の選定。
-4. **Execution Triggers**: エントリー、利確、損切り、およびヘッジ発動の定量的基準の設定。
+1. **Opportunity Scanning**: Screening for oversold/overbought securities using RSI or Z-score.
+2. **Pairs Selection**: Identifying statistical arbitrage pairs based on historical correlation data.
+3. **Hedge Design**: Selecting optimal hedging instruments based on the portfolio beta and sector concentration.
+4. **Execution Triggers**: Establishing quantitative criteria for entry, take-profit, stop-loss, and hedge activation.
 
 ## Best Practices
-- 平均回帰戦略では、ファンダメンタルズの崩壊（構造的変化）による価格下落と、一時的な乖離を厳密に区別すること。
-- ヘッジは常に「保険」として機能させ、過剰なヘッジによるリターンの毀損を避けること。
-- 相関が高いペアであっても、イベントリスク（M&A、決算等）がある場合は統計的裁定の対象外とすること。
+- In mean-reversion strategies, rigorously distinguish price declines caused by fundamental breakdown (structural changes) from temporary deviations.
+- Hedging should always function as insurance, avoiding deterioration of returns due to over-hedging.
+- Even for highly correlated pairs, if event risk (M&A, earnings announcements, etc.) exists, they should be excluded from statistical arbitrage.

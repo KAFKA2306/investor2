@@ -6,28 +6,28 @@ origin: local-git-analysis
 
 # Fundamental & Macro Analysis Skill
 
-マクロ経済指標の分析、企業のファンダメンタルズ評価、および市場センチメントの監査に関する専門知見。
+Expertise in analyzing macroeconomic indicators, evaluating a company's fundamentals, and auditing market sentiment.
 
 ## When to Use
-Use when working with fundamental analysis related tasks in this project.
+Use when working on fundamental analysis related tasks in this project.
 
 ## Core Concepts
-- **Macro Top-Down (マクロ経済)**:
-  - **主要指標**: CPI (インフレ)、政策金利、GDP 成長率、雇用統計。
-  - **レジーム転換**: インフレ局面、デフレ局面、スタグフレーション局面の特定。
-  - **資産相関**: 株、債券、金、原油の相関関係の異常（同時上昇・同時下落）の検出。
-- **Fundamental Audit (ファンダメンタル監査)**:
-  - **Yield Traps (配当の罠)**: 高配当でも配当性向が高すぎたり、キャッシュフローが不十分な銘柄の特定。
-  - **Sentiment Discrepancy (センチメントの乖離)**: ファンダメンタルズは強いが、市場の過剰な悲観により過小評価されている銘柄。
-  - **Cash Flow Analysis**: 営業キャッシュフロー、フリーキャッシュフローの健全性評価。
+- **Macro Top-Down (Macroeconomics)**:
+  - **Key Indicators**: CPI (inflation), policy rate, GDP growth, and employment statistics.
+  - **Regime Transitions**: identifying inflationary, deflationary, and stagflation environments.
+  - **Asset Correlations**: detection of abnormal correlations among equities, bonds, gold, and oil (simultaneous upswings or simultaneous declines).
+- **Fundamental Audit (Fundamental Audit)**:
+  - **Yield Traps**: identifying stocks with high dividend yields but excessively high payout ratios or insufficient cash flows.
+  - **Sentiment Discrepancy**: fundamentals are strong, yet the stock is undervalued due to excessive market pessimism.
+  - **Cash Flow Analysis**: evaluation of the health of operating cash flow and free cash flow.
 
 ## Code Examples
-1. **Macro Scanning**: FRED, ECB などのデータソースに基づいた現在の経済フェーズの判定。
-2. **Correlation Mapping**: 資産クラス間の相関の歪みを検出し、平均回帰トレードの機会を探る。
-3. **Sentiment vs Funda Audit**: ニュース、SNS、アナリストレポートと財務諸表の矛盾点を抽出。
-4. **Safety Check**: 高配当銘柄の減配リスクや、負債急増銘柄の警告。
+1. **Macro Scanning**: Determining the current economic phase based on data sources such as FRED and the ECB.
+2. **Correlation Mapping**: Detecting distortions in correlations across asset classes and seeking mean-reversion trading opportunities.
+3. **Sentiment vs Fundamentals Audit**: Extracting inconsistencies between news, social media (SNS), analyst reports, and financial statements.
+4. **Safety Check**: warnings on dividend cuts for high-yield stocks and on highly indebted companies.
 
 ## Best Practices
-- マクロ分析は常に「過去の類似事例」と比較し、歴史的な再現性を確認すること。
-- 表面上の PER や PBR だけでなく、キャッシュフローの質を最優先すること。
-- センチメントが極端に悪い時は、「なぜ市場は間違っているのか」という反対仮説を常に立てること。
+- Macro analysis should always be benchmarked against past similar cases to confirm historical repeatability.
+- Do not rely solely on surface metrics like the P/E ratio or the P/B ratio; prioritize cash flow quality.
+- When sentiment is extremely negative, always formulate the contrarian hypothesis: why might the market be wrong?

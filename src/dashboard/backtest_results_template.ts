@@ -140,6 +140,7 @@ export function backtestResultsHtml(data?: SpilloverBacktestResult): string {
       <a href="/company">Company Search</a>
       <a href="/pipeline/results">Alpha Discovery</a>
       <a href="/backtest/results" class="active">Sector Spillover</a>
+      <a href="/links">Link Directory</a>
     </div>
   </nav>
 

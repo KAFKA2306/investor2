@@ -6,46 +6,50 @@ origin: local-git-analysis
 
 # Polymarket Data Validation Skill
 
-Polymarket の市場データ品質を確保し、異常値検出と整合性チェックを行うための専門知見。
+Expertise to ensure the quality of Polymarket market data and to perform anomaly detection and integrity checks.
 
 ## When to Use
-Use when working with polymarket data validation related tasks in this project.
+Use for polymarket data validation related tasks in this project.
 
 ## Core Concepts
 
-- **スキーマ検証**: Zod による Polymarket イベント、オッズ、マーケットメタデータの型安全性確保。
-- **異常検知**: オッズの統計的外れ値（Z-score > 3 σ）、流動性低下（bid-ask スプレッド拡大）、ブックのアンバランス検出。
-- **整合性チェック**: イベント日時と現在時刻の乖離、複数ブックの同時引用、確率合計の逸脱（100% 超過等）。
-- **データフレッシュネス**: キャッシュ更新タイムスタンプ、レート制限ウィンドウの監視。
+- **Schema Validation**: Ensuring type safety for Polymarket events, odds, and market metadata using Zod.
+- **Anomaly Detection**: Detect statistical outliers in odds (Z-score > 3σ), illiquidity (bid-ask spread widening), and book imbalance.
+- **Integrity Checks**: Discrepancies between event times and the current time, concurrent quotes across multiple books, and deviations in the sum of probabilities (exceeding 100%).
+- **Data Freshness**: Monitor cache update timestamps and rate-limit Windows.
 
 ## Code Examples
 
-1. **Inbound Validation**: API から受け取ったイベントデータが `PolymarketEventSchema` を満たすか即座にチェック。
-2. **Anomaly Detection**: オッズ変動率、スプレッド、ボリュームプロファイルの統計的外れ値を検出。
-3. **Cross-Book Coherence**: 複数マーケットメーカーのオッズが一貫性を保っているか（重大な乖離は alert）。
-4. **Risk Flags**: 流動性不足、イベント直前での急激な変動等の取引リスク要因を自動抽出。
+1. **Inbound Validation**: Immediately verify that event data received from the API satisfies the `PolymarketEventSchema`.
+
+2. **Anomaly Detection**: Detect statistical outliers in odds movement rates, spreads, and volume profiles.
+
+3.3. **Cross-Book Coherence**: Ensure odds from multiple market makers remain coherent; alert on significant divergence.
+
+4. **Risk Flags**: Automatically identify trading risk factors such as illiquidity and abrupt movements near the event.
 
 ## Best Practices
 
-- 検証エラーは即座に propagate（suppress しない）。異常は早期に検出すべき。
-- 複数の独立したチェック（スキーマ、統計、キャッシュ鮮度）を並行実行し、1 つでも失敗すれば REJECT。
-- 検証パイプラインの出力は `CanonicalLog` 形式で記録し、後追い監査を可能にすること。
+- Validation errors should be propagated immediately (do not suppress). Anomalies should be detected early.
+- Run multiple independent checks (schema, statistics, and cache freshness) in parallel; if any fail, REJECT.
+- Record the output of the validation pipeline in `CanonicalLog` format to enable post hoc audits.
 
-## リファレンス (Reference)
+## Reference
 
-### スキーマ定義
-**ファイル**: `src/schemas.ts`
-- `PolymarketEventSchema`: イベント、オッズ、メタデータの統一スキーマ
-- `PolymarketMarketSchema`: マーケット単位の整合性検証
+### Schema Definition
+**File**: `src/schemas.ts`
+- `PolymarketEventSchema`: Unified schema for events, odds, and metadata
+- `PolymarketMarketSchema`: Market-level integrity validation
 
-### 実行
+### Execution
 ```
-task polymarket:validate    # 全イベント・オッズの整合性確認
+task polymarket:validate    # Validate all events and odds for consistency
 ```
 
-### エラー回復戦略
-| 異常パターン | 対応 |
+### Error Recovery Strategies
+
+| Anomaly Pattern | Response |
 |---|---|
-| スキーマ不一致 | REJECT - 修正なしで propagate |
-| Z-score > 3σ | ALERT - アノマリー検出ログ出力、取引は慎重に進める |
-| キャッシュ古い | REFRESH - API 再クエリ、最新データで再検証 |
+| Schema mismatch | REJECT - propagate as-is |
+| Z-score > 3σ | ALERT - output anomaly detection log, proceed with caution in trading |
+| Stale cache | REFRESH - re-query API and re-validate with the latest data |

@@ -85,6 +85,10 @@ tasks:
     desc: Run ablation study (Financials vs Texts vs Combined)
     cmds:
       - PYTHONPATH=. uv run python src/commands/bench_ablation.py --samples {{.SAMPLES | default 20}}
+  bench:baseline:
+    desc: Run statistical baseline (Logistic Regression)
+    cmds:
+      - PYTHONPATH=. uv run python src/commands/bench_baseline.py
   bench:sakana:run:
     desc: Run official Sakana AI EDINET-Bench evaluation
     dir: docs/bench/edinet-bench

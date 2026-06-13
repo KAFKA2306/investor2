@@ -436,6 +436,7 @@ app.get("/", async (c) => {
           <a href="/company" class="btn btn-sm btn-ghost">Company Search</a>
           <a href="/pipeline/results" class="btn btn-sm btn-ghost">Alpha Discovery</a>
           <a href="/backtest/results" class="btn btn-sm btn-ghost">Sector Spillover</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
         </div>
       </div>
 
@@ -583,6 +584,7 @@ app.get("/screener", async (c) => {
           <a href="/company" class="btn btn-sm btn-ghost">Company Search</a>
           <a href="/pipeline/results" class="btn btn-sm btn-ghost">Alpha Discovery</a>
           <a href="/backtest/results" class="btn btn-sm btn-ghost">Sector Spillover</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
         </div>
       </div>
 
@@ -702,6 +704,7 @@ app.get("/company", async (c) => {
           <a href="/company" class="btn btn-sm btn-primary">Company Search</a>
           <a href="/pipeline/results" class="btn btn-sm btn-ghost">Alpha Discovery</a>
           <a href="/backtest/results" class="btn btn-sm btn-ghost">Sector Spillover</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
         </div>
       </div>
 
@@ -991,6 +994,7 @@ app.get("/edinet/:code", async (c) => {
           <a href="/company" class="btn btn-sm btn-primary">Company Search</a>
           <a href="/pipeline/results" class="btn btn-sm btn-ghost">Alpha Discovery</a>
           <a href="/backtest/results" class="btn btn-sm btn-ghost">Sector Spillover</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
         </div>
       </div>
 
@@ -1450,6 +1454,7 @@ function pipelineResultsHtml({
       <a href="/company" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Company Search</a>
       <a href="/pipeline/results" class="bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium transition-colors">Alpha Discovery</a>
       <a href="/backtest/results" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Sector Spillover</a>
+      <a href="/links" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Link Directory</a>
     </div>
   </nav>
 
@@ -2048,6 +2053,441 @@ app.get("/api/backtest/results", (c) => {
 	}
 
 	return c.json(latest);
+});
+
+interface ReferenceLink {
+	title: string;
+	url: string;
+	category: string;
+	description: string;
+	features: string[];
+	tags: string[];
+	badge?: string;
+}
+
+const referenceLinks: ReferenceLink[] = [
+	{
+		title: "The社史",
+		url: "https://the-shashi.com/",
+		category: "企業史・歴史",
+		description:
+			"日本企業の歴史、創業時からの沿革や社史を集約したデータベース。過去の経営判断の変遷や長期的な企業の歩みを深掘りするために最適です。",
+		features: [
+			"全国各地の様々な企業の社史・記念誌を横断検索可能",
+			"企業のルーツや過去のイノベーションの軌跡を追跡",
+			"長期的な産業史・企業経営の文脈を理解するための一次史料",
+		],
+		tags: ["社史", "沿革", "企業歴史"],
+		badge: "歴史データベース",
+	},
+	{
+		title: "ザイマニ | 財務分析マニュアル",
+		url: "https://zaimani.com/",
+		category: "日本企業 財務・IR",
+		description:
+			"日系企業の財務データを非常に視覚的で分かりやすく可視化・分析できるポータル。財務分析の初心者からプロまで直感的に学べる解説も豊富です。",
+		features: [
+			"企業の財務諸表を直感的で美しいグラフに自動変換",
+			"主要な財務指標（安全性、収益性、効率性）の自動計算とスコアリング",
+			"業界平均やライバル企業との比較機能",
+		],
+		tags: ["財務分析", "グラフ可視化", "財務マニュアル"],
+		badge: "直感ビジュアル",
+	},
+	{
+		title: "有報キャッチャー",
+		url: "https://ufocatch.com/",
+		category: "日本企業 財務・IR",
+		description:
+			"日本の有価証券報告書や適時開示情報を素早くキャッチし、全文検索や閲覧を可能にするサービス。最新の開示情報の収集に不可欠なツールです。",
+		features: [
+			"EDINETおよびTDnetの開示データをリアルタイムで追跡",
+			"PDFやXBRLデータの高速ダウンロードと全文検索機能",
+			"RSSや通知機能によるお気に入り企業の開示ウォッチ",
+		],
+		tags: ["有価証券報告書", "適時開示", "XBRL"],
+		badge: "開示速報",
+	},
+	{
+		title: "IR気象台",
+		url: "https://irweather.jp/",
+		category: "日本企業 財務・IR",
+		description:
+			"企業の決算発表やIR情報の質、ネガティブ/ポジティブの度合いを、天気に例えて分かりやすく可視化する独自性の高いIR分析ツールです。",
+		features: [
+			"開示情報のトーンや市場の反応を「天気」マークで直感表示",
+			"決算のサプライズ度やリスク要因の増減をすばやく把握",
+			"企業のIRへの熱量や透明性の変化を可視化",
+		],
+		tags: ["IRトーン分析", "決算サプライズ", "天気マーク"],
+		badge: "感情・トーン分析",
+	},
+	{
+		title: "KabuBerry",
+		url: "https://kabuberry.com/",
+		category: "日本企業 財務・IR",
+		description:
+			"個人投資家が集まり、企業のIR説明会や決算分析を行う国内最大級 of IRコミュニティ・イベントプラットフォーム。一次情報を生の声で学べます。",
+		features: [
+			"企業の経営陣を招いたIR説明会の定期開催とレポート公開",
+			"投資家目線でのリアルな質疑応答や企業へのフィードバック",
+			"多様なセクターの個人投資家による決算・業績分析ディスカッション",
+		],
+		tags: ["IR説明会", "投資家コミュニティ", "一次情報"],
+		badge: "投資家対話",
+	},
+	{
+		title: "IR Searcher",
+		url: "https://ir-searcher.com/",
+		category: "日本企業 財務・IR",
+		description:
+			"大量の決算説明会資料や適時開示書類から、特定のキーワードやセグメント情報を横断的に一瞬で検索できる高機能IRデータベースです。",
+		features: [
+			"決算説明会スクリプトや補足資料のテキスト全文を検索対象に指定可能",
+			"新事業分野や注目技術キーワードの企業露出度を定量的・定性的に比較",
+			"複数のPDF書類をまとめてブラウザ上で素早く確認可能",
+		],
+		tags: ["IR検索", "説明会資料", "全文検索"],
+		badge: "キーワード横断",
+	},
+	{
+		title: "SEC EDGAR Advanced Search",
+		url: "https://www.sec.gov/edgar/search/",
+		category: "米国企業・一次情報",
+		description:
+			"米国証券取引委員会（SEC）の公式提出資料検索システム。米国の全上場企業の10-K、10-Q、インサイダー取引報告など、すべての一次情報源へ直接アクセスできます。",
+		features: [
+			"高度なクエリ構文を使用した提出書類内の全文テキスト検索",
+			"提出日、企業、フォームタイプ（例：10-K, 8-K）による強力なフィルタリング",
+			"企業間の財務報告書の比較とデータのCSV/XBRL形式での取得",
+		],
+		tags: ["SEC", "10-K/10-Q", "Edgar", "米国株"],
+		badge: "米国公式一次情報",
+	},
+	{
+		title: "OpenInsider",
+		url: "http://openinsider.com/",
+		category: "米国企業・一次情報",
+		description:
+			"米国企業の役員や大株主（インサイダー）による株式の売買取引（Form 4）情報をリアルタイムに収集・集計し、検索・フィルタリングできる極めて強力なサイトです。",
+		features: [
+			"CEOやCFOによる自社株買い（Insider Purchase）のリアルタイム追跡",
+			"売買の規模、企業規模、取引の種類による高度なスクリーニング",
+			"インサイダー取引のクラスタリング（複数役員が同時購入している企業）の検出",
+		],
+		tags: ["インサイダー取引", "自社株買い", "Form 4", "スマートマネー"],
+		badge: "スマートマネー追跡",
+	},
+	{
+		title: "BeatAndRaise",
+		url: "https://www.beatandraise.com/",
+		category: "米国企業・一次情報",
+		description:
+			"米国上場企業の決算発表結果（EPSや売上高が市場予想を上回ったか：Beat、または下回ったか：Miss）と業績見通し（Guidance：Raise）を素早く整理して表示する決算特化サイトです。",
+		features: [
+			"決算サプライズ（EPS/売上高対コンセンサス予想）の瞬時判定表示",
+			"将来のガイダンス情報の上方修正・下方修正の分かりやすいビジュアル表示",
+			"決算期カレンダーと重要指標のリアルタイム更新",
+		],
+		tags: ["決算サプライズ", "EPS/売上高", "業績見通し", "米国株決算"],
+		badge: "決算サプライズ",
+	},
+];
+
+app.get("/links", async (c) => {
+	return c.html(`
+<!DOCTYPE html>
+<html lang="ja" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🔗 企業分析・情報収集リンク集</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+  <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 50% 0%, #0d111d 0%, #07090e 100%);
+    }
+    .glass-card {
+      background: rgba(13, 20, 35, 0.6);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .glass-card:hover {
+      background: rgba(20, 30, 55, 0.8);
+      border-color: rgba(99, 102, 241, 0.4);
+      transform: translateY(-4px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(99, 102, 241, 0.15);
+    }
+  </style>
+</head>
+<body class="text-gray-100 min-h-screen">
+  <!-- Navbar -->
+  <div class="navbar bg-slate-950/80 backdrop-blur border-b border-white/5 sticky top-0 z-50 px-6">
+    <div class="flex-1">
+      <a href="/" class="btn btn-ghost text-xl tracking-tight text-white hover:bg-white/5 font-semibold">
+        <span class="text-indigo-400 font-bold mr-1">📈</span> AAARTS
+      </a>
+    </div>
+    <div class="flex-none gap-2">
+      <a href="/" class="btn btn-sm btn-ghost hover:bg-white/5">System Home</a>
+      <a href="/screener" class="btn btn-sm btn-ghost hover:bg-white/5">Screener</a>
+      <a href="/company" class="btn btn-sm btn-ghost hover:bg-white/5">Company Search</a>
+      <a href="/pipeline/results" class="btn btn-sm btn-ghost hover:bg-white/5">Alpha Discovery</a>
+      <a href="/backtest/results" class="btn btn-sm btn-ghost hover:bg-white/5">Sector Spillover</a>
+      <a href="/links" class="btn btn-sm btn-primary">Link Directory</a>
+    </div>
+  </div>
+
+  <!-- Hero Section -->
+  <div class="relative overflow-hidden py-16 px-6 border-b border-white/5 bg-slate-950/40">
+    <div class="absolute inset-0 bg-cover bg-center opacity-20 filter blur-sm" style="background-image: url('/assets/directory_banner.png');"></div>
+    <div class="absolute inset-0 bg-gradient-to-t from-[#07090e] via-transparent to-transparent"></div>
+    <div class="max-w-6xl mx-auto relative z-10 grid md:grid-cols-5 gap-8 items-center">
+      <div class="md:col-span-3 space-y-4">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
+          <span class="w-2 h-2 rounded-full bg-indigo-400 animate-pulse"></span> External Resources
+        </div>
+        <h1 class="text-4xl md:text-5xl font-extrabold tracking-tight text-white bg-clip-text bg-gradient-to-r from-white via-gray-200 to-gray-400">
+          企業分析・情報収集リンク集
+        </h1>
+        <p class="text-gray-400 max-w-xl leading-relaxed">
+          AI活用や高度な検索機能を備え、投資判断や市場調査、財務分析に多大な価値をもたらす厳選された高品質な外部データベースへのディレクトリです。
+        </p>
+      </div>
+      <div class="md:col-span-2 hidden md:block">
+        <div class="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl shadow-indigo-950/20 group">
+          <img src="/assets/directory_banner.png" alt="Intelligence Dashboard" class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"></div>
+          <div class="absolute bottom-4 left-4 right-4 text-xs text-indigo-200 backdrop-blur bg-slate-900/60 p-2.5 rounded-lg border border-white/5">
+            <span class="font-semibold text-white">AI-Generated Intelligence Banner</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto p-6 md:p-12 space-y-12">
+    <!-- Filters & Search -->
+    <div class="flex flex-col md:flex-row gap-4 items-center justify-between bg-slate-900/40 p-4 rounded-xl border border-white/5 backdrop-blur">
+      <div class="flex flex-wrap gap-2 w-full md:w-auto">
+        <button onclick="filterCategory('all')" id="btn-all" class="btn btn-sm btn-primary border-none text-white">すべて</button>
+        <button onclick="filterCategory('企業史・歴史')" id="btn-history" class="btn btn-sm btn-ghost hover:bg-white/5 text-gray-400">企業史・歴史</button>
+        <button onclick="filterCategory('日本企業 財務・IR')" id="btn-japan-ir" class="btn btn-sm btn-ghost hover:bg-white/5 text-gray-400">日本企業 財務・IR</button>
+        <button onclick="filterCategory('米国企業・一次情報')" id="btn-us-ir" class="btn btn-sm btn-ghost hover:bg-white/5 text-gray-400">米国企業・一次情報</button>
+      </div>
+      <div class="relative w-full md:w-80">
+        <input type="text" id="search-input" onkeyup="filterSearch()" placeholder="キーワードで検索..." class="input input-sm input-bordered w-full bg-slate-950/60 border-white/10 text-white placeholder-gray-500 focus:border-indigo-500 focus:outline-none">
+        <span class="absolute right-3 top-2.5 text-gray-500 text-xs">🔍</span>
+      </div>
+    </div>
+
+    <!-- Links Grid -->
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="links-grid">
+      <!-- Dynamically filled link cards -->
+    </div>
+  </div>
+
+  <!-- Detail Modal -->
+  <dialog id="link_detail_modal" class="modal">
+    <div class="modal-box bg-slate-900 border border-white/10 text-gray-100 max-w-xl">
+      <form method="dialog">
+        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+      </form>
+      <div id="modal-content" class="space-y-6">
+        <!-- Filled dynamically -->
+      </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+      <button>close</button>
+    </form>
+  </dialog>
+
+  <script>
+    const links = ${JSON.stringify(referenceLinks)};
+
+    function getCategoryColor(category) {
+      switch(category) {
+        case '企業史・歴史': return 'from-amber-500/20 to-amber-600/5 text-amber-300 border-amber-500/20';
+        case '日本企業 財務・IR': return 'from-emerald-500/20 to-emerald-600/5 text-emerald-300 border-emerald-500/20';
+        case '米国企業・一次情報': return 'from-indigo-500/20 to-indigo-600/5 text-indigo-300 border-indigo-500/20';
+        default: return 'from-gray-500/20 to-gray-600/5 text-gray-300 border-gray-500/20';
+      }
+    }
+
+    function renderCards(filteredLinks) {
+      const grid = document.getElementById('links-grid');
+      grid.innerHTML = '';
+      
+      if(filteredLinks.length === 0) {
+        grid.innerHTML = \`
+          <div class="col-span-full py-16 text-center text-gray-500">
+            <div class="text-4xl mb-4">📭</div>
+            <p>条件に一致するリンクが見つかりませんでした。</p>
+          </div>
+        \`;
+        return;
+      }
+
+      filteredLinks.forEach((link, idx) => {
+        const catColor = getCategoryColor(link.category);
+        const card = document.createElement('div');
+        card.className = 'card glass-card rounded-2xl overflow-hidden cursor-pointer';
+        card.setAttribute('onclick', 'showDetail(' + idx + ')');
+        card.dataset.category = link.category;
+        
+        card.innerHTML = \\\`
+          <div class="card-body p-6 space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-br border \\\${catColor}">
+                \\\${link.badge || link.category}
+              </span>
+              <span class="text-xs text-gray-500">#\\\${idx + 1}</span>
+            </div>
+            
+            <div class="space-y-1">
+              <h3 class="card-title text-lg font-bold text-white tracking-tight group-hover:text-indigo-400">
+                \\\${link.title}
+              </h3>
+              <p class="text-xs text-indigo-400/80 font-mono truncate">\\\${link.url}</p>
+            </div>
+            
+            <p class="text-sm text-gray-400 line-clamp-3 leading-relaxed">
+              \\\${link.description}
+            </p>
+            
+            <div class="flex flex-wrap gap-1.5 pt-2">
+              \\\${link.tags.map(tag => \\\`<span class="badge badge-sm bg-white/5 border-none text-gray-400 font-medium">#\\\${tag}</span>\\\`).join('')}
+            </div>
+            
+            <div class="card-actions justify-between items-center pt-4 border-t border-white/5">
+              <span class="text-xs text-indigo-400 font-semibold group-hover:text-indigo-300">詳細を表示 →</span>
+              <a href="\\\${link.url}" target="_blank" onclick="event.stopPropagation();" class="btn btn-xs btn-circle btn-ghost text-gray-400 hover:text-white hover:bg-white/10">
+                ↗️
+              </a>
+            </div>
+          </div>
+        \\\`;
+        grid.appendChild(card);
+      });
+    }
+
+    let currentCategory = 'all';
+    
+    function filterCategory(category) {
+      currentCategory = category;
+      
+      const buttons = {
+        'all': document.getElementById('btn-all'),
+        '企業史・歴史': document.getElementById('btn-history'),
+        '日本企業 財務・IR': document.getElementById('btn-japan-ir'),
+        '米国企業・一次情報': document.getElementById('btn-us-ir')
+      };
+
+      Object.keys(buttons).forEach(key => {
+        if(buttons[key]) {
+          if(key === category) {
+            buttons[key].className = 'btn btn-sm btn-primary border-none text-white';
+          } else {
+            buttons[key].className = 'btn btn-sm btn-ghost hover:bg-white/5 text-gray-400';
+          }
+        }
+      });
+
+      filterSearch();
+    }
+
+    function filterSearch() {
+      const query = document.getElementById('search-input').value.toLowerCase();
+      
+      const filtered = links.filter(link => {
+        const matchesCategory = currentCategory === 'all' || link.category === currentCategory;
+        const matchesQuery = link.title.toLowerCase().includes(query) || 
+                             link.description.toLowerCase().includes(query) ||
+                             link.url.toLowerCase().includes(query) ||
+                             link.tags.some(tag => tag.toLowerCase().includes(query));
+        return matchesCategory && matchesQuery;
+      });
+      
+      renderCards(filtered);
+    }
+
+    function showDetail(index) {
+      const link = links[index];
+      const catColor = getCategoryColor(link.category);
+      const modal = document.getElementById('link_detail_modal');
+      const content = document.getElementById('modal-content');
+      
+      content.innerHTML = \\\`
+        <div class="space-y-4">
+          <div class="flex items-center gap-2">
+            <span class="px-2.5 py-0.5 rounded-full text-xs font-medium bg-gradient-to-br border \\\${catColor}">
+              \\\${link.category}
+            </span>
+            <span class="text-xs text-gray-500 font-mono">ID: \\\${index + 1}</span>
+          </div>
+          
+          <h2 class="text-2xl font-extrabold text-white tracking-tight">\\\${link.title}</h2>
+          <a href="\\\${link.url}" target="_blank" class="link link-indigo text-indigo-400 font-mono text-sm inline-flex items-center gap-1 hover:text-indigo-300">
+            \\\${link.url} ↗️
+          </a>
+        </div>
+        
+        <div class="space-y-2">
+          <h3 class="text-xs uppercase tracking-wider text-gray-500 font-bold">サービス概要</h3>
+          <p class="text-gray-300 text-sm leading-relaxed bg-slate-950/40 p-4 rounded-xl border border-white/5">
+            \\\${link.description}
+          </p>
+        </div>
+        
+        <div class="space-y-3">
+          <h3 class="text-xs uppercase tracking-wider text-gray-500 font-bold">主要機能・ユースケース</h3>
+          <ul class="space-y-2 text-sm text-gray-300">
+            \\\${link.features.map(feat => \\\`
+              <li class="flex gap-2">
+                <span class="text-indigo-400">⚡</span>
+                <span>\\\${feat}</span>
+              </li>
+            \\\`).join('')}
+          </ul>
+        </div>
+        
+        <div class="flex flex-wrap gap-1.5 pt-2 border-t border-white/5">
+          \\\${link.tags.map(tag => \\\`<span class="badge bg-white/5 border-none text-gray-400">#\\\${tag}</span>\\\`).join('')}
+        </div>
+        
+        <div class="flex justify-end pt-4 gap-2">
+          <button class="btn btn-sm btn-ghost hover:bg-white/5 text-gray-400" onclick="document.getElementById('link_detail_modal').close()">閉じる</button>
+          <a href="\\\${link.url}" target="_blank" class="btn btn-sm btn-primary border-none text-white px-4">
+            サイトを開く ↗️
+          </a>
+        </div>
+      \\\`;
+      
+      modal.showModal();
+    }
+
+    // Initial render
+    renderCards(links);
+  </script>
+</body>
+</html>
+`);
+});
+
+app.get("/assets/directory_banner.png", async (c) => {
+	const imagePath = resolve("src/dashboard/directory_banner.png");
+	if (existsSync(imagePath)) {
+		const fileBytes = readFileSync(imagePath);
+		return c.body(fileBytes, 200, {
+			"Content-Type": "image/png",
+		});
+	}
+	return c.text("Image not found", 404);
 });
 
 export default {

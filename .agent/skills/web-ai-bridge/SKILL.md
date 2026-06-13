@@ -1,4 +1,3 @@
----
 name: web-ai-bridge
 description: Mandatory bridge protocol for treating Web LLM GUIs (Gemini, ChatGPT, Copilot) as autonomous agentic inference engines. Trigger for any task involving browser-based AI automation, DOM-based prompt injection, real-time response scraping, or WebSocket bridge maintenance.
 origin: local-git-analysis
@@ -6,10 +5,10 @@ origin: local-git-analysis
 
 # Web AI Bridge Protocol
 
-This skill defines the technical specifications for bypassing API limitations by using high-performance DOM manipulation to treat web-based AI interfaces as headless inference engines.
+This specification defines the technical requirements for bypassing API limitations through high-performance DOM manipulation to treat web-based AI interfaces as headless inference engines.
 
 ## When to Use
-Use when working with web ai bridge related tasks.
+Use when working on Web AI bridge-related tasks.
 
 ## Core Concepts
 
@@ -17,7 +16,7 @@ Use when working with web ai bridge related tasks.
 - **Background Persistence (MV3)**: To bypass the 30-second Service Worker expiration in Chrome Manifest V3:
     - `chrome.alarms` trigger every 30s.
     - `port.postMessage` heartbeat every 25s.
-- **Context Isolation**: All UI overlays Must use Shadow DOM with `mode: "closed"` to prevent target site CSS leakage and DOM interference.
+- **Context Isolation**: All UI overlays must use Shadow DOM with `mode: "closed"` to prevent target site CSS leakage and DOM interference.
 
 ## Code Examples
 
@@ -31,7 +30,7 @@ To ensure reliable text delivery into `contenteditable` rich-text areas, the fol
 ## 3. Extraction Protocol (Real-time Scraping)
 
 - **Polling Frequency**: 100ms interval monitoring of the assistant-role DOM (e.g., `.model-response` for Gemini).
-- **Dynamic Selection**: Selctors MUST be re-queried on every tick to handle React/Angular DOM reconciliation that breaks existing node references.
+- **Dynamic Selection**: Selectors MUST be re-queried on every tick to handle React/Angular DOM reconciliation that breaks existing node references.
 - **Completion Detection**:
     - **Pattern A (Active)**: Monitor for the disappearance of the "Stop streaming" button + 500ms of text stability.
     - **Pattern B (Passive)**: 1500ms of text stability after a mandatory 2s initial generation window.
@@ -41,7 +40,7 @@ To ensure reliable text delivery into `contenteditable` rich-text areas, the fol
 
 | Site | Input Area Selector | Send Button Selector | Response Container |
 | :--- | :--- | :--- | :--- |
-| **Gemini** | `input-area-v2 [contenteditable]` | `button[aria-label*="送信"]` | `model-response` |
+| **Gemini** | `input-area-v2 [contenteditable]` | `button[aria-label*="Send"]` | `model-response` |
 | **ChatGPT** | `#prompt-textarea` | `button[data-testid="send-button"]` | `[data-message-author-role="assistant"]` |
 | **Copilot** | `textarea[placeholder*="Copilot"]` | `button[aria-label="Submit"]` | `[data-testid="chat-message"]` |
 

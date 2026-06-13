@@ -1,16 +1,16 @@
-# Autonomous Quant Alpha Generation Pipeline (Ideal Roadmap)
+# 自律的クオンツ・アルファ生成パイプライン（理想的ロードマップ）
 
-**Objective**: Clarify the ideal architecture for an autonomous and high-performance alpha generation system.
-**Context**: To organize future features and ensure the project maintains a clear development path toward full autonomy.
+**目的**: 本ドキュメントの目的は、自律的かつ高性能なアルファ生成システムの理想アーキテクチャを明確化することである。  
+**背景**: 将来の機能を整理し、プロジェクトが完全自律へ向かう明確な開発ロードマップを維持する。
 
-## Executive Summary
-This document maps the "Ideal Pipeline" where Gemini autonomously discovers, validates, and deploys alpha signals. It integrates historical memory, robust market data handling, and specialized foundational models to achieve consistent, cost-aware investment performance. This blueprint serves as the north star for the system's evolution.
+## 要約
+本ドキュメントは、Gemini が自律的にアルファ・シグナルを発見・検証・適用する理想的パイプラインを概説する。過去の記憶、堅牢な市場データ処理、専門的な基盤モデルを統合し、コスト意識の高い投資パフォーマンスを一貫して実現する。本設計図は、システムの進化に対する指針として機能する。
 
 ---
 
-## Autonomous Quant Alpha Generation Pipeline (Ideal Flow)
+## 自律的クオンツ・アルファ生成パイプライン（理想フロー）
 
-This diagram outlines the target architecture for standard operations.
+本ダイアグラムは、標準運用を前提としたターゲットアーキテクチャを概説する。
 
 ```mermaid
 flowchart TD
@@ -75,22 +75,22 @@ flowchart TD
     ResearchPhase --> ExecutionPhase
 ```
 
-## Structural Enhancements 💡
-1. **Memory-Driven Search**: Uses historical success and failure as the primary seed for discovery cycles.
-2. **Early Archiving**: Captures intermediate candidates to build a long-term knowledge base.
-3. **Co-design Architecture**: Designs trading logic, alpha factors, and portfolio allocation co-dependently to maximize synergy.
-4. **Iterative Learning**: Every rejection and execution update feeds into the Meta Layer to improve future cycles.
+## 構造的強化
+1. 記憶主導の探索である。過去の成功と失敗を探索サイクルの主要なシードとして活用する。  
+2. 早期アーカイブである。中間候補を記録し、長期的な知識ベースを構築する。  
+3. 共設計アーキテクチャである。取引ロジック、アルファ因子、ポートフォリオ配分を相互依存的に設計し、相乗効果を最大化する。  
+4. 反復的学習である。すべての却下および実行の更新をメタレイヤへフィードバックし、将来のサイクルを改善する。
 
-## Roadmap Requirements (Outstanding Goals)
-1. **Data Quality Gates**: Define explicit thresholds for data missingness, latency, and leak detection to prevent low-fidelity training.
-2. **Rigorous Verification Rules**: Formalize acceptance criteria for Sharpe, IC, MDD, and net-of-costs performance.
-3. **Allocation Constraints**: Implement strict rules for sector concentration, liquidity limits, and turnover budgets.
-4. **Adaptive Re-learning**: Establish triggers for automatic re-training or model switching based on drift analysis.
+## ロードマップ要件（未解決目標）
+1. データ品質ゲートである。欠損データ、レイテンシ、リーク検出の明示的な閾値を定義し、低忠実度の学習を防止する。  
+2. 厳密な検証ルールである。シャープ比、情報比（IC）、最大ドローダウン、およびコスト控除後のパフォーマンスの受理基準を形式化する。  
+3. 配分制約である。セクター集中度、流動性制約、および売買回転予算に関する厳格な規則を実装する。  
+4. 適応的リーニングである。漸化分析に基づく自動再学習またはモデル切替のトリガを確立する。
 
 ---
 
-## 🎀 Core Discovery Loop (Minimal Flow)
-> Refer to `docs/specs/alpha_discovery_runbook.md` for detailed specifications.
+## コア発見ループ（最小フロー）
+> 詳細仕様については、`docs/specs/alpha_discovery_runbook.md`を参照する。
 
 ```mermaid
 flowchart TD

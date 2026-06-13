@@ -1,4 +1,3 @@
----
 name: schema-management
 description: >
   MANDATORY TRIGGER: Invoke BEFORE adding, modifying, or creating any Zod schema,
@@ -23,15 +22,15 @@ All data validation, type definitions, and model contracts are consolidated in a
 ## Core Concepts
 - See rules and guidelines in this skill.
 
-## 📍 Single Source of Truth
+## Single Source of Truth
 
-**Location**: `src/schemas.ts`
+Location: `src/schemas.ts`
 
 All schemas, type definitions, enums, interfaces, validation functions, and constants must be centralized here.
 
 ### Rule 1: NO DISTRIBUTED SCHEMA FILES
 
-❌ **FORBIDDEN**:
+Forbidden:
 ```
 src/schemas/user_schema.ts
 src/models/payment_schema.ts
@@ -39,7 +38,7 @@ src/api/contract_schemas.ts
 src/domain/financial_schemas.ts
 ```
 
-✅ **CORRECT**:
+Correct:
 ```
 src/schemas.ts (single file with all schemas)
 ```
@@ -68,12 +67,17 @@ export const BaseEventSchema = z.object({ ... });
 All schema identifiers follow the pattern: `<EntityName>Schema` (not `<EntityName>Validation` or `<EntityName>Type`).
 
 ```typescript
-✅ export const UserSchema = z.object({ ... });
-❌ export const UserValidation = z.object({ ... });
-❌ export const User = z.object({ ... });
+export const UserSchema = z.object({ ... });
+```
 
-✅ export type User = z.infer<typeof UserSchema>;
-❌ export interface User { ... }  // (unless it has no validation)
+Note: The following patterns are discouraged:
+```
+export const UserValidation = z.object({ ... });
+export const User = z.object({ ... });
+```
+
+```typescript
+export type User = z.infer<typeof UserSchema>;
 ```
 
 ### Rule 4: TYPE INFERENCE FROM SCHEMA
@@ -86,8 +90,7 @@ export const PaymentSchema = z.object({
   currency: z.string(),
 });
 
-✅ export type Payment = z.infer<typeof PaymentSchema>;
-❌ export interface Payment { amount: number; currency: string; }
+export type Payment = z.infer<typeof PaymentSchema>;
 ```
 
 ### Rule 5: VALIDATION FUNCTIONS
@@ -108,7 +111,7 @@ export enum AlphaStatus { ACTIVE, INACTIVE, DECAYED }
 export const EdinetDocumentTypeLabel: Record<...> = { ... };
 ```
 
-## 📋 Import Pattern
+## Import Pattern
 
 From anywhere in the codebase:
 
@@ -122,13 +125,13 @@ import {
 } from "../schemas.ts";
 ```
 
-**NOT**:
-```typescript
-❌ import { InvestmentIdeaSchema } from "../schemas/allocation_schema.ts";
-❌ import { AlphaStatus } from "../domain/enums.ts";
+Not:
+```text
+import { InvestmentIdeaSchema } from "../schemas/allocation_schema.ts";
+import { AlphaStatus } from "../domain/enums.ts";
 ```
 
-## 🛡️ Enforcement
+## Enforcement
 
 ### Pre-commit Check
 ```bash
@@ -141,13 +144,13 @@ If any TypeScript file imports from a path matching `src/schemas/.*\.ts` (except
 
 ## Best Practices
 
-1. **Keep Related Schemas Together**: Group by domain/feature, not by type
-2. **Document with Zod Descriptions**: Use `.describe()` for clarity
-3. **Export All Types**: Every schema must have its inferred type exported
-4. **Validate at Boundaries**: Use schemas only at I/O boundaries; domain logic receives already-validated types
-5. **No Circular Imports**: If schemas reference each other, they must be in the same file
+- Keep Related Schemas Together: Group by domain/feature, not by type
+- Document with Zod Descriptions: Use `.describe()` for clarity
+- Export All Types: Every schema must have its inferred type exported
+- Validate at Boundaries: Use schemas only at I/O boundaries; domain logic receives already-validated types
+- No Circular Imports: If schemas reference each other, they must be in the same file
 
-## 🚫 Violations & Consequences
+## Violations & Consequences
 
 | Violation | Consequence |
 |-----------|------------|
@@ -157,9 +160,7 @@ If any TypeScript file imports from a path matching `src/schemas/.*\.ts` (except
 | Import schema from wrong path | Module resolution error; CI/CD failure |
 
 origin: local-git-analysis
----
 
 **Reference**: `CLAUDE.md` project structure section defines consolidated schema architecture.
 ## Code Examples
 Refer to usage instructions for implementation patterns.
-

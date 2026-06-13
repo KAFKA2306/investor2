@@ -1,4 +1,3 @@
----
 name: cache
 description: |
   **When to use:** All data fetching operations, caching decisions, avoiding redundant API calls.
@@ -6,19 +5,19 @@ description: |
   Trigger phrases: cached data, cache data, reuse data, avoid API call, HTTP cache, data cache, fetch from cache
 ---
 
-# キャッシュデータを使いこなそう！🎀
+# Mastering Cached Data
 
-## 💡 Core Principle: Cache-First is MANDATORY
+## Core Principle: Cache-First is MANDATORY
 
-キャッシュはただのパフォーマンス最適化ではない。**存在するデータを再利用する**のは当たり前のエチケットなのだ！✨
+Caching is not merely a performance optimization. Reusing existing data is standard practice.
 
-API を叩く前に、まずキャッシュを確認。既に取得済みのデータがあるなら、それを使い回すのだ。無駄な API 呼び出しは避けるべし。
+Before calling the API, first check the cache. If data has already been retrieved, reuse it. Avoid unnecessary API calls.
 
 ---
 
-## 📍 Where Caches Live (SSOT: config/default.yaml)
+## Where Caches Live (SSOT: config/default.yaml)
 
-全キャッシュ設定は `config/default.yaml` の `paths` セクションに集約されている。使う時は **PathRegistry** から取得するのだ。
+All cache settings are centralized in the paths section of config/default.yaml. When using, retrieve from PathRegistry.
 
 ### Logical Cache Organization
 
@@ -42,7 +41,7 @@ cacheMarketsJquants:        /mnt/d/.../cache/markets/jquants.sqlite
 
 ---
 
-## 🔍 How to Read from Cache (Pattern)
+## How to Read from Cache (Pattern)
 
 ### Example: J-Quants Market Data
 
@@ -64,7 +63,7 @@ if (masterCacheRows.length === 0) {
 const masterData = JSON.parse(masterCacheRows[0].value);
 ```
 
-**Key Pattern**:
+Key Pattern:
 1. ✅ Open database using config path
 2. ✅ Query by `http_cache` table
 3. ✅ Parse JSON response
@@ -72,9 +71,9 @@ const masterData = JSON.parse(masterCacheRows[0].value);
 
 ---
 
-## ⚠️ Mistakes to Avoid
+## Mistakes to Avoid
 
-### ❌ Mistake 1: Hardcoded Cache Paths
+### Mistake 1: Hardcoded Cache Paths
 
 ```typescript
 // WRONG
@@ -87,7 +86,7 @@ import { config } from "../commands/_config.ts";
 const db = new Database(config.paths.cacheMarketsJquants);
 ```
 
-### ❌ Mistake 2: Defensive Fallbacks
+### Mistake 2: Defensive Fallbacks
 
 ```typescript
 // WRONG - hides real issues
@@ -108,7 +107,7 @@ if (masterCacheRows.length === 0) {
 }
 ```
 
-### ❌ Mistake 3: Reloading Configuration
+### Mistake 3: Reloading Configuration
 
 ```typescript
 // WRONG - duplicates config parsing
@@ -126,21 +125,21 @@ import { config } from "../commands/_config.ts";
 
 ---
 
-## 🚀 Cache Management (Operations)
+## Cache Management (Operations)
 
 ### Data Sync
 
-キャッシュを最新に保つ：
+Keep the cache up to date:
 
 ```bash
 task data:sync
 ```
 
-すべての外部データソース（J-Quants, EDINET, Yahoo Finance）から最新データを取得し、キャッシュに保存するのだ。
+Retrieve the latest data from all external data sources (J-Quants, EDINET, Yahoo Finance) and store it in the cache.
 
 ### Check Cache Health
 
-キャッシュの状態を確認：
+Check the status of the cache:
 
 ```bash
 task cache:inspect
@@ -148,9 +147,9 @@ task cache:inspect
 
 ---
 
-## 📊 Common Cache Queries
+## Common Cache Queries
 
-### J-Quants Master Data (株コード → セクターコード)
+### J-Quants Master Data (Stock Code → Sector Code)
 
 ```typescript
 const masterCacheRows = jquantsDb
@@ -163,7 +162,7 @@ for (const stock of masterData.data || []) {
 }
 ```
 
-### J-Quants Daily Bars (日次OHLCV)
+### J-Quants Daily Bars (Daily OHLCV)
 
 ```typescript
 const barCacheRows = jquantsDb
@@ -182,7 +181,7 @@ for (const row of barCacheRows) {
 
 ---
 
-## 💡 Decision Tree: Cache vs. API
+## Decision Tree: Cache vs. API
 
 ```
 Does this data already exist in cache?
@@ -200,7 +199,7 @@ Should this data EVER be regenerated?
 
 ---
 
-## 🎯 Checklist: Before Fetching
+## Checklist: Before Fetching
 
 - [ ] Is there a config path for this cache? (Check `config/default.yaml`)
 - [ ] Does the cache file exist? (If not, run `task data:sync`)
@@ -211,10 +210,9 @@ Should this data EVER be regenerated?
 
 ---
 
-## 📚 Related Files
+## Related Files
 
 - `src/io/sector_data_fetcher.ts` — J-Quants cache query example
 - `src/commands/_config.ts` — Config loader (import this, don't reload YAML)
 - `config/default.yaml` — Cache path SSOT
 - `docs/DATA_STRUCTURE.md` — Unified data architecture
-

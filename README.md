@@ -1,37 +1,36 @@
-# 🎀 AAARTS: Autonomous Agentic Alpha Trade System 🚀✨
+# AAARTS: Autonomous Agentic Alpha Trade System
 
-## 🌸 はじめにっ！ (Introduction)
+## Introduction
 
-AAARTS は、研究から執行までを一つの「知能」として統合した、世界一お利口さんなクオンツスタックだよっ！✨
-今は **NeurIPS 2026** に向けて、EDINET（有価証券報告書）を使った「業績予想（Earnings Forecast）」の最先端研究に全力投球中なんだもんっ！論文の準備もバッチリだよっ 📝💎
+AAARTS is a quantitative trading and research system designed as an integrated intelligence cycle, handling everything from alpha hypothesis generation to backtesting and validation. The system is currently focused on corporate earnings forecasting research using Japanese securities reports (EDINET) for submission to NeurIPS 2026.
 
-## 📊 研究のステータス (Research Status)
+## Research Status
 
-- **EDINET-Bench 攻略中！**: 不正検知（Precision 100%!）、業績予想（全件バックテスト中）をガチ評価してるよっ 📈
-- **Ablation Study**: 「財務数値」と「定性テキスト」のどっちが未来を当てるのに大事か、徹底的に切り分けてるんだからっ 🧪✨
+*   **EDINET-Bench Evaluation**: Actively evaluating performance on financial fraud detection and directional earnings forecasting tasks.
+*   **Ablation Study**: Systematically isolating the predictive power of quantitative financial ratios versus qualitative textual disclosures in regulatory filings.
 
-## 🗺️ だいじなポインタ (Key Pointers)
+## Key Pointers
 
-- **NeurIPS 論文アウトライン**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
-- **設計図（フロー）**: [docs/diagrams/simpleflowchart.md](docs/diagrams/simpleflowchart.md)
-- **運用ルール**: [AGENTS.md](AGENTS.md)
-- **決定の履歴**: [docs/adr/](docs/adr/)
+*   **NeurIPS Paper Outline**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
+*   **System Flowchart**: [docs/diagrams/simpleflowchart.md](docs/diagrams/simpleflowchart.md)
+*   **Operational Rules**: [AGENTS.md](AGENTS.md)
+*   **Architectural Decision Records (ADRs)**: [docs/adr/](docs/adr/)
 
-## ⚙️ セットアップ (Setup)
+## Setup and Execution
 
+### Setup
 ```bash
 task setup
 cp .env.example .env
 uv sync
 ```
 
-## 📊 実行 (Execution)
-
+### Run
 ```bash
-task run:newalphasearch  # アルファ探索開始っ！
-task view                # ダッシュボードを見るっ！
+task run:newalphasearch  # Start autonomous alpha search loop
+task view                # Start the dashboard and API
 ```
 
 ---
 
-*ハーネスエンジニアリングに基づき、このREADMEは最小限に保たれています。詳細は[ADR-001](file:///home/kafka/finance/investor/docs/adr/001-harness-engineering-adoption.md)を見てねっ！✨*
+*This repository conforms to harness engineering standards as specified in ADR-001.*

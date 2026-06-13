@@ -2,7 +2,7 @@ import pandas as pd
 from src.io.edinet_bench import load_fraud_detection, load_earnings_forecast, load_industry_prediction
 
 def print_section(title):
-    print(f"\n✨ {title} ✨")
+    print(f"\n{title}")
     print("=" * 40)
 
 def analyze_dataset(name, df, label_col):
@@ -26,7 +26,7 @@ def analyze_dataset(name, df, label_col):
             print(f"\nAverage Summary Length: {avg_len:.2f} characters")
 
 def main():
-    print("🎀 EDINET-Bench Statistics Master 🎀")
+    print("EDINET-Bench Statistics Master")
     
     # 1. Fraud Detection
     try:
@@ -54,7 +54,7 @@ def main():
     except Exception as e:
         print(f"Error loading Industry Prediction: {e}")
 
-    print("\n💖 Statistics calculation complete! 🌈✨")
+    print("\nStatistics calculation complete.")
 
 if __name__ == "__main__":
     main()

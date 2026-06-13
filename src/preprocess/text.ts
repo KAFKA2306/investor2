@@ -158,9 +158,9 @@ async function extractEdinetXbrlText() {
 	writeFileSync(OUTPUT_PATH, JSON.stringify(textMap, null, 2));
 
 	console.log(
-		`✨ [XBRL TEXT] Extraction complete: ${extracted}/${processed} documents with text`,
+		`[XBRL TEXT] Extraction complete: ${extracted}/${processed} documents with text`,
 	);
-	console.log(`📁 Saved to ${OUTPUT_PATH}`);
+	console.log(`Saved to ${OUTPUT_PATH}`);
 
 	db.close();
 }

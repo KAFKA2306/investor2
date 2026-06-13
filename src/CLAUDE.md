@@ -1,39 +1,38 @@
-# 🎀 src/ の歩きかた (CLAUDE.md) なのだ！💕
+# src/ の歩き方 (CLAUDE.md) である
 
-このディレクトリは `investor2` プロジェクトの心臓部なのだ✨
-機能ごとにフォルダが分かれていて、きれいに整理されているのだ！🎀
-
----
-
-## 📂 ディレクトリの役割なのだ！
-
-- **[shared/](./shared/CLAUDE.md)**: みんなで使う「きほん」の設定や型（Schema）が入ってるのだ✨
-- **[io/](./io/CLAUDE.md)**: お外（API）からデータを取ってくる「運び屋さん」なのだ📦
-- **[preprocess/](./preprocess/CLAUDE.md)**: とってきたデータを使いやすく「おめかし」する魔法の部屋なのだ🪄
-- **[dashboard/](./dashboard/CLAUDE.md)**: きれいにしたデータをみんなに見せる「舞台（UI）」なのだ🚀
-- **[tasks/](./tasks/CLAUDE.md)**: 統計を取ったりする「裏方のお仕事」なのだ📊
+このディレクトリは `investor2` プロジェクトの中核を成す。機能ごとにフォルダが分割されており、整理されている。
 
 ---
 
-## � 依存の順番 (Dependency Order) なのだ！💕
+## ディレクトリの役割
 
-コードの依存関係は**「一方通行」**が鉄則なのだ！下に行くほど独立性が高くなるのだ✨
-
-1. **`dashboard/`** (一番上) -> `preprocess/` や `io/`, `shared/` を使えるのだ！
-2. **`preprocess/`** -> `io/` や `shared/` を使えるのだ！ (`dashboard/` に依存しちゃダメ❌)
-3. **`io/`** -> `shared/` だけを使えるのだ！ (`preprocess/` や `dashboard/` に依存しちゃダメ❌)
-4. **`shared/`** (基盤) -> 誰にも依存しないのだ！孤高の存在なのだ👑
-
-※ **`tasks/`** は独立したバッチ処理だから、必要に応じて全体を使えるけど、他の機能が `tasks/` に依存するのはNGなのだ！
+- **[shared/](./shared/CLAUDE.md)**: 共通で使用される基本的な設定や型（Schema）が含まれている。  
+- **[io/](./io/CLAUDE.md)**: 外部 API からデータを取得する役割を担う。  
+- **[preprocess/](./preprocess/CLAUDE.md)**: 取得したデータを利用しやすい形へ整形する処理を担う。  
+- **[dashboard/](./dashboard/CLAUDE.md)**: 整形済みデータを表示・可視化するユーザーインターフェースを提供する。  
+- **[tasks/](./tasks/CLAUDE.md)**: 統計処理やバッチ処理を担当する。
 
 ---
 
-## �🛠️ 基本的な動かし方なのだ！
+## 依存の順番（Dependency Order）
 
-プロジェクト全体を動かすときは、ルートにある `Taskfile.yml` を使うのがプロのやりかたなのだ✨
+コードの依存関係は一方向性が原則であり、下位に位置するモジュールほど独立性が高まる。
 
-- **ビルドチェック**: `bun x tsc --noEmit`
-- **サーバー起動**: `bun run src/dashboard/server.ts`
+1. **`dashboard/`（最上位）** は `preprocess/`、`io/`、`shared/` を使用できる。  
+2. **`preprocess/`** は `io/` および `shared/` を使用できる（`dashboard/` には依存しない）。  
+3. **`io/`** は `shared/` のみを使用できる（`preprocess/` や `dashboard/` には依存しない）。  
+4. **`shared/`** は基盤として、他のモジュールに依存されることはない。
+
+※ `tasks/` は独立したバッチ処理であり、必要に応じて全体から利用可能であるが、他の機能が `tasks/` に依存することは許容されない。
+
+---
+
+## 基本的な動かし方
+
+プロジェクト全体を実行するには、ルートにある `Taskfile.yml` を使用するのが標準的な方法である。
+
+- **ビルドチェック**: `bun x tsc --noEmit`  
+- **サーバー起動**: `bun run src/dashboard/server.ts`  
 - **データ取得**: `bun run src/io/get.ts`
 
-各フォルダの中にも `CLAUDE.md` があるから、詳しい使い方はそっちを見てね！💕✨
+各フォルダには `CLAUDE.md` が含まれているため、詳しい使用方法はそちらを参照すること。
