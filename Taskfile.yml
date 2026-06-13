@@ -93,6 +93,14 @@ tasks:
     desc: Plot benchmark comparison and ablation study charts
     cmds:
       - PYTHONPATH=. uv run python scripts/plot_benchmark.py
+  bench:significance:
+    desc: Run statistical significance & bootstrap analysis on evaluation results
+    cmds:
+      - PYTHONPATH=. uv run python scripts/statistical_significance.py
+  bench:errors:
+    desc: Run systematic error analysis on evaluation results
+    cmds:
+      - PYTHONPATH=. uv run python scripts/error_analysis.py
   bench:sakana:run:
     desc: Run official Sakana AI EDINET-Bench evaluation
     dir: docs/bench/edinet-bench
