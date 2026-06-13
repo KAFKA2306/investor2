@@ -89,6 +89,10 @@ tasks:
     desc: Run statistical baseline (Logistic Regression)
     cmds:
       - PYTHONPATH=. uv run python src/commands/bench_baseline.py
+  bench:plot:
+    desc: Plot benchmark comparison and ablation study charts
+    cmds:
+      - PYTHONPATH=. uv run python scripts/plot_benchmark.py
   bench:sakana:run:
     desc: Run official Sakana AI EDINET-Bench evaluation
     dir: docs/bench/edinet-bench

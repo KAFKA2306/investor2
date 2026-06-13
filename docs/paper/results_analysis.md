@@ -62,6 +62,9 @@ Combined (AAARTS)      & 58.00                  & 0.67              \\ \hline
 \end{tabular}
 \end{table}
 
+![Ablation Study: Textual vs. Numerical Modalities](ablation_study_chart.png)
+
+
 The ablation results lead to the following observations:
 \begin{itemize}
     \item \textbf{Qualitative Alpha Dominance:} The \textit{Financials Only} configuration yields an accuracy of 52.00\% and an $F_1$ score of 0.59, which is only slightly better than a naive random baseline. This highlights the limitations of trailing, backward-looking accounting numbers when predicting future earnings direction. Conversely, the \textit{Texts Only} configuration achieves a significant performance boost, reaching 56.00\% accuracy and an $F_1$ score of 0.68. This confirms that qualitative narratives contain substantial leading signals (qualitative alpha) regarding a company's future operational environment that have not yet been reflected in quantitative tables.
