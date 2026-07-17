@@ -56,7 +56,7 @@ The 95% moving-block bootstrap interval for the full-period annualized arithmeti
 
 **Not confirmed as a robust persistent edge in this frozen post-publication sample.**
 
-The early holdout is positive, but the later 2006–2017 holdout has a slightly negative mean and a -57.42% maximum drawdown. The full-period mean is not statistically distinguishishable from zero under the specified Newey-West and block-bootstrap checks.
+The early holdout is positive, but the later 2006–2017 holdout has a slightly negative mean and a -57.42% maximum drawdown. The full-period mean is not statistically distinguishable from zero under the specified Newey-West and block-bootstrap checks.
 
 This is the intended behavior of the research gate: an old and economically plausible signal is not accepted merely because it survived in an earlier subperiod.
 
@@ -77,8 +77,8 @@ The machine-readable output is committed at `docs/research/post_publication_mome
 The frozen input contains the January 1994–December 2017 rows extracted from:
 
 - Repository snapshot: https://github.com/lukaskoerber/Replication-Shrinking-the-Cross-Section/blob/main/Data/F-F_Momentum_Factor.csv
-- Git blob SHA: `1541a5e303f7d1fdd76247c6a02a8a62130276c7`
-- Extracted CSV SHA-256: `7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969`
+- Source Git blob SHA: `1541a5e303f7d1fdd76247c6a02a8a62130276c7`
+- Repository Git blob SHA: `4a8f6bb198d088689db4c94b39db6fa04b7b912c`
 
 The primary factor definition is the Kenneth French Data Library. The current official data library extends beyond this frozen snapshot, so this report must not be represented as a through-2026 result.
 
