@@ -6,6 +6,7 @@ AAARTS is a quantitative trading and research system designed as an integrated i
 
 ## Research Status
 
+* **Evidence Dashboard**: [AAARTS Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/)
 * **EDINET-Bench Evaluation**: Actively evaluating performance on financial fraud detection and directional earnings forecasting tasks.
 * **Ablation Study**: Systematically isolating the predictive power of quantitative financial ratios versus qualitative textual disclosures in regulatory filings.
 * **OOS Governance**: Alpha candidates require frozen chronological out-of-sample evidence before promotion.
