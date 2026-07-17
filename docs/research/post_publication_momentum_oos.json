@@ -1,0 +1,137 @@
+{
+  "factor_definition": "Fama/French Mom: average of two high prior-return portfolios minus average of two low prior-return portfolios",
+  "gross_results": {
+    "early_holdout_1994_2005": {
+      "annualized_arithmetic_mean": 0.10112499999999999,
+      "annualized_sharpe_zero_rf": 0.5530000433553052,
+      "annualized_volatility": 0.1828661701117204,
+      "block_bootstrap_95pct_mean_ci": [
+        0.025641666666666667,
+        0.18765833333333334
+      ],
+      "cagr": 0.08741421912397795,
+      "cumulative_return": 1.733632259455021,
+      "end": "2005-12-31",
+      "iid_t_stat": 1.915648343358361,
+      "max_drawdown": -0.3131204129093961,
+      "months": 144,
+      "newey_west_t_stat_lag_6": 2.2945385877845985,
+      "positive_month_fraction": 0.6180555555555556,
+      "start": "1994-01-31"
+    },
+    "late_holdout_2006_2017": {
+      "annualized_arithmetic_mean": -0.0022500000000000007,
+      "annualized_sharpe_zero_rf": -0.013871279652021088,
+      "annualized_volatility": 0.16220565488146357,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.13654166666666667,
+        0.0962
+      ],
+      "cagr": -0.016754704848957802,
+      "cumulative_return": -0.18352569124220175,
+      "end": "2017-12-31",
+      "iid_t_stat": -0.04805152224659372,
+      "max_drawdown": -0.5742421471511057,
+      "months": 144,
+      "newey_west_t_stat_lag_6": -0.03887866401076276,
+      "positive_month_fraction": 0.5694444444444444,
+      "start": "2006-01-31"
+    },
+    "post_publication_1994_2017": {
+      "annualized_arithmetic_mean": 0.049437499999999995,
+      "annualized_sharpe_zero_rf": 0.2854529035571835,
+      "annualized_volatility": 0.17318969043205548,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.029995833333333326,
+        0.1201125
+      ],
+      "cagr": 0.03401881744675994,
+      "cumulative_return": 1.2319405094365559,
+      "end": "2017-12-31",
+      "iid_t_stat": 1.3984279186219932,
+      "max_drawdown": -0.5742421471511056,
+      "months": 288,
+      "newey_west_t_stat_lag_6": 1.3261722776440121,
+      "positive_month_fraction": 0.59375,
+      "start": "1994-01-31"
+    }
+  },
+  "monthly_cost_sensitivity_bps": {
+    "0": {
+      "annualized_arithmetic_mean": 0.049437499999999995,
+      "annualized_sharpe_zero_rf": 0.2854529035571835,
+      "annualized_volatility": 0.17318969043205548,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.029995833333333326,
+        0.1201125
+      ],
+      "cagr": 0.03401881744675994,
+      "cumulative_return": 1.2319405094365559,
+      "end": "2017-12-31",
+      "iid_t_stat": 1.3984279186219932,
+      "max_drawdown": -0.5742421471511056,
+      "months": 288,
+      "newey_west_t_stat_lag_6": 1.3261722776440121,
+      "positive_month_fraction": 0.59375,
+      "start": "1994-01-31"
+    },
+    "10": {
+      "annualized_arithmetic_mean": 0.03743749999999999,
+      "annualized_sharpe_zero_rf": 0.21616471457743727,
+      "annualized_volatility": 0.17318969043205548,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.04199583333333333,
+        0.10811249999999999
+      ],
+      "cagr": 0.021695084614662852,
+      "cumulative_return": 0.6738298009106343,
+      "end": "2017-12-31",
+      "iid_t_stat": 1.0589865022181717,
+      "max_drawdown": -0.5796857950328532,
+      "months": 288,
+      "newey_west_t_stat_lag_6": 1.004269525042684,
+      "positive_month_fraction": 0.5659722222222222,
+      "start": "1994-01-31"
+    },
+    "25": {
+      "annualized_arithmetic_mean": 0.019437499999999993,
+      "annualized_sharpe_zero_rf": 0.112232431107818,
+      "annualized_volatility": 0.17318969043205548,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.05999583333333333,
+        0.09011249999999998
+      ],
+      "cagr": 0.0034616905334599046,
+      "cumulative_return": 0.08647347176741782,
+      "end": "2017-12-31",
+      "iid_t_stat": 0.5498243776124396,
+      "max_drawdown": -0.5994338629648552,
+      "months": 288,
+      "newey_west_t_stat_lag_6": 0.5214153961406923,
+      "positive_month_fraction": 0.5381944444444444,
+      "start": "1994-01-31"
+    },
+    "50": {
+      "annualized_arithmetic_mean": -0.010562500000000006,
+      "annualized_sharpe_zero_rf": -0.06098804134154746,
+      "annualized_volatility": 0.17318969043205548,
+      "block_bootstrap_95pct_mean_ci": [
+        -0.08999583333333333,
+        0.060112499999999985
+      ],
+      "cagr": -0.026265857236964174,
+      "cumulative_return": -0.4720782459630839,
+      "end": "2017-12-31",
+      "iid_t_stat": -0.29877916339711375,
+      "max_drawdown": -0.7413443083987726,
+      "months": 288,
+      "newey_west_t_stat_lag_6": -0.28334148536262727,
+      "positive_month_fraction": 0.5034722222222222,
+      "start": "1994-01-31"
+    }
+  },
+  "publication_month": "1993-03",
+  "study": "Jegadeesh-Titman momentum post-publication holdout",
+  "units": "decimal returns",
+  "verdict": "not_confirmed: the full post-publication mean is not statistically distinguishable from zero and the 2006-2017 holdout has a negative mean"
+}

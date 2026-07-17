@@ -6,15 +6,19 @@ AAARTS is a quantitative trading and research system designed as an integrated i
 
 ## Research Status
 
-*   **EDINET-Bench Evaluation**: Actively evaluating performance on financial fraud detection and directional earnings forecasting tasks.
-*   **Ablation Study**: Systematically isolating the predictive power of quantitative financial ratios versus qualitative textual disclosures in regulatory filings.
+* **EDINET-Bench Evaluation**: Actively evaluating performance on financial fraud detection and directional earnings forecasting tasks.
+* **Ablation Study**: Systematically isolating the predictive power of quantitative financial ratios versus qualitative textual disclosures in regulatory filings.
+* **OOS Governance**: Alpha candidates require frozen chronological out-of-sample evidence before promotion.
 
 ## Key Pointers
 
-*   **NeurIPS Paper Outline**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
-*   **System Flowchart**: [docs/diagrams/simpleflowchart.md](docs/diagrams/simpleflowchart.md)
-*   **Operational Rules**: [AGENTS.md](AGENTS.md)
-*   **Architectural Decision Records (ADRs)**: [docs/adr/](docs/adr/)
+* **NeurIPS Paper Outline**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
+* **System Flowchart**: [docs/diagrams/simpleflowchart.md](docs/diagrams/simpleflowchart.md)
+* **Alpha Discovery Runbook**: [docs/specs/alpha_discovery_runbook.md](docs/specs/alpha_discovery_runbook.md)
+* **Time-Tested Alpha Policy**: [docs/specs/time_tested_alpha_policy.md](docs/specs/time_tested_alpha_policy.md)
+* **Post-publication OOS Example**: [docs/research/post_publication_momentum_oos.md](docs/research/post_publication_momentum_oos.md)
+* **Operational Rules**: [AGENTS.md](AGENTS.md)
+* **Architectural Decision Records (ADRs)**: [docs/adr/](docs/adr/)
 
 ## Setup and Execution
 
