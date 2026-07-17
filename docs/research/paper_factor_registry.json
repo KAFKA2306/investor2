@@ -1,0 +1,106 @@
+{
+  "datasets": {
+    "ff3_1992_2020": {
+      "path": "docs/research/data/ff3_1992_2020.csv",
+      "source_repository": "hannelita/Kenneth-French-Data-Library",
+      "source_commit": "f99404ccfb176aafca535590f2e6c6679ad03330",
+      "source_blob": "ff983775f09f9c47edec881cb952cfa450d1a6f9",
+      "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors.html",
+      "sha256": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d"
+    },
+    "ff5_2015_2020": {
+      "path": "docs/research/data/ff5_2015_2020.csv",
+      "source_repository": "hannelita/Kenneth-French-Data-Library",
+      "source_commit": "f99404ccfb176aafca535590f2e6c6679ad03330",
+      "source_blob": "60939e9803578b4c46e12a44d958d2a8e0c9d203",
+      "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html",
+      "sha256": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a"
+    }
+  },
+  "studies": [
+    {
+      "id": "banz_1981_size_late_oos_proxy",
+      "paper": "Banz (1981), The relationship between return and market value of common stocks",
+      "doi": "10.1016/0304-405X(81)90018-0",
+      "publication_month": "1981-03",
+      "dataset": "ff3_1992_2020",
+      "column": "smb_percent",
+      "oos_start": "1992-07",
+      "oos_end": "2020-02",
+      "implementation": "proxy",
+      "scope_note": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression."
+    },
+    {
+      "id": "fama_french_1992_size_proxy",
+      "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "doi": "10.1111/j.1540-6261.1992.tb04398.x",
+      "publication_month": "1992-06",
+      "dataset": "ff3_1992_2020",
+      "column": "smb_percent",
+      "oos_start": "1992-07",
+      "oos_end": "2020-02",
+      "implementation": "proxy",
+      "scope_note": "SMB is a return-factor proxy for the paper's security-level size characteristic result."
+    },
+    {
+      "id": "fama_french_1992_value_proxy",
+      "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "doi": "10.1111/j.1540-6261.1992.tb04398.x",
+      "publication_month": "1992-06",
+      "dataset": "ff3_1992_2020",
+      "column": "hml_percent",
+      "oos_start": "1992-07",
+      "oos_end": "2020-02",
+      "implementation": "proxy",
+      "scope_note": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result."
+    },
+    {
+      "id": "fama_french_1993_smb",
+      "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "doi": "10.1016/0304-405X(93)90023-5",
+      "publication_month": "1993-02",
+      "dataset": "ff3_1992_2020",
+      "column": "smb_percent",
+      "oos_start": "1993-03",
+      "oos_end": "2020-02",
+      "implementation": "factor",
+      "scope_note": "Post-publication return of the published SMB factor construction."
+    },
+    {
+      "id": "fama_french_1993_hml",
+      "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "doi": "10.1016/0304-405X(93)90023-5",
+      "publication_month": "1993-02",
+      "dataset": "ff3_1992_2020",
+      "column": "hml_percent",
+      "oos_start": "1993-03",
+      "oos_end": "2020-02",
+      "implementation": "factor",
+      "scope_note": "Post-publication return of the published HML factor construction."
+    },
+    {
+      "id": "fama_french_2015_rmw",
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "doi": "10.1016/j.jfineco.2014.10.010",
+      "publication_month": "2015-04",
+      "dataset": "ff5_2015_2020",
+      "column": "rmw_percent",
+      "oos_start": "2015-05",
+      "oos_end": "2020-02",
+      "implementation": "factor",
+      "scope_note": "Post-publication return of the RMW profitability factor."
+    },
+    {
+      "id": "fama_french_2015_cma",
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "doi": "10.1016/j.jfineco.2014.10.010",
+      "publication_month": "2015-04",
+      "dataset": "ff5_2015_2020",
+      "column": "cma_percent",
+      "oos_start": "2015-05",
+      "oos_end": "2020-02",
+      "implementation": "factor",
+      "scope_note": "Post-publication return of the CMA investment factor."
+    }
+  ]
+}
