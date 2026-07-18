@@ -21,6 +21,7 @@ AAARTS is a quantitative trading and research system designed as an integrated i
 * **Momentum OOS Example**: [docs/research/post_publication_momentum_oos.md](docs/research/post_publication_momentum_oos.md)
 * **Multi-paper OOS Results**: [docs/research/multi_paper_oos_summary.md](docs/research/multi_paper_oos_summary.md)
 * **Paper–Factor Registry**: [docs/research/paper_factor_registry.json](docs/research/paper_factor_registry.json)
+* **2010s Paper Catalog**: [docs/research/2010s_paper_catalog.md](docs/research/2010s_paper_catalog.md)
 * **Operational Rules**: [AGENTS.md](AGENTS.md)
 * **Architectural Decision Records (ADRs)**: [docs/adr/](docs/adr/)
 
