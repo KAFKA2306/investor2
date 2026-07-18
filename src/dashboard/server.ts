@@ -10,6 +10,7 @@ import {
 	searchCompanies,
 } from "../preprocess/edinet";
 import { getScreenerData } from "../preprocess/screener";
+import type { PipelineResultsReport } from "../schemas";
 import { ConfigSchema } from "../shared/schema";
 import { backtestResultsHtml } from "./backtest_results_template";
 
@@ -1318,8 +1319,7 @@ app.get("/pipeline/results", async (c) => {
 		if (!existsSync(resultsPath)) {
 			return c.html(
 				pipelineResultsHtml({
-					error:
-						"No pipeline results found. Run the pipeline first with: task pipeline:run",
+					error: "探索結果がありません。まずパイプラインを実行してください。",
 				}),
 			);
 		}
@@ -1339,31 +1339,39 @@ function pipelineResultsHtml({
 	report,
 	error,
 }: {
-	report?: any;
+	report?: PipelineResultsReport;
 	error?: string;
 }): string {
 	if (error) {
 		return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AAARTS Pipeline Results</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <title>探索結果を準備中 | AAARTS</title>
+  <style>
+    :root { --ink: #17221f; --paper: #f4f6f1; --mint: #b9f2d0; --line: #d8dfd7; }
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; display: grid; place-items: center; padding: 24px; background: var(--paper); color: var(--ink); font-family: Georgia, serif; }
+    main { width: min(100%, 620px); border: 1px solid var(--line); border-radius: 22px; padding: clamp(28px, 7vw, 56px); background: #fff; box-shadow: 0 18px 55px rgba(23,34,31,.08); }
+    .eyebrow { color: #587067; font: 12px/1.4 monospace; letter-spacing: .12em; text-transform: uppercase; }
+    h1 { margin: 14px 0 12px; font-size: clamp(32px, 6vw, 54px); line-height: .98; letter-spacing: -.04em; }
+    p { color: #52615b; line-height: 1.7; }
+    .next { margin: 24px 0; padding: 18px; border-radius: 14px; background: var(--mint); }
+    .next strong { display: block; margin-bottom: 5px; }
+    code { display: block; margin-top: 10px; padding: 12px; overflow-x: auto; border-radius: 9px; background: rgba(23,34,31,.08); font: 13px/1.5 monospace; }
+    a { color: var(--ink); font-weight: 700; text-underline-offset: 4px; }
+  </style>
 </head>
-<body class="bg-gray-50">
-  <div class="min-h-screen flex items-center justify-center">
-    <div class="bg-white shadow rounded-lg p-8 max-w-md w-full">
-      <div class="flex items-center justify-center w-12 h-12 mx-auto bg-red-100 rounded-full">
-        <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4v2m0 4v2"></path>
-        </svg>
-      </div>
-      <h3 class="mt-4 text-lg font-medium text-gray-900">Error</h3>
-      <p class="mt-2 text-sm text-gray-500">${error}</p>
-    </div>
-  </div>
+<body>
+  <main>
+    <div class="eyebrow">AAARTS / Alpha Discovery</div>
+    <h1>探索結果は<br>まだありません</h1>
+    <p>${error}</p>
+    <div class="next"><strong>次にすること</strong>パイプラインを実行すると、判定ゲートと各指標がここに表示されます。GO は運用許可ではなく、次段階レビューの入口です。<code>task pipeline:run</code></div>
+    <a href="/">システムホームへ戻る →</a>
+  </main>
 </body>
 </html>
 		`;
@@ -1372,7 +1380,7 @@ function pipelineResultsHtml({
 	if (!report) {
 		return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -1391,25 +1399,40 @@ function pipelineResultsHtml({
 	}
 
 	const totalCycles = report.total_cycles;
-	const goCount = report.verdicts.filter((v: any) => v.verdict === "GO").length;
-	const holdCount = report.verdicts.filter(
-		(v: any) => v.verdict === "HOLD",
-	).length;
+	const denominator = Math.max(totalCycles, 1);
+	const goCount = report.verdicts.filter((v) => v.verdict === "GO").length;
+	const holdCount = report.verdicts.filter((v) => v.verdict === "HOLD").length;
 	const pivotCount = report.verdicts.filter(
-		(v: any) => v.verdict === "PIVOT",
+		(v) => v.verdict === "PIVOT",
 	).length;
 
 	const executionTime = new Date(report.execution_timestamp).toLocaleString();
 	const avgConfidence =
-		(report.verdicts.reduce((sum: number, v: any) => sum + v.confidence, 0) /
-			totalCycles) *
+		(report.verdicts.reduce((sum, v) => sum + v.confidence, 0) / denominator) *
 		100;
+	const latestVerdict = report.verdicts.at(-1);
+	const latestStatus = latestVerdict?.verdict ?? "NO RUN";
+	const minBacktestDays = report.config_thresholds.minBacktestDays ?? 60;
+	const statusTone =
+		latestStatus === "GO"
+			? "mint"
+			: latestStatus === "HOLD"
+				? "amber"
+				: latestStatus === "PIVOT"
+					? "coral"
+					: "slate";
+	const nextAction =
+		latestStatus === "GO"
+			? "独立 OOS・コスト検証へ進む"
+			: latestStatus === "HOLD"
+				? "失敗したゲートを1つ確認する"
+				: latestStatus === "PIVOT"
+					? "失敗理由を記録して仮説を作り直す"
+					: "最初の探索サイクルを実行する";
 
 	// Prepare data for cycle timeline chart
-	const cycleLabels = report.verdicts.map(
-		(_: any, idx: number) => `Cycle ${idx + 1}`,
-	);
-	const cycleVerdicts = report.verdicts.map((v: any) => {
+	const cycleLabels = report.verdicts.map((_, idx) => `Cycle ${idx + 1}`);
+	const cycleVerdicts = report.verdicts.map((v) => {
 		if (v.verdict === "GO") return 1;
 		if (v.verdict === "HOLD") return 0.5;
 		return 0;
@@ -1419,36 +1442,65 @@ function pipelineResultsHtml({
 	const avgSharpeByVerdict = {
 		GO:
 			report.verdicts
-				.filter((v: any) => v.verdict === "GO")
-				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
-			Math.max(goCount, 1),
+				.filter((v) => v.verdict === "GO")
+				.reduce((sum, v) => sum + v.outcome.sharpe, 0) / Math.max(goCount, 1),
 		HOLD:
 			report.verdicts
-				.filter((v: any) => v.verdict === "HOLD")
-				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
-			Math.max(holdCount, 1),
+				.filter((v) => v.verdict === "HOLD")
+				.reduce((sum, v) => sum + v.outcome.sharpe, 0) / Math.max(holdCount, 1),
 		PIVOT:
 			report.verdicts
-				.filter((v: any) => v.verdict === "PIVOT")
-				.reduce((sum: number, v: any) => sum + v.outcome.sharpe, 0) /
+				.filter((v) => v.verdict === "PIVOT")
+				.reduce((sum, v) => sum + v.outcome.sharpe, 0) /
 			Math.max(pivotCount, 1),
 	};
 
 	return `
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>AAARTS Pipeline Results</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root { --ink: #17221f; --paper: #f4f6f1; --line: #d8dfd7; --mint: #b9f2d0; --amber: #f8d99b; --coral: #ffb2a4; }
+    * { box-sizing: border-box; }
+    body { background: var(--paper); color: var(--ink); font-family: 'Bricolage Grotesque', sans-serif; }
+    .mono { font-family: 'IBM Plex Mono', monospace; }
+    .topbar { background: #17221f; border-bottom: 1px solid #30403a; position: sticky; top: 0; z-index: 20; }
+    .topbar a { white-space: nowrap; }
+    .decision-hero { background: #17221f; color: #f4f6f1; padding: 28px 0 32px; }
+    .decision-grid { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(260px, .8fr); gap: 18px; align-items: stretch; }
+    .decision-card { border: 1px solid #3c5047; border-radius: 18px; padding: 22px; background: rgba(255,255,255,.04); }
+    .decision-card.accent-mint { background: var(--mint); color: var(--ink); border-color: transparent; }
+    .decision-card.accent-amber { background: var(--amber); color: var(--ink); border-color: transparent; }
+    .decision-card.accent-coral { background: var(--coral); color: var(--ink); border-color: transparent; }
+    .decision-card.accent-slate { background: #26332f; }
+    .eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; opacity: .72; }
+    .decision-title { font-size: clamp(28px, 4vw, 54px); line-height: .98; letter-spacing: -.04em; margin: 8px 0 14px; }
+    .decision-status { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 7px 11px; font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 500; }
+    .decision-status::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+    .decision-meta { display: flex; flex-wrap: wrap; gap: 10px 18px; margin-top: 20px; color: #b9c8c0; font-size: 13px; }
+    .decision-meta strong { color: #fff; font-family: 'IBM Plex Mono', monospace; }
+    .quick-action { display: flex; flex-direction: column; justify-content: space-between; }
+    .quick-action h2 { font-size: 20px; margin: 8px 0; }
+    .quick-action p { margin: 0; line-height: 1.55; }
+    .guardrail { margin-top: 12px; border-top: 1px solid rgba(23,34,31,.18); padding-top: 12px; font-size: 12px; line-height: 1.5; }
+    .section-shell { border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(23,34,31,.05); }
+    .section-shell h2 { letter-spacing: -.02em; }
+    @media (max-width: 720px) { .decision-grid { grid-template-columns: 1fr; } .decision-hero { padding-top: 20px; } }
+  </style>
 </head>
-<body class="bg-gray-50">
+<body>
   <!-- Global Navigation -->
-  <nav class="bg-blue-900 px-6 py-3 text-white flex items-center justify-between mb-6 shadow">
+  <nav class="topbar px-4 sm:px-6 py-3 text-white flex items-center justify-between gap-4 shadow">
     <a href="/" class="text-lg font-bold flex items-center gap-2 text-white no-underline">AAARTS Dashboard</a>
-    <div class="flex gap-4">
+    <div class="flex gap-1 sm:gap-4 overflow-x-auto" aria-label="Primary navigation">
       <a href="/" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">System Home</a>
       <a href="/screener" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Screener</a>
       <a href="/company" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Company Search</a>
@@ -1457,6 +1509,31 @@ function pipelineResultsHtml({
       <a href="/links" class="text-blue-200 hover:text-white hover:bg-blue-800 px-3 py-1.5 rounded text-sm font-medium transition-colors">Link Directory</a>
     </div>
   </nav>
+
+  <section class="decision-hero">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="decision-grid">
+        <div class="decision-card accent-${statusTone}">
+          <div class="eyebrow">Latest gate decision</div>
+          <div class="decision-title">${latestStatus === "NO RUN" ? "まだ探索結果はありません" : latestStatus}</div>
+          <span class="decision-status">${latestStatus === "GO" ? "NEXT REVIEW" : latestStatus === "NO RUN" ? "WAITING" : "RESEARCH ONLY"}</span>
+          <div class="decision-meta">
+            <span>最新サイクル <strong>${totalCycles || "—"}</strong></span>
+            <span>信頼度 <strong>${latestVerdict ? `${(latestVerdict.confidence * 100).toFixed(1)}%` : "—"}</strong></span>
+            <span>実行時間 <strong>${report.elapsed_seconds}s</strong></span>
+          </div>
+        </div>
+        <div class="decision-card quick-action accent-slate">
+          <div>
+            <div class="eyebrow">Recommended next move</div>
+            <h2>${nextAction}</h2>
+            <p>${latestStatus === "GO" ? "統計的な合格は運用開始を意味しません。未使用データで再検証してから判断します。" : "判定理由を開いて、次に見るべき指標を確認してください。"}</p>
+          </div>
+          <div class="guardrail"><strong>Safety rail</strong><br>この画面は研究結果の観測用です。注文・配備は実行しません。</div>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <div class="min-h-screen">
     <!-- Header -->
@@ -1471,7 +1548,7 @@ function pipelineResultsHtml({
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
       <!-- Execution Summary -->
-      <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <div class="bg-white shadow rounded-lg p-6 mb-6 section-shell">
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Pipeline Execution Summary</h2>
         <p class="text-sm text-gray-600 mb-4">Overview of this discovery cycle - how many factors were generated, tested, and their outcomes</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1510,21 +1587,21 @@ function pipelineResultsHtml({
           <div class="mt-4 space-y-2 text-sm">
             <div class="flex items-center p-2 bg-green-50 rounded">
               <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-              <span class="text-gray-700"><strong>GO:</strong> ${goCount} factor${goCount !== 1 ? "s" : ""} (${((goCount / totalCycles) * 100).toFixed(1)}%) - Ready for deployment</span>
+              <span class="text-gray-700"><strong>GO:</strong> ${goCount} factor${goCount !== 1 ? "s" : ""} (${((goCount / denominator) * 100).toFixed(1)}%) - Next-stage review eligible</span>
             </div>
             <div class="flex items-center p-2 bg-yellow-50 rounded">
               <div class="w-3 h-3 bg-yellow-500 rounded-full mr-2"></div>
-              <span class="text-gray-700"><strong>HOLD:</strong> ${holdCount} factor${holdCount !== 1 ? "s" : ""} (${((holdCount / totalCycles) * 100).toFixed(1)}%) - Marginal, needs refinement</span>
+              <span class="text-gray-700"><strong>HOLD:</strong> ${holdCount} factor${holdCount !== 1 ? "s" : ""} (${((holdCount / denominator) * 100).toFixed(1)}%) - Inspect one failed gate</span>
             </div>
             <div class="flex items-center p-2 bg-red-50 rounded">
               <div class="w-3 h-3 bg-red-500 rounded-full mr-2"></div>
-              <span class="text-gray-700"><strong>PIVOT:</strong> ${pivotCount} factor${pivotCount !== 1 ? "s" : ""} (${((pivotCount / totalCycles) * 100).toFixed(1)}%) - Failed, triggers domain re-init</span>
+              <span class="text-gray-700"><strong>PIVOT:</strong> ${pivotCount} factor${pivotCount !== 1 ? "s" : ""} (${((pivotCount / denominator) * 100).toFixed(1)}%) - Rebuild the hypothesis</span>
             </div>
           </div>
         </div>
 
         <!-- Verdict Timeline -->
-        <div class="bg-white shadow rounded-lg p-6">
+        <div class="bg-white shadow rounded-lg p-6 section-shell">
           <h2 class="text-xl font-semibold text-gray-900 mb-4">Verdict Timeline</h2>
           <p class="text-xs text-gray-600 mb-4">Sequence of verdicts across cycles - shows discovery pattern and any trends</p>
           <div style="position: relative; height: 300px;">
@@ -1539,7 +1616,7 @@ function pipelineResultsHtml({
       </div>
 
       <!-- Performance Metrics Grid -->
-      <div class="bg-white shadow rounded-lg p-6 mb-6">
+      <div class="bg-white shadow rounded-lg p-6 mb-6 section-shell">
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Performance Metrics</h2>
         <p class="text-sm text-gray-600 mb-4">Key insights into factor quality and discovery pipeline effectiveness across all tested hypotheses</p>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -1550,7 +1627,7 @@ function pipelineResultsHtml({
           </div>
           <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-300">
             <p class="text-xs font-medium text-green-600 uppercase tracking-wide">Deployment Rate</p>
-            <p class="text-2xl font-bold text-green-900">${((goCount / totalCycles) * 100).toFixed(1)}%</p>
+            <p class="text-2xl font-bold text-green-900">${((goCount / denominator) * 100).toFixed(1)}%</p>
             <p class="text-xs text-gray-600 mt-2">% of factors ready to trade<br/><em>Higher = better discovery quality</em></p>
           </div>
           <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-300">
@@ -1610,7 +1687,7 @@ function pipelineResultsHtml({
             </thead>
             <tbody id="tableBody">
               ${report.verdicts
-								.map((verdict: any, idx: number) => {
+								.map((verdict, idx) => {
 									const bgClass =
 										verdict.verdict === "GO"
 											? "bg-green-50"
@@ -1690,10 +1767,10 @@ function pipelineResultsHtml({
                             <p class="font-semibold ${verdict.verdict === "GO" ? "text-green-700" : verdict.verdict === "HOLD" ? "text-yellow-700" : "text-red-700"}">${verdict.verdict}</p>
                             ${
 															verdict.verdict === "GO"
-																? "<p class='text-xs mt-1'>✓ <strong>Ready for deployment.</strong> All quality checks passed. Recommend adding to live trading portfolio.</p>"
+																? "<p class='text-xs mt-1'>✓ <strong>Eligible for next-stage review.</strong> Confirm independent OOS and cost evidence before any operational decision.</p>"
 																: verdict.verdict === "HOLD"
 																	? "<p class='text-xs mt-1'>⏸ <strong>Marginal - needs refinement.</strong> Close to passing but not quite there. Consider parameter tuning or additional filtering.</p>"
-																	: "<p class='text-xs mt-1'>✗ <strong>Reject - critical failures.</strong> Triggers Ralph Loop. System will reinitialize discovery with different assumptions.</p>"
+																	: "<p class='text-xs mt-1'>✗ <strong>複数ゲート不合格。</strong> 失敗理由を記録してから、次の仮説へ進みます。</p>"
 														}
                           </div>
                           <div>
@@ -1721,8 +1798,8 @@ function pipelineResultsHtml({
       <!-- Threshold Reference -->
       <div class="bg-white shadow rounded-lg p-6 mb-6">
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Quality Standards</h2>
-        <p class="text-sm text-gray-600 mb-4">Minimum criteria that factors must meet to receive a GO verdict. These controls ensure only robust, profitable factors are deployed:</p>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <p class="text-sm text-gray-600 mb-4">GO 判定に必要な最低基準です。合格は次段階の研究レビューを許可しますが、運用開始を意味しません。</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
           <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-blue-300">
             <p class="text-xs font-medium text-gray-700 uppercase tracking-wide">Min Risk-Adjusted Return</p>
             <p class="text-2xl font-bold text-gray-900">${report.config_thresholds.minSharpe}</p>
@@ -1738,6 +1815,11 @@ function pipelineResultsHtml({
             <p class="text-2xl font-bold text-gray-900">${(report.config_thresholds.maxDrawdown * 100).toFixed(1)}%</p>
             <p class="text-xs text-gray-600 mt-2">Factor can lose at most <strong>${(report.config_thresholds.maxDrawdown * 100).toFixed(1)}%</strong> from peak to trough before failing risk control. Stricter limits reduce pain tolerance.</p>
           </div>
+          <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-purple-300">
+            <p class="text-xs font-medium text-gray-700 uppercase tracking-wide">Min Validation Window</p>
+            <p class="text-2xl font-bold text-gray-900">${minBacktestDays} days</p>
+            <p class="text-xs text-gray-600 mt-2">短すぎるバックテストは、他の指標が良くても次段階レビューへ進みません。</p>
+          </div>
         </div>
       </div>
 
@@ -1747,15 +1829,15 @@ function pipelineResultsHtml({
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
           <div>
             <h3 class="font-semibold text-gray-900 mb-2">✅ What GO Means</h3>
-            <p class="text-gray-700">Factor passed all quality checks and is <strong>ready for live trading</strong>. Its historical performance suggests it will likely be profitable, and its risk characteristics are acceptable.</p>
+            <p class="text-gray-700">Factor passed this gate and is <strong>eligible for the next research review</strong>. It is not evidence of future profit or permission to trade.</p>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 mb-2">⏸ What HOLD Means</h3>
-            <p class="text-gray-700">Factor shows promise but has <strong>marginal performance</strong>. Close to passing but needs refinement. Consider parameter adjustment or additional data before deployment.</p>
+            <p class="text-gray-700">Factor shows promise but has <strong>marginal evidence</strong>. Open the row to see the single failed gate, then add data or refine the hypothesis.</p>
           </div>
           <div>
             <h3 class="font-semibold text-gray-900 mb-2">❌ What PIVOT Means</h3>
-            <p class="text-gray-700">Factor failed critical tests. Triggers <strong>Ralph Loop</strong> - system re-initializes discovery with different assumptions. Indicates the current domain needs recalibration.</p>
+            <p class="text-gray-700">Factor failed multiple tests. Record the failure reasons before the next discovery cycle so the same search space is not repeated.</p>
           </div>
         </div>
       </div>
@@ -1798,7 +1880,7 @@ function pipelineResultsHtml({
           label: 'Verdict Score',
           data: ${JSON.stringify(cycleVerdicts)},
           backgroundColor: [${report.verdicts
-						.map((v: any) => {
+						.map((v) => {
 							if (v.verdict === "GO") return "'#10b981'";
 							if (v.verdict === "HOLD") return "'#f59e0b'";
 							return "'#ef4444'";

@@ -189,6 +189,7 @@ pipelineBlueprint:
     minSharpe: 0.25
     maxPValue: 0.20
     maxDrawdown: 0.45
+    minBacktestDays: 60
   executionConstraints:
     maxPositionWeight: 0.12
     maxTurnover: 0.9

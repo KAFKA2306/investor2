@@ -14,9 +14,9 @@ import hashlib
 import json
 import math
 import random
+from collections.abc import Iterable, Sequence
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable, Sequence
 
 
 @dataclass(frozen=True)
@@ -121,7 +121,10 @@ def moving_block_mean_ci(
 
 
 def calculate_metrics(
-    rows: Sequence[tuple[str, float]], *, bootstrap: bool = True
+    rows: Sequence[tuple[str, float]],
+    *,
+    bootstrap: bool = True,
+    bootstrap_seed: int = 2306,
 ) -> Metrics:
     values = [value for _, value in rows]
     n = len(values)
@@ -152,7 +155,7 @@ def calculate_metrics(
         iid_t_stat=mean / standard_error,
         newey_west_t_stat_lag_6=newey_west_t_stat(values, lags=6),
         block_bootstrap_95pct_mean_ci=(
-            moving_block_mean_ci(values) if bootstrap else None
+            moving_block_mean_ci(values, seed=bootstrap_seed) if bootstrap else None
         ),
     )
 
@@ -185,7 +188,13 @@ def verdict(
     raise ValueError(f"unknown implementation: {implementation}")
 
 
-def build_report(registry_path: Path) -> dict[str, object]:
+def build_report(
+    registry_path: Path,
+    *,
+    publication_start: str | None = None,
+    publication_end: str | None = None,
+    bootstrap_seed: int = 2306,
+) -> dict[str, object]:
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     repository_root = registry_path.parents[2]
     datasets = registry["datasets"]
@@ -206,7 +215,16 @@ def build_report(registry_path: Path) -> dict[str, object]:
         }
 
     studies: dict[str, object] = {}
-    for study in registry["studies"]:
+    studies_to_run = [
+        study
+        for study in registry["studies"]
+        if (publication_start is None or study["publication_month"] >= publication_start)
+        and (publication_end is None or study["publication_month"] <= publication_end)
+    ]
+    if not studies_to_run:
+        raise ValueError("no studies matched the publication window")
+
+    for study in studies_to_run:
         dataset_id = study["dataset"]
         column = study["column"]
         cache_key = (dataset_id, column)
@@ -219,9 +237,9 @@ def build_report(registry_path: Path) -> dict[str, object]:
         split = len(full_rows) // 2
         early_rows = full_rows[:split]
         late_rows = full_rows[split:]
-        full = calculate_metrics(full_rows)
-        early = calculate_metrics(early_rows)
-        late = calculate_metrics(late_rows)
+        full = calculate_metrics(full_rows, bootstrap_seed=bootstrap_seed)
+        early = calculate_metrics(early_rows, bootstrap_seed=bootstrap_seed)
+        late = calculate_metrics(late_rows, bootstrap_seed=bootstrap_seed)
         cost_sensitivity = {
             str(cost): asdict(
                 calculate_metrics(
@@ -265,6 +283,10 @@ def build_report(registry_path: Path) -> dict[str, object]:
                 "The monthly haircut is a sensitivity test, not an estimate of "
                 "realized turnover, borrow, spread, market impact, or taxes."
             ),
+        },
+        "publication_filter": {
+            "start": publication_start,
+            "end": publication_end,
         },
         "datasets": dataset_audit,
         "studies": studies,

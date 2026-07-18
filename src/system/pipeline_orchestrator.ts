@@ -10,6 +10,7 @@ import {
 	type VerificationResult,
 	VerificationResultSchema,
 } from "../schemas";
+import { judgeVerification } from "./verification";
 
 /**
  * PipelineOrchestrator
@@ -20,6 +21,7 @@ export class PipelineOrchestrator {
 	private config: Config;
 	private consecutiveFailures = 0;
 	private cycleResults: VerificationResult[] = [];
+	private cycleSummaries: CycleSummary[] = [];
 	private domainContext: string = randomUUID();
 
 	constructor(config: Config) {
@@ -30,7 +32,11 @@ export class PipelineOrchestrator {
 	 * Get all cycle results collected during pipeline execution
 	 */
 	getResults(): VerificationResult[] {
-		return this.cycleResults;
+		return [...this.cycleResults];
+	}
+
+	getCycleSummaries(): CycleSummary[] {
+		return [...this.cycleSummaries];
 	}
 
 	/**
@@ -38,6 +44,9 @@ export class PipelineOrchestrator {
 	 * Runs maxCycles iterations of: generate → backtest → verdict → ralph loop
 	 */
 	async run(): Promise<void> {
+		this.cycleResults = [];
+		this.cycleSummaries = [];
+		this.consecutiveFailures = 0;
 		const maxCycles = this.config.pipelineBlueprint?.alphaLoop?.maxCycles ?? 1;
 		const maxFailures =
 			this.config.pipelineBlueprint?.alphaLoop?.maxFailures ?? 1;
@@ -80,7 +89,7 @@ export class PipelineOrchestrator {
 			}
 
 			// Ralph Loop: Re-initialize domain on consecutive failures
-			if (this.consecutiveFailures > maxFailures) {
+			if (this.consecutiveFailures >= maxFailures) {
 				this.domainContext = randomUUID();
 				this.consecutiveFailures = 0;
 			}
@@ -89,7 +98,13 @@ export class PipelineOrchestrator {
 
 			// Output cycle summary
 			const summary = CycleSummarySchema.parse(cycleSummary);
+			this.cycleSummaries.push(summary);
 			process.stdout.write(`${JSON.stringify(summary)}\n`);
+
+			const sleepSec = this.config.pipelineBlueprint?.alphaLoop?.sleepSec ?? 0;
+			if (cycle < maxCycles && sleepSec > 0) {
+				await Bun.sleep(sleepSec * 1000);
+			}
 		}
 	}
 
@@ -101,7 +116,7 @@ export class PipelineOrchestrator {
 		// For now, return a minimal stub hypothesis
 		// In future: call LES agent with @google/genai
 		const candidate: AlphaCandidate = {
-			factor_id: `F_${randomUUID().slice(0, 8)}`,
+			factor_id: `F_${this.domainContext.slice(0, 8)}_${randomUUID().slice(0, 8)}`,
 			formula: "Rank(CLOSE)",
 			economic_mechanism: "Mean reversion in price momentum",
 		};
@@ -154,57 +169,11 @@ export class PipelineOrchestrator {
 	 * Uses config.pipelineBlueprint.verificationAcceptance
 	 */
 	private judgeVerdict(outcome: StandardOutcome): VerificationResult {
-		const acceptance = this.config.pipelineBlueprint?.verificationAcceptance;
-		const minSharpe = acceptance?.minSharpe ?? 0.25;
-		const maxPValue = acceptance?.maxPValue ?? 0.2;
-		const maxDrawdown = acceptance?.maxDrawdown ?? 0.45;
-
-		const reasons: string[] = [];
-		let verdict: "GO" | "HOLD" | "PIVOT" = "HOLD";
-
-		// Check all criteria
-		const sharpeOk = outcome.sharpe >= minSharpe;
-		const pValueOk = outcome.p_value <= maxPValue;
-		const drawdownOk = outcome.max_drawdown <= maxDrawdown;
-
-		if (!sharpeOk) {
-			reasons.push(`Sharpe ${outcome.sharpe} < ${minSharpe}`);
-		}
-		if (!pValueOk) {
-			reasons.push(`p-value ${outcome.p_value} > ${maxPValue}`);
-		}
-		if (!drawdownOk) {
-			reasons.push(`Max Drawdown ${outcome.max_drawdown} > ${maxDrawdown}`);
-		}
-
-		// Verdict logic
-		if (sharpeOk && pValueOk && drawdownOk) {
-			verdict = "GO";
-			reasons.push("All criteria passed");
-		} else if (reasons.length > 1) {
-			verdict = "PIVOT";
-			reasons.push("Multiple criteria failed");
-		} else {
-			verdict = "HOLD";
-			reasons.push("Marginal criteria");
-		}
-
-		const result: VerificationResult = {
-			verdict,
-			confidence: this.computeConfidence(outcome),
-			reasons,
-			outcome,
-		};
-
-		return VerificationResultSchema.parse(result);
-	}
-
-	/**
-	 * Compute confidence score from outcome metrics
-	 * Simple Sharpe-weighted confidence
-	 */
-	private computeConfidence(outcome: StandardOutcome): number {
-		// Sharpe-weighted: [0, 1]
-		return Math.min(Math.max(outcome.sharpe / 2.0, 0), 1);
+		return VerificationResultSchema.parse(
+			judgeVerification(
+				outcome,
+				this.config.pipelineBlueprint?.verificationAcceptance,
+			),
+		);
 	}
 }

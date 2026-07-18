@@ -12,6 +12,17 @@ export interface DatabaseRegistry {
 	[key: string]: Database;
 }
 
+export const VerificationAcceptanceSchema = z.object({
+	minSharpe: z.number().finite(),
+	maxPValue: z.number().finite().min(0).max(1),
+	maxDrawdown: z.number().finite().min(0).max(1),
+	minBacktestDays: z.number().int().positive().optional(),
+});
+
+export type VerificationAcceptance = z.infer<
+	typeof VerificationAcceptanceSchema
+>;
+
 export const ConfigSchema = z.object({
 	project: z.object({ name: z.string() }),
 	paths: z
@@ -71,11 +82,7 @@ export const ConfigSchema = z.object({
 		.optional(),
 	pipelineBlueprint: z
 		.object({
-			verificationAcceptance: z.object({
-				minSharpe: z.number(),
-				maxPValue: z.number(),
-				maxDrawdown: z.number(),
-			}),
+			verificationAcceptance: VerificationAcceptanceSchema,
 			alphaLoop: z.object({
 				maxCycles: z.number(),
 				sleepSec: z.number(),
@@ -163,12 +170,12 @@ export const AlphaCandidateSchema = z.object({
 export type AlphaCandidate = z.infer<typeof AlphaCandidateSchema>;
 
 export const StandardOutcomeSchema = z.object({
-	sharpe: z.number(),
-	ic: z.number(),
-	max_drawdown: z.number(),
-	p_value: z.number(),
-	factor_id: z.string(),
-	backtest_days: z.number(),
+	sharpe: z.number().finite(),
+	ic: z.number().finite(),
+	max_drawdown: z.number().finite().min(0).max(1),
+	p_value: z.number().finite().min(0).max(1),
+	factor_id: z.string().min(1),
+	backtest_days: z.number().int().positive(),
 });
 
 export type StandardOutcome = z.infer<typeof StandardOutcomeSchema>;
@@ -204,6 +211,7 @@ export const PipelineResultsReportSchema = z.object({
 		minSharpe: z.number(),
 		maxPValue: z.number(),
 		maxDrawdown: z.number(),
+		minBacktestDays: z.number().int().positive(),
 	}),
 });
 

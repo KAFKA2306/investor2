@@ -48,6 +48,14 @@ tasks:
   run:newalphasearch:
     cmds:
       - ALPHA_LOOP_MAX_CYCLES={{.MAX | default 3}} bun src/commands/pipeline_run.ts
+  research:repeat:2010s:
+    desc: Repeat frozen validation for papers published in the 2010s
+    cmds:
+      - uv run --python 3.12 python scripts/repeat_paper_validation.py --publication-start 2010-01 --publication-end 2019-12 --repetitions {{.REPETITIONS | default 5}} --json-output docs/research/2010s_paper_validation_repeated.json
+  research:catalog:validate:
+    desc: Validate the 2010s paper collection catalog
+    cmds:
+      - python3 scripts/validate_paper_catalog.py
   polymarket:bot:
     cmds:
       - bun src/agents/polymarket_trading_bot.ts
