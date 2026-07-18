@@ -28,7 +28,7 @@
     h2 { margin:0; font-size:clamp(25px,4vw,38px); letter-spacing:-.025em; }
     .section-note { color:var(--muted); max-width:580px; }
     .grid { display:grid; gap:16px; }
-    .summary-grid { grid-template-columns:repeat(4,minmax(0,1fr)); }
+    .summary-grid { grid-template-columns:repeat(5,minmax(0,1fr)); }
     .card { background:linear-gradient(180deg,rgba(17,31,43,.98),rgba(13,24,34,.98)); border:1px solid var(--line); border-radius:14px; box-shadow:var(--shadow); }
     .metric { padding:20px; min-height:142px; }
     .metric-label { color:var(--muted); font-size:13px; text-transform:uppercase; letter-spacing:.08em; }
@@ -72,7 +72,16 @@
     .link-row:last-child { border-bottom:0; }
     .link-label { color:var(--muted); }
     .error { padding:22px; color:#ffd5d5; border-color:rgba(255,122,122,.4); }
+    .suite-card { overflow:hidden; }
+    .suite-head { padding:22px; border-bottom:1px solid var(--line); }
+    .suite-head h3 { margin:0 0 8px; font-size:24px; }
+    .suite-head p { margin:0; color:var(--muted); }
+    .verdict-chip { display:inline-flex; padding:4px 8px; border-radius:999px; font-size:11px; font-weight:750; letter-spacing:.04em; white-space:nowrap; }
+    .verdict-direct { color:#ffd7d7; background:rgba(255,122,122,.15); border:1px solid rgba(255,122,122,.45); }
+    .verdict-proxy { color:#ffe8b0; background:rgba(245,196,81,.14); border:1px solid rgba(245,196,81,.42); }
+    .scope-note { color:var(--muted); font-size:13px; }
     footer { border-top:1px solid var(--line); color:var(--muted); padding:26px 0 50px; font-size:13px; }
+    @media (max-width:1100px) { .summary-grid { grid-template-columns:repeat(3,minmax(0,1fr)); } }
     @media (max-width:900px) { .summary-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .two-col { grid-template-columns:1fr; } .candidate-head { flex-direction:column; } }
     @media (max-width:560px) { .summary-grid { grid-template-columns:1fr; } .bar-row { grid-template-columns:115px 1fr 72px; } header { padding-top:42px; } }
   </style>
@@ -83,7 +92,7 @@
     <div class="eyebrow">AAARTS · Evidence-first research</div>
     <h1>Evidence & Evolution Dashboard</h1>
     <p class="lead">利益曲線を飾るページではない。仮説がどの検証ゲートで失敗し、何を次の探索へ持ち越すかを、コミット済みの機械可読成果物から監査する。</p>
-    <div class="notice">この公開版は、現在コミットされている実証成果物だけを表示する。未実施の検証を「合格」と推定せず、欠落した証拠は <strong>NOT RUN</strong> として残す。</div>
+    <div class="notice">この公開版は、現在コミットされている実証成果物だけを表示する。<code>not_confirmed</code> は仮説が偽だと証明した意味ではなく、現行ゲートでは昇格を見送る根拠を示す。未実施の検証は <strong>NOT RUN</strong> として残す。</div>
   </div>
 </header>
 <nav><div class="shell"><a href="#overview">探索概要</a><a href="#loop">AAARTSループ</a><a href="#evidence">証拠レジスタ</a><a href="#gates">ゲート監査</a><a href="#evolution">次の進化</a><a href="#provenance">再現・出典</a></div></nav>
@@ -91,10 +100,11 @@
   <section id="overview">
     <div class="section-head"><div><h2>探索概要</h2></div><p class="section-note">候補数ではなく、証拠が揃った候補だけを集計する。</p></div>
     <div class="grid summary-grid">
-      <article class="card metric"><div class="metric-label">Evidence artifacts</div><div class="metric-value">1</div><div class="metric-detail">機械可読なOOS成果物</div></article>
-      <article class="card metric"><div class="metric-label">Promoted</div><div class="metric-value">0</div><div class="metric-detail">研究ゲート通過候補</div></article>
-      <article class="card metric"><div class="metric-label">Not confirmed</div><div class="metric-value">1</div><div class="metric-detail">弱い仮説を棄却できた証拠</div></article>
-      <article class="card metric"><div class="metric-label">Unrun material gates</div><div class="metric-value">4</div><div class="metric-detail">PIT・外部市場・因子露出・容量</div></article>
+      <article class="card metric"><div class="metric-label">Evidence artifacts</div><div class="metric-value" id="artifactCount">—</div><div class="metric-detail">機械可読なOOS成果物</div></article>
+      <article class="card metric"><div class="metric-label">Verification records</div><div class="metric-value" id="recordCount">—</div><div class="metric-detail">成果物内の検証レコード</div></article>
+      <article class="card metric"><div class="metric-label">Direct not confirmed</div><div class="metric-value" id="directCount">—</div><div class="metric-detail">昇格を見送る根拠</div></article>
+      <article class="card metric"><div class="metric-label">Proxy not confirmed</div><div class="metric-value" id="proxyCount">—</div><div class="metric-detail">代理検証で昇格を見送る根拠</div></article>
+      <article class="card metric"><div class="metric-label">Promoted</div><div class="metric-value" id="promotedCount">—</div><div class="metric-detail">研究ゲート通過候補</div></article>
     </div>
   </section>
   <section id="loop">
@@ -110,14 +120,18 @@
     </div>
   </section>
   <section id="evidence">
-    <div class="section-head"><div><h2>証拠レジスタ</h2></div><p class="section-note">MomentumはAAARTSそのものではなく、探索ループを通過した候補の1件目。</p></div>
+    <div class="section-head"><div><h2>証拠レジスタ</h2></div><p class="section-note">表示対象と件数は、コミット済みのダッシュボード・レジストリから読み込む。</p></div>
     <article class="card candidate">
-      <div class="candidate-head"><div><h3>Jegadeesh–Titman Momentum · Post-publication OOS</h3><div class="candidate-meta">Publication: 1993-03 · Frozen OOS: 1994-01–2017-12 · 288 months · U.S. long-short factor</div></div><span class="badge badge-bad">NOT CONFIRMED</span></div>
+      <div class="candidate-head"><div><h3>Jegadeesh–Titman Momentum · Post-publication OOS</h3><div class="candidate-meta">Jegadeesh–Titman仮説／Fama–French Momによる代理検証 · Publication: 1993-03 · Frozen OOS: 1994-01–2017-12 · 288 months · U.S. long-short factor</div></div><span class="badge badge-bad">NOT CONFIRMED</span></div>
       <div class="candidate-body">
         <div class="table-wrap"><table class="metrics-table"><thead><tr><th>Period</th><th>Annual mean</th><th>Sharpe</th><th>CAGR</th><th>Max drawdown</th><th>Newey-West t</th></tr></thead><tbody id="periodRows"></tbody></table></div>
         <div class="period-bars" id="periodBars"></div>
-        <p style="color:var(--muted);margin:20px 0 0">判定根拠: 全期間のブロック・ブートストラップ95%区間はゼロを含み、後半ホールドアウトの平均リターンは負。したがって、初期期間の好成績だけでは昇格させない。</p>
+        <p style="color:var(--muted);margin:20px 0 0">判定根拠: 全期間のブロック・ブートストラップ95%区間はゼロを含み、後半ホールドアウトの平均リターンは負。これは仮説が偽だと証明したものではなく、初期期間の好成績だけでは昇格を見送る根拠になる。</p>
       </div>
+    </article>
+    <article class="card suite-card" style="margin-top:16px">
+      <div class="suite-head"><h3>Multi-paper post-publication OOS factor suite</h3><p>追加7レコード。factor行は公開後の因子リターン、proxy行は原論文の証券レベル回帰を再現しない実装代理。</p></div>
+      <div class="table-wrap"><table class="metrics-table"><thead><tr><th>Study</th><th>Type</th><th>Window</th><th>Months</th><th>Annual mean</th><th>Sharpe</th><th>CAGR</th><th>Late-half mean</th><th>Verdict</th></tr></thead><tbody id="multiPaperRows"></tbody></table></div>
     </article>
   </section>
   <section id="gates">
@@ -147,6 +161,11 @@
     <div class="grid two-col">
       <article class="card panel"><h3>Repository evidence</h3><div class="links">
         <div class="link-row"><span class="link-label">Machine-readable result</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/post_publication_momentum_oos.json">JSON</a></div>
+        <div class="link-row"><span class="link-label">Dashboard registry</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/dashboard_registry.json">Registry</a></div>
+        <div class="link-row"><span class="link-label">Multi-paper result</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/multi_paper_oos_results.json">JSON</a></div>
+        <div class="link-row"><span class="link-label">Multi-paper report</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/multi_paper_oos_summary.md">Report</a></div>
+        <div class="link-row"><span class="link-label">Multi-paper script</span><a href="https://github.com/KAFKA2306/investor2/blob/main/scripts/verify_paper_factor_suite.py">Script</a></div>
+        <div class="link-row"><span class="link-label">Multi-paper test</span><a href="https://github.com/KAFKA2306/investor2/blob/main/tests/test_paper_factor_suite.py">Test</a></div>
         <div class="link-row"><span class="link-label">Human-readable report</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/post_publication_momentum_oos.md">Report</a></div>
         <div class="link-row"><span class="link-label">Verification script</span><a href="https://github.com/KAFKA2306/investor2/blob/main/scripts/verify_post_publication_momentum.py">Script</a></div>
         <div class="link-row"><span class="link-label">Regression test</span><a href="https://github.com/KAFKA2306/investor2/blob/main/tests/test_post_publication_momentum.py">Test</a></div>
@@ -168,14 +187,36 @@
 <script>
   const fmtPct=(x,digits=2)=>`${(x*100).toFixed(digits)}%`;
   const fmtNum=(x,digits=2)=>Number(x).toFixed(digits);
+  const esc=(value)=>String(value).replace(/[&<>"']/g,character=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[character]));
   function periodOrder(results){return [["post_publication_1994_2017","Full OOS 1994–2017"],["early_holdout_1994_2005","Early 1994–2005"],["late_holdout_2006_2017","Late 2006–2017"]].map(([key,label])=>({label,...results[key]}));}
-  function render(data){
+  function renderMomentum(data){
     const periods=periodOrder(data.gross_results);
     document.getElementById("periodRows").innerHTML=periods.map(p=>`<tr><td>${p.label}<br><span style="color:var(--muted);font-size:12px">${p.months} months</span></td><td>${fmtPct(p.annualized_arithmetic_mean)}</td><td>${fmtNum(p.annualized_sharpe_zero_rf)}</td><td>${fmtPct(p.cagr)}</td><td>${fmtPct(p.max_drawdown)}</td><td>${fmtNum(p.newey_west_t_stat_lag_6)}</td></tr>`).join("");
     const scale=.12;
     document.getElementById("periodBars").innerHTML=periods.map(p=>{const value=p.annualized_arithmetic_mean;const width=Math.min(Math.abs(value)/scale*50,50);const left=value>=0?50:50-width;const color=value>=0?"var(--good)":"var(--bad)";return `<div class="bar-row"><div class="bar-label">${p.label}</div><div class="bar-track"><div class="bar-zero"></div><div class="bar-fill" style="left:${left}%;width:${width}%;background:${color}"></div></div><div class="bar-value">${fmtPct(value)}</div></div>`;}).join("");
   }
-  fetch("./data/post_publication_momentum_oos.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(`Evidence JSON load failed: HTTP ${r.status}`);return r.json();}).then(render).catch(error=>{const box=document.getElementById("loadError");box.hidden=false;box.textContent=error.message;});
+  function renderSummary(artifacts){
+    const records=artifacts.flatMap(({entry,data})=>entry.id==="momentum"?[{verdict:data.verdict,classification:entry.record_classification}]:Object.values(data.studies).map(study=>({verdict:study.verdict,classification:study.verdict.startsWith("proxy_")?"proxy":"direct"})));
+    document.getElementById("artifactCount").textContent=artifacts.length;
+    document.getElementById("recordCount").textContent=records.length;
+    document.getElementById("directCount").textContent=records.filter(record=>record.classification==="direct"&&record.verdict.startsWith("not_confirmed")).length;
+    document.getElementById("proxyCount").textContent=records.filter(record=>record.classification==="proxy"&&record.verdict==="proxy_not_confirmed").length;
+    document.getElementById("promotedCount").textContent=records.filter(record=>record.verdict==="confirmed"||record.verdict==="proxy_supportive").length;
+  }
+  function renderMulti(data){
+    const rows=Object.values(data.studies);
+    document.getElementById("multiPaperRows").innerHTML=rows.map(study=>{const full=study.gross_results.full_oos;const late=study.gross_results.late_half;const isProxy=study.verdict.startsWith("proxy_");const verdict=isProxy?"PROXY · NOT CONFIRMED":"NOT CONFIRMED";return `<tr><td><code>${esc(study.id)}</code><br><span class="scope-note">${esc(study.paper)}</span></td><td>${isProxy?"proxy":"factor"}</td><td>${full.start}–${full.end}</td><td>${full.months}</td><td>${fmtPct(full.annualized_arithmetic_mean)}</td><td>${fmtNum(full.annualized_sharpe_zero_rf)}</td><td>${fmtPct(full.cagr)}</td><td>${fmtPct(late.annualized_arithmetic_mean)}</td><td><span class="verdict-chip ${isProxy?"verdict-proxy":"verdict-direct"}">${verdict}</span></td></tr>`;}).join("");
+  }
+  async function load(){
+    const response=await fetch("./data/research_registry.json",{cache:"no-store"});
+    if(!response.ok)throw new Error(`Research registry load failed: HTTP ${response.status}`);
+    const registry=await response.json();
+    const artifacts=await Promise.all(registry.artifacts.map(async entry=>{const result=await fetch(`./data/${entry.file}`,{cache:"no-store"});if(!result.ok)throw new Error(`${entry.file} load failed: HTTP ${result.status}`);return {entry,data:await result.json()};}));
+    renderSummary(artifacts);
+    renderMomentum(artifacts.find(({entry})=>entry.id==="momentum").data);
+    renderMulti(artifacts.find(({entry})=>entry.id==="multi_paper").data);
+  }
+  load().catch(error=>{const box=document.getElementById("loadError");box.hidden=false;box.textContent=error.message;});
 </script>
 </body>
 </html>

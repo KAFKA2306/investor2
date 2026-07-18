@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "counting_note": "Dashboard buckets follow committed verdict labels: not_confirmed is direct and proxy_not_confirmed is proxy. Momentum remains a Fama–French Mom proxy verification despite its existing not_confirmed verdict label.",
+  "artifacts": [
+    {
+      "id": "momentum",
+      "file": "post_publication_momentum_oos.json",
+      "repository_path": "docs/research/post_publication_momentum_oos.json",
+      "title": "Jegadeesh–Titman Momentum",
+      "record_count": 1,
+      "record_classification": "direct",
+      "methodology": "Jegadeesh–Titman仮説／Fama–French Momによる代理検証"
+    },
+    {
+      "id": "multi_paper",
+      "file": "multi_paper_oos_results.json",
+      "repository_path": "docs/research/multi_paper_oos_results.json",
+      "title": "Multi-paper post-publication OOS factor suite",
+      "record_count": 7,
+      "record_classification": "mixed",
+      "methodology": "Paper–factor registry with direct factor-return tests and implementation proxies"
+    }
+  ]
+}

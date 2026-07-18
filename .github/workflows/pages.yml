@@ -5,7 +5,9 @@ on:
     branches: [main]
     paths:
       - "docs/aaarts-dashboard/**"
+      - "docs/research/dashboard_registry.json"
       - "docs/research/post_publication_momentum_oos.json"
+      - "docs/research/multi_paper_oos_results.json"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -34,7 +36,9 @@ jobs:
           rm -rf _site
           mkdir -p _site/data
           cp docs/aaarts-dashboard/index.html _site/index.html
+          cp docs/research/dashboard_registry.json _site/data/research_registry.json
           cp docs/research/post_publication_momentum_oos.json _site/data/post_publication_momentum_oos.json
+          cp docs/research/multi_paper_oos_results.json _site/data/multi_paper_oos_results.json
           touch _site/.nojekyll
 
       - name: Upload Pages artifact
