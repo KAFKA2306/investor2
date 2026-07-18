@@ -18,7 +18,9 @@ const pct = (value) =>
 const num = (value) =>
 	Number.isFinite(Number(value)) ? Number(value).toFixed(3) : "—";
 const byId = (items = [], id) =>
-	items.find((item) => item.stable_id === id || item.id === id);
+	id == null
+		? undefined
+		: items.find((item) => item.stable_id === id || item.id === id);
 const tag = (label, kind = label) =>
 	'<span class="tag tag-' +
 	String(kind).toLowerCase().replaceAll("_", "-") +
@@ -73,7 +75,7 @@ function assertRegistry(registry) {
 	requiredCollections.forEach((key) => {
 		if (!Array.isArray(registry[key]))
 			throw new Error(`Registry validation failed: missing ${key}`);
-		registry[key].forEach((item) =>
+		registry[key].forEach((item) => {
 			[
 				"stable_id",
 				"created_at",
@@ -85,8 +87,8 @@ function assertRegistry(registry) {
 					throw new Error(
 						`Registry validation failed: ${key} missing ${field}`,
 					);
-			}),
-		);
+			});
+		});
 	});
 	const states = ["CONFIRMED", "NOT_CONFIRMED", "CONTRADICTED", "UNVERIFIED"];
 	const decisions = ["GO", "HOLD", "PIVOT"];
@@ -125,6 +127,7 @@ function related(version) {
 			(item) => item.strategy_version_id === version.stable_id,
 		);
 	const genome = byId(r.strategy_genomes, version.genome_id);
+	const hypothesis = genome && byId(r.hypotheses, genome.hypothesis_id);
 	const variant = r.implementation_variants.find(
 		(item) => item.strategy_version_id === version.stable_id,
 	);
@@ -176,6 +179,7 @@ function related(version) {
 	return {
 		run,
 		genome,
+		hypothesis,
 		variant,
 		evidence,
 		gates,
@@ -235,8 +239,8 @@ function renderUniverse() {
 				const pass = x.gates.filter((item) => item.status === "PASS").length;
 				const gateRate = gateCount
 					? `${Math.round((pass / gateCount) * 100)}%`
-					: "UNVERIFIED";
-				const dataEnd = x.dataset?.period_end || "UNVERIFIED";
+					: "NOT_RUN";
+				const dataEnd = x.dataset?.period_end || "NOT_RUN";
 				const next = x.mutation[0]?.next_strategy_version_id || "—";
 				const width = Math.min((Math.abs(Number(late) || 0) / 0.06) * 100, 100);
 				return (
@@ -251,7 +255,7 @@ function renderUniverse() {
 					" · parent " +
 					esc(parent) +
 					'</span><span class="strategy-meta">' +
-					esc(x.hypothesis?.title || "UNVERIFIED") +
+					esc(x.hypothesis?.title || "NOT_RUN") +
 					"</span></span><span>" +
 					tag(version.evidence_state) +
 					"<br>" +
@@ -265,7 +269,7 @@ function renderUniverse() {
 					'</span><span class="bar"><i style="width:' +
 					width +
 					'%"></i></span></span><span class="strategy-meta">' +
-					esc(x.variant?.implementation_type || "UNVERIFIED") +
+					esc(x.variant?.implementation_type || "NOT_RUN") +
 					" · gates " +
 					gateRate +
 					"<br>data " +
@@ -277,13 +281,11 @@ function renderUniverse() {
 			})
 			.join("") ||
 		'<div style="padding:22px;color:var(--muted)">No strategies match this filter.</div>';
-	document
-		.querySelectorAll("[data-strategy]")
-		.forEach((button) =>
-			button.addEventListener("click", () =>
-				selectStrategy(button.dataset.strategy),
-			),
-		);
+	document.querySelectorAll("[data-strategy]").forEach((button) => {
+		button.addEventListener("click", () => {
+			selectStrategy(button.dataset.strategy);
+		});
+	});
 }
 function renderDetail() {
 	const version =
@@ -564,11 +566,9 @@ function renderTab() {
 	document
 		.querySelector(`.tab[data-tab="${state.tab}"]`)
 		?.classList.add("active");
-	document
-		.querySelectorAll(".detail-pane")
-		.forEach((pane) =>
-			pane.classList.toggle("active", pane.id === `pane-${state.tab}`),
-		);
+	document.querySelectorAll(".detail-pane").forEach((pane) => {
+		pane.classList.toggle("active", pane.id === `pane-${state.tab}`);
+	});
 }
 function selectStrategy(id) {
 	state.selected = id;
@@ -578,21 +578,21 @@ function selectStrategy(id) {
 		?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 function bind() {
-	document.querySelectorAll(".filter").forEach((button) =>
+	document.querySelectorAll(".filter").forEach((button) => {
 		button.addEventListener("click", () => {
 			state.filter = button.dataset.filter;
-			document
-				.querySelectorAll(".filter")
-				.forEach((item) => item.classList.toggle("selected", item === button));
+			document.querySelectorAll(".filter").forEach((item) => {
+				item.classList.toggle("selected", item === button);
+			});
 			renderUniverse();
-		}),
-	);
-	document.querySelectorAll(".tab").forEach((button) =>
+		});
+	});
+	document.querySelectorAll(".tab").forEach((button) => {
 		button.addEventListener("click", () => {
 			state.tab = button.dataset.tab;
 			renderTab();
-		}),
-	);
+		});
+	});
 }
 async function load() {
 	const response = await fetch("./data/strategy_registry.json", {
