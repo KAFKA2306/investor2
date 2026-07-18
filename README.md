@@ -1,4 +1,4 @@
-# AAARTS: Autonomous Agentic Alpha Trade System
+# AAARTS: Autonomous Agentic Alpha Research Trade System
 
 ## Introduction
 
