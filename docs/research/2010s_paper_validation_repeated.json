@@ -1,0 +1,113 @@
+{
+  "all_verdicts_stable": true,
+  "publication_window": {
+    "end": "2019-12",
+    "start": "2010-01"
+  },
+  "repetitions": 5,
+  "seed_start": 2306,
+  "studies": {
+    "fama_french_2015_cma": {
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "publication_month": "2015-04",
+      "runs": [
+        {
+          "bootstrap_lower_bound": -0.06130344827586207,
+          "cost_25bps_annualized_mean": -0.05786896551724138,
+          "late_half_annualized_mean": -0.03769655172413793,
+          "newey_west_t_stat_lag_6": -1.2141419249304828,
+          "seed": 2306,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": -0.06126206896551723,
+          "cost_25bps_annualized_mean": -0.05786896551724138,
+          "late_half_annualized_mean": -0.03769655172413793,
+          "newey_west_t_stat_lag_6": -1.2141419249304828,
+          "seed": 2307,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": -0.06252413793103448,
+          "cost_25bps_annualized_mean": -0.05786896551724138,
+          "late_half_annualized_mean": -0.03769655172413793,
+          "newey_west_t_stat_lag_6": -1.2141419249304828,
+          "seed": 2308,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": -0.06103448275862069,
+          "cost_25bps_annualized_mean": -0.05786896551724138,
+          "late_half_annualized_mean": -0.03769655172413793,
+          "newey_west_t_stat_lag_6": -1.2141419249304828,
+          "seed": 2309,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": -0.06151034482758621,
+          "cost_25bps_annualized_mean": -0.05786896551724138,
+          "late_half_annualized_mean": -0.03769655172413793,
+          "newey_west_t_stat_lag_6": -1.2141419249304828,
+          "seed": 2310,
+          "verdict": "not_confirmed"
+        }
+      ],
+      "verdict_counts": {
+        "not_confirmed": 5
+      },
+      "verdict_stable": true
+    },
+    "fama_french_2015_rmw": {
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "publication_month": "2015-04",
+      "runs": [
+        {
+          "bootstrap_lower_bound": 0.0014689655172413778,
+          "cost_25bps_annualized_mean": -0.011048275862068965,
+          "late_half_annualized_mean": 0.01820689655172414,
+          "newey_west_t_stat_lag_6": 1.1564036112151215,
+          "seed": 2306,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": 0.0011793103448275845,
+          "cost_25bps_annualized_mean": -0.011048275862068965,
+          "late_half_annualized_mean": 0.01820689655172414,
+          "newey_west_t_stat_lag_6": 1.1564036112151215,
+          "seed": 2307,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": 0.0018206896551724147,
+          "cost_25bps_annualized_mean": -0.011048275862068965,
+          "late_half_annualized_mean": 0.01820689655172414,
+          "newey_west_t_stat_lag_6": 1.1564036112151215,
+          "seed": 2308,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": 0.0015517241379310377,
+          "cost_25bps_annualized_mean": -0.011048275862068965,
+          "late_half_annualized_mean": 0.01820689655172414,
+          "newey_west_t_stat_lag_6": 1.1564036112151215,
+          "seed": 2309,
+          "verdict": "not_confirmed"
+        },
+        {
+          "bootstrap_lower_bound": 0.0017172413793103453,
+          "cost_25bps_annualized_mean": -0.011048275862068965,
+          "late_half_annualized_mean": 0.01820689655172414,
+          "newey_west_t_stat_lag_6": 1.1564036112151215,
+          "seed": 2310,
+          "verdict": "not_confirmed"
+        }
+      ],
+      "verdict_counts": {
+        "not_confirmed": 5
+      },
+      "verdict_stable": true
+    }
+  },
+  "study_count": 2,
+  "suite": "repeated 2010s paper-factor validation"
+}
