@@ -2,8 +2,8 @@
   "allocation_plans": [],
   "context_snapshots": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dependency_lock_hash": "31eb6871429e21f4096c19c557d6f50067fd313517312dc803ff9d165f96d10a",
       "environment": "Python 3.12 / frozen repository data / static Pages dashboard",
       "input_hash": "eecec26498c6cf58f84bfd4158130711e62782e183ceb3b55de5c5f5c6a6f8df",
@@ -20,8 +20,8 @@
         "chronological_months",
         "unique_months"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.momentum.snapshot.1",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
@@ -35,8 +35,8 @@
         "chronological_months",
         "unique_months"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
@@ -50,8 +50,8 @@
         "chronological_months",
         "unique_months"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
@@ -63,8 +63,8 @@
   "data_sources": [
     {
       "authority": "PRIMARY",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "kind": "MARKET",
       "name": "Kenneth French Data Library Mom",
@@ -74,8 +74,8 @@
     },
     {
       "authority": "PRIMARY",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "kind": "MARKET",
       "name": "Kenneth French Data Library FF3",
@@ -85,8 +85,8 @@
     },
     {
       "authority": "PRIMARY",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "kind": "MARKET",
       "name": "Kenneth French Data Library FF5",
@@ -97,12 +97,12 @@
   ],
   "dataset_snapshots": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "data_source_id": "source.ken_french.mom",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "name": "momentum",
-      "observed_at": "2026-07-18T04:40:55Z",
+      "observed_at": "2026-07-18T04:41:06Z",
       "path": "docs/research/data/ff_momentum_1994_2017.csv",
       "period_end": "2017-12",
       "period_start": "1994-01",
@@ -111,12 +111,12 @@
       "stable_id": "dataset.momentum.snapshot.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "data_source_id": "source.ken_french.ff3",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "name": "ff3_1992_2020",
-      "observed_at": "2026-07-18T04:40:55Z",
+      "observed_at": "2026-07-18T04:41:06Z",
       "path": "docs/research/data/ff3_1992_2020.csv",
       "period_end": "2020-02",
       "period_start": "1992-07",
@@ -125,12 +125,12 @@
       "stable_id": "dataset.ff3_1992_2020.snapshot.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "data_source_id": "source.ken_french.ff5",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "name": "ff5_2015_2020",
-      "observed_at": "2026-07-18T04:40:55Z",
+      "observed_at": "2026-07-18T04:41:06Z",
       "path": "docs/research/data/ff5_2015_2020.csv",
       "period_end": "2020-02",
       "period_start": "2015-05",
@@ -141,8 +141,8 @@
   ],
   "decision_records": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -162,8 +162,8 @@
       "strategy_version_id": "strategy.momentum_ff_mom.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -183,8 +183,8 @@
       "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -204,8 +204,8 @@
       "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -225,8 +225,8 @@
       "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -246,8 +246,8 @@
       "strategy_version_id": "strategy.fama_french_1993_hml.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -267,8 +267,8 @@
       "strategy_version_id": "strategy.fama_french_1993_smb.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -288,8 +288,8 @@
       "strategy_version_id": "strategy.fama_french_2015_cma.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
       "evidence_state": "NOT_CONFIRMED",
       "gate_assessment_ids": [
@@ -312,8 +312,8 @@
   "drift_events": [],
   "evidence_artifacts": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.049437499999999995,
@@ -340,8 +340,8 @@
       "verdict_label": "not_confirmed: the full post-publication mean is not statistically distinguishable from zero and the 2006-2017 holdout has a negative mean"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.014432530120481925,
@@ -368,8 +368,8 @@
       "verdict_label": "proxy_not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.014432530120481925,
@@ -396,8 +396,8 @@
       "verdict_label": "proxy_not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.014146987951807195,
@@ -424,8 +424,8 @@
       "verdict_label": "proxy_not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.010992592592592554,
@@ -452,8 +452,8 @@
       "verdict_label": "not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.01257037037037037,
@@ -480,8 +480,8 @@
       "verdict_label": "not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": -0.027868965517241384,
@@ -508,8 +508,8 @@
       "verdict_label": "not_confirmed"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "gross": {
         "annualized_mean": 0.018951724137931038,
@@ -538,8 +538,8 @@
   ],
   "evolution_edges": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.momentum_ff_mom.v1",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "learning_event_id": "learning.momentum_ff_mom.1",
@@ -550,8 +550,8 @@
       "to_strategy_version_id": "strategy.momentum_ff_mom.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.banz_1981_size_late_oos_proxy.1",
@@ -562,8 +562,8 @@
       "to_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_1992_size_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1992_size_proxy.1",
@@ -574,8 +574,8 @@
       "to_strategy_version_id": "strategy.fama_french_1992_size_proxy.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_1992_value_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1992_value_proxy.1",
@@ -586,8 +586,8 @@
       "to_strategy_version_id": "strategy.fama_french_1992_value_proxy.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_1993_hml.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1993_hml.1",
@@ -598,8 +598,8 @@
       "to_strategy_version_id": "strategy.fama_french_1993_hml.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_1993_smb.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1993_smb.1",
@@ -610,8 +610,8 @@
       "to_strategy_version_id": "strategy.fama_french_1993_smb.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_2015_cma.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "learning_event_id": "learning.fama_french_2015_cma.1",
@@ -622,8 +622,8 @@
       "to_strategy_version_id": "strategy.fama_french_2015_cma.v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "from_strategy_version_id": "strategy.fama_french_2015_rmw.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "learning_event_id": "learning.fama_french_2015_rmw.1",
@@ -637,8 +637,8 @@
   "execution_runs": [],
   "exploration_runs": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "0eab594622eb2cfeb6370784f0fc8d6154ee3211ca6c900ed253018805a6abd3",
       "objective": "Audit committed post-publication research as versioned AAARTS strategies.",
       "schema_version": "aaarts-ontology.v1",
@@ -658,8 +658,8 @@
   ],
   "factor_exposure_assessments": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "note": "No additional factor or industry attribution artifact.",
@@ -669,8 +669,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "No additional factor or industry attribution artifact.",
@@ -680,8 +680,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "No additional factor or industry attribution artifact.",
@@ -691,8 +691,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "No additional factor or industry attribution artifact.",
@@ -702,8 +702,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "No additional factor or industry attribution artifact.",
@@ -713,8 +713,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "No additional factor or industry attribution artifact.",
@@ -724,8 +724,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "note": "No additional factor or industry attribution artifact.",
@@ -735,8 +735,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "factors": [],
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "note": "No additional factor or industry attribution artifact.",
@@ -748,9 +748,9 @@
   ],
   "failure_constraints": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "learning_event_id": "learning.momentum_ff_mom.1",
       "schema_version": "aaarts-ontology.v1",
@@ -758,9 +758,9 @@
       "stable_id": "constraint.momentum_ff_mom.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.banz_1981_size_late_oos_proxy.1",
       "schema_version": "aaarts-ontology.v1",
@@ -768,9 +768,9 @@
       "stable_id": "constraint.banz_1981_size_late_oos_proxy.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1992_size_proxy.1",
       "schema_version": "aaarts-ontology.v1",
@@ -778,9 +778,9 @@
       "stable_id": "constraint.fama_french_1992_size_proxy.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1992_value_proxy.1",
       "schema_version": "aaarts-ontology.v1",
@@ -788,9 +788,9 @@
       "stable_id": "constraint.fama_french_1992_value_proxy.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1993_hml.1",
       "schema_version": "aaarts-ontology.v1",
@@ -798,9 +798,9 @@
       "stable_id": "constraint.fama_french_1993_hml.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "learning_event_id": "learning.fama_french_1993_smb.1",
       "schema_version": "aaarts-ontology.v1",
@@ -808,9 +808,9 @@
       "stable_id": "constraint.fama_french_1993_smb.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "learning_event_id": "learning.fama_french_2015_cma.1",
       "schema_version": "aaarts-ontology.v1",
@@ -818,9 +818,9 @@
       "stable_id": "constraint.fama_french_2015_cma.1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "learning_event_id": "learning.fama_french_2015_rmw.1",
       "schema_version": "aaarts-ontology.v1",
@@ -830,8 +830,8 @@
   ],
   "gate_assessments": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -844,8 +844,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -858,8 +858,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -872,8 +872,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -886,8 +886,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -900,8 +900,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -914,8 +914,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -928,8 +928,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -942,8 +942,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -956,8 +956,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -970,8 +970,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -984,8 +984,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -998,8 +998,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -1012,8 +1012,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -1026,8 +1026,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -1040,8 +1040,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1054,8 +1054,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1068,8 +1068,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1082,8 +1082,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1096,8 +1096,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1110,8 +1110,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1124,8 +1124,8 @@
       "status": "FAIL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1138,8 +1138,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1152,8 +1152,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1166,8 +1166,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1180,8 +1180,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1194,8 +1194,8 @@
       "status": "FAIL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1208,8 +1208,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1222,8 +1222,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1236,8 +1236,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1250,8 +1250,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1264,8 +1264,8 @@
       "status": "FAIL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1278,8 +1278,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1292,8 +1292,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1306,8 +1306,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1320,8 +1320,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1334,8 +1334,8 @@
       "status": "FAIL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1348,8 +1348,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1362,8 +1362,8 @@
       "status": "PARTIAL"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1376,8 +1376,8 @@
       "status": "NOT_RUN"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1390,12 +1390,12 @@
       "status": "NOT_RUN"
     }
   ],
-  "generated_at": "2026-07-18T04:40:55Z",
+  "generated_at": "2026-07-18T04:41:06Z",
   "hypotheses": [
     {
       "claim": "過去リターン上位銘柄は将来も相対的に高いリターンを示す。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "投資家の反応遅れ・情報拡散の遅さが短中期の継続を生むという仮説。",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "primary_source_ids": [
@@ -1407,8 +1407,8 @@
     },
     {
       "claim": "Banz (1981), The relationship between return and market value of common stocks の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "primary_source_ids": [
@@ -1420,8 +1420,8 @@
     },
     {
       "claim": "Fama and French (1992), The Cross-Section of Expected Stock Returns の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "primary_source_ids": [
@@ -1433,8 +1433,8 @@
     },
     {
       "claim": "Fama and French (1992), The Cross-Section of Expected Stock Returns の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "primary_source_ids": [
@@ -1446,8 +1446,8 @@
     },
     {
       "claim": "Fama and French (1993), Common risk factors in the returns on stocks and bonds の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the published HML factor construction.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "primary_source_ids": [
@@ -1459,8 +1459,8 @@
     },
     {
       "claim": "Fama and French (1993), Common risk factors in the returns on stocks and bonds の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the published SMB factor construction.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "primary_source_ids": [
@@ -1472,8 +1472,8 @@
     },
     {
       "claim": "Fama and French (2015), A five-factor asset pricing model の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the CMA investment factor.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "primary_source_ids": [
@@ -1485,8 +1485,8 @@
     },
     {
       "claim": "Fama and French (2015), A five-factor asset pricing model の公開後因子リターンが再現される。",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the RMW profitability factor.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "primary_source_ids": [
@@ -1499,8 +1499,8 @@
   ],
   "implementation_variants": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Fama/French Mom: high prior-return portfolios minus low prior-return portfolios.",
       "implementation_type": "PROXY",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
@@ -1513,8 +1513,8 @@
       "strategy_version_id": "strategy.momentum_ff_mom.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
       "implementation_type": "PROXY",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -1527,8 +1527,8 @@
       "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
       "implementation_type": "PROXY",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -1541,8 +1541,8 @@
       "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
       "implementation_type": "PROXY",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -1555,8 +1555,8 @@
       "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Post-publication return of the published HML factor construction.",
       "implementation_type": "FACTOR",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -1569,8 +1569,8 @@
       "strategy_version_id": "strategy.fama_french_1993_hml.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Post-publication return of the published SMB factor construction.",
       "implementation_type": "FACTOR",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -1583,8 +1583,8 @@
       "strategy_version_id": "strategy.fama_french_1993_smb.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Post-publication return of the CMA investment factor.",
       "implementation_type": "FACTOR",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -1597,8 +1597,8 @@
       "strategy_version_id": "strategy.fama_french_2015_cma.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "definition": "Post-publication return of the RMW profitability factor.",
       "implementation_type": "FACTOR",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -1613,8 +1613,8 @@
   ],
   "learning_events": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.momentum_ff_mom.oos.1"
       ],
@@ -1630,8 +1630,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.banz_1981_size_late_oos_proxy.oos.1"
       ],
@@ -1647,8 +1647,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_size_proxy.oos.1"
       ],
@@ -1664,8 +1664,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1992_value_proxy.oos.1"
       ],
@@ -1681,8 +1681,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_hml.oos.1"
       ],
@@ -1698,8 +1698,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_1993_smb.oos.1"
       ],
@@ -1715,8 +1715,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_cma.oos.1"
       ],
@@ -1732,8 +1732,8 @@
       "trigger": "NOT_CONFIRMED under locked post-publication gate"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_artifact_ids": [
         "evidence.fama_french_2015_rmw.oos.1"
       ],
@@ -1756,8 +1756,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "next_strategy_version_id": "strategy.momentum_ff_mom.v2",
@@ -1773,8 +1773,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "next_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v2",
@@ -1790,8 +1790,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "next_strategy_version_id": "strategy.fama_french_1992_size_proxy.v2",
@@ -1807,8 +1807,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "next_strategy_version_id": "strategy.fama_french_1992_value_proxy.v2",
@@ -1824,8 +1824,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "next_strategy_version_id": "strategy.fama_french_1993_hml.v2",
@@ -1841,8 +1841,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "next_strategy_version_id": "strategy.fama_french_1993_smb.v2",
@@ -1858,8 +1858,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "next_strategy_version_id": "strategy.fama_french_2015_cma.v2",
@@ -1875,8 +1875,8 @@
         "Add exposure and capacity assessment",
         "Freeze a new independent period before tuning"
       ],
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "next_strategy_version_id": "strategy.fama_french_2015_rmw.v2",
@@ -1892,9 +1892,9 @@
   "performance_audits": [],
   "pit_assessments": [
     {
-      "assessed_at": "2026-07-18T04:40:55Z",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "assessed_at": "2026-07-18T04:41:06Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.momentum.snapshot.1",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
@@ -1903,9 +1903,9 @@
       "status": "NOT_RUN"
     },
     {
-      "assessed_at": "2026-07-18T04:40:55Z",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "assessed_at": "2026-07-18T04:41:06Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
@@ -1914,9 +1914,9 @@
       "status": "NOT_RUN"
     },
     {
-      "assessed_at": "2026-07-18T04:40:55Z",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "assessed_at": "2026-07-18T04:41:06Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
@@ -1928,9 +1928,9 @@
   "portfolio_candidates": [],
   "protocol_snapshots": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "logic_fingerprint": "86032894f303bef2b2c48de80cd46fa064e3a2828bba39ee0033bbbf66331a55",
@@ -1944,9 +1944,9 @@
       "stable_id": "protocol.momentum_ff_mom.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "logic_fingerprint": "d8ec5b4faf57240e9e74796b13c0ce64dc28598ed8daef7e52bca968d870343c",
@@ -1960,9 +1960,9 @@
       "stable_id": "protocol.banz_1981_size_late_oos_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "logic_fingerprint": "e5f1af3d1bf450bf7a29702da5dd88fbedfe3fd05c11c3cbb3494df414364b4a",
@@ -1976,9 +1976,9 @@
       "stable_id": "protocol.fama_french_1992_size_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "logic_fingerprint": "ac827680c504192fb8894ab24c6179fd0d0aa97679fa0def7e9ac089290bf25b",
@@ -1992,9 +1992,9 @@
       "stable_id": "protocol.fama_french_1992_value_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "logic_fingerprint": "ed6351bbf0e185c1cbd630f113e002b28378f6efdfc67344156254d5c7078770",
@@ -2008,9 +2008,9 @@
       "stable_id": "protocol.fama_french_1993_hml.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "logic_fingerprint": "6c4a2c12f6f10bf0660d4512033a96268bac31deaec7ac1910cc91a8978ab429",
@@ -2024,9 +2024,9 @@
       "stable_id": "protocol.fama_french_1993_smb.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "logic_fingerprint": "1f10f756afc06bf54e0dc3f4a097df74101cc24a8c07c0d6fa808788786b7d88",
@@ -2040,9 +2040,9 @@
       "stable_id": "protocol.fama_french_2015_cma.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "logic_fingerprint": "c6fd908d5a7da3695d8ef0f4c8fd9683c7809fc21b0788bcb099c4d9b678c75b",
@@ -2058,12 +2058,12 @@
   ],
   "provenance_records": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_ids": [
         "dataset.momentum.snapshot.1"
       ],
-      "environment_fingerprint": "96a3f235fd008b7250b18274d35eaff8ea1fac29fa440138f0ef3e2b94a7df9f",
+      "environment_fingerprint": "780a451e78d4809962e64178de06a6ac325a814b28f49e8ab9c4a8c36b0eaee9",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "pit_assessment_id": "pit.momentum.snapshot.1",
       "schema_version": "aaarts-ontology.v1",
@@ -2074,12 +2074,12 @@
       "transformation": "CSV factor return divided by 100; chronological OOS selection."
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_ids": [
         "dataset.ff3_1992_2020.snapshot.1"
       ],
-      "environment_fingerprint": "db8dd3f5c5771e6f001b327d889d8a68655a5b1d9be82e584a88f4bdb218dc35",
+      "environment_fingerprint": "592f10934a4bd795284fe04913abe95cf4c81a17644b4eca00841da66b09af9c",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "pit_assessment_id": "pit.ff3_1992_2020.snapshot.1",
       "schema_version": "aaarts-ontology.v1",
@@ -2090,12 +2090,12 @@
       "transformation": "CSV factor return divided by 100; chronological OOS selection."
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_ids": [
         "dataset.ff5_2015_2020.snapshot.1"
       ],
-      "environment_fingerprint": "30fd0b8a22011a6b1b5d25dc2363de9fff2e7f3cd7aaee9e9ebbf77e961e874c",
+      "environment_fingerprint": "5ee823f1157aa8b306a7e5481aa37ced53554167b389334d055124f88654434b",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "pit_assessment_id": "pit.ff5_2015_2020.snapshot.1",
       "schema_version": "aaarts-ontology.v1",
@@ -2108,14 +2108,14 @@
   ],
   "research_runs": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.momentum.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "ddce9e5e79cffbefbed8fdfd248d9b3df063bf90f88219a8dfbbf46df5b1a45a",
-        "environment": "3e8207f7c98ebae805dfa6483c2fd832d5804af1a3277cb329ff7f136f72dd57",
+        "environment": "9e91ca14ef51162c1da6040b0a868d4f1cc8354adba0bd53c68b202ff7b0d7b8",
         "logic": "c47c00be1ee118380160520109a5140d98cb1f5f3d50ee57deed95141d749ce3"
       },
       "implementation_variant_id": "implementation.momentum_ff_mom.v1",
@@ -2125,19 +2125,19 @@
       "reproduction_command": "python3 scripts/verify_post_publication_momentum.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.momentum_ff_mom.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.momentum_ff_mom.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "76cd1e8aeeb75b33b9b104e993b8e38bcb206535279085e22089bb0d580e1541",
-        "environment": "2ed4182c6a67caa2a18fcc0567aa2e2603e66566bf06fcd4c7cb44b3c21b633c",
+        "environment": "62e1e81e5a283d3d6e2a3750b352bc2297bf1de90be26dc47cb600d018ae0be8",
         "logic": "4de7c2a4c638a2067723aea0713f174e7047857667d040d449aa5ec47048922f"
       },
       "implementation_variant_id": "implementation.banz_1981_size_late_oos_proxy.v1",
@@ -2147,19 +2147,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "12bb5b163a3426bded165cc312ee5b3d96c73ffafd10ff0cd3844f59b0fced44",
-        "environment": "050b960fb8ecf60ba7d3fa54f3e803c79d24a12a9f5ac4c87f113e40263772b3",
+        "environment": "cfa853fb6554ec88646b45d4f9077309b07c943c09bda42903a1a74c9c1c5357",
         "logic": "01e8e0a778d9b5adb410aa18ed4d2c917d7fcb84f15f551ef3fcbe77664c3ebe"
       },
       "implementation_variant_id": "implementation.fama_french_1992_size_proxy.v1",
@@ -2169,19 +2169,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_1992_size_proxy.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "370a345e76e625004560a2e39ba08f398bbf6dbe1a186957f3c94dd2e6dd0a1e",
-        "environment": "41e6f2700afcf7bf4b07595e354bc0538bc76ae12e5b644ab62af880b38836cc",
+        "environment": "a70723060d1cd1ccd2b4ad5f9f989e08b2a6d0bddd48a3284db0f6c8e2f91eed",
         "logic": "835de2f8f095b68ab967efd73200d3970f784f8cd8cf1eb2153288ab00580b92"
       },
       "implementation_variant_id": "implementation.fama_french_1992_value_proxy.v1",
@@ -2191,19 +2191,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_1992_value_proxy.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "7f6d1f30171dd1cb06211f067912102bad87ccd6bfdd5aa9f90fd858041171c5",
-        "environment": "16c59201f26465b7149f3c691203d0a9343c191c2bf9d63ea117a7db670ce5cf",
+        "environment": "5b4cca09082b6368950a6aca9027b8f6d4d9b7f022e7c3f3d99e2162cd96fcd8",
         "logic": "a3a77500276d867a19c485933053e8f2642c757b86bd8ee095d067d51a0e5d5e"
       },
       "implementation_variant_id": "implementation.fama_french_1993_hml.v1",
@@ -2213,19 +2213,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_1993_hml.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_1993_hml.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "2b0586cea6de6d774058c2a59faa513f29dbaebe07d3c2812bffb55b1e4de034",
-        "environment": "314b2ddad09f6e2837675ea22b4058a83f013ce7f95003905937c3a14d2e9e83",
+        "environment": "a6d6f46cdd10e645855d94e5a4373679a372e52ef31d1f5f0c35940372acc925",
         "logic": "ec58d8d6f356cff1db72eaf6bc70591cc1ca245ff43842fe5a4678359403fec1"
       },
       "implementation_variant_id": "implementation.fama_french_1993_smb.v1",
@@ -2235,19 +2235,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_1993_smb.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_1993_smb.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "a9b2e7e4b89c0e3fa73afd3693230a04f9e43c934b0779f2f114e2af2bdfe261",
-        "environment": "ec656c6f39f71c634ce5387322fe9f1534182c8ffe3a14af7510e2e3bf5609c1",
+        "environment": "178f28f8f5345ad485bb21bf18e6cd12b8f7c57dcd1c123b355de5bfbfe9a214",
         "logic": "68cc215bbf355c83f7398ae0d1daf35bb7941c8eec7b3b3a9cfdc834a52e1e3b"
       },
       "implementation_variant_id": "implementation.fama_french_2015_cma.v1",
@@ -2257,19 +2257,19 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_2015_cma.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_2015_cma.v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "context_snapshot_id": "context.snapshot.2026-07-18",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
-      "ended_at": "2026-07-18T04:40:55Z",
+      "ended_at": "2026-07-18T04:41:06Z",
       "fingerprints": {
         "decision_trace": "e8096252b79bf00db0ca295c2a8ae352939b99efd1063a8938495704ad9e2b5d",
-        "environment": "7dfa6ab2929d0ab772cece9141d1c30aa4e1e9b92618f133ecc0157794d4e127",
+        "environment": "b96f8ec90bf9a098d2c32f3c5cff93e16143c24ec078963426901f70350bce0c",
         "logic": "66f58f95645f061a1e32dcbf795ae3c3401cc5f08ad74e9e57874483a71c77ea"
       },
       "implementation_variant_id": "implementation.fama_french_2015_rmw.v1",
@@ -2279,7 +2279,7 @@
       "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
       "schema_version": "aaarts-ontology.v1",
       "stable_id": "research_run.fama_french_2015_rmw.oos.1",
-      "started_at": "2026-07-18T04:40:55Z",
+      "started_at": "2026-07-18T04:41:06Z",
       "status": "COMPLETED",
       "strategy_version_id": "strategy.fama_french_2015_rmw.v1"
     }
@@ -2289,8 +2289,8 @@
   "strategy_genomes": [
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "投資家の反応遅れ・情報拡散の遅さが短中期の継続を生むという仮説。",
       "hypothesis_id": "hypothesis.momentum_ff_mom",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
@@ -2305,8 +2305,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
       "hypothesis_id": "hypothesis.banz_1981_size_late_oos_proxy",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2321,8 +2321,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
       "hypothesis_id": "hypothesis.fama_french_1992_size_proxy",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2337,8 +2337,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
       "hypothesis_id": "hypothesis.fama_french_1992_value_proxy",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2353,8 +2353,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the published HML factor construction.",
       "hypothesis_id": "hypothesis.fama_french_1993_hml",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2369,8 +2369,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the published SMB factor construction.",
       "hypothesis_id": "hypothesis.fama_french_1993_smb",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2385,8 +2385,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the CMA investment factor.",
       "hypothesis_id": "hypothesis.fama_french_2015_cma",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -2401,8 +2401,8 @@
     },
     {
       "allocation": "Long-short factor return; no live allocation",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "economic_mechanism": "Post-publication return of the RMW profitability factor.",
       "hypothesis_id": "hypothesis.fama_french_2015_rmw",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -2418,12 +2418,12 @@
   ],
   "strategy_versions": [
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.momentum_ff_mom.v1",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2433,8 +2433,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.momentum_ff_mom.v1",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
@@ -2448,12 +2448,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.banz_1981_size_late_oos_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2463,8 +2463,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.banz_1981_size_late_oos_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2478,12 +2478,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1992_size_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2493,8 +2493,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1992_size_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2508,12 +2508,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1992_value_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2523,8 +2523,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1992_value_proxy.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2538,12 +2538,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1993_hml.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2553,8 +2553,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1993_hml.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2568,12 +2568,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1993_smb.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "HOLD",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2583,8 +2583,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_1993_smb.v1",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
@@ -2598,12 +2598,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_2015_cma.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "PIVOT",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2613,8 +2613,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_2015_cma.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -2628,12 +2628,12 @@
       "version": "v2"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_2015_rmw.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
-      "last_verified_at": "2026-07-18T04:40:55Z",
+      "last_verified_at": "2026-07-18T04:41:06Z",
       "lifecycle_decision": "HOLD",
       "parent_strategy_version_id": null,
       "schema_version": "aaarts-ontology.v1",
@@ -2643,8 +2643,8 @@
       "version": "v1"
     },
     {
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
-      "created_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
+      "created_at": "2026-07-18T04:41:06Z",
       "evidence_state": "NOT_CONFIRMED",
       "genome_id": "genome.fama_french_2015_rmw.v1",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
@@ -2661,9 +2661,9 @@
   "trading_realism_assessments": [
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.momentum_ff_mom.oos.1",
@@ -2674,9 +2674,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
@@ -2687,9 +2687,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
@@ -2700,9 +2700,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
@@ -2713,9 +2713,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_1993_hml.oos.1",
@@ -2726,9 +2726,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_1993_smb.oos.1",
@@ -2739,9 +2739,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_2015_cma.oos.1",
@@ -2752,9 +2752,9 @@
     },
     {
       "capacity": "NOT_RUN",
-      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "code_commit_sha": "840f26f6e994f718eab9a9c3ec8ca94f40e25e9d",
       "cost_model": "25 bps monthly mechanical haircut sensitivity",
-      "created_at": "2026-07-18T04:40:55Z",
+      "created_at": "2026-07-18T04:41:06Z",
       "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
       "liquidity": "NOT_RUN",
       "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
