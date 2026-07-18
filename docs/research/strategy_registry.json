@@ -1,0 +1,2767 @@
+{
+  "allocation_plans": [],
+  "context_snapshots": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dependency_lock_hash": "31eb6871429e21f4096c19c557d6f50067fd313517312dc803ff9d165f96d10a",
+      "environment": "Python 3.12 / frozen repository data / static Pages dashboard",
+      "input_hash": "eecec26498c6cf58f84bfd4158130711e62782e183ceb3b55de5c5f5c6a6f8df",
+      "notes": "No live trading, no order submission, no through-2026 claim.",
+      "platform": "linux",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "context.snapshot.2026-07-18"
+    }
+  ],
+  "data_quality_assessments": [
+    {
+      "checks": [
+        "sha256",
+        "chronological_months",
+        "unique_months"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.momentum.snapshot.1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "quality.momentum.snapshot.1",
+      "status": "PASS"
+    },
+    {
+      "checks": [
+        "sha256",
+        "chronological_months",
+        "unique_months"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "quality.ff3_1992_2020.snapshot.1",
+      "status": "PASS"
+    },
+    {
+      "checks": [
+        "sha256",
+        "chronological_months",
+        "unique_months"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "固定CSVのハッシュ、時系列順、月重複なしを検証。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "quality.ff5_2015_2020.snapshot.1",
+      "status": "PASS"
+    }
+  ],
+  "data_sources": [
+    {
+      "authority": "PRIMARY",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "kind": "MARKET",
+      "name": "Kenneth French Data Library Mom",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "source.ken_french.mom",
+      "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/det_mom_factor.html"
+    },
+    {
+      "authority": "PRIMARY",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "kind": "MARKET",
+      "name": "Kenneth French Data Library FF3",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "source.ken_french.ff3",
+      "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors.html"
+    },
+    {
+      "authority": "PRIMARY",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "kind": "MARKET",
+      "name": "Kenneth French Data Library FF5",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "source.ken_french.ff5",
+      "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html"
+    }
+  ],
+  "dataset_snapshots": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "data_source_id": "source.ken_french.mom",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "name": "momentum",
+      "observed_at": "2026-07-18T04:40:55Z",
+      "path": "docs/research/data/ff_momentum_1994_2017.csv",
+      "period_end": "2017-12",
+      "period_start": "1994-01",
+      "schema_version": "aaarts-ontology.v1",
+      "sha256": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "stable_id": "dataset.momentum.snapshot.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "data_source_id": "source.ken_french.ff3",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "ff3_1992_2020",
+      "observed_at": "2026-07-18T04:40:55Z",
+      "path": "docs/research/data/ff3_1992_2020.csv",
+      "period_end": "2020-02",
+      "period_start": "1992-07",
+      "schema_version": "aaarts-ontology.v1",
+      "sha256": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "stable_id": "dataset.ff3_1992_2020.snapshot.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "data_source_id": "source.ken_french.ff5",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "name": "ff5_2015_2020",
+      "observed_at": "2026-07-18T04:40:55Z",
+      "path": "docs/research/data/ff5_2015_2020.csv",
+      "period_end": "2020-02",
+      "period_start": "2015-05",
+      "schema_version": "aaarts-ontology.v1",
+      "sha256": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "stable_id": "dataset.ff5_2015_2020.snapshot.1"
+    }
+  ],
+  "decision_records": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.momentum_ff_mom.oos.1",
+        "gate.momentum_ff_mom.pit.1",
+        "gate.momentum_ff_mom.cost.1",
+        "gate.momentum_ff_mom.factor_exposure.1",
+        "gate.momentum_ff_mom.capacity.1"
+      ],
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.momentum_ff_mom.1",
+      "strategy_version_id": "strategy.momentum_ff_mom.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.banz_1981_size_late_oos_proxy.oos.1",
+        "gate.banz_1981_size_late_oos_proxy.pit.1",
+        "gate.banz_1981_size_late_oos_proxy.cost.1",
+        "gate.banz_1981_size_late_oos_proxy.factor_exposure.1",
+        "gate.banz_1981_size_late_oos_proxy.capacity.1"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.banz_1981_size_late_oos_proxy.1",
+      "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_1992_size_proxy.oos.1",
+        "gate.fama_french_1992_size_proxy.pit.1",
+        "gate.fama_french_1992_size_proxy.cost.1",
+        "gate.fama_french_1992_size_proxy.factor_exposure.1",
+        "gate.fama_french_1992_size_proxy.capacity.1"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_1992_size_proxy.1",
+      "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_1992_value_proxy.oos.1",
+        "gate.fama_french_1992_value_proxy.pit.1",
+        "gate.fama_french_1992_value_proxy.cost.1",
+        "gate.fama_french_1992_value_proxy.factor_exposure.1",
+        "gate.fama_french_1992_value_proxy.capacity.1"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_1992_value_proxy.1",
+      "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_1993_hml.oos.1",
+        "gate.fama_french_1993_hml.pit.1",
+        "gate.fama_french_1993_hml.cost.1",
+        "gate.fama_french_1993_hml.factor_exposure.1",
+        "gate.fama_french_1993_hml.capacity.1"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_1993_hml.1",
+      "strategy_version_id": "strategy.fama_french_1993_hml.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_1993_smb.oos.1",
+        "gate.fama_french_1993_smb.pit.1",
+        "gate.fama_french_1993_smb.cost.1",
+        "gate.fama_french_1993_smb.factor_exposure.1",
+        "gate.fama_french_1993_smb.capacity.1"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lifecycle_decision": "HOLD",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_1993_smb.1",
+      "strategy_version_id": "strategy.fama_french_1993_smb.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_2015_cma.oos.1",
+        "gate.fama_french_2015_cma.pit.1",
+        "gate.fama_french_2015_cma.cost.1",
+        "gate.fama_french_2015_cma.factor_exposure.1",
+        "gate.fama_french_2015_cma.capacity.1"
+      ],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "lifecycle_decision": "PIVOT",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_2015_cma.1",
+      "strategy_version_id": "strategy.fama_french_2015_cma.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "deterministic_evaluator": "scripts/verify_post_publication_momentum.py or scripts/verify_paper_factor_suite.py",
+      "evidence_state": "NOT_CONFIRMED",
+      "gate_assessment_ids": [
+        "gate.fama_french_2015_rmw.oos.1",
+        "gate.fama_french_2015_rmw.pit.1",
+        "gate.fama_french_2015_rmw.cost.1",
+        "gate.fama_french_2015_rmw.factor_exposure.1",
+        "gate.fama_french_2015_rmw.capacity.1"
+      ],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "lifecycle_decision": "HOLD",
+      "llm_pass_authority": false,
+      "reason": "NOT_CONFIRMED means promotion is deferred under the current protocol; it is not a proof of falsity.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "decision.fama_french_2015_rmw.1",
+      "strategy_version_id": "strategy.fama_french_2015_rmw.v1"
+    }
+  ],
+  "drift_events": [],
+  "evidence_artifacts": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.049437499999999995,
+        "cagr": 0.03401881744675994,
+        "max_drawdown": -0.5742421471511056,
+        "months": 288,
+        "sharpe": 0.2854529035571835
+      },
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "late_half_annualized_mean": -0.0022500000000000007,
+      "net": {
+        "annualized_mean": 0.019437499999999993,
+        "cagr": 0.0034616905334599046,
+        "max_drawdown": -0.5994338629648552,
+        "months": 288,
+        "sharpe": 0.112232431107818
+      },
+      "path": "docs/research/post_publication_momentum_oos.json",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.momentum_ff_mom.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "not_confirmed: the full post-publication mean is not statistically distinguishable from zero and the 2006-2017 holdout has a negative mean"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.014432530120481925,
+        "cagr": 0.00853456100327632,
+        "max_drawdown": -0.4075809711471762,
+        "months": 332,
+        "sharpe": 0.13148701648530933
+      },
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "late_half_annualized_mean": -0.0029927710843373496,
+      "net": {
+        "annualized_mean": -0.015567469879518084,
+        "cagr": -0.02130252984533121,
+        "max_drawdown": -0.5065810300944029,
+        "months": 332,
+        "sharpe": -0.14182684197401146
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.banz_1981_size_late_oos_proxy.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "proxy_not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.014432530120481925,
+        "cagr": 0.00853456100327632,
+        "max_drawdown": -0.4075809711471762,
+        "months": 332,
+        "sharpe": 0.13148701648530933
+      },
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "late_half_annualized_mean": -0.0029927710843373496,
+      "net": {
+        "annualized_mean": -0.015567469879518084,
+        "cagr": -0.02130252984533121,
+        "max_drawdown": -0.5065810300944029,
+        "months": 332,
+        "sharpe": -0.14182684197401146
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_1992_size_proxy.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "proxy_not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.014146987951807195,
+        "cagr": 0.008688476286592417,
+        "max_drawdown": -0.43446396856707215,
+        "months": 332,
+        "sharpe": 0.1345516354527772
+      },
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "late_half_annualized_mean": -0.03116385542168674,
+      "net": {
+        "annualized_mean": -0.015853012048192776,
+        "cagr": -0.02115181224973428,
+        "max_drawdown": -0.6197993330139298,
+        "months": 332,
+        "sharpe": -0.15077758638116565
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_1992_value_proxy.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "proxy_not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.010992592592592554,
+        "cagr": 0.005537277283478748,
+        "max_drawdown": -0.4344639685670727,
+        "months": 324,
+        "sharpe": 0.10480444891308714
+      },
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "late_half_annualized_mean": -0.035370370370370365,
+      "net": {
+        "annualized_mean": -0.019007407407407417,
+        "cagr": -0.024217390618411883,
+        "max_drawdown": -0.6197993330139298,
+        "months": 324,
+        "sharpe": -0.1812184743335463
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_1993_hml.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.01257037037037037,
+        "cagr": 0.006579354840722473,
+        "max_drawdown": -0.4075809711471764,
+        "months": 324,
+        "sharpe": 0.11374278148406104
+      },
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "late_half_annualized_mean": 0.001792592592592591,
+      "net": {
+        "annualized_mean": -0.017429629629629628,
+        "cagr": -0.02320483290265085,
+        "max_drawdown": -0.5065810300944036,
+        "months": 324,
+        "sharpe": -0.1577117058526786
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_1993_smb.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": -0.027868965517241384,
+        "cagr": -0.02910030714813272,
+        "max_drawdown": -0.16514060940141928,
+        "months": 58,
+        "sharpe": -0.4836349174161368
+      },
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "late_half_annualized_mean": -0.03769655172413793,
+      "net": {
+        "annualized_mean": -0.05786896551724137,
+        "cagr": -0.05790378915669048,
+        "max_drawdown": -0.250461850157929,
+        "months": 58,
+        "sharpe": -1.0042515694231138
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_2015_cma.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "not_confirmed"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "gross": {
+        "annualized_mean": 0.018951724137931038,
+        "cagr": 0.017993820204684097,
+        "max_drawdown": -0.04980840689722554,
+        "months": 58,
+        "sharpe": 0.3996845147978609
+      },
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "late_half_annualized_mean": 0.01820689655172414,
+      "net": {
+        "annualized_mean": -0.011048275862068965,
+        "cagr": -0.012088167299207253,
+        "max_drawdown": -0.09179463850385405,
+        "months": 58,
+        "sharpe": -0.23300385469656948
+      },
+      "path": "docs/research/multi_paper_oos_results.json",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "evidence.fama_french_2015_rmw.oos.1",
+      "summary": "Current evidence supports deferring promotion; it does not prove the hypothesis false.",
+      "type": "OOS_RETURN_SERIES",
+      "verdict_label": "not_confirmed"
+    }
+  ],
+  "evolution_edges": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.momentum_ff_mom.v1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "learning_event_id": "learning.momentum_ff_mom.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.momentum_ff_mom.v1-to-v2",
+      "to_strategy_version_id": "strategy.momentum_ff_mom.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.banz_1981_size_late_oos_proxy.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.banz_1981_size_late_oos_proxy.v1-to-v2",
+      "to_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_1992_size_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1992_size_proxy.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_1992_size_proxy.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_1992_size_proxy.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_1992_value_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1992_value_proxy.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_1992_value_proxy.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_1992_value_proxy.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_1993_hml.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1993_hml.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_1993_hml.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_1993_hml.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_1993_smb.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1993_smb.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_1993_smb.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_1993_smb.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_2015_cma.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "learning_event_id": "learning.fama_french_2015_cma.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_2015_cma.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_2015_cma.v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "from_strategy_version_id": "strategy.fama_french_2015_rmw.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "learning_event_id": "learning.fama_french_2015_rmw.1",
+      "reason": "Retain the failure branch and carry its constraint into the next version.",
+      "relation": "MUTATION",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "edge.fama_french_2015_rmw.v1-to-v2",
+      "to_strategy_version_id": "strategy.fama_french_2015_rmw.v2"
+    }
+  ],
+  "execution_runs": [],
+  "exploration_runs": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "0eab594622eb2cfeb6370784f0fc8d6154ee3211ca6c900ed253018805a6abd3",
+      "objective": "Audit committed post-publication research as versioned AAARTS strategies.",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exploration.2026-07-18",
+      "status": "COMPLETED",
+      "strategy_version_ids": [
+        "strategy.momentum_ff_mom.v1",
+        "strategy.banz_1981_size_late_oos_proxy.v1",
+        "strategy.fama_french_1992_size_proxy.v1",
+        "strategy.fama_french_1992_value_proxy.v1",
+        "strategy.fama_french_1993_hml.v1",
+        "strategy.fama_french_1993_smb.v1",
+        "strategy.fama_french_2015_cma.v1",
+        "strategy.fama_french_2015_rmw.v1"
+      ]
+    }
+  ],
+  "factor_exposure_assessments": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.momentum_ff_mom.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.banz_1981_size_late_oos_proxy.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_1992_size_proxy.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_1992_value_proxy.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_1993_hml.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_1993_smb.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_2015_cma.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "factors": [],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "No additional factor or industry attribution artifact.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "exposure.fama_french_2015_rmw.1",
+      "status": "NOT_RUN"
+    }
+  ],
+  "failure_constraints": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "learning_event_id": "learning.momentum_ff_mom.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "momentum_ff_mom",
+      "stable_id": "constraint.momentum_ff_mom.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.banz_1981_size_late_oos_proxy.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "banz_1981_size_late_oos_proxy",
+      "stable_id": "constraint.banz_1981_size_late_oos_proxy.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1992_size_proxy.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_1992_size_proxy",
+      "stable_id": "constraint.fama_french_1992_size_proxy.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1992_value_proxy.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_1992_value_proxy",
+      "stable_id": "constraint.fama_french_1992_value_proxy.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1993_hml.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_1993_hml",
+      "stable_id": "constraint.fama_french_1993_hml.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "learning_event_id": "learning.fama_french_1993_smb.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_1993_smb",
+      "stable_id": "constraint.fama_french_1993_smb.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "learning_event_id": "learning.fama_french_2015_cma.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_2015_cma",
+      "stable_id": "constraint.fama_french_2015_cma.1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "constraint": "Do not promote from factor-only evidence while PIT, capacity, and exposure gates remain NOT_RUN.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "learning_event_id": "learning.fama_french_2015_rmw.1",
+      "schema_version": "aaarts-ontology.v1",
+      "scope": "fama_french_2015_rmw",
+      "stable_id": "constraint.fama_french_2015_rmw.1"
+    }
+  ],
+  "gate_assessments": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.momentum_ff_mom.oos.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.momentum_ff_mom.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.momentum_ff_mom.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.momentum_ff_mom.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.momentum_ff_mom.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.banz_1981_size_late_oos_proxy.oos.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.banz_1981_size_late_oos_proxy.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.banz_1981_size_late_oos_proxy.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.banz_1981_size_late_oos_proxy.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.banz_1981_size_late_oos_proxy.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_size_proxy.oos.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_size_proxy.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_size_proxy.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_size_proxy.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_size_proxy.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_value_proxy.oos.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_value_proxy.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_value_proxy.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_value_proxy.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1992_value_proxy.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_hml.oos.1",
+      "status": "FAIL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_hml.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_hml.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_hml.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_hml.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_smb.oos.1",
+      "status": "FAIL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_smb.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_smb.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_smb.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_1993_smb.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_cma.oos.1",
+      "status": "FAIL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_cma.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_cma.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_cma.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_cma.capacity.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "gate": "OOS",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Full-window and late-half results do not satisfy the locked confirmation gate.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_rmw.oos.1",
+      "status": "FAIL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "gate": "PIT",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Individual security point-in-time reconstruction was not run.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_rmw.pit.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "gate": "COST",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Mechanical monthly haircut only; turnover, borrow, impact, and taxes are not modeled.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_rmw.cost.1",
+      "status": "PARTIAL"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "gate": "FACTOR_EXPOSURE",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Additional exposure attribution is not present in this artifact.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_rmw.factor_exposure.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "gate": "CAPACITY",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "Security-level liquidity and capacity were not evaluated.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "gate.fama_french_2015_rmw.capacity.1",
+      "status": "NOT_RUN"
+    }
+  ],
+  "generated_at": "2026-07-18T04:40:55Z",
+  "hypotheses": [
+    {
+      "claim": "過去リターン上位銘柄は将来も相対的に高いリターンを示す。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "投資家の反応遅れ・情報拡散の遅さが短中期の継続を生むという仮説。",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "primary_source_ids": [
+        "source.ken_french.mom"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.momentum_ff_mom",
+      "title": "Jegadeesh–Titman型モメンタム"
+    },
+    {
+      "claim": "Banz (1981), The relationship between return and market value of common stocks の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "primary_source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.banz_1981_size_late_oos_proxy",
+      "title": "Banz (1981), The relationship between return and market value of common stocks"
+    },
+    {
+      "claim": "Fama and French (1992), The Cross-Section of Expected Stock Returns の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "primary_source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_1992_size_proxy",
+      "title": "Fama and French (1992), The Cross-Section of Expected Stock Returns"
+    },
+    {
+      "claim": "Fama and French (1992), The Cross-Section of Expected Stock Returns の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "primary_source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_1992_value_proxy",
+      "title": "Fama and French (1992), The Cross-Section of Expected Stock Returns"
+    },
+    {
+      "claim": "Fama and French (1993), Common risk factors in the returns on stocks and bonds の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the published HML factor construction.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "primary_source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_1993_hml",
+      "title": "Fama and French (1993), Common risk factors in the returns on stocks and bonds"
+    },
+    {
+      "claim": "Fama and French (1993), Common risk factors in the returns on stocks and bonds の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the published SMB factor construction.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "primary_source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_1993_smb",
+      "title": "Fama and French (1993), Common risk factors in the returns on stocks and bonds"
+    },
+    {
+      "claim": "Fama and French (2015), A five-factor asset pricing model の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the CMA investment factor.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "primary_source_ids": [
+        "source.ken_french.ff5"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_2015_cma",
+      "title": "Fama and French (2015), A five-factor asset pricing model"
+    },
+    {
+      "claim": "Fama and French (2015), A five-factor asset pricing model の公開後因子リターンが再現される。",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the RMW profitability factor.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "primary_source_ids": [
+        "source.ken_french.ff5"
+      ],
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "hypothesis.fama_french_2015_rmw",
+      "title": "Fama and French (2015), A five-factor asset pricing model"
+    }
+  ],
+  "implementation_variants": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Fama/French Mom: high prior-return portfolios minus low prior-return portfolios.",
+      "implementation_type": "PROXY",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "limitations": [
+        "原論文の証券レベル完全再現ではない。"
+      ],
+      "name": "Fama/French Mom factor proxy",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.momentum_ff_mom.v1",
+      "strategy_version_id": "strategy.momentum_ff_mom.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
+      "implementation_type": "PROXY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "smb_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.banz_1981_size_late_oos_proxy.v1",
+      "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
+      "implementation_type": "PROXY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "smb_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_1992_size_proxy.v1",
+      "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
+      "implementation_type": "PROXY",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "hml_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_1992_value_proxy.v1",
+      "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Post-publication return of the published HML factor construction.",
+      "implementation_type": "FACTOR",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "hml_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_1993_hml.v1",
+      "strategy_version_id": "strategy.fama_french_1993_hml.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Post-publication return of the published SMB factor construction.",
+      "implementation_type": "FACTOR",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "smb_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_1993_smb.v1",
+      "strategy_version_id": "strategy.fama_french_1993_smb.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Post-publication return of the CMA investment factor.",
+      "implementation_type": "FACTOR",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "cma_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_2015_cma.v1",
+      "strategy_version_id": "strategy.fama_french_2015_cma.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "definition": "Post-publication return of the RMW profitability factor.",
+      "implementation_type": "FACTOR",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "limitations": [
+        "因子リターン検証であり、原論文の証券レベル回帰を再現しない。"
+      ],
+      "name": "rmw_percent",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "implementation.fama_french_2015_rmw.v1",
+      "strategy_version_id": "strategy.fama_french_2015_rmw.v1"
+    }
+  ],
+  "learning_events": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.momentum_ff_mom.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.momentum_ff_mom.v2"
+      ],
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.momentum_ff_mom.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.banz_1981_size_late_oos_proxy.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.banz_1981_size_late_oos_proxy.v2"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.banz_1981_size_late_oos_proxy.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_size_proxy.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_1992_size_proxy.v2"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_1992_size_proxy.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1992_value_proxy.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_1992_value_proxy.v2"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_1992_value_proxy.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_hml.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_1993_hml.v2"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_1993_hml.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_1993_smb.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_1993_smb.v2"
+      ],
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_1993_smb.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_cma.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_2015_cma.v2"
+      ],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_2015_cma.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_artifact_ids": [
+        "evidence.fama_french_2015_rmw.oos.1"
+      ],
+      "exploration_run_id": "exploration.2026-07-18",
+      "feeds_mutation_plan_ids": [
+        "mutation.fama_french_2015_rmw.v2"
+      ],
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "lesson": "Preserve the failed branch and test the explicit missing or unstable dimension before promotion.",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "learning.fama_french_2015_rmw.1",
+      "trigger": "NOT_CONFIRMED under locked post-publication gate"
+    }
+  ],
+  "mutation_plans": [
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "next_strategy_version_id": "strategy.momentum_ff_mom.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.momentum_ff_mom.v1",
+      "stable_id": "mutation.momentum_ff_mom.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "next_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1",
+      "stable_id": "mutation.banz_1981_size_late_oos_proxy.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "next_strategy_version_id": "strategy.fama_french_1992_size_proxy.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_1992_size_proxy.v1",
+      "stable_id": "mutation.fama_french_1992_size_proxy.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "next_strategy_version_id": "strategy.fama_french_1992_value_proxy.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_1992_value_proxy.v1",
+      "stable_id": "mutation.fama_french_1992_value_proxy.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "next_strategy_version_id": "strategy.fama_french_1993_hml.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_1993_hml.v1",
+      "stable_id": "mutation.fama_french_1993_hml.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "next_strategy_version_id": "strategy.fama_french_1993_smb.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_1993_smb.v1",
+      "stable_id": "mutation.fama_french_1993_smb.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "next_strategy_version_id": "strategy.fama_french_2015_cma.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_2015_cma.v1",
+      "stable_id": "mutation.fama_french_2015_cma.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    },
+    {
+      "changes": [
+        "Add PIT individual-security reconstruction",
+        "Add exposure and capacity assessment",
+        "Freeze a new independent period before tuning"
+      ],
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "expected_test": "Re-run the same gate set with the new dataset and protocol snapshot.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "next_strategy_version_id": "strategy.fama_french_2015_rmw.v2",
+      "schema_version": "aaarts-ontology.v1",
+      "source_strategy_version_id": "strategy.fama_french_2015_rmw.v1",
+      "stable_id": "mutation.fama_french_2015_rmw.v2",
+      "status": "PLANNED",
+      "trigger": "learning event from current research run"
+    }
+  ],
+  "ontology_version": "aaarts-ontology.v1",
+  "order_plans": [],
+  "performance_audits": [],
+  "pit_assessments": [
+    {
+      "assessed_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.momentum.snapshot.1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "pit.momentum.snapshot.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "assessed_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "pit.ff3_1992_2020.snapshot.1",
+      "status": "NOT_RUN"
+    },
+    {
+      "assessed_at": "2026-07-18T04:40:55Z",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "note": "公開済み因子系列の検証であり、個別銘柄PIT再構築は未実施。",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "pit.ff5_2015_2020.snapshot.1",
+      "status": "NOT_RUN"
+    }
+  ],
+  "portfolio_candidates": [],
+  "protocol_snapshots": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "logic_fingerprint": "86032894f303bef2b2c48de80cd46fa064e3a2828bba39ee0033bbbf66331a55",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2017-12-31",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.momentum_ff_mom.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "logic_fingerprint": "d8ec5b4faf57240e9e74796b13c0ce64dc28598ed8daef7e52bca968d870343c",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.banz_1981_size_late_oos_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "logic_fingerprint": "e5f1af3d1bf450bf7a29702da5dd88fbedfe3fd05c11c3cbb3494df414364b4a",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_1992_size_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "logic_fingerprint": "ac827680c504192fb8894ab24c6179fd0d0aa97679fa0def7e9ac089290bf25b",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_1992_value_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "logic_fingerprint": "ed6351bbf0e185c1cbd630f113e002b28378f6efdfc67344156254d5c7078770",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_1993_hml.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "logic_fingerprint": "6c4a2c12f6f10bf0660d4512033a96268bac31deaec7ac1910cc91a8978ab429",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_1993_smb.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "logic_fingerprint": "1f10f756afc06bf54e0dc3f4a097df74101cc24a8c07c0d6fa808788786b7d88",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_2015_cma.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_rule": "Mechanical 0/10/25/50 bps monthly haircut sensitivity.",
+      "created_at": "2026-07-18T04:40:55Z",
+      "decision_rule": "NW t >= 1.96, bootstrap lower bound > 0, positive late mean, positive 25 bps mean.",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "logic_fingerprint": "c6fd908d5a7da3695d8ef0f4c8fd9683c7809fc21b0788bcb099c4d9b678c75b",
+      "name": "Locked post-publication OOS midpoint protocol",
+      "oos_rule": "Chronological post-publication window with midpoint early/late split.",
+      "publication_window": {
+        "end": "2020-02",
+        "start": "1993-03"
+      },
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "protocol.fama_french_2015_rmw.v1"
+    }
+  ],
+  "provenance_records": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_ids": [
+        "dataset.momentum.snapshot.1"
+      ],
+      "environment_fingerprint": "96a3f235fd008b7250b18274d35eaff8ea1fac29fa440138f0ef3e2b94a7df9f",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "pit_assessment_id": "pit.momentum.snapshot.1",
+      "schema_version": "aaarts-ontology.v1",
+      "source_ids": [
+        "source.ken_french.mom"
+      ],
+      "stable_id": "provenance.momentum.snapshot.1",
+      "transformation": "CSV factor return divided by 100; chronological OOS selection."
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_ids": [
+        "dataset.ff3_1992_2020.snapshot.1"
+      ],
+      "environment_fingerprint": "db8dd3f5c5771e6f001b327d889d8a68655a5b1d9be82e584a88f4bdb218dc35",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "pit_assessment_id": "pit.ff3_1992_2020.snapshot.1",
+      "schema_version": "aaarts-ontology.v1",
+      "source_ids": [
+        "source.ken_french.ff3"
+      ],
+      "stable_id": "provenance.ff3_1992_2020.snapshot.1",
+      "transformation": "CSV factor return divided by 100; chronological OOS selection."
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_ids": [
+        "dataset.ff5_2015_2020.snapshot.1"
+      ],
+      "environment_fingerprint": "30fd0b8a22011a6b1b5d25dc2363de9fff2e7f3cd7aaee9e9ebbf77e961e874c",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "pit_assessment_id": "pit.ff5_2015_2020.snapshot.1",
+      "schema_version": "aaarts-ontology.v1",
+      "source_ids": [
+        "source.ken_french.ff5"
+      ],
+      "stable_id": "provenance.ff5_2015_2020.snapshot.1",
+      "transformation": "CSV factor return divided by 100; chronological OOS selection."
+    }
+  ],
+  "research_runs": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.momentum.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "ddce9e5e79cffbefbed8fdfd248d9b3df063bf90f88219a8dfbbf46df5b1a45a",
+        "environment": "3e8207f7c98ebae805dfa6483c2fd832d5804af1a3277cb329ff7f136f72dd57",
+        "logic": "c47c00be1ee118380160520109a5140d98cb1f5f3d50ee57deed95141d749ce3"
+      },
+      "implementation_variant_id": "implementation.momentum_ff_mom.v1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "protocol_snapshot_id": "protocol.momentum_ff_mom.v1",
+      "provenance_record_id": "provenance.momentum.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_post_publication_momentum.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.momentum_ff_mom.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.momentum_ff_mom.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "76cd1e8aeeb75b33b9b104e993b8e38bcb206535279085e22089bb0d580e1541",
+        "environment": "2ed4182c6a67caa2a18fcc0567aa2e2603e66566bf06fcd4c7cb44b3c21b633c",
+        "logic": "4de7c2a4c638a2067723aea0713f174e7047857667d040d449aa5ec47048922f"
+      },
+      "implementation_variant_id": "implementation.banz_1981_size_late_oos_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "protocol_snapshot_id": "protocol.banz_1981_size_late_oos_proxy.v1",
+      "provenance_record_id": "provenance.ff3_1992_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "12bb5b163a3426bded165cc312ee5b3d96c73ffafd10ff0cd3844f59b0fced44",
+        "environment": "050b960fb8ecf60ba7d3fa54f3e803c79d24a12a9f5ac4c87f113e40263772b3",
+        "logic": "01e8e0a778d9b5adb410aa18ed4d2c917d7fcb84f15f551ef3fcbe77664c3ebe"
+      },
+      "implementation_variant_id": "implementation.fama_french_1992_size_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "protocol_snapshot_id": "protocol.fama_french_1992_size_proxy.v1",
+      "provenance_record_id": "provenance.ff3_1992_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_1992_size_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "370a345e76e625004560a2e39ba08f398bbf6dbe1a186957f3c94dd2e6dd0a1e",
+        "environment": "41e6f2700afcf7bf4b07595e354bc0538bc76ae12e5b644ab62af880b38836cc",
+        "logic": "835de2f8f095b68ab967efd73200d3970f784f8cd8cf1eb2153288ab00580b92"
+      },
+      "implementation_variant_id": "implementation.fama_french_1992_value_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "protocol_snapshot_id": "protocol.fama_french_1992_value_proxy.v1",
+      "provenance_record_id": "provenance.ff3_1992_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_1992_value_proxy.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "7f6d1f30171dd1cb06211f067912102bad87ccd6bfdd5aa9f90fd858041171c5",
+        "environment": "16c59201f26465b7149f3c691203d0a9343c191c2bf9d63ea117a7db670ce5cf",
+        "logic": "a3a77500276d867a19c485933053e8f2642c757b86bd8ee095d067d51a0e5d5e"
+      },
+      "implementation_variant_id": "implementation.fama_french_1993_hml.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "protocol_snapshot_id": "protocol.fama_french_1993_hml.v1",
+      "provenance_record_id": "provenance.ff3_1992_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_1993_hml.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_1993_hml.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff3_1992_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "2b0586cea6de6d774058c2a59faa513f29dbaebe07d3c2812bffb55b1e4de034",
+        "environment": "314b2ddad09f6e2837675ea22b4058a83f013ce7f95003905937c3a14d2e9e83",
+        "logic": "ec58d8d6f356cff1db72eaf6bc70591cc1ca245ff43842fe5a4678359403fec1"
+      },
+      "implementation_variant_id": "implementation.fama_french_1993_smb.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "protocol_snapshot_id": "protocol.fama_french_1993_smb.v1",
+      "provenance_record_id": "provenance.ff3_1992_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_1993_smb.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_1993_smb.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "a9b2e7e4b89c0e3fa73afd3693230a04f9e43c934b0779f2f114e2af2bdfe261",
+        "environment": "ec656c6f39f71c634ce5387322fe9f1534182c8ffe3a14af7510e2e3bf5609c1",
+        "logic": "68cc215bbf355c83f7398ae0d1daf35bb7941c8eec7b3b3a9cfdc834a52e1e3b"
+      },
+      "implementation_variant_id": "implementation.fama_french_2015_cma.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "protocol_snapshot_id": "protocol.fama_french_2015_cma.v1",
+      "provenance_record_id": "provenance.ff5_2015_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_2015_cma.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_2015_cma.v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "context_snapshot_id": "context.snapshot.2026-07-18",
+      "created_at": "2026-07-18T04:40:55Z",
+      "dataset_snapshot_id": "dataset.ff5_2015_2020.snapshot.1",
+      "ended_at": "2026-07-18T04:40:55Z",
+      "fingerprints": {
+        "decision_trace": "e8096252b79bf00db0ca295c2a8ae352939b99efd1063a8938495704ad9e2b5d",
+        "environment": "7dfa6ab2929d0ab772cece9141d1c30aa4e1e9b92618f133ecc0157794d4e127",
+        "logic": "66f58f95645f061a1e32dcbf795ae3c3401cc5f08ad74e9e57874483a71c77ea"
+      },
+      "implementation_variant_id": "implementation.fama_french_2015_rmw.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "protocol_snapshot_id": "protocol.fama_french_2015_rmw.v1",
+      "provenance_record_id": "provenance.ff5_2015_2020.snapshot.1",
+      "reproduction_command": "python3 scripts/verify_paper_factor_suite.py",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "research_run.fama_french_2015_rmw.oos.1",
+      "started_at": "2026-07-18T04:40:55Z",
+      "status": "COMPLETED",
+      "strategy_version_id": "strategy.fama_french_2015_rmw.v1"
+    }
+  ],
+  "risk_budgets": [],
+  "schema_version": 1,
+  "strategy_genomes": [
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "投資家の反応遅れ・情報拡散の遅さが短中期の継続を生むという仮説。",
+      "hypothesis_id": "hypothesis.momentum_ff_mom",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "name": "Jegadeesh–Titman型モメンタム",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Fama/French Mom: high prior-return portfolios minus low prior-return portfolios.",
+      "stable_id": "genome.momentum_ff_mom.v1",
+      "strategy_id": "momentum_ff_mom.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
+      "hypothesis_id": "hypothesis.banz_1981_size_late_oos_proxy",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "Banz (1981), The relationship between return and market value of common stocks",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
+      "stable_id": "genome.banz_1981_size_late_oos_proxy.v1",
+      "strategy_id": "banz_1981_size_late_oos_proxy.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
+      "hypothesis_id": "hypothesis.fama_french_1992_size_proxy",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
+      "stable_id": "genome.fama_french_1992_size_proxy.v1",
+      "strategy_id": "fama_french_1992_size_proxy.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
+      "hypothesis_id": "hypothesis.fama_french_1992_value_proxy",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
+      "stable_id": "genome.fama_french_1992_value_proxy.v1",
+      "strategy_id": "fama_french_1992_value_proxy.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the published HML factor construction.",
+      "hypothesis_id": "hypothesis.fama_french_1993_hml",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Post-publication return of the published HML factor construction.",
+      "stable_id": "genome.fama_french_1993_hml.v1",
+      "strategy_id": "fama_french_1993_hml.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the published SMB factor construction.",
+      "hypothesis_id": "hypothesis.fama_french_1993_smb",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "name": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Post-publication return of the published SMB factor construction.",
+      "stable_id": "genome.fama_french_1993_smb.v1",
+      "strategy_id": "fama_french_1993_smb.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the CMA investment factor.",
+      "hypothesis_id": "hypothesis.fama_french_2015_cma",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "name": "Fama and French (2015), A five-factor asset pricing model",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Post-publication return of the CMA investment factor.",
+      "stable_id": "genome.fama_french_2015_cma.v1",
+      "strategy_id": "fama_french_2015_cma.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    },
+    {
+      "allocation": "Long-short factor return; no live allocation",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "economic_mechanism": "Post-publication return of the RMW profitability factor.",
+      "hypothesis_id": "hypothesis.fama_french_2015_rmw",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "name": "Fama and French (2015), A five-factor asset pricing model",
+      "parent_genome_id": null,
+      "rebalance": "Monthly factor series; no security-level execution",
+      "schema_version": "aaarts-ontology.v1",
+      "signal_definition": "Post-publication return of the RMW profitability factor.",
+      "stable_id": "genome.fama_french_2015_rmw.v1",
+      "strategy_id": "fama_french_2015_rmw.strategy",
+      "universe": "U.S. factor portfolios in the frozen Kenneth French mirror"
+    }
+  ],
+  "strategy_versions": [
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.momentum_ff_mom.v1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.momentum_ff_mom.v1",
+      "status": "ACTIVE",
+      "strategy_id": "momentum_ff_mom.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.momentum_ff_mom.v1",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.momentum_ff_mom.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.momentum_ff_mom.v2",
+      "status": "PLANNED",
+      "strategy_id": "momentum_ff_mom.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.banz_1981_size_late_oos_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.banz_1981_size_late_oos_proxy.v1",
+      "status": "ACTIVE",
+      "strategy_id": "banz_1981_size_late_oos_proxy.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.banz_1981_size_late_oos_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.banz_1981_size_late_oos_proxy.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.banz_1981_size_late_oos_proxy.v2",
+      "status": "PLANNED",
+      "strategy_id": "banz_1981_size_late_oos_proxy.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1992_size_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1992_size_proxy.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_1992_size_proxy.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1992_size_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_1992_size_proxy.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1992_size_proxy.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_1992_size_proxy.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1992_value_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1992_value_proxy.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_1992_value_proxy.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1992_value_proxy.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_1992_value_proxy.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1992_value_proxy.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_1992_value_proxy.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1993_hml.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1993_hml.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_1993_hml.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1993_hml.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_1993_hml.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1993_hml.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_1993_hml.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1993_smb.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1993_smb.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_1993_smb.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_1993_smb.v1",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_1993_smb.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_1993_smb.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_1993_smb.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_2015_cma.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "PIVOT",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_2015_cma.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_2015_cma.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_2015_cma.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_2015_cma.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_2015_cma.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_2015_cma.strategy",
+      "version": "v2"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_2015_rmw.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "last_verified_at": "2026-07-18T04:40:55Z",
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": null,
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_2015_rmw.v1",
+      "status": "ACTIVE",
+      "strategy_id": "fama_french_2015_rmw.strategy",
+      "version": "v1"
+    },
+    {
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "created_at": "2026-07-18T04:40:55Z",
+      "evidence_state": "NOT_CONFIRMED",
+      "genome_id": "genome.fama_french_2015_rmw.v1",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "last_verified_at": null,
+      "lifecycle_decision": "HOLD",
+      "parent_strategy_version_id": "strategy.fama_french_2015_rmw.v1",
+      "schema_version": "aaarts-ontology.v1",
+      "stable_id": "strategy.fama_french_2015_rmw.v2",
+      "status": "PLANNED",
+      "strategy_id": "fama_french_2015_rmw.strategy",
+      "version": "v2"
+    }
+  ],
+  "trading_realism_assessments": [
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "7d306028fa33f6391f2f60404c1680650faa680a486d6e7f34dae2eacdad6969",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.momentum_ff_mom.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.momentum_ff_mom.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.banz_1981_size_late_oos_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.banz_1981_size_late_oos_proxy.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_1992_size_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_1992_size_proxy.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_1992_value_proxy.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_1992_value_proxy.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_1993_hml.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_1993_hml.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_1993_smb.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_1993_smb.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_2015_cma.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_2015_cma.1",
+      "status": "PARTIAL"
+    },
+    {
+      "capacity": "NOT_RUN",
+      "code_commit_sha": "6fe11f0975a7e051598f07ae0c01a81862ac844e",
+      "cost_model": "25 bps monthly mechanical haircut sensitivity",
+      "created_at": "2026-07-18T04:40:55Z",
+      "input_hash": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a",
+      "liquidity": "NOT_RUN",
+      "research_run_id": "research_run.fama_french_2015_rmw.oos.1",
+      "schema_version": "aaarts-ontology.v1",
+      "spread_and_slippage": "NOT_RUN",
+      "stable_id": "realism.fama_french_2015_rmw.1",
+      "status": "PARTIAL"
+    }
+  ]
+}

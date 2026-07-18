@@ -1,4 +1,4 @@
-name: Deploy AAARTS evidence dashboard
+name: Deploy AAARTS strategy dashboard
 
 on:
   push:
@@ -6,8 +6,12 @@ on:
     paths:
       - "docs/aaarts-dashboard/**"
       - "docs/research/dashboard_registry.json"
+      - "docs/research/strategy_registry.json"
       - "docs/research/post_publication_momentum_oos.json"
       - "docs/research/multi_paper_oos_results.json"
+      - "src/ontology.ts"
+      - "package.json"
+      - "package-lock.json"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -30,13 +34,22 @@ jobs:
       - name: Configure Pages
         uses: actions/configure-pages@v5
 
+      - name: Install validation dependencies
+        run: npm ci
+
+      - name: Validate strategy registry with Zod
+        run: |
+          npx tsx -e 'import { readFileSync } from "node:fs"; import { StrategyRegistrySchema } from "./src/ontology.ts"; StrategyRegistrySchema.parse(JSON.parse(readFileSync("docs/research/strategy_registry.json", "utf8"))); console.log("ontology: PASS");'
+
       - name: Assemble static site
         run: |
           set -euo pipefail
           rm -rf _site
           mkdir -p _site/data
           cp docs/aaarts-dashboard/index.html _site/index.html
+          cp docs/aaarts-dashboard/app.js _site/app.js
           cp docs/research/dashboard_registry.json _site/data/research_registry.json
+          cp docs/research/strategy_registry.json _site/data/strategy_registry.json
           cp docs/research/post_publication_momentum_oos.json _site/data/post_publication_momentum_oos.json
           cp docs/research/multi_paper_oos_results.json _site/data/multi_paper_oos_results.json
           touch _site/.nojekyll

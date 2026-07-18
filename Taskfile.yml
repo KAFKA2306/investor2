@@ -56,6 +56,10 @@ tasks:
     desc: Validate the 2010s paper collection catalog
     cmds:
       - python3 scripts/validate_paper_catalog.py
+  research:strategy-registry:build:
+    desc: Build the strategy-centered AAARTS registry from committed evidence
+    cmds:
+      - python3 scripts/build_strategy_registry.py --output docs/research/strategy_registry.json
   polymarket:bot:
     cmds:
       - bun src/agents/polymarket_trading_bot.ts
