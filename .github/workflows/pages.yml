@@ -38,6 +38,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
+      - name: Configure GitHub Pages
+        if: github.event_name != 'pull_request'
+        uses: actions/configure-pages@v5
+
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
