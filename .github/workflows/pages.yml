@@ -1,11 +1,24 @@
-name: Deploy AAARTS evidence dashboard
+name: Validate and deploy AAARTS evidence dashboard
 
 on:
+  pull_request:
+    paths:
+      - "docs/aaarts-dashboard/**"
+      - "docs/research/**"
+      - "scripts/build_research_verification_manifest.py"
+      - "scripts/verify_paper_factor_suite.py"
+      - "tests/test_research_verification_manifest.py"
+      - "tests/test_paper_factor_suite.py"
+      - ".github/workflows/pages.yml"
   push:
     branches: [main]
     paths:
       - "docs/aaarts-dashboard/**"
-      - "docs/research/post_publication_momentum_oos.json"
+      - "docs/research/**"
+      - "scripts/build_research_verification_manifest.py"
+      - "scripts/verify_paper_factor_suite.py"
+      - "tests/test_research_verification_manifest.py"
+      - "tests/test_paper_factor_suite.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
 
@@ -15,7 +28,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -25,24 +38,42 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
 
-      - name: Assemble static site
+      - name: Install test runner
+        run: python -m pip install --disable-pip-version-check pytest
+
+      - name: Validate empirical research artifacts
+        run: |
+          set -euo pipefail
+          python -m pytest -q \
+            tests/test_paper_factor_suite.py \
+            tests/test_repeated_paper_validation.py \
+            tests/test_research_verification_manifest.py
+
+      - name: Assemble static site from verified evidence
         run: |
           set -euo pipefail
           rm -rf _site
           mkdir -p _site/data
+          python scripts/build_research_verification_manifest.py \
+            --output _site/data/research_verification_manifest.json
           cp docs/aaarts-dashboard/index.html _site/index.html
-          cp docs/research/post_publication_momentum_oos.json _site/data/post_publication_momentum_oos.json
           touch _site/.nojekyll
+          test "$(python -c 'import json; print(json.load(open("_site/data/research_verification_manifest.json"))["summary"]["tested_hypotheses"])')" = "8"
+          test "$(python -c 'import json; print(json.load(open("_site/data/research_verification_manifest.json"))["summary"]["confirmed"])')" = "0"
 
       - name: Upload Pages artifact
+        if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v4
         with:
           path: _site
 
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
