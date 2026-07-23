@@ -46,9 +46,11 @@ jobs:
             "$base/data/research_verification_manifest.json?smoke=${GITHUB_SHA}" \
             -o "$tmp/manifest.json"
           python -m json.tool "$tmp/manifest.json" >/dev/null
-          python - <<'PY'
+          MANIFEST="$tmp/manifest.json" python - <<'PY'
           import json
-          with open("$tmp/manifest.json", encoding="utf-8") as handle:
+          import os
+
+          with open(os.environ["MANIFEST"], encoding="utf-8") as handle:
               data = json.load(handle)
           assert data["summary"]["tested_hypotheses"] == 8
           assert data["summary"]["confirmed"] == 0
