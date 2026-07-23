@@ -4,23 +4,27 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="description" content="AAARTSの投資仮説を、時系列OOS・多重検定・売買可能性・コストの証拠ゲートで監査する公開ダッシュボード。">
+  <meta name="theme-color" content="#fbfaf7">
   <title>AAARTS Empirical Validation Audit</title>
   <style>
-    :root{color-scheme:dark;--bg:#071018;--panel:#0d1822;--panel2:#111f2b;--line:#263948;--text:#eef5f8;--muted:#9fb1bd;--accent:#69d8ff;--good:#65d9a0;--warn:#f5c451;--bad:#ff7d7d;--idle:#92a2ad}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(circle at 90% 0%,rgba(105,216,255,.12),transparent 30rem),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}
-    a{color:var(--accent)}code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#d8f4ff;overflow-wrap:anywhere}.shell{width:min(1200px,calc(100% - 32px));margin:auto}
-    header{padding:58px 0 32px}.eyebrow{font-size:12px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}h1{font-size:clamp(38px,6vw,72px);line-height:1.03;letter-spacing:-.04em;margin:14px 0}.lead{font-size:clamp(17px,2vw,21px);max-width:900px;color:var(--muted)}
-    .notice{margin-top:24px;padding:16px 18px;border:1px solid #465663;border-left:4px solid var(--warn);border-radius:12px;background:rgba(17,31,43,.92)}
-    nav{position:sticky;top:0;z-index:10;background:rgba(7,16,24,.88);backdrop-filter:blur(15px);border-block:1px solid var(--line)}nav .shell{display:flex;gap:18px;overflow:auto;padding:12px 0}nav a{white-space:nowrap;text-decoration:none;color:var(--muted);font-size:14px}
-    main{padding:34px 0 72px}section{margin-bottom:56px}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:18px}h2{font-size:clamp(26px,4vw,40px);letter-spacing:-.025em;margin:0}.section-note{max-width:620px;color:var(--muted)}
-    .grid{display:grid;gap:16px}.summary{grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:linear-gradient(180deg,rgba(17,31,43,.98),rgba(13,24,34,.98));border:1px solid var(--line);border-radius:14px}.metric{padding:20px;min-height:138px}.metric-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}.metric-value{font-size:40px;font-weight:780;letter-spacing:-.04em;margin-top:7px}.metric-detail{font-size:13px;color:var(--muted)}
-    .panel{padding:22px}.panel h3{margin:0 0 12px}.plain{margin:0;padding-left:20px}.plain li+li{margin-top:8px}.state{display:inline-flex;padding:5px 9px;border-radius:999px;font-size:12px;font-weight:750;letter-spacing:.04em}.pass{color:#d6ffe9;background:rgba(101,217,160,.14);border:1px solid rgba(101,217,160,.42)}.fail{color:#ffd9d9;background:rgba(255,125,125,.14);border:1px solid rgba(255,125,125,.42)}.unverified{color:#ffeab5;background:rgba(245,196,81,.13);border:1px solid rgba(245,196,81,.42)}
-    .table-wrap{overflow:auto}.table-wrap.card{padding:8px 14px}table{width:100%;border-collapse:collapse;min-width:980px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--muted)}td{font-size:13px}tr:last-child td{border-bottom:0}.muted{color:var(--muted)}.negative{color:var(--bad)}.positive{color:var(--good)}
-    .gate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.gate{padding:15px;border:1px solid var(--line);border-radius:11px;background:var(--panel)}.gate strong{display:block;margin-bottom:5px}.gate p{margin:0;color:var(--muted);font-size:13px}
-    .claim{padding:20px}.claim-head{display:flex;align-items:start;justify-content:space-between;gap:18px}.claim h3{margin:0 0 8px}.claim p{margin:8px 0;color:var(--muted)}.sources{display:grid;gap:10px}.source{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line)}.source:last-child{border-bottom:0}.error{padding:20px;border-color:rgba(255,125,125,.55);color:#ffd7d7}
-    footer{border-top:1px solid var(--line);padding:28px 0 46px;color:var(--muted);font-size:13px}
+    :root{color-scheme:light;--canvas:#fbfaf7;--paper:rgba(255,255,255,.82);--paper-strong:rgba(255,255,255,.96);--ink:#263752;--muted:#6d788b;--line:rgba(92,108,139,.17);--blue:#90b7ed;--blue-strong:#5f86cf;--lavender:#bba9e6;--rose:#efb5c1;--mint:#b9dcc9;--apricot:#f2cfaa;--good:#31795e;--warn:#8e6b23;--bad:#b45d70;--idle:#778292;--shadow:0 18px 48px rgba(77,91,124,.10)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:"Noto Sans JP","Yu Gothic",system-ui,sans-serif;line-height:1.65;background:radial-gradient(circle at 8% 2%,rgba(144,183,237,.28),transparent 28rem),radial-gradient(circle at 92% 8%,rgba(187,169,230,.22),transparent 26rem),radial-gradient(circle at 18% 58%,rgba(239,181,193,.15),transparent 24rem),radial-gradient(circle at 87% 76%,rgba(185,220,201,.18),transparent 25rem),linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),var(--canvas);background-attachment:fixed}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:repeating-linear-gradient(0deg,rgba(53,67,94,.025) 0 1px,transparent 1px 4px);mix-blend-mode:multiply}
+    a{color:var(--blue-strong)}code{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#506b9b;overflow-wrap:anywhere}.shell{width:min(1200px,calc(100% - 32px));margin:auto}
+    header{padding:64px 0 36px}.eyebrow{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:#7583a2;font-weight:800}h1,h2,h3{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;color:#2c3f61}h1{font-size:clamp(38px,6vw,72px);line-height:1.04;letter-spacing:-.035em;margin:14px 0}.lead{font-size:clamp(17px,2vw,21px);max-width:900px;color:var(--muted)}
+    .notice{margin-top:24px;padding:18px 20px;border:1px solid rgba(210,176,103,.34);border-left:5px solid var(--apricot);border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(250,241,224,.76));box-shadow:var(--shadow)}
+    nav{position:sticky;top:0;z-index:10;background:rgba(251,250,247,.84);backdrop-filter:blur(18px);border-block:1px solid var(--line)}nav .shell{display:flex;gap:20px;overflow:auto;padding:13px 0}nav a{white-space:nowrap;text-decoration:none;color:#697791;font-size:14px;font-weight:700}nav a:hover{color:var(--blue-strong)}
+    main{padding:36px 0 76px}section{margin-bottom:58px}.section-head{display:flex;justify-content:space-between;gap:22px;align-items:end;margin-bottom:20px}h2{font-size:clamp(27px,4vw,42px);letter-spacing:-.02em;margin:0}.section-note{max-width:620px;color:var(--muted)}
+    .grid{display:grid;gap:16px}.summary{grid-template-columns:repeat(4,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{position:relative;background:linear-gradient(145deg,var(--paper-strong),var(--paper));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.card::after{content:"";position:absolute;inset:auto -35px -45px auto;width:130px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(187,169,230,.15),transparent 70%);pointer-events:none}.metric{padding:22px;min-height:142px}.metric:nth-child(1){border-top:5px solid var(--blue)}.metric:nth-child(2){border-top:5px solid var(--mint)}.metric:nth-child(3){border-top:5px solid var(--rose)}.metric:nth-child(4){border-top:5px solid var(--lavender)}.metric-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}.metric-value{font-size:42px;font-weight:800;letter-spacing:-.04em;margin-top:8px;color:#30486f}.metric-detail{font-size:13px;color:var(--muted)}
+    .panel{padding:24px}.panel h3{margin:0 0 12px}.plain{margin:0;padding-left:20px}.plain li+li{margin-top:8px}.state{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em}.pass{color:#25654d;background:rgba(185,220,201,.34);border:1px solid rgba(49,121,94,.24)}.fail{color:#99495e;background:rgba(239,181,193,.32);border:1px solid rgba(180,93,112,.25)}.unverified{color:#7b5d1f;background:rgba(242,207,170,.38);border:1px solid rgba(142,107,35,.22)}
+    .table-wrap{overflow:auto}.table-wrap.card{padding:9px 15px}table{width:100%;border-collapse:collapse;min-width:980px}th,td{text-align:left;padding:13px 11px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#71809b;background:rgba(144,183,237,.08)}td{font-size:13px}tr:last-child td{border-bottom:0}tbody tr:hover{background:rgba(144,183,237,.07)}.muted{color:var(--muted)}.negative{color:var(--bad)}.positive{color:var(--good)}
+    .gate-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.gate{padding:17px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(255,255,255,.88),rgba(240,244,251,.76));box-shadow:0 10px 30px rgba(77,91,124,.07)}.gate:nth-child(4n+2){background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(246,239,252,.8))}.gate:nth-child(4n+3){background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(238,248,242,.8))}.gate:nth-child(4n){background:linear-gradient(145deg,rgba(255,255,255,.9),rgba(252,241,244,.8))}.gate strong{display:block;margin-bottom:6px;color:#31486c}.gate p{margin:0;color:var(--muted);font-size:13px}
+    .claim{padding:22px}.claim-head{display:flex;align-items:start;justify-content:space-between;gap:18px}.claim h3{margin:0 0 8px}.claim p{margin:8px 0;color:var(--muted)}.sources{display:grid;gap:10px}.source{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line)}.source:last-child{border-bottom:0}.error{padding:20px;border-color:rgba(180,93,112,.42);color:#99495e;background:rgba(255,244,247,.9)}
+    footer{border-top:1px solid var(--line);padding:30px 0 48px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.28)}
+    :focus-visible{outline:3px solid rgba(95,134,207,.42);outline-offset:3px;border-radius:6px}
     @media(max-width:900px){.summary,.two{grid-template-columns:repeat(2,minmax(0,1fr))}.section-head{display:block}.section-note{margin-top:8px}.gate-grid{grid-template-columns:1fr}}
-    @media(max-width:570px){.summary,.two{grid-template-columns:1fr}.claim-head{display:block}.claim-head .state{margin-top:8px}header{padding-top:40px}}
+    @media(max-width:570px){.summary,.two{grid-template-columns:1fr}.claim-head{display:block}.claim-head .state{margin-top:8px}header{padding-top:42px}.shell{width:min(100% - 22px,1200px)}}
+    @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
@@ -47,22 +51,14 @@
       <article class="card panel"><h3>反復検証</h3><p class="muted" id="repeat">読み込み中</p><p>乱数seedを変えて判定が反転しないことだけを確認する。反復回数は独立OOSを増やさない。</p></article>
     </div>
   </section>
-
   <section id="results">
     <div class="section-head"><h2>仮説別の証拠</h2><p class="section-note">t値、ブロック・ブートストラップ、後半期間、機械的コスト控除、売買可能性を分離する。</p></div>
-    <div class="table-wrap card">
-      <table>
-        <thead><tr><th>Hypothesis</th><th>Type</th><th>OOS window</th><th>Annual mean</th><th>Sharpe</th><th>NW t</th><th>Late mean</th><th>25bp/mo</th><th>PIT / tradability</th><th>Verdict</th></tr></thead>
-        <tbody id="resultRows"></tbody>
-      </table>
-    </div>
+    <div class="table-wrap card"><table><thead><tr><th>Hypothesis</th><th>Type</th><th>OOS window</th><th>Annual mean</th><th>Sharpe</th><th>NW t</th><th>Late mean</th><th>25bp/mo</th><th>PIT / tradability</th><th>Verdict</th></tr></thead><tbody id="resultRows"></tbody></table></div>
   </section>
-
   <section id="claims">
     <div class="section-head"><h2>X上の主張をどう扱うか</h2><p class="section-note">他者の投稿を「実証結果」として転記せず、再現可能性の有無を監査する。</p></div>
     <div class="grid two" id="claimCards"></div>
   </section>
-
   <section id="protocol">
     <div class="section-head"><h2>AI探索の検証ロジック</h2><p class="section-note">AIの役割は仮説実装・大量検証・反証補助。探索履歴や市場制度を省略する権限は与えない。</p></div>
     <div class="gate-grid" id="protocolGates"></div>
@@ -71,7 +67,6 @@
       <article class="card panel"><h3>今回の判断</h3><ul class="plain" id="interpretation"></ul></article>
     </div>
   </section>
-
   <section id="sources">
     <div class="section-head"><h2>一次資料・再現物</h2><p class="section-note">方法論は原論文、制度はJPX、数値は当該リポジトリの固定入力に紐づける。</p></div>
     <div class="grid two">
