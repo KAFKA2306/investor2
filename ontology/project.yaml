@@ -1,0 +1,83 @@
+project:
+  id: kafka:investor2
+  name: AAARTS Autonomous Agentic Alpha Trade System
+  repository: https://github.com/KAFKA2306/investor2
+  pages: https://kafka2306.github.io/investor2/
+  version: 0.1.0
+  updated: 2026-07-30
+  core_ontology: https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/causal-evidence-core.yaml
+  schema: https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/project.schema.json
+
+purpose:
+  problem: Govern financial forecasting and alpha hypotheses through a reproducible research cycle that prevents in-sample discovery from being presented as validated evidence.
+  intended_decisions: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required]
+  success_conditions:
+    - Hypotheses identify source papers, economic mechanism, features, targets, and falsification tests.
+    - Training, validation, and chronological out-of-sample periods are explicit and frozen.
+    - Ablations isolate quantitative, textual, and combined information contributions.
+    - Promotion requires reproducible OOS evidence rather than narrative plausibility.
+  falsification_conditions:
+    - Future information leaks into features, labels, selection, or evaluation.
+    - A hypothesis changes after inspecting its frozen OOS result without a new version.
+    - Results cannot be reproduced from recorded data, code, parameters, and commit.
+    - A single favorable metric substitutes for robustness and ablation evidence.
+
+scope:
+  included: [EDINET filings, financial features, textual disclosures, hypotheses, experiments, ablations, chronological OOS evaluations, evidence dashboard]
+  excluded: [live trading authorization, guaranteed returns, unfrozen post-hoc claims, unsupported fraud or earnings assertions]
+  temporal: Filing availability time, feature cutoff, label period, publication date, and OOS window are explicit.
+  abstraction_level: Research governance and evidence lifecycle for predictive hypotheses.
+
+competency_questions:
+  - What economic or accounting mechanism is each hypothesis asserting?
+  - Which data were available at the decision timestamp?
+  - Which choices were made before and after observing OOS results?
+  - Do ablations show incremental value beyond simpler baselines?
+  - Can another run reproduce the exact metrics and promotion decision?
+
+domain_mapping:
+  System: FinancialResearchLifecycle
+  State: [hypothesis state, dataset freeze state, model state, experiment state, evidence state, promotion state]
+  Action: [register hypothesis, build dataset, train model, freeze protocol, run OOS, perform ablation, promote or reject]
+  Process: [EDINET acquisition, feature extraction, model fitting, backtest, OOS evaluation, robustness test, dashboard publication]
+  Observation: [filing fact, textual disclosure, market outcome, experiment metric, leakage diagnostic]
+  Model: [baseline model, quantitative model, text model, combined model, alpha ranking model]
+  Requirement: [timestamp correctness, frozen OOS, reproducibility, baseline comparison, ablation, multiple-testing governance]
+  Claim: [forecast skill, incremental information, robustness, economic relevance, reproducibility]
+  Evidence: [dataset manifest, protocol hash, experiment configuration, metrics, ablation result, commit SHA, dashboard artifact]
+  Decision: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required]
+
+claims_and_evidence:
+  assertion_types: [ObservedFact, CalculatedValue, ModelEstimate, Forecast, Assumption, Hypothesis, DecisionAssertion]
+  required_evidence:
+    ForecastSkill: [chronological OOS metrics, baseline comparison, confidence or uncertainty analysis]
+    IncrementalValue: [ablation results, identical OOS window, identical target definition]
+    ReproducibleResult: [data manifest, code commit, configuration, random seeds, environment]
+    Promotion: [frozen protocol, OOS pass, robustness checks, governance rule]
+  unknown_policy: Unfrozen, leaky, unreproducible, or incomplete results remain candidates or are rejected; they are not promoted.
+
+decision_rules:
+  - id: hypothesis-registration
+    when: Mechanism, target, inputs, availability timing, baseline, and falsification criteria are declared.
+    result: candidate
+  - id: freeze-before-oos
+    when: Dataset split, metrics, thresholds, and analysis plan are committed before OOS inspection.
+    result: freeze_for_oos
+  - id: promotion-gate
+    when: Frozen chronological OOS, baseline, ablation, robustness, and reproducibility requirements pass.
+    result: promote
+  - id: integrity-failure
+    when: Leakage, post-hoc protocol mutation, missing provenance, or non-reproducibility is detected.
+    result: reject
+
+provenance:
+  sources: [EDINET filings, registered research papers, market and accounting datasets permitted by project policy]
+  generated_artifacts: [dataset manifests, feature tables, experiment configs, model outputs, OOS reports, dashboard data]
+  agents: [acquisition code, research agents, model training code, test harness, GitHub Actions, human reviewer]
+  lineage: Hypothesis IDs connect source rationale, frozen protocol, data versions, model versions, metrics, and promotion decisions.
+
+validation:
+  structural: Schemas, unique IDs, required timestamps, configuration completeness, and artifact hashes.
+  semantic: Availability timing, target definition, split chronology, hypothesis versioning, and metric comparability.
+  evidence: Baselines, ablations, OOS results, robustness checks, and reproducibility records.
+  publication: Evidence dashboard build and published artifacts identify the exact research commit and protocol version.
