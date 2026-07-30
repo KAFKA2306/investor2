@@ -12,6 +12,22 @@ AAARTS is a quantitative trading and research system designed as an integrated i
 * **OOS Governance**: Alpha candidates require frozen chronological out-of-sample evidence before promotion.
 * **Multi-paper OOS Suite**: Four additional classic papers and seven paper–factor hypotheses are evaluated with a locked post-publication protocol.
 
+## Causal-evidence research ontology
+
+[`ontology/project.yaml`](ontology/project.yaml) defines the research lifecycle as a machine-readable evidence structure:
+
+```text
+FinancialResearchLifecycle
+  -> hypothesis registration and dataset construction
+  -> timestamped observations
+  -> model estimates and forecasts
+  -> frozen OOS tests and ablations
+  -> reproducible evidence
+  -> candidate / reject / freeze_for_oos / promote / retire
+```
+
+Observed filing facts, calculated features, model estimates, forecasts, assumptions, hypotheses, and promotion decisions are distinct assertion types. In-sample fit, narrative plausibility, or a favorable isolated metric cannot produce `promote` without a frozen chronological OOS protocol, baseline comparison, ablation, robustness, and reproducibility evidence.
+
 ## Key Pointers
 
 * **NeurIPS Paper Outline**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
