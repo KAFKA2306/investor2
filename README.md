@@ -1,61 +1,66 @@
-# AAARTS: Autonomous Agentic Alpha Trade System
+# AAARTS — 自律型アルファ研究システム
 
-## Introduction
+**公開ダッシュボード:** https://kafka2306.github.io/investor2/
 
-AAARTS is a quantitative trading and research system designed as an integrated intelligence cycle, handling everything from alpha hypothesis generation to backtesting and validation. The system is currently focused on corporate earnings forecasting research using Japanese securities reports (EDINET) for submission to NeurIPS 2026.
+AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、データ作成、検証、時系列のアウト・オブ・サンプル評価、再現可能な証拠の保存までを一つの研究サイクルとして管理するプロジェクトです。
 
-## Research Status
+単にバックテストの成績が良い候補を探すのではなく、**未来情報の混入を防ぎ、反証可能な条件を先に決め、同じ結果を再実行できる状態にすること**を重視します。
 
-* **Evidence Dashboard**: [AAARTS Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/)
-* **EDINET-Bench Evaluation**: Actively evaluating performance on financial fraud detection and directional earnings forecasting tasks.
-* **Ablation Study**: Systematically isolating the predictive power of quantitative financial ratios versus qualitative textual disclosures in regulatory filings.
-* **OOS Governance**: Alpha candidates require frozen chronological out-of-sample evidence before promotion.
-* **Multi-paper OOS Suite**: Four additional classic papers and seven paper–factor hypotheses are evaluated with a locked post-publication protocol.
+## 現在取り組んでいること
 
-## Causal-evidence research ontology
+- EDINETの有価証券報告書を用いた企業業績予測
+- 財務数値と開示文章の予測力を分離するアブレーション分析
+- 不正会計検知と利益方向予測の評価
+- 論文公開後の期間だけを使う凍結OOS検証
+- 古典的な投資研究とファクター仮説の再現・失敗条件の記録
+- 仮説、観測値、計算値、予測、判断を区別する証拠オントロジー
 
-[`ontology/project.yaml`](ontology/project.yaml) defines the research lifecycle as a machine-readable evidence structure:
+## このリポジトリで分かること
+
+| 目的 | 主な入口 |
+| --- | --- |
+| 研究全体の進捗を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
+| 論文構成を確認する | [NeurIPS earnings forecast outline](docs/paper/neurips_earnings_forecast_outline.md) |
+| システム全体の流れを見る | [Simple flowchart](docs/diagrams/simpleflowchart.md) |
+| アルファ探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
+| OOS判定ルールを見る | [Time-tested alpha policy](docs/specs/time_tested_alpha_policy.md) |
+| 複数論文の再検証結果を見る | [Multi-paper OOS summary](docs/research/multi_paper_oos_summary.md) |
+| 運用上の禁止事項・作業規則を見る | [AGENTS.md](AGENTS.md) |
+| 設計判断の履歴を見る | [ADR](docs/adr/) |
+
+## 研究判定の原則
 
 ```text
-FinancialResearchLifecycle
-  -> hypothesis registration and dataset construction
-  -> timestamped observations
-  -> model estimates and forecasts
-  -> frozen OOS tests and ablations
-  -> reproducible evidence
-  -> candidate / reject / freeze_for_oos / promote / retire
+仮説登録
+  → データセット構築
+  → 時点付き観測
+  → モデル推定・予測
+  → 凍結OOS・比較対象・アブレーション
+  → 再現可能な証拠
+  → candidate / reject / freeze_for_oos / promote / retire
 ```
 
-Observed filing facts, calculated features, model estimates, forecasts, assumptions, hypotheses, and promotion decisions are distinct assertion types. In-sample fit, narrative plausibility, or a favorable isolated metric cannot produce `promote` without a frozen chronological OOS protocol, baseline comparison, ablation, robustness, and reproducibility evidence.
+`promote`は、インサンプル成績、説明のもっともらしさ、単独の好成績だけでは成立しません。時系列OOS、ベースライン比較、アブレーション、頑健性、再現性の証拠が必要です。
 
-## Key Pointers
+機械可読な定義は[`ontology/project.yaml`](ontology/project.yaml)にあります。
 
-* **NeurIPS Paper Outline**: [docs/paper/neurips_earnings_forecast_outline.md](docs/paper/neurips_earnings_forecast_outline.md)
-* **System Flowchart**: [docs/diagrams/simpleflowchart.md](docs/diagrams/simpleflowchart.md)
-* **Alpha Discovery Runbook**: [docs/specs/alpha_discovery_runbook.md](docs/specs/alpha_discovery_runbook.md)
-* **Time-Tested Alpha Policy**: [docs/specs/time_tested_alpha_policy.md](docs/specs/time_tested_alpha_policy.md)
-* **Momentum OOS Example**: [docs/research/post_publication_momentum_oos.md](docs/research/post_publication_momentum_oos.md)
-* **Multi-paper OOS Results**: [docs/research/multi_paper_oos_summary.md](docs/research/multi_paper_oos_summary.md)
-* **Paper–Factor Registry**: [docs/research/paper_factor_registry.json](docs/research/paper_factor_registry.json)
-* **2010s Paper Catalog**: [docs/research/2010s_paper_catalog.md](docs/research/2010s_paper_catalog.md)
-* **Operational Rules**: [AGENTS.md](AGENTS.md)
-* **Architectural Decision Records (ADRs)**: [docs/adr/](docs/adr/)
+## セットアップ
 
-## Setup and Execution
-
-### Setup
 ```bash
 task setup
 cp .env.example .env
 uv sync
 ```
 
-### Run
+## 実行
+
 ```bash
-task run:newalphasearch  # Start autonomous alpha search loop
-task view                # Start the dashboard and API
+task run:newalphasearch  # 自律的なアルファ探索ループ
+task view                # ダッシュボードとAPIを起動
 ```
 
----
+## 現在の位置づけ
 
-*This repository conforms to harness engineering standards as specified in ADR-001.*
+このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。
+
+**README最終監査:** 2026-08-01
