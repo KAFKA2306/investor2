@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "split_id": "edinet-bench-industry-frozen-v1",
+  "source": {
+    "dataset": "SakanaAI/EDINET-Bench",
+    "config": "industry_prediction",
+    "split": "train",
+    "revision": "fff8d7cc328578b2c845c812b8a55b454d689962",
+    "parquet_path": "industry_prediction/train-00000-of-00001.parquet",
+    "sha256": "b03e25ed4a8618d576919afa92e9acd024b85caeef6585a91a7887077376b004",
+    "row_count": 496
+  },
+  "policy": {
+    "algorithm": "stratified_sha256_rank_v1",
+    "seed": 20260803,
+    "evaluation_fraction": 0.2,
+    "id_column": "doc_id",
+    "group_column": "industry",
+    "minimum_evaluation_per_class": 1,
+    "preserve_development_sample_per_class": true
+  },
+  "contract": {
+    "formal_evaluation_split": "frozen_evaluation",
+    "development_split": "development",
+    "source_change_policy": "fail_closed",
+    "notes": "The pinned parquet identity plus the deterministic per-industry SHA256 ranking uniquely defines every development and evaluation doc_id. Evaluation reports persist the expanded doc_id list and its SHA256."
+  }
+}

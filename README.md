@@ -44,6 +44,18 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 
 機械可読な定義は[`ontology/project.yaml`](ontology/project.yaml)にあります。
 
+## EDINET-Benchの凍結評価
+
+`industry_prediction` は公式test splitを持たないため、`train.head(N)`を正式評価には使用しません。
+
+- 正準manifest: `data/benchmarks/industry_prediction_frozen_split.json`
+- ソース固定: Hugging Face revision、Parquet SHA256、行数
+- 分割: `industry`ごとに固定seed付きSHA256順位を計算し、developmentとfrozen evaluationへ決定論的に分離
+- 失敗条件: ソースSHA、行数、doc_id一意性、manifest schemaの不一致
+- 証跡: 評価レポートへmanifest hash、split名、全評価doc_id、その集合hashを保存
+
+正式評価は`src.io.edinet_bench.load_industry_prediction_frozen()`を通し、ソースが改訂された場合は暗黙にsplitを作り直さず停止します。
+
 ## セットアップ
 
 ```bash
@@ -63,4 +75,4 @@ task view                # ダッシュボードとAPIを起動
 
 このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。
 
-**README最終監査:** 2026-08-01
+**README最終監査:** 2026-08-03
