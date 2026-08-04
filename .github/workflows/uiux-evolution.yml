@@ -1,0 +1,29 @@
+name: Validate evidence evolution review
+on:
+  pull_request:
+    paths:
+      - "docs/evolution/**"
+      - ".github/workflows/uiux-evolution.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22.18.0"
+      - run: node --check docs/evolution/evolution.js
+      - name: Validate contracts
+        run: |
+          grep -q 'REGISTERED → DATASET → EXPERIMENT → FROZEN OOS → DECISION' docs/evolution/index.html
+          grep -q 'function decisionOf' docs/evolution/evolution.js
+          grep -q 'function normalize' docs/evolution/evolution.js
+          grep -q 'new URLSearchParams' docs/evolution/evolution.js
+          grep -q 'data-list="support"' docs/evolution/index.html
+          grep -q 'data-list="counter"' docs/evolution/index.html
+          grep -q 'data-list="unresolved"' docs/evolution/index.html
+          grep -q 'data-list="next"' docs/evolution/index.html
+          grep -q 'min-height:44px' docs/evolution/evolution.css
