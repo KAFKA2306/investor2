@@ -6,8 +6,10 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "scripts/build_research_verification_manifest.py"
+      - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
       - "tests/test_research_verification_manifest.py"
+      - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
       - ".github/workflows/pages.yml"
   push:
@@ -16,8 +18,10 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "scripts/build_research_verification_manifest.py"
+      - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
       - "tests/test_research_verification_manifest.py"
+      - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
       - ".github/workflows/pages.yml"
   workflow_dispatch:
@@ -32,7 +36,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  validate-candidate:
+    name: Validate candidate artifact
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -56,19 +61,51 @@ jobs:
           python -m pytest -q \
             tests/test_paper_factor_suite.py \
             tests/test_repeated_paper_validation.py \
-            tests/test_research_verification_manifest.py
+            tests/test_research_verification_manifest.py \
+            tests/test_research_dashboard_validation.py
 
-      - name: Assemble static site from verified evidence
+      - name: Assemble candidate site
         run: |
           set -euo pipefail
-          rm -rf _site
-          mkdir -p _site/data
+          rm -rf _site validation-report
+          mkdir -p _site/data validation-report
           python scripts/build_research_verification_manifest.py \
             --output _site/data/research_verification_manifest.json
           cp docs/aaarts-dashboard/index.html _site/index.html
           touch _site/.nojekyll
-          test "$(python -c 'import json; print(json.load(open("_site/data/research_verification_manifest.json"))["summary"]["tested_hypotheses"])')" = "8"
-          test "$(python -c 'import json; print(json.load(open("_site/data/research_verification_manifest.json"))["summary"]["confirmed"])')" = "0"
+
+      - name: Serve and validate candidate site
+        run: |
+          set -euo pipefail
+          python -m http.server 4173 --directory _site >validation-report/http-server.log 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in $(seq 1 15); do
+            if curl --fail --silent --show-error http://127.0.0.1:4173/ -o validation-report/candidate-index.html; then
+              break
+            fi
+            if [ "$attempt" -eq 15 ]; then
+              echo "candidate HTTP server did not become ready" >&2
+              exit 1
+            fi
+            sleep 1
+          done
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/data/research_verification_manifest.json \
+            -o validation-report/candidate-manifest.json
+          python scripts/validate_research_dashboard.py \
+            --manifest validation-report/candidate-manifest.json \
+            --html validation-report/candidate-index.html \
+            --expected-revision "${GITHUB_SHA}" \
+            --report validation-report/candidate-validation.json
+
+      - name: Upload candidate validation evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-candidate-validation-${{ github.sha }}
+          path: validation-report
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Upload Pages artifact
         if: github.event_name != 'pull_request'
@@ -77,12 +114,13 @@ jobs:
           path: _site
 
   deploy:
+    name: Deploy production Pages
     if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: validate-candidate
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
