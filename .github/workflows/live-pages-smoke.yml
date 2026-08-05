@@ -1,17 +1,11 @@
-name: Verify live GitHub Pages
+name: Verify deployed GitHub Pages
 
 on:
-  pull_request:
-    paths:
-      - docs/aaarts-dashboard/**
-      - .github/workflows/live-pages-smoke.yml
-  push:
-    branches:
-      - main
-    paths:
-      - docs/aaarts-dashboard/**
-      - .github/workflows/pages.yml
-      - .github/workflows/live-pages-smoke.yml
+  workflow_run:
+    workflows:
+      - Validate and deploy AAARTS evidence dashboard
+    types:
+      - completed
   workflow_dispatch:
 
 permissions:
@@ -19,58 +13,88 @@ permissions:
   pages: read
 
 jobs:
-  verify-live:
+  verify-production:
+    name: Verify production artifact
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.head_branch == 'main' &&
+       github.event.workflow_run.event != 'pull_request')
     runs-on: ubuntu-latest
     steps:
-      - name: Inspect GitHub Pages source configuration
+      - name: Resolve expected deployed revision
+        id: revision
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          WORKFLOW_HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          if [ "$EVENT_NAME" = "workflow_dispatch" ]; then
+            echo "sha=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          else
+            echo "sha=${WORKFLOW_HEAD_SHA}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout deployed revision
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ steps.revision.outputs.sha }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Inspect GitHub Pages configuration
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
           set -euo pipefail
+          mkdir -p production-validation
           curl --fail --silent --show-error \
             -H "Authorization: Bearer ${GH_TOKEN}" \
             -H "Accept: application/vnd.github+json" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             "https://api.github.com/repos/${GITHUB_REPOSITORY}/pages" \
-            | jq '{html_url, status, build_type, source, public}'
+            | tee production-validation/pages-configuration.json
 
-      - name: Wait for Pages propagation on main
-        if: github.event_name == 'push'
-        run: sleep 30
-
-      - name: Verify production HTML and manifest
-        shell: bash
+      - name: Poll production until the expected revision is visible
+        env:
+          EXPECTED_REVISION: ${{ steps.revision.outputs.sha }}
         run: |
           set -euo pipefail
           base="https://kafka2306.github.io/investor2"
-          tmp="$(mktemp -d)"
+          mkdir -p production-validation
+          success=0
+          for attempt in $(seq 1 20); do
+            cache_bust="${EXPECTED_REVISION}-${attempt}"
+            if curl --fail --silent --show-error --location \
+                "$base/?smoke=$cache_bust" \
+                -o production-validation/index.html \
+              && curl --fail --silent --show-error --location \
+                "$base/data/research_verification_manifest.json?smoke=$cache_bust" \
+                -o production-validation/manifest.json \
+              && python scripts/validate_research_dashboard.py \
+                --manifest production-validation/manifest.json \
+                --html production-validation/index.html \
+                --expected-revision "$EXPECTED_REVISION" \
+                --report production-validation/production-validation.json; then
+              success=1
+              break
+            fi
+            echo "attempt ${attempt}/20: deployed revision is not visible yet" | tee -a production-validation/poll.log
+            sleep 6
+          done
+          if [ "$success" -ne 1 ]; then
+            echo "production did not expose expected revision ${EXPECTED_REVISION} within 120 seconds" >&2
+            exit 1
+          fi
 
-          curl --fail --silent --show-error --location \
-            --retry 10 --retry-all-errors --retry-delay 6 \
-            -D "$tmp/index.headers" \
-            "$base/?smoke=${GITHUB_SHA}" -o "$tmp/index.html"
-          sed -n '1,30p' "$tmp/index.headers"
-          grep -nE 'theme-color|<title>|--(lavender|rose|mint):' "$tmp/index.html" || true
-          grep -F 'content="#fbfaf7"' "$tmp/index.html"
-          grep -F -- '--lavender:' "$tmp/index.html"
-          grep -F -- '--rose:' "$tmp/index.html"
-          grep -F -- '--mint:' "$tmp/index.html"
-          grep -F 'id="resultRows"' "$tmp/index.html"
-          grep -F 'id="protocolGates"' "$tmp/index.html"
-
-          curl --fail --silent --show-error --location \
-            --retry 10 --retry-all-errors --retry-delay 6 \
-            "$base/data/research_verification_manifest.json?smoke=${GITHUB_SHA}" \
-            -o "$tmp/manifest.json"
-          python -m json.tool "$tmp/manifest.json" >/dev/null
-          MANIFEST="$tmp/manifest.json" python - <<'PY'
-          import json
-          import os
-
-          with open(os.environ["MANIFEST"], encoding="utf-8") as handle:
-              data = json.load(handle)
-          assert data["summary"]["tested_hypotheses"] == 8
-          assert data["summary"]["confirmed"] == 0
-          PY
-
-          echo "Live Pages smoke test passed: $base/"
+      - name: Upload production validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pages-production-validation-${{ steps.revision.outputs.sha }}
+          path: production-validation
+          if-no-files-found: error
+          retention-days: 30
