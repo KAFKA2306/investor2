@@ -1,0 +1,24 @@
+{
+  "schema_version": "investor2.input-source-registry.v1",
+  "sources": {
+    "edinetdb_annual_financials": {
+      "enabled": true,
+      "adapter": "edinetdb_mcp_projection",
+      "primary_source": "EDINET annual XBRL financials",
+      "required_provenance": [
+        "edinetCode",
+        "secCode",
+        "docID",
+        "edinetFilingUrl",
+        "observed_at",
+        "raw_rows_sha256"
+      ],
+      "canonical_timestamp_rule": "Use the source snapshot observed_at and retain filing docID/URL per fiscal-year row.",
+      "revision_pinning_rule": "Canonical rows are content-addressed by deterministic SHA-256 over sorted-key compact JSON records.",
+      "retry_policy": "Collector/network retries are handled upstream; this repository audit never fabricates missing rows.",
+      "rate_limit_policy": "Do not bypass provider limits or duplicate identical requests.",
+      "schema_expectations": "investor2.edinet-company-trajectory.v1",
+      "failure_mode": "fail-closed"
+    }
+  }
+}
