@@ -1,0 +1,31 @@
+name: EDINETDB projection contract
+
+on:
+  pull_request:
+    paths:
+      - "src/io/edinetdb_projection.py"
+      - "tests/test_edinetdb_projection_consumer.py"
+      - "docs/specs/edinetdb-shared-projection.md"
+      - ".github/workflows/edinetdb-projection-contract.yml"
+  push:
+    branches: [main]
+    paths:
+      - "src/io/edinetdb_projection.py"
+      - "tests/test_edinetdb_projection_consumer.py"
+      - "docs/specs/edinetdb-shared-projection.md"
+      - ".github/workflows/edinetdb-projection-contract.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: python -m pip install 'pytest>=8,<9' 'ruff>=0.12,<1'
+      - run: ruff check src/io/edinetdb_projection.py tests/test_edinetdb_projection_consumer.py
+      - run: python -m pytest tests/test_edinetdb_projection_consumer.py
