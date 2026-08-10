@@ -1,0 +1,50 @@
+name: Frozen manifest integrity
+
+on:
+  pull_request:
+    paths:
+      - "data/benchmarks/industry_prediction_frozen_split.json"
+      - "scripts/validate_frozen_manifest.py"
+      - "tests/test_validate_frozen_manifest.py"
+      - ".github/workflows/frozen-manifest-integrity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "data/benchmarks/industry_prediction_frozen_split.json"
+      - "scripts/validate_frozen_manifest.py"
+      - "tests/test_validate_frozen_manifest.py"
+      - ".github/workflows/frozen-manifest-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frozen-manifest-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Compile validator
+        run: python -m py_compile scripts/validate_frozen_manifest.py tests/test_validate_frozen_manifest.py
+      - name: Run unit tests
+        run: python -m unittest tests.test_validate_frozen_manifest -v
+      - name: Validate canonical manifest
+        run: |
+          python scripts/validate_frozen_manifest.py \
+            data/benchmarks/industry_prediction_frozen_split.json \
+            --report build/frozen-manifest-audit.json
+      - name: Upload audit evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: frozen-manifest-audit
+          path: build/frozen-manifest-audit.json
+          retention-days: 30
+          if-no-files-found: error
