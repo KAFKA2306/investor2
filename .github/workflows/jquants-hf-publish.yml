@@ -1,0 +1,122 @@
+name: J-Quants canonical sync and HF publisher
+
+on:
+  pull_request:
+    paths:
+      - "scripts/jquants_hf_pipeline.py"
+      - "tests/test_jquants_hf_pipeline.py"
+      - "docs/specs/jquants-hf-pipeline.md"
+      - ".github/workflows/jquants-hf-publish.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/jquants_hf_pipeline.py"
+      - "tests/test_jquants_hf_pipeline.py"
+      - "docs/specs/jquants-hf-pipeline.md"
+      - ".github/workflows/jquants-hf-publish.yml"
+  workflow_dispatch:
+    inputs:
+      end_date:
+        description: "End of the narrow lookup window (YYYY-MM-DD). Empty = today minus JQUANTS_DATA_DELAY_DAYS."
+        required: false
+        type: string
+      lookback_days:
+        description: "Calendar-day lookup window; 7 normally covers weekends/holidays."
+        required: false
+        default: "7"
+        type: string
+  schedule:
+    - cron: "0 11 * * 1-5"
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install contract dependencies
+        run: python -m pip install 'pandas>=2,<3' 'pydantic>=2,<3' 'pytest>=8,<9' 'ruff>=0.12,<1'
+      - name: Ruff
+        run: ruff check scripts/jquants_hf_pipeline.py tests/test_jquants_hf_pipeline.py
+      - name: Contract tests
+        run: python -m pytest tests/test_jquants_hf_pipeline.py
+
+  sync-and-publish:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'schedule' && vars.JQUANTS_CANONICAL_SYNC_ENABLED == 'true')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      JQUANTS_DATA_DELAY_DAYS: ${{ vars.JQUANTS_DATA_DELAY_DAYS || '0' }}
+      JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED: ${{ vars.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED || 'false' }}
+      HF_DATASET_REPO: ${{ vars.HF_DATASET_REPO }}
+      INPUT_END_DATE: ${{ inputs.end_date }}
+      INPUT_LOOKBACK_DAYS: ${{ inputs.lookback_days }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install J-Quants client and validation dependencies
+        run: python -m pip install 'jquants-api-client' 'pandas>=2,<3' 'pydantic>=2,<3'
+      - name: Resolve acquisition window
+        shell: bash
+        run: |
+          END_DATE="$INPUT_END_DATE"
+          if [ -z "$END_DATE" ]; then
+            END_DATE="$(python - <<'PY'
+          from datetime import date, timedelta
+          import os
+
+          lag_days = int(os.environ["JQUANTS_DATA_DELAY_DAYS"])
+          print((date.today() - timedelta(days=lag_days)).isoformat())
+          PY
+          )"
+          fi
+          LOOKBACK_DAYS="${INPUT_LOOKBACK_DAYS:-7}"
+          echo "END_DATE=$END_DATE" >> "$GITHUB_ENV"
+          echo "LOOKBACK_DAYS=$LOOKBACK_DAYS" >> "$GITHUB_ENV"
+      - name: Fetch and validate in ephemeral runner storage
+        shell: bash
+        run: |
+          PUBLISH_FLAG=()
+          if [ "$JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED" = "true" ]; then
+            PUBLISH_FLAG+=(--external-distribution-authorized)
+          fi
+          python scripts/jquants_hf_pipeline.py \
+            --end-date "$END_DATE" \
+            --lookback-days "$LOOKBACK_DAYS" \
+            --output-dir .jquants-staging \
+            "${PUBLISH_FLAG[@]}"
+      - name: Enforce Hugging Face target when distribution is authorized
+        if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED == 'true'
+        shell: bash
+        run: |
+          test -n "$HF_DATASET_REPO" || {
+            echo "HF_DATASET_REPO must be configured before external distribution is enabled." >&2
+            exit 1
+          }
+      - name: Record fail-closed publication boundary
+        if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED != 'true'
+        run: echo "J-Quants snapshot validated; HF publication blocked by default."
+      - name: Install Hugging Face CLI
+        if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED == 'true'
+        run: curl -LsSf https://hf.co/cli/install.sh | bash
+      - name: Publish authorized snapshot with Hugging Face OIDC
+        if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED == 'true'
+        env:
+          HF_OIDC_RESOURCE: datasets/${{ vars.HF_DATASET_REPO }}
+        run: hf upload "$HF_DATASET_REPO" .jquants-staging . --repo-type dataset
+      - name: Remove J-Quants staging data
+        if: always()
+        run: rm -rf .jquants-staging
