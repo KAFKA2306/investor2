@@ -1,0 +1,44 @@
+{
+  "schema_version": "investor2.edinet-company-trajectory.v1",
+  "observed_at": "2026-08-10T14:02:44+09:00",
+  "company": {
+    "name": "トヨタ自動車株式会社",
+    "edinetCode": "E02144",
+    "secCode": "72030",
+    "jquantsCode4": "7203"
+  },
+  "period": {"from_fiscal_year": 2022, "to_fiscal_year": 2026, "rows": 5},
+  "source": {
+    "provider": "EDINET DB MCP",
+    "source_type": "EDINET annual XBRL financials",
+    "raw_rows_sha256": "a4c267e445793f865935503003ac3c5d11a28b159327aa05906f16d0b4fd3d5d"
+  },
+  "audit": {
+    "duplicate_fiscal_years": 0,
+    "missing_required_fields": 0,
+    "period_contiguous": true,
+    "nulls_imputed": false,
+    "jquants_status": "prepared_not_fetched",
+    "jquants_reason": "J-Quants GPT/API is not exposed as a callable connected tool in this automation execution; no credential was copied or inferred."
+  },
+  "derived": {
+    "revenue_cagr_2022_2026": 0.1273486026,
+    "net_income_cagr_2022_2026": 0.0779438162,
+    "mean_roe_2022_2026": 0.12,
+    "operating_margin_2022": 0.0954666687,
+    "operating_margin_2026": 0.0743063937,
+    "free_cash_flow_2026": 3952613000000.0,
+    "derivation": {
+      "cagr": "(last/first)^(1/4)-1",
+      "operating_margin": "operatingIncome/revenue",
+      "free_cash_flow": "cfOperating+cfInvesting"
+    }
+  },
+  "records": [
+    {"fiscalYear":2022,"revenue":31379507000000.0,"operatingIncome":2995697000000.0,"netIncome":2850110000000.0,"roeOfficial":0.115,"equityRatioOfficial":0.388,"cfOperating":3722615000000.0,"cfInvesting":-577496000000.0,"docID":"S100OC13","edinetFilingUrl":"https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100OC13"},
+    {"fiscalYear":2023,"revenue":37154298000000.0,"operatingIncome":2725025000000.0,"netIncome":2451318000000.0,"roeOfficial":0.09,"equityRatioOfficial":0.381,"cfOperating":2955076000000.0,"cfInvesting":-1598890000000.0,"docID":"S100QZHY","edinetFilingUrl":"https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100QZHY"},
+    {"fiscalYear":2024,"revenue":45095325000000.0,"operatingIncome":5352934000000.0,"netIncome":4944933000000.0,"roeOfficial":0.158,"equityRatioOfficial":0.38,"cfOperating":4206373000000.0,"cfInvesting":-4998751000000.0,"docID":"S100TR7I","edinetFilingUrl":"https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100TR7I"},
+    {"fiscalYear":2025,"revenue":48036704000000.0,"operatingIncome":4795586000000.0,"netIncome":4765086000000.0,"roeOfficial":0.136,"equityRatioOfficial":0.384,"cfOperating":3696934000000.0,"cfInvesting":-4189736000000.0,"docID":"S100VWVY","edinetFilingUrl":"https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100VWVY"},
+    {"fiscalYear":2026,"revenue":50684952000000.0,"operatingIncome":3766216000000.0,"netIncome":3848098000000.0,"roeOfficial":0.101,"equityRatioOfficial":0.378,"cfOperating":5472920000000.0,"cfInvesting":-1520307000000.0,"docID":"S100Y8NY","edinetFilingUrl":"https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100Y8NY"}
+  ]
+}
