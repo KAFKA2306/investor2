@@ -1,0 +1,50 @@
+{
+  "analysis": {
+    "guards": [
+      "Market capitalization is filing-date/period-end derived, not real-time.",
+      "Missing operatingIncome is preserved as null; it is not imputed.",
+      "No buy/sell conclusion is generated from this cross-sectional snapshot."
+    ],
+    "observed_at": "2026-08-10T13:02:06+09:00",
+    "results": {
+      "highest_roe": [
+        {"edinetCode": "E01950", "name": "株式会社アドバンテスト", "roe": 0.576},
+        {"edinetCode": "E02778", "name": "ソフトバンクグループ株式会社", "roe": 0.343},
+        {"edinetCode": "E02652", "name": "東京エレクトロン株式会社", "roe": 0.296}
+      ],
+      "lowest_per": [
+        {"edinetCode": "E02778", "name": "ソフトバンクグループ株式会社", "per": 4.1},
+        {"edinetCode": "E02144", "name": "トヨタ自動車株式会社", "per": 10.7},
+        {"edinetCode": "E03614", "name": "株式会社三井住友フィナンシャルグループ", "per": 12.15}
+      ],
+      "median_per": 17.95,
+      "median_roe": 0.1212
+    },
+    "schema_version": "investor2.cross-sectional-analysis.v1",
+    "source_snapshot_sha256": "badc9cf5a27fb80c1bb8aafdd00163b0cc90dccfae281bae230bb6fe6152b83a",
+    "universe": "EDINET FY2026 top-10 by filing-date market capitalization"
+  },
+  "fiscal_year": 2026,
+  "jquants_join": {
+    "code_field": "jquantsCode4",
+    "reason": "J-Quants GPT/MCP is not exposed as a callable connector in this chat execution; no API key was copied or inferred.",
+    "status": "prepared_not_fetched"
+  },
+  "observed_at": "2026-08-10T13:02:06+09:00",
+  "provider": "EDINET DB MCP",
+  "records": [
+    {"cfOperating":5472920000000.0,"dividendPerShare":95.0,"edinetCode":"E02144","eps":295.25,"equityRatioOfficial":0.378,"fiscalYear":2026,"industry":"輸送用機器","jquantsCode4":"7203","marketCap":49899129508945.49,"name":"トヨタ自動車株式会社","netIncome":3848098000000.0,"operatingIncome":3766216000000.0,"pbr":1.0314595699388145,"per":10.7,"rank":1,"revenue":50684952000000.0,"roeOfficial":0.101,"secCode":"72030"},
+    {"cfOperating":-23064420000000.0,"dividendPerShare":86.0,"edinetCode":"E03606","eps":213.16,"equityRatioOfficial":0.0515,"fiscalYear":2026,"industry":"銀行業","jquantsCode4":"8306","marketCap":30837302155830.77,"name":"株式会社三菱ＵＦＪフィナンシャル・グループ","netIncome":2427229000000.0,"operatingIncome":null,"pbr":1.3167893376577307,"per":12.19,"rank":2,"revenue":14620843000000.0,"roeOfficial":0.1134,"secCode":"83060"},
+    {"cfOperating":-428832000000.0,"dividendPerShare":27.5,"edinetCode":"E02778","eps":873.51,"equityRatioOfficial":0.29,"fiscalYear":2026,"industry":"情報・通信業","jquantsCode4":"9984","marketCap":20456361450334.918,"name":"ソフトバンクグループ株式会社","netIncome":5002271000000.0,"operatingIncome":null,"pbr":null,"per":4.1,"rank":3,"revenue":7798650000000.0,"roeOfficial":0.343,"secCode":"99840"},
+    {"cfOperating":1668061000000.0,"dividendPerShare":50.0,"edinetCode":"E01737","eps":176.76,"equityRatioOfficial":0.437,"fiscalYear":2026,"industry":"電気機器","jquantsCode4":"6501","marketCap":20283155720627.582,"name":"株式会社日立製作所","netIncome":802368000000.0,"operatingIncome":null,"pbr":null,"per":25.3,"rank":4,"revenue":10586781000000.0,"roeOfficial":0.129,"secCode":"65010"},
+    {"cfOperating":1490041000000.0,"dividendPerShare":110.0,"edinetCode":"E02529","eps":210.92,"equityRatioOfficial":0.391,"fiscalYear":2026,"industry":"卸売業","jquantsCode4":"8058","marketCap":19729969248241.156,"name":"三菱商事株式会社","netIncome":800460000000.0,"operatingIncome":null,"pbr":null,"per":25.21,"rank":5,"revenue":18915995000000.0,"roeOfficial":0.085,"secCode":"80580"},
+    {"cfOperating":-10283139000000.0,"dividendPerShare":157.0,"edinetCode":"E03614","eps":411.97,"equityRatioOfficial":0.0481,"fiscalYear":2026,"industry":"銀行業","jquantsCode4":"8316","marketCap":19158295066139.973,"name":"株式会社三井住友フィナンシャルグループ","netIncome":1582973000000.0,"operatingIncome":null,"pbr":null,"per":12.15,"rank":6,"revenue":10790853000000.0,"roeOfficial":0.1038,"secCode":"83160"},
+    {"cfOperating":539732000000.0,"dividendPerShare":628.0,"edinetCode":"E02652","eps":1254.57,"equityRatioOfficial":0.715,"fiscalYear":2026,"industry":"電気機器","jquantsCode4":"8035","marketCap":17427497230925.559,"name":"東京エレクトロン株式会社","netIncome":574454000000.0,"operatingIncome":624936000000.0,"pbr":null,"per":29.68,"rank":7,"revenue":2443533000000.0,"roeOfficial":0.296,"secCode":"80350"},
+    {"cfOperating":952912000000.0,"dividendPerShare":115.0,"edinetCode":"E02513","eps":291.12,"equityRatioOfficial":0.4211,"fiscalYear":2026,"industry":"卸売業","jquantsCode4":"8031","marketCap":17071196686896.805,"name":"三井物産株式会社","netIncome":833971000000.0,"operatingIncome":null,"pbr":null,"per":20.47,"rank":8,"revenue":13995222000000.0,"roeOfficial":0.1022,"secCode":"80310"},
+    {"cfOperating":1131837000000.0,"dividendPerShare":42.0,"edinetCode":"E02497","eps":128.0,"equityRatioOfficial":0.3938,"fiscalYear":2026,"industry":"卸売業","jquantsCode4":"8001","marketCap":15651100829900.799,"name":"伊藤忠商事株式会社","netIncome":900283000000.0,"operatingIncome":null,"pbr":2.094910795731772,"per":15.43,"rank":9,"revenue":14823087000000.0,"roeOfficial":0.1459,"secCode":"80010"},
+    {"cfOperating":335182000000.0,"dividendPerShare":59.0,"edinetCode":"E01950","eps":515.15,"equityRatioOfficial":0.679,"fiscalYear":2026,"industry":"電気機器","jquantsCode4":"6857","marketCap":14879963508000.0,"name":"株式会社アドバンテスト","netIncome":375353000000.0,"operatingIncome":499120000000.0,"pbr":null,"per":39.46,"rank":10,"revenue":1128610000000.0,"roeOfficial":0.576,"secCode":"68570"}
+  ],
+  "schema_version": "investor2.edinet-top10-filing-marketcap.v1",
+  "selection": {"definition":"有報記載の期末株価×発行済株式数（リアルタイム時価総額ではない）","limit":10,"metric":"market-cap"},
+  "snapshot_sha256_without_analysis": "badc9cf5a27fb80c1bb8aafdd00163b0cc90dccfae281bae230bb6fe6152b83a"
+}
