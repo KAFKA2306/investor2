@@ -1,0 +1,86 @@
+{
+  "schema_version": "1.0",
+  "updated_at": "2026-08-11",
+  "company": {
+    "name_ja": "西日本旅客鉄道株式会社",
+    "ticker": "9021",
+    "edinet_code": "E04148"
+  },
+  "verified_financials": {
+    "fy2026": {
+      "period_end": "2026-03-31",
+      "revenue_million_jpy": 1845840,
+      "operating_profit_million_jpy": 198081,
+      "net_income_attributable_to_owners_million_jpy": 127499,
+      "eps_jpy": 277.73,
+      "roe_pct": 10.8,
+      "source_urls": [
+        "https://www.westjr.co.jp/press/article/2026/04/30/items/20260430_00_press_kessantanshin.pdf",
+        "https://www.westjr.co.jp/company/ir/library/securities-report/pdf/report39_01.pdf"
+      ]
+    },
+    "fy2027_q1": {
+      "period_start": "2026-04-01",
+      "period_end": "2026-06-30",
+      "revenue_million_jpy": 424403,
+      "operating_profit_million_jpy": 55989,
+      "net_income_attributable_to_owners_million_jpy": 39046,
+      "eps_jpy": 85.80,
+      "weighted_average_shares": 455083782,
+      "full_year_company_forecast": {
+        "net_income_attributable_to_owners_million_jpy": 100000,
+        "eps_jpy": 219.74
+      },
+      "source_url": "https://www.westjr.co.jp/company/ir/financial/pdf/27/01.pdf"
+    }
+  },
+  "group_scope": {
+    "period_end": "2026-03-31",
+    "consolidated_subsidiaries": 58,
+    "equity_method_affiliates": 5,
+    "unconsolidated_subsidiaries": 81,
+    "non_equity_method_affiliates": 18,
+    "mcp_subset_count_reported_in_prior_analysis": 21,
+    "mcp_subset_status": "subset_not_official_population",
+    "source_url": "https://www.westjr.co.jp/company/ir/library/securities-report/pdf/report39_01.pdf"
+  },
+  "ureshito": {
+    "classification": "paid_reserved_seating_service_on_existing_trains",
+    "standalone_revenue_disclosed": false,
+    "standalone_operating_profit_disclosed": false,
+    "standalone_net_income_disclosed": false,
+    "standalone_eps_disclosed": false,
+    "seat_fees_jpy": {
+      "reserved_regular_season": 530,
+      "reserved_off_season": 330,
+      "e5489_ticketless": 300
+    },
+    "source_urls": [
+      "https://faq-support.westjr.co.jp/hc/ja/articles/8881269142159-",
+      "https://faq-support.westjr.co.jp/hc/ja/articles/8881253459471-",
+      "https://www.westjr.co.jp/press/article/items/241213_00_press_2025harudaiyakaisei5_1.pdf"
+    ]
+  },
+  "eps_model": {
+    "annual_seat_capacity": "annual_train_runs * seats_per_run",
+    "gross_incremental_revenue": "annual_seat_capacity * load_factor * average_seat_fee",
+    "incremental_operating_profit": "gross_incremental_revenue * contribution_margin",
+    "incremental_net_income": "incremental_operating_profit * (1 - effective_tax_rate)",
+    "incremental_eps": "incremental_net_income / weighted_average_shares",
+    "required_assumptions": [
+      "annual_train_runs",
+      "seats_per_run",
+      "load_factor",
+      "average_seat_fee",
+      "contribution_margin",
+      "effective_tax_rate"
+    ]
+  },
+  "evidence_policy": {
+    "observed": "directly disclosed in primary source",
+    "derived": "mechanically calculated from observed values",
+    "assumption": "model input not directly disclosed",
+    "unavailable": "not separately disclosed in checked primary sources",
+    "rule": "Never label derived or assumption values as actual results."
+  }
+}
