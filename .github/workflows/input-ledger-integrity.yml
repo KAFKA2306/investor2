@@ -5,14 +5,22 @@ on:
     paths:
       - "data/input_ledger/**"
       - "data/market_snapshots/**"
+      - "docs/research/data/**"
       - "scripts/audit_input_ledger.py"
+      - "scripts/snapshot_store.py"
+      - "tests/test_snapshot_store.py"
+      - "docs/specs/external_snapshot_store.md"
       - ".github/workflows/input-ledger-integrity.yml"
   push:
     branches: [main]
     paths:
       - "data/input_ledger/**"
       - "data/market_snapshots/**"
+      - "docs/research/data/**"
       - "scripts/audit_input_ledger.py"
+      - "scripts/snapshot_store.py"
+      - "tests/test_snapshot_store.py"
+      - "docs/specs/external_snapshot_store.md"
       - ".github/workflows/input-ledger-integrity.yml"
 
 permissions:
@@ -28,3 +36,5 @@ jobs:
           python-version: "3.12"
       - name: Deterministic external-input audit
         run: python scripts/audit_input_ledger.py
+      - name: Reusable snapshot catalog audit
+        run: python scripts/snapshot_store.py audit
