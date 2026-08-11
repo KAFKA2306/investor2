@@ -13,11 +13,69 @@
         "observed_at",
         "raw_rows_sha256"
       ],
+      "snapshot_required_provenance": [
+        "tool",
+        "operation",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
       "canonical_timestamp_rule": "Use the source snapshot observed_at and retain filing docID/URL per fiscal-year row.",
       "revision_pinning_rule": "Canonical rows are content-addressed by deterministic SHA-256 over sorted-key compact JSON records.",
       "retry_policy": "Collector/network retries are handled upstream; this repository audit never fabricates missing rows.",
       "rate_limit_policy": "Do not bypass provider limits or duplicate identical requests.",
       "schema_expectations": "investor2.edinet-company-trajectory.v1",
+      "failure_mode": "fail-closed"
+    },
+    "jr_west_official_ir": {
+      "enabled": true,
+      "adapter": "primary_source_materialization",
+      "primary_source": "West Japan Railway Company official IR, press releases, and official FAQ",
+      "snapshot_required_provenance": [
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Record the date or timezone-aware timestamp when the primary sources were checked.",
+      "revision_pinning_rule": "Pin the materialized artifact by SHA-256 and retain every official source URL used.",
+      "retry_policy": "Do not promote unavailable fields to observed values.",
+      "rate_limit_policy": "Use normal official-site access; do not bypass access controls.",
+      "schema_expectations": "Dataset-specific JSON/NDJSON schema declared by each snapshot entry.",
+      "failure_mode": "fail-closed"
+    },
+    "external_mcp_snapshot": {
+      "enabled": true,
+      "adapter": "mcp_materialization",
+      "primary_source": "External provider data retrieved through an MCP tool",
+      "snapshot_required_provenance": [
+        "tool",
+        "operation",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain the MCP retrieval timestamp separately from the source fiscal or event date.",
+      "revision_pinning_rule": "Materialize the response or normalized records and pin the artifact by SHA-256.",
+      "retry_policy": "Respect provider/MCP limits; never fill missing records from memory.",
+      "rate_limit_policy": "Do not bypass provider limits or split requests solely to evade quotas.",
+      "schema_expectations": "Dataset-specific JSON/NDJSON schema declared by each snapshot entry.",
+      "failure_mode": "fail-closed"
+    },
+    "jquants_api_snapshot": {
+      "enabled": true,
+      "adapter": "jquants_api_materialization",
+      "primary_source": "J-Quants API response",
+      "snapshot_required_provenance": [
+        "endpoint",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain API retrieval timestamp and each record's disclosed period/date.",
+      "revision_pinning_rule": "Materialize normalized API records and pin the artifact by SHA-256.",
+      "retry_policy": "Respect official API retry and quota behavior; never synthesize unavailable rows.",
+      "rate_limit_policy": "Do not bypass J-Quants API limits.",
+      "schema_expectations": "Dataset-specific JSON/NDJSON schema declared by each snapshot entry.",
       "failure_mode": "fail-closed"
     }
   }
