@@ -26,9 +26,10 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 | 研究全体の進捗を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
 | 論文構成を確認する | [NeurIPS earnings forecast outline](docs/paper/neurips_earnings_forecast_outline.md) |
 | システム全体の流れを見る | [Simple flowchart](docs/diagrams/simpleflowchart.md) |
-| アルファ探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
+| Alpha探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
 | OOS判定ルールを見る | [Time-tested alpha policy](docs/specs/time_tested_alpha_policy.md) |
 | 複数論文の再検証結果を見る | [Multi-paper OOS summary](docs/research/multi_paper_oos_summary.md) |
+| JR西日本「うれしート」の利益・EPS推計基礎を見る | [JR West Ureshito EPS baseline](docs/research/jr_west_ureshito_eps.md) |
 | 運用上の禁止事項・作業規則を見る | [AGENTS.md](AGENTS.md) |
 | 設計判断の履歴を見る | [ADR](docs/adr/) |
 
@@ -79,4 +80,4 @@ task view                # ダッシュボードとAPIを起動
 
 このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。
 
-**README最終監査:** 2026-08-03
+**README最終監査:** 2026-08-11
