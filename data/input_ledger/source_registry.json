@@ -77,6 +77,22 @@
       "rate_limit_policy": "Do not bypass J-Quants API limits.",
       "schema_expectations": "Dataset-specific JSON/NDJSON schema declared by each snapshot entry.",
       "failure_mode": "fail-closed"
+    },
+    "us_oge_presidential_278t": {
+      "enabled": true,
+      "adapter": "primary_source_materialization",
+      "primary_source": "U.S. Office of Government Ethics Presidential OGE Form 278-T disclosures",
+      "snapshot_required_provenance": [
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain the repository observation timestamp separately from each OGE filing date and transaction date range.",
+      "revision_pinning_rule": "Pin the normalized filing index and derived counts by SHA-256 and retain every official OGE URL used.",
+      "retry_policy": "Do not infer unavailable transactions or silently treat partial filing sets as complete.",
+      "rate_limit_policy": "Use normal OGE public access; do not bypass access controls.",
+      "schema_expectations": "investor2.us-oge-278t-trade-count.v1",
+      "failure_mode": "fail-closed"
     }
   }
 }
