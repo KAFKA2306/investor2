@@ -1,0 +1,71 @@
+name: Build Trump OGE 278-T daily chart
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 0 * * *"
+  pull_request:
+    paths:
+      - "scripts/daily_trump_chart.py"
+      - "tests/test_daily_trump_chart.py"
+      - ".github/workflows/daily-trump-chart.yml"
+      - ".github/workflows/pages.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install runtime and test dependencies
+        run: python -m pip install --disable-pip-version-check matplotlib pytest
+      - name: Run regression tests
+        run: python -m pytest -q tests/test_daily_trump_chart.py
+      - name: Generate current chart
+        run: python scripts/daily_trump_chart.py
+      - name: Verify output contract
+        run: |
+          python - <<'PY'
+          import csv, json
+          from pathlib import Path
+          out = Path('generated/trump-daily-chart')
+          summary = json.loads((out / 'summary.json').read_text())
+          with (out / 'trump_daily_transactions.csv').open(newline='', encoding='utf-8') as f:
+              rows = list(csv.DictReader(f))
+          assert rows
+          assert all(int(r['Total']) == int(r['Purchase']) + int(r['Sale']) for r in rows)
+          assert sum(int(r['Total']) for r in rows) == summary['row_count']
+          assert sum(int(r['Purchase']) for r in rows) == summary['purchase_rows']
+          assert sum(int(r['Sale']) for r in rows) == summary['sale_rows']
+          assert (out / 'trump_daily_transactions.png').stat().st_size > 0
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: trump-daily-chart-${{ github.sha }}
+          path: generated/trump-daily-chart
+          if-no-files-found: error
+          retention-days: 30
+      - name: Commit changed generated snapshot
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet -- generated/trump-daily-chart && [ -z "$(git status --porcelain --untracked-files=all generated/trump-daily-chart)" ]; then
+            echo "No upstream change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add generated/trump-daily-chart
+          git commit -m "data: refresh Trump 278-T daily chart"
+          git push
+      - name: Verify clean checkout
+        run: |
+          rm -rf .pytest_cache scripts/__pycache__ tests/__pycache__
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            rm -rf generated/trump-daily-chart
+          fi
+          test -z "$(git status --porcelain --untracked-files=all)"

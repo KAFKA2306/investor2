@@ -8,10 +8,13 @@ on:
       - "scripts/build_research_verification_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
+      - "scripts/daily_trump_chart.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
+      - "tests/test_daily_trump_chart.py"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/daily-trump-chart.yml"
   push:
     branches: [main]
     paths:
@@ -20,10 +23,14 @@ on:
       - "scripts/build_research_verification_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
+      - "scripts/daily_trump_chart.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
+      - "tests/test_daily_trump_chart.py"
       - ".github/workflows/pages.yml"
+      - ".github/workflows/daily-trump-chart.yml"
+      - "generated/trump-daily-chart/**"
   workflow_dispatch:
 
 permissions:
@@ -52,8 +59,8 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install test runner
-        run: python -m pip install --disable-pip-version-check pytest
+      - name: Install test/runtime dependencies
+        run: python -m pip install --disable-pip-version-check pytest matplotlib
 
       - name: Validate empirical research artifacts
         run: |
@@ -62,15 +69,17 @@ jobs:
             tests/test_paper_factor_suite.py \
             tests/test_repeated_paper_validation.py \
             tests/test_research_verification_manifest.py \
-            tests/test_research_dashboard_validation.py
+            tests/test_research_dashboard_validation.py \
+            tests/test_daily_trump_chart.py
 
       - name: Assemble candidate site
         run: |
           set -euo pipefail
           rm -rf _site validation-report
-          mkdir -p _site/data validation-report
+          mkdir -p _site/data _site/trump-daily-chart validation-report
           python scripts/build_research_verification_manifest.py \
             --output _site/data/research_verification_manifest.json
+          python scripts/daily_trump_chart.py --output-dir _site/trump-daily-chart
           cp docs/aaarts-dashboard/index.html _site/index.html
           touch _site/.nojekyll
 
@@ -93,6 +102,12 @@ jobs:
           curl --fail --silent --show-error \
             http://127.0.0.1:4173/data/research_verification_manifest.json \
             -o validation-report/candidate-manifest.json
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/trump-daily-chart/ \
+            -o validation-report/trump-daily-chart-index.html
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/trump-daily-chart/summary.json \
+            -o validation-report/trump-daily-chart-summary.json
           python scripts/validate_research_dashboard.py \
             --manifest validation-report/candidate-manifest.json \
             --html validation-report/candidate-index.html \
