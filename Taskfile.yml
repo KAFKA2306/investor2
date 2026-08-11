@@ -21,6 +21,14 @@ tasks:
   edinet:fetch:all:
     cmds:
       - GET_MODE=edinet bun src/io/get.ts
+  data:snapshots:audit:
+    desc: Audit reusable external data snapshots and provenance
+    cmds:
+      - python3 scripts/snapshot_store.py audit
+  data:snapshots:latest:
+    desc: Resolve the newest accepted external snapshot for REUSE_KEY
+    cmds:
+      - python3 scripts/snapshot_store.py latest --reuse-key "{{.REUSE_KEY}}"
   dashboard:dev:
     cmds:
       - bun --hot src/dashboard/server.ts
@@ -30,6 +38,7 @@ tasks:
       - task: format
       - task: typecheck
       - task: test
+      - task: data:snapshots:audit
   lint:
     cmds:
       - bun ./node_modules/@biomejs/biome/bin/biome check src
