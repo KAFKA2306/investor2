@@ -1,0 +1,154 @@
+{
+  "schema_version": "investor2.us-oge-278t-trade-count.v1",
+  "subject": {
+    "name": "Donald J. Trump",
+    "office": "President of the United States of America",
+    "disclosure_form": "OGE Form 278-T"
+  },
+  "observed_at": "2026-08-11T14:13:00+09:00",
+  "scope": {
+    "transaction_date_range_from_aggregate_parser": {
+      "first": "2025-01-01",
+      "last": "2026-05-29"
+    },
+    "latest_listed_filing_date": "2026-07-01",
+    "oge_278t_document_count": 17
+  },
+  "aggregate": {
+    "transaction_rows": 7699,
+    "purchases": 5026,
+    "sales": 2673,
+    "reconciliation": "5026 + 2673 = 7699",
+    "status": "derived_external_parser_crosscheck",
+    "source_url": "https://open-cabinet.org/officials/trump-donald-j?range=12mo",
+    "source_observation_note": "Open Cabinet states that its total aggregates every OGE source filing listed on the page. OGE itself publishes the underlying filings rather than this single aggregate counter.",
+    "unit_note": "These are disclosed transaction rows. They are not proof that the filer personally placed each order."
+  },
+  "official_definition": {
+    "reportable_scope_note": "OGE Form 278-T is the Periodic Transaction Report. The OGE guide and form describe reportable purchases, sales, and exchanges and the reporting rules.",
+    "guide_url": "https://www.oge.gov/web/278eGuide.nsf/Form_278-T",
+    "definitions_url": "https://www.oge.gov/web/278eGuide.nsf/Definitions",
+    "public_access_url": "https://www.oge.gov/Web/OGE.nsf/publicresources_disclosure-quickstart"
+  },
+  "verification": {
+    "primary_source_indexed": true,
+    "primary_pdf_last_row_spot_checks": 5,
+    "aggregate_is_not_labeled_as_an_oge_published_total": true,
+    "previous_partial_count_856_superseded": true,
+    "note": "The earlier 856-row figure covered only a subset of filings and is not canonical. The 7,699 aggregate is retained with explicit attribution to the parser cross-check, while the OGE PDFs remain the primary evidence artifacts."
+  },
+  "records": [
+    {
+      "sequence": 1,
+      "listed_filing_date": "2026-07-01",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/AC43530823BD60D485258E27002DDEF7/%24FILE/Donald-J-Trump-06.25.2026-278T.pdf"
+    },
+    {
+      "sequence": 2,
+      "listed_filing_date": "2026-07-01",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/F9CA13B970439E8F85258E27002DDF15/%24FILE/Donald-J-Trump-06.25.2026-278T%20%282%29.pdf"
+    },
+    {
+      "sequence": 3,
+      "listed_filing_date": "2026-05-14",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/5326D3AF5BE7C25385258DF7002DD1B7/%24FILE/Trump%2C%20Donald%20J.-05.08.2026-278T.pdf",
+      "primary_verified_last_transaction_row": 69,
+      "primary_verification_location": "page 4 of 5"
+    },
+    {
+      "sequence": 4,
+      "listed_filing_date": "2026-05-14",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/405E4EC4E27BE8D185258DF7002DD1C0/%24FILE/Trump%2C%20Donald%20J.-05.08.2026-278T%282%29.pdf"
+    },
+    {
+      "sequence": 5,
+      "listed_filing_date": "2026-04-25",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/CD75555856A7D2E485258DE4002DD4A0/%24FILE/Donald-J-Trump-4.20.2026-278T.pdf",
+      "primary_verified_last_transaction_row": 175,
+      "primary_verification_location": "page 7 of 8"
+    },
+    {
+      "sequence": 6,
+      "listed_filing_date": "2026-03-04",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/174165F6E1E120B185258DB000347F54/%24FILE/Donald%20J.%20Trump%202.26.2026%20278-T%20%281%29.pdf",
+      "primary_verified_last_transaction_row": 174,
+      "primary_verification_location": "page 7 of 8"
+    },
+    {
+      "sequence": 7,
+      "listed_filing_date": "2026-03-04",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/BCF60D94B8F1E59285258DB000347F61/%24FILE/Donald%20J.%20Trump%202.26.2026%20278-T%20%282%29.pdf",
+      "primary_verified_last_transaction_row": 83,
+      "primary_verification_location": "page 4 of 5"
+    },
+    {
+      "sequence": 8,
+      "listed_filing_date": "2026-01-16",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/268353939B7DACB585258D81003471B1/%24FILE/Donald-J-Trump%201.14.2026-278T.pdf",
+      "primary_verified_last_transaction_row": 191,
+      "primary_verification_location": "page 7 of 7"
+    },
+    {
+      "sequence": 9,
+      "listed_filing_date": "2025-12-20",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/87BFE542A2751E0285258D6600346FCD/%24FILE/Donald%20J.%20Trump%2012.18.2025%20278-T.pdf"
+    },
+    {
+      "sequence": 10,
+      "listed_filing_date": "2025-11-22",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/903A217DC18563EC85258D4A0031B044/%24FILE/Donald%20J.%20Trump%2011.14.2025%20278-T.pdf"
+    },
+    {
+      "sequence": 11,
+      "listed_filing_date": "2025-11-15",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/18353894FE440B3685258D430031A337/%24FILE/Donald%20J.%20Trump%2010.20.2025%20278-T%20%282%29.pdf"
+    },
+    {
+      "sequence": 12,
+      "listed_filing_date": "2025-11-15",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/2C89623DC721F62585258D430031A32A/%24FILE/Donald%20J.%20Trump%2010.20.2025%20278-T.pdf"
+    },
+    {
+      "sequence": 13,
+      "listed_filing_date": "2025-11-15",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/AA799A2729B4D1BE85258D430031A320/%24FILE/Donald%20J.%20Trump%2010.17.2025%20278-T.pdf"
+    },
+    {
+      "sequence": 14,
+      "listed_filing_date": "2025-09-06",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/322B8A28DB21CC9285258CFD002C0D0B/%24FILE/Donald%20J.%20Trump%209.3.25%20278-T.pdf"
+    },
+    {
+      "sequence": 15,
+      "listed_filing_date": "2025-08-19",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/024D876AAE518C5085258CEB006E7E2E/%24FILE/Donald-J-Trump-08.12.2025-278T%282%29%20AMENDED.pdf"
+    },
+    {
+      "sequence": 16,
+      "listed_filing_date": "2025-08-19",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/5315A095A2EE1B9185258CEB006E7E36/%24FILE/Donald-J-Trump-08.12.2025-278T%283%29.pdf"
+    },
+    {
+      "sequence": 17,
+      "listed_filing_date": "2025-08-19",
+      "form": "OGE Form 278-T",
+      "source_url": "https://extapps2.oge.gov/201/Presiden.nsf/PAS%2BIndex/E9C024E25C9E4B2085258CEB006E7E23/%24FILE/Donald-J-Trump-08.12.2025-278T.pdf"
+    }
+  ]
+}
