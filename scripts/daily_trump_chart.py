@@ -36,6 +36,8 @@ def aggregate_transactions(payload: dict[str, Any]) -> list[dict[str, int | str]
     transactions = payload.get("transactions")
     if not isinstance(transactions, list):
         raise ValueError("transactions must be a list")
+    if any(not isinstance(row, dict) for row in transactions):
+        raise ValueError("each transaction must be an object")
 
     unknown_types = sorted({str(row.get("type")) for row in transactions if row.get("type") not in EXPECTED_TYPES})
     if unknown_types:
@@ -43,8 +45,6 @@ def aggregate_transactions(payload: dict[str, Any]) -> list[dict[str, int | str]
 
     daily: dict[str, Counter[str]] = defaultdict(Counter)
     for row in transactions:
-        if not isinstance(row, dict):
-            raise ValueError("each transaction must be an object")
         date = row.get("date")
         tx_type = row.get("type")
         if not isinstance(date, str) or not date:
@@ -52,19 +52,37 @@ def aggregate_transactions(payload: dict[str, Any]) -> list[dict[str, int | str]
         datetime.strptime(date, "%Y-%m-%d")
         daily[date][str(tx_type)] += 1
 
-    rows: list[dict[str, int | str]] = []
-    for date in sorted(daily):
-        purchase = daily[date]["Purchase"]
-        sale = daily[date]["Sale"]
-        rows.append({"date": date, "Purchase": purchase, "Sale": sale, "Total": purchase + sale})
-    return rows
+    return [
+        {
+            "date": date,
+            "Purchase": daily[date]["Purchase"],
+            "Sale": daily[date]["Sale"],
+            "Total": daily[date]["Purchase"] + daily[date]["Sale"],
+        }
+        for date in sorted(daily)
+    ]
 
 
-def write_outputs(payload: dict[str, Any], raw: bytes, rows: list[dict[str, int | str]], output_dir: Path, source_url: str) -> dict[str, Any]:
+def stable_fetched_at(output_dir: Path, source_hash: str) -> str:
+    summary_path = output_dir / "summary.json"
+    if summary_path.is_file():
+        try:
+            previous = json.loads(summary_path.read_text(encoding="utf-8"))
+            if previous.get("source_sha256") == source_hash and isinstance(previous.get("fetched_at"), str):
+                return previous["fetched_at"]
+        except (OSError, json.JSONDecodeError):
+            pass
+    return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def write_outputs(
+    payload: dict[str, Any], raw: bytes, rows: list[dict[str, int | str]], output_dir: Path, source_url: str
+) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
+    source_hash = hashlib.sha256(raw).hexdigest()
+    fetched_at = stable_fetched_at(output_dir, source_hash)
 
-    csv_path = output_dir / "trump_daily_transactions.csv"
-    with csv_path.open("w", encoding="utf-8", newline="") as handle:
+    with (output_dir / "trump_daily_transactions.csv").open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=["date", "Purchase", "Sale", "Total"])
         writer.writeheader()
         writer.writerows(rows)
@@ -86,13 +104,11 @@ def write_outputs(payload: dict[str, Any], raw: bytes, rows: list[dict[str, int 
             label.set_rotation(45)
             label.set_ha("right")
     figure.tight_layout()
-    figure.savefig(output_dir / "trump_daily_transactions.png", dpi=150)
+    figure.savefig(output_dir / "trump_daily_transactions.png", dpi=150, metadata={"Software": "investor2"})
     plt.close(figure)
 
     row_count = sum(int(row["Total"]) for row in rows)
     max_row = max(rows, key=lambda row: int(row["Total"])) if rows else None
-    source_hash = hashlib.sha256(raw).hexdigest()
-    fetched_at = datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
     summary = {
         "schema_version": "investor2.trump-daily-278t-chart.v1",
         "name": payload.get("name"),
