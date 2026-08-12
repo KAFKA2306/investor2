@@ -1,0 +1,65 @@
+name: Sync Kioxia 50-company canonical snapshot
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/sync-kioxia-universe-data.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Fetch central EDINET projection
+        shell: bash
+        run: |
+          mkdir -p docs/research/data
+          curl --fail --location --retry 3 \
+            https://raw.githubusercontent.com/KAFKA2306/semiconductor-earnings-model/main/data/edinetdb_projections/KAFKA2306__investor2/investor2-kioxia-semiconductor-universe-50-5y-quarterly.json \
+            --output docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json.tmp
+      - name: Validate before canonicalizing
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          src = Path('docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json.tmp')
+          data = json.loads(src.read_text(encoding='utf-8'))
+          assert data['schema_version'] == 'investor2.kioxia-semiconductor-universe-financials.v1'
+          assert data['company_count'] == 50
+          assert len(data['companies']) == 50
+          assert data['requested_years'] == 5
+          assert data['period'] == 'quarterly_standalone'
+          assert data['counts']['fetched_quarter_rows'] > 0
+          assert data['counts']['canonical_eligible_quarter_rows'] + data['counts']['quarantined_quarter_rows'] == data['counts']['fetched_quarter_rows']
+          dst = src.with_suffix('')
+          src.replace(dst)
+          print(json.dumps({
+              'company_count': data['company_count'],
+              'fetched_quarter_rows': data['counts']['fetched_quarter_rows'],
+              'canonical_eligible_quarter_rows': data['counts']['canonical_eligible_quarter_rows'],
+              'quarantined_quarter_rows': data['counts']['quarantined_quarter_rows'],
+              'retrieved_at_max': data['retrieved_at_max'],
+          }, ensure_ascii=False))
+          PY
+      - name: Commit canonical snapshot
+        shell: bash
+        run: |
+          git add docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
+          if git diff --cached --quiet; then
+            echo "Canonical snapshot is already current."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "data: store Kioxia 50-company 5y quarterly snapshot"
+          git pull --rebase origin main
+          git push origin HEAD:main
