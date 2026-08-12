@@ -10,6 +10,22 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 
 単にバックテストの成績が良い候補を探すのではなく、**未来情報の混入を防ぎ、反証可能な条件を先に決め、同じ結果を再実行できる状態にすること**を重視します。
 
+## 正準の入力→検証→出力
+
+投資判断へ到達する正準線は1本です。
+
+```text
+一次情報 / revision固定外部データ
+  → data/input_ledger の採否・監査
+  → point-in-time dataset / frozen manifest
+  → OOS・比較・ablation
+  → 再現可能な evidence artifact
+  → Evidence & Evolution Dashboard
+  → 人間の投資判断
+```
+
+詳細な責務境界、source of truth、主要KPI（更新成功・鮮度・利用可能な証拠成果）は [Canonical investment flow](docs/architecture/canonical-investment-flow.md) を正準文書とします。
+
 ## 現在取り組んでいること
 
 - EDINETの有価証券報告書を用いた企業業績予測
@@ -24,6 +40,7 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 | 目的 | 主な入口 |
 | --- | --- |
 | 研究全体の進捗を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
+| 正準の入力→検証→出力を見る | [Canonical investment flow](docs/architecture/canonical-investment-flow.md) |
 | 論文構成を確認する | [NeurIPS earnings forecast outline](docs/paper/neurips_earnings_forecast_outline.md) |
 | システム全体の流れを見る | [Simple flowchart](docs/diagrams/simpleflowchart.md) |
 | Alpha探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
@@ -80,4 +97,4 @@ task view                # ダッシュボードとAPIを起動
 
 このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。
 
-**README最終監査:** 2026-08-11
+**README最終監査:** 2026-08-12
