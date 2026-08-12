@@ -53,7 +53,9 @@ jobs:
       - name: Commit canonical snapshot
         shell: bash
         run: |
-          git add docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
+          # docs/research/data is intentionally ignored for generated data in general;
+          # this validated snapshot is an explicit canonical exception.
+          git add -f docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
           if git diff --cached --quiet; then
             echo "Canonical snapshot is already current."
             exit 0
