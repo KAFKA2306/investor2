@@ -1,0 +1,41 @@
+name: Repository Ratchet
+
+on:
+  pull_request:
+    paths:
+      - "README.md"
+      - "docs/architecture/**"
+      - "tests/test_repository_ratchet.py"
+      - ".github/workflows/**"
+      - "data/input_ledger/**"
+      - "data/benchmarks/**"
+      - "ontology/project.yaml"
+  push:
+    branches: [main]
+    paths:
+      - "README.md"
+      - "docs/architecture/**"
+      - "tests/test_repository_ratchet.py"
+      - ".github/workflows/**"
+      - "data/input_ledger/**"
+      - "data/benchmarks/**"
+      - "ontology/project.yaml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Verify canonical repository flow
+        run: python tests/test_repository_ratchet.py
+      - name: Verify clean checkout
+        shell: bash
+        run: |
+          test -z "$(git status --porcelain --untracked-files=all)"
