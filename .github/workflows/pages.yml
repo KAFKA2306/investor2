@@ -80,6 +80,8 @@ jobs:
           python scripts/build_research_verification_manifest.py \
             --output _site/data/research_verification_manifest.json
           python scripts/daily_trump_chart.py --output-dir _site/trump-daily-chart
+          cp docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
+            _site/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
           cp docs/aaarts-dashboard/index.html _site/index.html
           touch _site/.nojekyll
 
@@ -102,6 +104,18 @@ jobs:
           curl --fail --silent --show-error \
             http://127.0.0.1:4173/data/research_verification_manifest.json \
             -o validation-report/candidate-manifest.json
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
+            -o validation-report/kioxia-semiconductor-universe.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('validation-report/kioxia-semiconductor-universe.json').read_text(encoding='utf-8'))
+          assert data['company_count'] == 50
+          assert data['requested_years'] == 5
+          assert data['period'] == 'quarterly_standalone'
+          assert data['counts']['fetched_quarter_rows'] > 0
+          PY
           curl --fail --silent --show-error \
             http://127.0.0.1:4173/trump-daily-chart/ \
             -o validation-report/trump-daily-chart-index.html
