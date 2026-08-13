@@ -84,10 +84,27 @@ def test_confirmed_without_all_promotion_evidence_is_rejected() -> None:
 
 def test_method_only_paper_cannot_claim_empirical_verification() -> None:
     manifest = valid_manifest()
-    paper = manifest["paper_reproduction_2021"]["papers"][0]
-    paper["reproduction_verdict"] = "VERIFIED"
+    paper = next(
+        item
+        for item in manifest["paper_reproduction_2021"]["papers"]
+        if item["empirical_reproduction_state"] == "NOT_RUN"
+    )
+    paper["reproduction_verdict"] = "REPRODUCED"
 
     with pytest.raises(ValueError, match="empirical-looking verdict"):
+        VALIDATOR.validate_manifest(manifest)
+
+
+def test_empirically_run_paper_requires_evidence_reference() -> None:
+    manifest = valid_manifest()
+    paper = next(
+        item
+        for item in manifest["paper_reproduction_2021"]["papers"]
+        if item["empirical_reproduction_state"] == "EMPIRICALLY_RUN"
+    )
+    paper["empirical_evidence_manifest"] = None
+
+    with pytest.raises(ValueError, match="empirical_evidence_manifest"):
         VALIDATOR.validate_manifest(manifest)
 
 
