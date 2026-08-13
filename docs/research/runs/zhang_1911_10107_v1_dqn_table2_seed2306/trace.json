@@ -1,0 +1,48 @@
+{
+  "events": [
+    {
+      "at": "2026-08-13T11:51:10Z",
+      "errors": [],
+      "stage": "UPSTREAM_CONTRACTS",
+      "status": "PASS"
+    },
+    {
+      "at": "2026-08-13T11:51:10Z",
+      "observed": {
+        "cost_adjusted_reward_sample": 0.0,
+        "discrete_actions": [
+          -1,
+          0,
+          1
+        ],
+        "gross_reward_sample": 4.0,
+        "paper_training_cost_basis_points": 20.0,
+        "paper_training_cost_rate": 0.002,
+        "status": "PASS",
+        "synthetic_sigma_target": 0.02,
+        "synthetic_sigma_target_scope": "SELF_TEST_ONLY_NOT_PAPER_CALIBRATION",
+        "turnover_cost_sample": 4.0
+      },
+      "stage": "METHOD_CONTRACT_SELF_TEST",
+      "status": "PASS"
+    },
+    {
+      "at": "2026-08-13T11:51:10Z",
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "stage": "EXACT_DATA_GATE",
+      "status": "BLOCKED"
+    },
+    {
+      "at": "2026-08-13T11:51:10Z",
+      "detail": "Fail-closed: DQN fitting/evaluation cannot execute without the exact licensed 50-contract CLC data gate. No substitute dataset is permitted.",
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "stage": "TRAINING_EVALUATION",
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "run_id": "zhang_1911_10107_v1_dqn_table2_seed2306"
+}
