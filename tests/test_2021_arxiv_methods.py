@@ -17,6 +17,13 @@ SPEC.loader.exec_module(MODULE)
 def test_2021_registry_is_fail_closed_and_methods_are_deterministic() -> None:
     report = MODULE.build_report(ROOT / "docs/research/2021_arxiv_finance_registry.json")
 
+    assert report["discovery_universe"] == {
+        "dataset_id": "arxiv_qfin_2021_metadata",
+        "path": "docs/research/data/arxiv_qfin_2021.json",
+        "sha256": "a1ebbbd25ae65b5bce391ccb8ded1a27fa7c013102581251cc1f6ee4e73a948c",
+        "record_count": 1132,
+        "snapshot_id": "78a7a514d27762fd3891",
+    }
     assert report["summary"] == {
         "indexed": 4,
         "method_contract_pass": 4,
@@ -29,7 +36,10 @@ def test_2021_registry_is_fail_closed_and_methods_are_deterministic() -> None:
         "2112.01166",
         "2112.09015",
     }
-    assert all(paper["source_metadata_state"] == "VERIFIED_PRIMARY" for paper in report["papers"])
+    assert all(
+        paper["source_metadata_state"] == "VERIFIED_PRIMARY_AND_FROZEN_UNIVERSE"
+        for paper in report["papers"]
+    )
     assert all(paper["method_contract_state"] == "PASS" for paper in report["papers"])
     assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in report["papers"])
     assert all(paper["artifact_state"] == "NOT_MATERIALIZED" for paper in report["papers"])
