@@ -82,6 +82,23 @@ def test_confirmed_without_all_promotion_evidence_is_rejected() -> None:
         VALIDATOR.validate_manifest(manifest)
 
 
+def test_method_only_paper_cannot_claim_empirical_verification() -> None:
+    manifest = valid_manifest()
+    paper = manifest["paper_reproduction_2021"]["papers"][0]
+    paper["reproduction_verdict"] = "VERIFIED"
+
+    with pytest.raises(ValueError, match="empirical-looking verdict"):
+        VALIDATOR.validate_manifest(manifest)
+
+
+def test_paper_summary_tampering_is_rejected() -> None:
+    manifest = valid_manifest()
+    manifest["summary"]["papers_2021_materialized"] += 1
+
+    with pytest.raises(ValueError, match="papers_2021_materialized"):
+        VALIDATOR.validate_manifest(manifest)
+
+
 def test_missing_build_provenance_is_rejected() -> None:
     manifest = valid_manifest()
     manifest["build"]["code_sha"] = ""
@@ -96,3 +113,6 @@ def test_broken_candidate_html_is_rejected() -> None:
 
     with pytest.raises(ValueError, match="resultRows"):
         VALIDATOR.validate_html(html.replace('id="resultRows"', 'id="removedRows"'))
+
+    with pytest.raises(ValueError, match="paperRows"):
+        VALIDATOR.validate_html(html.replace('id="paperRows"', 'id="removedPaperRows"'))
