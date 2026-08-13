@@ -27,6 +27,40 @@
       "split_contract_state": "VERIFIED_FULL_TEXT",
       "stage_reached": "EXACT_DATA_GATE",
       "title": "Enhancing Time Series Momentum Strategies Using Deep Neural Networks"
+    },
+    {
+      "arxiv_id": "1911.10107",
+      "data_contract_state": "VERIFIED_FULL_TEXT_PROPRIETARY_INPUT_BLOCKED",
+      "empirical_reproduction_state": "EMPIRICALLY_RUN",
+      "empirical_verdict": "BLOCKED",
+      "evidence_manifest": "docs/research/runs/zhang_1911_10107_v1_dqn_table2_seed2306/manifest.json",
+      "evidence_manifest_sha256": "414bff1e3146fe73a401717da33f7bd12a9ac2dd56f7d4305d9a2086f1187419",
+      "id": "zhang_1911_10107_v1",
+      "method_contract_state": "PASS",
+      "observed_metrics": null,
+      "paper_target": {
+        "average_positive_negative_return_ratio": 1.043,
+        "calmar": 1.025,
+        "downside_deviation": 0.567,
+        "expected_return": 1.258,
+        "max_drawdown": 0.002,
+        "metric": "annualized_sharpe",
+        "positive_return_fraction": 0.543,
+        "sortino": 2.22,
+        "training_cost_bps": 20.0,
+        "training_cost_rate": 0.002,
+        "value": 1.288,
+        "volatility": 0.976
+      },
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "source_pdf_url": "https://arxiv.org/pdf/1911.10107v1",
+      "source_url": "https://arxiv.org/abs/1911.10107v1",
+      "source_version": "v1",
+      "split_contract_state": "VERIFIED_FULL_TEXT_WITH_NOT_SPECIFIED_VALIDATION",
+      "stage_reached": "EXACT_DATA_GATE",
+      "title": "Deep Reinforcement Learning for Trading"
     }
   ],
   "schema_version": "investor2.arxiv-2019-empirical-registry.v1"

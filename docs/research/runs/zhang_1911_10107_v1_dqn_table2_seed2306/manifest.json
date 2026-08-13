@@ -1,0 +1,50 @@
+{
+  "artifacts": {
+    "model_state": {
+      "path": null,
+      "sha256": null,
+      "state": "NOT_CREATED_EVIDENCE_GATE_BLOCKED"
+    },
+    "report": {
+      "path": "docs/research/runs/zhang_1911_10107_v1_dqn_table2_seed2306/report.json",
+      "sha256": "bf2e7358466d309081ac38b9945afec83e86f2ee48ec1890d50d0f40483c7f84"
+    },
+    "trace": {
+      "path": "docs/research/runs/zhang_1911_10107_v1_dqn_table2_seed2306/trace.json",
+      "sha256": "a8c2de320c55ebf7806a79f521bd30bae96f6a13634718cc9aa6d3be3179c9dc"
+    }
+  },
+  "arxiv_id": "1911.10107",
+  "canonical_inputs": {
+    "data_contracts": {
+      "path": "docs/research/arxiv_qfin_2019_data_requirements.json",
+      "sha256": "59aa0b03796d77cfd8c4f5ca989fd343015b842f5f4e273d3d4719978d774bc7"
+    },
+    "split_contracts": {
+      "path": "docs/research/arxiv_qfin_2019_split_contracts.json",
+      "sha256": "1bfb04f43814e3eed82a35d9588c5fb131384c36ecda240527d942cc62cb3bb8"
+    }
+  },
+  "empirical_reproduction_state": "EMPIRICALLY_RUN",
+  "empirical_verdict": "BLOCKED",
+  "paper_id": "zhang_1911_10107_v1",
+  "protocol": {
+    "path": "docs/research/protocols/zhang_1911_10107_v1_dqn_table2.json",
+    "sha256": "34ee6d0a4f77edc2e580a6f8f55cbfd452a9c6a2a558e7d645f8d814a8645625"
+  },
+  "provenance": {
+    "code_revision": "25263f162e7461eb6c75dea06f37a87b607c45b7",
+    "seed": 2306,
+    "workflow_run_id": "31697326757"
+  },
+  "run_id": "zhang_1911_10107_v1_dqn_table2_seed2306",
+  "schema_version": "investor2.paper-empirical-evidence.v1",
+  "source_pdf": {
+    "acquired_at": "2026-08-13T11:51:10Z",
+    "bytes": 881660,
+    "repository_storage_reason": "Exact arXiv bytes are hashed during CI but not committed; the pinned version URL is the primary source.",
+    "sha256": "5738aaa632526b11be01178b7ef966986d3d0cbe1ea3f3620be06bfc96fc261c",
+    "stored_in_repository": false,
+    "url": "https://arxiv.org/pdf/1911.10107v1"
+  }
+}
