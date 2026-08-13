@@ -1,0 +1,33 @@
+{
+  "papers": [
+    {
+      "arxiv_id": "1904.04912",
+      "data_contract_state": "VERIFIED_FULL_TEXT_PROPRIETARY_INPUT_BLOCKED",
+      "empirical_reproduction_state": "EMPIRICALLY_RUN",
+      "empirical_verdict": "BLOCKED",
+      "evidence_manifest": "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/manifest.json",
+      "evidence_manifest_sha256": "4e2d9d585095541e245f4b6fc369479f3fa1de35dae1c8db647633c36b98e65d",
+      "id": "lim_1904_04912_v2",
+      "method_contract_state": "PASS",
+      "observed_metrics": null,
+      "paper_target": {
+        "expected_return": 0.141,
+        "max_drawdown": 0.371,
+        "metric": "annualized_sharpe",
+        "transaction_cost_bps": 10.0,
+        "value": 0.912,
+        "volatility": 0.154
+      },
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "source_pdf_url": "https://arxiv.org/pdf/1904.04912v2",
+      "source_url": "https://arxiv.org/abs/1904.04912v2",
+      "source_version": "v2",
+      "split_contract_state": "VERIFIED_FULL_TEXT",
+      "stage_reached": "EXACT_DATA_GATE",
+      "title": "Enhancing Time Series Momentum Strategies Using Deep Neural Networks"
+    }
+  ],
+  "schema_version": "investor2.arxiv-2019-empirical-registry.v1"
+}

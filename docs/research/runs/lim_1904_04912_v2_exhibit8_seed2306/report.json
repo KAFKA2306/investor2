@@ -1,0 +1,97 @@
+{
+  "arxiv_id": "1904.04912",
+  "author_code_and_data": {
+    "license_for_author_code": "NOT_SPECIFIED",
+    "license_for_paper_data": "NOT_SPECIFIED_BY_PAPER",
+    "paper_pdf_contains_github_link": false,
+    "pinned_paper_code_link": "NOT_IDENTIFIED_IN_PINNED_PAPER",
+    "pinned_paper_data_link": "Pinnacle Data Corp CLC Database reference only"
+  },
+  "current_vendor_reference": {
+    "contract_count": 98,
+    "current_price_usd": 99,
+    "note": "Current product availability does not establish access to the paper-vintage 88-series input bytes or their revision state.",
+    "url": "https://pinnacledata2.com/clc.html"
+  },
+  "data_gate": {
+    "detail": "No local licensed Pinnacle CLC dataset was supplied to the empirical runner.",
+    "reason_codes": [
+      "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+    ],
+    "status": "BLOCKED"
+  },
+  "empirical_reproduction_state": "EMPIRICALLY_RUN",
+  "empirical_verdict": "BLOCKED",
+  "environment": {
+    "device": "NOT_REACHED_DATA_GATE",
+    "github_run_id": "31695950848",
+    "github_sha": "2a673c9b303c180eade8450fdc6af1ddcae08c87",
+    "machine": "x86_64",
+    "platform": "Linux-6.17.0-1020-azure-x86_64-with-glibc2.39",
+    "python": "3.12.13",
+    "seed": 2306
+  },
+  "evaluation_executed": false,
+  "fail_closed_statement": "BLOCKED is not FAILED and not REPRODUCED. No empirical metric is emitted because the exact paper data gate did not pass.",
+  "finished_at": "2026-08-13T11:32:34Z",
+  "method_contract_self_test": {
+    "annualized_sharpe_sample": 8.315427918238163,
+    "cost_adjusted_return_10bps_sample": 0.07125,
+    "cost_free_return_sample": 0.075,
+    "status": "PASS",
+    "turnover_cost_sample": 0.00375
+  },
+  "metric_delta": null,
+  "observed_metrics": null,
+  "paper_id": "lim_1904_04912_v2",
+  "paper_target": {
+    "expected_return": 0.141,
+    "max_drawdown": 0.371,
+    "metric": "annualized_sharpe",
+    "transaction_cost_bps": 10.0,
+    "value": 0.912,
+    "volatility": 0.154
+  },
+  "protocol": "docs/research/protocols/lim_1904_04912_v2_exhibit8.json",
+  "reason_codes": [
+    "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+  ],
+  "run_id": "lim_1904_04912_v2_exhibit8_seed2306",
+  "schema_version": "investor2.paper-empirical-report.v1",
+  "source_pdf": {
+    "acquired_at": "2026-08-13T11:32:34Z",
+    "bytes": 6270745,
+    "repository_storage_reason": "Paper bytes are hashed during CI but not committed; the exact arXiv version URL is the canonical primary source.",
+    "sha256": "889a8684711431aebccdf8a4f14ca0c60ea361a70a99d61e049ae766ec9423e8",
+    "stored_in_repository": false,
+    "url": "https://arxiv.org/pdf/1904.04912v2"
+  },
+  "source_version": "v2",
+  "split_contract_consumed": {
+    "model_selection_rule": {
+      "early_stopping_patience_epochs": 25,
+      "hyperparameter_search": "50_ITERATION_RANDOM_SEARCH",
+      "max_epochs": 100,
+      "selection_basis": "VALIDATION_LOSS",
+      "training_fraction": 0.9,
+      "validation_fraction": 0.1,
+      "validation_position": "MOST_RECENT_PART_OF_TRAINING_BLOCK"
+    },
+    "retraining_cadence": {
+      "from_scratch": true,
+      "interval_years": 5,
+      "training_data": "ALL_AVAILABLE_UP_TO_RECALIBRATION",
+      "weights_fixed_for_following_years": 5
+    },
+    "semantics": "EXPANDING",
+    "test_window": {
+      "end": 2015,
+      "precision": "YEAR",
+      "start": 1995
+    }
+  },
+  "stage_reached": "EXACT_DATA_GATE",
+  "started_at": "2026-08-13T11:32:34Z",
+  "training_attempted": true,
+  "training_executed": false
+}
