@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/KAFKA2306/investor2/docs/research/arxiv_version_pin_schema_v1.json",
+  "title": "investor2 arXiv version pin manifest v1",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "selection_manifest_sha256",
+    "source_snapshot_sha256",
+    "selection_time_basis",
+    "version_policy",
+    "inspected_at",
+    "summary",
+    "request_provenance",
+    "pins"
+  ],
+  "properties": {
+    "schema_version": {"const": "investor2.arxiv-version-pins.v1"},
+    "selection_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "source_snapshot_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "selection_time_basis": {"const": "EX_POST_2026_METADATA_NOT_2021_VINTAGE"},
+    "version_policy": {"type": "string", "minLength": 1},
+    "inspected_at": {"type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "summary": {
+      "type": "object",
+      "required": ["selected_count", "status_counts", "post_2021_selected_versions"],
+      "properties": {
+        "selected_count": {"type": "integer", "minimum": 0},
+        "status_counts": {
+          "type": "object",
+          "required": ["VERIFIED", "UNKNOWN", "CONFLICT"],
+          "properties": {
+            "VERIFIED": {"type": "integer", "minimum": 0},
+            "UNKNOWN": {"type": "integer", "minimum": 0},
+            "CONFLICT": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
+        "post_2021_selected_versions": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "request_provenance": {"type": "array"},
+    "pins": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "arxiv_id",
+          "selected_version",
+          "selected_version_url",
+          "version_submitted_at",
+          "first_submitted_at",
+          "inspected_source_url",
+          "inspected_at",
+          "availability_status",
+          "available_by_2021_end",
+          "provenance",
+          "evidence"
+        ],
+        "properties": {
+          "arxiv_id": {"type": "string", "pattern": "^[0-9]{4}\\.[0-9]{4,5}$"},
+          "selected_version": {"type": ["string", "null"]},
+          "selected_version_url": {"type": ["string", "null"]},
+          "version_submitted_at": {"type": ["string", "null"]},
+          "first_submitted_at": {"type": ["string", "null"]},
+          "inspected_source_url": {"type": ["string", "null"]},
+          "inspected_at": {"type": "string"},
+          "availability_status": {"enum": ["VERIFIED", "UNKNOWN", "CONFLICT"]},
+          "available_by_2021_end": {"type": ["boolean", "null"]},
+          "provenance": {"type": "object"},
+          "evidence": {"type": "array"}
+        }
+      }
+    }
+  }
+}
