@@ -52,11 +52,13 @@ tasks:
     cmds:
       - bun run test
   pipeline:run:
+    desc: Legacy experimental orchestrator; not the canonical alpha-discovery path
     cmds:
       - bun src/commands/pipeline_run.ts
   run:newalphasearch:
+    desc: Validate a frozen real-data MCP hypothesis capture and deep-dive candidates
     cmds:
-      - ALPHA_LOOP_MAX_CYCLES={{.MAX | default 3}} bun src/commands/pipeline_run.ts
+      - bun src/commands/hypothesis_lab_run.ts
   research:repeat:2010s:
     desc: Repeat frozen validation for papers published in the 2010s
     cmds:
