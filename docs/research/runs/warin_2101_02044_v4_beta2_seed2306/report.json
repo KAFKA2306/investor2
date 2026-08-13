@@ -1,0 +1,128 @@
+{
+  "analytical_reference": {
+    "R": 0.2698851446912635,
+    "mean": 1.0774535007504626,
+    "variance": 0.019363375187615647
+  },
+  "artifact_policy": {
+    "large_hf_artifacts_created": false,
+    "mutable_path_without_git_hash_is_evidence": false,
+    "reason": "model state and raw trace are small JSON artifacts; no large checkpoint or third-party dataset was generated"
+  },
+  "arxiv_id": "2101.02044",
+  "comparison": {
+    "analytical": {
+      "mean_abs_error_vs_paper": 0.00045350075046268756,
+      "variance_abs_error_vs_paper": 0.0003633751876156478,
+      "within_tolerance": true
+    },
+    "neural": {
+      "mean_abs_error_vs_paper": 0.004797351538911476,
+      "variance_abs_error_vs_paper": 0.0021242338705403756,
+      "within_tolerance": true
+    },
+    "predeclared_tolerance": {
+      "analytical_mean_absolute": 0.005,
+      "analytical_variance_absolute": 0.005,
+      "neural_mean_absolute": 0.05,
+      "neural_variance_absolute": 0.01
+    }
+  },
+  "empirical_reproduction_state": "EMPIRICALLY_RUN",
+  "empirical_verdict": "REPRODUCED",
+  "evaluation": {
+    "independent_random_stream": true,
+    "simulation_count": 100000,
+    "terminal_wealth_mean": 1.0752026484610886,
+    "terminal_wealth_population_variance": 0.018875766129459626
+  },
+  "known_reproducibility_limits": [
+    "The paper does not publish its TensorFlow version.",
+    "The paper does not publish the random seed or neural-network initialization state.",
+    "No author reference implementation was found in the primary arXiv record or exact-title GitHub repository search."
+  ],
+  "licenses": {
+    "experiment_inputs": {
+      "kind": "synthetic paths generated from paper parameters",
+      "status": "NO_EXTERNAL_DATA_LICENSE_REQUIRED",
+      "third_party_dataset": false
+    },
+    "paper": {
+      "license": "arXiv non-exclusive distribution license",
+      "redistribution_by_investor2": "NOT_ESTABLISHED",
+      "status": "VERIFIED_PRIMARY"
+    },
+    "repository_generated_code_and_results": {
+      "repository_license": "NOT_DECLARED",
+      "status": "NO_REPOSITORY_LICENSE_FILE_FOUND"
+    },
+    "tensorflow_runtime": {
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/tensorflow/2.21.0/",
+      "status": "VERIFIED_PRIMARY",
+      "version": "2.21.0"
+    }
+  },
+  "paper_id": "warin_2101_02044",
+  "paper_version": "v4",
+  "protocol": {
+    "path": "docs/research/protocols/warin_2101_02044_v4_beta2.json",
+    "sha256": "fd46e6499f495f7384172a3aa594962bc835bcdc15f8d93b395ab10d9e9784ad"
+  },
+  "report_content_sha256_without_self_hash": "95116662468c4f3221e726b3da3a1fdb7a33a33d141b945ce7905087d152bd0d",
+  "runtime": {
+    "deterministic_ops_requested": true,
+    "device_policy": "CPU",
+    "machine": "x86_64",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.12.13",
+    "seed": 2306,
+    "tensorflow": "2.21.0"
+  },
+  "schema_version": "investor2.warin-2101.02044-empirical.v1",
+  "scope": {
+    "beta": 2.0,
+    "method": "Point by point direct formulation",
+    "paper_equations": [
+      3,
+      10,
+      11
+    ],
+    "paper_section": "3.2 Results in dimension 4",
+    "paper_table": 1,
+    "predeclared_comparison_tolerance": {
+      "analytical_mean_absolute": 0.005,
+      "analytical_variance_absolute": 0.005,
+      "neural_mean_absolute": 0.05,
+      "neural_variance_absolute": 0.01
+    },
+    "target": {
+      "analytical_mean": 1.077,
+      "analytical_variance": 0.019,
+      "paper_neural_mean": 1.08,
+      "paper_neural_variance": 0.021
+    },
+    "target_kind": "single_table_point"
+  },
+  "source_pdf": {
+    "content_type": "application/pdf",
+    "final_url": "https://arxiv.org/pdf/2101.02044v4",
+    "requested_url": "https://arxiv.org/pdf/2101.02044v4",
+    "sha256": "9d25546533d55e906b662ebc7a768bcb8368e5220348403287b87940debe9695",
+    "size_bytes": 1521560,
+    "storage_reason": "arXiv license grants distribution rights to arXiv; third-party redistribution permission was not established",
+    "stored_in_repository": false
+  },
+  "training": {
+    "batch_size": 300,
+    "gradient_iterations": 15000,
+    "learning_rate_final": 0.00025,
+    "learning_rate_initial": 0.0025,
+    "model_state_sha256": "27ffb93f8f1ffa700eb464e260694ff5260559eb5ef127fcb35bc838f8765c4e",
+    "optimizer": "Adam",
+    "trace_points": 151,
+    "trace_sha256": "8fa911e40d7ddf0f435ccf78edc404b39e7a8a26d1cd6c1968b3bbf99d6c6a6d"
+  },
+  "verdict_reason": "independent full-count training/evaluation matched the predeclared Table 1 beta=2.0 tolerances"
+}
