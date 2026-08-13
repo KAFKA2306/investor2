@@ -1,0 +1,102 @@
+name: Build 2019 arXiv split contracts
+
+on:
+  push:
+    branches:
+      - research/2019-split-contracts
+    paths:
+      - "scripts/build_arxiv_2019_split_contracts.py"
+      - "docs/research/arxiv_split_contract_schema_v1.json"
+      - "docs/research/arxiv_qfin_2019_version_pins.json"
+      - "docs/research/arxiv_qfin_2019_data_requirements.json"
+      - ".github/workflows/arxiv-split-contracts-2019.yml"
+  pull_request:
+    paths:
+      - "scripts/build_arxiv_2019_split_contracts.py"
+      - "docs/research/arxiv_split_contract_schema_v1.json"
+      - "docs/research/arxiv_qfin_2019_split_contracts.json"
+      - ".github/workflows/arxiv-split-contracts-2019.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arxiv-split-contracts-2019-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile deterministic builder
+        run: python -m py_compile scripts/build_arxiv_2019_split_contracts.py
+
+      - name: Build canonical split contracts
+        run: |
+          python scripts/build_arxiv_2019_split_contracts.py \
+            --pins docs/research/arxiv_qfin_2019_version_pins.json \
+            --data-contracts docs/research/arxiv_qfin_2019_data_requirements.json \
+            --output docs/research/arxiv_qfin_2019_split_contracts.json
+
+      - name: Enforce population and target semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          d = json.loads(Path('docs/research/arxiv_qfin_2019_split_contracts.json').read_text(encoding='utf-8'))
+          assert d['record_count'] == 129
+          assert d['summary'] == {'verified_full_text': 2, 'fail_closed_not_extracted': 127}
+          rows = {r['arxiv_id']: r for r in d['records']}
+          lim = rows['1904.04912']
+          zhang = rows['1911.10107']
+          assert lim['selected_version'] == 'v2'
+          assert lim['sample_window'] == {'start': 1990, 'end': 2015, 'precision': 'YEAR'}
+          assert lim['test_window'] == {'start': 1995, 'end': 2015, 'precision': 'YEAR'}
+          assert lim['split_semantics'] == 'EXPANDING'
+          assert lim['model_selection_rule']['training_fraction'] == 0.90
+          assert lim['model_selection_rule']['validation_fraction'] == 0.10
+          assert lim['retraining_cadence']['interval_years'] == 5
+          assert zhang['selected_version'] == 'v1'
+          assert zhang['sample_window'] == {'start': 2005, 'end': 2019, 'precision': 'YEAR'}
+          assert zhang['test_window'] == {'start': 2011, 'end': 2019, 'precision': 'YEAR'}
+          assert zhang['split_semantics'] == 'EXPANDING'
+          assert zhang['validation_window'] == {'start': 'NOT_SPECIFIED', 'end': 'NOT_SPECIFIED', 'precision': 'NOT_SPECIFIED'}
+          assert zhang['model_selection_rule'] == 'NOT_SPECIFIED'
+          for r in d['records']:
+              if r['arxiv_id'] not in {'1904.04912','1911.10107'}:
+                  assert r['split_semantics'] == 'NOT_SPECIFIED'
+                  assert r['test_window']['start'] == 'NOT_SPECIFIED'
+                  assert 'FULL_TEXT_SPLIT_NOT_VERIFIED' in r['unresolved_blockers']
+          print(json.dumps(d['summary'], sort_keys=True))
+          PY
+
+      - name: Byte stability
+        run: |
+          cp docs/research/arxiv_qfin_2019_split_contracts.json /tmp/first.json
+          python scripts/build_arxiv_2019_split_contracts.py \
+            --pins docs/research/arxiv_qfin_2019_version_pins.json \
+            --data-contracts docs/research/arxiv_qfin_2019_data_requirements.json \
+            --output docs/research/arxiv_qfin_2019_split_contracts.json
+          cmp /tmp/first.json docs/research/arxiv_qfin_2019_split_contracts.json
+
+      - name: Commit canonical contracts on materialization branch
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/research/arxiv_qfin_2019_split_contracts.json
+          if git diff --cached --quiet; then
+            echo "No split-contract changes to commit."
+          else
+            git commit -m "Build 2019 q-fin split contracts"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Pull request must commit canonical contracts
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- docs/research/arxiv_qfin_2019_split_contracts.json
