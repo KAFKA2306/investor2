@@ -2,38 +2,61 @@
 
 **バックテストで勝った。それだけでは、この研究ではまだ何も証明していない。**
 
-未来情報が混ざっていないか。都合のいい期間だけを見ていないか。比較対象を変えても残るか。AAARTSは、好成績の仮説を集めるのではなく、**反証条件を先に置き、時系列OOSと再現可能な証拠を通過した仮説だけを残す**ための研究システムです。
+未来情報が混ざっていないか。都合のいい期間だけを見ていないか。比較対象を変えても残るか。AAARTSは、好成績の仮説を集めるのではなく、**反証条件を先に置き、実データを時点固定し、時系列OOSと再現可能な証拠を通過した仮説だけを残す**ための研究システムです。
 
 **公開ダッシュボード:** https://kafka2306.github.io/investor2/
 
-AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、データ作成、検証、時系列のアウト・オブ・サンプル評価、再現可能な証拠の保存までを一つの研究サイクルとして管理するプロジェクトです。
+AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、MCPを含む外部データ取得、候補探索、データ作成、検証、時系列のアウト・オブ・サンプル評価、再現可能な証拠の保存、そして人間の判断時点の固定までを一つの研究サイクルとして管理するプロジェクトです。
 
-単にバックテストの成績が良い候補を探すのではなく、**未来情報の混入を防ぎ、反証可能な条件を先に決め、同じ結果を再実行できる状態にすること**を重視します。
+単にバックテストの成績が良い候補を探すのではなく、**未来情報の混入を防ぎ、反証可能な条件を先に決め、同じ結果を再実行でき、結果を見た後に判断理由を書き換えられない状態にすること**を重視します。
 
-## 正準の入力→検証→出力
+## 正準の入力→仮説→検証→判断
 
 投資判断へ到達する正準線は1本です。
 
 ```text
 一次情報 / revision固定外部データ
   → data/input_ledger の採否・監査
+  → data/hypothesis_lab の仮説定義・MCP capture・候補deep-dive
   → point-in-time dataset / frozen manifest
   → OOS・比較・ablation
   → 再現可能な evidence artifact
   → Evidence & Evolution Dashboard
+  → data/decision_ledger の immutable Decision Snapshot
   → 人間の投資判断
+  → 結果判明後の Decision Review
 ```
 
 詳細な責務境界、source of truth、主要KPI（更新成功・鮮度・利用可能な証拠成果）は [Canonical investment flow](docs/architecture/canonical-investment-flow.md) を正準文書とします。
 
+## 実データから似たアルファを探す
+
+[Hypothesis Lab](docs/research/hypothesis-lab.md) では、自然言語のアイデアをそのまま銘柄候補にせず、次の順で実データへ落とします。
+
+```text
+観察 / 過去の判断
+  → measurable hypothesis + falsifiers
+  → Stage A: 広い定量screen
+  → MCP query + result を時点固定
+  → Stage B: 実体・相対価格・売り手フロー・eventを追加取得
+  → 3 gate
+  → candidate / reject / Decision Snapshot候補
+```
+
+2026-08-13の最初の実践では、EDINET DB MCPで `growth_value_dislocation_v1` を実行しました。低PER・成長・ROE・財務安全性・FCFを同時に満たす候補を広く取得したうえで、RION (6823) をdeep-diveし、業績推移、relative TSR、大量保有報告の持分低下、corporate eventを別々の証拠として保存しています。
+
+重要なのは、**seller-flowを見つけてもforced liquidationとは呼ばない**ことです。直接観測できない原因は `unknown` のまま残します。
+
 ## 現在取り組んでいること
 
+- 実データMCPからの仮説候補生成とpoint-in-time capture
 - EDINETの有価証券報告書を用いた企業業績予測
 - 財務数値と開示文章の予測力を分離するアブレーション分析
 - 不正会計検知と利益方向予測の評価
 - 論文公開後の期間だけを使う凍結OOS検証
 - 古典的な投資研究とファクター仮説の再現・失敗条件の記録
 - 仮説、観測値、計算値、予測、判断を区別する証拠オントロジー
+- 人間のentry/add判断を後から反証できるDecision Snapshot / Review
 
 ## このリポジトリで分かること
 
@@ -41,6 +64,8 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 | --- | --- |
 | 研究全体の進捗を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
 | 正準の入力→検証→出力を見る | [Canonical investment flow](docs/architecture/canonical-investment-flow.md) |
+| 実データから似たalphaを探す方法を見る | [Hypothesis Lab](docs/research/hypothesis-lab.md) |
+| 判断時点の固定契約を見る | [Decision ledger](data/decision_ledger/README.md) |
 | 論文構成を確認する | [NeurIPS earnings forecast outline](docs/paper/neurips_earnings_forecast_outline.md) |
 | システム全体の流れを見る | [Simple flowchart](docs/diagrams/simpleflowchart.md) |
 | Alpha探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
@@ -54,12 +79,14 @@ AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、�
 
 ```text
 仮説登録
-  → データセット構築
+  → MCP / external data capture
+  → dataset構築
   → 時点付き観測
   → モデル推定・予測
   → 凍結OOS・比較対象・アブレーション
   → 再現可能な証拠
   → candidate / reject / freeze_for_oos / promote / retire
+  → immutable Decision Snapshot
 ```
 
 `promote`は、インサンプル成績、説明のもっともらしさ、単独の好成績だけでは成立しません。時系列OOS、ベースライン比較、アブレーション、頑健性、再現性の証拠が必要です。
@@ -89,12 +116,14 @@ uv sync
 ## 実行
 
 ```bash
-task run:newalphasearch  # 自律的なアルファ探索ループ
+task run:newalphasearch  # frozen MCP captureから実データ仮説探索を検証
 task view                # ダッシュボードとAPIを起動
 ```
 
+`pipeline:run` に残る旧experimental orchestratorは正準alpha探索ではありません。
+
 ## 現在の位置づけ
 
-このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。
+このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。Hypothesis LabのcandidateやDecision Snapshot eligibilityも自動売買許可ではありません。
 
-**README最終監査:** 2026-08-12
+**README最終監査:** 2026-08-13
