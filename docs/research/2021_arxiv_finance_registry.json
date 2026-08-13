@@ -1,0 +1,53 @@
+{
+  "selection_note": "Curated representative 2021 arXiv q-fin papers spanning portfolio optimization, reinforcement-learning trading, univariate/multicurrency volatility forecasting, and cross-sectional graph volatility forecasting. This is not a citation ranking.",
+  "papers": [
+    {
+      "id": "warin_2101_02044",
+      "arxiv_id": "2101.02044",
+      "title": "Deep learning for efficient frontier calculation in finance",
+      "authors": ["Xavier Warin"],
+      "first_submitted": "2021-01-06",
+      "primary_category": "q-fin.PM",
+      "source_url": "https://arxiv.org/abs/2101.02044",
+      "paper_claim": "Deep neural-network formulations are proposed for Mean-Variance and Mean-CVaR efficient frontiers; a projected feedforward formulation is reported to handle global portfolio-weight constraints and outperform classical penalization in the paper's experiments.",
+      "implementation_scope": "Contract-level implementation of a projected long-only unit-budget portfolio-weight primitive. No neural-network training or paper figure/table reproduction.",
+      "unreproduced_evidence": "The paper's original experiment inputs, trained network states, and full numerical evaluation are not committed in this repository."
+    },
+    {
+      "id": "pigorsch_schaefer_2112_04755",
+      "arxiv_id": "2112.04755",
+      "title": "High-Dimensional Stock Portfolio Trading with Deep Reinforcement Learning",
+      "authors": ["Uta Pigorsch", "Sebastian Schäfer"],
+      "first_submitted": "2021-12-09",
+      "primary_category": "q-fin.PM",
+      "source_url": "https://arxiv.org/abs/2112.04755",
+      "paper_claim": "A Deep Q-learning portfolio method is evaluated out of sample on 48 US-stock portfolio setups from 10 to 500 stocks and is reported to outperform the considered passive and active benchmarks on average.",
+      "implementation_scope": "Exact deterministic implementation of the paper's stated invest-versus-cash reward contract, including entry transaction cost and cross-sectional mean cash reward. No DQN training.",
+      "unreproduced_evidence": "The paper's complete point-in-time stock universe, fundamentals, training states, validation checkpoint selection, and test trades are not committed in this repository."
+    },
+    {
+      "id": "liao_chen_ni_2112_01166",
+      "arxiv_id": "2112.01166",
+      "title": "Forex Trading Volatility Prediction using Neural Network Models",
+      "authors": ["Shujian Liao", "Jian Chen", "Hao Ni"],
+      "first_submitted": "2021-12-02",
+      "primary_category": "q-fin.ST",
+      "source_url": "https://arxiv.org/abs/2112.01166",
+      "paper_claim": "A multi-scale LSTM using multiple currency-pair inputs is reported to outperform autoregressive, GARCH, and other deep-learning baselines for Forex volatility prediction.",
+      "implementation_scope": "Deterministic multi-scale realized-variance feature construction with scale-consistency checks. No LSTM training or benchmark reproduction.",
+      "unreproduced_evidence": "The paper's Forex dataset, exact train/test tensors, fitted model weights, and baseline forecasts are not committed in this repository."
+    },
+    {
+      "id": "chen_robert_2112_09015",
+      "arxiv_id": "2112.09015",
+      "title": "Multivariate Realized Volatility Forecasting with Graph Neural Network",
+      "authors": ["Qinkai Chen", "Christian-Yann Robert"],
+      "first_submitted": "2021-12-16",
+      "primary_category": "q-fin.CP",
+      "source_url": "https://arxiv.org/abs/2112.09015",
+      "paper_claim": "A Graph Transformer Network is proposed to combine limit-order-book features with temporal and cross-sectional relations; experiments on about 500 S&P 500 stocks report better performance than the paper's benchmarks.",
+      "implementation_scope": "Deterministic weighted multi-relation graph aggregation with row normalization and permutation-equivariance checks. No Graph Transformer training or benchmark reproduction.",
+      "unreproduced_evidence": "The paper's limit-order-book dataset, relation tensors, training configuration, fitted model weights, and benchmark predictions are not committed in this repository."
+    }
+  ]
+}
