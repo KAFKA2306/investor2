@@ -1,0 +1,80 @@
+name: Cache arXiv finance metadata
+
+on:
+  push:
+    branches:
+      - data/arxiv-finance-metadata
+    paths:
+      - "scripts/fetch_arxiv_finance_metadata.py"
+      - "tests/test_fetch_arxiv_finance_metadata.py"
+      - "data/input_ledger/source_registry.json"
+      - "docs/specs/arxiv_finance_metadata_cache.md"
+      - ".github/workflows/arxiv-finance-metadata.yml"
+  workflow_dispatch:
+    inputs:
+      year:
+        description: "UTC submission year to materialize"
+        required: true
+        default: "2021"
+        type: string
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arxiv-finance-metadata-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      YEAR: ${{ github.event.inputs.year || '2021' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Parser and query contract
+        run: python tests/test_fetch_arxiv_finance_metadata.py
+
+      - name: Fetch and register arXiv q-fin metadata
+        run: |
+          python scripts/fetch_arxiv_finance_metadata.py \
+            --year "$YEAR" \
+            --output "docs/research/data/arxiv_qfin_${YEAR}.json" \
+            --register
+
+      - name: 2021 sentinel papers are present
+        if: env.YEAR == '2021'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("docs/research/data/arxiv_qfin_2021.json").read_text(encoding="utf-8"))
+          ids = {row["arxiv_id"] for row in data["records"]}
+          expected = {"2111.04709", "2112.04755"}
+          missing = expected - ids
+          if missing:
+              raise SystemExit(f"missing verified 2021 q-fin sentinel papers: {sorted(missing)}")
+          print({"record_count": data["record_count"], "sentinels": sorted(expected)})
+          PY
+
+      - name: Snapshot ledger audit
+        run: python scripts/snapshot_store.py audit
+
+      - name: Commit canonical snapshot to current branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # These two paths are intentionally canonical even though broad data paths
+          # are ignored by default. Force-add only the exact audited outputs.
+          git add -f "docs/research/data/arxiv_qfin_${YEAR}.json" data/input_ledger/snapshot_catalog.ndjson
+          if git diff --cached --quiet; then
+            echo "No metadata changes to commit."
+          else
+            git commit -m "Cache arXiv q-fin ${YEAR} metadata"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
