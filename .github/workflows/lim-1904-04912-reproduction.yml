@@ -73,7 +73,6 @@ jobs:
           run_dir = root / 'docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306'
           manifest_path = run_dir / 'manifest.json'
           report_path = run_dir / 'report.json'
-          manifest = json.loads(manifest_path.read_text(encoding='utf-8'))
           report = json.loads(report_path.read_text(encoding='utf-8'))
           assert report['empirical_reproduction_state'] == 'EMPIRICALLY_RUN'
           assert report['empirical_verdict'] == 'BLOCKED'
@@ -83,7 +82,8 @@ jobs:
           assert report['observed_metrics'] is None
           assert report['metric_delta'] is None
           assert report['reason_codes'] == ['PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED'], report['reason_codes']
-          assert report['paper_target']['annualized_sharpe'] == 0.912
+          assert report['paper_target']['metric'] == 'annualized_sharpe'
+          assert report['paper_target']['value'] == 0.912
           assert report['paper_target']['transaction_cost_bps'] == 10.0
           manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
           registry = {
