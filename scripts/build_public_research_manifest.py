@@ -1,10 +1,5 @@
 #!/usr/bin/env python3
-"""Project the internal research evidence manifest into a small public-safe contract.
-
-The public dashboard must never depend on internal audit/governance or storage fields.
-This module is the explicit boundary: internal evidence can grow freely while public
-JSON stays stable, understandable, and intentionally small.
-"""
+"""Project internal research evidence into small public-safe contracts."""
 
 from __future__ import annotations
 
@@ -18,6 +13,8 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 INTERNAL_BUILDER = ROOT / "scripts" / "build_research_verification_manifest.py"
+EMPIRICAL_2019_VERIFIER = ROOT / "scripts" / "verify_2019_arxiv_empirical.py"
+EMPIRICAL_2019_REGISTRY = ROOT / "docs" / "research" / "2019_arxiv_finance_registry.json"
 EMPIRICAL_VERDICTS = {"REPRODUCED", "FAILED", "BLOCKED"}
 
 PUBLIC_QUESTIONS = {
@@ -44,6 +41,16 @@ REPOSITORY_SOURCES = (
         "検証に使った論文とデータの一覧",
         "https://github.com/KAFKA2306/investor2/blob/main/docs/research/paper_factor_registry.json",
         "どの研究を、どのデータで確かめたかを確認できます。",
+    ),
+    (
+        "2019年 arXiv 論文の実証再現索引",
+        "https://github.com/KAFKA2306/investor2/blob/main/docs/research/2019_arxiv_finance_registry.json",
+        "2019年のpaper-specific runについて、方法契約と実証判定を分離して管理する正準索引です。",
+    ),
+    (
+        "2019年論文の実証証拠チェック",
+        "https://github.com/KAFKA2306/investor2/blob/main/scripts/verify_2019_arxiv_empirical.py",
+        "run manifest・report・traceとSHA-256を検証し、BLOCKEDを成功や失敗と混同しないためのコードです。",
     ),
     (
         "2021年 arXiv 論文の再現索引",
@@ -94,14 +101,22 @@ FORBIDDEN_PUBLIC_KEYS = {
 }
 
 
-def load_internal_builder():
-    spec = importlib.util.spec_from_file_location("internal_research_manifest_builder", INTERNAL_BUILDER)
+def _load_module(path: Path, name: str):
+    spec = importlib.util.spec_from_file_location(name, path)
     if spec is None or spec.loader is None:
-        raise RuntimeError(f"cannot import {INTERNAL_BUILDER}")
+        raise RuntimeError(f"cannot import {path}")
     module = importlib.util.module_from_spec(spec)
     sys.modules[spec.name] = module
     spec.loader.exec_module(module)
     return module
+
+
+def load_internal_builder():
+    return _load_module(INTERNAL_BUILDER, "internal_research_manifest_builder")
+
+
+def load_2019_verifier():
+    return _load_module(EMPIRICAL_2019_VERIFIER, "empirical_2019_verifier")
 
 
 def human_reason(record: dict[str, Any]) -> str:
@@ -154,7 +169,7 @@ def paper_stage_label(paper: dict[str, Any]) -> str:
         if verdict == "FAILED":
             return "実証再現を実行したが、事前条件を満たさず"
         if verdict == "BLOCKED":
-            return "実証再現を実行したが、証拠・解釈上の制約で判定保留"
+            return "実証再現protocolを実行したが、証拠gateで停止"
         raise ValueError(f"EMPIRICALLY_RUN paper lacks final verdict: {paper['id']}")
     if empirical != "NOT_RUN":
         raise ValueError(f"unknown empirical state: {paper['id']}")
@@ -240,6 +255,60 @@ def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
             "same_conclusion_each_time": internal["repeated_validation"]["all_verdicts_stable"],
         },
         "sources": repository_sources + method_sources,
+    }
+
+
+def _safe_repo_path(value: str) -> Path:
+    path = (ROOT / value).resolve()
+    path.relative_to(ROOT.resolve())
+    return path
+
+
+def project_2019_paper(paper: dict[str, Any]) -> dict[str, Any]:
+    manifest_path = _safe_repo_path(paper["evidence_manifest"])
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    report_path = _safe_repo_path(manifest["artifacts"]["report"]["path"])
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    return {
+        "id": paper["id"],
+        "arxiv_id": paper["arxiv_id"],
+        "title": paper["title"],
+        "source_url": paper["source_url"],
+        "source_pdf_url": paper["source_pdf_url"],
+        "source_version": paper["source_version"],
+        "source_pdf_sha256": report["source_pdf"]["sha256"],
+        "method_state": paper["method_contract_state"],
+        "data_state": paper["data_contract_state"],
+        "split_state": paper["split_contract_state"],
+        "empirical_state": paper["empirical_reproduction_state"],
+        "empirical_verdict": paper["empirical_verdict"],
+        "stage_reached": paper["stage_reached"],
+        "training_attempted": report["training_attempted"],
+        "training_executed": report["training_executed"],
+        "evaluation_executed": report["evaluation_executed"],
+        "paper_target": paper["paper_target"],
+        "observed_metrics": paper["observed_metrics"],
+        "reason_codes": list(paper["reason_codes"]),
+        "evidence": {
+            "manifest_path": paper["evidence_manifest"],
+            "manifest_sha256": paper["evidence_manifest_sha256"],
+        },
+    }
+
+
+def build_public_2019_manifest(*, code_sha: str) -> dict[str, Any]:
+    verifier = load_2019_verifier()
+    internal = verifier.build_report(EMPIRICAL_2019_REGISTRY)
+    papers = [project_2019_paper(paper) for paper in internal["papers"]]
+    summary = {
+        **internal["summary"],
+        "method_contract_pass": sum(paper["method_state"] == "PASS" for paper in papers),
+    }
+    return {
+        "schema_version": 1,
+        "build": {"code_sha": code_sha},
+        "summary": summary,
+        "papers": papers,
     }
 
 
@@ -345,6 +414,43 @@ def validate_public_manifest(data: dict[str, Any], expected_revision: str | None
         raise ValueError(f"public revision {revision} does not match expected {expected_revision}")
 
 
+def validate_public_2019_manifest(data: dict[str, Any], expected_revision: str | None = None) -> None:
+    if data.get("schema_version") != 1:
+        raise ValueError("unsupported 2019 public schema_version")
+    build = data.get("build", {})
+    revision = build.get("code_sha")
+    if not isinstance(revision, str) or not re.fullmatch(r"[0-9a-f]{40}|LOCAL_WORKTREE", revision):
+        raise ValueError("2019 public build.code_sha must be a commit SHA or LOCAL_WORKTREE")
+    if expected_revision and revision != expected_revision:
+        raise ValueError(f"2019 public revision {revision} does not match expected {expected_revision}")
+    papers = data.get("papers")
+    summary = data.get("summary")
+    if not isinstance(papers, list) or not isinstance(summary, dict) or not papers:
+        raise ValueError("2019 public paper records and summary are required")
+    if summary.get("indexed") != len(papers):
+        raise ValueError("2019 indexed count mismatch")
+    expected_run = sum(paper.get("empirical_state") == "EMPIRICALLY_RUN" for paper in papers)
+    expected_blocked = sum(paper.get("empirical_verdict") == "BLOCKED" for paper in papers)
+    if summary.get("empirically_run") != expected_run or summary.get("blocked") != expected_blocked:
+        raise ValueError("2019 empirical summary mismatch")
+    if summary.get("method_contract_pass") != sum(paper.get("method_state") == "PASS" for paper in papers):
+        raise ValueError("2019 method summary mismatch")
+    for paper in papers:
+        for field in ("id", "arxiv_id", "title", "source_url", "source_pdf_url", "source_version", "source_pdf_sha256", "method_state", "data_state", "split_state", "empirical_state", "empirical_verdict", "stage_reached"):
+            if not isinstance(paper.get(field), str) or not paper[field].strip():
+                raise ValueError(f"2019 public paper missing {field}: {paper.get('id')}")
+        if not re.fullmatch(r"[0-9a-f]{64}", paper["source_pdf_sha256"]):
+            raise ValueError(f"2019 source PDF SHA invalid: {paper['id']}")
+        if paper["empirical_state"] != "EMPIRICALLY_RUN" or paper["empirical_verdict"] not in EMPIRICAL_VERDICTS:
+            raise ValueError(f"2019 terminal paper lacks empirical verdict: {paper['id']}")
+        if paper["empirical_verdict"] == "BLOCKED":
+            if paper["training_executed"] or paper["evaluation_executed"] or paper["observed_metrics"] is not None:
+                raise ValueError(f"BLOCKED paper cannot claim model metrics: {paper['id']}")
+        evidence = paper.get("evidence")
+        if not isinstance(evidence, dict) or not re.fullmatch(r"[0-9a-f]{64}", str(evidence.get("manifest_sha256", ""))):
+            raise ValueError(f"2019 evidence SHA missing: {paper['id']}")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path, required=True)
@@ -359,6 +465,14 @@ def main() -> None:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(
         json.dumps(public, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+
+    public_2019 = build_public_2019_manifest(code_sha=public["build"]["code_sha"])
+    validate_public_2019_manifest(public_2019, expected_revision=args.expected_revision)
+    output_2019 = args.output.parent / "research_2019_public_manifest.json"
+    output_2019.write_text(
+        json.dumps(public_2019, indent=2, ensure_ascii=False, sort_keys=True) + "\n",
         encoding="utf-8",
     )
 
