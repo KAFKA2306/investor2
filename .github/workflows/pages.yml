@@ -5,14 +5,17 @@ on:
     paths:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
+      - "docs/specs/paper_reproduction_store.md"
       - "scripts/build_research_verification_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
+      - "scripts/verify_2021_arxiv_methods.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
+      - "tests/test_2021_arxiv_methods.py"
       - "tests/test_daily_trump_chart.py"
       - "tests/test_kioxia_quarterly_chart.py"
       - ".github/workflows/pages.yml"
@@ -22,14 +25,17 @@ on:
     paths:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
+      - "docs/specs/paper_reproduction_store.md"
       - "scripts/build_research_verification_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
+      - "scripts/verify_2021_arxiv_methods.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
+      - "tests/test_2021_arxiv_methods.py"
       - "tests/test_daily_trump_chart.py"
       - "tests/test_kioxia_quarterly_chart.py"
       - ".github/workflows/pages.yml"
@@ -71,6 +77,7 @@ jobs:
           set -euo pipefail
           python -m pytest -q \
             tests/test_paper_factor_suite.py \
+            tests/test_2021_arxiv_methods.py \
             tests/test_repeated_paper_validation.py \
             tests/test_research_verification_manifest.py \
             tests/test_research_dashboard_validation.py \
