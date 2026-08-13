@@ -27,7 +27,7 @@ SAMPLE_XML = b"""<?xml version="1.0" encoding="utf-8"?>
     </title>
     <summary>  A sample   abstract. </summary>
     <author><name>Uta Pigorsch</name></author>
-    <author><name>Sebastian SchÃ    <author><name>Sebastian Sch\xc3¤    <author><name>Sebastian Sch\xc3\xa4fer</name></author>
+    <author><name>Sebastian Schaefer</name></author>
     <category term="q-fin.PM" scheme="http://arxiv.org/schemas/atom"/>
     <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
     <arxiv:primary_category term="q-fin.PM"/>
@@ -56,7 +56,7 @@ def test_parse_feed() -> None:
     assert record["title"] == (
         "High-Dimensional Stock Portfolio Trading with Deep Reinforcement Learning"
     )
-    assert record["authors"] == ["Uta Pigorsch", "Sebastian Schäfer"]
+    assert record["authors"] == ["Uta Pigorsch", "Sebastian Schaefer"]
     assert record["abstract"] == "A sample abstract."
     assert record["primary_category"] == "q-fin.PM"
     assert record["categories"] == ["cs.LG", "q-fin.PM"]
