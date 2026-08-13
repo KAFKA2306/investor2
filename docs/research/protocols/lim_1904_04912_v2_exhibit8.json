@@ -1,0 +1,86 @@
+{
+  "schema_version": "investor2.paper-empirical-protocol.v1",
+  "paper_id": "lim_1904_04912_v2",
+  "arxiv_id": "1904.04912",
+  "title": "Enhancing Time Series Momentum Strategies Using Deep Neural Networks",
+  "source_url": "https://arxiv.org/abs/1904.04912v2",
+  "source_pdf_url": "https://arxiv.org/pdf/1904.04912v2",
+  "source_version": "v2",
+  "source_version_submitted_at": "2019-11-17T21:16:45Z",
+  "protocol_locked_before_empirical_run": true,
+  "seed": 2306,
+  "experiment": {
+    "paper_location": "Exhibit 8 / Section VI.A",
+    "name": "Sharpe-optimised LSTM with turnover regularisation under c=10 bps",
+    "paper_target": {
+      "metric": "annualized_sharpe",
+      "value": 0.912,
+      "expected_return": 0.141,
+      "volatility": 0.154,
+      "max_drawdown": 0.371,
+      "transaction_cost_bps": 10.0
+    },
+    "comparison_targets": {
+      "unregularized_lstm_sharpe": -5.313,
+      "sign_returns_sharpe": 0.861,
+      "macd_sharpe": 0.719,
+      "long_only_sharpe": 0.628
+    },
+    "reproduction_tolerance": {
+      "annualized_sharpe_absolute": 0.10,
+      "rule": "REPRODUCED requires the exact-paper-data run to produce the predeclared LSTM+Reg Sharpe within absolute tolerance 0.10 and preserve the paper's stated method/data/split contract. A numerically close substitute-data run is never REPRODUCED."
+    }
+  },
+  "canonical_inputs": {
+    "version_pins": "docs/research/arxiv_qfin_2019_version_pins.json",
+    "data_contracts": "docs/research/arxiv_qfin_2019_data_requirements.json",
+    "split_contracts": "docs/research/arxiv_qfin_2019_split_contracts.json"
+  },
+  "data_gate": {
+    "required_vendor": "Pinnacle Data Corp",
+    "required_dataset": "CLC Database",
+    "required_linking": "ratio-adjusted continuous futures",
+    "required_contract_count": 88,
+    "required_sample_years": [1990, 2015],
+    "substitute_data_allowed": false,
+    "required_local_manifest": "dataset_manifest.json",
+    "paper_vintage_revision_must_be_proven": true,
+    "license_state": "COMMERCIAL_DATASET; redistribution rights not established by the paper",
+    "current_vendor_url": "https://pinnacledata2.com/clc.html"
+  },
+  "split_gate": {
+    "semantics": "EXPANDING",
+    "paper_oos_years": [1995, 2015],
+    "retraining_interval_years": 5,
+    "training_fraction": 0.90,
+    "validation_fraction": 0.10,
+    "validation_position": "MOST_RECENT_PART_OF_TRAINING_BLOCK",
+    "unresolved_boundaries_must_remain_not_specified": true
+  },
+  "method_contract": {
+    "annualized_volatility_target": 0.15,
+    "ex_ante_volatility_estimator": "exponentially weighted moving standard deviation with 60-day span",
+    "position_signal_bounds": [-1.0, 1.0],
+    "sharpe_loss": "negative annualized sample Sharpe over strategy returns, annualization sqrt(252)",
+    "transaction_cost": "c times absolute daily change in volatility-scaled position; c=10 bps for the locked experiment",
+    "portfolio_level_volatility_scaling": true,
+    "lstm_sequence_steps": 63,
+    "hyperparameter_selection": "50-iteration random search using validation loss; max 100 epochs; early stopping patience 25",
+    "baselines": ["Long Only", "Sgn(Returns)", "MACD"],
+    "forbidden_substitutions": [
+      "different futures vendor or public proxy data",
+      "current continuous-futures construction without proof of the paper's ratio-adjusted CLC series",
+      "different validation scheme",
+      "cross-sectional momentum baseline in place of paper baselines"
+    ]
+  },
+  "author_code_and_data": {
+    "pinned_paper_code_link": "NOT_IDENTIFIED_IN_PINNED_PAPER",
+    "pinned_paper_data_link": "Pinnacle Data Corp CLC Database reference only",
+    "paper_pdf_contains_github_link": false,
+    "license_for_author_code": "NOT_SPECIFIED",
+    "license_for_paper_data": "NOT_SPECIFIED_BY_PAPER"
+  },
+  "final_verdicts": ["REPRODUCED", "FAILED", "BLOCKED"],
+  "fail_closed_rule": "If exact paper data provenance, version, license/access state, or required split/method inputs fail their gate, emit BLOCKED before model fitting. Do not manufacture final metrics."
+}
