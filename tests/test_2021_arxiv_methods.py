@@ -36,10 +36,8 @@ def test_2021_registry_is_fail_closed_and_methods_are_deterministic() -> None:
         "2112.01166",
         "2112.09015",
     }
-    assert all(
-        paper["source_metadata_state"] == "VERIFIED_PRIMARY_AND_FROZEN_UNIVERSE"
-        for paper in report["papers"]
-    )
+    assert all(paper["source_metadata_state"] == "VERIFIED_PRIMARY" for paper in report["papers"])
+    assert all(paper["frozen_universe_state"] == "VERIFIED" for paper in report["papers"])
     assert all(paper["method_contract_state"] == "PASS" for paper in report["papers"])
     assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in report["papers"])
     assert all(paper["artifact_state"] == "NOT_MATERIALIZED" for paper in report["papers"])
