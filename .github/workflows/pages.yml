@@ -76,7 +76,7 @@ jobs:
       - name: Install test/runtime dependencies
         run: python -m pip install --disable-pip-version-check pytest matplotlib
 
-      - name: Validate empirical research artifacts
+      - name: Validate research contracts and regression checks
         run: |
           set -euo pipefail
           python -m pytest -q \
