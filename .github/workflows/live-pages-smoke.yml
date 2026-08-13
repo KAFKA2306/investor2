@@ -72,13 +72,35 @@ jobs:
                 "$base/?smoke=$cache_bust" \
                 -o production-validation/index.html \
               && curl --fail --silent --show-error --location \
-                "$base/data/research_verification_manifest.json?smoke=$cache_bust" \
-                -o production-validation/manifest.json \
-              && python scripts/validate_research_dashboard.py \
-                --manifest production-validation/manifest.json \
-                --html production-validation/index.html \
-                --expected-revision "$EXPECTED_REVISION" \
-                --report production-validation/production-validation.json; then
+                "$base/data/research_public_manifest.json?smoke=$cache_bust" \
+                -o production-validation/research-public-manifest.json \
+              && curl --fail --silent --show-error --location \
+                "$base/data/research_2019_public_manifest.json?smoke=$cache_bust" \
+                -o production-validation/research-2019-public-manifest.json \
+              && python - <<'PY'
+          import importlib.util
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          module_path = Path("scripts/build_public_research_manifest.py")
+          spec = importlib.util.spec_from_file_location("public_manifest_production_validator", module_path)
+          assert spec and spec.loader
+          module = importlib.util.module_from_spec(spec)
+          sys.modules[spec.name] = module
+          spec.loader.exec_module(module)
+          expected = os.environ["EXPECTED_REVISION"]
+          public = json.loads(Path("production-validation/research-public-manifest.json").read_text(encoding="utf-8"))
+          public_2019 = json.loads(Path("production-validation/research-2019-public-manifest.json").read_text(encoding="utf-8"))
+          module.validate_public_manifest(public, expected_revision=expected)
+          module.validate_public_2019_manifest(public_2019, expected_revision=expected)
+          html = Path("production-validation/index.html").read_text(encoding="utf-8")
+          for required in ("research_public_manifest.json", "research_2019_public_manifest.json"):
+              if required not in html:
+                  raise ValueError(f"production HTML does not reference {required}")
+          PY
+            then
               success=1
               break
             fi
