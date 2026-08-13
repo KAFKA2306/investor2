@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="投資アイデアを過去データで確かめ、2021年の金融論文をどこまで再現できたかも専門知識なしで読める形にまとめた公開ページ。">
+  <meta name="description" content="投資アイデアを過去データで確かめ、2019年・2021年の金融論文をどこまで実証再現できたかを証拠付きで示す公開ページ。">
   <meta name="theme-color" content="#fbfaf7">
   <title>投資アイデアを、過去データで確かめる | AAARTS</title>
   <style>
@@ -19,7 +19,7 @@
     .plain-panel{padding:24px}.plain-panel h3{margin:0 0 8px;font-size:19px}.plain-panel p{margin:0;color:var(--muted)}
     details{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}summary{cursor:pointer;font-weight:800;color:#506784}details p{color:var(--muted)}
     .explain{margin-top:18px;padding:20px 22px}.explain strong{color:#354d73}.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.term{padding:14px;border-radius:14px;background:rgba(144,183,237,.08)}.term b{display:block;margin-bottom:4px}.term span{font-size:13px;color:var(--muted)}
-    .result-grid,.paper-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.result-card,.paper-card{padding:24px;display:flex;flex-direction:column;gap:14px}.result-card h3,.paper-card h3{font-size:21px;line-height:1.45;margin:0}.state{display:inline-flex;align-self:flex-start;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:850}.fail{color:#91445a;background:rgba(239,181,193,.30);border:1px solid rgba(167,78,99,.20)}.pass{color:#27674f;background:rgba(185,220,201,.35);border:1px solid rgba(45,118,91,.20)}.pending{color:#76591d;background:rgba(242,207,170,.36);border:1px solid rgba(142,107,35,.20)}.reason{margin:0;color:#536078}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{padding:12px;border-radius:14px;background:rgba(144,183,237,.07)}.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800}.stat-value{display:block;margin-top:4px;font-size:16px;font-weight:850}.positive{color:var(--good)}.negative{color:var(--bad)}.technical{font-size:14px}.technical dl{display:grid;grid-template-columns:max-content 1fr;gap:7px 14px}.technical dt{font-weight:800}.technical dd{margin:0;color:var(--muted)}
+    .result-grid,.paper-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.result-card,.paper-card{padding:24px;display:flex;flex-direction:column;gap:14px}.result-card h3,.paper-card h3{font-size:21px;line-height:1.45;margin:0}.state{display:inline-flex;align-self:flex-start;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:850}.fail{color:#91445a;background:rgba(239,181,193,.30);border:1px solid rgba(167,78,99,.20)}.pass{color:#27674f;background:rgba(185,220,201,.35);border:1px solid rgba(45,118,91,.20)}.pending{color:#76591d;background:rgba(242,207,170,.36);border:1px solid rgba(142,107,35,.20)}.reason{margin:0;color:#536078}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{padding:12px;border-radius:14px;background:rgba(144,183,237,.07)}.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800}.stat-value{display:block;margin-top:4px;font-size:16px;font-weight:850}.positive{color:var(--good)}.negative{color:var(--bad)}.technical{font-size:14px}.technical dl{display:grid;grid-template-columns:max-content 1fr;gap:7px 14px}.technical dt{font-weight:800}.technical dd{margin:0;color:var(--muted);overflow-wrap:anywhere}
     .paper-meta{font-size:12px;color:var(--muted)}.paper-status{display:flex;gap:8px;flex-wrap:wrap}.paper-status .state{align-self:auto}.paper-claim{margin:0;color:#42526e}.paper-scope{margin:0;color:var(--muted);font-size:14px}.paper-source{font-weight:800;align-self:flex-start}.storage-boundary{padding:20px 22px;margin-top:18px;border-left:5px solid var(--lavender)}
     .source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.source-card{padding:20px}.source-kind{font-size:11px;font-weight:850;color:#71809b;letter-spacing:.05em}.source-card h3{font-size:17px;margin:4px 0 7px}.source-card p{color:var(--muted);font-size:14px;margin:0 0 12px}.source-card a{font-weight:800}
     .error{padding:20px;border-color:rgba(167,78,99,.40);color:#91445a;background:rgba(255,244,247,.92)}footer{border-top:1px solid var(--line);padding:30px 0 48px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.28)}
@@ -34,11 +34,11 @@
   <div class="shell">
     <div class="eyebrow">AAARTS · data-backed investing</div>
     <h1>投資アイデアを、<br>過去データで確かめる。</h1>
-    <p class="lead">「小さい会社の株は強い？」「最近上がった株は、その後も上がる？」。よく聞く投資の考え方を、過去データで一つずつ確かめます。さらに、金融論文を後からもう一度実装・検証できる形にして、どこまで再現できたかも分けて示します。</p>
+    <p class="lead">投資アイデアと金融論文を、一次資料・固定データ・実行証拠まで分けて検証します。方法のコードが動くことと、論文の成績を実データで再現できたことは同じ意味にしません。</p>
     <div class="notice" id="plainConclusion"><strong>読み込み中です。</strong></div>
   </div>
 </header>
-<nav><div class="shell"><a href="#summary">まず結論</a><a href="#results">試したアイデア</a><a href="#papers2021">2021年の論文</a><a href="#sources">元データ</a></div></nav>
+<nav><div class="shell"><a href="#summary">まず結論</a><a href="#results">試したアイデア</a><a href="#papers2019">2019年の論文</a><a href="#papers2021">2021年の論文</a><a href="#sources">元データ</a></div></nav>
 <main class="shell">
   <section id="summary">
     <div class="section-head"><h2>まず、何がわかった？</h2><p class="section-note">ここだけ読めば全体像が分かります。件数や結果は、公開データから自動で更新されます。</p></div>
@@ -51,23 +51,24 @@
       <article class="card plain-panel"><h3>どこまでのデータを見た？</h3><p id="freshness">読み込み中です。</p></article>
       <article class="card plain-panel"><h3>何度やっても同じ結論？</h3><p id="repeat">読み込み中です。</p></article>
     </div>
-    <article class="card explain">
-      <strong>「確認できない」＝「絶対に間違い」ではありません。</strong> 今ある証拠だけでは、実際のお金を使う判断まで進めない、という意味です。
-      <details>
-        <summary>専門的な数字の意味も知りたい</summary>
-        <div class="glossary">
-          <div class="term"><b>年平均リターン</b><span>その期間の結果を、1年あたりに直した目安です。将来の利益を保証する数字ではありません。</span></div>
-          <div class="term"><b>コストを引いた結果</b><span>毎月0.25%の簡単な取引コストを仮定して、それでも利益が残るかを見る数字です。</span></div>
-          <div class="term"><b>シャープレシオ</b><span>値動きの大きさに対して、どれくらいリターンがあったかを見る目安です。大きいほど効率が良いと考えます。</span></div>
-          <div class="term"><b>t値</b><span>結果が偶然だけでは説明しにくいかを見る目安です。この研究では3以上を厳しい合格ラインの一つにしています。</span></div>
-        </div>
-      </details>
-    </article>
+    <article class="card explain"><strong>「確認できない」＝「絶対に間違い」ではありません。</strong> 今ある証拠だけでは、実際のお金を使う判断まで進めない、という意味です。</article>
   </section>
 
   <section id="results">
     <div class="section-head"><h2>どんなアイデアを試した？</h2><p class="section-note">最初に日常語の問いと結論を表示します。論文名や統計値は、各カードの「詳しい数字」を開くと確認できます。</p></div>
     <div class="result-grid" id="resultRows" aria-live="polite"></div>
+  </section>
+
+  <section id="papers2019">
+    <div class="section-head"><h2>2019年の論文は、実データで再現できた？</h2><p class="section-note">method contract、data/split contract、paper-specific protocolの実行、最終empirical verdictを別々に表示します。BLOCKEDはFAILEDでもREPRODUCEDでもありません。</p></div>
+    <div class="grid paper-summary-grid">
+      <article class="card metric"><div class="metric-label">実証対象</div><div class="metric-value" id="paper2019Indexed">—</div><div class="metric-detail">terminal registryへ登録</div></article>
+      <article class="card metric"><div class="metric-label">Method contract PASS</div><div class="metric-value" id="paper2019MethodPass">—</div><div class="metric-detail">方法の機械契約を検証</div></article>
+      <article class="card metric"><div class="metric-label">Protocol実行</div><div class="metric-value" id="paper2019Run">—</div><div class="metric-detail">paper-specific runnerを起動</div></article>
+      <article class="card metric"><div class="metric-label">BLOCKED</div><div class="metric-value" id="paper2019Blocked">—</div><div class="metric-detail">exact evidence gateで停止</div></article>
+    </div>
+    <article class="card storage-boundary"><strong>「runnerを実行した」と「モデル学習・評価を実行した」を分離しています。</strong> exact paper dataが無ければ、似た公開データへ置換せず、metricを生成せずにBLOCKEDで停止します。</article>
+    <div class="paper-grid" id="paperRows2019" aria-live="polite" style="margin-top:18px"></div>
   </section>
 
   <section id="papers2021">
@@ -83,7 +84,7 @@
   </section>
 
   <section id="sources">
-    <div class="section-head"><h2>数字はどこから来た？</h2><p class="section-note">結果だけでなく、使ったデータ・論文・計算コードまで辿れます。新しい資料が増えても、この一覧はデータから自動で増えます。</p></div>
+    <div class="section-head"><h2>数字はどこから来た？</h2><p class="section-note">結果だけでなく、使ったデータ・論文・計算コードまで辿れます。</p></div>
     <div class="source-grid" id="methodSources"></div>
   </section>
 
@@ -96,8 +97,9 @@
   const num=(value)=>Number(value).toFixed(2);
   const cssNum=(value)=>Number(value)>=0?"positive":"negative";
   const safeUrl=(value)=>{try{const url=new URL(String(value));return ["https:","http:"].includes(url.protocol)?url.href:"#"}catch{return "#"}};
+  const verdictClass=(value)=>value==="REPRODUCED"?"pass":value==="FAILED"?"fail":"pending";
 
-  function render(data){
+  function render(data,data2019){
     const s=data.summary;
     document.getElementById("tested").textContent=s.tested_hypotheses;
     document.getElementById("confirmed").textContent=s.confirmed;
@@ -107,10 +109,15 @@
     document.getElementById("paperMethodPass").textContent=paperSummary.method_contract_pass;
     document.getElementById("paperMaterialized").textContent=paperSummary.materialized;
     document.getElementById("paperEmpirical").textContent=paperSummary.empirically_reproduced;
+    const s19=data2019.summary;
+    document.getElementById("paper2019Indexed").textContent=s19.indexed;
+    document.getElementById("paper2019MethodPass").textContent=s19.method_contract_pass;
+    document.getElementById("paper2019Run").textContent=s19.empirically_run;
+    document.getElementById("paper2019Blocked").textContent=s19.blocked;
     const investmentConclusion=s.confirmed>0
       ? `<strong>${s.tested_hypotheses}件</strong>を試し、<strong>${s.confirmed}件</strong>で投資に使える可能性を確認しました。`
       : `<strong>${s.tested_hypotheses}件</strong>の投資アイデアを試しましたが、今の証拠だけで<strong>実際の投資に使えると確認できたものは0件</strong>でした。`;
-    document.getElementById("plainConclusion").innerHTML=`${investmentConclusion} 2021年論文は<strong>${paperSummary.indexed}本</strong>を索引し、方法の最小実装は<strong>${paperSummary.method_contract_pass}本</strong>、実証再現まで終えたものは<strong>${paperSummary.empirically_reproduced}本</strong>です。`;
+    document.getElementById("plainConclusion").innerHTML=`${investmentConclusion} 2019年paper-specific runは<strong>${s19.empirically_run}本</strong>、REPRODUCED ${s19.reproduced} / FAILED ${s19.failed} / BLOCKED ${s19.blocked}です。`;
     document.getElementById("freshness").textContent=`主な検証データは${s.latest_factor_data_end}まで、モメンタムの検証は${s.latest_momentum_data_end}までです。`;
     const r=data.repeat_check;
     document.getElementById("repeat").textContent=r.same_conclusion_each_time
@@ -128,16 +135,41 @@
           <div class="stat"><span class="stat-label">年平均の結果</span><span class="stat-value ${cssNum(item.annualized_mean)}">${pct(item.annualized_mean)}</span></div>
           <div class="stat"><span class="stat-label">簡単なコスト控除後</span><span class="stat-value ${cssNum(item.cost_25bps_annualized_mean)}">${pct(item.cost_25bps_annualized_mean)}</span></div>
         </div>
-        <details class="technical">
-          <summary>詳しい数字と元論文を見る</summary>
-          <dl>
-            <dt>元論文</dt><dd>${esc(item.paper)}</dd>
-            <dt>データ月数</dt><dd>${esc(item.months)}か月</dd>
-            <dt>期間後半の年平均</dt><dd>${pct(item.late_period_mean)}</dd>
-            <dt>シャープレシオ</dt><dd>${num(item.sharpe)}</dd>
-            <dt>t値</dt><dd>${num(item.newey_west_t)}</dd>
-          </dl>
-        </details>
+        <details class="technical"><summary>詳しい数字と元論文を見る</summary><dl>
+          <dt>元論文</dt><dd>${esc(item.paper)}</dd><dt>データ月数</dt><dd>${esc(item.months)}か月</dd>
+          <dt>期間後半の年平均</dt><dd>${pct(item.late_period_mean)}</dd><dt>シャープレシオ</dt><dd>${num(item.sharpe)}</dd><dt>t値</dt><dd>${num(item.newey_west_t)}</dd>
+        </dl></details>
+      </article>`;
+    }).join("");
+
+    document.getElementById("paperRows2019").innerHTML=data2019.papers.map(paper=>{
+      const target=paper.paper_target||{};
+      const evidenceUrl=`https://github.com/KAFKA2306/investor2/blob/main/${paper.evidence.manifest_path}`;
+      const training=paper.training_executed?"実行済み":"未実行";
+      const evaluation=paper.evaluation_executed?"実行済み":"未実行";
+      return `<article class="card paper-card">
+        <div class="paper-meta">arXiv:${esc(paper.arxiv_id)} · ${esc(paper.source_version)} · stage ${esc(paper.stage_reached)}</div>
+        <h3>${esc(paper.title)}</h3>
+        <div class="paper-status">
+          <span class="state ${paper.method_state==="PASS"?"pass":"fail"}">Method ${esc(paper.method_state)}</span>
+          <span class="state pass">Split ${esc(paper.split_state)}</span>
+          <span class="state ${verdictClass(paper.empirical_verdict)}">Empirical ${esc(paper.empirical_verdict)}</span>
+        </div>
+        <p class="reason"><strong>Data:</strong> ${esc(paper.data_state)}</p>
+        <div class="stats">
+          <div class="stat"><span class="stat-label">paper target</span><span class="stat-value">${esc(target.metric||"—")} ${target.value===undefined?"":esc(target.value)}</span></div>
+          <div class="stat"><span class="stat-label">モデル学習</span><span class="stat-value">${training}</span></div>
+          <div class="stat"><span class="stat-label">評価</span><span class="stat-value">${evaluation}</span></div>
+        </div>
+        <p class="reason"><strong>停止理由:</strong> ${esc((paper.reason_codes||[]).join(", ")||"—")}</p>
+        <details class="technical"><summary>証拠を確認する</summary><dl>
+          <dt>runner起動</dt><dd>${paper.training_attempted?"実行済み":"未実行"}</dd>
+          <dt>observed metrics</dt><dd>${paper.observed_metrics===null?"未生成":esc(JSON.stringify(paper.observed_metrics))}</dd>
+          <dt>source PDF SHA-256</dt><dd>${esc(paper.source_pdf_sha256)}</dd>
+          <dt>evidence manifest SHA-256</dt><dd>${esc(paper.evidence.manifest_sha256)}</dd>
+        </dl></details>
+        <a class="paper-source" href="${safeUrl(paper.source_url)}" target="_blank" rel="noopener noreferrer">arXiv の一次資料を見る</a>
+        <a class="paper-source" href="${safeUrl(evidenceUrl)}" target="_blank" rel="noopener noreferrer">run evidenceを見る</a>
       </article>`;
     }).join("");
 
@@ -150,33 +182,26 @@
         <div class="paper-status">
           <span class="state ${paper.method_state==="PASS"?"pass":"fail"}">方法 ${esc(paper.method_state)}</span>
           <span class="state ${artifactDone?"pass":"pending"}">${artifactDone?"再現データ保存済み":"再現データ未保存"}</span>
-          <span class="state ${empiricalDone?"pass":"pending"}">${empiricalDone?"実証再現を実行":"実証再現は未実施"}</span>
+          <span class="state ${empiricalDone?verdictClass(paper.empirical_verdict):"pending"}">${empiricalDone?`実証 ${esc(paper.empirical_verdict)}`:"実証再現は未実施"}</span>
         </div>
         <p class="paper-claim">${esc(paper.claim)}</p>
         <p class="paper-scope"><strong>いま実装した範囲:</strong> ${esc(paper.implemented)}</p>
         <p class="reason"><strong>現在地:</strong> ${esc(paper.stage_label)}</p>
-        <details class="technical">
-          <summary>著者・未再現の証拠を見る</summary>
-          <dl>
-            <dt>著者</dt><dd>${esc(paper.authors.join(", "))}</dd>
-            <dt>未再現</dt><dd>${esc(paper.missing_evidence)}</dd>
-          </dl>
-        </details>
+        <details class="technical"><summary>著者・未再現の証拠を見る</summary><dl><dt>著者</dt><dd>${esc(paper.authors.join(", "))}</dd><dt>未再現</dt><dd>${esc(paper.missing_evidence)}</dd></dl></details>
         <a class="paper-source" href="${safeUrl(paper.source_url)}" target="_blank" rel="noopener noreferrer">arXiv の一次資料を見る</a>
       </article>`;
     }).join("");
 
-    document.getElementById("methodSources").innerHTML=data.sources.map(source=>`<article class="card source-card">
-      <div class="source-kind">${esc(source.kind)}</div>
-      <h3>${esc(source.label)}</h3>
-      <p>${esc(source.note)}</p>
-      <a href="${safeUrl(source.url)}" target="_blank" rel="noopener noreferrer">元資料を見る</a>
-    </article>`).join("");
+    document.getElementById("methodSources").innerHTML=data.sources.map(source=>`<article class="card source-card"><div class="source-kind">${esc(source.kind)}</div><h3>${esc(source.label)}</h3><p>${esc(source.note)}</p><a href="${safeUrl(source.url)}" target="_blank" rel="noopener noreferrer">元資料を見る</a></article>`).join("");
   }
 
-  fetch("./data/research_public_manifest.json",{cache:"no-store"})
-    .then(response=>{if(!response.ok)throw new Error(`公開データを読み込めませんでした: HTTP ${response.status}`);return response.json()})
-    .then(render)
+  Promise.all([
+    fetch("./data/research_public_manifest.json",{cache:"no-store"}),
+    fetch("./data/research_2019_public_manifest.json",{cache:"no-store"})
+  ]).then(async responses=>{
+    for(const response of responses){if(!response.ok)throw new Error(`公開データを読み込めませんでした: HTTP ${response.status}`)}
+    return Promise.all(responses.map(response=>response.json()));
+  }).then(([data,data2019])=>render(data,data2019))
     .catch(error=>{const box=document.getElementById("error");box.hidden=false;box.textContent=error.message});
 </script>
 </body>

@@ -1,0 +1,40 @@
+{
+  "events": [
+    {
+      "at": "2026-08-13T11:32:34Z",
+      "errors": [],
+      "stage": "UPSTREAM_CONTRACTS",
+      "status": "PASS"
+    },
+    {
+      "at": "2026-08-13T11:32:34Z",
+      "observed": {
+        "annualized_sharpe_sample": 8.315427918238163,
+        "cost_adjusted_return_10bps_sample": 0.07125,
+        "cost_free_return_sample": 0.075,
+        "status": "PASS",
+        "turnover_cost_sample": 0.00375
+      },
+      "stage": "METHOD_CONTRACT_SELF_TEST",
+      "status": "PASS"
+    },
+    {
+      "at": "2026-08-13T11:32:34Z",
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "stage": "EXACT_DATA_GATE",
+      "status": "BLOCKED"
+    },
+    {
+      "at": "2026-08-13T11:32:34Z",
+      "detail": "Fail-closed: paper-specific fitting/evaluation cannot execute without the exact 88-contract licensed CLC input gate. No substitute dataset is permitted.",
+      "reason_codes": [
+        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+      ],
+      "stage": "TRAINING_EVALUATION",
+      "status": "NOT_EXECUTED"
+    }
+  ],
+  "run_id": "lim_1904_04912_v2_exhibit8_seed2306"
+}

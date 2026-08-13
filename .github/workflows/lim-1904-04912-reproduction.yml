@@ -1,0 +1,136 @@
+name: Reproduce Lim 1904.04912 v2
+
+on:
+  push:
+    branches:
+      - research/2019-lim-reproduction
+    paths:
+      - "scripts/run_lim_1904_04912_empirical.py"
+      - "scripts/verify_2019_arxiv_empirical.py"
+      - "tests/test_lim_1904_04912_empirical.py"
+      - "docs/research/protocols/lim_1904_04912_v2_exhibit8.json"
+      - ".github/workflows/lim-1904-04912-reproduction.yml"
+  pull_request:
+    paths:
+      - "scripts/run_lim_1904_04912_empirical.py"
+      - "scripts/verify_2019_arxiv_empirical.py"
+      - "tests/test_lim_1904_04912_empirical.py"
+      - "docs/research/protocols/lim_1904_04912_v2_exhibit8.json"
+      - "docs/research/2019_arxiv_finance_registry.json"
+      - "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/**"
+      - ".github/workflows/lim-1904-04912-reproduction.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: lim-1904-04912-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  empirical:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile and test method/data gates
+        run: |
+          python -m py_compile scripts/run_lim_1904_04912_empirical.py scripts/verify_2019_arxiv_empirical.py
+          python tests/test_lim_1904_04912_empirical.py
+
+      - name: Acquire exact pinned paper bytes for hash-only provenance
+        if: github.event_name == 'push'
+        run: |
+          curl --fail --location --retry 5 --retry-delay 3 \
+            --user-agent 'investor2-reproduction/1.0' \
+            https://arxiv.org/pdf/1904.04912v2 \
+            --output /tmp/1904.04912v2.pdf
+          test -s /tmp/1904.04912v2.pdf
+          sha256sum /tmp/1904.04912v2.pdf
+
+      - name: Execute locked paper-specific protocol
+        if: github.event_name == 'push'
+        run: |
+          python scripts/run_lim_1904_04912_empirical.py \
+            --protocol docs/research/protocols/lim_1904_04912_v2_exhibit8.json \
+            --data-contracts docs/research/arxiv_qfin_2019_data_requirements.json \
+            --split-contracts docs/research/arxiv_qfin_2019_split_contracts.json \
+            --source-pdf /tmp/1904.04912v2.pdf \
+            --output-dir docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306
+
+      - name: Enforce fail-closed empirical result and write registry
+        if: github.event_name == 'push'
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          run_dir = root / 'docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306'
+          manifest_path = run_dir / 'manifest.json'
+          report_path = run_dir / 'report.json'
+          report = json.loads(report_path.read_text(encoding='utf-8'))
+          assert report['empirical_reproduction_state'] == 'EMPIRICALLY_RUN'
+          assert report['empirical_verdict'] == 'BLOCKED'
+          assert report['training_attempted'] is True
+          assert report['training_executed'] is False
+          assert report['evaluation_executed'] is False
+          assert report['observed_metrics'] is None
+          assert report['metric_delta'] is None
+          assert report['reason_codes'] == ['PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED'], report['reason_codes']
+          assert report['paper_target']['metric'] == 'annualized_sharpe'
+          assert report['paper_target']['value'] == 0.912
+          assert report['paper_target']['transaction_cost_bps'] == 10.0
+          manifest_sha = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+          registry = {
+              'schema_version': 'investor2.arxiv-2019-empirical-registry.v1',
+              'papers': [{
+                  'id': 'lim_1904_04912_v2',
+                  'arxiv_id': '1904.04912',
+                  'title': 'Enhancing Time Series Momentum Strategies Using Deep Neural Networks',
+                  'source_url': 'https://arxiv.org/abs/1904.04912v2',
+                  'source_pdf_url': 'https://arxiv.org/pdf/1904.04912v2',
+                  'source_version': 'v2',
+                  'method_contract_state': 'PASS',
+                  'data_contract_state': 'VERIFIED_FULL_TEXT_PROPRIETARY_INPUT_BLOCKED',
+                  'split_contract_state': 'VERIFIED_FULL_TEXT',
+                  'empirical_reproduction_state': 'EMPIRICALLY_RUN',
+                  'empirical_verdict': 'BLOCKED',
+                  'stage_reached': report['stage_reached'],
+                  'paper_target': report['paper_target'],
+                  'observed_metrics': None,
+                  'reason_codes': report['reason_codes'],
+                  'evidence_manifest': manifest_path.as_posix(),
+                  'evidence_manifest_sha256': manifest_sha,
+              }]
+          }
+          path = root / 'docs/research/2019_arxiv_finance_registry.json'
+          path.write_text(json.dumps(registry, ensure_ascii=False, indent=2, sort_keys=True) + '\n', encoding='utf-8')
+          print(json.dumps({'manifest_sha256': manifest_sha, 'verdict': 'BLOCKED', 'reason_codes': report['reason_codes']}, sort_keys=True))
+          PY
+          python scripts/verify_2019_arxiv_empirical.py
+
+      - name: Commit immutable run evidence to materialization branch
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f \
+            docs/research/2019_arxiv_finance_registry.json \
+            docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/manifest.json \
+            docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/report.json \
+            docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/trace.json
+          git commit -m "Record Lim v2 empirical BLOCKED evidence"
+          git push origin "HEAD:${GITHUB_REF_NAME}"
+
+      - name: Validate committed empirical evidence on pull request
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/verify_2019_arxiv_empirical.py
+          git diff --exit-code -- \
+            docs/research/2019_arxiv_finance_registry.json \
+            docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306
