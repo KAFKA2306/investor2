@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "selection_note": "Curated representative 2021 arXiv q-fin papers spanning portfolio optimization, reinforcement-learning trading, multi-currency volatility forecasting, and cross-sectional graph volatility forecasting. This is not a citation ranking.",
+  "canonical_storage": {
+    "github_index": "docs/research/2021_arxiv_finance_registry.json",
+    "github_role": "Versioned bibliographic metadata, artifact hashes, provenance, implementation state, and verification verdicts.",
+    "huggingface_role": "Large or frequently changing public source snapshots, normalized inputs, derived datasets, checkpoints, and evaluation artifacts.",
+    "bucket_env": "HF_RESEARCH_BUCKET",
+    "bucket_prefix": "investor2/research/papers/2021",
+    "content_addressed_uri_template": "hf://buckets/{bucket}/investor2/research/papers/2021/{arxiv_id}/{sha256}/{filename}",
+    "promotion_rule": "An HF artifact is reusable evidence only after its exact SHA-256 and provenance are committed to this GitHub registry. A mutable bucket path alone is never canonical evidence."
+  },
+  "required_artifact_kinds": [
+    "source_metadata",
+    "public_code",
+    "public_data",
+    "normalized_input",
+    "derived_data",
+    "method_contract_result",
+    "empirical_evaluation"
+  ],
+  "papers": [
+    {
+      "id": "warin_2101_02044",
+      "arxiv_id": "2101.02044",
+      "title": "Deep learning for efficient frontier calculation in finance",
+      "authors": ["Xavier Warin"],
+      "first_submitted": "2021-01-06",
+      "primary_category": "q-fin.PM",
+      "source_url": "https://arxiv.org/abs/2101.02044",
+      "source_metadata_state": "VERIFIED_PRIMARY",
+      "paper_claim": "Deep neural-network formulations are proposed for Mean-Variance and Mean-CVaR efficient frontiers; a projected feedforward formulation is reported to handle global portfolio-weight constraints and outperform classical penalization in the paper's experiments.",
+      "implementation_scope": "Contract-level implementation of a projected long-only unit-budget portfolio-weight primitive. No neural-network training or paper figure/table reproduction.",
+      "method_contract": "long_only_simplex_projection",
+      "empirical_reproduction_state": "NOT_RUN",
+      "unreproduced_evidence": "The paper's original experiment inputs, trained network states, and full numerical evaluation have not yet been materialized into the canonical artifact store.",
+      "artifact_prefix": "2101.02044"
+    },
+    {
+      "id": "pigorsch_schaefer_2112_04755",
+      "arxiv_id": "2112.04755",
+      "title": "High-Dimensional Stock Portfolio Trading with Deep Reinforcement Learning",
+      "authors": ["Uta Pigorsch", "Sebastian Schäfer"],
+      "first_submitted": "2021-12-09",
+      "primary_category": "q-fin.PM",
+      "source_url": "https://arxiv.org/abs/2112.04755",
+      "source_metadata_state": "VERIFIED_PRIMARY",
+      "paper_claim": "A Deep Q-learning portfolio method is evaluated out of sample on 48 US-stock portfolio setups from 10 to 500 stocks and is reported to outperform the considered passive and active benchmarks on average.",
+      "implementation_scope": "Deterministic implementation of the paper's stated invest-versus-cash reward contract, including entry transaction cost and cross-sectional mean cash reward. No DQN training.",
+      "method_contract": "invest_cash_reward",
+      "empirical_reproduction_state": "NOT_RUN",
+      "unreproduced_evidence": "The paper's complete point-in-time stock universe, fundamentals, training states, validation checkpoint selection, and test trades have not yet been materialized into the canonical artifact store.",
+      "artifact_prefix": "2112.04755"
+    },
+    {
+      "id": "liao_chen_ni_2112_01166",
+      "arxiv_id": "2112.01166",
+      "title": "Forex Trading Volatility Prediction using Neural Network Models",
+      "authors": ["Shujian Liao", "Jian Chen", "Hao Ni"],
+      "first_submitted": "2021-12-02",
+      "primary_category": "q-fin.ST",
+      "source_url": "https://arxiv.org/abs/2112.01166",
+      "source_metadata_state": "VERIFIED_PRIMARY",
+      "paper_claim": "A multi-scale LSTM using multiple currency-pair inputs is reported to outperform autoregressive, GARCH, and other deep-learning baselines for Forex volatility prediction.",
+      "implementation_scope": "Deterministic multi-scale realized-variance feature construction with scale-consistency checks. No LSTM training or benchmark reproduction.",
+      "method_contract": "multiscale_realized_variance",
+      "empirical_reproduction_state": "NOT_RUN",
+      "unreproduced_evidence": "The paper's Forex dataset, exact train/test tensors, fitted model weights, and baseline forecasts have not yet been materialized into the canonical artifact store.",
+      "artifact_prefix": "2112.01166"
+    },
+    {
+      "id": "chen_robert_2112_09015",
+      "arxiv_id": "2112.09015",
+      "title": "Multivariate Realized Volatility Forecasting with Graph Neural Network",
+      "authors": ["Qinkai Chen", "Christian-Yann Robert"],
+      "first_submitted": "2021-12-16",
+      "primary_category": "q-fin.CP",
+      "source_url": "https://arxiv.org/abs/2112.09015",
+      "source_metadata_state": "VERIFIED_PRIMARY",
+      "paper_claim": "A Graph Transformer Network is proposed to combine limit-order-book features with temporal and cross-sectional relations; experiments on about 500 S&P 500 stocks report better performance than the paper's benchmarks.",
+      "implementation_scope": "Deterministic weighted multi-relation graph aggregation with row normalization and permutation-equivariance checks. No Graph Transformer training or benchmark reproduction.",
+      "method_contract": "multi_relation_graph_aggregation",
+      "empirical_reproduction_state": "NOT_RUN",
+      "unreproduced_evidence": "The paper's limit-order-book dataset, relation tensors, training configuration, fitted model weights, and benchmark predictions have not yet been materialized into the canonical artifact store.",
+      "artifact_prefix": "2112.09015"
+    }
+  ],
+  "materialized_artifacts": []
+}
