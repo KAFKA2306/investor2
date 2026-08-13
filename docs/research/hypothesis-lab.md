@@ -138,6 +138,27 @@ weak_case_margin         PASS
 - 保有比率低下は観測された売り手フローであり、forced liquidationの証拠ではない
 - TSRは開示recordのtotal-return指標であり、特定イベント日のdrawdownではない
 
+## 対照例: OTEC 1736
+
+同じStage Aを通過したオーテックも同じ手順で確認した。FY2026では売上 +7.31%、営業利益 +26.34%、純利益 +26.18%、営業CF +30.37%、filing-date PER 10.0x、FCF yield 約8.42%、net cash ratio 約0.27で、`underlying_reality` と `weak_case_margin` は通る。
+
+しかし同じannual recordのTSRは3.139、comparison indexは2.022で、登録した **relative underperformance** は存在しない。今回確認した範囲では、これと独立するseller-flow signalも固定できなかった。
+
+したがって、
+
+```text
+underlying_reality       PASS
+price_pressure_mechanism UNKNOWN
+weak_case_margin         PASS
+=> reject from this hypothesis
+```
+
+とする。これはオーテック自体を弱気評価する意味ではない。**「安くて伸びている会社」を、この仮説のalphaと誤認しないためのnegative control** である。
+
+2026-02-09には業績予想修正イベントも存在するが、今回取得した正規化イベントの `revision_direction` はnullだったため、上方・下方のどちらとも推測しない。
+
+このようにStage Aの全候補を成功例へ寄せず、Stage Bで `pass / reject / unknown` を分ける。
+
 次に実売買判断へ進む場合は、最新価格・出来高・信用/貸借・イベント時点を新しいinformation cutoffで取得し、`data/decision_ledger/` に別途Decision Snapshotを固定する。
 
 ## 実行
