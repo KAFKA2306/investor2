@@ -24,7 +24,7 @@ REQUIRED_HTML_MARKERS = (
     "<main",
     'id="resultRows"',
     'id="methodSources"',
-    'data/research_verification_manifest.json',
+    'data/research_public_manifest.json',
 )
 
 
@@ -103,8 +103,8 @@ def validate_html(html: str) -> None:
         require(marker in html, f"required HTML marker missing: {marker}")
     require("<title>" in html and "</title>" in html, "HTML title is missing")
     require("<header" in html and "<nav" in html and "<footer" in html, "required page landmarks are missing")
-    require("<table" in html and "<thead" in html and "<tbody" in html, "results table structure is incomplete")
-    require("fetch(" in html, "dashboard does not fetch its manifest")
+    require("<details" in html, "plain-language page must offer progressive disclosure for technical detail")
+    require("fetch(" in html, "dashboard does not fetch its public manifest")
 
 
 def validate_files(manifest_path: Path, html_path: Path, expected_revision: str | None = None) -> dict[str, Any]:
