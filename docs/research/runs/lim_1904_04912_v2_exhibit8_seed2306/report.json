@@ -24,8 +24,8 @@
   "empirical_verdict": "BLOCKED",
   "environment": {
     "device": "NOT_REACHED_DATA_GATE",
-    "github_run_id": "31695950848",
-    "github_sha": "2a673c9b303c180eade8450fdc6af1ddcae08c87",
+    "github_run_id": "31696757153",
+    "github_sha": "59d3294e7c4a72fbd721cdbd1480d72470049d5c",
     "machine": "x86_64",
     "platform": "Linux-6.17.0-1020-azure-x86_64-with-glibc2.39",
     "python": "3.12.13",
@@ -33,7 +33,7 @@
   },
   "evaluation_executed": false,
   "fail_closed_statement": "BLOCKED is not FAILED and not REPRODUCED. No empirical metric is emitted because the exact paper data gate did not pass.",
-  "finished_at": "2026-08-13T11:32:34Z",
+  "finished_at": "2026-08-13T11:43:30Z",
   "method_contract_self_test": {
     "annualized_sharpe_sample": 8.315427918238163,
     "cost_adjusted_return_10bps_sample": 0.07125,
@@ -59,7 +59,7 @@
   "run_id": "lim_1904_04912_v2_exhibit8_seed2306",
   "schema_version": "investor2.paper-empirical-report.v1",
   "source_pdf": {
-    "acquired_at": "2026-08-13T11:32:34Z",
+    "acquired_at": "2026-08-13T11:43:30Z",
     "bytes": 6270745,
     "repository_storage_reason": "Paper bytes are hashed during CI but not committed; the exact arXiv version URL is the canonical primary source.",
     "sha256": "889a8684711431aebccdf8a4f14ca0c60ea361a70a99d61e049ae766ec9423e8",
@@ -91,7 +91,7 @@
     }
   },
   "stage_reached": "EXACT_DATA_GATE",
-  "started_at": "2026-08-13T11:32:34Z",
+  "started_at": "2026-08-13T11:43:30Z",
   "training_attempted": true,
   "training_executed": false
 }

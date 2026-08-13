@@ -1,13 +1,13 @@
 {
   "events": [
     {
-      "at": "2026-08-13T11:32:34Z",
+      "at": "2026-08-13T11:43:30Z",
       "errors": [],
       "stage": "UPSTREAM_CONTRACTS",
       "status": "PASS"
     },
     {
-      "at": "2026-08-13T11:32:34Z",
+      "at": "2026-08-13T11:43:30Z",
       "observed": {
         "annualized_sharpe_sample": 8.315427918238163,
         "cost_adjusted_return_10bps_sample": 0.07125,
@@ -19,7 +19,7 @@
       "status": "PASS"
     },
     {
-      "at": "2026-08-13T11:32:34Z",
+      "at": "2026-08-13T11:43:30Z",
       "reason_codes": [
         "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
       ],
@@ -27,7 +27,7 @@
       "status": "BLOCKED"
     },
     {
-      "at": "2026-08-13T11:32:34Z",
+      "at": "2026-08-13T11:43:30Z",
       "detail": "Fail-closed: paper-specific fitting/evaluation cannot execute without the exact 88-contract licensed CLC input gate. No substitute dataset is permitted.",
       "reason_codes": [
         "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"

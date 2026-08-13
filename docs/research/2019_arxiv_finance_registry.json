@@ -6,7 +6,7 @@
       "empirical_reproduction_state": "EMPIRICALLY_RUN",
       "empirical_verdict": "BLOCKED",
       "evidence_manifest": "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/manifest.json",
-      "evidence_manifest_sha256": "4e2d9d585095541e245f4b6fc369479f3fa1de35dae1c8db647633c36b98e65d",
+      "evidence_manifest_sha256": "c9db38d337d5e1be2d84dcd78972a1b4afc0f33fceb1fbad6093d378b9dd8140",
       "id": "lim_1904_04912_v2",
       "method_contract_state": "PASS",
       "observed_metrics": null,

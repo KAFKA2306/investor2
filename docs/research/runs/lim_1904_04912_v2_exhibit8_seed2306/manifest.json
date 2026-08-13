@@ -7,11 +7,11 @@
     },
     "report": {
       "path": "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/report.json",
-      "sha256": "6e9c7080076b3513b516b91574e07990ade2742dca8eaa296398d445be807542"
+      "sha256": "427c2404b4100b32651906c1ae22baa3123e392111bbad12f6c246daef726fbf"
     },
     "trace": {
       "path": "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/trace.json",
-      "sha256": "61b70a540e28b0a0e3ef715102b5d8d6c49ee2a9b229f41b7634c4769307dda9"
+      "sha256": "24405082537e066e7f7872865a225a36349fcae6d5c329b378980df5cbcd94c5"
     }
   },
   "arxiv_id": "1904.04912",
@@ -33,14 +33,14 @@
     "sha256": "5b6bff76a59ff1bbfd36e8dc30aa1234833654d434070756da9023f6432b5fe2"
   },
   "provenance": {
-    "code_revision": "2a673c9b303c180eade8450fdc6af1ddcae08c87",
+    "code_revision": "59d3294e7c4a72fbd721cdbd1480d72470049d5c",
     "seed": 2306,
-    "workflow_run_id": "31695950848"
+    "workflow_run_id": "31696757153"
   },
   "run_id": "lim_1904_04912_v2_exhibit8_seed2306",
   "schema_version": "investor2.paper-empirical-evidence.v1",
   "source_pdf": {
-    "acquired_at": "2026-08-13T11:32:34Z",
+    "acquired_at": "2026-08-13T11:43:30Z",
     "bytes": 6270745,
     "repository_storage_reason": "Paper bytes are hashed during CI but not committed; the exact arXiv version URL is the canonical primary source.",
     "sha256": "889a8684711431aebccdf8a4f14ca0c60ea361a70a99d61e049ae766ec9423e8",
