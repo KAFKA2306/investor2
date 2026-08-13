@@ -43,14 +43,27 @@ def test_public_manifest_is_small_safe_and_human_readable() -> None:
     assert public["paper_reproduction"]["summary"] == {
         "indexed": 4,
         "method_contract_pass": 4,
-        "materialized": 0,
-        "empirically_reproduced": 0,
+        "materialized": 1,
+        "empirically_run": 1,
+        "empirically_reproduced": 1,
+        "empirically_failed": 0,
+        "empirically_blocked": 0,
+        "empirically_not_run": 3,
     }
-    assert all(
-        paper["empirical_state"] == "NOT_RUN"
-        and "実証再現は未実施" in paper["stage_label"]
-        for paper in public["paper_reproduction"]["papers"]
-    )
+    papers = public["paper_reproduction"]["papers"]
+    warin = next(paper for paper in papers if paper["id"] == "warin_2101_02044")
+    assert warin["method_state"] == "PASS"
+    assert warin["empirical_state"] == "EMPIRICALLY_RUN"
+    assert warin["empirical_verdict"] == "REPRODUCED"
+    assert warin["empirical_evidence"]["path"].endswith("manifest.json")
+    assert len(warin["empirical_evidence"]["sha256"]) == 64
+    assert "事前条件内で再現" in warin["stage_label"]
+
+    not_run = [paper for paper in papers if paper["empirical_state"] == "NOT_RUN"]
+    assert len(not_run) == 3
+    assert all(paper["empirical_verdict"] is None for paper in not_run)
+    assert all(paper["empirical_evidence"] is None for paper in not_run)
+    assert all("実証再現は未実施" in paper["stage_label"] for paper in not_run)
 
     keys = set(PUBLIC.walk_keys(public))
     assert not (keys & PUBLIC.FORBIDDEN_PUBLIC_KEYS)
@@ -73,22 +86,30 @@ def test_public_projection_scales_when_a_hypothesis_is_added() -> None:
     assert public["results"][-1]["question"] == "Future paper fixture"
 
 
-def test_public_projection_scales_when_a_2021_paper_is_added() -> None:
+def test_public_projection_scales_when_a_2021_not_run_paper_is_added() -> None:
     internal = INTERNAL.build_manifest()
-    extra = copy.deepcopy(internal["paper_reproduction_2021"]["papers"][0])
+    source = next(
+        paper
+        for paper in internal["paper_reproduction_2021"]["papers"]
+        if paper["empirical_reproduction_state"] == "NOT_RUN"
+    )
+    extra = copy.deepcopy(source)
     extra["id"] = "future_2021_paper_fixture"
     extra["arxiv_id"] = "2101.99999"
     extra["title"] = "Future 2021 paper fixture"
     internal["paper_reproduction_2021"]["papers"].append(extra)
     internal["paper_reproduction_2021"]["summary"]["indexed"] += 1
     internal["paper_reproduction_2021"]["summary"]["method_contract_pass"] += 1
+    internal["paper_reproduction_2021"]["summary"]["empirically_not_run"] += 1
     internal["summary"]["papers_2021_indexed"] += 1
     internal["summary"]["papers_2021_method_contract_pass"] += 1
+    internal["summary"]["papers_2021_empirically_not_run"] += 1
 
     public = PUBLIC.build_public_manifest(internal)
     PUBLIC.validate_public_manifest(public)
 
     assert public["paper_reproduction"]["summary"]["indexed"] == 5
+    assert public["paper_reproduction"]["summary"]["empirically_not_run"] == 4
     assert len(public["paper_reproduction"]["papers"]) == 5
 
 
@@ -108,9 +129,25 @@ def test_public_validator_rejects_tampered_count() -> None:
         PUBLIC.validate_public_manifest(public)
 
 
-def test_public_validator_rejects_false_empirical_label() -> None:
+def test_public_validator_rejects_not_run_empirical_result() -> None:
     public = PUBLIC.build_public_manifest(INTERNAL.build_manifest())
-    public["paper_reproduction"]["papers"][0]["stage_label"] = "実証再現済み"
+    paper = next(
+        item for item in public["paper_reproduction"]["papers"] if item["empirical_state"] == "NOT_RUN"
+    )
+    paper["empirical_verdict"] = "REPRODUCED"
 
-    with pytest.raises(ValueError, match="clearly labeled"):
+    with pytest.raises(ValueError, match="NOT_RUN"):
+        PUBLIC.validate_public_manifest(public)
+
+
+def test_public_validator_rejects_empirical_verdict_without_evidence() -> None:
+    public = PUBLIC.build_public_manifest(INTERNAL.build_manifest())
+    warin = next(
+        item
+        for item in public["paper_reproduction"]["papers"]
+        if item["empirical_state"] == "EMPIRICALLY_RUN"
+    )
+    warin["empirical_evidence"] = None
+
+    with pytest.raises(ValueError, match="evidence"):
         PUBLIC.validate_public_manifest(public)
