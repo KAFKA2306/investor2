@@ -6,11 +6,13 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "scripts/build_research_verification_manifest.py"
+      - "scripts/build_public_research_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
       - "tests/test_research_verification_manifest.py"
+      - "tests/test_public_research_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
       - "tests/test_daily_trump_chart.py"
@@ -23,11 +25,13 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "scripts/build_research_verification_manifest.py"
+      - "scripts/build_public_research_manifest.py"
       - "scripts/validate_research_dashboard.py"
       - "scripts/verify_paper_factor_suite.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
       - "tests/test_research_verification_manifest.py"
+      - "tests/test_public_research_manifest.py"
       - "tests/test_research_dashboard_validation.py"
       - "tests/test_paper_factor_suite.py"
       - "tests/test_daily_trump_chart.py"
@@ -73,6 +77,7 @@ jobs:
             tests/test_paper_factor_suite.py \
             tests/test_repeated_paper_validation.py \
             tests/test_research_verification_manifest.py \
+            tests/test_public_research_manifest.py \
             tests/test_research_dashboard_validation.py \
             tests/test_daily_trump_chart.py \
             tests/test_kioxia_quarterly_chart.py
@@ -83,7 +88,10 @@ jobs:
           rm -rf _site validation-report
           mkdir -p _site/data _site/trump-daily-chart _site/kioxia-quarterly validation-report
           python scripts/build_research_verification_manifest.py \
-            --output _site/data/research_verification_manifest.json
+            --output validation-report/internal-research-manifest.json
+          python scripts/build_public_research_manifest.py \
+            --output _site/data/research_public_manifest.json \
+            --expected-revision "${GITHUB_SHA}"
           python scripts/daily_trump_chart.py --output-dir _site/trump-daily-chart
           python scripts/kioxia_quarterly_chart.py \
             --input docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
@@ -110,8 +118,24 @@ jobs:
             sleep 1
           done
           curl --fail --silent --show-error \
-            http://127.0.0.1:4173/data/research_verification_manifest.json \
-            -o validation-report/candidate-manifest.json
+            http://127.0.0.1:4173/data/research_public_manifest.json \
+            -o validation-report/candidate-public-manifest.json
+          python - <<'PY'
+          import importlib.util
+          import json
+          import os
+          import sys
+          from pathlib import Path
+
+          path = Path('scripts/build_public_research_manifest.py')
+          spec = importlib.util.spec_from_file_location('public_manifest_candidate_validator', path)
+          assert spec and spec.loader
+          module = importlib.util.module_from_spec(spec)
+          sys.modules[spec.name] = module
+          spec.loader.exec_module(module)
+          data = json.loads(Path('validation-report/candidate-public-manifest.json').read_text(encoding='utf-8'))
+          module.validate_public_manifest(data, expected_revision=os.environ['GITHUB_SHA'])
+          PY
           curl --fail --silent --show-error \
             http://127.0.0.1:4173/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
             -o validation-report/kioxia-semiconductor-universe.json
@@ -147,7 +171,7 @@ jobs:
             http://127.0.0.1:4173/trump-daily-chart/summary.json \
             -o validation-report/trump-daily-chart-summary.json
           python scripts/validate_research_dashboard.py \
-            --manifest validation-report/candidate-manifest.json \
+            --manifest validation-report/internal-research-manifest.json \
             --html validation-report/candidate-index.html \
             --expected-revision "${GITHUB_SHA}" \
             --report validation-report/candidate-validation.json

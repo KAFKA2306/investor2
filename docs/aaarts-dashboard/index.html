@@ -3,87 +3,137 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="AAARTSの投資仮説について、コミット済み入力から再生成できる検証結果と一次資料を示す公開ダッシュボード。">
+  <meta name="description" content="投資アイデアを過去データで確かめ、何が分かったかを専門知識なしで読める形にまとめた公開ページ。">
   <meta name="theme-color" content="#fbfaf7">
-  <title>AAARTS Empirical Validation Audit</title>
+  <title>投資アイデアを、過去データで確かめる | AAARTS</title>
   <style>
-    :root{color-scheme:light;--canvas:#fbfaf7;--paper:rgba(255,255,255,.82);--paper-strong:rgba(255,255,255,.96);--ink:#263752;--muted:#6d788b;--line:rgba(92,108,139,.17);--blue:#90b7ed;--blue-strong:#5f86cf;--rose:#efb5c1;--mint:#b9dcc9;--bad:#b45d70;--good:#31795e;--shadow:0 18px 48px rgba(77,91,124,.10)}
-    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:"Noto Sans JP","Yu Gothic",system-ui,sans-serif;line-height:1.65;background:radial-gradient(circle at 8% 2%,rgba(144,183,237,.28),transparent 28rem),radial-gradient(circle at 92% 8%,rgba(187,169,230,.22),transparent 26rem),radial-gradient(circle at 18% 58%,rgba(239,181,193,.15),transparent 24rem),radial-gradient(circle at 87% 76%,rgba(185,220,201,.18),transparent 25rem),linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),var(--canvas);background-attachment:fixed}
-    body::before{content:"";position:fixed;inset:0;pointer-events:none;opacity:.22;background-image:repeating-linear-gradient(0deg,rgba(53,67,94,.025) 0 1px,transparent 1px 4px);mix-blend-mode:multiply}
-    a{color:var(--blue-strong)}.shell{width:min(1200px,calc(100% - 32px));margin:auto}
-    header{padding:64px 0 36px}.eyebrow{font-size:12px;letter-spacing:.11em;text-transform:uppercase;color:#7583a2;font-weight:800}h1,h2,h3{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;color:#2c3f61}h1{font-size:clamp(38px,6vw,72px);line-height:1.04;letter-spacing:-.035em;margin:14px 0}.lead{font-size:clamp(17px,2vw,21px);max-width:900px;color:var(--muted)}
-    .notice{margin-top:24px;padding:18px 20px;border:1px solid rgba(210,176,103,.34);border-left:5px solid #f2cfaa;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(250,241,224,.76));box-shadow:var(--shadow)}
-    nav{position:sticky;top:0;z-index:10;background:rgba(251,250,247,.84);backdrop-filter:blur(18px);border-block:1px solid var(--line)}nav .shell{display:flex;gap:20px;overflow:auto;padding:13px 0}nav a{white-space:nowrap;text-decoration:none;color:#697791;font-size:14px;font-weight:700}nav a:hover{color:var(--blue-strong)}
-    main{padding:36px 0 76px}section{margin-bottom:58px}.section-head{display:flex;justify-content:space-between;gap:22px;align-items:end;margin-bottom:20px}h2{font-size:clamp(27px,4vw,42px);letter-spacing:-.02em;margin:0}.section-note{max-width:620px;color:var(--muted)}
-    .grid{display:grid;gap:16px}.summary{grid-template-columns:repeat(3,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{position:relative;background:linear-gradient(145deg,var(--paper-strong),var(--paper));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}.card::after{content:"";position:absolute;inset:auto -35px -45px auto;width:130px;height:100px;border-radius:50%;background:radial-gradient(circle,rgba(187,169,230,.15),transparent 70%);pointer-events:none}.metric{padding:22px;min-height:142px}.metric:nth-child(1){border-top:5px solid var(--blue)}.metric:nth-child(2){border-top:5px solid var(--mint)}.metric:nth-child(3){border-top:5px solid var(--rose)}.metric-label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:800}.metric-value{font-size:42px;font-weight:800;letter-spacing:-.04em;margin-top:8px;color:#30486f}.metric-detail{font-size:13px;color:var(--muted)}
-    .panel{padding:24px}.panel h3{margin:0 0 12px}.state{display:inline-flex;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:800;letter-spacing:.04em}.fail{color:#99495e;background:rgba(239,181,193,.32);border:1px solid rgba(180,93,112,.25)}
-    .table-wrap{overflow:auto}.table-wrap.card{padding:9px 15px}table{width:100%;border-collapse:collapse;min-width:980px}th,td{text-align:left;padding:13px 11px;border-bottom:1px solid var(--line);vertical-align:top}th{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#71809b;background:rgba(144,183,237,.08)}td{font-size:13px}tr:last-child td{border-bottom:0}tbody tr:hover{background:rgba(144,183,237,.07)}.muted{color:var(--muted)}.negative{color:var(--bad)}.positive{color:var(--good)}
-    .sources{display:grid;gap:10px}.source{display:flex;justify-content:space-between;gap:20px;padding:12px 0;border-bottom:1px solid var(--line)}.source:last-child{border-bottom:0}.error{padding:20px;border-color:rgba(180,93,112,.42);color:#99495e;background:rgba(255,244,247,.9)}
-    footer{border-top:1px solid var(--line);padding:30px 0 48px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.28)}
-    :focus-visible{outline:3px solid rgba(95,134,207,.42);outline-offset:3px;border-radius:6px}
-    @media(max-width:900px){.summary,.two{grid-template-columns:repeat(2,minmax(0,1fr))}.section-head{display:block}.section-note{margin-top:8px}}
-    @media(max-width:570px){.summary,.two{grid-template-columns:1fr}header{padding-top:42px}.shell{width:min(100% - 22px,1200px)}}
+    :root{color-scheme:light;--canvas:#fbfaf7;--paper:rgba(255,255,255,.88);--ink:#263752;--muted:#657188;--line:rgba(92,108,139,.16);--blue:#90b7ed;--blue-strong:#557fc8;--rose:#efb5c1;--mint:#b9dcc9;--bad:#a74e63;--good:#2d765b;--shadow:0 18px 48px rgba(77,91,124,.10)}
+    *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;color:var(--ink);font-family:"Noto Sans JP","Yu Gothic",system-ui,sans-serif;line-height:1.75;background:radial-gradient(circle at 8% 2%,rgba(144,183,237,.27),transparent 28rem),radial-gradient(circle at 92% 8%,rgba(187,169,230,.20),transparent 26rem),radial-gradient(circle at 18% 58%,rgba(239,181,193,.14),transparent 24rem),radial-gradient(circle at 87% 76%,rgba(185,220,201,.17),transparent 25rem),linear-gradient(rgba(255,255,255,.42),rgba(255,255,255,.42)),var(--canvas);background-attachment:fixed}
+    a{color:var(--blue-strong)}.shell{width:min(1120px,calc(100% - 32px));margin:auto}
+    header{padding:64px 0 36px}.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:#7583a2;font-weight:800}h1,h2,h3{color:#2c3f61}h1{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:clamp(38px,6vw,70px);line-height:1.08;letter-spacing:-.035em;margin:14px 0}.lead{font-size:clamp(17px,2vw,21px);max-width:850px;color:var(--muted);margin-bottom:0}
+    .notice{margin-top:26px;padding:20px 22px;border:1px solid rgba(210,176,103,.32);border-left:5px solid #efc798;border-radius:18px;background:linear-gradient(135deg,rgba(255,255,255,.92),rgba(250,241,224,.78));box-shadow:var(--shadow);font-size:16px}
+    nav{position:sticky;top:0;z-index:10;background:rgba(251,250,247,.88);backdrop-filter:blur(18px);border-block:1px solid var(--line)}nav .shell{display:flex;gap:22px;overflow:auto;padding:13px 0}nav a{white-space:nowrap;text-decoration:none;color:#65738c;font-size:14px;font-weight:800}nav a:hover{color:var(--blue-strong)}
+    main{padding:38px 0 76px}section{margin-bottom:62px}.section-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:22px}h2{font-family:"Yu Mincho","Hiragino Mincho ProN",serif;font-size:clamp(28px,4vw,42px);letter-spacing:-.02em;margin:0}.section-note{max-width:610px;color:var(--muted);margin:0}
+    .grid{display:grid;gap:16px}.summary-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.two{grid-template-columns:repeat(2,minmax(0,1fr))}.card{background:linear-gradient(145deg,rgba(255,255,255,.97),var(--paper));border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow)}
+    .metric{padding:22px;min-height:145px}.metric:nth-child(1){border-top:5px solid var(--blue)}.metric:nth-child(2){border-top:5px solid var(--mint)}.metric:nth-child(3){border-top:5px solid var(--rose)}.metric-label{font-size:13px;color:var(--muted);font-weight:800}.metric-value{font-size:44px;font-weight:850;letter-spacing:-.04em;margin-top:8px;color:#30486f}.metric-detail{font-size:13px;color:var(--muted)}
+    .plain-panel{padding:24px}.plain-panel h3{margin:0 0 8px;font-size:19px}.plain-panel p{margin:0;color:var(--muted)}
+    details{border-top:1px solid var(--line);margin-top:18px;padding-top:14px}summary{cursor:pointer;font-weight:800;color:#506784}details p{color:var(--muted)}
+    .explain{margin-top:18px;padding:20px 22px}.explain strong{color:#354d73}.glossary{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:14px}.term{padding:14px;border-radius:14px;background:rgba(144,183,237,.08)}.term b{display:block;margin-bottom:4px}.term span{font-size:13px;color:var(--muted)}
+    .result-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.result-card{padding:24px;display:flex;flex-direction:column;gap:14px}.result-card h3{font-size:21px;line-height:1.45;margin:0}.state{display:inline-flex;align-self:flex-start;padding:6px 10px;border-radius:999px;font-size:12px;font-weight:850}.fail{color:#91445a;background:rgba(239,181,193,.30);border:1px solid rgba(167,78,99,.20)}.pass{color:#27674f;background:rgba(185,220,201,.35);border:1px solid rgba(45,118,91,.20)}.reason{margin:0;color:#536078}.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}.stat{padding:12px;border-radius:14px;background:rgba(144,183,237,.07)}.stat-label{display:block;font-size:11px;color:var(--muted);font-weight:800}.stat-value{display:block;margin-top:4px;font-size:16px;font-weight:850}.positive{color:var(--good)}.negative{color:var(--bad)}.technical{font-size:14px}.technical dl{display:grid;grid-template-columns:max-content 1fr;gap:7px 14px}.technical dt{font-weight:800}.technical dd{margin:0;color:var(--muted)}
+    .source-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.source-card{padding:20px}.source-kind{font-size:11px;font-weight:850;color:#71809b;letter-spacing:.05em}.source-card h3{font-size:17px;margin:4px 0 7px}.source-card p{color:var(--muted);font-size:14px;margin:0 0 12px}.source-card a{font-weight:800}
+    .error{padding:20px;border-color:rgba(167,78,99,.40);color:#91445a;background:rgba(255,244,247,.92)}footer{border-top:1px solid var(--line);padding:30px 0 48px;color:var(--muted);font-size:13px;background:rgba(255,255,255,.28)}
+    :focus-visible{outline:3px solid rgba(85,127,200,.42);outline-offset:3px;border-radius:6px}
+    @media(max-width:850px){.summary-grid,.two,.result-grid,.source-grid{grid-template-columns:1fr}.section-head{display:block}.section-note{margin-top:8px}.glossary{grid-template-columns:1fr}}
+    @media(max-width:570px){header{padding-top:42px}.shell{width:min(100% - 22px,1120px)}.stats{grid-template-columns:1fr}.result-card,.plain-panel{padding:20px}}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
   </style>
 </head>
 <body>
 <header>
   <div class="shell">
-    <div class="eyebrow">AAARTS · empirical research</div>
-    <h1>Empirical Validation Audit</h1>
-    <p class="lead">コミット済み入力から再生成できる投資仮説の検証結果を、データ期間と再現物とともに表示する。</p>
-    <div class="notice"><strong>現在の結果:</strong> リポジトリ内で再生成できる8仮説はすべて <strong>NOT CONFIRMED</strong>。</div>
+    <div class="eyebrow">AAARTS · data-backed investing</div>
+    <h1>投資アイデアを、<br>過去データで確かめる。</h1>
+    <p class="lead">「小さい会社の株は強い？」「最近上がった株は、その後も上がる？」。よく聞く投資の考え方を、過去データで一つずつ確かめます。専門知識がなくても、まず結論だけ読めます。</p>
+    <div class="notice" id="plainConclusion"><strong>読み込み中です。</strong></div>
   </div>
 </header>
-<nav><div class="shell"><a href="#summary">実検証結果</a><a href="#results">仮説別</a><a href="#sources">一次資料</a></div></nav>
+<nav><div class="shell"><a href="#summary">まず結論</a><a href="#results">試したアイデア</a><a href="#sources">元データ</a></div></nav>
 <main class="shell">
   <section id="summary">
-    <div class="section-head"><h2>実検証結果</h2><p class="section-note">数値はGitHub Actions内で、コミット済み入力と検証スクリプトから再計算する。</p></div>
-    <div class="grid summary">
-      <article class="card metric"><div class="metric-label">Tested hypotheses</div><div class="metric-value" id="tested">—</div><div class="metric-detail">Momentum 1 + paper-factor 7</div></article>
-      <article class="card metric"><div class="metric-label">Confirmed</div><div class="metric-value" id="confirmed">—</div><div class="metric-detail">全ゲート合格のみ</div></article>
-      <article class="card metric"><div class="metric-label">Not confirmed</div><div class="metric-value" id="notConfirmed">—</div><div class="metric-detail">棄却・不十分・未実施を含む</div></article>
+    <div class="section-head"><h2>まず、何がわかった？</h2><p class="section-note">ここだけ読めば全体像が分かります。件数や結果は、公開データから自動で更新されます。</p></div>
+    <div class="grid summary-grid">
+      <article class="card metric"><div class="metric-label">試した投資アイデア</div><div class="metric-value" id="tested">—</div><div class="metric-detail">過去データで確認した数</div></article>
+      <article class="card metric"><div class="metric-label">投資に使える可能性を確認</div><div class="metric-value" id="confirmed">—</div><div class="metric-detail">必要な確認をすべて通過</div></article>
+      <article class="card metric"><div class="metric-label">まだ確認できない</div><div class="metric-value" id="notConfirmed">—</div><div class="metric-detail">証拠不足や条件未確認を含む</div></article>
     </div>
     <div class="grid two" style="margin-top:16px">
-      <article class="card panel"><h3>データの鮮度境界</h3><p class="muted" id="freshness">読み込み中</p></article>
-      <article class="card panel"><h3>反復検証</h3><p class="muted" id="repeat">読み込み中</p><p>乱数seedを変えて判定が反転しないことを確認する。</p></article>
+      <article class="card plain-panel"><h3>どこまでのデータを見た？</h3><p id="freshness">読み込み中です。</p></article>
+      <article class="card plain-panel"><h3>何度やっても同じ結論？</h3><p id="repeat">読み込み中です。</p></article>
     </div>
+    <article class="card explain">
+      <strong>「確認できない」＝「絶対に間違い」ではありません。</strong> 今ある証拠だけでは、実際のお金を使う判断まで進めない、という意味です。
+      <details>
+        <summary>専門的な数字の意味も知りたい</summary>
+        <div class="glossary">
+          <div class="term"><b>年平均リターン</b><span>その期間の結果を、1年あたりに直した目安です。将来の利益を保証する数字ではありません。</span></div>
+          <div class="term"><b>コストを引いた結果</b><span>毎月0.25%の簡単な取引コストを仮定して、それでも利益が残るかを見る数字です。</span></div>
+          <div class="term"><b>シャープレシオ</b><span>値動きの大きさに対して、どれくらいリターンがあったかを見る目安です。大きいほど効率が良いと考えます。</span></div>
+          <div class="term"><b>t値</b><span>結果が偶然だけでは説明しにくいかを見る目安です。この研究では3以上を厳しい合格ラインの一つにしています。</span></div>
+        </div>
+      </details>
+    </article>
   </section>
+
   <section id="results">
-    <div class="section-head"><h2>仮説別の証拠</h2><p class="section-note">再生成された各仮説の統計量と判定を表示する。</p></div>
-    <div class="table-wrap card"><table><thead><tr><th>Hypothesis</th><th>Type</th><th>OOS window</th><th>Annual mean</th><th>Sharpe</th><th>NW t</th><th>Late mean</th><th>25bp/mo</th><th>PIT / tradability</th><th>Verdict</th></tr></thead><tbody id="resultRows"></tbody></table></div>
+    <div class="section-head"><h2>どんなアイデアを試した？</h2><p class="section-note">最初に日常語の問いと結論を表示します。論文名や統計値は、各カードの「詳しい数字」を開くと確認できます。</p></div>
+    <div class="result-grid" id="resultRows" aria-live="polite"></div>
   </section>
+
   <section id="sources">
-    <div class="section-head"><h2>一次資料・再現物</h2><p class="section-note">公開数値を再生成するコードと固定入力へ直接リンクする。</p></div>
-    <div class="grid two">
-      <article class="card panel"><h3>Method sources</h3><div class="sources" id="methodSources"></div></article>
-      <article class="card panel"><h3>Repository artifacts</h3><div class="sources">
-        <div class="source"><span>Dashboard manifest builder</span><a href="https://github.com/KAFKA2306/investor2/blob/main/scripts/build_research_verification_manifest.py">Script</a></div>
-        <div class="source"><span>Factor-suite verifier</span><a href="https://github.com/KAFKA2306/investor2/blob/main/scripts/verify_paper_factor_suite.py">Script</a></div>
-        <div class="source"><span>Paper–factor registry</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/paper_factor_registry.json">Registry</a></div>
-        <div class="source"><span>Momentum result</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/post_publication_momentum_oos.json">JSON</a></div>
-        <div class="source"><span>Repeated 2010s result</span><a href="https://github.com/KAFKA2306/investor2/blob/main/docs/research/2010s_paper_validation_repeated.json">JSON</a></div>
-      </div></article>
-    </div>
+    <div class="section-head"><h2>数字はどこから来た？</h2><p class="section-note">結果だけでなく、使ったデータ・論文・計算コードまで辿れます。新しい資料が増えても、この一覧はデータから自動で増えます。</p></div>
+    <div class="source-grid" id="methodSources"></div>
   </section>
+
   <div id="error" class="card error" hidden></div>
 </main>
-<footer><div class="shell">AAARTS empirical validation audit · Evidence is not investment advice.</div></footer>
+<footer><div class="shell">AAARTS · 過去データによる検証結果であり、将来の利益を保証するものではありません。</div></footer>
 <script>
   const esc=(value)=>String(value).replace(/[&<>"']/g,ch=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[ch]));
   const pct=(value)=>`${(Number(value)*100).toFixed(2)}%`;
   const num=(value)=>Number(value).toFixed(2);
   const cssNum=(value)=>Number(value)>=0?"positive":"negative";
+  const safeUrl=(value)=>{try{const url=new URL(String(value));return ["https:","http:"].includes(url.protocol)?url.href:"#"}catch{return "#"}};
+
   function render(data){
-    document.getElementById("tested").textContent=data.summary.tested_hypotheses;
-    document.getElementById("confirmed").textContent=data.summary.confirmed;
-    document.getElementById("notConfirmed").textContent=data.summary.not_confirmed;
-    document.getElementById("freshness").textContent=`Factor suite: ${data.summary.latest_factor_data_end}まで / Momentum: ${data.summary.latest_momentum_data_end}まで`;
-    document.getElementById("repeat").textContent=`${data.repeated_validation.study_count}仮説 × ${data.repeated_validation.repetitions}回、判定安定=${data.repeated_validation.all_verdicts_stable}`;
-    document.getElementById("resultRows").innerHTML=data.repository_results.map(r=>`<tr><td><strong>${esc(r.id)}</strong><br><span class="muted">${esc(r.paper)}</span></td><td>${esc(r.implementation)}</td><td>${esc(r.window)}<br><span class="muted">${r.months} months</span></td><td class="${cssNum(r.annualized_mean)}">${pct(r.annualized_mean)}</td><td>${num(r.sharpe)}</td><td>${num(r.newey_west_t)}</td><td class="${cssNum(r.late_period_mean)}">${pct(r.late_period_mean)}</td><td class="${cssNum(r.cost_25bps_annualized_mean)}">${pct(r.cost_25bps_annualized_mean)}</td><td><span class="state fail">FAIL</span><br><span class="muted">security-level未再構築</span></td><td><span class="state fail">${esc(r.dashboard_verdict)}</span></td></tr>`).join("");
-    document.getElementById("methodSources").innerHTML=data.primary_method_sources.map(s=>`<div class="source"><span><strong>${esc(s.label)}</strong><br><span class="muted">${esc(s.role)}</span></span><a href="${esc(s.url)}">Primary</a></div>`).join("");
+    const s=data.summary;
+    document.getElementById("tested").textContent=s.tested_hypotheses;
+    document.getElementById("confirmed").textContent=s.confirmed;
+    document.getElementById("notConfirmed").textContent=s.not_confirmed;
+    document.getElementById("plainConclusion").innerHTML=s.confirmed>0
+      ? `<strong>${s.tested_hypotheses}件</strong>を試し、<strong>${s.confirmed}件</strong>で投資に使える可能性を確認しました。詳しい条件は各カードで確認できます。`
+      : `<strong>${s.tested_hypotheses}件</strong>の投資アイデアを試しましたが、今の証拠だけで<strong>実際の投資に使えると確認できたものは0件</strong>でした。`;
+    document.getElementById("freshness").textContent=`主な検証データは${s.latest_factor_data_end}まで、モメンタムの検証は${s.latest_momentum_data_end}までです。`;
+    const r=data.repeat_check;
+    document.getElementById("repeat").textContent=r.same_conclusion_each_time
+      ? `${r.study_count}件について、それぞれ${r.repetitions}回やり直しても結論は変わりませんでした。`
+      : `繰り返し検証で結論が変わったものがあります。結果は確定扱いしません。`;
+
+    document.getElementById("resultRows").innerHTML=data.results.map(item=>{
+      const pass=item.verdict==="CONFIRMED";
+      return `<article class="card result-card">
+        <span class="state ${pass?"pass":"fail"}">${esc(item.verdict_label)}</span>
+        <h3>${esc(item.question)}</h3>
+        <p class="reason">${esc(item.why)}</p>
+        <div class="stats">
+          <div class="stat"><span class="stat-label">調べた期間</span><span class="stat-value">${esc(item.period)}</span></div>
+          <div class="stat"><span class="stat-label">年平均の結果</span><span class="stat-value ${cssNum(item.annualized_mean)}">${pct(item.annualized_mean)}</span></div>
+          <div class="stat"><span class="stat-label">簡単なコスト控除後</span><span class="stat-value ${cssNum(item.cost_25bps_annualized_mean)}">${pct(item.cost_25bps_annualized_mean)}</span></div>
+        </div>
+        <details class="technical">
+          <summary>詳しい数字と元論文を見る</summary>
+          <dl>
+            <dt>元論文</dt><dd>${esc(item.paper)}</dd>
+            <dt>データ月数</dt><dd>${esc(item.months)}か月</dd>
+            <dt>期間後半の年平均</dt><dd>${pct(item.late_period_mean)}</dd>
+            <dt>シャープレシオ</dt><dd>${num(item.sharpe)}</dd>
+            <dt>t値</dt><dd>${num(item.newey_west_t)}</dd>
+          </dl>
+        </details>
+      </article>`;
+    }).join("");
+
+    document.getElementById("methodSources").innerHTML=data.sources.map(source=>`<article class="card source-card">
+      <div class="source-kind">${esc(source.kind)}</div>
+      <h3>${esc(source.label)}</h3>
+      <p>${esc(source.note)}</p>
+      <a href="${safeUrl(source.url)}" target="_blank" rel="noopener noreferrer">元資料を見る</a>
+    </article>`).join("");
   }
-  fetch("./data/research_verification_manifest.json",{cache:"no-store"}).then(r=>{if(!r.ok)throw new Error(`manifest load failed: HTTP ${r.status}`);return r.json()}).then(render).catch(err=>{const box=document.getElementById("error");box.hidden=false;box.textContent=err.message});
+
+  fetch("./data/research_public_manifest.json",{cache:"no-store"})
+    .then(response=>{if(!response.ok)throw new Error(`公開データを読み込めませんでした: HTTP ${response.status}`);return response.json()})
+    .then(render)
+    .catch(error=>{const box=document.getElementById("error");box.hidden=false;box.textContent=error.message});
 </script>
 </body>
 </html>

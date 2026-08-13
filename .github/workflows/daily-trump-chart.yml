@@ -66,6 +66,7 @@ jobs:
         run: |
           rm -rf .pytest_cache scripts/__pycache__ tests/__pycache__
           if [ "${{ github.event_name }}" = "pull_request" ]; then
-            rm -rf generated/trump-daily-chart
+            git restore --source=HEAD --staged --worktree -- generated/trump-daily-chart
+            git clean -fd -- generated/trump-daily-chart
           fi
           test -z "$(git status --porcelain --untracked-files=all)"
