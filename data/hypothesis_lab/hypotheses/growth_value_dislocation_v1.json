@@ -1,0 +1,41 @@
+{
+  "schema_version": "1.0",
+  "hypothesis_id": "growth_value_dislocation_v1",
+  "thesis": "企業の実体が改善しているのに、保有者の縮小など観測可能な売り手フローと相対株価低迷が重なる局面では、単純な低PERよりも再評価余地のある候補を見つけられる可能性がある。",
+  "economic_mechanism": "Fundamental improvement and valuation compression can coexist when ownership-driven supply is temporarily stronger than changes in operating reality. The hypothesis requires observed seller-flow evidence and does not infer forced liquidation without direct evidence.",
+  "stage_a": {
+    "tool": "EDINET_DB_2028-08-10.screen_companies",
+    "conditions": [
+      {"metric": "per", "operator": "lte", "value": 10},
+      {"metric": "revenue-cagr-3y", "operator": "gte", "value": 5},
+      {"metric": "oi-cagr-3y", "operator": "gte", "value": 8},
+      {"metric": "roe", "operator": "gte", "value": 10},
+      {"metric": "equity-ratio", "operator": "gte", "value": 40},
+      {"metric": "fcf-yield", "operator": "gte", "value": 3},
+      {"metric": "net-cash-ratio", "operator": "gte", "value": 0}
+    ],
+    "sort_by": "per"
+  },
+  "stage_b": {
+    "required_features": [
+      "latest annual and interim revenue / operating income / net income trajectory",
+      "operating cash flow trajectory",
+      "company TSR and comparison-index TSR from the same disclosure record",
+      "large-shareholding changes with filer, date, prior ratio and current ratio",
+      "earnings revisions, dividend revisions and other material corporate events"
+    ],
+    "minimum_independent_pressure_signals": 2
+  },
+  "falsifiers": [
+    "Latest revenue, operating income, net income or operating cash flow turns negative year-on-year without a separately documented temporary cause.",
+    "Valuation ceases to satisfy the pre-registered weak-case margin thresholds at the information cutoff.",
+    "Observed relative underperformance is accompanied by a negative earnings revision or other fundamental event sufficient to explain the repricing.",
+    "The claimed seller-flow mechanism cannot be tied to dated large-shareholding or equivalent supply evidence.",
+    "Thresholds or required features are changed after inspecting the candidate outcome without a new hypothesis version."
+  ],
+  "decision_gate_mapping": {
+    "underlying_reality": ["revenue_yoy", "operating_income_yoy", "net_income_yoy", "operating_cf_yoy"],
+    "price_pressure_mechanism": ["relative_tsr_underperformance", "large_holder_reduction", "negative_fundamental_event_check"],
+    "weak_case_margin": ["per", "fcf_yield", "net_cash_ratio"]
+  }
+}
