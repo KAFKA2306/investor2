@@ -4,21 +4,33 @@ on:
   pull_request:
     paths:
       - "README.md"
+      - "Taskfile.yml"
       - "docs/architecture/**"
+      - "docs/research/hypothesis-lab.md"
       - "tests/test_repository_ratchet.py"
       - ".github/workflows/**"
       - "data/input_ledger/**"
+      - "data/hypothesis_lab/**"
+      - "data/decision_ledger/**"
       - "data/benchmarks/**"
+      - "src/research/**"
+      - "src/decision/**"
       - "ontology/project.yaml"
   push:
     branches: [main]
     paths:
       - "README.md"
+      - "Taskfile.yml"
       - "docs/architecture/**"
+      - "docs/research/hypothesis-lab.md"
       - "tests/test_repository_ratchet.py"
       - ".github/workflows/**"
       - "data/input_ledger/**"
+      - "data/hypothesis_lab/**"
+      - "data/decision_ledger/**"
       - "data/benchmarks/**"
+      - "src/research/**"
+      - "src/decision/**"
       - "ontology/project.yaml"
   workflow_dispatch:
 
