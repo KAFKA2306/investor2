@@ -1,0 +1,104 @@
+name: Build 2019 arXiv data requirement contracts
+
+on:
+  push:
+    branches:
+      - research/2019-data-contracts
+    paths:
+      - "scripts/build_arxiv_2019_data_requirements.py"
+      - "docs/research/arxiv_data_requirement_schema_v1.json"
+      - "docs/research/arxiv_qfin_2019_version_pins.json"
+      - ".github/workflows/arxiv-data-contracts-2019.yml"
+  pull_request:
+    paths:
+      - "scripts/build_arxiv_2019_data_requirements.py"
+      - "docs/research/arxiv_data_requirement_schema_v1.json"
+      - "docs/research/arxiv_qfin_2019_version_pins.json"
+      - "docs/research/arxiv_qfin_2019_data_requirements.json"
+      - ".github/workflows/arxiv-data-contracts-2019.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arxiv-data-contracts-2019-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile deterministic builder
+        run: python -m py_compile scripts/build_arxiv_2019_data_requirements.py
+
+      - name: Build canonical contracts
+        run: |
+          python scripts/build_arxiv_2019_data_requirements.py \
+            --pins docs/research/arxiv_qfin_2019_version_pins.json \
+            --output docs/research/arxiv_qfin_2019_data_requirements.json
+
+      - name: Enforce population and fail-closed semantics
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('docs/research/arxiv_qfin_2019_data_requirements.json')
+          data = json.loads(p.read_text(encoding='utf-8'))
+          assert data['record_count'] == 129
+          assert data['summary']['verified_full_text'] == 2
+          assert data['summary']['fail_closed_not_extracted'] == 127
+          assert data['summary']['access_status_counts'] == {
+              'PUBLIC': 0, 'PROPRIETARY': 2, 'UNAVAILABLE': 0, 'AMBIGUOUS': 127
+          }
+          rows = {r['arxiv_id']: r for r in data['records']}
+          lim = rows['1904.04912']
+          zhang = rows['1911.10107']
+          assert lim['selected_version'] == 'v2'
+          assert lim['instrument_universe']['count'] == 88
+          assert sum(len(v) for v in lim['instrument_universe']['tickers_by_asset_class'].values()) == 88
+          assert lim['source_named_by_paper']['dataset'] == 'CLC Database'
+          assert lim['access_status'] == 'PROPRIETARY'
+          assert 'EXACT_VENDOR_PRICE_FIELD_NOT_SPECIFIED_BY_PAPER' in lim['unresolved_blockers']
+          assert zhang['selected_version'] == 'v1'
+          assert zhang['instrument_universe']['count'] == 50
+          assert sum(len(v) for v in zhang['instrument_universe']['tickers_by_asset_class'].values()) == 50
+          assert zhang['source_named_by_paper']['dataset'] == 'CLC Database'
+          assert zhang['access_status'] == 'PROPRIETARY'
+          for row in data['records']:
+              if row['arxiv_id'] not in {'1904.04912','1911.10107'}:
+                  assert row['source_named_by_paper'] == 'NOT_SPECIFIED'
+                  assert row['raw_observations'] == []
+                  assert row['derived_features'] == []
+                  assert row['access_status'] == 'AMBIGUOUS'
+          print(json.dumps(data['summary'], sort_keys=True))
+          PY
+
+      - name: Byte stability
+        run: |
+          cp docs/research/arxiv_qfin_2019_data_requirements.json /tmp/first.json
+          python scripts/build_arxiv_2019_data_requirements.py \
+            --pins docs/research/arxiv_qfin_2019_version_pins.json \
+            --output docs/research/arxiv_qfin_2019_data_requirements.json
+          cmp /tmp/first.json docs/research/arxiv_qfin_2019_data_requirements.json
+
+      - name: Commit canonical contracts on materialization branch
+        if: github.event_name == 'push'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/research/arxiv_qfin_2019_data_requirements.json
+          if git diff --cached --quiet; then
+            echo "No data-contract changes to commit."
+          else
+            git commit -m "Build 2019 q-fin data requirement contracts"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Pull request must commit canonical contracts
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- docs/research/arxiv_qfin_2019_data_requirements.json
