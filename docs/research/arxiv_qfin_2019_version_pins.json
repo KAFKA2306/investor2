@@ -1,0 +1,4224 @@
+{
+  "cutoff": "2019-12-31T23:59:59Z",
+  "inspected_at": "2026-08-13T11:10:52Z",
+  "pins": [
+    {
+      "arxiv_id": "1903.06033",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-13T16:33:53Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1903.06033v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.06033v2",
+      "title": "Altcoin-Bitcoin Arbitrage",
+      "version_submitted_at": "2019-04-02T04:08:36Z",
+      "versions": [
+        {
+          "published": "2019-03-13T16:33:53Z",
+          "query_id": "1903.06033v1",
+          "updated": "2019-03-13T16:33:53Z",
+          "url": "https://arxiv.org/abs/1903.06033v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-13T16:33:53Z",
+          "query_id": "1903.06033v2",
+          "updated": "2019-04-02T04:08:36Z",
+          "url": "https://arxiv.org/abs/1903.06033v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.11166",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-24T01:23:29Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.11166v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.11166v1",
+      "title": "A Gated Recurrent Unit Approach to Bitcoin Price Prediction",
+      "version_submitted_at": "2019-12-24T01:23:29Z",
+      "versions": [
+        {
+          "published": "2019-12-24T01:23:29Z",
+          "query_id": "1912.11166v1",
+          "updated": "2019-12-24T01:23:29Z",
+          "url": "https://arxiv.org/abs/1912.11166v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.00293",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-29T23:11:24Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.00293v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.00293v1",
+      "title": "Tracking VIX with VIX Futures: Portfolio Construction and Performance",
+      "version_submitted_at": "2019-06-29T23:11:24Z",
+      "versions": [
+        {
+          "published": "2019-06-29T23:11:24Z",
+          "query_id": "1907.00293v1",
+          "updated": "2019-06-29T23:11:24Z",
+          "url": "https://arxiv.org/abs/1907.00293v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.02228",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-06T08:04:26Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1903.02228v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.02228v3",
+      "title": "Learning the dynamics of technical trading strategies",
+      "version_submitted_at": "2019-12-24T16:07:21Z",
+      "versions": [
+        {
+          "published": "2019-03-06T08:04:26Z",
+          "query_id": "1903.02228v1",
+          "updated": "2019-03-06T08:04:26Z",
+          "url": "https://arxiv.org/abs/1903.02228v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-06T08:04:26Z",
+          "query_id": "1903.02228v2",
+          "updated": "2019-04-25T12:43:46Z",
+          "url": "https://arxiv.org/abs/1903.02228v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-03-06T08:04:26Z",
+          "query_id": "1903.02228v3",
+          "updated": "2019-12-24T16:07:21Z",
+          "url": "https://arxiv.org/abs/1903.02228v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.08448",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-19T18:14:58Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1911.08448v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.08448v4",
+      "title": "Artificial intelligence approach to momentum risk-taking",
+      "version_submitted_at": "2019-12-04T14:56:52Z",
+      "versions": [
+        {
+          "published": "2019-11-19T18:14:58Z",
+          "query_id": "1911.08448v1",
+          "updated": "2019-11-19T18:14:58Z",
+          "url": "https://arxiv.org/abs/1911.08448v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-11-19T18:14:58Z",
+          "query_id": "1911.08448v2",
+          "updated": "2019-12-04T14:56:52Z",
+          "url": "https://arxiv.org/abs/1911.08448v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-11-19T18:14:58Z",
+          "query_id": "1911.08448v3",
+          "updated": "2020-02-05T14:21:58Z",
+          "url": "https://arxiv.org/abs/1911.08448v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-11-19T18:14:58Z",
+          "query_id": "1911.08448v4",
+          "updated": "2020-03-17T16:06:58Z",
+          "url": "https://arxiv.org/abs/1911.08448v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.04912",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-09T21:06:55Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1904.04912v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.04912v3",
+      "title": "Enhancing Time Series Momentum Strategies Using Deep Neural Networks",
+      "version_submitted_at": "2019-11-17T21:16:45Z",
+      "versions": [
+        {
+          "published": "2019-04-09T21:06:55Z",
+          "query_id": "1904.04912v1",
+          "updated": "2019-04-09T21:06:55Z",
+          "url": "https://arxiv.org/abs/1904.04912v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-09T21:06:55Z",
+          "query_id": "1904.04912v2",
+          "updated": "2019-11-17T21:16:45Z",
+          "url": "https://arxiv.org/abs/1904.04912v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-04-09T21:06:55Z",
+          "query_id": "1904.04912v3",
+          "updated": "2020-09-27T14:23:03Z",
+          "url": "https://arxiv.org/abs/1904.04912v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.05065",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-12T11:31:13Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.05065v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.05065v3",
+      "title": "Deep Smoothing of the Implied Volatility Surface",
+      "version_submitted_at": "2019-06-12T11:31:13Z",
+      "versions": [
+        {
+          "published": "2019-06-12T11:31:13Z",
+          "query_id": "1906.05065v1",
+          "updated": "2019-06-12T11:31:13Z",
+          "url": "https://arxiv.org/abs/1906.05065v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-12T11:31:13Z",
+          "query_id": "1906.05065v2",
+          "updated": "2020-06-19T17:34:21Z",
+          "url": "https://arxiv.org/abs/1906.05065v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-06-12T11:31:13Z",
+          "query_id": "1906.05065v3",
+          "updated": "2020-10-26T10:53:40Z",
+          "url": "https://arxiv.org/abs/1906.05065v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.02457",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-04T15:30:46Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.02457v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.02457v1",
+      "title": "Learning Threshold-Type Investment Strategies with Stochastic Gradient Method",
+      "version_submitted_at": "2019-07-04T15:30:46Z",
+      "versions": [
+        {
+          "published": "2019-07-04T15:30:46Z",
+          "query_id": "1907.02457v1",
+          "updated": "2019-07-04T15:30:46Z",
+          "url": "https://arxiv.org/abs/1907.02457v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.05555",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-12T11:59:07Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.05555v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.05555v1",
+      "title": "Systematic Asset Allocation using Flexible Views for South African Markets",
+      "version_submitted_at": "2019-10-12T11:59:07Z",
+      "versions": [
+        {
+          "published": "2019-10-12T11:59:07Z",
+          "query_id": "1910.05555v1",
+          "updated": "2019-10-12T11:59:07Z",
+          "url": "https://arxiv.org/abs/1910.05555v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.10450",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-24T02:57:10Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.10450v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.10450v1",
+      "title": "A singular stochastic control approach for optimal pairs trading with proportional transaction costs",
+      "version_submitted_at": "2019-11-24T02:57:10Z",
+      "versions": [
+        {
+          "published": "2019-11-24T02:57:10Z",
+          "query_id": "1911.10450v1",
+          "updated": "2019-11-24T02:57:10Z",
+          "url": "https://arxiv.org/abs/1911.10450v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.09571",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-12T17:28:24Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.09571v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.09571v1",
+      "title": "Reinforcement Learning for Portfolio Management",
+      "version_submitted_at": "2019-09-12T17:28:24Z",
+      "versions": [
+        {
+          "published": "2019-09-12T17:28:24Z",
+          "query_id": "1909.09571v1",
+          "updated": "2019-09-12T17:28:24Z",
+          "url": "https://arxiv.org/abs/1909.09571v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.07564",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-16T18:25:47Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.07564v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.07564v1",
+      "title": "Residual Switching Network for Portfolio Optimization",
+      "version_submitted_at": "2019-10-16T18:25:47Z",
+      "versions": [
+        {
+          "published": "2019-10-16T18:25:47Z",
+          "query_id": "1910.07564v1",
+          "updated": "2019-10-16T18:25:47Z",
+          "url": "https://arxiv.org/abs/1910.07564v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.10107",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-22T16:10:45Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.10107v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.10107v1",
+      "title": "Deep Reinforcement Learning for Trading",
+      "version_submitted_at": "2019-11-22T16:10:45Z",
+      "versions": [
+        {
+          "published": "2019-11-22T16:10:45Z",
+          "query_id": "1911.10107v1",
+          "updated": "2019-11-22T16:10:45Z",
+          "url": "https://arxiv.org/abs/1911.10107v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.06426",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-13T11:46:05Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.06426v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.06426v1",
+      "title": "Portfolio liquidation under transient price impact -- theoretical solution and implementation with 100 NASDAQ stocks",
+      "version_submitted_at": "2019-12-13T11:46:05Z",
+      "versions": [
+        {
+          "published": "2019-12-13T11:46:05Z",
+          "query_id": "1912.06426v1",
+          "updated": "2019-12-13T11:46:05Z",
+          "url": "https://arxiv.org/abs/1912.06426v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.09606",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-31T10:01:19Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.09606v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.09606v1",
+      "title": "A Mean Field Game of Portfolio Trading and Its Consequences On Perceived Correlations",
+      "version_submitted_at": "2019-01-31T10:01:19Z",
+      "versions": [
+        {
+          "published": "2019-01-31T10:01:19Z",
+          "query_id": "1902.09606v1",
+          "updated": "2019-01-31T10:01:19Z",
+          "url": "https://arxiv.org/abs/1902.09606v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.00558",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-01T05:51:05Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.00558v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.00558v1",
+      "title": "Improved Forecasting of Cryptocurrency Price using Social Signals",
+      "version_submitted_at": "2019-07-01T05:51:05Z",
+      "versions": [
+        {
+          "published": "2019-07-01T05:51:05Z",
+          "query_id": "1907.00558v1",
+          "updated": "2019-07-01T05:51:05Z",
+          "url": "https://arxiv.org/abs/1907.00558v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.03278",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-07T14:45:36Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.03278v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.03278v1",
+      "title": "Automatic Financial Trading Agent for Low-risk Portfolio Management using Deep Reinforcement Learning",
+      "version_submitted_at": "2019-09-07T14:45:36Z",
+      "versions": [
+        {
+          "published": "2019-09-07T14:45:36Z",
+          "query_id": "1909.03278v1",
+          "updated": "2019-09-07T14:45:36Z",
+          "url": "https://arxiv.org/abs/1909.03278v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.07748",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v5",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-17T12:28:27Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v5",
+      "selected_version_url": "https://arxiv.org/abs/1909.07748v5",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.07748v5",
+      "title": "Stock market microstructure inference via multi-agent reinforcement learning",
+      "version_submitted_at": "2019-10-17T12:19:24Z",
+      "versions": [
+        {
+          "published": "2019-09-17T12:28:27Z",
+          "query_id": "1909.07748v1",
+          "updated": "2019-09-17T12:28:27Z",
+          "url": "https://arxiv.org/abs/1909.07748v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-09-17T12:28:27Z",
+          "query_id": "1909.07748v2",
+          "updated": "2019-09-18T12:48:57Z",
+          "url": "https://arxiv.org/abs/1909.07748v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-09-17T12:28:27Z",
+          "query_id": "1909.07748v3",
+          "updated": "2019-10-10T14:58:04Z",
+          "url": "https://arxiv.org/abs/1909.07748v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-09-17T12:28:27Z",
+          "query_id": "1909.07748v4",
+          "updated": "2019-10-11T13:14:30Z",
+          "url": "https://arxiv.org/abs/1909.07748v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-09-17T12:28:27Z",
+          "query_id": "1909.07748v5",
+          "updated": "2019-10-17T12:19:24Z",
+          "url": "https://arxiv.org/abs/1909.07748v5",
+          "version": "v5"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.10801",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-24T10:42:23Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.10801v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.10801v1",
+      "title": "WATTNet: Learning to Trade FX via Hierarchical Spatio-Temporal Representation of Highly Multivariate Time Series",
+      "version_submitted_at": "2019-09-24T10:42:23Z",
+      "versions": [
+        {
+          "published": "2019-09-24T10:42:23Z",
+          "query_id": "1909.10801v1",
+          "updated": "2019-09-24T10:42:23Z",
+          "url": "https://arxiv.org/abs/1909.10801v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.10237",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-21T10:18:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.10237v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.10237v1",
+      "title": "Comparative Study of Two Extensions of Heston Stochastic Volatility Model",
+      "version_submitted_at": "2019-12-21T10:18:16Z",
+      "versions": [
+        {
+          "published": "2019-12-21T10:18:16Z",
+          "query_id": "1912.10237v1",
+          "updated": "2019-12-21T10:18:16Z",
+          "url": "https://arxiv.org/abs/1912.10237v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.00745",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v6",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-11T01:37:47Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v4",
+        "v5",
+        "v6"
+      ],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1904.00745v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.00745v6",
+      "title": "Deep Learning in Asset Pricing",
+      "version_submitted_at": "2019-06-12T21:40:25Z",
+      "versions": [
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v1",
+          "updated": "2019-03-11T01:37:47Z",
+          "url": "https://arxiv.org/abs/1904.00745v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v2",
+          "updated": "2019-06-05T18:50:27Z",
+          "url": "https://arxiv.org/abs/1904.00745v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v3",
+          "updated": "2019-06-12T21:40:25Z",
+          "url": "https://arxiv.org/abs/1904.00745v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v4",
+          "updated": "2020-05-16T14:20:53Z",
+          "url": "https://arxiv.org/abs/1904.00745v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v5",
+          "updated": "2021-07-23T22:26:00Z",
+          "url": "https://arxiv.org/abs/1904.00745v5",
+          "version": "v5"
+        },
+        {
+          "published": "2019-03-11T01:37:47Z",
+          "query_id": "1904.00745v6",
+          "updated": "2021-08-11T01:40:40Z",
+          "url": "https://arxiv.org/abs/1904.00745v6",
+          "version": "v6"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.02194",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-06T04:15:17Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.02194v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.02194v1",
+      "title": "A Rational Finance Explanation of the Stock Predictability Puzzle",
+      "version_submitted_at": "2019-11-06T04:15:17Z",
+      "versions": [
+        {
+          "published": "2019-11-06T04:15:17Z",
+          "query_id": "1911.02194v1",
+          "updated": "2019-11-06T04:15:17Z",
+          "url": "https://arxiv.org/abs/1911.02194v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.07288",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-17T17:12:37Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.07288v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.07288v1",
+      "title": "Application of Principal Component Analysis in Chinese Sovereign Bond Market and Principal Component-Based Fixed Income Immunization",
+      "version_submitted_at": "2019-11-17T17:12:37Z",
+      "versions": [
+        {
+          "published": "2019-11-17T17:12:37Z",
+          "query_id": "1911.07288v1",
+          "updated": "2019-11-17T17:12:37Z",
+          "url": "https://arxiv.org/abs/1911.07288v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.05228",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-11T11:05:15Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.05228v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.05228v3",
+      "title": "Risk of Bitcoin Market: Volatility, Jumps, and Forecasts",
+      "version_submitted_at": "2019-12-11T11:05:15Z",
+      "versions": [
+        {
+          "published": "2019-12-11T11:05:15Z",
+          "query_id": "1912.05228v1",
+          "updated": "2019-12-11T11:05:15Z",
+          "url": "https://arxiv.org/abs/1912.05228v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-12-11T11:05:15Z",
+          "query_id": "1912.05228v2",
+          "updated": "2021-08-29T13:24:25Z",
+          "url": "https://arxiv.org/abs/1912.05228v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-12-11T11:05:15Z",
+          "query_id": "1912.05228v3",
+          "updated": "2021-12-09T15:08:40Z",
+          "url": "https://arxiv.org/abs/1912.05228v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.10849",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-28T00:40:17Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.10849v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.10849v1",
+      "title": "A novel dynamic asset allocation system using Feature Saliency Hidden Markov models for smart beta investing",
+      "version_submitted_at": "2019-02-28T00:40:17Z",
+      "versions": [
+        {
+          "published": "2019-02-28T00:40:17Z",
+          "query_id": "1902.10849v1",
+          "updated": "2019-02-28T00:40:17Z",
+          "url": "https://arxiv.org/abs/1902.10849v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.09140",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-21T17:51:20Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1903.09140v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.09140v4",
+      "title": "Transaction Cost Analytics for Corporate Bonds",
+      "version_submitted_at": "2019-06-07T05:25:09Z",
+      "versions": [
+        {
+          "published": "2019-03-21T17:51:20Z",
+          "query_id": "1903.09140v1",
+          "updated": "2019-03-21T17:51:20Z",
+          "url": "https://arxiv.org/abs/1903.09140v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-21T17:51:20Z",
+          "query_id": "1903.09140v2",
+          "updated": "2019-06-07T05:25:09Z",
+          "url": "https://arxiv.org/abs/1903.09140v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-03-21T17:51:20Z",
+          "query_id": "1903.09140v3",
+          "updated": "2021-02-10T14:08:52Z",
+          "url": "https://arxiv.org/abs/1903.09140v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-03-21T17:51:20Z",
+          "query_id": "1903.09140v4",
+          "updated": "2021-12-08T20:43:45Z",
+          "url": "https://arxiv.org/abs/1903.09140v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.01889",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-03T10:09:24Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.01889v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.01889v2",
+      "title": "Probability-free models in option pricing: statistically indistinguishable dynamics and historical vs implied volatility",
+      "version_submitted_at": "2019-04-03T10:09:24Z",
+      "versions": [
+        {
+          "published": "2019-04-03T10:09:24Z",
+          "query_id": "1904.01889v1",
+          "updated": "2019-04-03T10:09:24Z",
+          "url": "https://arxiv.org/abs/1904.01889v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-03T10:09:24Z",
+          "query_id": "1904.01889v2",
+          "updated": "2021-08-09T15:49:40Z",
+          "url": "https://arxiv.org/abs/1904.01889v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.11145",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-25T03:43:02Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.11145v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.11145v1",
+      "title": "Forecasting in Big Data Environments: an Adaptable and Automated Shrinkage Estimation of Neural Networks (AAShNet)",
+      "version_submitted_at": "2019-04-25T03:43:02Z",
+      "versions": [
+        {
+          "published": "2019-04-25T03:43:02Z",
+          "query_id": "1904.11145v1",
+          "updated": "2019-04-25T03:43:02Z",
+          "url": "https://arxiv.org/abs/1904.11145v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.00212",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-29T14:42:18Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.00212v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.00212v1",
+      "title": "Detailed study of a moving average trading rule",
+      "version_submitted_at": "2019-06-29T14:42:18Z",
+      "versions": [
+        {
+          "published": "2019-06-29T14:42:18Z",
+          "query_id": "1907.00212v1",
+          "updated": "2019-06-29T14:42:18Z",
+          "url": "https://arxiv.org/abs/1907.00212v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.01268",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-03T16:03:13Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.01268v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.01268v1",
+      "title": "Are Bitcoins price predictable? Evidence from machine learning techniques using technical indicators",
+      "version_submitted_at": "2019-09-03T16:03:13Z",
+      "versions": [
+        {
+          "published": "2019-09-03T16:03:13Z",
+          "query_id": "1909.01268v1",
+          "updated": "2019-09-03T16:03:13Z",
+          "url": "https://arxiv.org/abs/1909.01268v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.10035",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-22T15:56:19Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.10035v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.10035v1",
+      "title": "Using Machine Learning to Predict Realized Variance",
+      "version_submitted_at": "2019-09-22T15:56:19Z",
+      "versions": [
+        {
+          "published": "2019-09-22T15:56:19Z",
+          "query_id": "1909.10035v1",
+          "updated": "2019-09-22T15:56:19Z",
+          "url": "https://arxiv.org/abs/1909.10035v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.00359",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-01T08:50:24Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.00359v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.00359v2",
+      "title": "Endogenous Liquidity Crises",
+      "version_submitted_at": "2019-12-01T08:50:24Z",
+      "versions": [
+        {
+          "published": "2019-12-01T08:50:24Z",
+          "query_id": "1912.00359v1",
+          "updated": "2019-12-01T08:50:24Z",
+          "url": "https://arxiv.org/abs/1912.00359v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-12-01T08:50:24Z",
+          "query_id": "1912.00359v2",
+          "updated": "2020-02-19T16:25:14Z",
+          "url": "https://arxiv.org/abs/1912.00359v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.10343",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-21T21:25:39Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.10343v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.10343v1",
+      "title": "Design of High-Frequency Trading Algorithm Based on Machine Learning",
+      "version_submitted_at": "2019-12-21T21:25:39Z",
+      "versions": [
+        {
+          "published": "2019-12-21T21:25:39Z",
+          "query_id": "1912.10343v1",
+          "updated": "2019-12-21T21:25:39Z",
+          "url": "https://arxiv.org/abs/1912.10343v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.05053",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-15T21:41:52Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.05053v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.05053v1",
+      "title": "An Agent-Based Model to Explain the Emergence of Stylised Facts in Log Returns",
+      "version_submitted_at": "2019-01-15T21:41:52Z",
+      "versions": [
+        {
+          "published": "2019-01-15T21:41:52Z",
+          "query_id": "1901.05053v1",
+          "updated": "2019-01-15T21:41:52Z",
+          "url": "https://arxiv.org/abs/1901.05053v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.11493",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-20T18:47:56Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.11493v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.11493v1",
+      "title": "Deep Recurrent Factor Model: Interpretable Non-Linear and Time-Varying Multi-Factor Model",
+      "version_submitted_at": "2019-01-20T18:47:56Z",
+      "versions": [
+        {
+          "published": "2019-01-20T18:47:56Z",
+          "query_id": "1901.11493v1",
+          "updated": "2019-01-20T18:47:56Z",
+          "url": "https://arxiv.org/abs/1901.11493v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.05312",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-28T22:59:32Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.05312v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.05312v4",
+      "title": "Bayesian prediction of jumps in large panels of time series data",
+      "version_submitted_at": "2019-03-28T22:59:32Z",
+      "versions": [
+        {
+          "published": "2019-03-28T22:59:32Z",
+          "query_id": "1904.05312v1",
+          "updated": "2019-03-28T22:59:32Z",
+          "url": "https://arxiv.org/abs/1904.05312v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-28T22:59:32Z",
+          "query_id": "1904.05312v2",
+          "updated": "2020-06-26T07:57:45Z",
+          "url": "https://arxiv.org/abs/1904.05312v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-03-28T22:59:32Z",
+          "query_id": "1904.05312v3",
+          "updated": "2021-04-05T15:24:56Z",
+          "url": "https://arxiv.org/abs/1904.05312v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-03-28T22:59:32Z",
+          "query_id": "1904.05312v4",
+          "updated": "2021-04-06T11:29:49Z",
+          "url": "https://arxiv.org/abs/1904.05312v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.02312",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-05T21:13:11Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.02312v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.02312v2",
+      "title": "Risk-Sensitive Compact Decision Trees for Autonomous Execution in Presence of Simulated Market Response",
+      "version_submitted_at": "2019-06-05T21:13:11Z",
+      "versions": [
+        {
+          "published": "2019-06-05T21:13:11Z",
+          "query_id": "1906.02312v1",
+          "updated": "2019-06-05T21:13:11Z",
+          "url": "https://arxiv.org/abs/1906.02312v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-05T21:13:11Z",
+          "query_id": "1906.02312v2",
+          "updated": "2021-01-06T06:52:45Z",
+          "url": "https://arxiv.org/abs/1906.02312v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.01503",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-21T02:29:25Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.01503v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.01503v1",
+      "title": "Optimistic Bull or Pessimistic Bear: Adaptive Deep Reinforcement Learning for Stock Portfolio Allocation",
+      "version_submitted_at": "2019-06-21T02:29:25Z",
+      "versions": [
+        {
+          "published": "2019-06-21T02:29:25Z",
+          "query_id": "1907.01503v1",
+          "updated": "2019-06-21T02:29:25Z",
+          "url": "https://arxiv.org/abs/1907.01503v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.02666",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-05T03:44:36Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.02666v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.02666v1",
+      "title": "Forecasting security's volatility using low-frequency historical data, high-frequency historical data and option-implied volatility",
+      "version_submitted_at": "2019-07-05T03:44:36Z",
+      "versions": [
+        {
+          "published": "2019-07-05T03:44:36Z",
+          "query_id": "1907.02666v1",
+          "updated": "2019-07-05T03:44:36Z",
+          "url": "https://arxiv.org/abs/1907.02666v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.08036",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-21T01:55:36Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.08036v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.08036v2",
+      "title": "Deep Reinforcement Learning for Foreign Exchange Trading",
+      "version_submitted_at": "2019-08-21T01:55:36Z",
+      "versions": [
+        {
+          "published": "2019-08-21T01:55:36Z",
+          "query_id": "1908.08036v1",
+          "updated": "2019-08-21T01:55:36Z",
+          "url": "https://arxiv.org/abs/1908.08036v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-08-21T01:55:36Z",
+          "query_id": "1908.08036v2",
+          "updated": "2020-06-03T12:54:33Z",
+          "url": "https://arxiv.org/abs/1908.08036v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.04327",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-10T07:16:40Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.04327v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.04327v1",
+      "title": "Empirical investigation of state-of-the-art mean reversion strategies for equity markets",
+      "version_submitted_at": "2019-09-10T07:16:40Z",
+      "versions": [
+        {
+          "published": "2019-09-10T07:16:40Z",
+          "query_id": "1909.04327v1",
+          "updated": "2019-09-10T07:16:40Z",
+          "url": "https://arxiv.org/abs/1909.04327v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.11009",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-21T05:37:14Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.11009v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.11009v1",
+      "title": "Implied volatility surface predictability: the case of commodity markets",
+      "version_submitted_at": "2019-09-21T05:37:14Z",
+      "versions": [
+        {
+          "published": "2019-09-21T05:37:14Z",
+          "query_id": "1909.11009v1",
+          "updated": "2019-09-21T05:37:14Z",
+          "url": "https://arxiv.org/abs/1909.11009v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.10005",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-22T14:26:15Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.10005v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.10005v1",
+      "title": "The CMMV Pricing Model in Practice",
+      "version_submitted_at": "2019-10-22T14:26:15Z",
+      "versions": [
+        {
+          "published": "2019-10-22T14:26:15Z",
+          "query_id": "1910.10005v1",
+          "updated": "2019-10-22T14:26:15Z",
+          "url": "https://arxiv.org/abs/1910.10005v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.11819",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-26T20:26:46Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1911.11819v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.11819v2",
+      "title": "Cryptocurrency Price Prediction and Trading Strategies Using Support Vector Machines",
+      "version_submitted_at": "2019-11-28T22:58:25Z",
+      "versions": [
+        {
+          "published": "2019-11-26T20:26:46Z",
+          "query_id": "1911.11819v1",
+          "updated": "2019-11-26T20:26:46Z",
+          "url": "https://arxiv.org/abs/1911.11819v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-11-26T20:26:46Z",
+          "query_id": "1911.11819v2",
+          "updated": "2019-11-28T22:58:25Z",
+          "url": "https://arxiv.org/abs/1911.11819v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.04565",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-10T08:20:26Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.04565v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.04565v1",
+      "title": "Market Price of Trading Liquidity Risk and Market Depth",
+      "version_submitted_at": "2019-12-10T08:20:26Z",
+      "versions": [
+        {
+          "published": "2019-12-10T08:20:26Z",
+          "query_id": "1912.04565v1",
+          "updated": "2019-12-10T08:20:26Z",
+          "url": "https://arxiv.org/abs/1912.04565v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.08938",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-24T13:10:30Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.08938v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.08938v1",
+      "title": "Working Paper: Improved Stock Price Forecasting Algorithm based on Feature-weighed Support Vector Regression by using Grey Correlation Degree",
+      "version_submitted_at": "2019-02-24T13:10:30Z",
+      "versions": [
+        {
+          "published": "2019-02-24T13:10:30Z",
+          "query_id": "1902.08938v1",
+          "updated": "2019-02-24T13:10:30Z",
+          "url": "https://arxiv.org/abs/1902.08938v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.06346",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-15T03:42:12Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.06346v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.06346v1",
+      "title": "Optimal FX Hedge Tenor with Liquidity Risk",
+      "version_submitted_at": "2019-03-15T03:42:12Z",
+      "versions": [
+        {
+          "published": "2019-03-15T03:42:12Z",
+          "query_id": "1903.06346v1",
+          "updated": "2019-03-15T03:42:12Z",
+          "url": "https://arxiv.org/abs/1903.06346v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.06632",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-17T10:47:27Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.06632v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.06632v1",
+      "title": "Designing an Optimal Portfolio for Iran's Stock Market with Genetic Algorithm using Neural Network Prediction of Risk and Return Stocks",
+      "version_submitted_at": "2019-02-17T10:47:27Z",
+      "versions": [
+        {
+          "published": "2019-02-17T10:47:27Z",
+          "query_id": "1903.06632v1",
+          "updated": "2019-02-17T10:47:27Z",
+          "url": "https://arxiv.org/abs/1903.06632v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.09536",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-22T14:48:14Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1903.09536v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.09536v2",
+      "title": "A Machine Learning approach to Risk Minimisation in Electricity Markets with Coregionalized Sparse Gaussian Processes",
+      "version_submitted_at": "2019-04-03T10:43:06Z",
+      "versions": [
+        {
+          "published": "2019-03-22T14:48:14Z",
+          "query_id": "1903.09536v1",
+          "updated": "2019-03-22T14:48:14Z",
+          "url": "https://arxiv.org/abs/1903.09536v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-22T14:48:14Z",
+          "query_id": "1903.09536v2",
+          "updated": "2019-04-03T10:43:06Z",
+          "url": "https://arxiv.org/abs/1903.09536v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1905.09647",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-05-23T13:38:36Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1905.09647v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1905.09647v2",
+      "title": "Real-time Prediction of Bitcoin Bubble Crashes",
+      "version_submitted_at": "2019-06-13T05:21:53Z",
+      "versions": [
+        {
+          "published": "2019-05-23T13:38:36Z",
+          "query_id": "1905.09647v1",
+          "updated": "2019-05-23T13:38:36Z",
+          "url": "https://arxiv.org/abs/1905.09647v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-05-23T13:38:36Z",
+          "query_id": "1905.09647v2",
+          "updated": "2019-06-13T05:21:53Z",
+          "url": "https://arxiv.org/abs/1905.09647v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.11718",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-26T14:38:08Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1907.11718v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.11718v2",
+      "title": "Large scale continuous-time mean-variance portfolio allocation via reinforcement learning",
+      "version_submitted_at": "2019-08-02T08:37:19Z",
+      "versions": [
+        {
+          "published": "2019-07-26T14:38:08Z",
+          "query_id": "1907.11718v1",
+          "updated": "2019-07-26T14:38:08Z",
+          "url": "https://arxiv.org/abs/1907.11718v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-07-26T14:38:08Z",
+          "query_id": "1907.11718v2",
+          "updated": "2019-08-02T08:37:19Z",
+          "url": "https://arxiv.org/abs/1907.11718v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.02101",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-06T12:16:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v4",
+      "selected_version_url": "https://arxiv.org/abs/1908.02101v4",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.02101v4",
+      "title": "Analysing Global Fixed Income Markets with Tensors",
+      "version_submitted_at": "2019-12-04T14:30:56Z",
+      "versions": [
+        {
+          "published": "2019-08-06T12:16:16Z",
+          "query_id": "1908.02101v1",
+          "updated": "2019-08-06T12:16:16Z",
+          "url": "https://arxiv.org/abs/1908.02101v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-08-06T12:16:16Z",
+          "query_id": "1908.02101v2",
+          "updated": "2019-09-29T15:07:44Z",
+          "url": "https://arxiv.org/abs/1908.02101v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-08-06T12:16:16Z",
+          "query_id": "1908.02101v3",
+          "updated": "2019-11-17T12:33:18Z",
+          "url": "https://arxiv.org/abs/1908.02101v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-08-06T12:16:16Z",
+          "query_id": "1908.02101v4",
+          "updated": "2019-12-04T14:30:56Z",
+          "url": "https://arxiv.org/abs/1908.02101v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.07165",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-16T02:37:19Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.07165v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.07165v1",
+      "title": "Predicting intraday jumps in stock prices using liquidity measures and technical indicators",
+      "version_submitted_at": "2019-12-16T02:37:19Z",
+      "versions": [
+        {
+          "published": "2019-12-16T02:37:19Z",
+          "query_id": "1912.07165v1",
+          "updated": "2019-12-16T02:37:19Z",
+          "url": "https://arxiv.org/abs/1912.07165v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.11804",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-28T06:50:49Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.11804v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.11804v1",
+      "title": "Short Selling with Margin Risk and Recall Risk",
+      "version_submitted_at": "2019-03-28T06:50:49Z",
+      "versions": [
+        {
+          "published": "2019-03-28T06:50:49Z",
+          "query_id": "1903.11804v1",
+          "updated": "2019-03-28T06:50:49Z",
+          "url": "https://arxiv.org/abs/1903.11804v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.09403",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v6",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-20T05:04:59Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3",
+        "v4",
+        "v5",
+        "v6"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.09403v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.09403v6",
+      "title": "On the Evolution of Cryptocurrency Market Efficiency",
+      "version_submitted_at": "2019-04-20T05:04:59Z",
+      "versions": [
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v1",
+          "updated": "2019-04-20T05:04:59Z",
+          "url": "https://arxiv.org/abs/1904.09403v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v2",
+          "updated": "2020-04-06T01:49:46Z",
+          "url": "https://arxiv.org/abs/1904.09403v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v3",
+          "updated": "2020-04-07T03:22:33Z",
+          "url": "https://arxiv.org/abs/1904.09403v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v4",
+          "updated": "2020-05-05T09:40:47Z",
+          "url": "https://arxiv.org/abs/1904.09403v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v5",
+          "updated": "2020-05-06T03:47:45Z",
+          "url": "https://arxiv.org/abs/1904.09403v5",
+          "version": "v5"
+        },
+        {
+          "published": "2019-04-20T05:04:59Z",
+          "query_id": "1904.09403v6",
+          "updated": "2020-07-07T07:19:13Z",
+          "url": "https://arxiv.org/abs/1904.09403v6",
+          "version": "v6"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.10152",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-23T21:53:41Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.10152v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.10152v1",
+      "title": "Multivariate Modeling of Natural Gas Spot Trading Hubs Incorporating Futures Market Realized Volatility",
+      "version_submitted_at": "2019-07-23T21:53:41Z",
+      "versions": [
+        {
+          "published": "2019-07-23T21:53:41Z",
+          "query_id": "1907.10152v1",
+          "updated": "2019-07-23T21:53:41Z",
+          "url": "https://arxiv.org/abs/1907.10152v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.08684",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-23T06:29:40Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.08684v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.08684v1",
+      "title": "A nonlinear optimisation model for constructing minimal drawdown portfolios",
+      "version_submitted_at": "2019-08-23T06:29:40Z",
+      "versions": [
+        {
+          "published": "2019-08-23T06:29:40Z",
+          "query_id": "1908.08684v1",
+          "updated": "2019-08-23T06:29:40Z",
+          "url": "https://arxiv.org/abs/1908.08684v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.05151",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-11T15:39:49Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.05151v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.05151v1",
+      "title": "Validating Weak-form Market Efficiency in United States Stock Markets with Trend Deterministic Price Data and Machine Learning",
+      "version_submitted_at": "2019-09-11T15:39:49Z",
+      "versions": [
+        {
+          "published": "2019-09-11T15:39:49Z",
+          "query_id": "1909.05151v1",
+          "updated": "2019-09-11T15:39:49Z",
+          "url": "https://arxiv.org/abs/1909.05151v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.10807",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-24T10:56:23Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.10807v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.10807v2",
+      "title": "Unveiling the relation between herding and liquidity with trader lead-lag networks",
+      "version_submitted_at": "2019-09-24T10:56:23Z",
+      "versions": [
+        {
+          "published": "2019-09-24T10:56:23Z",
+          "query_id": "1909.10807v1",
+          "updated": "2019-09-24T10:56:23Z",
+          "url": "https://arxiv.org/abs/1909.10807v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-09-24T10:56:23Z",
+          "query_id": "1909.10807v2",
+          "updated": "2020-03-06T17:04:59Z",
+          "url": "https://arxiv.org/abs/1909.10807v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.00281",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-01T09:59:54Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.00281v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.00281v2",
+      "title": "Asset Prices with Investor Protection and Past Information",
+      "version_submitted_at": "2019-11-01T09:59:54Z",
+      "versions": [
+        {
+          "published": "2019-11-01T09:59:54Z",
+          "query_id": "1911.00281v1",
+          "updated": "2019-11-01T09:59:54Z",
+          "url": "https://arxiv.org/abs/1911.00281v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-11-01T09:59:54Z",
+          "query_id": "1911.00281v2",
+          "updated": "2020-04-10T07:39:01Z",
+          "url": "https://arxiv.org/abs/1911.00281v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.01091",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-02T21:51:02Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.01091v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.01091v1",
+      "title": "A Simple Proof of the Fundamental Theorem of Asset Pricing",
+      "version_submitted_at": "2019-12-02T21:51:02Z",
+      "versions": [
+        {
+          "published": "2019-12-02T21:51:02Z",
+          "query_id": "1912.01091v1",
+          "updated": "2019-12-02T21:51:02Z",
+          "url": "https://arxiv.org/abs/1912.01091v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.06021",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-17T22:16:45Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1901.06021v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.06021v2",
+      "title": "A Probabilistic Approach to Nonparametric Local Volatility",
+      "version_submitted_at": "2019-01-23T14:00:06Z",
+      "versions": [
+        {
+          "published": "2019-01-17T22:16:45Z",
+          "query_id": "1901.06021v1",
+          "updated": "2019-01-17T22:16:45Z",
+          "url": "https://arxiv.org/abs/1901.06021v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-01-17T22:16:45Z",
+          "query_id": "1901.06021v2",
+          "updated": "2019-01-23T14:00:06Z",
+          "url": "https://arxiv.org/abs/1901.06021v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.05384",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-10T18:40:20Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1904.05384v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.05384v3",
+      "title": "Feature Engineering for Mid-Price Prediction with Deep Learning",
+      "version_submitted_at": "2019-06-07T19:07:22Z",
+      "versions": [
+        {
+          "published": "2019-04-10T18:40:20Z",
+          "query_id": "1904.05384v1",
+          "updated": "2019-04-10T18:40:20Z",
+          "url": "https://arxiv.org/abs/1904.05384v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-10T18:40:20Z",
+          "query_id": "1904.05384v2",
+          "updated": "2019-04-15T12:08:54Z",
+          "url": "https://arxiv.org/abs/1904.05384v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-04-10T18:40:20Z",
+          "query_id": "1904.05384v3",
+          "updated": "2019-06-07T19:07:22Z",
+          "url": "https://arxiv.org/abs/1904.05384v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1905.04842",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-05-13T03:02:39Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1905.04842v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1905.04842v1",
+      "title": "A Stock Selection Method Based on Earning Yield Forecast Using Sequence Prediction Models",
+      "version_submitted_at": "2019-05-13T03:02:39Z",
+      "versions": [
+        {
+          "published": "2019-05-13T03:02:39Z",
+          "query_id": "1905.04842v1",
+          "updated": "2019-05-13T03:02:39Z",
+          "url": "https://arxiv.org/abs/1905.04842v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.08911",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v8",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-21T04:36:03Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v5",
+        "v6",
+        "v7",
+        "v8"
+      ],
+      "reasons": [],
+      "selected_version": "v4",
+      "selected_version_url": "https://arxiv.org/abs/1907.08911v4",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.08911v8",
+      "title": "A Stock Market Model Based on CAPM and Market Size",
+      "version_submitted_at": "2019-09-23T16:36:17Z",
+      "versions": [
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v1",
+          "updated": "2019-07-21T04:36:03Z",
+          "url": "https://arxiv.org/abs/1907.08911v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v2",
+          "updated": "2019-07-24T04:12:11Z",
+          "url": "https://arxiv.org/abs/1907.08911v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v3",
+          "updated": "2019-07-25T01:51:38Z",
+          "url": "https://arxiv.org/abs/1907.08911v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v4",
+          "updated": "2019-09-23T16:36:17Z",
+          "url": "https://arxiv.org/abs/1907.08911v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v5",
+          "updated": "2020-04-09T05:51:25Z",
+          "url": "https://arxiv.org/abs/1907.08911v5",
+          "version": "v5"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v6",
+          "updated": "2020-09-24T00:34:23Z",
+          "url": "https://arxiv.org/abs/1907.08911v6",
+          "version": "v6"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v7",
+          "updated": "2021-02-25T23:37:46Z",
+          "url": "https://arxiv.org/abs/1907.08911v7",
+          "version": "v7"
+        },
+        {
+          "published": "2019-07-21T04:36:03Z",
+          "query_id": "1907.08911v8",
+          "updated": "2021-04-27T00:12:44Z",
+          "url": "https://arxiv.org/abs/1907.08911v8",
+          "version": "v8"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.02164",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v5",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-06T13:49:27Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.02164v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.02164v5",
+      "title": "Statistical Arbitrage for Multiple Co-Integrated Stocks",
+      "version_submitted_at": "2019-08-06T13:49:27Z",
+      "versions": [
+        {
+          "published": "2019-08-06T13:49:27Z",
+          "query_id": "1908.02164v1",
+          "updated": "2019-08-06T13:49:27Z",
+          "url": "https://arxiv.org/abs/1908.02164v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-08-06T13:49:27Z",
+          "query_id": "1908.02164v2",
+          "updated": "2021-06-30T20:47:35Z",
+          "url": "https://arxiv.org/abs/1908.02164v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-08-06T13:49:27Z",
+          "query_id": "1908.02164v3",
+          "updated": "2021-10-30T13:57:38Z",
+          "url": "https://arxiv.org/abs/1908.02164v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-08-06T13:49:27Z",
+          "query_id": "1908.02164v4",
+          "updated": "2021-12-15T03:36:58Z",
+          "url": "https://arxiv.org/abs/1908.02164v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-08-06T13:49:27Z",
+          "query_id": "1908.02164v5",
+          "updated": "2022-02-08T05:35:42Z",
+          "url": "https://arxiv.org/abs/1908.02164v5",
+          "version": "v5"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.03905",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-11T13:19:27Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.03905v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.03905v2",
+      "title": "Portfolio Optimization Managing Value at Risk under Heavy Tail Return, using Stochastic Maximum Principle",
+      "version_submitted_at": "2019-08-11T13:19:27Z",
+      "versions": [
+        {
+          "published": "2019-08-11T13:19:27Z",
+          "query_id": "1908.03905v1",
+          "updated": "2019-08-11T13:19:27Z",
+          "url": "https://arxiv.org/abs/1908.03905v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-08-11T13:19:27Z",
+          "query_id": "1908.03905v2",
+          "updated": "2020-11-30T20:57:30Z",
+          "url": "https://arxiv.org/abs/1908.03905v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.08344",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-18T11:25:09Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.08344v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.08344v3",
+      "title": "Pricing and Hedging Performance on Pegged FX Markets Based on a Regime Switching Model",
+      "version_submitted_at": "2019-10-18T11:25:09Z",
+      "versions": [
+        {
+          "published": "2019-10-18T11:25:09Z",
+          "query_id": "1910.08344v1",
+          "updated": "2019-10-18T11:25:09Z",
+          "url": "https://arxiv.org/abs/1910.08344v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-10-18T11:25:09Z",
+          "query_id": "1910.08344v2",
+          "updated": "2020-05-27T07:34:25Z",
+          "url": "https://arxiv.org/abs/1910.08344v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-10-18T11:25:09Z",
+          "query_id": "1910.08344v3",
+          "updated": "2020-05-28T10:58:21Z",
+          "url": "https://arxiv.org/abs/1910.08344v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.10099",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-10T15:15:06Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.10099v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.10099v1",
+      "title": "Mesoscale impact of trader psychology on stock markets: a multi-agent AI approach",
+      "version_submitted_at": "2019-10-10T15:15:06Z",
+      "versions": [
+        {
+          "published": "2019-10-10T15:15:06Z",
+          "query_id": "1910.10099v1",
+          "updated": "2019-10-10T15:15:06Z",
+          "url": "https://arxiv.org/abs/1910.10099v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.12596",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-28T08:52:19Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.12596v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.12596v1",
+      "title": "An Integrated Early Warning System for Stock Market Turbulence",
+      "version_submitted_at": "2019-11-28T08:52:19Z",
+      "versions": [
+        {
+          "published": "2019-11-28T08:52:19Z",
+          "query_id": "1911.12596v1",
+          "updated": "2019-11-28T08:52:19Z",
+          "url": "https://arxiv.org/abs/1911.12596v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.09524",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-19T20:00:06Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.09524v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.09524v1",
+      "title": "Evolving ab initio trading strategies in heterogeneous environments",
+      "version_submitted_at": "2019-12-19T20:00:06Z",
+      "versions": [
+        {
+          "published": "2019-12-19T20:00:06Z",
+          "query_id": "1912.09524v1",
+          "updated": "2019-12-19T20:00:06Z",
+          "url": "https://arxiv.org/abs/1912.09524v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.01751",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-07T11:19:31Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1901.01751v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.01751v3",
+      "title": "Generative Adversarial Networks for Financial Trading Strategies Fine-Tuning and Combination",
+      "version_submitted_at": "2019-03-30T14:19:01Z",
+      "versions": [
+        {
+          "published": "2019-01-07T11:19:31Z",
+          "query_id": "1901.01751v1",
+          "updated": "2019-01-07T11:19:31Z",
+          "url": "https://arxiv.org/abs/1901.01751v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-01-07T11:19:31Z",
+          "query_id": "1901.01751v2",
+          "updated": "2019-01-22T22:57:18Z",
+          "url": "https://arxiv.org/abs/1901.01751v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-01-07T11:19:31Z",
+          "query_id": "1901.01751v3",
+          "updated": "2019-03-30T14:19:01Z",
+          "url": "https://arxiv.org/abs/1901.01751v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.11686",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v5",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-09T12:07:24Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1903.11686v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.11686v5",
+      "title": "Discounted optimal stopping of a Brownian bridge, with application to American options under pinning",
+      "version_submitted_at": "2019-08-14T19:54:07Z",
+      "versions": [
+        {
+          "published": "2019-03-09T12:07:24Z",
+          "query_id": "1903.11686v1",
+          "updated": "2019-03-09T12:07:24Z",
+          "url": "https://arxiv.org/abs/1903.11686v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-03-09T12:07:24Z",
+          "query_id": "1903.11686v2",
+          "updated": "2019-08-14T19:54:07Z",
+          "url": "https://arxiv.org/abs/1903.11686v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-03-09T12:07:24Z",
+          "query_id": "1903.11686v3",
+          "updated": "2020-02-02T13:32:45Z",
+          "url": "https://arxiv.org/abs/1903.11686v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-03-09T12:07:24Z",
+          "query_id": "1903.11686v4",
+          "updated": "2020-07-17T12:29:52Z",
+          "url": "https://arxiv.org/abs/1903.11686v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-03-09T12:07:24Z",
+          "query_id": "1903.11686v5",
+          "updated": "2020-08-22T17:07:52Z",
+          "url": "https://arxiv.org/abs/1903.11686v5",
+          "version": "v5"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.12442",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-29T04:27:43Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1904.12442v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.12442v3",
+      "title": "Mean-variance portfolio selection under Volterra Heston model",
+      "version_submitted_at": "2019-09-29T12:34:26Z",
+      "versions": [
+        {
+          "published": "2019-04-29T04:27:43Z",
+          "query_id": "1904.12442v1",
+          "updated": "2019-04-29T04:27:43Z",
+          "url": "https://arxiv.org/abs/1904.12442v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-29T04:27:43Z",
+          "query_id": "1904.12442v2",
+          "updated": "2019-09-29T12:34:26Z",
+          "url": "https://arxiv.org/abs/1904.12442v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-04-29T04:27:43Z",
+          "query_id": "1904.12442v3",
+          "updated": "2020-01-29T04:03:28Z",
+          "url": "https://arxiv.org/abs/1904.12442v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.12834",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v5",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-29T17:35:41Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v4",
+        "v5"
+      ],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1904.12834v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.12834v5",
+      "title": "Incorporating prior financial domain knowledge into neural networks for implied volatility surface prediction",
+      "version_submitted_at": "2019-06-13T22:32:10Z",
+      "versions": [
+        {
+          "published": "2019-04-29T17:35:41Z",
+          "query_id": "1904.12834v1",
+          "updated": "2019-04-29T17:35:41Z",
+          "url": "https://arxiv.org/abs/1904.12834v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-29T17:35:41Z",
+          "query_id": "1904.12834v2",
+          "updated": "2019-05-26T21:13:58Z",
+          "url": "https://arxiv.org/abs/1904.12834v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-04-29T17:35:41Z",
+          "query_id": "1904.12834v3",
+          "updated": "2019-06-13T22:32:10Z",
+          "url": "https://arxiv.org/abs/1904.12834v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-04-29T17:35:41Z",
+          "query_id": "1904.12834v4",
+          "updated": "2020-01-30T23:43:33Z",
+          "url": "https://arxiv.org/abs/1904.12834v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-04-29T17:35:41Z",
+          "query_id": "1904.12834v5",
+          "updated": "2021-05-28T14:26:23Z",
+          "url": "https://arxiv.org/abs/1904.12834v5",
+          "version": "v5"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.00219",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-29T15:19:44Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1907.00219v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.00219v2",
+      "title": "Branching Particle Pricers with Heston Examples",
+      "version_submitted_at": "2019-11-11T22:25:12Z",
+      "versions": [
+        {
+          "published": "2019-06-29T15:19:44Z",
+          "query_id": "1907.00219v1",
+          "updated": "2019-06-29T15:19:44Z",
+          "url": "https://arxiv.org/abs/1907.00219v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-29T15:19:44Z",
+          "query_id": "1907.00219v2",
+          "updated": "2019-11-11T22:25:12Z",
+          "url": "https://arxiv.org/abs/1907.00219v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.12025",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-28T06:33:18Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.12025v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.12025v1",
+      "title": "Marked Hawkes process modeling of price dynamics and volatility estimation",
+      "version_submitted_at": "2019-07-28T06:33:18Z",
+      "versions": [
+        {
+          "published": "2019-07-28T06:33:18Z",
+          "query_id": "1907.12025v1",
+          "updated": "2019-07-28T06:33:18Z",
+          "url": "https://arxiv.org/abs/1907.12025v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.02972",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-06T15:30:56Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.02972v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.02972v1",
+      "title": "Portfolio optimisation under rough Heston models",
+      "version_submitted_at": "2019-09-06T15:30:56Z",
+      "versions": [
+        {
+          "published": "2019-09-06T15:30:56Z",
+          "query_id": "1909.02972v1",
+          "updated": "2019-09-06T15:30:56Z",
+          "url": "https://arxiv.org/abs/1909.02972v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.04903",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-11T08:16:48Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1909.04903v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.04903v2",
+      "title": "Estimating the volatility of Bitcoin using GARCH models",
+      "version_submitted_at": "2019-10-04T18:44:59Z",
+      "versions": [
+        {
+          "published": "2019-09-11T08:16:48Z",
+          "query_id": "1909.04903v1",
+          "updated": "2019-09-11T08:16:48Z",
+          "url": "https://arxiv.org/abs/1909.04903v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-09-11T08:16:48Z",
+          "query_id": "1909.04903v2",
+          "updated": "2019-10-04T18:44:59Z",
+          "url": "https://arxiv.org/abs/1909.04903v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.10187",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-23T07:04:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.10187v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.10187v1",
+      "title": "Consistent and Efficient Pricing of SPX and VIX Options under Multiscale Stochastic Volatility",
+      "version_submitted_at": "2019-09-23T07:04:16Z",
+      "versions": [
+        {
+          "published": "2019-09-23T07:04:16Z",
+          "query_id": "1909.10187v1",
+          "updated": "2019-09-23T07:04:16Z",
+          "url": "https://arxiv.org/abs/1909.10187v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.10957",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-24T14:33:32Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.10957v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.10957v2",
+      "title": "A Peek into the Unobservable: Hidden States and Bayesian Inference for the Bitcoin and Ether Price Series",
+      "version_submitted_at": "2019-09-24T14:33:32Z",
+      "versions": [
+        {
+          "published": "2019-09-24T14:33:32Z",
+          "query_id": "1909.10957v1",
+          "updated": "2019-09-24T14:33:32Z",
+          "url": "https://arxiv.org/abs/1909.10957v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-09-24T14:33:32Z",
+          "query_id": "1909.10957v2",
+          "updated": "2021-07-18T13:22:14Z",
+          "url": "https://arxiv.org/abs/1909.10957v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.05561",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-12T13:19:00Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1910.05561v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.05561v3",
+      "title": "Portfolio Cuts: A Graph-Theoretic Framework to Diversification",
+      "version_submitted_at": "2019-10-16T13:39:02Z",
+      "versions": [
+        {
+          "published": "2019-10-12T13:19:00Z",
+          "query_id": "1910.05561v1",
+          "updated": "2019-10-12T13:19:00Z",
+          "url": "https://arxiv.org/abs/1910.05561v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-10-12T13:19:00Z",
+          "query_id": "1910.05561v2",
+          "updated": "2019-10-15T15:32:33Z",
+          "url": "https://arxiv.org/abs/1910.05561v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-10-12T13:19:00Z",
+          "query_id": "1910.05561v3",
+          "updated": "2019-10-16T13:39:02Z",
+          "url": "https://arxiv.org/abs/1910.05561v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.10606",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-23T15:23:42Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.10606v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.10606v4",
+      "title": "Inference of Binary Regime Models with Jump Discontinuities",
+      "version_submitted_at": "2019-10-23T15:23:42Z",
+      "versions": [
+        {
+          "published": "2019-10-23T15:23:42Z",
+          "query_id": "1910.10606v1",
+          "updated": "2019-10-23T15:23:42Z",
+          "url": "https://arxiv.org/abs/1910.10606v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-10-23T15:23:42Z",
+          "query_id": "1910.10606v2",
+          "updated": "2021-02-22T06:58:36Z",
+          "url": "https://arxiv.org/abs/1910.10606v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-10-23T15:23:42Z",
+          "query_id": "1910.10606v3",
+          "updated": "2021-07-29T10:38:36Z",
+          "url": "https://arxiv.org/abs/1910.10606v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-10-23T15:23:42Z",
+          "query_id": "1910.10606v4",
+          "updated": "2022-03-20T14:14:34Z",
+          "url": "https://arxiv.org/abs/1910.10606v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.05052",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-12T18:18:22Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1911.05052v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.05052v2",
+      "title": "Index Tracking with Cardinality Constraints: A Stochastic Neural Networks Approach",
+      "version_submitted_at": "2019-11-14T13:52:45Z",
+      "versions": [
+        {
+          "published": "2019-11-12T18:18:22Z",
+          "query_id": "1911.05052v1",
+          "updated": "2019-11-12T18:18:22Z",
+          "url": "https://arxiv.org/abs/1911.05052v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-11-12T18:18:22Z",
+          "query_id": "1911.05052v2",
+          "updated": "2019-11-14T13:52:45Z",
+          "url": "https://arxiv.org/abs/1911.05052v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.06126",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-14T14:32:29Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.06126v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.06126v2",
+      "title": "Unveil stock correlation via a new tensor-based decomposition method",
+      "version_submitted_at": "2019-11-14T14:32:29Z",
+      "versions": [
+        {
+          "published": "2019-11-14T14:32:29Z",
+          "query_id": "1911.06126v1",
+          "updated": "2019-11-14T14:32:29Z",
+          "url": "https://arxiv.org/abs/1911.06126v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-11-14T14:32:29Z",
+          "query_id": "1911.06126v2",
+          "updated": "2020-04-28T15:44:21Z",
+          "url": "https://arxiv.org/abs/1911.06126v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.08280",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-24T08:30:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.08280v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.08280v1",
+      "title": "Temporal Logistic Neural Bag-of-Features for Financial Time series Forecasting leveraging Limit Order Book Data",
+      "version_submitted_at": "2019-01-24T08:30:16Z",
+      "versions": [
+        {
+          "published": "2019-01-24T08:30:16Z",
+          "query_id": "1901.08280v1",
+          "updated": "2019-01-24T08:30:16Z",
+          "url": "https://arxiv.org/abs/1901.08280v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.08938",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-25T15:50:54Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.08938v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.08938v1",
+      "title": "Queue-reactive Hawkes models for the order flow",
+      "version_submitted_at": "2019-01-25T15:50:54Z",
+      "versions": [
+        {
+          "published": "2019-01-25T15:50:54Z",
+          "query_id": "1901.08938v1",
+          "updated": "2019-01-25T15:50:54Z",
+          "url": "https://arxiv.org/abs/1901.08938v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.00786",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-02T20:39:54Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.00786v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.00786v1",
+      "title": "The Applications of Graph Theory to Investing",
+      "version_submitted_at": "2019-02-02T20:39:54Z",
+      "versions": [
+        {
+          "published": "2019-02-02T20:39:54Z",
+          "query_id": "1902.00786v1",
+          "updated": "2019-02-02T20:39:54Z",
+          "url": "https://arxiv.org/abs/1902.00786v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.05315",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-04T12:18:42Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.05315v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.05315v1",
+      "title": "Bitcoin Price Prediction: An ARIMA Approach",
+      "version_submitted_at": "2019-04-04T12:18:42Z",
+      "versions": [
+        {
+          "published": "2019-04-04T12:18:42Z",
+          "query_id": "1904.05315v1",
+          "updated": "2019-04-04T12:18:42Z",
+          "url": "https://arxiv.org/abs/1904.05315v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.10523",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-23T20:12:18Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1904.10523v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.10523v1",
+      "title": "A neural network-based framework for financial model calibration",
+      "version_submitted_at": "2019-04-23T20:12:18Z",
+      "versions": [
+        {
+          "published": "2019-04-23T20:12:18Z",
+          "query_id": "1904.10523v1",
+          "updated": "2019-04-23T20:12:18Z",
+          "url": "https://arxiv.org/abs/1904.10523v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1905.05931",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-05-15T03:42:06Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1905.05931v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1905.05931v1",
+      "title": "What is the Minimal Systemic Risk in Financial Exposure Networks?",
+      "version_submitted_at": "2019-05-15T03:42:06Z",
+      "versions": [
+        {
+          "published": "2019-05-15T03:42:06Z",
+          "query_id": "1905.05931v1",
+          "updated": "2019-05-15T03:42:06Z",
+          "url": "https://arxiv.org/abs/1905.05931v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.01320",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-04T10:20:01Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.01320v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.01320v1",
+      "title": "Fair Pricing of Variable Annuities with Guarantees under the Benchmark Approach",
+      "version_submitted_at": "2019-06-04T10:20:01Z",
+      "versions": [
+        {
+          "published": "2019-06-04T10:20:01Z",
+          "query_id": "1906.01320v1",
+          "updated": "2019-06-04T10:20:01Z",
+          "url": "https://arxiv.org/abs/1906.01320v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.10388",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-25T08:51:02Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1906.10388v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.10388v3",
+      "title": "Lead-lag Relationships in Foreign Exchange Markets",
+      "version_submitted_at": "2019-09-15T12:27:33Z",
+      "versions": [
+        {
+          "published": "2019-06-25T08:51:02Z",
+          "query_id": "1906.10388v1",
+          "updated": "2019-06-25T08:51:02Z",
+          "url": "https://arxiv.org/abs/1906.10388v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-25T08:51:02Z",
+          "query_id": "1906.10388v2",
+          "updated": "2019-06-26T11:27:11Z",
+          "url": "https://arxiv.org/abs/1906.10388v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-06-25T08:51:02Z",
+          "query_id": "1906.10388v3",
+          "updated": "2019-09-15T12:27:33Z",
+          "url": "https://arxiv.org/abs/1906.10388v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.04986",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-11T11:52:36Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.04986v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.04986v2",
+      "title": "Continuous Time Random Walk with correlated waiting times. The crucial role of inter-trade times in volatility clustering",
+      "version_submitted_at": "2019-09-11T11:52:36Z",
+      "versions": [
+        {
+          "published": "2019-09-11T11:52:36Z",
+          "query_id": "1909.04986v1",
+          "updated": "2019-09-11T11:52:36Z",
+          "url": "https://arxiv.org/abs/1909.04986v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-09-11T11:52:36Z",
+          "query_id": "1909.04986v2",
+          "updated": "2020-04-11T10:43:35Z",
+          "url": "https://arxiv.org/abs/1909.04986v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.08647",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-20T00:48:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.08647v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.08647v1",
+      "title": "Deep Reinforcement Learning in Cryptocurrency Market Making",
+      "version_submitted_at": "2019-11-20T00:48:16Z",
+      "versions": [
+        {
+          "published": "2019-11-20T00:48:16Z",
+          "query_id": "1911.08647v1",
+          "updated": "2019-11-20T00:48:16Z",
+          "url": "https://arxiv.org/abs/1911.08647v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.04941",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-10T19:28:03Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.04941v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.04941v1",
+      "title": "Get Real: Realism Metrics for Robust Limit Order Book Market Simulations",
+      "version_submitted_at": "2019-12-10T19:28:03Z",
+      "versions": [
+        {
+          "published": "2019-12-10T19:28:03Z",
+          "query_id": "1912.04941v1",
+          "updated": "2019-12-10T19:28:03Z",
+          "url": "https://arxiv.org/abs/1912.04941v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.10709",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-23T10:03:38Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.10709v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.10709v2",
+      "title": "Centralizing-Unitizing Standardized High-Dimensional Directional Statistics and Its Applications in Finance",
+      "version_submitted_at": "2019-12-23T10:03:38Z",
+      "versions": [
+        {
+          "published": "2019-12-23T10:03:38Z",
+          "query_id": "1912.10709v1",
+          "updated": "2019-12-23T10:03:38Z",
+          "url": "https://arxiv.org/abs/1912.10709v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-12-23T10:03:38Z",
+          "query_id": "1912.10709v2",
+          "updated": "2020-08-14T02:41:20Z",
+          "url": "https://arxiv.org/abs/1912.10709v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.04770",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-15T11:21:42Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.04770v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.04770v1",
+      "title": "Empirical forward price distribution from Bitcoin option prices",
+      "version_submitted_at": "2019-01-15T11:21:42Z",
+      "versions": [
+        {
+          "published": "2019-01-15T11:21:42Z",
+          "query_id": "1901.04770v1",
+          "updated": "2019-01-15T11:21:42Z",
+          "url": "https://arxiv.org/abs/1901.04770v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.09145",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-26T02:35:54Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1901.09145v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.09145v1",
+      "title": "Volatility Models Applied to Geophysics and High Frequency Financial Market Data",
+      "version_submitted_at": "2019-01-26T02:35:54Z",
+      "versions": [
+        {
+          "published": "2019-01-26T02:35:54Z",
+          "query_id": "1901.09145v1",
+          "updated": "2019-01-26T02:35:54Z",
+          "url": "https://arxiv.org/abs/1901.09145v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.06883",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-19T04:02:28Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1902.06883v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.06883v2",
+      "title": "Multiscale Asymptotic Analysis for Portfolio Optimization under Stochastic Environment",
+      "version_submitted_at": "2019-09-01T19:23:27Z",
+      "versions": [
+        {
+          "published": "2019-02-19T04:02:28Z",
+          "query_id": "1902.06883v1",
+          "updated": "2019-02-19T04:02:28Z",
+          "url": "https://arxiv.org/abs/1902.06883v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-02-19T04:02:28Z",
+          "query_id": "1902.06883v2",
+          "updated": "2019-09-01T19:23:27Z",
+          "url": "https://arxiv.org/abs/1902.06883v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.08684",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-02-13T15:56:51Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.08684v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.08684v1",
+      "title": "Discovering Language of the Stocks",
+      "version_submitted_at": "2019-02-13T15:56:51Z",
+      "versions": [
+        {
+          "published": "2019-02-13T15:56:51Z",
+          "query_id": "1902.08684v1",
+          "updated": "2019-02-13T15:56:51Z",
+          "url": "https://arxiv.org/abs/1902.08684v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1902.10502",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-30T16:23:35Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1902.10502v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1902.10502v1",
+      "title": "Quantum model for price forecasting in financial markets",
+      "version_submitted_at": "2019-01-30T16:23:35Z",
+      "versions": [
+        {
+          "published": "2019-01-30T16:23:35Z",
+          "query_id": "1902.10502v1",
+          "updated": "2019-01-30T16:23:35Z",
+          "url": "https://arxiv.org/abs/1902.10502v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1905.04852",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-05-13T04:04:34Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1905.04852v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1905.04852v2",
+      "title": "Is Volatility Rough ?",
+      "version_submitted_at": "2019-05-17T00:48:39Z",
+      "versions": [
+        {
+          "published": "2019-05-13T04:04:34Z",
+          "query_id": "1905.04852v1",
+          "updated": "2019-05-13T04:04:34Z",
+          "url": "https://arxiv.org/abs/1905.04852v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-05-13T04:04:34Z",
+          "query_id": "1905.04852v2",
+          "updated": "2019-05-17T00:48:39Z",
+          "url": "https://arxiv.org/abs/1905.04852v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.02818",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v5",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-06T21:11:05Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v5"
+      ],
+      "reasons": [],
+      "selected_version": "v4",
+      "selected_version_url": "https://arxiv.org/abs/1906.02818v4",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.02818v5",
+      "title": "Tensor Processing Units for Financial Monte Carlo",
+      "version_submitted_at": "2019-08-28T19:14:34Z",
+      "versions": [
+        {
+          "published": "2019-06-06T21:11:05Z",
+          "query_id": "1906.02818v1",
+          "updated": "2019-06-06T21:11:05Z",
+          "url": "https://arxiv.org/abs/1906.02818v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-06T21:11:05Z",
+          "query_id": "1906.02818v2",
+          "updated": "2019-06-10T20:40:12Z",
+          "url": "https://arxiv.org/abs/1906.02818v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-06-06T21:11:05Z",
+          "query_id": "1906.02818v3",
+          "updated": "2019-07-24T17:34:20Z",
+          "url": "https://arxiv.org/abs/1906.02818v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-06-06T21:11:05Z",
+          "query_id": "1906.02818v4",
+          "updated": "2019-08-28T19:14:34Z",
+          "url": "https://arxiv.org/abs/1906.02818v4",
+          "version": "v4"
+        },
+        {
+          "published": "2019-06-06T21:11:05Z",
+          "query_id": "1906.02818v5",
+          "updated": "2020-01-27T22:20:16Z",
+          "url": "https://arxiv.org/abs/1906.02818v5",
+          "version": "v5"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.10325",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-25T05:36:29Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.10325v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.10325v1",
+      "title": "Against the Norm: Modeling Daily Stock Returns with the Laplace Distribution",
+      "version_submitted_at": "2019-06-25T05:36:29Z",
+      "versions": [
+        {
+          "published": "2019-06-25T05:36:29Z",
+          "query_id": "1906.10325v1",
+          "updated": "2019-06-25T05:36:29Z",
+          "url": "https://arxiv.org/abs/1906.10325v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.03009",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-01T08:37:02Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.03009v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.03009v1",
+      "title": "Identification of short-term and long-term time scales in stock markets and effect of structural break",
+      "version_submitted_at": "2019-07-01T08:37:02Z",
+      "versions": [
+        {
+          "published": "2019-07-01T08:37:02Z",
+          "query_id": "1907.03009v1",
+          "updated": "2019-07-01T08:37:02Z",
+          "url": "https://arxiv.org/abs/1907.03009v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.10407",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-21T03:21:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.10407v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.10407v1",
+      "title": "Evaluating the Effectiveness of Common Technical Trading Models",
+      "version_submitted_at": "2019-07-21T03:21:16Z",
+      "versions": [
+        {
+          "published": "2019-07-21T03:21:16Z",
+          "query_id": "1907.10407v1",
+          "updated": "2019-07-21T03:21:16Z",
+          "url": "https://arxiv.org/abs/1907.10407v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.02591",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-31T22:10:01Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.02591v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.02591v1",
+      "title": "Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics",
+      "version_submitted_at": "2019-07-31T22:10:01Z",
+      "versions": [
+        {
+          "published": "2019-07-31T22:10:01Z",
+          "query_id": "1908.02591v1",
+          "updated": "2019-07-31T22:10:01Z",
+          "url": "https://arxiv.org/abs/1908.02591v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1908.05089",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-08-14T12:11:15Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1908.05089v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1908.05089v1",
+      "title": "Modeling microstructure price dynamics with symmetric Hawkes and diffusion model using ultra-high-frequency stock data",
+      "version_submitted_at": "2019-08-14T12:11:15Z",
+      "versions": [
+        {
+          "published": "2019-08-14T12:11:15Z",
+          "query_id": "1908.05089v1",
+          "updated": "2019-08-14T12:11:15Z",
+          "url": "https://arxiv.org/abs/1908.05089v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1909.03185",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-09-07T04:17:45Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1909.03185v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1909.03185v1",
+      "title": "Heterogeneous wealth distribution, round-trip trading and the emergence of volatility clustering in Speculation Game",
+      "version_submitted_at": "2019-09-07T04:17:45Z",
+      "versions": [
+        {
+          "published": "2019-09-07T04:17:45Z",
+          "query_id": "1909.03185v1",
+          "updated": "2019-09-07T04:17:45Z",
+          "url": "https://arxiv.org/abs/1909.03185v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1910.05536",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-10-12T09:26:11Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1910.05536v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1910.05536v1",
+      "title": "sPortfolio: Stratified Visual Analysis of Stock Portfolios",
+      "version_submitted_at": "2019-10-12T09:26:11Z",
+      "versions": [
+        {
+          "published": "2019-10-12T09:26:11Z",
+          "query_id": "1910.05536v1",
+          "updated": "2019-10-12T09:26:11Z",
+          "url": "https://arxiv.org/abs/1910.05536v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.12540",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-28T05:50:40Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.12540v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.12540v1",
+      "title": "U-CNNpred: A Universal CNN-based Predictor for Stock Markets",
+      "version_submitted_at": "2019-11-28T05:50:40Z",
+      "versions": [
+        {
+          "published": "2019-11-28T05:50:40Z",
+          "query_id": "1911.12540v1",
+          "updated": "2019-11-28T05:50:40Z",
+          "url": "https://arxiv.org/abs/1911.12540v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.06709",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-13T21:04:55Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.06709v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.06709v1",
+      "title": "Robustness and sensitivity analyses for stochastic volatility models under uncertain data structure",
+      "version_submitted_at": "2019-12-13T21:04:55Z",
+      "versions": [
+        {
+          "published": "2019-12-13T21:04:55Z",
+          "query_id": "1912.06709v1",
+          "updated": "2019-12-13T21:04:55Z",
+          "url": "https://arxiv.org/abs/1912.06709v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1901.09647",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-28T13:56:44Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1901.09647v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1901.09647v2",
+      "title": "Deep Learning Volatility",
+      "version_submitted_at": "2019-08-22T22:36:15Z",
+      "versions": [
+        {
+          "published": "2019-01-28T13:56:44Z",
+          "query_id": "1901.09647v1",
+          "updated": "2019-01-28T13:56:44Z",
+          "url": "https://arxiv.org/abs/1901.09647v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-01-28T13:56:44Z",
+          "query_id": "1901.09647v2",
+          "updated": "2019-08-22T22:36:15Z",
+          "url": "https://arxiv.org/abs/1901.09647v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.07737",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-18T21:46:57Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.07737v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.07737v1",
+      "title": "Risk and Return models for Equity Markets and Implied Equity Risk Premium",
+      "version_submitted_at": "2019-03-18T21:46:57Z",
+      "versions": [
+        {
+          "published": "2019-03-18T21:46:57Z",
+          "query_id": "1903.07737v1",
+          "updated": "2019-03-18T21:46:57Z",
+          "url": "https://arxiv.org/abs/1903.07737v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.08076",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-03-19T16:06:32Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.08076v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.08076v1",
+      "title": "The Changing Geopolitics in the Arab World: Implications of the 2017 Gulf Crisis for Business",
+      "version_submitted_at": "2019-03-19T16:06:32Z",
+      "versions": [
+        {
+          "published": "2019-03-19T16:06:32Z",
+          "query_id": "1903.08076v1",
+          "updated": "2019-03-19T16:06:32Z",
+          "url": "https://arxiv.org/abs/1903.08076v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.06478",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-15T06:25:03Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1906.06478v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.06478v4",
+      "title": "Calibration of Local-Stochastic Volatility Models by Optimal Transport",
+      "version_submitted_at": "2019-09-24T07:10:49Z",
+      "versions": [
+        {
+          "published": "2019-06-15T06:25:03Z",
+          "query_id": "1906.06478v1",
+          "updated": "2019-06-15T06:25:03Z",
+          "url": "https://arxiv.org/abs/1906.06478v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-15T06:25:03Z",
+          "query_id": "1906.06478v2",
+          "updated": "2019-09-24T07:10:49Z",
+          "url": "https://arxiv.org/abs/1906.06478v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-06-15T06:25:03Z",
+          "query_id": "1906.06478v3",
+          "updated": "2020-10-26T05:26:10Z",
+          "url": "https://arxiv.org/abs/1906.06478v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-06-15T06:25:03Z",
+          "query_id": "1906.06478v4",
+          "updated": "2021-07-21T14:11:55Z",
+          "url": "https://arxiv.org/abs/1906.06478v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.03093",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-06T07:49:30Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.03093v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.03093v1",
+      "title": "Dynamic Mean-Variance Portfolio Optimisation",
+      "version_submitted_at": "2019-07-06T07:49:30Z",
+      "versions": [
+        {
+          "published": "2019-07-06T07:49:30Z",
+          "query_id": "1907.03093v1",
+          "updated": "2019-07-06T07:49:30Z",
+          "url": "https://arxiv.org/abs/1907.03093v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1907.09452",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-07-13T13:26:47Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1907.09452v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1907.09452v1",
+      "title": "Mid-price Prediction Based on Machine Learning Methods with Technical and Quantitative Indicators",
+      "version_submitted_at": "2019-07-13T13:26:47Z",
+      "versions": [
+        {
+          "published": "2019-07-13T13:26:47Z",
+          "query_id": "1907.09452v1",
+          "updated": "2019-07-13T13:26:47Z",
+          "url": "https://arxiv.org/abs/1907.09452v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1911.10297",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-11-23T01:39:31Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1911.10297v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1911.10297v1",
+      "title": "Financial ratios and stock returns reappraised through a topological data analysis lens",
+      "version_submitted_at": "2019-11-23T01:39:31Z",
+      "versions": [
+        {
+          "published": "2019-11-23T01:39:31Z",
+          "query_id": "1911.10297v1",
+          "updated": "2019-11-23T01:39:31Z",
+          "url": "https://arxiv.org/abs/1911.10297v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.11060",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-23T19:01:02Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.11060v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.11060v3",
+      "title": "Pricing and hedging American-style options with deep learning",
+      "version_submitted_at": "2019-12-23T19:01:02Z",
+      "versions": [
+        {
+          "published": "2019-12-23T19:01:02Z",
+          "query_id": "1912.11060v1",
+          "updated": "2019-12-23T19:01:02Z",
+          "url": "https://arxiv.org/abs/1912.11060v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-12-23T19:01:02Z",
+          "query_id": "1912.11060v2",
+          "updated": "2020-07-06T17:11:42Z",
+          "url": "https://arxiv.org/abs/1912.11060v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-12-23T19:01:02Z",
+          "query_id": "1912.11060v3",
+          "updated": "2020-07-18T18:44:11Z",
+          "url": "https://arxiv.org/abs/1912.11060v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1903.11642",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-01-13T22:43:16Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1903.11642v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1903.11642v1",
+      "title": "Sutte Indicator: an approach to predict the direction of stock market movements",
+      "version_submitted_at": "2019-01-13T22:43:16Z",
+      "versions": [
+        {
+          "published": "2019-01-13T22:43:16Z",
+          "query_id": "1903.11642v1",
+          "updated": "2019-01-13T22:43:16Z",
+          "url": "https://arxiv.org/abs/1903.11642v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1904.10250",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v2",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-04-23T11:22:28Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v2",
+      "selected_version_url": "https://arxiv.org/abs/1904.10250v2",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1904.10250v2",
+      "title": "Best Portfolio Management Strategies For Synthetic and Real Assets",
+      "version_submitted_at": "2019-09-05T22:40:08Z",
+      "versions": [
+        {
+          "published": "2019-04-23T11:22:28Z",
+          "query_id": "1904.10250v1",
+          "updated": "2019-04-23T11:22:28Z",
+          "url": "https://arxiv.org/abs/1904.10250v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-04-23T11:22:28Z",
+          "query_id": "1904.10250v2",
+          "updated": "2019-09-05T22:40:08Z",
+          "url": "https://arxiv.org/abs/1904.10250v2",
+          "version": "v2"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1905.05310",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v3",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-05-13T22:49:32Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v3",
+      "selected_version_url": "https://arxiv.org/abs/1905.05310v3",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1905.05310v3",
+      "title": "On the consistency of jump-diffusion dynamics for FX rates under inversion",
+      "version_submitted_at": "2019-07-08T13:44:15Z",
+      "versions": [
+        {
+          "published": "2019-05-13T22:49:32Z",
+          "query_id": "1905.05310v1",
+          "updated": "2019-05-13T22:49:32Z",
+          "url": "https://arxiv.org/abs/1905.05310v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-05-13T22:49:32Z",
+          "query_id": "1905.05310v2",
+          "updated": "2019-05-16T22:58:51Z",
+          "url": "https://arxiv.org/abs/1905.05310v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-05-13T22:49:32Z",
+          "query_id": "1905.05310v3",
+          "updated": "2019-07-08T13:44:15Z",
+          "url": "https://arxiv.org/abs/1905.05310v3",
+          "version": "v3"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.05494",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-13T05:55:22Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.05494v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.05494v1",
+      "title": "Time scales in stock markets",
+      "version_submitted_at": "2019-06-13T05:55:22Z",
+      "versions": [
+        {
+          "published": "2019-06-13T05:55:22Z",
+          "query_id": "1906.05494v1",
+          "updated": "2019-06-13T05:55:22Z",
+          "url": "https://arxiv.org/abs/1906.05494v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.05898",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v4",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-13T19:11:57Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [
+        "v2",
+        "v3",
+        "v4"
+      ],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.05898v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.05898v4",
+      "title": "Stochastic PDEs for large portfolios with general mean-reverting volatility processes",
+      "version_submitted_at": "2019-06-13T19:11:57Z",
+      "versions": [
+        {
+          "published": "2019-06-13T19:11:57Z",
+          "query_id": "1906.05898v1",
+          "updated": "2019-06-13T19:11:57Z",
+          "url": "https://arxiv.org/abs/1906.05898v1",
+          "version": "v1"
+        },
+        {
+          "published": "2019-06-13T19:11:57Z",
+          "query_id": "1906.05898v2",
+          "updated": "2021-10-04T19:33:48Z",
+          "url": "https://arxiv.org/abs/1906.05898v2",
+          "version": "v2"
+        },
+        {
+          "published": "2019-06-13T19:11:57Z",
+          "query_id": "1906.05898v3",
+          "updated": "2023-12-01T21:03:26Z",
+          "url": "https://arxiv.org/abs/1906.05898v3",
+          "version": "v3"
+        },
+        {
+          "published": "2019-06-13T19:11:57Z",
+          "query_id": "1906.05898v4",
+          "updated": "2024-03-22T15:21:48Z",
+          "url": "https://arxiv.org/abs/1906.05898v4",
+          "version": "v4"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1906.12134",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-06-28T11:16:00Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1906.12134v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1906.12134v1",
+      "title": "Dealing with Stochastic Volatility in Time Series Using the R Package stochvol",
+      "version_submitted_at": "2019-06-28T11:16:00Z",
+      "versions": [
+        {
+          "published": "2019-06-28T11:16:00Z",
+          "query_id": "1906.12134v1",
+          "updated": "2019-06-28T11:16:00Z",
+          "url": "https://arxiv.org/abs/1906.12134v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.03556",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-07T20:27:23Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.03556v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.03556v1",
+      "title": "A percolation model for the emergence of the Bitcoin Lightning Network",
+      "version_submitted_at": "2019-12-07T20:27:23Z",
+      "versions": [
+        {
+          "published": "2019-12-07T20:27:23Z",
+          "query_id": "1912.03556v1",
+          "updated": "2019-12-07T20:27:23Z",
+          "url": "https://arxiv.org/abs/1912.03556v1",
+          "version": "v1"
+        }
+      ]
+    },
+    {
+      "arxiv_id": "1912.04221",
+      "availability_status": "VERIFIED",
+      "current_latest_version": "v1",
+      "cutoff": "2019-12-31T23:59:59Z",
+      "first_submitted_at": "2019-12-09T17:56:57Z",
+      "inspected_at": "2026-08-13T11:10:52Z",
+      "later_revisions_excluded": [],
+      "reasons": [],
+      "selected_version": "v1",
+      "selected_version_url": "https://arxiv.org/abs/1912.04221v1",
+      "selection_snapshot_abs_url": "https://arxiv.org/abs/1912.04221v1",
+      "title": "Leakage of rank-dependent functionally generated trading strategies",
+      "version_submitted_at": "2019-12-09T17:56:57Z",
+      "versions": [
+        {
+          "published": "2019-12-09T17:56:57Z",
+          "query_id": "1912.04221v1",
+          "updated": "2019-12-09T17:56:57Z",
+          "url": "https://arxiv.org/abs/1912.04221v1",
+          "version": "v1"
+        }
+      ]
+    }
+  ],
+  "policy": "Select the highest explicit arXiv version whose primary-API updated timestamp is at or before the cutoff; never substitute the current latest revision after cutoff.",
+  "population_year": 2019,
+  "request_provenance": [
+    {
+      "entry_count": 40,
+      "query_ids": [
+        "1903.06033v1",
+        "1903.06033v2",
+        "1912.11166v1",
+        "1907.00293v1",
+        "1903.02228v1",
+        "1903.02228v2",
+        "1903.02228v3",
+        "1911.08448v1",
+        "1911.08448v2",
+        "1911.08448v3",
+        "1911.08448v4",
+        "1904.04912v1",
+        "1904.04912v2",
+        "1904.04912v3",
+        "1906.05065v1",
+        "1906.05065v2",
+        "1906.05065v3",
+        "1907.02457v1",
+        "1910.05555v1",
+        "1911.10450v1",
+        "1909.09571v1",
+        "1910.07564v1",
+        "1911.10107v1",
+        "1912.06426v1",
+        "1902.09606v1",
+        "1907.00558v1",
+        "1909.03278v1",
+        "1909.07748v1",
+        "1909.07748v2",
+        "1909.07748v3",
+        "1909.07748v4",
+        "1909.07748v5",
+        "1909.10801v1",
+        "1912.10237v1",
+        "1904.00745v1",
+        "1904.00745v2",
+        "1904.00745v3",
+        "1904.00745v4",
+        "1904.00745v5",
+        "1904.00745v6"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1903.06033v1%2C1903.06033v2%2C1912.11166v1%2C1907.00293v1%2C1903.02228v1%2C1903.02228v2%2C1903.02228v3%2C1911.08448v1%2C1911.08448v2%2C1911.08448v3%2C1911.08448v4%2C1904.04912v1%2C1904.04912v2%2C1904.04912v3%2C1906.05065v1%2C1906.05065v2%2C1906.05065v3%2C1907.02457v1%2C1910.05555v1%2C1911.10450v1%2C1909.09571v1%2C1910.07564v1%2C1911.10107v1%2C1912.06426v1%2C1902.09606v1%2C1907.00558v1%2C1909.03278v1%2C1909.07748v1%2C1909.07748v2%2C1909.07748v3%2C1909.07748v4%2C1909.07748v5%2C1909.10801v1%2C1912.10237v1%2C1904.00745v1%2C1904.00745v2%2C1904.00745v3%2C1904.00745v4%2C1904.00745v5%2C1904.00745v6&start=0&max_results=40",
+      "response_sha256": "36cd83e30e45037cbf3e95e59ad2bae78f80bb2686ba530fcc3b5f6fa4cd1579"
+    },
+    {
+      "entry_count": 40,
+      "query_ids": [
+        "1911.02194v1",
+        "1911.07288v1",
+        "1912.05228v1",
+        "1912.05228v2",
+        "1912.05228v3",
+        "1902.10849v1",
+        "1903.09140v1",
+        "1903.09140v2",
+        "1903.09140v3",
+        "1903.09140v4",
+        "1904.01889v1",
+        "1904.01889v2",
+        "1904.11145v1",
+        "1907.00212v1",
+        "1909.01268v1",
+        "1909.10035v1",
+        "1912.00359v1",
+        "1912.00359v2",
+        "1912.10343v1",
+        "1901.05053v1",
+        "1901.11493v1",
+        "1904.05312v1",
+        "1904.05312v2",
+        "1904.05312v3",
+        "1904.05312v4",
+        "1906.02312v1",
+        "1906.02312v2",
+        "1907.01503v1",
+        "1907.02666v1",
+        "1908.08036v1",
+        "1908.08036v2",
+        "1909.04327v1",
+        "1909.11009v1",
+        "1910.10005v1",
+        "1911.11819v1",
+        "1911.11819v2",
+        "1912.04565v1",
+        "1902.08938v1",
+        "1903.06346v1",
+        "1903.06632v1"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1911.02194v1%2C1911.07288v1%2C1912.05228v1%2C1912.05228v2%2C1912.05228v3%2C1902.10849v1%2C1903.09140v1%2C1903.09140v2%2C1903.09140v3%2C1903.09140v4%2C1904.01889v1%2C1904.01889v2%2C1904.11145v1%2C1907.00212v1%2C1909.01268v1%2C1909.10035v1%2C1912.00359v1%2C1912.00359v2%2C1912.10343v1%2C1901.05053v1%2C1901.11493v1%2C1904.05312v1%2C1904.05312v2%2C1904.05312v3%2C1904.05312v4%2C1906.02312v1%2C1906.02312v2%2C1907.01503v1%2C1907.02666v1%2C1908.08036v1%2C1908.08036v2%2C1909.04327v1%2C1909.11009v1%2C1910.10005v1%2C1911.11819v1%2C1911.11819v2%2C1912.04565v1%2C1902.08938v1%2C1903.06346v1%2C1903.06632v1&start=0&max_results=40",
+      "response_sha256": "629324af316e8680b519bc07fd86b9598dda6f091ca04fef3eca3202b956eb60"
+    },
+    {
+      "entry_count": 40,
+      "query_ids": [
+        "1903.09536v1",
+        "1903.09536v2",
+        "1905.09647v1",
+        "1905.09647v2",
+        "1907.11718v1",
+        "1907.11718v2",
+        "1908.02101v1",
+        "1908.02101v2",
+        "1908.02101v3",
+        "1908.02101v4",
+        "1912.07165v1",
+        "1903.11804v1",
+        "1904.09403v1",
+        "1904.09403v2",
+        "1904.09403v3",
+        "1904.09403v4",
+        "1904.09403v5",
+        "1904.09403v6",
+        "1907.10152v1",
+        "1908.08684v1",
+        "1909.05151v1",
+        "1909.10807v1",
+        "1909.10807v2",
+        "1911.00281v1",
+        "1911.00281v2",
+        "1912.01091v1",
+        "1901.06021v1",
+        "1901.06021v2",
+        "1904.05384v1",
+        "1904.05384v2",
+        "1904.05384v3",
+        "1905.04842v1",
+        "1907.08911v1",
+        "1907.08911v2",
+        "1907.08911v3",
+        "1907.08911v4",
+        "1907.08911v5",
+        "1907.08911v6",
+        "1907.08911v7",
+        "1907.08911v8"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1903.09536v1%2C1903.09536v2%2C1905.09647v1%2C1905.09647v2%2C1907.11718v1%2C1907.11718v2%2C1908.02101v1%2C1908.02101v2%2C1908.02101v3%2C1908.02101v4%2C1912.07165v1%2C1903.11804v1%2C1904.09403v1%2C1904.09403v2%2C1904.09403v3%2C1904.09403v4%2C1904.09403v5%2C1904.09403v6%2C1907.10152v1%2C1908.08684v1%2C1909.05151v1%2C1909.10807v1%2C1909.10807v2%2C1911.00281v1%2C1911.00281v2%2C1912.01091v1%2C1901.06021v1%2C1901.06021v2%2C1904.05384v1%2C1904.05384v2%2C1904.05384v3%2C1905.04842v1%2C1907.08911v1%2C1907.08911v2%2C1907.08911v3%2C1907.08911v4%2C1907.08911v5%2C1907.08911v6%2C1907.08911v7%2C1907.08911v8&start=0&max_results=40",
+      "response_sha256": "2f897ad09959285bfb34818c6238645fb8b082d0befa94b5e6987a7f0cb0c3f9"
+    },
+    {
+      "entry_count": 40,
+      "query_ids": [
+        "1908.02164v1",
+        "1908.02164v2",
+        "1908.02164v3",
+        "1908.02164v4",
+        "1908.02164v5",
+        "1908.03905v1",
+        "1908.03905v2",
+        "1910.08344v1",
+        "1910.08344v2",
+        "1910.08344v3",
+        "1910.10099v1",
+        "1911.12596v1",
+        "1912.09524v1",
+        "1901.01751v1",
+        "1901.01751v2",
+        "1901.01751v3",
+        "1903.11686v1",
+        "1903.11686v2",
+        "1903.11686v3",
+        "1903.11686v4",
+        "1903.11686v5",
+        "1904.12442v1",
+        "1904.12442v2",
+        "1904.12442v3",
+        "1904.12834v1",
+        "1904.12834v2",
+        "1904.12834v3",
+        "1904.12834v4",
+        "1904.12834v5",
+        "1907.00219v1",
+        "1907.00219v2",
+        "1907.12025v1",
+        "1909.02972v1",
+        "1909.04903v1",
+        "1909.04903v2",
+        "1909.10187v1",
+        "1909.10957v1",
+        "1909.10957v2",
+        "1910.05561v1",
+        "1910.05561v2"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1908.02164v1%2C1908.02164v2%2C1908.02164v3%2C1908.02164v4%2C1908.02164v5%2C1908.03905v1%2C1908.03905v2%2C1910.08344v1%2C1910.08344v2%2C1910.08344v3%2C1910.10099v1%2C1911.12596v1%2C1912.09524v1%2C1901.01751v1%2C1901.01751v2%2C1901.01751v3%2C1903.11686v1%2C1903.11686v2%2C1903.11686v3%2C1903.11686v4%2C1903.11686v5%2C1904.12442v1%2C1904.12442v2%2C1904.12442v3%2C1904.12834v1%2C1904.12834v2%2C1904.12834v3%2C1904.12834v4%2C1904.12834v5%2C1907.00219v1%2C1907.00219v2%2C1907.12025v1%2C1909.02972v1%2C1909.04903v1%2C1909.04903v2%2C1909.10187v1%2C1909.10957v1%2C1909.10957v2%2C1910.05561v1%2C1910.05561v2&start=0&max_results=40",
+      "response_sha256": "61d0ba9b8f87fef6647c13540ac1840ae879aed29e9d5c7c749a3a5ab8eff417"
+    },
+    {
+      "entry_count": 40,
+      "query_ids": [
+        "1910.05561v3",
+        "1910.10606v1",
+        "1910.10606v2",
+        "1910.10606v3",
+        "1910.10606v4",
+        "1911.05052v1",
+        "1911.05052v2",
+        "1911.06126v1",
+        "1911.06126v2",
+        "1901.08280v1",
+        "1901.08938v1",
+        "1902.00786v1",
+        "1904.05315v1",
+        "1904.10523v1",
+        "1905.05931v1",
+        "1906.01320v1",
+        "1906.10388v1",
+        "1906.10388v2",
+        "1906.10388v3",
+        "1909.04986v1",
+        "1909.04986v2",
+        "1911.08647v1",
+        "1912.04941v1",
+        "1912.10709v1",
+        "1912.10709v2",
+        "1901.04770v1",
+        "1901.09145v1",
+        "1902.06883v1",
+        "1902.06883v2",
+        "1902.08684v1",
+        "1902.10502v1",
+        "1905.04852v1",
+        "1905.04852v2",
+        "1906.02818v1",
+        "1906.02818v2",
+        "1906.02818v3",
+        "1906.02818v4",
+        "1906.02818v5",
+        "1906.10325v1",
+        "1907.03009v1"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1910.05561v3%2C1910.10606v1%2C1910.10606v2%2C1910.10606v3%2C1910.10606v4%2C1911.05052v1%2C1911.05052v2%2C1911.06126v1%2C1911.06126v2%2C1901.08280v1%2C1901.08938v1%2C1902.00786v1%2C1904.05315v1%2C1904.10523v1%2C1905.05931v1%2C1906.01320v1%2C1906.10388v1%2C1906.10388v2%2C1906.10388v3%2C1909.04986v1%2C1909.04986v2%2C1911.08647v1%2C1912.04941v1%2C1912.10709v1%2C1912.10709v2%2C1901.04770v1%2C1901.09145v1%2C1902.06883v1%2C1902.06883v2%2C1902.08684v1%2C1902.10502v1%2C1905.04852v1%2C1905.04852v2%2C1906.02818v1%2C1906.02818v2%2C1906.02818v3%2C1906.02818v4%2C1906.02818v5%2C1906.10325v1%2C1907.03009v1&start=0&max_results=40",
+      "response_sha256": "1640ab8b0b308c6d3e28a8b2ca69851d7adf510a4ac773ff67cc719ddb7c4ebe"
+    },
+    {
+      "entry_count": 35,
+      "query_ids": [
+        "1907.10407v1",
+        "1908.02591v1",
+        "1908.05089v1",
+        "1909.03185v1",
+        "1910.05536v1",
+        "1911.12540v1",
+        "1912.06709v1",
+        "1901.09647v1",
+        "1901.09647v2",
+        "1903.07737v1",
+        "1903.08076v1",
+        "1906.06478v1",
+        "1906.06478v2",
+        "1906.06478v3",
+        "1906.06478v4",
+        "1907.03093v1",
+        "1907.09452v1",
+        "1911.10297v1",
+        "1912.11060v1",
+        "1912.11060v2",
+        "1912.11060v3",
+        "1903.11642v1",
+        "1904.10250v1",
+        "1904.10250v2",
+        "1905.05310v1",
+        "1905.05310v2",
+        "1905.05310v3",
+        "1906.05494v1",
+        "1906.05898v1",
+        "1906.05898v2",
+        "1906.05898v3",
+        "1906.05898v4",
+        "1906.12134v1",
+        "1912.03556v1",
+        "1912.04221v1"
+      ],
+      "request_url": "https://export.arxiv.org/api/query?id_list=1907.10407v1%2C1908.02591v1%2C1908.05089v1%2C1909.03185v1%2C1910.05536v1%2C1911.12540v1%2C1912.06709v1%2C1901.09647v1%2C1901.09647v2%2C1903.07737v1%2C1903.08076v1%2C1906.06478v1%2C1906.06478v2%2C1906.06478v3%2C1906.06478v4%2C1907.03093v1%2C1907.09452v1%2C1911.10297v1%2C1912.11060v1%2C1912.11060v2%2C1912.11060v3%2C1903.11642v1%2C1904.10250v1%2C1904.10250v2%2C1905.05310v1%2C1905.05310v2%2C1905.05310v3%2C1906.05494v1%2C1906.05898v1%2C1906.05898v2%2C1906.05898v3%2C1906.05898v4%2C1906.12134v1%2C1912.03556v1%2C1912.04221v1&start=0&max_results=35",
+      "response_sha256": "a9af33fff620aae7eed2af6e23eda26802bce333754efd9291eda75d0804b067"
+    }
+  ],
+  "schema_version": "investor2.arxiv-version-pins-by-cutoff.v1",
+  "selection_manifest_sha256": "0d6f138c785295d839d7855f229cfeae3dd580704028d7407f24672be4ed8e45",
+  "source_snapshot_sha256": "7d7fcb2639219c5a2e528ac63347e2d18b73fa46ed8637e4832322dd9c8b90cb",
+  "summary": {
+    "selected_count": 129,
+    "status_counts": {
+      "CONFLICT": 0,
+      "UNKNOWN": 0,
+      "VERIFIED": 129
+    }
+  }
+}

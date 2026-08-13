@@ -1,0 +1,94 @@
+name: Verify 2019 arXiv cutoff version pins
+
+on:
+  push:
+    branches:
+      - research/2019-version-pins
+    paths:
+      - "scripts/pin_arxiv_versions_by_cutoff.py"
+      - "docs/research/arxiv_qfin_2019_selection_manifest.json"
+      - ".github/workflows/arxiv-version-pins-2019.yml"
+  pull_request:
+    paths:
+      - "scripts/pin_arxiv_versions_by_cutoff.py"
+      - "docs/research/arxiv_qfin_2019_selection_manifest.json"
+      - "docs/research/arxiv_qfin_2019_version_pins.json"
+      - ".github/workflows/arxiv-version-pins-2019.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arxiv-version-pins-2019-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  pin:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Compile pinning contracts
+        run: |
+          python -m py_compile scripts/pin_arxiv_versions.py scripts/pin_arxiv_versions_by_cutoff.py
+
+      - name: Query every explicit version and pin 2019 cutoff
+        run: |
+          mkdir -p artifacts
+          inspected_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          python scripts/pin_arxiv_versions_by_cutoff.py \
+            --selection docs/research/arxiv_qfin_2019_selection_manifest.json \
+            --output artifacts/arxiv_qfin_2019_version_pins.json \
+            --cutoff 2019-12-31T23:59:59Z \
+            --inspected-at "$inspected_at"
+
+      - name: Enforce complete population and sentinel versions
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path('artifacts/arxiv_qfin_2019_version_pins.json').read_text(encoding='utf-8'))
+          assert data['summary']['selected_count'] == 129, data['summary']
+          assert data['summary']['status_counts'] == {'VERIFIED': 129, 'UNKNOWN': 0, 'CONFLICT': 0}, data['summary']
+          rows = {row['arxiv_id']: row for row in data['pins']}
+          lim = rows['1904.04912']
+          zhang = rows['1911.10107']
+          assert lim['selected_version'] == 'v2', lim
+          assert lim['current_latest_version'] == 'v3', lim
+          assert lim['version_submitted_at'] == '2019-11-17T21:16:45Z', lim
+          assert 'v3' in lim['later_revisions_excluded'], lim
+          assert zhang['selected_version'] == 'v1', zhang
+          assert zhang['version_submitted_at'] == '2019-11-22T16:10:45Z', zhang
+          print(json.dumps({
+              'summary': data['summary'],
+              'lim': {k: lim[k] for k in ('selected_version','current_latest_version','version_submitted_at','later_revisions_excluded')},
+              'zhang': {k: zhang[k] for k in ('selected_version','current_latest_version','version_submitted_at','later_revisions_excluded')},
+          }, ensure_ascii=False, sort_keys=True))
+          PY
+
+      - name: Commit canonical pins on materialization branch
+        if: github.event_name == 'push'
+        run: |
+          cp artifacts/arxiv_qfin_2019_version_pins.json docs/research/arxiv_qfin_2019_version_pins.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/research/arxiv_qfin_2019_version_pins.json
+          if git diff --cached --quiet; then
+            echo "No pin changes to commit."
+          else
+            git commit -m "Pin 2019 q-fin arXiv versions"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
+
+      - name: Upload live cutoff evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: arxiv-qfin-2019-version-pins-${{ github.sha }}
+          path: artifacts/arxiv_qfin_2019_version_pins.json
+          if-no-files-found: error
+          retention-days: 30
