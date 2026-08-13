@@ -1,0 +1,121 @@
+{
+  "schema_version": "investor2.paper-empirical-protocol.v1",
+  "paper": {
+    "arxiv_id": "2101.02044",
+    "title": "Deep learning for efficient frontier calculation in finance",
+    "author": "Xavier Warin",
+    "selected_version": "v4",
+    "selected_version_submitted_at": "2022-02-15T10:34:34Z",
+    "abs_url": "https://arxiv.org/abs/2101.02044v4",
+    "pdf_url": "https://arxiv.org/pdf/2101.02044v4",
+    "license_url": "https://arxiv.org/licenses/nonexclusive-distrib/1.0/",
+    "paper_redistribution_rights_for_this_repository": "NOT_ESTABLISHED",
+    "paper_bytes_storage_policy": "DO_NOT_REDISTRIBUTE; retain URL and fetched SHA-256 only"
+  },
+  "public_artifact_search": {
+    "author_code_state": "NOT_FOUND_IN_PRIMARY_PAPER_OR_EXACT_TITLE_GITHUB_REPOSITORY_SEARCH",
+    "arxiv_code_link_state": "NO_AUTHOR_CODE_LINK_DECLARED_ON_ARXIV_RECORD",
+    "github_repository_search_url": "https://github.com/search?q=%22Deep+learning+for+efficient+frontier+calculation+in+finance%22&type=repositories",
+    "inspected_at": "2026-08-13T10:10:00Z",
+    "author_dataset_state": "NOT_REQUIRED_FOR_SELECTED_EXPERIMENT_SYNTHETIC_BLACK_SCHOLES"
+  },
+  "reproduction_scope": {
+    "paper_section": "3.2 Results in dimension 4",
+    "paper_equations": [3, 10, 11],
+    "paper_table": 1,
+    "method": "Point by point direct formulation",
+    "beta": 2.0,
+    "target_kind": "single_table_point",
+    "target": {
+      "analytical_mean": 1.077,
+      "analytical_variance": 0.019,
+      "paper_neural_mean": 1.080,
+      "paper_neural_variance": 0.021
+    },
+    "predeclared_comparison_tolerance": {
+      "neural_mean_absolute": 0.05,
+      "neural_variance_absolute": 0.01,
+      "analytical_mean_absolute": 0.005,
+      "analytical_variance_absolute": 0.005
+    }
+  },
+  "market_model": {
+    "kind": "correlated_geometric_brownian_motion",
+    "initial_wealth": 1.0,
+    "risk_free_rate_after_discounting": 0.0,
+    "horizon_years": 1.0,
+    "rebalancing_steps": 104,
+    "mu": [0.01, 0.0225, 0.035, 0.0475],
+    "sigma_diagonal": [0.05, 0.1, 0.15, 0.2],
+    "correlation": [
+      [1.0, 0.26, -0.43, 0.233],
+      [0.26, 1.0, 0.003, 0.06],
+      [-0.43, 0.003, 1.0, -0.33],
+      [0.233, 0.06, -0.33, 1.0]
+    ]
+  },
+  "network": {
+    "framework_family": "TensorFlow",
+    "hidden_layers": 3,
+    "hidden_width": 14,
+    "activation": "tanh",
+    "output_activation": "linear",
+    "input": ["time", "wealth"],
+    "output_dimension": 4,
+    "optimizer": "Adam",
+    "learning_rate_initial": 0.0025,
+    "learning_rate_final": 0.00025,
+    "learning_rate_schedule": "linear_by_gradient_iteration",
+    "batch_size": 300,
+    "gradient_iterations": 15000,
+    "paper_seed": "UNSPECIFIED",
+    "paper_tensorflow_version": "UNSPECIFIED"
+  },
+  "evaluation": {
+    "simulation_count": 100000,
+    "independent_from_training_random_stream": true,
+    "metrics": ["terminal_wealth_mean", "terminal_wealth_population_variance"],
+    "dataset_split": "NOT_APPLICABLE_SYNTHETIC_MONTE_CARLO; independent train and evaluation draws"
+  },
+  "implementation_lock": {
+    "python": "3.12",
+    "tensorflow": "2.21.0",
+    "seed": 2306,
+    "device": "CPU",
+    "float_dtype": "float32",
+    "paper_protocol_deviations_known_before_run": [
+      "The paper does not publish its TensorFlow version.",
+      "The paper does not publish the random seed or neural-network initialization state.",
+      "No author reference implementation was found in the primary arXiv record or exact-title GitHub repository search."
+    ]
+  },
+  "license_checks": {
+    "paper": {
+      "license": "arXiv non-exclusive distribution license",
+      "status": "VERIFIED_PRIMARY",
+      "redistribution_by_investor2": "NOT_ESTABLISHED"
+    },
+    "tensorflow_runtime": {
+      "version": "2.21.0",
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/tensorflow/2.21.0/",
+      "status": "VERIFIED_PRIMARY"
+    },
+    "experiment_inputs": {
+      "kind": "synthetic paths generated from paper parameters",
+      "third_party_dataset": false,
+      "status": "NO_EXTERNAL_DATA_LICENSE_REQUIRED"
+    },
+    "repository_generated_code_and_results": {
+      "repository_license": "NOT_DECLARED",
+      "status": "NO_REPOSITORY_LICENSE_FILE_FOUND"
+    }
+  },
+  "promotion_policy": {
+    "states": ["REPRODUCED", "FAILED", "BLOCKED"],
+    "author_code_missing_alone_does_not_prevent_independent_reproduction": true,
+    "metric_tolerance_failure": "FAILED",
+    "source_or_protocol_ambiguity_that_prevents_interpretation": "BLOCKED",
+    "no_success_from_method_contract_only": true
+  }
+}

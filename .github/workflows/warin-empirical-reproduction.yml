@@ -1,0 +1,61 @@
+name: Validate Warin 2101.02044 empirical evidence
+
+on:
+  pull_request:
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
+      - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
+      - "docs/research/2021_arxiv_finance_registry.json"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - "scripts/materialize_warin_2101_02044_evidence.py"
+      - "scripts/validate_warin_2101_02044_evidence.py"
+      - "scripts/verify_2021_arxiv_methods.py"
+      - "tests/test_warin_empirical_evidence.py"
+      - "tests/test_2021_arxiv_methods.py"
+      - ".github/workflows/warin-empirical-reproduction.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
+      - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
+      - "docs/research/2021_arxiv_finance_registry.json"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - "scripts/materialize_warin_2101_02044_evidence.py"
+      - "scripts/validate_warin_2101_02044_evidence.py"
+      - "scripts/verify_2021_arxiv_methods.py"
+      - "tests/test_warin_empirical_evidence.py"
+      - "tests/test_2021_arxiv_methods.py"
+      - ".github/workflows/warin-empirical-reproduction.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: warin-evidence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install test dependency
+        run: python -m pip install --disable-pip-version-check pytest
+
+      - name: Validate empirical evidence contracts
+        run: python tests/test_warin_empirical_evidence.py
+
+      - name: Validate canonical Warin run hashes and registry linkage
+        run: python scripts/validate_warin_2101_02044_evidence.py
+
+      - name: Validate method versus empirical state machine
+        run: python -m pytest -q tests/test_2021_arxiv_methods.py

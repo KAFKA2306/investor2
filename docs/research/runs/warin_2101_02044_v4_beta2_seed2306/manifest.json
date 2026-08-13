@@ -1,0 +1,74 @@
+{
+  "artifact_storage": {
+    "huggingface_used": false,
+    "large_artifacts": "NONE",
+    "mutable_hf_path_alone_is_evidence": false,
+    "reason": "all generated artifacts are small enough for Git and contain no third-party paper bytes"
+  },
+  "artifacts": {
+    "model_state.json": {
+      "sha256": "27ffb93f8f1ffa700eb464e260694ff5260559eb5ef127fcb35bc838f8765c4e",
+      "size_bytes": 19242
+    },
+    "report.json": {
+      "sha256": "e594f3502738e35f4b577074436670314d5638a26718bc048f00de05a577a333",
+      "size_bytes": 4564
+    },
+    "training_trace.json": {
+      "sha256": "8fa911e40d7ddf0f435ccf78edc404b39e7a8a26d1cd6c1968b3bbf99d6c6a6d",
+      "size_bytes": 30714
+    }
+  },
+  "arxiv_id": "2101.02044",
+  "empirical_reproduction_state": "EMPIRICALLY_RUN",
+  "empirical_verdict": "REPRODUCED",
+  "licenses": {
+    "experiment_inputs": {
+      "kind": "synthetic paths generated from paper parameters",
+      "status": "NO_EXTERNAL_DATA_LICENSE_REQUIRED",
+      "third_party_dataset": false
+    },
+    "paper": {
+      "license": "arXiv non-exclusive distribution license",
+      "redistribution_by_investor2": "NOT_ESTABLISHED",
+      "status": "VERIFIED_PRIMARY"
+    },
+    "repository_generated_code_and_results": {
+      "repository_license": "NOT_DECLARED",
+      "status": "NO_REPOSITORY_LICENSE_FILE_FOUND"
+    },
+    "tensorflow_runtime": {
+      "license": "Apache-2.0",
+      "source": "https://pypi.org/project/tensorflow/2.21.0/",
+      "status": "VERIFIED_PRIMARY",
+      "version": "2.21.0"
+    }
+  },
+  "paper_id": "warin_2101_02044",
+  "paper_version": "v4",
+  "protocol": {
+    "path": "docs/research/protocols/warin_2101_02044_v4_beta2.json",
+    "sha256": "fd46e6499f495f7384172a3aa594962bc835bcdc15f8d93b395ab10d9e9784ad"
+  },
+  "run_id": "v4_table1_beta2_seed2306",
+  "runtime": {
+    "deterministic_ops_requested": true,
+    "device_policy": "CPU",
+    "machine": "x86_64",
+    "numpy": "2.5.2",
+    "platform": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
+    "python": "3.12.13",
+    "seed": 2306,
+    "tensorflow": "2.21.0"
+  },
+  "schema_version": "investor2.paper-evidence-manifest.v1",
+  "source_pdf": {
+    "content_type": "application/pdf",
+    "final_url": "https://arxiv.org/pdf/2101.02044v4",
+    "requested_url": "https://arxiv.org/pdf/2101.02044v4",
+    "sha256": "9d25546533d55e906b662ebc7a768bcb8368e5220348403287b87940debe9695",
+    "size_bytes": 1521560,
+    "storage_reason": "arXiv license grants distribution rights to arXiv; third-party redistribution permission was not established",
+    "stored_in_repository": false
+  }
+}

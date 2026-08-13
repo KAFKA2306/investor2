@@ -30,8 +30,12 @@ def test_dashboard_manifest_is_fail_closed() -> None:
         "latest_momentum_data_end": "2017-12",
         "papers_2021_indexed": 4,
         "papers_2021_method_contract_pass": 4,
-        "papers_2021_materialized": 0,
-        "papers_2021_empirically_reproduced": 0,
+        "papers_2021_materialized": 1,
+        "papers_2021_empirically_run": 1,
+        "papers_2021_empirically_reproduced": 1,
+        "papers_2021_empirically_failed": 0,
+        "papers_2021_empirically_blocked": 0,
+        "papers_2021_empirically_not_run": 3,
     }
     assert manifest["repeated_validation"]["study_count"] == 2
     assert manifest["repeated_validation"]["repetitions"] == 5
@@ -48,12 +52,28 @@ def test_dashboard_manifest_is_fail_closed() -> None:
         for result in manifest["repository_results"]
     )
 
-    papers = manifest["paper_reproduction_2021"]
-    assert papers["summary"] == {
+    queue = manifest["paper_reproduction_2021"]
+    assert queue["summary"] == {
         "indexed": 4,
         "method_contract_pass": 4,
-        "materialized": 0,
-        "empirically_reproduced": 0,
+        "materialized": 1,
+        "empirically_run": 1,
+        "empirically_reproduced": 1,
+        "empirically_failed": 0,
+        "empirically_blocked": 0,
+        "empirically_not_run": 3,
     }
-    assert all(paper["reproduction_verdict"] == "METHOD_ONLY" for paper in papers["papers"])
-    assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in papers["papers"])
+    by_id = {paper["id"]: paper for paper in queue["papers"]}
+    warin = by_id["warin_2101_02044"]
+    assert warin["empirical_reproduction_state"] == "EMPIRICALLY_RUN"
+    assert warin["empirical_verdict"] == "REPRODUCED"
+    assert warin["reproduction_verdict"] == "REPRODUCED"
+    assert warin["artifact_state"] == "MATERIALIZED"
+    assert warin["empirical_evidence_manifest"].endswith("manifest.json")
+    assert len(warin["empirical_evidence_manifest_sha256"]) == 64
+
+    not_run = [paper for paper in queue["papers"] if paper["id"] != "warin_2101_02044"]
+    assert len(not_run) == 3
+    assert all(paper["reproduction_verdict"] == "METHOD_ONLY" for paper in not_run)
+    assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in not_run)
+    assert all(paper["empirical_verdict"] is None for paper in not_run)

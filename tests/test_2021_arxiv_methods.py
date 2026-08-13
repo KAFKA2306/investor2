@@ -14,7 +14,7 @@ sys.modules[SPEC.name] = MODULE
 SPEC.loader.exec_module(MODULE)
 
 
-def test_2021_registry_is_fail_closed_and_methods_are_deterministic() -> None:
+def test_2021_registry_separates_method_contract_from_empirical_run() -> None:
     report = MODULE.build_report(ROOT / "docs/research/2021_arxiv_finance_registry.json")
 
     assert report["discovery_universe"] == {
@@ -27,21 +27,63 @@ def test_2021_registry_is_fail_closed_and_methods_are_deterministic() -> None:
     assert report["summary"] == {
         "indexed": 4,
         "method_contract_pass": 4,
-        "materialized": 0,
-        "empirically_reproduced": 0,
+        "materialized": 1,
+        "empirically_run": 1,
+        "empirically_reproduced": 1,
+        "empirically_failed": 0,
+        "empirically_blocked": 0,
+        "empirically_not_run": 3,
     }
-    assert {paper["arxiv_id"] for paper in report["papers"]} == {
-        "2101.02044",
-        "2112.04755",
-        "2112.01166",
-        "2112.09015",
-    }
+    by_id = {paper["arxiv_id"]: paper for paper in report["papers"]}
+    assert set(by_id) == {"2101.02044", "2112.04755", "2112.01166", "2112.09015"}
     assert all(paper["source_metadata_state"] == "VERIFIED_PRIMARY" for paper in report["papers"])
     assert all(paper["frozen_universe_state"] == "VERIFIED" for paper in report["papers"])
     assert all(paper["method_contract_state"] == "PASS" for paper in report["papers"])
-    assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in report["papers"])
-    assert all(paper["artifact_state"] == "NOT_MATERIALIZED" for paper in report["papers"])
-    assert all(paper["reproduction_verdict"] == "METHOD_ONLY" for paper in report["papers"])
+
+    warin = by_id["2101.02044"]
+    assert warin["source_version"] == "v4"
+    assert warin["empirical_reproduction_state"] == "EMPIRICALLY_RUN"
+    assert warin["empirical_verdict"] == "REPRODUCED"
+    assert warin["artifact_state"] == "MATERIALIZED"
+    assert warin["reproduction_verdict"] == "REPRODUCED"
+    assert warin["empirical_evidence_manifest"].endswith("/manifest.json")
+    assert len(warin["empirical_evidence_manifest_sha256"]) == 64
+
+    not_run = [paper for paper in report["papers"] if paper["arxiv_id"] != "2101.02044"]
+    assert len(not_run) == 3
+    assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in not_run)
+    assert all(paper["empirical_verdict"] is None for paper in not_run)
+    assert all(paper["artifact_state"] == "NOT_MATERIALIZED" for paper in not_run)
+    assert all(paper["reproduction_verdict"] == "METHOD_ONLY" for paper in not_run)
+
+
+def test_not_run_cannot_carry_empirical_verdict_or_evidence() -> None:
+    invalid = {
+        "id": "example",
+        "empirical_reproduction_state": "NOT_RUN",
+        "empirical_verdict": "REPRODUCED",
+    }
+    try:
+        MODULE.validate_empirical_state(invalid)
+    except ValueError as error:
+        assert "NOT_RUN" in str(error)
+    else:
+        raise AssertionError("NOT_RUN must never be accepted with an empirical verdict")
+
+
+def test_empirically_run_requires_evidence_manifest_and_hash() -> None:
+    invalid = {
+        "id": "example",
+        "arxiv_id": "2101.02044",
+        "empirical_reproduction_state": "EMPIRICALLY_RUN",
+        "empirical_verdict": "REPRODUCED",
+    }
+    try:
+        MODULE.validate_empirical_state(invalid)
+    except ValueError as error:
+        assert "evidence manifest" in str(error)
+    else:
+        raise AssertionError("EMPIRICALLY_RUN must fail closed without evidence")
 
 
 def test_simplex_projection_preserves_long_only_unit_budget() -> None:

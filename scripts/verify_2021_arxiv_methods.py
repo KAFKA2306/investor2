@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-"""Validate selected 2021 arXiv finance papers and deterministic method contracts.
+"""Validate 2021 arXiv finance method contracts and empirical evidence separately.
 
-The paper selection is anchored to the repository's frozen 2021 q-fin metadata
-universe. Passing a method contract means only that a small mechanism stated by the
-paper has a working deterministic implementation. It does not reproduce the paper's
-empirical performance claim.
+A method-contract PASS proves only that one small paper-stated mechanism has a
+working deterministic implementation.  Empirical reproduction is a distinct
+state machine.  ``EMPIRICALLY_RUN`` is accepted only with an explicit verdict
+and a Git-committed evidence manifest whose SHA-256 matches the registry.
+``NOT_RUN`` can never be projected as empirical success.
 """
 
 from __future__ import annotations
@@ -18,8 +19,10 @@ from pathlib import Path
 from typing import Any, Callable
 
 ROOT = Path(__file__).resolve().parents[1]
-ARXIV_URL = re.compile(r"https://arxiv\.org/abs/(?P<id>\d{4}\.\d{4,5})$")
+ARXIV_URL = re.compile(r"https://arxiv\.org/abs/(?P<id>\d{4}\.\d{4,5})(?P<version>v[1-9]\d*)?$")
 SHA256 = re.compile(r"[0-9a-f]{64}")
+EMPIRICAL_STATES = {"NOT_RUN", "EMPIRICALLY_RUN"}
+EMPIRICAL_VERDICTS = {"REPRODUCED", "FAILED", "BLOCKED"}
 
 
 def file_sha256(path: Path) -> str:
@@ -28,6 +31,17 @@ def file_sha256(path: Path) -> str:
         for chunk in iter(lambda: handle.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
+
+
+def repo_path(value: str) -> Path:
+    if not value or value.startswith("/") or ".." in Path(value).parts:
+        raise ValueError(f"unsafe repository path: {value!r}")
+    path = (ROOT / value).resolve()
+    try:
+        path.relative_to(ROOT.resolve())
+    except ValueError as error:
+        raise ValueError(f"path escapes repository: {value!r}") from error
+    return path
 
 
 def project_to_simplex(values: list[float]) -> list[float]:
@@ -82,7 +96,10 @@ def combine_relations(relations: list[list[list[float]]], weights: list[float]) 
     if not relations or len(relations) != len(weights):
         raise ValueError("one weight is required per relation")
     n = len(relations[0])
-    if n == 0 or any(len(matrix) != n or any(len(row) != n for row in matrix) for matrix in relations):
+    if n == 0 or any(
+        len(matrix) != n or any(len(row) != n for row in matrix)
+        for matrix in relations
+    ):
         raise ValueError("relations must be non-empty square matrices with equal shape")
     mixed = [[0.0] * n for _ in range(n)]
     for matrix, weight in zip(relations, weights, strict=True):
@@ -100,7 +117,10 @@ def combine_relations(relations: list[list[list[float]]], weights: list[float]) 
 def graph_message(adjacency: list[list[float]], features: list[float]) -> list[float]:
     if len(adjacency) != len(features):
         raise ValueError("feature count must equal graph size")
-    return [sum(weight * value for weight, value in zip(row, features, strict=True)) for row in adjacency]
+    return [
+        sum(weight * value for weight, value in zip(row, features, strict=True))
+        for row in adjacency
+    ]
 
 
 def _warin() -> dict[str, Any]:
@@ -112,21 +132,55 @@ def _warin() -> dict[str, Any]:
 
 def _pigorsch() -> dict[str, Any]:
     cross_section = [0.01, -0.02, 0.03]
-    entry = invest_cash_reward(action=1, previous_action=0, asset_next_return=0.03, cross_section_next_returns=cross_section, transaction_cost=0.001)
-    hold = invest_cash_reward(action=1, previous_action=1, asset_next_return=0.03, cross_section_next_returns=cross_section, transaction_cost=0.001)
-    cash = invest_cash_reward(action=0, previous_action=1, asset_next_return=0.03, cross_section_next_returns=cross_section, transaction_cost=0.001)
+    entry = invest_cash_reward(
+        action=1,
+        previous_action=0,
+        asset_next_return=0.03,
+        cross_section_next_returns=cross_section,
+        transaction_cost=0.001,
+    )
+    hold = invest_cash_reward(
+        action=1,
+        previous_action=1,
+        asset_next_return=0.03,
+        cross_section_next_returns=cross_section,
+        transaction_cost=0.001,
+    )
+    cash = invest_cash_reward(
+        action=0,
+        previous_action=1,
+        asset_next_return=0.03,
+        cross_section_next_returns=cross_section,
+        transaction_cost=0.001,
+    )
     expected_cash = sum(cross_section) / len(cross_section)
-    passed = math.isclose(entry, 0.029, abs_tol=1e-12) and math.isclose(hold, 0.03, abs_tol=1e-12) and math.isclose(cash, expected_cash, abs_tol=1e-12)
-    return {"passed": passed, "observed": {"entry_reward": entry, "hold_reward": hold, "cash_reward": cash}}
+    passed = (
+        math.isclose(entry, 0.029, abs_tol=1e-12)
+        and math.isclose(hold, 0.03, abs_tol=1e-12)
+        and math.isclose(cash, expected_cash, abs_tol=1e-12)
+    )
+    return {
+        "passed": passed,
+        "observed": {"entry_reward": entry, "hold_reward": hold, "cash_reward": cash},
+    }
 
 
 def _liao() -> dict[str, Any]:
     values = [0.01, -0.02, 0.015, -0.005, 0.012, -0.008, 0.004, -0.006]
     scales = multiscale_realized_variance(values, [1, 2, 4, 8])
     total = realized_variance(values)
-    conserved = all(math.isclose(sum(buckets), total, abs_tol=1e-15) for buckets in scales.values())
+    conserved = all(
+        math.isclose(sum(buckets), total, abs_tol=1e-15)
+        for buckets in scales.values()
+    )
     passed = conserved and [len(scales[size]) for size in (1, 2, 4, 8)] == [8, 4, 2, 1]
-    return {"passed": passed, "observed": {"total_realized_variance": total, "bucket_counts": {str(k): len(v) for k, v in scales.items()}}}
+    return {
+        "passed": passed,
+        "observed": {
+            "total_realized_variance": total,
+            "bucket_counts": {str(k): len(v) for k, v in scales.items()},
+        },
+    }
 
 
 def _chen_robert() -> dict[str, Any]:
@@ -134,8 +188,11 @@ def _chen_robert() -> dict[str, Any]:
     sector = [[1.0, 1.0, 0.0], [1.0, 1.0, 1.0], [0.0, 1.0, 1.0]]
     adjacency = combine_relations([identity, sector], [0.25, 0.75])
     message = graph_message(adjacency, [0.1, 0.5, 0.9])
-    passed = all(math.isclose(sum(row), 1.0, abs_tol=1e-12) for row in adjacency) and len(message) == 3
-    return {"passed": passed, "observed": {"row_sums": [sum(row) for row in adjacency], "message": message}}
+    passed = all(math.isclose(sum(row), 1.0, abs_tol=1e-12) for row in adjacency)
+    return {
+        "passed": passed,
+        "observed": {"row_sums": [sum(row) for row in adjacency], "message": message},
+    }
 
 
 VALIDATORS: dict[str, Callable[[], dict[str, Any]]] = {
@@ -150,14 +207,17 @@ def load_discovery_universe(registry: dict[str, Any]) -> tuple[dict[str, Any], d
     discovery = registry.get("discovery_universe")
     if not isinstance(discovery, dict):
         raise ValueError("discovery_universe is required")
-    path = ROOT / str(discovery.get("path", ""))
+    path = repo_path(str(discovery.get("path", "")))
     if not path.is_file():
         raise ValueError(f"frozen discovery universe is missing: {path}")
     actual_hash = file_sha256(path)
     if actual_hash != discovery.get("sha256"):
         raise ValueError(f"discovery universe SHA-256 mismatch: {actual_hash}")
     data = json.loads(path.read_text(encoding="utf-8"))
-    if data.get("record_count") != discovery.get("record_count") or len(data.get("records", [])) != discovery.get("record_count"):
+    if (
+        data.get("record_count") != discovery.get("record_count")
+        or len(data.get("records", [])) != discovery.get("record_count")
+    ):
         raise ValueError("discovery universe record_count mismatch")
     if data.get("schema_version") != discovery.get("schema_version"):
         raise ValueError("discovery universe schema_version mismatch")
@@ -166,6 +226,72 @@ def load_discovery_universe(registry: dict[str, Any]) -> tuple[dict[str, Any], d
     if len(by_id) != len(records):
         raise ValueError("discovery universe contains duplicate arXiv IDs")
     return data, by_id
+
+
+def validate_empirical_state(paper: dict[str, Any]) -> None:
+    paper_id = str(paper.get("id", ""))
+    state = paper.get("empirical_reproduction_state")
+    if state not in EMPIRICAL_STATES:
+        raise ValueError(f"unknown empirical reproduction state for {paper_id}")
+    verdict = paper.get("empirical_verdict")
+    manifest_value = paper.get("empirical_evidence_manifest")
+    manifest_sha = paper.get("empirical_evidence_manifest_sha256")
+    if state == "NOT_RUN":
+        if verdict is not None or manifest_value is not None or manifest_sha is not None:
+            raise ValueError(f"{paper_id} NOT_RUN cannot carry empirical success/evidence fields")
+        return
+    if verdict not in EMPIRICAL_VERDICTS:
+        raise ValueError(f"{paper_id} EMPIRICALLY_RUN requires a final empirical verdict")
+    if not isinstance(manifest_value, str) or not manifest_value:
+        raise ValueError(f"{paper_id} EMPIRICALLY_RUN requires an evidence manifest")
+    if not SHA256.fullmatch(str(manifest_sha or "")):
+        raise ValueError(f"{paper_id} empirical evidence manifest requires SHA-256")
+    manifest_path = repo_path(manifest_value)
+    if not manifest_path.is_file():
+        raise ValueError(f"{paper_id} empirical evidence manifest is missing")
+    actual = file_sha256(manifest_path)
+    if actual != manifest_sha:
+        raise ValueError(f"{paper_id} empirical evidence manifest SHA-256 mismatch")
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    if manifest.get("paper_id") != paper_id or manifest.get("arxiv_id") != paper.get("arxiv_id"):
+        raise ValueError(f"{paper_id} empirical manifest identity mismatch")
+    if manifest.get("empirical_reproduction_state") != "EMPIRICALLY_RUN":
+        raise ValueError(f"{paper_id} empirical manifest state mismatch")
+    if manifest.get("empirical_verdict") != verdict:
+        raise ValueError(f"{paper_id} empirical manifest verdict mismatch")
+
+
+def validate_materialized_artifact(artifact: dict[str, Any], paper_ids: set[str]) -> None:
+    paper_id = artifact.get("paper_id")
+    if paper_id not in paper_ids:
+        raise ValueError("artifact references unknown paper")
+    digest = str(artifact.get("sha256", ""))
+    if not SHA256.fullmatch(digest):
+        raise ValueError("materialized artifact requires SHA-256")
+
+    path_value = artifact.get("path")
+    hf_uri = artifact.get("hf_uri")
+    if isinstance(path_value, str) and path_value:
+        path = repo_path(path_value)
+        if not path.is_file():
+            raise ValueError(f"Git materialized artifact is missing: {path_value}")
+        if file_sha256(path) != digest:
+            raise ValueError(f"Git materialized artifact SHA-256 mismatch: {path_value}")
+        if hf_uri not in {None, ""}:
+            raise ValueError("Git-local artifact must not invent a mutable HF URI")
+        for key in ("kind", "provenance", "canonical_evidence_rule"):
+            if not artifact.get(key):
+                raise ValueError(f"Git materialized artifact missing {key}")
+        return
+
+    if isinstance(hf_uri, str) and hf_uri:
+        if digest not in hf_uri or not hf_uri.startswith("hf://buckets/"):
+            raise ValueError("HF artifact URI must be content-addressed")
+        for key in ("kind", "filename", "bytes", "observed_at", "source_url", "license"):
+            if key not in artifact:
+                raise ValueError(f"HF artifact missing {key}")
+        return
+    raise ValueError("materialized artifact requires either Git path or content-addressed HF URI")
 
 
 def validate_registry(registry: dict[str, Any]) -> dict[str, Any]:
@@ -177,6 +303,7 @@ def validate_registry(registry: dict[str, Any]) -> dict[str, Any]:
     for token in ("{bucket}", "{arxiv_id}", "{sha256}", "{filename}"):
         if token not in template:
             raise ValueError(f"storage URI template missing {token}")
+
     papers = registry.get("papers")
     if not isinstance(papers, list) or not papers:
         raise ValueError("papers must be a non-empty list")
@@ -189,6 +316,8 @@ def validate_registry(registry: dict[str, Any]) -> dict[str, Any]:
         match = ARXIV_URL.fullmatch(str(paper.get("source_url", "")))
         if not match or match.group("id") != paper.get("arxiv_id"):
             raise ValueError(f"invalid arXiv primary URL for {paper_id}")
+        if match.group("version") and paper.get("source_version") != match.group("version"):
+            raise ValueError(f"{paper_id} source_version does not match source_url")
         if not str(paper.get("first_submitted", "")).startswith("2021-"):
             raise ValueError(f"{paper_id} is not a 2021 first submission")
         if paper.get("source_metadata_state") != "VERIFIED_PRIMARY_AND_FROZEN_UNIVERSE":
@@ -196,31 +325,27 @@ def validate_registry(registry: dict[str, Any]) -> dict[str, Any]:
         frozen = discovery_by_id.get(paper["arxiv_id"])
         if frozen is None:
             raise ValueError(f"{paper_id} is missing from frozen discovery universe")
-        expected_fields = {
+        for field, expected in {
             "title": paper["title"],
             "authors": paper["authors"],
             "primary_category": paper["primary_category"],
-        }
-        for field, expected in expected_fields.items():
+        }.items():
             if frozen.get(field) != expected:
                 raise ValueError(f"{paper_id} frozen {field} mismatch")
         if str(frozen.get("published", ""))[:10] != paper["first_submitted"]:
             raise ValueError(f"{paper_id} frozen first-submitted date mismatch")
         if paper.get("method_contract") not in VALIDATORS:
             raise ValueError(f"unknown method contract for {paper_id}")
-        if paper.get("empirical_reproduction_state") not in {"NOT_RUN", "NOT_CONFIRMED", "VERIFIED"}:
-            raise ValueError(f"unknown empirical reproduction state for {paper_id}")
-    for artifact in registry.get("materialized_artifacts", []):
-        if artifact.get("paper_id") not in ids:
-            raise ValueError("artifact references unknown paper")
-        if not SHA256.fullmatch(str(artifact.get("sha256", ""))):
-            raise ValueError("materialized artifact requires SHA-256")
-        hf_uri = str(artifact.get("hf_uri", ""))
-        if artifact["sha256"] not in hf_uri or not hf_uri.startswith("hf://buckets/"):
-            raise ValueError("HF artifact URI must be content-addressed")
-        for key in ("kind", "filename", "bytes", "observed_at", "source_url", "license"):
-            if key not in artifact:
-                raise ValueError(f"artifact missing {key}")
+        validate_empirical_state(paper)
+
+    artifacts = registry.get("materialized_artifacts", [])
+    if not isinstance(artifacts, list):
+        raise ValueError("materialized_artifacts must be a list")
+    for artifact in artifacts:
+        if not isinstance(artifact, dict):
+            raise ValueError("materialized artifact must be an object")
+        validate_materialized_artifact(artifact, ids)
+
     return {
         "dataset_id": registry["discovery_universe"]["dataset_id"],
         "path": registry["discovery_universe"]["path"],
@@ -233,38 +358,63 @@ def validate_registry(registry: dict[str, Any]) -> dict[str, Any]:
 def build_report(registry_path: Path) -> dict[str, Any]:
     registry = json.loads(registry_path.read_text(encoding="utf-8"))
     discovery_audit = validate_registry(registry)
+    artifacts = registry.get("materialized_artifacts", [])
     studies: list[dict[str, Any]] = []
     for paper in registry["papers"]:
         result = VALIDATORS[paper["method_contract"]]()
-        studies.append({
-            "id": paper["id"],
-            "arxiv_id": paper["arxiv_id"],
-            "title": paper["title"],
-            "authors": paper["authors"],
-            "first_submitted": paper["first_submitted"],
-            "primary_category": paper["primary_category"],
-            "source_url": paper["source_url"],
-            "source_metadata_state": "VERIFIED_PRIMARY",
-            "frozen_universe_state": "VERIFIED",
-            "paper_claim": paper["paper_claim"],
-            "implementation_scope": paper["implementation_scope"],
-            "method_contract": paper["method_contract"],
-            "method_contract_state": "PASS" if result["passed"] else "FAIL",
-            "method_observed": result["observed"],
-            "empirical_reproduction_state": paper["empirical_reproduction_state"],
-            "artifact_state": "MATERIALIZED" if any(a["paper_id"] == paper["id"] for a in registry["materialized_artifacts"]) else "NOT_MATERIALIZED",
-            "reproduction_verdict": "METHOD_ONLY" if result["passed"] else "METHOD_CONTRACT_FAIL",
-            "unreproduced_evidence": paper["unreproduced_evidence"],
-        })
+        method_state = "PASS" if result["passed"] else "FAIL"
+        empirical_state = paper["empirical_reproduction_state"]
+        empirical_verdict = paper.get("empirical_verdict")
+        studies.append(
+            {
+                "id": paper["id"],
+                "arxiv_id": paper["arxiv_id"],
+                "title": paper["title"],
+                "authors": paper["authors"],
+                "first_submitted": paper["first_submitted"],
+                "primary_category": paper["primary_category"],
+                "source_url": paper["source_url"],
+                "source_version": paper.get("source_version"),
+                "source_version_submitted_at": paper.get("source_version_submitted_at"),
+                "source_metadata_state": "VERIFIED_PRIMARY",
+                "frozen_universe_state": "VERIFIED",
+                "paper_claim": paper["paper_claim"],
+                "implementation_scope": paper["implementation_scope"],
+                "method_contract": paper["method_contract"],
+                "method_contract_state": method_state,
+                "method_observed": result["observed"],
+                "empirical_reproduction_state": empirical_state,
+                "empirical_verdict": empirical_verdict,
+                "empirical_evidence_manifest": paper.get("empirical_evidence_manifest"),
+                "empirical_evidence_manifest_sha256": paper.get("empirical_evidence_manifest_sha256"),
+                "artifact_state": (
+                    "MATERIALIZED"
+                    if any(a.get("paper_id") == paper["id"] for a in artifacts)
+                    else "NOT_MATERIALIZED"
+                ),
+                "reproduction_verdict": (
+                    empirical_verdict
+                    if empirical_state == "EMPIRICALLY_RUN"
+                    else ("METHOD_ONLY" if result["passed"] else "METHOD_CONTRACT_FAIL")
+                ),
+                "unreproduced_evidence": paper["unreproduced_evidence"],
+            }
+        )
+
+    empirically_run = [s for s in studies if s["empirical_reproduction_state"] == "EMPIRICALLY_RUN"]
     return {
         "suite": "2021 arXiv finance reproduction queue",
         "discovery_universe": discovery_audit,
         "canonical_storage": registry["canonical_storage"],
         "summary": {
             "indexed": len(studies),
-            "method_contract_pass": sum(study["method_contract_state"] == "PASS" for study in studies),
-            "materialized": sum(study["artifact_state"] == "MATERIALIZED" for study in studies),
-            "empirically_reproduced": sum(study["empirical_reproduction_state"] in {"NOT_CONFIRMED", "VERIFIED"} for study in studies),
+            "method_contract_pass": sum(s["method_contract_state"] == "PASS" for s in studies),
+            "materialized": sum(s["artifact_state"] == "MATERIALIZED" for s in studies),
+            "empirically_run": len(empirically_run),
+            "empirically_reproduced": sum(s["empirical_verdict"] == "REPRODUCED" for s in studies),
+            "empirically_failed": sum(s["empirical_verdict"] == "FAILED" for s in studies),
+            "empirically_blocked": sum(s["empirical_verdict"] == "BLOCKED" for s in studies),
+            "empirically_not_run": sum(s["empirical_reproduction_state"] == "NOT_RUN" for s in studies),
         },
         "papers": studies,
     }
@@ -272,7 +422,11 @@ def build_report(registry_path: Path) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--registry", type=Path, default=ROOT / "docs" / "research" / "2021_arxiv_finance_registry.json")
+    parser.add_argument(
+        "--registry",
+        type=Path,
+        default=ROOT / "docs" / "research" / "2021_arxiv_finance_registry.json",
+    )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     report = build_report(args.registry)

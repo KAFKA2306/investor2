@@ -18,6 +18,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 INTERNAL_BUILDER = ROOT / "scripts" / "build_research_verification_manifest.py"
+EMPIRICAL_VERDICTS = {"REPRODUCED", "FAILED", "BLOCKED"}
 
 PUBLIC_QUESTIONS = {
     "jegadeesh_titman_1993_momentum": "最近上がった株は、その後もしばらく上がりやすい？",
@@ -146,18 +147,31 @@ def project_result(record: dict[str, Any]) -> dict[str, Any]:
 
 def paper_stage_label(paper: dict[str, Any]) -> str:
     empirical = paper["empirical_reproduction_state"]
-    if empirical == "VERIFIED":
-        return "元の評価系まで再現して確認"
-    if empirical == "NOT_CONFIRMED":
-        return "元の評価系を再実行したが確認できず"
+    verdict = paper.get("empirical_verdict")
+    if empirical == "EMPIRICALLY_RUN":
+        if verdict == "REPRODUCED":
+            return "実証再現を実行し、事前条件内で再現"
+        if verdict == "FAILED":
+            return "実証再現を実行したが、事前条件を満たさず"
+        if verdict == "BLOCKED":
+            return "実証再現を実行したが、証拠・解釈上の制約で判定保留"
+        raise ValueError(f"EMPIRICALLY_RUN paper lacks final verdict: {paper['id']}")
+    if empirical != "NOT_RUN":
+        raise ValueError(f"unknown empirical state: {paper['id']}")
     if paper["artifact_state"] == "MATERIALIZED":
         return "再現用データを保存済み・実証再現は未実施"
     if paper["method_contract_state"] == "PASS":
         return "方法の最小実装まで完了・実証再現は未実施"
-    return "方法実装の確認が必要"
+    return "方法実装の確認が必要・実証再現は未実施"
 
 
 def project_paper(paper: dict[str, Any]) -> dict[str, Any]:
+    evidence = None
+    if paper["empirical_reproduction_state"] == "EMPIRICALLY_RUN":
+        evidence = {
+            "path": paper["empirical_evidence_manifest"],
+            "sha256": paper["empirical_evidence_manifest_sha256"],
+        }
     return {
         "id": paper["id"],
         "arxiv_id": paper["arxiv_id"],
@@ -171,6 +185,8 @@ def project_paper(paper: dict[str, Any]) -> dict[str, Any]:
         "method_state": paper["method_contract_state"],
         "artifact_state": paper["artifact_state"],
         "empirical_state": paper["empirical_reproduction_state"],
+        "empirical_verdict": paper.get("empirical_verdict"),
+        "empirical_evidence": evidence,
         "stage_label": paper_stage_label(paper),
         "missing_evidence": paper["unreproduced_evidence"],
     }
@@ -192,6 +208,16 @@ def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
         {"label": label, "url": url, "note": note, "kind": "再現できる記録"}
         for label, url, note in REPOSITORY_SOURCES
     ]
+    paper_summary_keys = (
+        "indexed",
+        "method_contract_pass",
+        "materialized",
+        "empirically_run",
+        "empirically_reproduced",
+        "empirically_failed",
+        "empirically_blocked",
+        "empirically_not_run",
+    )
     return {
         "schema_version": 2,
         "build": dict(internal["build"]),
@@ -201,10 +227,7 @@ def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
             "not_confirmed": summary["not_confirmed"],
             "latest_factor_data_end": summary["latest_factor_data_end"],
             "latest_momentum_data_end": summary["latest_momentum_data_end"],
-            "papers_2021_indexed": summary["papers_2021_indexed"],
-            "papers_2021_method_contract_pass": summary["papers_2021_method_contract_pass"],
-            "papers_2021_materialized": summary["papers_2021_materialized"],
-            "papers_2021_empirically_reproduced": summary["papers_2021_empirically_reproduced"],
+            **{f"papers_2021_{key}": summary[f"papers_2021_{key}"] for key in paper_summary_keys},
         },
         "results": [project_result(record) for record in internal["repository_results"]],
         "paper_reproduction": {
@@ -272,7 +295,11 @@ def validate_public_manifest(data: dict[str, Any], expected_revision: str | None
         "indexed": len(papers),
         "method_contract_pass": sum(paper.get("method_state") == "PASS" for paper in papers),
         "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
-        "empirically_reproduced": sum(paper.get("empirical_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+        "empirically_run": sum(paper.get("empirical_state") == "EMPIRICALLY_RUN" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_verdict") == "REPRODUCED" for paper in papers),
+        "empirically_failed": sum(paper.get("empirical_verdict") == "FAILED" for paper in papers),
+        "empirically_blocked": sum(paper.get("empirical_verdict") == "BLOCKED" for paper in papers),
+        "empirically_not_run": sum(paper.get("empirical_state") == "NOT_RUN" for paper in papers),
     }
     if paper_summary != expected_paper:
         raise ValueError("public paper summary does not match records")
@@ -283,8 +310,25 @@ def validate_public_manifest(data: dict[str, Any], expected_revision: str | None
         for field in ("arxiv_id", "title", "first_submitted", "category", "source_url", "claim", "implemented", "method_state", "artifact_state", "empirical_state", "stage_label", "missing_evidence"):
             if not isinstance(paper.get(field), str) or not paper[field].strip():
                 raise ValueError(f"public paper {paper['id']} missing {field}")
-        if paper["empirical_state"] == "NOT_RUN" and "実証再現は未実施" not in paper["stage_label"]:
-            raise ValueError(f"unrun public paper is not clearly labeled: {paper['id']}")
+        state = paper["empirical_state"]
+        verdict = paper.get("empirical_verdict")
+        evidence = paper.get("empirical_evidence")
+        if state == "NOT_RUN":
+            if verdict is not None or evidence is not None:
+                raise ValueError(f"NOT_RUN public paper carries empirical result/evidence: {paper['id']}")
+            if "実証再現は未実施" not in paper["stage_label"]:
+                raise ValueError(f"unrun public paper is not clearly labeled: {paper['id']}")
+        elif state == "EMPIRICALLY_RUN":
+            if verdict not in EMPIRICAL_VERDICTS:
+                raise ValueError(f"empirically run public paper lacks verdict: {paper['id']}")
+            if not isinstance(evidence, dict):
+                raise ValueError(f"empirically run public paper lacks evidence ref: {paper['id']}")
+            if not isinstance(evidence.get("path"), str) or not evidence["path"].strip():
+                raise ValueError(f"empirical evidence path missing: {paper['id']}")
+            if not isinstance(evidence.get("sha256"), str) or not re.fullmatch(r"[0-9a-f]{64}", evidence["sha256"]):
+                raise ValueError(f"empirical evidence SHA-256 missing: {paper['id']}")
+        else:
+            raise ValueError(f"unknown public empirical state: {paper['id']}")
 
     sources = data.get("sources")
     if not isinstance(sources, list) or not sources:

@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any
 
 ALLOWED_VERDICTS = {"CONFIRMED", "NOT_CONFIRMED"}
+EMPIRICAL_VERDICTS = {"REPRODUCED", "FAILED", "BLOCKED"}
 REQUIRED_PROMOTION_GATES = {
     "chronological_oos",
     "t_stat_ge_3",
@@ -85,18 +86,35 @@ def validate_manifest(data: dict[str, Any], expected_revision: str | None = None
         require(paper.get("method_contract_state") in {"PASS", "FAIL"}, f"invalid method state for {paper_id}")
         require(paper.get("artifact_state") in {"MATERIALIZED", "NOT_MATERIALIZED"}, f"invalid artifact state for {paper_id}")
         empirical = paper.get("empirical_reproduction_state")
-        require(empirical in {"NOT_RUN", "NOT_CONFIRMED", "VERIFIED"}, f"invalid empirical state for {paper_id}")
+        require(empirical in {"NOT_RUN", "EMPIRICALLY_RUN"}, f"invalid empirical state for {paper_id}")
         if empirical == "NOT_RUN":
             require(
                 paper.get("reproduction_verdict") in {"METHOD_ONLY", "METHOD_CONTRACT_FAIL"},
                 f"unrun paper has empirical-looking verdict: {paper_id}",
             )
+            require(paper.get("empirical_verdict") is None, f"NOT_RUN paper has empirical verdict: {paper_id}")
+            require(paper.get("empirical_evidence_manifest") is None, f"NOT_RUN paper has empirical evidence: {paper_id}")
+        else:
+            verdict = paper.get("empirical_verdict")
+            require(verdict in EMPIRICAL_VERDICTS, f"empirically run paper lacks final verdict: {paper_id}")
+            require(paper.get("reproduction_verdict") == verdict, f"empirical/reproduction verdict mismatch: {paper_id}")
+            require_nonempty_string(paper.get("empirical_evidence_manifest"), f"{paper_id}.empirical_evidence_manifest")
+            evidence_sha = require_nonempty_string(
+                paper.get("empirical_evidence_manifest_sha256"),
+                f"{paper_id}.empirical_evidence_manifest_sha256",
+            )
+            require(bool(re.fullmatch(r"[0-9a-f]{64}", evidence_sha)), f"invalid empirical evidence SHA-256 for {paper_id}")
+
     require(len(paper_ids) == len(set(paper_ids)), "paper reproduction IDs must be unique")
     expected_paper = {
         "indexed": len(papers),
         "method_contract_pass": sum(paper.get("method_contract_state") == "PASS" for paper in papers),
         "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
-        "empirically_reproduced": sum(paper.get("empirical_reproduction_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+        "empirically_run": sum(paper.get("empirical_reproduction_state") == "EMPIRICALLY_RUN" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_verdict") == "REPRODUCED" for paper in papers),
+        "empirically_failed": sum(paper.get("empirical_verdict") == "FAILED" for paper in papers),
+        "empirically_blocked": sum(paper.get("empirical_verdict") == "BLOCKED" for paper in papers),
+        "empirically_not_run": sum(paper.get("empirical_reproduction_state") == "NOT_RUN" for paper in papers),
     }
     require(paper_summary == expected_paper, "paper reproduction summary does not match records")
     for key, value in expected_paper.items():
@@ -153,6 +171,7 @@ def validate_files(manifest_path: Path, html_path: Path, expected_revision: str 
         "tested_hypotheses": data["summary"]["tested_hypotheses"],
         "confirmed": data["summary"]["confirmed"],
         "papers_2021_indexed": data["summary"]["papers_2021_indexed"],
+        "papers_2021_empirically_run": data["summary"]["papers_2021_empirically_run"],
         "papers_2021_empirically_reproduced": data["summary"]["papers_2021_empirically_reproduced"],
         "status": "PASS",
     }
