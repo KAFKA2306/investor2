@@ -1,6 +1,14 @@
 name: Build arXiv q-fin selection manifest
 
 on:
+  pull_request:
+    paths:
+      - "scripts/select_arxiv_qfin_papers.py"
+      - "tests/test_arxiv_qfin_selection.py"
+      - "docs/research/arxiv_qfin_selector_rules_v1.json"
+      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/specs/arxiv_qfin_selection_gate.md"
+      - ".github/workflows/arxiv-qfin-selection-gate.yml"
   push:
     branches:
       - main
@@ -107,7 +115,12 @@ jobs:
       - name: Snapshot ledger audit
         run: python scripts/snapshot_store.py audit
 
-      - name: Commit canonical manifest to branch
+      - name: Pull request must commit canonical manifest
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- docs/research/arxiv_qfin_2021_selection_manifest.json
+
+      - name: Commit canonical manifest to current branch
+        if: github.event_name != 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
