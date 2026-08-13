@@ -4,13 +4,13 @@
   "discovery_universe": {
     "dataset_id": "arxiv_qfin_2021_metadata",
     "path": "docs/research/data/arxiv_qfin_2021.json",
-    "schema_version": "investor2.arxiv-qfin-metadata.v1",
     "snapshot_id": "78a7a514d27762fd3891",
     "record_count": 1132,
     "sha256": "a1ebbbd25ae65b5bce391ccb8ded1a27fa7c013102581251cc1f6ee4e73a948c",
     "source": "arxiv_api_metadata",
     "observed_at": "2026-08-13T09:02:34Z",
-    "reuse_key": "arxiv/q-fin/2021/metadata"
+    "reuse_key": "arxiv/q-fin/2021/metadata",
+    "ledger_schema_version": "investor2.arxiv-qfin-metadata.v1"
   },
   "canonical_storage": {
     "github_index": "docs/research/2021_arxiv_finance_registry.json",
