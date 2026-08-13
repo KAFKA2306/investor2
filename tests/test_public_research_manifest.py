@@ -135,6 +135,9 @@ def test_public_validator_rejects_not_run_empirical_result() -> None:
         item for item in public["paper_reproduction"]["papers"] if item["empirical_state"] == "NOT_RUN"
     )
     paper["empirical_verdict"] = "REPRODUCED"
+    # Keep aggregate counts internally consistent so the semantic NOT_RUN guard is exercised.
+    public["paper_reproduction"]["summary"]["empirically_reproduced"] += 1
+    public["summary"]["papers_2021_empirically_reproduced"] += 1
 
     with pytest.raises(ValueError, match="NOT_RUN"):
         PUBLIC.validate_public_manifest(public)
