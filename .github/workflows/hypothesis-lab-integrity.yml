@@ -1,0 +1,57 @@
+name: Hypothesis Lab Integrity
+
+on:
+  pull_request:
+    paths:
+      - "Taskfile.yml"
+      - "src/research/**"
+      - "src/decision/**"
+      - "src/commands/hypothesis_lab_run.ts"
+      - "src/commands/decision_check.ts"
+      - "data/hypothesis_lab/**"
+      - "data/decision_ledger/**"
+      - "tests/hypothesis_lab.test.ts"
+      - "tests/decision_snapshot.test.ts"
+      - "tsconfig.json"
+      - "package.json"
+      - "bun.lock"
+      - ".github/workflows/hypothesis-lab-integrity.yml"
+  push:
+    branches: [main]
+    paths:
+      - "Taskfile.yml"
+      - "src/research/**"
+      - "src/decision/**"
+      - "src/commands/hypothesis_lab_run.ts"
+      - "src/commands/decision_check.ts"
+      - "data/hypothesis_lab/**"
+      - "data/decision_ledger/**"
+      - "tests/hypothesis_lab.test.ts"
+      - "tests/decision_snapshot.test.ts"
+      - "tsconfig.json"
+      - "package.json"
+      - "bun.lock"
+      - ".github/workflows/hypothesis-lab-integrity.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: oven-sh/setup-bun@v2
+      - name: Install dependencies without rewriting the existing lockfile
+        run: bun install --no-save
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Test hypothesis and decision contracts
+        run: bun test tests/hypothesis_lab.test.ts tests/decision_snapshot.test.ts
+      - name: Execute frozen real-data hypothesis lab
+        run: bun src/commands/hypothesis_lab_run.ts
+      - name: Verify clean checkout
+        shell: bash
+        run: |
+          test -z "$(git status --porcelain --untracked-files=all)"

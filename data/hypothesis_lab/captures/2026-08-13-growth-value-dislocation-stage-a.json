@@ -1,0 +1,34 @@
+{
+  "schema_version": "1.0",
+  "capture_id": "2026-08-13-growth-value-dislocation-stage-a",
+  "hypothesis_id": "growth_value_dislocation_v1",
+  "tool": "EDINET_DB_2028-08-10.screen_companies",
+  "params": {
+    "conditions": [
+      {"metric": "per", "operator": "lte", "value": 10},
+      {"metric": "revenue-cagr-3y", "operator": "gte", "value": 5},
+      {"metric": "oi-cagr-3y", "operator": "gte", "value": 8},
+      {"metric": "roe", "operator": "gte", "value": 10},
+      {"metric": "equity-ratio", "operator": "gte", "value": 40},
+      {"metric": "fcf-yield", "operator": "gte", "value": 3},
+      {"metric": "net-cash-ratio", "operator": "gte", "value": 0}
+    ],
+    "limit": 30,
+    "sort_by": "per"
+  },
+  "captured_at": "2026-08-13T13:23:41+09:00",
+  "information_cutoff": "2026-08-13T13:23:41+09:00",
+  "result_count": 84,
+  "rows": [
+    {"edinet_code":"E01842","sec_code":"6823","company_name":"リオン株式会社","industry":"電気機器","per":10.0,"revenue_cagr_3y":6.09,"oi_cagr_3y":15.32,"roe":10.10,"equity_ratio":83.29,"fcf_yield":10.18,"net_cash_ratio":0.54},
+    {"edinet_code":"E05477","sec_code":"2436","company_name":"共同ピーアール株式会社","industry":"サービス業","per":10.0,"revenue_cagr_3y":17.56,"oi_cagr_3y":21.85,"roe":20.10,"equity_ratio":70.59,"fcf_yield":8.56,"net_cash_ratio":0.41},
+    {"edinet_code":"E00304","sec_code":"1736","company_name":"株式会社オーテック","industry":"建設業","per":10.0,"revenue_cagr_3y":8.86,"oi_cagr_3y":37.55,"roe":14.51,"equity_ratio":68.89,"fcf_yield":8.42,"net_cash_ratio":0.27},
+    {"edinet_code":"E04478","sec_code":"4838","company_name":"スペースシャワーＳＫＩＹＡＫＩホールディングス株式会社","industry":"情報・通信業","per":9.97,"revenue_cagr_3y":14.63,"oi_cagr_3y":133.64,"roe":14.08,"equity_ratio":48.54,"fcf_yield":8.75,"net_cash_ratio":0.13},
+    {"edinet_code":"E38634","sec_code":"5533","company_name":"株式会社エリッツホールディングス","industry":"不動産業","per":9.9,"revenue_cagr_3y":9.49,"oi_cagr_3y":18.61,"roe":13.91,"equity_ratio":55.60,"fcf_yield":9.43,"net_cash_ratio":0.21},
+    {"edinet_code":"E36670","sec_code":"7792","company_name":"株式会社コラントッテ","industry":"その他製品","per":9.9,"revenue_cagr_3y":14.05,"oi_cagr_3y":23.92,"roe":28.63,"equity_ratio":76.94,"fcf_yield":5.27,"net_cash_ratio":0.25},
+    {"edinet_code":"E37143","sec_code":"7134","company_name":"株式会社アップガレージグループ","industry":"サービス業","per":9.89,"revenue_cagr_3y":10.65,"oi_cagr_3y":9.24,"roe":16.04,"equity_ratio":69.45,"fcf_yield":8.39,"net_cash_ratio":0.31},
+    {"edinet_code":"E36393","sec_code":"9346","company_name":"株式会社ココルポート","industry":"サービス業","per":9.86,"revenue_cagr_3y":15.15,"oi_cagr_3y":26.61,"roe":21.26,"equity_ratio":75.73,"fcf_yield":7.85,"net_cash_ratio":0.37},
+    {"edinet_code":"E03432","sec_code":"3317","company_name":"株式会社フライングガーデン","industry":"小売業","per":9.81,"revenue_cagr_3y":8.33,"oi_cagr_3y":10.11,"roe":13.12,"equity_ratio":67.90,"fcf_yield":3.04,"net_cash_ratio":0.09},
+    {"edinet_code":"E01747","sec_code":"6643","company_name":"株式会社戸上電機製作所","industry":"電気機器","per":9.8,"revenue_cagr_3y":7.42,"oi_cagr_3y":28.61,"roe":11.36,"equity_ratio":73.09,"fcf_yield":4.58,"net_cash_ratio":0.46}
+  ]
+}

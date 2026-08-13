@@ -1,0 +1,111 @@
+{
+  "schema_version": "1.0",
+  "hypothesis_id": "growth_value_dislocation_v1",
+  "candidate_id": "growth_value_dislocation_v1:E01842:2026-08-13",
+  "company": {
+    "edinet_code": "E01842",
+    "sec_code": "6823",
+    "name": "リオン株式会社"
+  },
+  "information_cutoff": "2026-08-13T13:23:41+09:00",
+  "metrics": {
+    "revenue_yoy": 0.0223861005,
+    "operating_income_yoy": 0.0813033947,
+    "net_income_yoy": 0.1698961805,
+    "operating_cf_yoy": 0.2118385528,
+    "per": 10.0,
+    "pbr": 0.9615704836,
+    "fcf_yield": 0.1018176808,
+    "net_cash_ratio": 0.5416165126,
+    "tsr": 1.004,
+    "comparison_index_tsr": 2.022,
+    "relative_tsr_ratio": 0.4965380811
+  },
+  "pressure_signals": [
+    {
+      "type": "relative_tsr_underperformance",
+      "description": "FY2026 EDINET record reports totalShareholderReturn=1.004 versus totalReturnSharePriceIndex=2.022. This is used only as a relative-dislocation signal; it is not treated as a current-price return calculation.",
+      "evidence": {
+        "source_type": "edinet_filing",
+        "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YI2O",
+        "available_at": "2026-06-24T09:53:00+09:00"
+      }
+    },
+    {
+      "type": "large_holder_reduction",
+      "description": "Large-shareholding events show Asset Management One declining from 5.04% to 3.98% by 2026-04-30 and then to 2.13% by 2026-07-15. A separate pure-investment filer, Sumitomo Mitsui DS Asset Management, declined from 3.92% to 3.36% by 2026-04-30. These are observed seller-flow signals, not evidence of forced liquidation.",
+      "evidence": {
+        "source_type": "corporate_event",
+        "ref": "EDINET_DB_2028-08-10.get_events:E01842:2026-04-30,2026-07-15; latest filing doc_id S100YRON",
+        "available_at": "2026-07-15"
+      }
+    }
+  ],
+  "negative_fundamental_events": [],
+  "gate_assessment": {
+    "underlying_reality": {
+      "status": "pass",
+      "reasons": [
+        "FY2026 revenue increased 2.24% year-on-year.",
+        "FY2026 operating income increased 8.13% year-on-year.",
+        "FY2026 net income increased 16.99% year-on-year.",
+        "FY2026 operating cash flow increased 21.18% year-on-year."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YI2O",
+          "available_at": "2026-06-24T09:53:00+09:00"
+        }
+      ]
+    },
+    "price_pressure_mechanism": {
+      "status": "pass",
+      "reasons": [
+        "Two independent observable pressure signals are present: relative TSR underperformance and dated large-holder reductions.",
+        "The 2026 event capture through 2026-08-13 contains earnings summaries and a dividend increase, but no negative earnings-revision event.",
+        "The evidence supports observable seller-flow/dislocation only; forced liquidation or causal sufficiency is not claimed."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YI2O",
+          "available_at": "2026-06-24T09:53:00+09:00"
+        },
+        {
+          "source_type": "corporate_event",
+          "ref": "EDINET_DB_2028-08-10.get_events:E01842:2026-01-01..2026-08-13",
+          "available_at": "2026-08-13"
+        }
+      ]
+    },
+    "weak_case_margin": {
+      "status": "pass",
+      "reasons": [
+        "FY2026 filing-date PER is 10.0x, at the pre-registered threshold.",
+        "FY2026 filing-date PBR is approximately 0.96x.",
+        "FY2026 filing-date FCF yield is approximately 10.18%.",
+        "FY2026 filing-date net cash / market cap ratio is approximately 0.54."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YI2O",
+          "available_at": "2026-06-24T09:53:00+09:00"
+        },
+        {
+          "source_type": "mcp_capture",
+          "ref": "data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json",
+          "available_at": "2026-08-13T13:23:41+09:00"
+        }
+      ]
+    }
+  },
+  "research_status": "eligible_for_decision_snapshot",
+  "limitations": [
+    "PER, PBR, FCF yield and net-cash ratio here use the filing-date market price embedded in the EDINET DB annual record, not a live 2026-08-13 market quote.",
+    "The shareholder reductions establish observed supply from named holders but do not prove forced selling, margin calls or that those sales caused the stock-price path.",
+    "The TSR fields are disclosure-record total-return measures and are used as a relative-dislocation feature, not as a precise event-window drawdown.",
+    "This artifact ranks research priority only. A fresh point-in-time Decision Snapshot is still required before any human investment decision."
+  ]
+}

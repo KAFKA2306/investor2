@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0",
+  "hypothesis_id": "growth_value_dislocation_v1",
+  "candidate_id": "growth_value_dislocation_v1:E00304:2026-08-13",
+  "company": {
+    "edinet_code": "E00304",
+    "sec_code": "1736",
+    "name": "株式会社オーテック"
+  },
+  "information_cutoff": "2026-08-13T13:23:41+09:00",
+  "metrics": {
+    "revenue_yoy": 0.0731351756,
+    "operating_income_yoy": 0.2633639995,
+    "net_income_yoy": 0.2618091888,
+    "operating_cf_yoy": 0.3036585376,
+    "per": 10.0,
+    "pbr": 1.3670770740,
+    "fcf_yield": 0.0842315636,
+    "net_cash_ratio": 0.2690401771,
+    "tsr": 3.139,
+    "comparison_index_tsr": 2.022,
+    "relative_tsr_ratio": 1.5524233432
+  },
+  "pressure_signals": [],
+  "negative_fundamental_events": [],
+  "gate_assessment": {
+    "underlying_reality": {
+      "status": "pass",
+      "reasons": [
+        "FY2026 revenue increased 7.31% year-on-year.",
+        "FY2026 operating income increased 26.34% year-on-year.",
+        "FY2026 net income increased 26.18% year-on-year.",
+        "FY2026 operating cash flow increased 30.37% year-on-year."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YKWY",
+          "available_at": "2026-06-25T14:48:00+09:00"
+        }
+      ]
+    },
+    "price_pressure_mechanism": {
+      "status": "unknown",
+      "reasons": [
+        "The FY2026 disclosure record reports TSR 3.139 versus comparison index 2.022, so the registered relative-underperformance signal is absent.",
+        "No independent seller-flow signal was established in this deep dive.",
+        "A 2026-02-09 earnings-revision event exists, but the normalized event metadata does not state its direction; it is therefore not labeled negative."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YKWY",
+          "available_at": "2026-06-25T14:48:00+09:00"
+        },
+        {
+          "source_type": "corporate_event",
+          "ref": "EDINET_DB_2028-08-10.get_events:E00304:2026-01-01..2026-08-13",
+          "available_at": "2026-08-13"
+        }
+      ]
+    },
+    "weak_case_margin": {
+      "status": "pass",
+      "reasons": [
+        "FY2026 filing-date PER is 10.0x.",
+        "FY2026 filing-date FCF yield is approximately 8.42%.",
+        "FY2026 filing-date net cash / market cap ratio is approximately 0.27."
+      ],
+      "evidence": [
+        {
+          "source_type": "edinet_filing",
+          "ref": "https://disclosure2.edinet-fsa.go.jp/WZEK0040.aspx?S100YKWY",
+          "available_at": "2026-06-25T14:48:00+09:00"
+        },
+        {
+          "source_type": "mcp_capture",
+          "ref": "data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json",
+          "available_at": "2026-08-13T13:23:41+09:00"
+        }
+      ]
+    }
+  },
+  "research_status": "reject",
+  "limitations": [
+    "This is a negative-control example for the registered dislocation mechanism, not a negative view on the company.",
+    "PER, PBR, FCF yield and net-cash ratio use the filing-date market price embedded in the EDINET DB annual record, not a live 2026-08-13 quote.",
+    "The absence of a pressure signal in the queried evidence is not proof that no supply-driven pressure ever existed.",
+    "The earnings-revision event direction is unavailable in the normalized event metadata, so no positive or negative direction is inferred."
+  ]
+}

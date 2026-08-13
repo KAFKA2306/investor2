@@ -3,62 +3,74 @@ project:
   name: AAARTS Autonomous Agentic Alpha Trade System
   repository: https://github.com/KAFKA2306/investor2
   pages: https://kafka2306.github.io/investor2/
-  version: 0.1.0
-  updated: 2026-07-30
+  version: 0.2.0
+  updated: 2026-08-13
   core_ontology: https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/causal-evidence-core.yaml
   schema: https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/project.schema.json
 
 purpose:
-  problem: Govern financial forecasting and alpha hypotheses through a reproducible research cycle that prevents in-sample discovery from being presented as validated evidence.
-  intended_decisions: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required]
+  problem: Govern financial forecasting, measurable alpha hypotheses, external data captures, and human investment decisions through a reproducible research cycle that prevents in-sample discovery and hindsight narratives from being presented as validated evidence.
+  intended_decisions: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required, eligible_for_decision_snapshot]
   success_conditions:
-    - Hypotheses identify source papers, economic mechanism, features, targets, and falsification tests.
+    - Hypotheses identify source papers or observations, economic mechanism, measurable features, targets, and falsification tests.
+    - External MCP queries record tool, parameters, information cutoff, capture time, and source provenance before downstream interpretation.
     - Training, validation, and chronological out-of-sample periods are explicit and frozen.
     - Ablations isolate quantitative, textual, and combined information contributions.
     - Promotion requires reproducible OOS evidence rather than narrative plausibility.
+    - Human entry or add decisions preserve an immutable pre-decision snapshot and append post-outcome reviews separately.
   falsification_conditions:
-    - Future information leaks into features, labels, selection, or evaluation.
-    - A hypothesis changes after inspecting its frozen OOS result without a new version.
-    - Results cannot be reproduced from recorded data, code, parameters, and commit.
-    - A single favorable metric substitutes for robustness and ablation evidence.
+    - Future information leaks into features, labels, selection, evaluation, or a decision snapshot.
+    - A hypothesis changes after inspecting its captured candidate set or frozen OOS result without a new version.
+    - An observed holder reduction is promoted to forced-liquidation or margin-call evidence without direct support.
+    - Results cannot be reproduced from recorded data, code, parameters, MCP capture, and commit.
+    - A single favorable metric substitutes for mechanism evidence, robustness, and ablation evidence.
+    - A post-outcome review mutates the original decision snapshot.
 
 scope:
-  included: [EDINET filings, financial features, textual disclosures, hypotheses, experiments, ablations, chronological OOS evaluations, evidence dashboard]
-  excluded: [live trading authorization, guaranteed returns, unfrozen post-hoc claims, unsupported fraud or earnings assertions]
-  temporal: Filing availability time, feature cutoff, label period, publication date, and OOS window are explicit.
-  abstraction_level: Research governance and evidence lifecycle for predictive hypotheses.
+  included: [EDINET filings, MCP captures, financial features, textual disclosures, hypotheses, candidate deep dives, experiments, ablations, chronological OOS evaluations, evidence dashboard, decision snapshots, decision reviews]
+  excluded: [live trading authorization, guaranteed returns, unfrozen post-hoc claims, unsupported forced-selling claims, unsupported fraud or earnings assertions]
+  temporal: Filing availability time, MCP information cutoff, capture time, feature cutoff, label period, publication date, OOS window, and decision timestamp are explicit.
+  abstraction_level: Research governance and evidence lifecycle for predictive hypotheses and human investment decisions.
 
 competency_questions:
   - What economic or accounting mechanism is each hypothesis asserting?
-  - Which data were available at the decision timestamp?
-  - Which choices were made before and after observing OOS results?
+  - Which measurable features and thresholds were fixed before the candidate set was observed?
+  - Which MCP or external data were available at the information cutoff, and with which parameters?
+  - Which choices were made before and after observing candidate and OOS results?
+  - Is observed price pressure supported by dated seller-flow evidence, or only inferred from a falling price?
   - Do ablations show incremental value beyond simpler baselines?
-  - Can another run reproduce the exact metrics and promotion decision?
+  - Can another run reproduce the exact candidate set, metrics, promotion decision, and human decision snapshot?
 
 domain_mapping:
   System: FinancialResearchLifecycle
-  State: [hypothesis state, dataset freeze state, model state, experiment state, evidence state, promotion state]
-  Action: [register hypothesis, build dataset, train model, freeze protocol, run OOS, perform ablation, promote or reject]
-  Process: [EDINET acquisition, feature extraction, model fitting, backtest, OOS evaluation, robustness test, dashboard publication]
-  Observation: [filing fact, textual disclosure, market outcome, experiment metric, leakage diagnostic]
+  State: [hypothesis state, capture state, dataset freeze state, model state, experiment state, evidence state, promotion state, decision snapshot state, review state]
+  Action: [register hypothesis, capture MCP evidence, build dataset, deep dive candidate, train model, freeze protocol, run OOS, perform ablation, promote or reject, freeze decision snapshot, append decision review]
+  Process: [EDINET acquisition, MCP screening, feature extraction, candidate evidence enrichment, model fitting, backtest, OOS evaluation, robustness test, dashboard publication, human decision]
+  Observation: [filing fact, MCP result row, textual disclosure, market outcome, shareholder change, corporate event, experiment metric, leakage diagnostic]
   Model: [baseline model, quantitative model, text model, combined model, alpha ranking model]
-  Requirement: [timestamp correctness, frozen OOS, reproducibility, baseline comparison, ablation, multiple-testing governance]
-  Claim: [forecast skill, incremental information, robustness, economic relevance, reproducibility]
-  Evidence: [dataset manifest, protocol hash, experiment configuration, metrics, ablation result, commit SHA, dashboard artifact]
-  Decision: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required]
+  Requirement: [timestamp correctness, frozen hypothesis thresholds, frozen MCP parameters, frozen OOS, reproducibility, baseline comparison, ablation, multiple-testing governance, immutable pre-decision state]
+  Claim: [forecast skill, incremental information, observable seller flow, price dislocation, robustness, economic relevance, reproducibility]
+  Evidence: [MCP capture, EDINET document ID, source URL, dataset manifest, protocol hash, experiment configuration, metrics, shareholder event, ablation result, commit SHA, dashboard artifact, decision snapshot]
+  Decision: [candidate, reject, freeze_for_oos, promote, retire, reproduce_required, eligible_for_decision_snapshot]
 
 claims_and_evidence:
   assertion_types: [ObservedFact, CalculatedValue, ModelEstimate, Forecast, Assumption, Hypothesis, DecisionAssertion]
   required_evidence:
     ForecastSkill: [chronological OOS metrics, baseline comparison, confidence or uncertainty analysis]
     IncrementalValue: [ablation results, identical OOS window, identical target definition]
-    ReproducibleResult: [data manifest, code commit, configuration, random seeds, environment]
+    ObservableSellerFlow: [dated holding or supply change, source identity, prior value, current value]
+    PriceDislocation: [comparable relative-price or total-return measure, separate fundamental evidence]
+    ReproducibleResult: [data manifest, MCP capture, code commit, configuration, random seeds, environment]
     Promotion: [frozen protocol, OOS pass, robustness checks, governance rule]
-  unknown_policy: Unfrozen, leaky, unreproducible, or incomplete results remain candidates or are rejected; they are not promoted.
+    DecisionSnapshotEligibility: [underlying reality pass, price pressure mechanism pass, weak-case margin pass, point-in-time evidence]
+  unknown_policy: Unfrozen, leaky, unreproducible, causally unsupported, or incomplete results remain candidates or unknown; they are not promoted and do not become eligible decision snapshots.
 
 decision_rules:
   - id: hypothesis-registration
-    when: Mechanism, target, inputs, availability timing, baseline, and falsification criteria are declared.
+    when: Mechanism, target, inputs, availability timing, baseline, measurable thresholds, and falsification criteria are declared.
+    result: candidate
+  - id: mcp-capture-freeze
+    when: MCP tool name, exact parameters, capture time, information cutoff, total result count, and stored rows are recorded before candidate deep-dive interpretation.
     result: candidate
   - id: freeze-before-oos
     when: Dataset split, metrics, thresholds, and analysis plan are committed before OOS inspection.
@@ -66,18 +78,21 @@ decision_rules:
   - id: promotion-gate
     when: Frozen chronological OOS, baseline, ablation, robustness, and reproducibility requirements pass.
     result: promote
+  - id: decision-snapshot-gate
+    when: Underlying reality, observable price-pressure mechanism, and weak-case margin all pass using evidence available at the decision information cutoff.
+    result: eligible_for_decision_snapshot
   - id: integrity-failure
-    when: Leakage, post-hoc protocol mutation, missing provenance, or non-reproducibility is detected.
+    when: Leakage, post-hoc protocol mutation, missing provenance, unsupported causal escalation, or non-reproducibility is detected.
     result: reject
 
 provenance:
-  sources: [EDINET filings, registered research papers, market and accounting datasets permitted by project policy]
-  generated_artifacts: [dataset manifests, feature tables, experiment configs, model outputs, OOS reports, dashboard data]
-  agents: [acquisition code, research agents, model training code, test harness, GitHub Actions, human reviewer]
-  lineage: Hypothesis IDs connect source rationale, frozen protocol, data versions, model versions, metrics, and promotion decisions.
+  sources: [EDINET filings, registered research papers, MCP-accessed external datasets, market and accounting datasets permitted by project policy]
+  generated_artifacts: [MCP capture snapshots, candidate deep dives, dataset manifests, feature tables, experiment configs, model outputs, OOS reports, dashboard data, decision snapshots, decision reviews]
+  agents: [acquisition code, MCP clients, research agents, model training code, test harness, GitHub Actions, human reviewer]
+  lineage: Hypothesis IDs connect source rationale, MCP query parameters, captured rows, candidate evidence, frozen protocol, data versions, model versions, metrics, promotion decisions, and immutable human decision snapshots.
 
 validation:
-  structural: Schemas, unique IDs, required timestamps, configuration completeness, and artifact hashes.
-  semantic: Availability timing, target definition, split chronology, hypothesis versioning, and metric comparability.
-  evidence: Baselines, ablations, OOS results, robustness checks, and reproducibility records.
-  publication: Evidence dashboard build and published artifacts identify the exact research commit and protocol version.
+  structural: Schemas, unique IDs, required timestamps, configuration completeness, MCP capture completeness, and artifact hashes.
+  semantic: Availability timing, target definition, split chronology, hypothesis versioning, seller-flow wording, decision snapshot immutability, and metric comparability.
+  evidence: Source document IDs and URLs where available, MCP capture parameters, baselines, ablations, OOS results, robustness checks, and reproducibility records.
+  publication: Evidence dashboard build and published artifacts identify the exact research commit, protocol version, hypothesis ID, and information cutoff.
