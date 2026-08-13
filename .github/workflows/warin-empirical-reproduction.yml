@@ -1,0 +1,118 @@
+name: Reproduce Warin 2101.02044 Table 1
+
+on:
+  pull_request:
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
+      - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
+      - "docs/research/2021_arxiv_finance_registry.json"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - "scripts/materialize_warin_2101_02044_evidence.py"
+      - "scripts/validate_warin_2101_02044_evidence.py"
+      - "tests/test_warin_empirical_evidence.py"
+      - ".github/workflows/warin-empirical-reproduction.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
+      - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
+      - "docs/research/2021_arxiv_finance_registry.json"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - "scripts/materialize_warin_2101_02044_evidence.py"
+      - "scripts/validate_warin_2101_02044_evidence.py"
+      - "tests/test_warin_empirical_evidence.py"
+      - ".github/workflows/warin-empirical-reproduction.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: warin-empirical-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Validate fail-closed evidence contracts
+        run: python tests/test_warin_empirical_evidence.py
+
+      - name: Detect canonical empirical evidence
+        id: evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -f docs/research/runs/warin_2101_02044_v4_beta2_seed2306/manifest.json ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install locked TensorFlow runtime
+        if: steps.evidence.outputs.exists == 'false'
+        run: |
+          python -m pip install --disable-pip-version-check --no-cache-dir "tensorflow==2.21.0"
+          python - <<'PY'
+          import tensorflow as tf
+          assert tf.__version__ == '2.21.0', tf.__version__
+          print(tf.__version__)
+          PY
+
+      - name: Execute full documented Table 1 beta=2.0 training and evaluation
+        if: steps.evidence.outputs.exists == 'false'
+        run: |
+          set -euo pipefail
+          rm -rf artifacts/warin_2101_02044_v4_beta2_seed2306
+          python scripts/run_warin_2101_02044_empirical.py \
+            --protocol docs/research/protocols/warin_2101_02044_v4_beta2.json \
+            --output-dir artifacts/warin_2101_02044_v4_beta2_seed2306
+
+      - name: Materialize empirical evidence and update registry
+        if: steps.evidence.outputs.exists == 'false'
+        run: |
+          set -euo pipefail
+          python scripts/materialize_warin_2101_02044_evidence.py \
+            --run-dir artifacts/warin_2101_02044_v4_beta2_seed2306 \
+            --registry docs/research/2021_arxiv_finance_registry.json
+          python scripts/validate_warin_2101_02044_evidence.py
+
+      - name: Commit first completed empirical evidence to PR head
+        if: github.event_name == 'pull_request' && steps.evidence.outputs.exists == 'false'
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/research/runs/warin_2101_02044_v4_beta2_seed2306 \
+            docs/research/2021_arxiv_finance_registry.json
+          git diff --cached --exit-code && {
+            echo "Expected empirical evidence changes were not produced" >&2
+            exit 1
+          } || true
+          git commit -m "Materialize Warin 2101.02044 empirical evidence"
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
+
+      - name: Validate committed canonical empirical evidence
+        if: steps.evidence.outputs.exists == 'true'
+        run: python scripts/validate_warin_2101_02044_evidence.py
+
+      - name: Upload raw run before Git materialization
+        if: steps.evidence.outputs.exists == 'false'
+        uses: actions/upload-artifact@v6
+        with:
+          name: warin-2101-02044-v4-beta2-${{ github.sha }}
+          path: artifacts/warin_2101_02044_v4_beta2_seed2306
+          if-no-files-found: error
+          retention-days: 30
