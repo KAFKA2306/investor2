@@ -23,8 +23,7 @@ REQUIRED_HTML_MARKERS = (
     '<html lang="ja">',
     "<main",
     'id="resultRows"',
-    'id="protocolGates"',
-    'id="claimCards"',
+    'id="methodSources"',
     'data/research_verification_manifest.json',
 )
 
