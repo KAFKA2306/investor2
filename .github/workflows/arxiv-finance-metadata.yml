@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - data/arxiv-finance-metadata
+      - "data/arxiv-finance-metadata-*"
     paths:
       - "scripts/fetch_arxiv_finance_metadata.py"
       - "tests/test_fetch_arxiv_finance_metadata.py"
@@ -29,12 +30,28 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     env:
-      YEAR: ${{ github.event.inputs.year || '2021' }}
+      INPUT_YEAR: ${{ github.event.inputs.year || '' }}
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
         with:
           python-version: "3.12"
+
+      - name: Resolve materialization year
+        shell: bash
+        run: |
+          if [[ -n "$INPUT_YEAR" ]]; then
+            year="$INPUT_YEAR"
+          elif [[ "$GITHUB_REF_NAME" =~ ^data/arxiv-finance-metadata-([0-9]{4})$ ]]; then
+            year="${BASH_REMATCH[1]}"
+          else
+            year="2021"
+          fi
+          if [[ ! "$year" =~ ^[0-9]{4}$ ]]; then
+            echo "Invalid UTC submission year: $year" >&2
+            exit 1
+          fi
+          echo "YEAR=$year" >> "$GITHUB_ENV"
 
       - name: Parser and query contract
         run: python tests/test_fetch_arxiv_finance_metadata.py
@@ -45,6 +62,22 @@ jobs:
             --year "$YEAR" \
             --output "docs/research/data/arxiv_qfin_${YEAR}.json" \
             --register
+
+      - name: 2019 sentinel papers are present
+        if: env.YEAR == '2019'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          data = json.loads(Path("docs/research/data/arxiv_qfin_2019.json").read_text(encoding="utf-8"))
+          ids = {row["arxiv_id"] for row in data["records"]}
+          expected = {"1904.04912", "1911.10107"}
+          missing = expected - ids
+          if missing:
+              raise SystemExit(f"missing verified 2019 q-fin sentinel papers: {sorted(missing)}")
+          print({"record_count": data["record_count"], "sentinels": sorted(expected)})
+          PY
 
       - name: 2021 sentinel papers are present
         if: env.YEAR == '2021'
