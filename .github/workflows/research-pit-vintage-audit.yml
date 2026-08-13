@@ -33,8 +33,29 @@ jobs:
       - name: Run empirical audit against Kenneth French July 2020 archives
         run: |
           mkdir -p artifacts
-          python scripts/audit_french_factor_vintages.py \
-            --output artifacts/french-2020-vintage-empirical-audit.json
+          python - <<'PY'
+          import importlib.util
+          import json
+          import pathlib
+          import sys
+
+          source = pathlib.Path("scripts/audit_french_factor_vintages.py")
+          spec = importlib.util.spec_from_file_location("french_vintage_audit", source)
+          module = importlib.util.module_from_spec(spec)
+          sys.modules["french_vintage_audit"] = module
+          spec.loader.exec_module(module)
+          report = module.build_report()
+
+          summary = report["summary"]
+          if summary["factor_studies_retested"] != 7:
+              raise SystemExit("expected seven factor studies")
+          if not summary["portfolio_leg_reconstruction_pass"]:
+              raise SystemExit("archived portfolio-leg reconstruction failed")
+
+          output = pathlib.Path("artifacts/french-2020-vintage-empirical-audit.json")
+          output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+          print(json.dumps(summary, indent=2, sort_keys=True))
+          PY
 
       - name: Upload empirical evidence
         uses: actions/upload-artifact@v4
