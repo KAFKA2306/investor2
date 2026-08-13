@@ -402,20 +402,22 @@ def build_report() -> dict[str, Any]:
 
 
 def validate(report: dict[str, Any]) -> None:
+    """Validate audit mechanics, never an expected empirical conclusion."""
     summary = report["summary"]
     if summary["factor_studies_retested"] != 7:
-        raise ValueError("expected seven factor studies")
+        raise ValueError("expected seven registry studies to be evaluated")
     if not summary["portfolio_leg_reconstruction_pass"]:
         raise ValueError("factor reconstruction does not match archived factor files")
-    if summary["rejected_on_tested_statistical_gates"] != 7:
-        raise ValueError(
-            "expected all seven current factor studies to remain statistically rejected"
-        )
-    if summary["gate_results_changed_vs_repository_snapshot"]:
-        raise ValueError(
-            "historical vintage changes one or more locked gate results: "
-            + ", ".join(summary["gate_results_changed_vs_repository_snapshot"])
-        )
+    for study_id, result in report["repository_factor_studies"].items():
+        if result["point_in_time_factor_vintage"] != "PASS":
+            raise ValueError(f"{study_id}: historical factor vintage was not evaluated")
+        if set(result["locked_statistical_gates"]) != {
+            "t_stat_ge_3",
+            "block_bootstrap_lower_gt_0",
+            "late_period_mean_gt_0",
+            "after_25bps_monthly_haircut_gt_0",
+        }:
+            raise ValueError(f"{study_id}: incomplete statistical gate output")
 
 
 def main() -> None:
