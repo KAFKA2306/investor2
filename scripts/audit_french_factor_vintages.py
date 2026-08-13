@@ -2,7 +2,7 @@
 """Empirically audit factor results against an historical Kenneth French data cut.
 
 This job deliberately uses the July 2020 Kenneth French historical archive,
-released in August 2020, instead of today's revised factor history.  It also
+released in August 2020, instead of today's revised factor history. It also
 reconstructs factor returns from the archived 2x3 portfolio legs before
 re-running the repository's locked statistical gates.
 
@@ -21,7 +21,7 @@ import hashlib
 import importlib.util
 import io
 import json
-import math
+import sys
 import urllib.request
 import zipfile
 from dataclasses import asdict
@@ -64,17 +64,22 @@ def load_module(path: Path, name: str) -> Any:
     if spec is None or spec.loader is None:
         raise RuntimeError(f"cannot import {path}")
     module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
     spec.loader.exec_module(module)
     return module
 
 
 def download_zip_csv(url: str) -> tuple[str, str, str]:
-    request = urllib.request.Request(url, headers={"User-Agent": "investor2-research-audit/1.0"})
+    request = urllib.request.Request(
+        url, headers={"User-Agent": "investor2-research-audit/1.0"}
+    )
     with urllib.request.urlopen(request, timeout=60) as response:
         payload = response.read()
     digest = hashlib.sha256(payload).hexdigest()
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-        csv_members = [name for name in archive.namelist() if name.lower().endswith(".csv")]
+        csv_members = [
+            name for name in archive.namelist() if name.lower().endswith(".csv")
+        ]
         if len(csv_members) != 1:
             raise ValueError(f"expected one CSV in {url}, got {csv_members}")
         member = csv_members[0]
@@ -83,7 +88,9 @@ def download_zip_csv(url: str) -> tuple[str, str, str]:
     return text, digest, member
 
 
-def parse_first_monthly_table(text: str) -> tuple[list[str], dict[str, list[float]]]:
+def parse_first_monthly_table(
+    text: str,
+) -> tuple[list[str], dict[str, list[float]]]:
     rows = list(csv.reader(io.StringIO(text)))
     header_index: int | None = None
     for index in range(len(rows) - 1):
@@ -164,11 +171,15 @@ def reconstruct_from_2x3(
         smb_inv = avg(inv_row[:3]) - avg(inv_row[3:])
         output[month] = {
             "ff3_smb": smb_bm,
-            "ff3_hml": avg([bm_row[2], bm_row[5]]) - avg([bm_row[0], bm_row[3]]),
+            "ff3_hml": avg([bm_row[2], bm_row[5]])
+            - avg([bm_row[0], bm_row[3]]),
             "ff5_smb": avg([smb_bm, smb_op, smb_inv]),
-            "ff5_hml": avg([bm_row[2], bm_row[5]]) - avg([bm_row[0], bm_row[3]]),
-            "ff5_rmw": avg([op_row[2], op_row[5]]) - avg([op_row[0], op_row[3]]),
-            "ff5_cma": avg([inv_row[0], inv_row[3]]) - avg([inv_row[2], inv_row[5]]),
+            "ff5_hml": avg([bm_row[2], bm_row[5]])
+            - avg([bm_row[0], bm_row[3]]),
+            "ff5_rmw": avg([op_row[2], op_row[5]])
+            - avg([op_row[0], op_row[3]]),
+            "ff5_cma": avg([inv_row[0], inv_row[3]])
+            - avg([inv_row[2], inv_row[5]]),
         }
     return output
 
@@ -202,7 +213,8 @@ def reconstruction_audit(
             "start": common[0],
             "end": common[-1],
             "max_abs_rounding_error_bps": max_abs,
-            "mean_abs_rounding_error_bps": sum(abs(value) for value in errors_bps) / len(errors_bps),
+            "mean_abs_rounding_error_bps": sum(abs(value) for value in errors_bps)
+            / len(errors_bps),
             "pass_within_3bps_rounding_tolerance": max_abs <= 3.0 + 1e-12,
         }
     return result
@@ -214,7 +226,9 @@ def gate_snapshot(full: Any, late: Any, cost_25: Any) -> dict[str, bool]:
         "t_stat_ge_3": full.newey_west_t_stat_lag_6 >= T_HURDLE,
         "block_bootstrap_lower_gt_0": ci is not None and ci[0] > 0.0,
         "late_period_mean_gt_0": late.annualized_arithmetic_mean > 0.0,
-        "after_25bps_monthly_haircut_gt_0": cost_25.annualized_arithmetic_mean > 0.0,
+        "after_25bps_monthly_haircut_gt_0": (
+            cost_25.annualized_arithmetic_mean > 0.0
+        ),
     }
 
 
@@ -254,10 +268,16 @@ def empirical_studies(
         current_cost = current_study["monthly_haircut_sensitivity_bps"]["25"]
         current_gates = {
             "t_stat_ge_3": current_full["newey_west_t_stat_lag_6"] >= T_HURDLE,
-            "block_bootstrap_lower_gt_0": current_full["block_bootstrap_95pct_mean_ci"] is not None
-            and current_full["block_bootstrap_95pct_mean_ci"][0] > 0.0,
-            "late_period_mean_gt_0": current_late["annualized_arithmetic_mean"] > 0.0,
-            "after_25bps_monthly_haircut_gt_0": current_cost["annualized_arithmetic_mean"] > 0.0,
+            "block_bootstrap_lower_gt_0": (
+                current_full["block_bootstrap_95pct_mean_ci"] is not None
+                and current_full["block_bootstrap_95pct_mean_ci"][0] > 0.0
+            ),
+            "late_period_mean_gt_0": current_late["annualized_arithmetic_mean"]
+            > 0.0,
+            "after_25bps_monthly_haircut_gt_0": current_cost[
+                "annualized_arithmetic_mean"
+            ]
+            > 0.0,
         }
         studies[study["id"]] = {
             "paper": study["paper"],
@@ -276,15 +296,20 @@ def empirical_studies(
                 "REJECTED" if not all(gates.values()) else "NO_STATISTICAL_REJECTION"
             ),
             "point_in_time_factor_vintage": "PASS",
-            "point_in_time_security_level_rebuild": "NOT_EVALUATED_NO_SECURITY_LEVEL_PUBLIC_ARCHIVE",
-            "historical_borrow_availability_and_cost": "NOT_EVALUATED_NO_BORROW_DATA_IN_SOURCE",
+            "point_in_time_security_level_rebuild": (
+                "NOT_EVALUATED_NO_SECURITY_LEVEL_PUBLIC_ARCHIVE"
+            ),
+            "historical_borrow_availability_and_cost": (
+                "NOT_EVALUATED_NO_BORROW_DATA_IN_SOURCE"
+            ),
         }
     return studies
 
 
 def build_report() -> dict[str, Any]:
     suite = load_module(
-        ROOT / "scripts" / "verify_paper_factor_suite.py", "factor_suite_for_vintage_audit"
+        ROOT / "scripts" / "verify_paper_factor_suite.py",
+        "factor_suite_for_vintage_audit",
     )
     registry = json.loads(
         (ROOT / "docs/research/paper_factor_registry.json").read_text(encoding="utf-8")
@@ -324,7 +349,8 @@ def build_report() -> dict[str, Any]:
     )
 
     reconstruction_pass = all(
-        item["pass_within_3bps_rounding_tolerance"] for item in reconstruction.values()
+        item["pass_within_3bps_rounding_tolerance"]
+        for item in reconstruction.values()
     )
     changed = [
         study_id
@@ -346,13 +372,18 @@ def build_report() -> dict[str, Any]:
                 "Re-run repository factor hypotheses on a historical data release and "
                 "independently reconstruct factors from the archived 2x3 portfolio legs."
             ),
-            "statistical_policy": "Repository promotion hurdle Newey-West t >= 3.0 plus existing bootstrap, late-period, and 25 bps/month gates.",
+            "statistical_policy": (
+                "Repository promotion hurdle Newey-West t >= 3.0 plus existing "
+                "bootstrap, late-period, and 25 bps/month gates."
+            ),
             "security_level_scope": (
-                "Not claimed. Public Kenneth French historical archives contain factor/portfolio "
-                "return vintages but not the underlying security identifiers and weights."
+                "Not claimed. Public Kenneth French historical archives contain "
+                "factor/portfolio return vintages but not the underlying security "
+                "identifiers and weights."
             ),
             "borrow_scope": (
-                "Not claimed. These archives contain no date-indexed shortability, locate inventory, or borrow fee observations."
+                "Not claimed. These archives contain no date-indexed shortability, "
+                "locate inventory, or borrow fee observations."
             ),
         },
         "sources": downloaded,
@@ -377,7 +408,9 @@ def validate(report: dict[str, Any]) -> None:
     if not summary["portfolio_leg_reconstruction_pass"]:
         raise ValueError("factor reconstruction does not match archived factor files")
     if summary["rejected_on_tested_statistical_gates"] != 7:
-        raise ValueError("expected all seven current factor studies to remain statistically rejected")
+        raise ValueError(
+            "expected all seven current factor studies to remain statistically rejected"
+        )
     if summary["gate_results_changed_vs_repository_snapshot"]:
         raise ValueError(
             "historical vintage changes one or more locked gate results: "
