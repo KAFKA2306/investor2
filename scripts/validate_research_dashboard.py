@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Semantically validate the AAARTS dashboard manifest and HTML shell."""
+"""Semantically validate the AAARTS internal manifest and public HTML shell."""
 
 from __future__ import annotations
 
@@ -23,6 +23,7 @@ REQUIRED_HTML_MARKERS = (
     '<html lang="ja">',
     "<main",
     'id="resultRows"',
+    'id="paperRows"',
     'id="methodSources"',
     'data/research_public_manifest.json',
 )
@@ -39,7 +40,7 @@ def require_nonempty_string(value: Any, label: str) -> str:
 
 
 def validate_manifest(data: dict[str, Any], expected_revision: str | None = None) -> None:
-    require(data.get("schema_version") == 1, "unsupported manifest schema_version")
+    require(data.get("schema_version") == 2, "unsupported manifest schema_version")
     records = data.get("repository_results")
     summary = data.get("summary")
     require(isinstance(records, list), "repository_results must be a list")
@@ -68,6 +69,38 @@ def validate_manifest(data: dict[str, Any], expected_revision: str | None = None
     require(summary.get("tested_hypotheses") == len(records), "tested_hypotheses does not match repository_results")
     require(summary.get("confirmed") == verdict_counts["CONFIRMED"], "confirmed summary does not match records")
     require(summary.get("not_confirmed") == verdict_counts["NOT_CONFIRMED"], "not_confirmed summary does not match records")
+
+    paper_queue = data.get("paper_reproduction_2021")
+    require(isinstance(paper_queue, dict), "paper_reproduction_2021 must be an object")
+    paper_summary = paper_queue.get("summary")
+    papers = paper_queue.get("papers")
+    require(isinstance(paper_summary, dict), "paper_reproduction_2021.summary must be an object")
+    require(isinstance(papers, list), "paper_reproduction_2021.papers must be a list")
+    paper_ids: list[str] = []
+    for index, paper in enumerate(papers):
+        require(isinstance(paper, dict), f"paper_reproduction_2021.papers[{index}] must be an object")
+        paper_id = require_nonempty_string(paper.get("id"), f"paper_reproduction_2021.papers[{index}].id")
+        paper_ids.append(paper_id)
+        require(paper.get("source_metadata_state") == "VERIFIED_PRIMARY", f"primary metadata not verified for {paper_id}")
+        require(paper.get("method_contract_state") in {"PASS", "FAIL"}, f"invalid method state for {paper_id}")
+        require(paper.get("artifact_state") in {"MATERIALIZED", "NOT_MATERIALIZED"}, f"invalid artifact state for {paper_id}")
+        empirical = paper.get("empirical_reproduction_state")
+        require(empirical in {"NOT_RUN", "NOT_CONFIRMED", "VERIFIED"}, f"invalid empirical state for {paper_id}")
+        if empirical == "NOT_RUN":
+            require(
+                paper.get("reproduction_verdict") in {"METHOD_ONLY", "METHOD_CONTRACT_FAIL"},
+                f"unrun paper has empirical-looking verdict: {paper_id}",
+            )
+    require(len(paper_ids) == len(set(paper_ids)), "paper reproduction IDs must be unique")
+    expected_paper = {
+        "indexed": len(papers),
+        "method_contract_pass": sum(paper.get("method_contract_state") == "PASS" for paper in papers),
+        "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_reproduction_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+    }
+    require(paper_summary == expected_paper, "paper reproduction summary does not match records")
+    for key, value in expected_paper.items():
+        require(summary.get(f"papers_2021_{key}") == value, f"papers_2021_{key} summary mismatch")
 
     claims = data.get("external_claims")
     require(isinstance(claims, list), "external_claims must be a list")
@@ -105,6 +138,7 @@ def validate_html(html: str) -> None:
     require("<header" in html and "<nav" in html and "<footer" in html, "required page landmarks are missing")
     require("<details" in html, "plain-language page must offer progressive disclosure for technical detail")
     require("fetch(" in html, "dashboard does not fetch its public manifest")
+    require("実証再現" in html, "dashboard must explain the empirical reproduction boundary")
 
 
 def validate_files(manifest_path: Path, html_path: Path, expected_revision: str | None = None) -> dict[str, Any]:
@@ -118,6 +152,8 @@ def validate_files(manifest_path: Path, html_path: Path, expected_revision: str 
         "run_id": data["build"]["run_id"],
         "tested_hypotheses": data["summary"]["tested_hypotheses"],
         "confirmed": data["summary"]["confirmed"],
+        "papers_2021_indexed": data["summary"]["papers_2021_indexed"],
+        "papers_2021_empirically_reproduced": data["summary"]["papers_2021_empirically_reproduced"],
         "status": "PASS",
     }
 
