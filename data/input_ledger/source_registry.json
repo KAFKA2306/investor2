@@ -93,6 +93,23 @@
       "rate_limit_policy": "Use normal OGE public access; do not bypass access controls.",
       "schema_expectations": "investor2.us-oge-278t-trade-count.v1",
       "failure_mode": "fail-closed"
+    },
+    "arxiv_api_metadata": {
+      "enabled": true,
+      "adapter": "arxiv_api_metadata_materialization",
+      "primary_source": "arXiv API descriptive metadata",
+      "snapshot_required_provenance": [
+        "endpoint",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain the UTC API retrieval timestamp and each record's arXiv published/updated timestamps.",
+      "revision_pinning_rule": "Pin the normalized metadata artifact by SHA-256 while retaining arXiv identifiers and updated timestamps.",
+      "retry_policy": "Fail closed on malformed or partial pages and keep at least 3 seconds between legacy API requests.",
+      "rate_limit_policy": "Use one connection and no more than one legacy arXiv API request every three seconds.",
+      "schema_expectations": "investor2.arxiv-qfin-metadata.v1",
+      "failure_mode": "fail-closed"
     }
   }
 }
