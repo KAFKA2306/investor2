@@ -24,6 +24,7 @@ REQUIRED_PROMOTION_GATES = {
     "point_in_time_security_level_rebuild",
     "tradability_and_borrowability",
 }
+EMPIRICAL_VERDICTS = {"REPRODUCED", "FAILED", "BLOCKED"}
 
 
 def load_python_module(path: Path, name: str) -> Any:
@@ -168,6 +169,7 @@ def build_manifest() -> dict[str, Any]:
     records.extend(factor_record(study_id, study) for study_id, study in suite["studies"].items())
     claims = external_claims()
     revision = code_sha()
+    paper_summary = paper_2021["summary"]
     return {
         "schema_version": 2,
         "build": {"code_sha": revision, "run_id": run_id(revision)},
@@ -186,10 +188,14 @@ def build_manifest() -> dict[str, Any]:
             "external_claims_unverified": sum(claim["evidence_state"] == "UNVERIFIED" for claim in claims),
             "latest_factor_data_end": "2020-02",
             "latest_momentum_data_end": "2017-12",
-            "papers_2021_indexed": paper_2021["summary"]["indexed"],
-            "papers_2021_method_contract_pass": paper_2021["summary"]["method_contract_pass"],
-            "papers_2021_materialized": paper_2021["summary"]["materialized"],
-            "papers_2021_empirically_reproduced": paper_2021["summary"]["empirically_reproduced"],
+            "papers_2021_indexed": paper_summary["indexed"],
+            "papers_2021_method_contract_pass": paper_summary["method_contract_pass"],
+            "papers_2021_materialized": paper_summary["materialized"],
+            "papers_2021_empirically_run": paper_summary["empirically_run"],
+            "papers_2021_empirically_reproduced": paper_summary["empirically_reproduced"],
+            "papers_2021_empirically_failed": paper_summary["empirically_failed"],
+            "papers_2021_empirically_blocked": paper_summary["empirically_blocked"],
+            "papers_2021_empirically_not_run": paper_summary["empirically_not_run"],
         },
         "locked_protocol": {
             "selection_test_separation": "Chronological post-publication OOS; no result-driven boundary changes.",
@@ -279,7 +285,11 @@ def validate_manifest(manifest: dict[str, Any]) -> None:
         "indexed": len(papers),
         "method_contract_pass": sum(paper.get("method_contract_state") == "PASS" for paper in papers),
         "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
-        "empirically_reproduced": sum(paper.get("empirical_reproduction_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+        "empirically_run": sum(paper.get("empirical_reproduction_state") == "EMPIRICALLY_RUN" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_verdict") == "REPRODUCED" for paper in papers),
+        "empirically_failed": sum(paper.get("empirical_verdict") == "FAILED" for paper in papers),
+        "empirically_blocked": sum(paper.get("empirical_verdict") == "BLOCKED" for paper in papers),
+        "empirically_not_run": sum(paper.get("empirical_reproduction_state") == "NOT_RUN" for paper in papers),
     }
     if paper_summary != expected_paper:
         raise ValueError("2021 paper summary does not match paper records")
@@ -290,8 +300,24 @@ def validate_manifest(manifest: dict[str, Any]) -> None:
         if paper.get("source_metadata_state") != "VERIFIED_PRIMARY":
             raise ValueError(f"primary source not verified for {paper['id']}")
         empirical_state = paper.get("empirical_reproduction_state")
-        if empirical_state == "NOT_RUN" and paper.get("reproduction_verdict") not in {"METHOD_ONLY", "METHOD_CONTRACT_FAIL"}:
-            raise ValueError(f"unrun paper has empirical-looking verdict: {paper['id']}")
+        if empirical_state == "NOT_RUN":
+            if paper.get("empirical_verdict") is not None:
+                raise ValueError(f"NOT_RUN paper has empirical verdict: {paper['id']}")
+            if paper.get("reproduction_verdict") not in {"METHOD_ONLY", "METHOD_CONTRACT_FAIL"}:
+                raise ValueError(f"unrun paper has empirical-looking verdict: {paper['id']}")
+            if paper.get("empirical_evidence_manifest") is not None:
+                raise ValueError(f"NOT_RUN paper has empirical evidence manifest: {paper['id']}")
+        elif empirical_state == "EMPIRICALLY_RUN":
+            if paper.get("empirical_verdict") not in EMPIRICAL_VERDICTS:
+                raise ValueError(f"empirically run paper lacks final verdict: {paper['id']}")
+            if paper.get("reproduction_verdict") != paper.get("empirical_verdict"):
+                raise ValueError(f"empirical/reproduction verdict mismatch: {paper['id']}")
+            if not paper.get("empirical_evidence_manifest") or not re.fullmatch(
+                r"[0-9a-f]{64}", str(paper.get("empirical_evidence_manifest_sha256", ""))
+            ):
+                raise ValueError(f"empirically run paper lacks evidence reference/hash: {paper['id']}")
+        else:
+            raise ValueError(f"unknown empirical state: {paper['id']}")
 
     repeated = manifest.get("repeated_validation", {})
     if repeated.get("study_count") != len(repeated.get("studies", {})):
