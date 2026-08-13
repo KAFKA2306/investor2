@@ -13,6 +13,26 @@ Canonical input:
 
 The selector resolves this input through `scripts/snapshot_store.py` and verifies the artifact SHA before reading it.
 
+## Relationship to the reproduction registry
+
+The repository also contains the curated reproduction registry at `docs/research/2021_arxiv_finance_registry.json` and its storage/state-machine contract in `docs/specs/paper_reproduction_store.md`.
+
+These artifacts have different roles:
+
+```text
+1,132-paper frozen discovery universe
+  -> deterministic metadata selection manifest
+  -> paper/version inspection
+  -> explicit curation into 2021_arxiv_finance_registry.json
+  -> source/data discovery and materialization
+  -> method implementation
+  -> empirical reproduction
+  -> PIT/OOS/cost validation
+  -> #claims eligibility
+```
+
+A `SELECT` result never appends a paper to the reproduction registry automatically. Registry curation is a separate evidence-bearing transition. Likewise, a paper already present in the reproduction registry does not receive a higher Stage A score merely because it was curated there.
+
 ## Time semantics
 
 This is **ex-post research triage**, not a reconstruction of a 2021 paper-ranking decision.
@@ -29,7 +49,7 @@ Current citation counts, later journal outcomes, and post-2021 strategy performa
 - `REVIEW`: potentially relevant, but metadata evidence is insufficient for automatic inspection priority.
 - `REJECT`: do not prioritize from metadata. Missing required metadata fails closed.
 
-`SELECT` is **not** approval for reproduction, PIT integrity, OOS performance, transaction-cost viability, or publication to `#claims`.
+`SELECT` is **not** approval for reproduction, registry inclusion, PIT integrity, OOS performance, transaction-cost viability, or publication to `#claims`.
 
 ## Deterministic inputs
 
@@ -41,7 +61,7 @@ The selector consumes only:
 
 The rules file fixes required fields, phrase lists, thresholds, weights, forbidden decision inputs, selector version, and tie-breaking. Matching is case-folded and phrase-boundary aware; for example, the term `data` does not match the substring in `metadata`.
 
-No network request, citation API, LLM call, randomness, current clock, or generated timestamp participates in the selection.
+No network request, citation API, LLM call, randomness, current clock, generated timestamp, or current reproduction-registry membership participates in the selection.
 
 ## Output contract
 
@@ -67,21 +87,7 @@ The manifest also records the rules SHA-256, snapshot identity, summary counts b
 
 ## Promotion boundary
 
-The repository's existing validation policy remains authoritative:
-
-```text
-metadata selection
-  -> paper/version inspection
-  -> machine-readable hypothesis
-  -> PIT input freeze
-  -> original-sample reproduction
-  -> chronological OOS
-  -> post-publication / cross-regime checks where applicable
-  -> transaction cost / liquidity / capacity
-  -> #claims eligibility
-```
-
-No Stage A metadata result can skip these gates.
+The repository's existing validation and reproduction policies remain authoritative. No Stage A metadata result can skip paper/version inspection, explicit registry curation, PIT input freezing, empirical reproduction, chronological OOS, or implementation-cost gates.
 
 ## Reproduction
 
