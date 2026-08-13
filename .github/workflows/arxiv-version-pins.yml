@@ -1,0 +1,107 @@
+name: Verify arXiv version pins
+
+on:
+  pull_request:
+    paths:
+      - "scripts/pin_arxiv_versions.py"
+      - "scripts/build_arxiv_stage_b_inputs.py"
+      - "tests/test_arxiv_version_pins.py"
+      - "docs/research/arxiv_version_pin_schema_v1.json"
+      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/research/arxiv_qfin_2021_version_pins.json"
+      - ".github/workflows/arxiv-version-pins.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/pin_arxiv_versions.py"
+      - "scripts/build_arxiv_stage_b_inputs.py"
+      - "tests/test_arxiv_version_pins.py"
+      - "docs/research/arxiv_version_pin_schema_v1.json"
+      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/research/arxiv_qfin_2021_version_pins.json"
+      - ".github/workflows/arxiv-version-pins.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: arxiv-version-pins-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  verify-version-pins:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Unit contracts
+        run: python tests/test_arxiv_version_pins.py
+
+      - name: Validate committed canonical pins before live refresh
+        run: |
+          set -euo pipefail
+          test -f docs/research/arxiv_qfin_2021_version_pins.json
+          python scripts/build_arxiv_stage_b_inputs.py \
+            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
+            --pins docs/research/arxiv_qfin_2021_version_pins.json \
+            --output /tmp/committed-stage-b-inputs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('/tmp/committed-stage-b-inputs.json').read_text(encoding='utf-8'))
+          assert data['record_count'] == 179
+          PY
+
+      - name: Re-verify all selected arXiv versions from primary API
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          inspected_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+          python scripts/pin_arxiv_versions.py \
+            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
+            --output artifacts/arxiv_qfin_2021_version_pins.json \
+            --inspected-at "$inspected_at"
+
+      - name: Enforce full selected population and build live Stage B inputs
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          pins = json.loads(Path('artifacts/arxiv_qfin_2021_version_pins.json').read_text(encoding='utf-8'))
+          summary = pins['summary']
+          assert summary['selected_count'] == 179, summary
+          assert summary['status_counts'] == {'VERIFIED': 179, 'UNKNOWN': 0, 'CONFLICT': 0}, summary
+          print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+          PY
+          python scripts/build_arxiv_stage_b_inputs.py \
+            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
+            --pins artifacts/arxiv_qfin_2021_version_pins.json \
+            --output artifacts/arxiv_qfin_2021_stage_b_inputs.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('artifacts/arxiv_qfin_2021_stage_b_inputs.json').read_text(encoding='utf-8'))
+          assert data['record_count'] == 179
+          assert all(row['selected_version'].startswith('v') for row in data['records'])
+          print(json.dumps({'stage_b_record_count': data['record_count']}, sort_keys=True))
+          PY
+
+      - name: Upload live version-pin evidence
+        uses: actions/upload-artifact@v6
+        with:
+          name: arxiv-qfin-2021-version-pins-${{ github.sha }}
+          path: |
+            artifacts/arxiv_qfin_2021_version_pins.json
+            artifacts/arxiv_qfin_2021_stage_b_inputs.json
+          if-no-files-found: error
+          retention-days: 30
