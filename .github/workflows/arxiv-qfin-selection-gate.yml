@@ -77,6 +77,33 @@ jobs:
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
           PY
 
+      - name: Inspect top selection queue
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(
+              Path("docs/research/arxiv_qfin_2021_selection_manifest.json").read_text(encoding="utf-8")
+          )
+          selected = [row for row in manifest["candidates"] if row["decision"] == "SELECT"][:20]
+          for rank, row in enumerate(selected, 1):
+              print(
+                  json.dumps(
+                      {
+                          "rank": rank,
+                          "arxiv_id": row["arxiv_id"],
+                          "title": row["title"],
+                          "primary_category": row["primary_category"],
+                          "priority_score": row["priority_score"],
+                          "evidence": row["evidence"],
+                      },
+                      ensure_ascii=False,
+                      sort_keys=True,
+                  )
+              )
+          PY
+
       - name: Snapshot ledger audit
         run: python scripts/snapshot_store.py audit
 
