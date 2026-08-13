@@ -23,7 +23,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: arxiv-version-pins-${{ github.ref }}
@@ -36,6 +36,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -81,6 +83,22 @@ jobs:
           print(json.dumps({'stage_b_record_count': data['record_count']}, sort_keys=True))
           PY
 
+      - name: Commit first canonical version-pin artifact on PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          set -euo pipefail
+          canonical=docs/research/arxiv_qfin_2021_version_pins.json
+          if [ -f "$canonical" ]; then
+            echo "Canonical version-pin artifact already exists; preserving the committed evidence snapshot."
+          else
+            cp artifacts/arxiv_qfin_2021_version_pins.json "$canonical"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$canonical"
+            git commit -m "Pin verified arXiv versions for 2021 q-fin queue"
+            git push origin "HEAD:${GITHUB_HEAD_REF}"
+          fi
+
       - name: Validate committed canonical pins when present
         run: |
           set -euo pipefail
@@ -90,7 +108,7 @@ jobs:
               --pins docs/research/arxiv_qfin_2021_version_pins.json \
               --output /tmp/committed-stage-b-inputs.json
           else
-            echo "Canonical version-pin artifact not committed yet; live evidence artifact will be uploaded."
+            echo "Canonical version-pin artifact is expected to be committed by this PR run."
           fi
 
       - name: Upload version-pin evidence
