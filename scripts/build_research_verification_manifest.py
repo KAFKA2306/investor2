@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build the machine-readable evidence manifest used by the public dashboard."""
+"""Build the machine-readable internal evidence manifest used to derive public output."""
 
 from __future__ import annotations
 
@@ -156,7 +156,12 @@ def build_manifest() -> dict[str, Any]:
         ROOT / "scripts" / "verify_paper_factor_suite.py",
         "verify_paper_factor_suite_for_dashboard",
     )
+    paper_2021_module = load_python_module(
+        ROOT / "scripts" / "verify_2021_arxiv_methods.py",
+        "verify_2021_arxiv_methods_for_dashboard",
+    )
     suite = suite_module.build_report(ROOT / "docs" / "research" / "paper_factor_registry.json")
+    paper_2021 = paper_2021_module.build_report(ROOT / "docs" / "research" / "2021_arxiv_finance_registry.json")
     momentum = load_json(ROOT / "docs" / "research" / "post_publication_momentum_oos.json")
     repeated = load_json(ROOT / "docs" / "research" / "2010s_paper_validation_repeated.json")
     records = [momentum_record(momentum)]
@@ -164,13 +169,15 @@ def build_manifest() -> dict[str, Any]:
     claims = external_claims()
     revision = code_sha()
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "build": {"code_sha": revision, "run_id": run_id(revision)},
         "generated_from": {
             "momentum_result": "docs/research/post_publication_momentum_oos.json",
             "factor_registry": "docs/research/paper_factor_registry.json",
             "factor_verifier": "scripts/verify_paper_factor_suite.py",
             "repeated_2010s_result": "docs/research/2010s_paper_validation_repeated.json",
+            "paper_2021_registry": "docs/research/2021_arxiv_finance_registry.json",
+            "paper_2021_verifier": "scripts/verify_2021_arxiv_methods.py",
         },
         "summary": {
             "tested_hypotheses": len(records),
@@ -179,6 +186,10 @@ def build_manifest() -> dict[str, Any]:
             "external_claims_unverified": sum(claim["evidence_state"] == "UNVERIFIED" for claim in claims),
             "latest_factor_data_end": "2020-02",
             "latest_momentum_data_end": "2017-12",
+            "papers_2021_indexed": paper_2021["summary"]["indexed"],
+            "papers_2021_method_contract_pass": paper_2021["summary"]["method_contract_pass"],
+            "papers_2021_materialized": paper_2021["summary"]["materialized"],
+            "papers_2021_empirically_reproduced": paper_2021["summary"]["empirically_reproduced"],
         },
         "locked_protocol": {
             "selection_test_separation": "Chronological post-publication OOS; no result-driven boundary changes.",
@@ -191,6 +202,7 @@ def build_manifest() -> dict[str, Any]:
             "promotion_rule": "Any material NOT RUN or FAIL gate prevents promotion to a live strategy.",
         },
         "repository_results": records,
+        "paper_reproduction_2021": paper_2021,
         "repeated_validation": {
             "study_count": repeated["study_count"],
             "repetitions": repeated["repetitions"],
@@ -214,6 +226,7 @@ def build_manifest() -> dict[str, Any]:
         ],
         "interpretation": [
             "The committed repository evidence rejects promotion of the currently displayed hypotheses; it does not prove that every market edge is impossible.",
+            "The 2021 arXiv queue separates primary-source verification, method implementation, artifact materialization, and empirical reproduction. METHOD_ONLY is never empirical confirmation.",
             "The social-media TSE claims are useful hypotheses about failure modes, but remain UNVERIFIED here because their original artifacts are absent.",
             "AI is used as an implementation and falsification tool. Hypothesis provenance, trial accounting, and market-mechanism constraints remain mandatory inputs.",
         ],
@@ -221,6 +234,8 @@ def build_manifest() -> dict[str, Any]:
 
 
 def validate_manifest(manifest: dict[str, Any]) -> None:
+    if manifest.get("schema_version") != 2:
+        raise ValueError("unsupported internal schema_version")
     records = manifest.get("repository_results")
     summary = manifest.get("summary")
     if not isinstance(records, list) or not isinstance(summary, dict):
@@ -249,6 +264,35 @@ def validate_manifest(manifest: dict[str, Any]) -> None:
             gates.get(name) != "PASS" for name in REQUIRED_PROMOTION_GATES
         ):
             raise ValueError(f"confirmed record has incomplete evidence: {record['id']}")
+
+    paper_2021 = manifest.get("paper_reproduction_2021")
+    if not isinstance(paper_2021, dict):
+        raise ValueError("paper_reproduction_2021 is required")
+    paper_summary = paper_2021.get("summary")
+    papers = paper_2021.get("papers")
+    if not isinstance(paper_summary, dict) or not isinstance(papers, list):
+        raise ValueError("2021 paper summary and records are required")
+    paper_ids = [paper.get("id") for paper in papers]
+    if any(not isinstance(paper_id, str) or not paper_id for paper_id in paper_ids) or len(paper_ids) != len(set(paper_ids)):
+        raise ValueError("2021 paper ids must be unique non-empty strings")
+    expected_paper = {
+        "indexed": len(papers),
+        "method_contract_pass": sum(paper.get("method_contract_state") == "PASS" for paper in papers),
+        "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_reproduction_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+    }
+    if paper_summary != expected_paper:
+        raise ValueError("2021 paper summary does not match paper records")
+    for key, value in expected_paper.items():
+        if summary.get(f"papers_2021_{key}") != value:
+            raise ValueError(f"summary papers_2021_{key} does not match 2021 paper records")
+    for paper in papers:
+        if paper.get("source_metadata_state") != "VERIFIED_PRIMARY":
+            raise ValueError(f"primary source not verified for {paper['id']}")
+        empirical_state = paper.get("empirical_reproduction_state")
+        if empirical_state == "NOT_RUN" and paper.get("reproduction_verdict") not in {"METHOD_ONLY", "METHOD_CONTRACT_FAIL"}:
+            raise ValueError(f"unrun paper has empirical-looking verdict: {paper['id']}")
+
     repeated = manifest.get("repeated_validation", {})
     if repeated.get("study_count") != len(repeated.get("studies", {})):
         raise ValueError("repeated validation study_count is inconsistent")

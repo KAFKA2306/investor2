@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """Project the internal research evidence manifest into a small public-safe contract.
 
-The public dashboard must never depend on internal audit/governance fields.  This
-module is the explicit boundary: internal evidence can grow freely while the
-public JSON stays stable, understandable, and intentionally small.
+The public dashboard must never depend on internal audit/governance or storage fields.
+This module is the explicit boundary: internal evidence can grow freely while public
+JSON stays stable, understandable, and intentionally small.
 """
 
 from __future__ import annotations
@@ -45,6 +45,21 @@ REPOSITORY_SOURCES = (
         "どの研究を、どのデータで確かめたかを確認できます。",
     ),
     (
+        "2021年 arXiv 論文の再現索引",
+        "https://github.com/KAFKA2306/investor2/blob/main/docs/research/2021_arxiv_finance_registry.json",
+        "論文の一次URL、実装段階、再現用データの永続化状態を管理する正準索引です。",
+    ),
+    (
+        "2021年論文の方法チェック",
+        "https://github.com/KAFKA2306/investor2/blob/main/scripts/verify_2021_arxiv_methods.py",
+        "論文から切り出した最小の方法契約を、決定論的に検証するコードです。",
+    ),
+    (
+        "論文再現データの保存ルール",
+        "https://github.com/KAFKA2306/investor2/blob/main/docs/specs/paper_reproduction_store.md",
+        "GitHubの索引とHugging Faceの大容量artifactをどう分離するかを定めた契約です。",
+    ),
+    (
         "モメンタムの検証結果",
         "https://github.com/KAFKA2306/investor2/blob/main/docs/research/post_publication_momentum_oos.json",
         "『最近上がった株は上がり続けるか』の計算結果です。",
@@ -66,9 +81,15 @@ FORBIDDEN_PUBLIC_KEYS = {
     "locked_protocol",
     "interpretation",
     "repository_results",
+    "paper_reproduction_2021",
+    "canonical_storage",
+    "materialized_artifacts",
+    "method_observed",
     "gates",
     "scope_note",
     "original_verdict",
+    "reproduction_verdict",
+    "unreproduced_evidence",
 }
 
 
@@ -123,8 +144,41 @@ def project_result(record: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def paper_stage_label(paper: dict[str, Any]) -> str:
+    empirical = paper["empirical_reproduction_state"]
+    if empirical == "VERIFIED":
+        return "元の評価系まで再現して確認"
+    if empirical == "NOT_CONFIRMED":
+        return "元の評価系を再実行したが確認できず"
+    if paper["artifact_state"] == "MATERIALIZED":
+        return "再現用データを保存済み・実証再現は未実施"
+    if paper["method_contract_state"] == "PASS":
+        return "方法の最小実装まで完了・実証再現は未実施"
+    return "方法実装の確認が必要"
+
+
+def project_paper(paper: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "id": paper["id"],
+        "arxiv_id": paper["arxiv_id"],
+        "title": paper["title"],
+        "authors": list(paper["authors"]),
+        "first_submitted": paper["first_submitted"],
+        "category": paper["primary_category"],
+        "source_url": paper["source_url"],
+        "claim": paper["paper_claim"],
+        "implemented": paper["implementation_scope"],
+        "method_state": paper["method_contract_state"],
+        "artifact_state": paper["artifact_state"],
+        "empirical_state": paper["empirical_reproduction_state"],
+        "stage_label": paper_stage_label(paper),
+        "missing_evidence": paper["unreproduced_evidence"],
+    }
+
+
 def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
     summary = internal["summary"]
+    paper_internal = internal["paper_reproduction_2021"]
     method_sources = [
         {
             "label": source["label"],
@@ -139,7 +193,7 @@ def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
         for label, url, note in REPOSITORY_SOURCES
     ]
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "build": dict(internal["build"]),
         "summary": {
             "tested_hypotheses": summary["tested_hypotheses"],
@@ -147,8 +201,16 @@ def build_public_manifest(internal: dict[str, Any]) -> dict[str, Any]:
             "not_confirmed": summary["not_confirmed"],
             "latest_factor_data_end": summary["latest_factor_data_end"],
             "latest_momentum_data_end": summary["latest_momentum_data_end"],
+            "papers_2021_indexed": summary["papers_2021_indexed"],
+            "papers_2021_method_contract_pass": summary["papers_2021_method_contract_pass"],
+            "papers_2021_materialized": summary["papers_2021_materialized"],
+            "papers_2021_empirically_reproduced": summary["papers_2021_empirically_reproduced"],
         },
         "results": [project_result(record) for record in internal["repository_results"]],
+        "paper_reproduction": {
+            "summary": dict(paper_internal["summary"]),
+            "papers": [project_paper(paper) for paper in paper_internal["papers"]],
+        },
         "repeat_check": {
             "study_count": internal["repeated_validation"]["study_count"],
             "repetitions": internal["repeated_validation"]["repetitions"],
@@ -169,7 +231,7 @@ def walk_keys(value: Any):
 
 
 def validate_public_manifest(data: dict[str, Any], expected_revision: str | None = None) -> None:
-    if data.get("schema_version") != 1:
+    if data.get("schema_version") != 2:
         raise ValueError("unsupported public schema_version")
     keys = set(walk_keys(data))
     leaked = sorted(keys & FORBIDDEN_PUBLIC_KEYS)
@@ -195,6 +257,34 @@ def validate_public_manifest(data: dict[str, Any], expected_revision: str | None
         raise ValueError("public tested_hypotheses does not match results")
     if summary.get("confirmed") != confirmed or summary.get("not_confirmed") != not_confirmed:
         raise ValueError("public verdict summary does not match results")
+
+    paper_queue = data.get("paper_reproduction")
+    if not isinstance(paper_queue, dict):
+        raise ValueError("public paper_reproduction is required")
+    papers = paper_queue.get("papers")
+    paper_summary = paper_queue.get("summary")
+    if not isinstance(papers, list) or not isinstance(paper_summary, dict):
+        raise ValueError("public paper records and summary are required")
+    paper_ids = [paper.get("id") for paper in papers]
+    if any(not isinstance(paper_id, str) or not paper_id for paper_id in paper_ids) or len(paper_ids) != len(set(paper_ids)):
+        raise ValueError("public paper ids must be unique non-empty strings")
+    expected_paper = {
+        "indexed": len(papers),
+        "method_contract_pass": sum(paper.get("method_state") == "PASS" for paper in papers),
+        "materialized": sum(paper.get("artifact_state") == "MATERIALIZED" for paper in papers),
+        "empirically_reproduced": sum(paper.get("empirical_state") in {"NOT_CONFIRMED", "VERIFIED"} for paper in papers),
+    }
+    if paper_summary != expected_paper:
+        raise ValueError("public paper summary does not match records")
+    for key, value in expected_paper.items():
+        if summary.get(f"papers_2021_{key}") != value:
+            raise ValueError(f"public papers_2021_{key} does not match paper records")
+    for paper in papers:
+        for field in ("arxiv_id", "title", "first_submitted", "category", "source_url", "claim", "implemented", "method_state", "artifact_state", "empirical_state", "stage_label", "missing_evidence"):
+            if not isinstance(paper.get(field), str) or not paper[field].strip():
+                raise ValueError(f"public paper {paper['id']} missing {field}")
+        if paper["empirical_state"] == "NOT_RUN" and "実証再現は未実施" not in paper["stage_label"]:
+            raise ValueError(f"unrun public paper is not clearly labeled: {paper['id']}")
 
     sources = data.get("sources")
     if not isinstance(sources, list) or not sources:
