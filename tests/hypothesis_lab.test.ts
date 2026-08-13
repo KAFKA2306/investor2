@@ -12,6 +12,7 @@ const hypothesisPath =
 const capturePath =
 	"data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json";
 const rionPath = "data/hypothesis_lab/deep_dives/2026-08-13-rion-6823.json";
+const otecPath = "data/hypothesis_lab/deep_dives/2026-08-13-otec-1736.json";
 
 describe("hypothesis lab", () => {
 	test("validates the pre-registered hypothesis and frozen MCP capture", () => {
@@ -39,6 +40,18 @@ describe("hypothesis lab", () => {
 			weak_case_margin: "pass",
 			eligible_for_decision_snapshot: true,
 		});
+	});
+
+	test("does not confuse cheap growth with the registered dislocation alpha", () => {
+		const control = CandidateDeepDiveSchema.parse(
+			JSON.parse(readFileSync(otecPath, "utf8")),
+		);
+		const result = evaluateCandidate(control, 2);
+
+		expect(result.underlying_reality).toBe("pass");
+		expect(result.weak_case_margin).toBe("pass");
+		expect(result.price_pressure_mechanism).toBe("unknown");
+		expect(result.eligible_for_decision_snapshot).toBe(false);
 	});
 
 	test("fails closed when seller-flow evidence is removed", () => {
