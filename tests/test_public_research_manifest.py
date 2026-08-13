@@ -154,3 +154,13 @@ def test_public_validator_rejects_empirical_verdict_without_evidence() -> None:
 
     with pytest.raises(ValueError, match="evidence"):
         PUBLIC.validate_public_manifest(public)
+
+
+def test_production_smoke_uses_only_published_public_manifests() -> None:
+    workflow = (ROOT / ".github" / "workflows" / "live-pages-smoke.yml").read_text(encoding="utf-8")
+
+    assert "data/research_public_manifest.json" in workflow
+    assert "data/research_2019_public_manifest.json" in workflow
+    assert "data/research_verification_manifest.json" not in workflow
+    assert "validate_public_manifest" in workflow
+    assert "validate_public_2019_manifest" in workflow
