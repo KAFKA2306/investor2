@@ -1,0 +1,133 @@
+name: Build arXiv q-fin selection manifest
+
+on:
+  pull_request:
+    paths:
+      - "scripts/select_arxiv_qfin_papers.py"
+      - "tests/test_arxiv_qfin_selection.py"
+      - "docs/research/arxiv_qfin_selector_rules_v1.json"
+      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/specs/arxiv_qfin_selection_gate.md"
+      - ".github/workflows/arxiv-qfin-selection-gate.yml"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/select_arxiv_qfin_papers.py"
+      - "tests/test_arxiv_qfin_selection.py"
+      - "docs/research/arxiv_qfin_selector_rules_v1.json"
+      - "docs/specs/arxiv_qfin_selection_gate.md"
+      - ".github/workflows/arxiv-qfin-selection-gate.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: arxiv-qfin-selection-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  select:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Selector regression contracts
+        run: python tests/test_arxiv_qfin_selection.py
+
+      - name: Existing arXiv parser contract
+        run: python tests/test_fetch_arxiv_finance_metadata.py
+
+      - name: Build canonical selection manifest
+        run: |
+          python scripts/select_arxiv_qfin_papers.py \
+            --reuse-key arxiv/q-fin/2021/metadata \
+            --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+            --output docs/research/arxiv_qfin_2021_selection_manifest.json
+
+      - name: Full-universe byte stability
+        run: |
+          cp docs/research/arxiv_qfin_2021_selection_manifest.json /tmp/selection-first.json
+          python scripts/select_arxiv_qfin_papers.py \
+            --reuse-key arxiv/q-fin/2021/metadata \
+            --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+            --output docs/research/arxiv_qfin_2021_selection_manifest.json
+          cmp /tmp/selection-first.json docs/research/arxiv_qfin_2021_selection_manifest.json
+
+      - name: Canonical population and provenance contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(
+              Path("docs/research/arxiv_qfin_2021_selection_manifest.json").read_text(encoding="utf-8")
+          )
+          expected_sha = "a1ebbbd25ae65b5bce391ccb8ded1a27fa7c013102581251cc1f6ee4e73a948c"
+          source = manifest["source_snapshot"]
+          summary = manifest["summary"]
+          assert source["reuse_key"] == "arxiv/q-fin/2021/metadata"
+          assert source["artifact_sha256"] == expected_sha
+          assert source["record_count"] == 1132
+          assert summary["record_count"] == 1132
+          assert sum(summary["decision_counts"].values()) == 1132
+          assert len(manifest["candidates"]) == 1132
+          assert all(row["source_snapshot_sha256"] == expected_sha for row in manifest["candidates"])
+          assert all(row["research_importance"] == "UNASSESSED" for row in manifest["candidates"])
+          assert all(
+              row["lookahead_risk"] == "CURRENT_ARXIV_METADATA_NOT_2021_VINTAGE"
+              for row in manifest["candidates"]
+          )
+          print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+          PY
+
+      - name: Inspect top selection queue
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(
+              Path("docs/research/arxiv_qfin_2021_selection_manifest.json").read_text(encoding="utf-8")
+          )
+          selected = [row for row in manifest["candidates"] if row["decision"] == "SELECT"][:20]
+          for rank, row in enumerate(selected, 1):
+              print(
+                  json.dumps(
+                      {
+                          "rank": rank,
+                          "arxiv_id": row["arxiv_id"],
+                          "title": row["title"],
+                          "primary_category": row["primary_category"],
+                          "priority_score": row["priority_score"],
+                          "evidence": row["evidence"],
+                      },
+                      ensure_ascii=False,
+                      sort_keys=True,
+                  )
+              )
+          PY
+
+      - name: Snapshot ledger audit
+        run: python scripts/snapshot_store.py audit
+
+      - name: Pull request must commit canonical manifest
+        if: github.event_name == 'pull_request'
+        run: git diff --exit-code -- docs/research/arxiv_qfin_2021_selection_manifest.json
+
+      - name: Commit canonical manifest to current branch
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f docs/research/arxiv_qfin_2021_selection_manifest.json
+          if git diff --cached --quiet; then
+            echo "No selection manifest changes to commit."
+          else
+            git commit -m "Build 2021 q-fin selection manifest"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi

@@ -1,0 +1,132 @@
+{
+  "decision_thresholds": {
+    "review": {
+      "min_investment_relevance_terms": 1
+    },
+    "select": {
+      "min_empirical_or_data_terms": 1,
+      "min_investment_relevance_terms": 2,
+      "min_method_terms": 1
+    }
+  },
+  "forbidden_decision_inputs": [
+    "citation_count",
+    "citations",
+    "current_citations",
+    "journal_ref",
+    "later_journal_outcome",
+    "post_2021_performance"
+  ],
+  "purpose": "Deterministic ex-post metadata-only prioritization for paper-level inspection. It does not reconstruct a 2021-vintage ranking and does not validate alpha.",
+  "required_metadata": [
+    "arxiv_id",
+    "title",
+    "abstract",
+    "published",
+    "primary_category",
+    "categories",
+    "abs_url"
+  ],
+  "schema_version": "investor2.arxiv-qfin-selector-rules.v1",
+  "score_weights": {
+    "empirical_or_data": 2,
+    "investment_relevance": 4,
+    "method": 2,
+    "oos": 2,
+    "pit_data": 1,
+    "transaction_cost": 1
+  },
+  "selector_version": "1.0.0",
+  "stable_tie_breaker": [
+    "decision_rank",
+    "priority_score_desc",
+    "arxiv_id_asc"
+  ],
+  "term_groups": {
+    "empirical_or_data": [
+      "data",
+      "dataset",
+      "database",
+      "empirical",
+      "historical",
+      "sample",
+      "we examine",
+      "we test"
+    ],
+    "investment_relevance": [
+      "alpha",
+      "arbitrage",
+      "asset allocation",
+      "asset pricing",
+      "bitcoin",
+      "bond",
+      "carry trade",
+      "cryptocurrency",
+      "equity",
+      "exchange rate",
+      "factor investing",
+      "financial market",
+      "fixed income",
+      "foreign exchange",
+      "hedging",
+      "liquidity",
+      "market microstructure",
+      "momentum",
+      "option",
+      "order book",
+      "portfolio",
+      "price impact",
+      "return predict",
+      "risk premium",
+      "stock",
+      "trading",
+      "volatility"
+    ],
+    "method": [
+      "algorithm",
+      "backtest",
+      "factor",
+      "forecast",
+      "model",
+      "optimization",
+      "portfolio construction",
+      "predict",
+      "regression",
+      "reinforcement learning",
+      "signal",
+      "simulation",
+      "strategy"
+    ],
+    "oos": [
+      "holdout",
+      "out of sample",
+      "out-of-sample",
+      "post-publication",
+      "test set",
+      "validation set"
+    ],
+    "pit_data": [
+      "accounting",
+      "daily",
+      "financial statement",
+      "fundamental",
+      "macro",
+      "monthly",
+      "order book",
+      "price data",
+      "prices",
+      "quarterly",
+      "return data",
+      "returns"
+    ],
+    "transaction_cost": [
+      "bid-ask",
+      "commission",
+      "market impact",
+      "slippage",
+      "spread",
+      "transaction cost",
+      "turnover"
+    ]
+  }
+}
