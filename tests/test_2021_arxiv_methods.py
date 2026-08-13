@@ -56,8 +56,8 @@ def test_pigorsch_reward_charges_entry_cost_only_on_entry() -> None:
         "cross_section_next_returns": [0.01, -0.02, 0.03],
         "transaction_cost": 0.001,
     }
-    assert MODULE.invest_cash_reward(action=1, previous_action=0, **kwargs) == 0.029
-    assert MODULE.invest_cash_reward(action=1, previous_action=1, **kwargs) == 0.03
+    assert abs(MODULE.invest_cash_reward(action=1, previous_action=0, **kwargs) - 0.029) < 1e-12
+    assert abs(MODULE.invest_cash_reward(action=1, previous_action=1, **kwargs) - 0.03) < 1e-12
 
 
 def test_multiscale_realized_variance_conserves_total_variance() -> None:
