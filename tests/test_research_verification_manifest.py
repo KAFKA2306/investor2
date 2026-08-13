@@ -20,6 +20,7 @@ def test_dashboard_manifest_is_fail_closed() -> None:
     manifest = MODULE.build_manifest()
     MODULE.validate_manifest(manifest)
 
+    assert manifest["schema_version"] == 2
     assert manifest["summary"] == {
         "tested_hypotheses": 8,
         "confirmed": 0,
@@ -27,6 +28,10 @@ def test_dashboard_manifest_is_fail_closed() -> None:
         "external_claims_unverified": 2,
         "latest_factor_data_end": "2020-02",
         "latest_momentum_data_end": "2017-12",
+        "papers_2021_indexed": 4,
+        "papers_2021_method_contract_pass": 4,
+        "papers_2021_materialized": 0,
+        "papers_2021_empirically_reproduced": 0,
     }
     assert manifest["repeated_validation"]["study_count"] == 2
     assert manifest["repeated_validation"]["repetitions"] == 5
@@ -42,3 +47,13 @@ def test_dashboard_manifest_is_fail_closed() -> None:
         result["gates"]["point_in_time_security_level_rebuild"] == "FAIL"
         for result in manifest["repository_results"]
     )
+
+    papers = manifest["paper_reproduction_2021"]
+    assert papers["summary"] == {
+        "indexed": 4,
+        "method_contract_pass": 4,
+        "materialized": 0,
+        "empirically_reproduced": 0,
+    }
+    assert all(paper["reproduction_verdict"] == "METHOD_ONLY" for paper in papers["papers"])
+    assert all(paper["empirical_reproduction_state"] == "NOT_RUN" for paper in papers["papers"])
