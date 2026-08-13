@@ -3,7 +3,7 @@ name: Build arXiv q-fin selection manifest
 on:
   push:
     branches:
-      - issue-40-arxiv-qfin-selection-gate
+      - main
     paths:
       - "scripts/select_arxiv_qfin_papers.py"
       - "tests/test_arxiv_qfin_selection.py"
