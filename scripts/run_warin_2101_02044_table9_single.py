@@ -29,13 +29,18 @@ def main() -> None:
     output_dir = args.output_dir if args.output_dir.is_absolute() else ROOT / args.output_dir
     protocol = json.loads(protocol_path.read_text(encoding="utf-8"))
     report = mod.run_one(protocol, args.model_id, args.restart, output_dir)
-    print(json.dumps({
-        "model": args.model_id,
-        "restart": args.restart,
-        "score": report["evaluation"]["unpenalized_score"],
-        "opposite_penalized_objective": report["evaluation"]["opposite_penalized_objective"],
-        "within": report["comparison"]["within_predeclared_tolerance"],
-    }, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "model": args.model_id,
+                "restart": args.restart,
+                "score": report["evaluation"]["unpenalized_score"],
+                "opposite_penalized_objective": report["evaluation"]["opposite_penalized_objective"],
+                "within": report["comparison"]["within_predeclared_tolerance"],
+            },
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":

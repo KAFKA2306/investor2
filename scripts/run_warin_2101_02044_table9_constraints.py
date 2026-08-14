@@ -167,7 +167,7 @@ def run_one(protocol: dict[str, Any], model_id: int, restart: int, output_dir: P
         gradients = tape.gradient(loss, model.trainable_variables)
         if any(g is None for g in gradients):
             raise RuntimeError("missing gradient")
-        optimizer.apply_gradients(zip(gradients, model.trainable_variables))
+        optimizer.apply_gradients(zip(gradients, model.trainable_variables, strict=True))
         return loss, mean, variance, total_penalty
 
     trace = []
@@ -180,7 +180,7 @@ def run_one(protocol: dict[str, Any], model_id: int, restart: int, output_dir: P
         loss, mean, variance, penalty = train_step(tf.constant(i + 1, tf.int32))
         values = [float(v.numpy()) for v in (loss, mean, variance, penalty)]
         if not all(math.isfinite(v) for v in values):
-            raise FloatingPointError(f"non-finite training metric at iteration {i+1}")
+            raise FloatingPointError(f"non-finite training metric at iteration {i + 1}")
         if i == 0 or (i + 1) % 100 == 0 or i + 1 == iterations:
             trace.append(
                 {
@@ -332,7 +332,7 @@ def main() -> None:
         "selected": selected,
         "model_verdicts": model_verdicts,
         "empirical_verdict": overall,
-        "paper_wide_reproduction_claim": False
+        "paper_wide_reproduction_claim": False,
     }
     output_root.mkdir(parents=True, exist_ok=True)
     summary_path = output_root / "summary.json"
