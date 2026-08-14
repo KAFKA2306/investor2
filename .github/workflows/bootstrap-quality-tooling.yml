@@ -1,0 +1,86 @@
+name: Bootstrap Quality Tooling
+
+on:
+  push:
+    branches: ["chore/quality-gates-2026"]
+    paths:
+      - "package.json"
+      - "pyproject.toml"
+      - ".github/workflows/bootstrap-quality-tooling.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: "1.3.13"
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Refresh locks, generate migration baseline, and capture gate output
+        shell: bash
+        run: |
+          set +e
+          report=quality-bootstrap-report.txt
+          : > "$report"
+
+          run_check() {
+            name="$1"
+            shift
+            printf '\n===== %s =====\n' "$name" | tee -a "$report"
+            "$@" >>"$report" 2>&1
+            status=$?
+            printf 'exit_code=%s\n' "$status" | tee -a "$report"
+            return 0
+          }
+
+          run_check "bun lock" bun install --lockfile-only
+          run_check "uv lock" uv lock
+          run_check "uv quality sync" uv sync --locked --only-group dev
+
+          if [ -x .venv/bin/pyrefly ]; then
+            run_check "pyrefly baseline" uv run --no-sync pyrefly check --baseline=.pyrefly-baseline.json --update-baseline
+            run_check "pyrefly check" uv run --no-sync pyrefly check
+            run_check "ruff format" uv run --no-sync ruff format --check src scripts tests
+            run_check "ruff lint" uv run --no-sync ruff check src scripts tests
+          fi
+
+          if [ -d node_modules ]; then
+            run_check "biome" bun run format:check
+            run_check "oxlint" bun run lint
+            run_check "typescript" bun run typecheck
+            run_check "typescript tests" bun run test
+          else
+            run_check "bun ci" bun ci
+            run_check "biome" bun run format:check
+            run_check "oxlint" bun run lint
+            run_check "typescript" bun run typecheck
+            run_check "typescript tests" bun run test
+          fi
+
+          cat "$report"
+      - name: Commit generated lockfiles and migration evidence
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add bun.lock uv.lock quality-bootstrap-report.txt
+          if [ -f .pyrefly-baseline.json ]; then
+            git add .pyrefly-baseline.json
+          fi
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "tooling: refresh locks and migration baseline"
+          git push origin HEAD:chore/quality-gates-2026
