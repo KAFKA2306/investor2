@@ -14,19 +14,11 @@ hooks = [
 repo = "local"
 
 [[repos.hooks]]
-id = "biome-check"
-name = "Biome staged format/import check"
+id = "changed-quality"
+name = "Changed-file Biome/Oxlint/Ruff quality ratchet"
 language = "system"
-entry = "bun run format:staged"
-files = "\\.(ts|tsx|js|jsx)$"
-pass_filenames = false
-
-[[repos.hooks]]
-id = "oxlint"
-name = "Oxlint"
-language = "system"
-entry = "bun run lint"
-files = "\\.(ts|tsx|js|jsx)$"
+entry = "bun scripts/quality_changed.ts"
+files = "\\.(py|ts|tsx|js|jsx)$"
 pass_filenames = false
 
 [[repos.hooks]]
@@ -35,22 +27,6 @@ name = "TypeScript strict check"
 language = "system"
 entry = "bun run typecheck"
 files = "\\.(ts|tsx)$"
-pass_filenames = false
-
-[[repos.hooks]]
-id = "ruff-format"
-name = "Ruff format check"
-language = "system"
-entry = "uv run --no-sync ruff format --check src scripts tests"
-files = "\\.py$"
-pass_filenames = false
-
-[[repos.hooks]]
-id = "ruff-lint"
-name = "Ruff lint"
-language = "system"
-entry = "uv run --no-sync ruff check src scripts tests"
-files = "\\.py$"
 pass_filenames = false
 
 [[repos.hooks]]
