@@ -15,9 +15,9 @@ repo = "local"
 
 [[repos.hooks]]
 id = "biome-check"
-name = "Biome format/import check"
+name = "Biome staged format/import check"
 language = "system"
-entry = "bun run format:check"
+entry = "bun run format:staged"
 files = "\\.(ts|tsx|js|jsx)$"
 pass_filenames = false
 
