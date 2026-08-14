@@ -5,6 +5,8 @@ on:
     paths:
       - "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json"
       - "scripts/run_warin_2101_02044_table9_constraints.py"
+      - "scripts/run_warin_2101_02044_table9_single.py"
+      - "scripts/aggregate_warin_2101_02044_table9.py"
       - ".github/workflows/warin-table9-constraints.yml"
   workflow_dispatch:
 
@@ -20,23 +22,18 @@ jobs:
     if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        model: [1, 4]
+        restart: [0, 1, 2, 3]
     steps:
       - name: Checkout PR head
         uses: actions/checkout@v7
         with:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
-          fetch-depth: 0
-
-      - name: Detect immutable evidence already committed
-        id: evidence
-        shell: bash
-        run: |
-          root=docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
-          if test -f "$root/summary.json"; then
-            echo "present=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "present=false" >> "$GITHUB_OUTPUT"
-          fi
+          fetch-depth: 1
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -44,25 +41,65 @@ jobs:
           python-version: "3.12"
 
       - name: Install locked runtime
-        if: steps.evidence.outputs.present != 'true'
         run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
 
-      - name: Compile runner
-        run: python -m py_compile scripts/run_warin_2101_02044_table9_constraints.py
+      - name: Compile runners
+        run: |
+          python -m py_compile scripts/run_warin_2101_02044_table9_constraints.py
+          python -m py_compile scripts/run_warin_2101_02044_table9_single.py
 
-      - name: Execute predeclared constrained comparison
-        if: steps.evidence.outputs.present != 'true'
+      - name: Execute one predeclared restart
         env:
           TF_CPP_MIN_LOG_LEVEL: "2"
           TF_DETERMINISTIC_OPS: "1"
         run: |
-          rm -rf docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
-          python scripts/run_warin_2101_02044_table9_constraints.py \
+          out=/tmp/warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          rm -rf "$out"
+          python scripts/run_warin_2101_02044_table9_single.py \
             --protocol docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json \
+            --model-id ${{ matrix.model }} \
+            --restart ${{ matrix.restart }} \
+            --output-dir "$out"
+
+      - name: Upload restart evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          path: /tmp/warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          if-no-files-found: error
+
+  aggregate:
+    if: github.actor != 'github-actions[bot]'
+    needs: reproduce
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Download restart evidence
+        uses: actions/download-artifact@v8
+        with:
+          pattern: warin-table9-model*-restart*
+          path: /tmp/warin-table9-downloads
+
+      - name: Aggregate and hash evidence
+        run: |
+          rm -rf docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
+          python scripts/aggregate_warin_2101_02044_table9.py \
+            --protocol docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json \
+            --downloads /tmp/warin-table9-downloads \
             --output-root docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
 
       - name: Commit immutable evidence to PR branch
-        if: github.event_name == 'pull_request' && steps.evidence.outputs.present != 'true'
+        if: github.event_name == 'pull_request'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -71,7 +108,7 @@ jobs:
           git commit -m "research: materialize Warin Table 9 constrained evidence"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
 
-      - name: Upload evidence
+      - name: Upload combined evidence
         uses: actions/upload-artifact@v7
         with:
           name: warin-table9-constraints
