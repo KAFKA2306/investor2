@@ -1,10 +1,8 @@
 import {
-	ChannelType,
 	Client,
 	EmbedBuilder,
 	GatewayIntentBits,
 	type Message,
-	MessageFlags,
 } from "discord.js";
 import { searchWithTavily } from "./websearch";
 
@@ -92,9 +90,6 @@ export class DiscordBot {
 		}
 
 		const [ticker1, ticker2] = args;
-		const isPrivate =
-			message.channel?.type === ChannelType.DM ||
-			message.channel?.type === ChannelType.GroupDM;
 
 		const embed = new EmbedBuilder()
 			.setTitle(`📊 ${ticker1} vs ${ticker2} 比較`)
