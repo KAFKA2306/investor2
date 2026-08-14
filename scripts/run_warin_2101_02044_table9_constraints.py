@@ -332,7 +332,7 @@ def main() -> None:
         "selected": selected,
         "model_verdicts": model_verdicts,
         "empirical_verdict": overall,
-        "paper_wide_reproduction_claim": false if False else False
+        "paper_wide_reproduction_claim": False
     }
     output_root.mkdir(parents=True, exist_ok=True)
     summary_path = output_root / "summary.json"
