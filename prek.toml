@@ -1,0 +1,38 @@
+[[repos]]
+repo = "builtin"
+hooks = [
+  { id = "trailing-whitespace" },
+  { id = "end-of-file-fixer" },
+  { id = "check-json" },
+  { id = "check-toml" },
+  { id = "check-yaml" },
+  { id = "check-merge-conflict" },
+  { id = "detect-private-key" },
+]
+
+[[repos]]
+repo = "local"
+
+[[repos.hooks]]
+id = "changed-quality"
+name = "Changed-file Biome/Oxlint/Ruff quality ratchet"
+language = "system"
+entry = "bun scripts/quality_changed.ts"
+files = "\\.(py|ts|tsx|js|jsx)$"
+pass_filenames = false
+
+[[repos.hooks]]
+id = "typescript"
+name = "TypeScript strict check"
+language = "system"
+entry = "bun run typecheck"
+files = "\\.(ts|tsx)$"
+pass_filenames = false
+
+[[repos.hooks]]
+id = "pyrefly"
+name = "Pyrefly strict check"
+language = "system"
+entry = "uv run --no-sync pyrefly check"
+files = "\\.py$"
+pass_filenames = false

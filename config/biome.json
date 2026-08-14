@@ -1,5 +1,11 @@
 {
   "$schema": "https://biomejs.dev/schemas/latest/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true,
+    "defaultBranch": "main"
+  },
   "assist": {
     "actions": {
       "source": {
@@ -8,13 +14,7 @@
     }
   },
   "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true,
-      "style": {
-        "noNonNullAssertion": "off"
-      }
-    }
+    "enabled": false
   },
   "formatter": {
     "enabled": true,
@@ -25,6 +25,8 @@
     "ignoreUnknown": true,
     "includes": [
       "src/**",
+      "tests/**/*.ts",
+      "scripts/**/*.ts",
       "!src/dashboard/dist",
       "!src/experiments/foundation_models/.venv",
       "!src/model_registry/.venv"

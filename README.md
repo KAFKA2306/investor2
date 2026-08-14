@@ -138,14 +138,23 @@ AAARTSが目指すのは、alpha候補を大量に出すことではありませ
 ```bash
 task setup
 cp .env.example .env
-uv sync
 ```
+
+`task setup` は committed lockfile を使って Bun / uv の依存関係を同期し、`prek` hook を導入します。高速なquality gateだけを入れる場合は `task setup:quality` を使います。
+
+## 品質チェック
+
+```bash
+task check
+```
+
+`task check` はworktreeを書き換えません。既存のformat/lint負債は一括改変せず、mainとの差分とローカル変更に対して Biome / Oxlint / Ruff をratchetし、TypeScript strict checkとPyrefly strict checkは全体へ適用します。Pyreflyの既存負債はmigration baselineで固定し、新しい型エラーだけを失敗させます。
 
 ## 実行
 
 ```bash
 task run:newalphasearch  # frozen MCP captureから実データ仮説探索を検証
-task view                # ダッシュボードとAPIを起動
+task dashboard:dev       # ダッシュボードとAPIを起動
 ```
 
 `pipeline:run` に残る旧experimental orchestratorは正準alpha探索ではありません。

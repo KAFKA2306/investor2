@@ -1,0 +1,24 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "options": {
+    "denyWarnings": true,
+    "reportUnusedDisableDirectives": "deny"
+  },
+  "rules": {
+    "eslint/no-unused-vars": [
+      "warn",
+      {
+        "argsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["src/preprocess/sector_spillover.ts"],
+      "rules": {
+        "unicorn/no-new-array": "off"
+      }
+    }
+  ]
+}
