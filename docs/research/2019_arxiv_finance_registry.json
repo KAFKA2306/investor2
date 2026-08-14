@@ -35,6 +35,8 @@
     },
     {
       "arxiv_id": "1911.10107",
+      "data_access_evidence": "docs/research/data_access/zhang_1911_10107_v1_clc_access.json",
+      "data_access_state": "ACCESS_REQUIRED",
       "data_contract_state": "VERIFIED_FULL_TEXT_PROPRIETARY_INPUT_BLOCKED",
       "empirical_reproduction_state": "EMPIRICALLY_RUN",
       "empirical_verdict": "BLOCKED",
@@ -58,7 +60,10 @@
         "volatility": 0.976
       },
       "reason_codes": [
-        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+        "PINNACLE_CLC_ACCESS_REQUIRED",
+        "PAPER_VINTAGE_REVISION_NOT_PROVEN",
+        "PUBLIC_RESEARCH_LICENSE_NOT_VERIFIED",
+        "PUBLIC_REDISTRIBUTION_RIGHT_NOT_VERIFIED"
       ],
       "source_pdf_url": "https://arxiv.org/pdf/1911.10107v1",
       "source_url": "https://arxiv.org/abs/1911.10107v1",
