@@ -104,6 +104,42 @@ jobs:
           if-no-files-found: error
 
       - name: Verify generated evidence matches committed evidence
+        shell: bash
         run: |
-          git diff --exit-code -- docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
-          test -z "$(git status --porcelain --untracked-files=all -- docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306)"
+          python - <<'PY'
+          import json
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
+
+          def strip_run_sha(value):
+              if isinstance(value, dict):
+                  return {
+                      key: strip_run_sha(item)
+                      for key, item in value.items()
+                      if key != "github_sha"
+                  }
+              if isinstance(value, list):
+                  return [strip_run_sha(item) for item in value]
+              return value
+
+          generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
+          committed_paths = subprocess.check_output(
+              ["git", "ls-tree", "-r", "--name-only", "HEAD", "--", str(root)],
+              text=True,
+          ).splitlines()
+          if [str(path) for path in generated_paths] != committed_paths:
+              raise SystemExit("generated and committed Table 9 evidence file sets differ")
+
+          for path in generated_paths:
+              committed = subprocess.check_output(["git", "show", f"HEAD:{path}"])
+              generated = path.read_bytes()
+              if path.suffix == ".json":
+                  committed_obj = strip_run_sha(json.loads(committed))
+                  generated_obj = strip_run_sha(json.loads(generated))
+                  if committed_obj != generated_obj:
+                      raise SystemExit(f"Table 9 JSON evidence differs: {path}")
+              elif committed != generated:
+                  raise SystemExit(f"Table 9 evidence differs: {path}")
+          PY
