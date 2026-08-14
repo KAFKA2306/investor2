@@ -6,6 +6,7 @@ import importlib.util
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 RUNNER_PATH = ROOT / "scripts/run_warin_2101_02044_empirical.py"
@@ -26,7 +27,7 @@ def canonical_bytes(value: object) -> bytes:
     return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode("utf-8")
 
 
-def normalize_report(report: dict, report_path: Path) -> dict:
+def normalize_report(report: dict[str, Any], report_path: Path) -> dict[str, Any]:
     beta = report["scope"]["beta"]
     if report["empirical_verdict"] == "REPRODUCED":
         report["verdict_reason"] = (

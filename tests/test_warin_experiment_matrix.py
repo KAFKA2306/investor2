@@ -3,6 +3,7 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX = ROOT / "docs/research/warin_2101_02044_v4_experiment_matrix.json"
@@ -17,7 +18,7 @@ def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def by_id(matrix: dict) -> dict[str, dict]:
+def by_id(matrix: dict[str, Any]) -> dict[str, dict[str, Any]]:
     rows = matrix["experiments"]
     ids = [row["id"] for row in rows]
     assert len(ids) == len(set(ids))
