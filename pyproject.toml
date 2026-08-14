@@ -33,7 +33,6 @@ dependencies = [
     "torch",
     "torchvision",
     "transformers",
-    "vllm",
     "chronos-forecasting",
     "timesfm",
     "datasets",
