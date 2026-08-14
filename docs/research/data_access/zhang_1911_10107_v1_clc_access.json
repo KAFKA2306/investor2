@@ -1,0 +1,59 @@
+{
+  "acquisition": {
+    "exact_paper_vintage_bytes_available": false,
+    "exact_paper_vintage_revision_proven": false,
+    "official_purchase_path": "https://pinnacledata2.com/orderdb.asp",
+    "public_license_for_research_execution": "NOT_VERIFIED",
+    "public_redistribution_right": "NOT_VERIFIED",
+    "state": "ACCESS_REQUIRED"
+  },
+  "arxiv_id": "1911.10107",
+  "current_vendor_observation": {
+    "catalog_contract_count": 98,
+    "catalog_price_usd": 99,
+    "linking_methods": [
+      "Reverse (Back) Adjusted",
+      "Non-Adjusted",
+      "Ratio Adjusted"
+    ],
+    "observed_on": "2026-08-14",
+    "order_url": "https://pinnacledata2.com/orderdb.asp",
+    "product_url": "https://pinnacledata2.com/clc.html",
+    "supplied_fields": [
+      "Open",
+      "High",
+      "Low",
+      "Settle",
+      "Open Interest",
+      "Total Volume",
+      "Total Open Interest"
+    ]
+  },
+  "paper_id": "zhang_1911_10107_v1",
+  "paper_requirement": {
+    "continuous_series_method": "ratio-adjusted continuous futures",
+    "contract_count": 50,
+    "dataset_end_year": 2019,
+    "dataset_start_year": 2005,
+    "oos_end_year": 2019,
+    "oos_start_year": 2011,
+    "source_pdf_url": "https://arxiv.org/pdf/1911.10107v1",
+    "source_url": "https://arxiv.org/abs/1911.10107v1",
+    "vendor": "Pinnacle Data Corp",
+    "vendor_dataset": "CLC Database"
+  },
+  "reason_codes": [
+    "PINNACLE_CLC_ACCESS_REQUIRED",
+    "PAPER_VINTAGE_REVISION_NOT_PROVEN",
+    "PUBLIC_RESEARCH_LICENSE_NOT_VERIFIED",
+    "PUBLIC_REDISTRIBUTION_RIGHT_NOT_VERIFIED"
+  ],
+  "rules": {
+    "exact_reproduction_requires_local_licensed_bytes": true,
+    "observed_metrics_require_exact_data_gate_pass": true,
+    "proxy_data_can_promote_exact_reproduction": false,
+    "repository_must_not_store_proprietary_source_bytes": true
+  },
+  "schema_version": "investor2.paper-data-access.v1",
+  "verification_note": "The pinned v1 paper specifies 50 ratio-adjusted continuous futures from Pinnacle Data Corp.'s CLC Database, with data from 2005 through 2019 and OOS testing from 2011 through 2019. Current official Pinnacle pages confirm present CLC availability, catalog size, price, supplied fields and linking options, but do not prove identity with the paper-vintage bytes/revision or establish a public research-execution or redistribution license."
+}
