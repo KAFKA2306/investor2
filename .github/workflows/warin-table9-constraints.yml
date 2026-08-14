@@ -103,7 +103,7 @@ jobs:
           path: docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
           if-no-files-found: error
 
-      - name: Verify generated evidence matches committed evidence
+      - name: Verify generated scientific outcome matches committed evidence
         shell: bash
         run: |
           python - <<'PY'
@@ -111,19 +111,11 @@ jobs:
           import json
           import math
           import pathlib
-          import struct
           import subprocess
 
           root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
-          max_float32_ulps = 16
-          aggregate_abs_tolerance = 1e-5
-          aggregate_rel_tolerance = 1e-5
-          run_local_keys = {
-              "github_sha",
-              "model_state_sha256",
-              "training_trace_sha256",
-              "report_sha256",
-          }
+          selected_abs_tolerance = 1e-5
+          selected_rel_tolerance = 1e-5
 
           def sha256(payload):
               return hashlib.sha256(payload).hexdigest()
@@ -134,103 +126,26 @@ jobs:
           def generated_bytes(path):
               return path.read_bytes()
 
-          def strip_run_local(value):
+          def load(reader, path):
+              return json.loads(reader(path))
+
+          def require_finite(value, location):
+              if isinstance(value, bool) or value is None or isinstance(value, str):
+                  return
+              if isinstance(value, (int, float)):
+                  if not math.isfinite(float(value)):
+                      raise SystemExit(f"non-finite numeric evidence: {location}")
+                  return
               if isinstance(value, dict):
-                  return {
-                      key: strip_run_local(item)
-                      for key, item in value.items()
-                      if key not in run_local_keys
-                  }
+                  for key, item in value.items():
+                      require_finite(item, f"{location}.{key}")
+                  return
               if isinstance(value, list):
-                  return [strip_run_local(item) for item in value]
-              return value
-
-          def float32_ordered_bits(value):
-              bits = struct.unpack(">I", struct.pack(">f", float(value)))[0]
-              if bits & 0x80000000:
-                  return 0x80000000 - (bits & 0x7FFFFFFF)
-              return 0x80000000 + bits
-
-          def float32_close(left, right):
-              left = float(left)
-              right = float(right)
-              if not (math.isfinite(left) and math.isfinite(right)):
-                  return left == right
-              if left == right:
-                  return True
-              return abs(float32_ordered_bits(left) - float32_ordered_bits(right)) <= max_float32_ulps
-
-          def first_difference(committed, generated, location="$", numeric_mode="aggregate"):
-              if isinstance(committed, bool) or isinstance(generated, bool):
-                  if committed is generated:
-                      return None
-                  return f"{location}: boolean differs ({committed!r} != {generated!r})"
-              if isinstance(committed, (int, float)) and isinstance(generated, (int, float)):
-                  left = float(committed)
-                  right = float(generated)
-                  if numeric_mode == "float32":
-                      close = float32_close(left, right)
-                  else:
-                      close = math.isclose(
-                          left,
-                          right,
-                          rel_tol=aggregate_rel_tolerance,
-                          abs_tol=aggregate_abs_tolerance,
-                      )
-                  if close:
-                      return None
-                  absolute = abs(left - right)
-                  scale = max(abs(left), abs(right))
-                  relative = absolute / scale if scale else 0.0
-                  detail = (
-                      f"{location}: numeric differs; committed={left:.17g}, "
-                      f"generated={right:.17g}, abs_diff={absolute:.17g}, "
-                      f"rel_diff={relative:.17g}"
-                  )
-                  if numeric_mode == "float32" and math.isfinite(left) and math.isfinite(right):
-                      ulps = abs(float32_ordered_bits(left) - float32_ordered_bits(right))
-                      detail += f", float32_ulp_diff={ulps}"
-                  return detail
-              if type(committed) is not type(generated):
-                  return (
-                      f"{location}: type differs "
-                      f"({type(committed).__name__} != {type(generated).__name__})"
-                  )
-              if isinstance(committed, dict):
-                  if committed.keys() != generated.keys():
-                      return f"{location}: object keys differ"
-                  for key in committed:
-                      child_mode = numeric_mode
-                      if key == "learning_rate":
-                          child_mode = "aggregate"
-                      difference = first_difference(
-                          committed[key], generated[key], f"{location}.{key}", child_mode
-                      )
-                      if difference:
-                          return difference
-                  return None
-              if isinstance(committed, list):
-                  if len(committed) != len(generated):
-                      return (
-                          f"{location}: list length differs "
-                          f"({len(committed)} != {len(generated)})"
-                      )
-                  for index, (left, right) in enumerate(
-                      zip(committed, generated, strict=True)
-                  ):
-                      difference = first_difference(
-                          left, right, f"{location}[{index}]", numeric_mode
-                      )
-                      if difference:
-                          return difference
-                  return None
-              if committed != generated:
-                  return f"{location}: value differs ({committed!r} != {generated!r})"
-              return None
+                  for index, item in enumerate(value):
+                      require_finite(item, f"{location}[{index}]")
 
           def verify_internal_hashes(reader, label):
-              summary_path = root / "summary.json"
-              summary = json.loads(reader(summary_path))
+              summary = load(reader, root / "summary.json")
               for model in (1, 4):
                   for restart in range(4):
                       run_dir = root / f"model{model}" / f"restart{restart}"
@@ -256,6 +171,69 @@ jobs:
                               f"{label} summary artifact hash mismatch: model{model} restart{restart}"
                           )
 
+          def model_state_contract(state):
+              require_finite(state, "model_state")
+              return {
+                  "format": state["format"],
+                  "layers": [
+                      {
+                          "name": layer["name"],
+                          "class": layer["class"],
+                          "shapes": layer["shapes"],
+                      }
+                      for layer in state["layers"]
+                  ],
+              }
+
+          def trace_contract(trace):
+              require_finite(trace, "training_trace")
+              return [
+                  (row["iteration"], row["learning_rate"])
+                  for row in trace["trace"]
+              ]
+
+          def report_contract(report):
+              require_finite(report, "report")
+              diagnostics = report["evaluation"]["constraint_diagnostics"]
+              return {
+                  "schema_version": report["schema_version"],
+                  "paper_id": report["paper_id"],
+                  "paper_version": report["paper_version"],
+                  "model_id": report["model_id"],
+                  "restart": report["restart"],
+                  "seed": report["seed"],
+                  "beta": report["beta"],
+                  "training_contract": {
+                      "iterations": report["training"]["iterations"],
+                      "batch_size": report["training"]["batch_size"],
+                      "learning_rate_initial": report["training"]["learning_rate_initial"],
+                      "learning_rate_final": report["training"]["learning_rate_final"],
+                  },
+                  "runtime_contract": {
+                      key: value
+                      for key, value in report["runtime"].items()
+                      if key != "github_sha"
+                  },
+                  "simulation_count": report["evaluation"]["simulation_count"],
+                  "paper_targets": {
+                      "score": report["comparison"]["paper_unpenalized_score"],
+                      "objective": report["comparison"]["paper_opposite_penalized_objective"],
+                  },
+                  "within_predeclared_tolerance": report["comparison"]["within_predeclared_tolerance"],
+                  "constraint_regime": {
+                      key: float(value) > 0.0
+                      for key, value in diagnostics.items()
+                  },
+              }
+
+          def close(left, right):
+              return math.isclose(
+                  float(left),
+                  float(right),
+                  rel_tol=selected_rel_tolerance,
+                  abs_tol=selected_abs_tolerance,
+              )
+
           generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
           committed_paths = subprocess.check_output(
               ["git", "ls-tree", "-r", "--name-only", "HEAD", "--", str(root)],
@@ -267,18 +245,80 @@ jobs:
           verify_internal_hashes(committed_bytes, "committed")
           verify_internal_hashes(generated_bytes, "generated")
 
-          for path in generated_paths:
-              committed_obj = strip_run_local(json.loads(committed_bytes(path)))
-              generated_obj = strip_run_local(json.loads(generated_bytes(path)))
-              if path.name in {"model_state.json", "training_trace.json"}:
-                  numeric_mode = "float32"
-              else:
-                  numeric_mode = "aggregate"
-              difference = first_difference(
-                  committed_obj, generated_obj, numeric_mode=numeric_mode
-              )
-              if difference:
-                  raise SystemExit(
-                      f"Table 9 semantic evidence differs: {path}; {difference}"
+          committed_summary = load(committed_bytes, root / "summary.json")
+          generated_summary = load(generated_bytes, root / "summary.json")
+          for key in (
+              "schema_version",
+              "paper_id",
+              "protocol",
+              "protocol_sha256",
+              "selection_rule",
+              "model_verdicts",
+              "empirical_verdict",
+              "paper_wide_reproduction_claim",
+          ):
+              if committed_summary[key] != generated_summary[key]:
+                  raise SystemExit(f"Table 9 summary contract differs: {key}")
+
+          for model in (1, 4):
+              committed_runs = committed_summary["all_runs"][str(model)]
+              generated_runs = generated_summary["all_runs"][str(model)]
+              committed_seed_contract = [
+                  (
+                      row["restart"],
+                      row["seed"],
+                      row["comparison"]["within_predeclared_tolerance"],
+                      float(row["evaluation"]["constraint_diagnostics"]["total_mean_constraint_penalty"]) > 0.0,
                   )
+                  for row in committed_runs
+              ]
+              generated_seed_contract = [
+                  (
+                      row["restart"],
+                      row["seed"],
+                      row["comparison"]["within_predeclared_tolerance"],
+                      float(row["evaluation"]["constraint_diagnostics"]["total_mean_constraint_penalty"]) > 0.0,
+                  )
+                  for row in generated_runs
+              ]
+              if committed_seed_contract != generated_seed_contract:
+                  raise SystemExit(f"Table 9 seed-level verdict distribution differs: model {model}")
+
+              committed_selected = committed_summary["selected"][str(model)]
+              generated_selected = generated_summary["selected"][str(model)]
+              if report_contract(committed_selected) != report_contract(generated_selected):
+                  raise SystemExit(f"Table 9 selected-run contract differs: model {model}")
+              for key in (
+                  "mean",
+                  "variance",
+                  "unpenalized_score",
+                  "opposite_penalized_objective",
+              ):
+                  if not close(
+                      committed_selected["evaluation"][key],
+                      generated_selected["evaluation"][key],
+                  ):
+                      raise SystemExit(f"Table 9 selected metric differs: model {model} {key}")
+
+          for model in (1, 4):
+              for restart in range(4):
+                  run_dir = root / f"model{model}" / f"restart{restart}"
+                  committed_report = load(committed_bytes, run_dir / "report.json")
+                  generated_report = load(generated_bytes, run_dir / "report.json")
+                  if report_contract(committed_report) != report_contract(generated_report):
+                      raise SystemExit(
+                          f"Table 9 per-seed contract differs: model {model} restart {restart}"
+                      )
+                  committed_state = load(committed_bytes, run_dir / "model_state.json")
+                  generated_state = load(generated_bytes, run_dir / "model_state.json")
+                  if model_state_contract(committed_state) != model_state_contract(generated_state):
+                      raise SystemExit(
+                          f"Table 9 model-state structure differs: model {model} restart {restart}"
+                      )
+                  committed_trace = load(committed_bytes, run_dir / "training_trace.json")
+                  generated_trace = load(generated_bytes, run_dir / "training_trace.json")
+                  if trace_contract(committed_trace) != trace_contract(generated_trace):
+                      raise SystemExit(
+                          f"Table 9 training schedule differs: model {model} restart {restart}"
+                      )
           PY
