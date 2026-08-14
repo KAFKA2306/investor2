@@ -1,0 +1,33 @@
+{
+  "cases": [
+    {
+      "analytical_match": true,
+      "beta": 0.05,
+      "case_id": "beta005",
+      "empirical_verdict": "FAILED",
+      "mean": 1.9132914229382743,
+      "model_state_sha256": "1c2290229ab1a1a8d611afbdb74d52c47b745cab774f714086f587efe9ee7190",
+      "neural_match": false,
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_beta005.json",
+      "report_sha256": "f6ef19db50465a395aed6931df9980c07fa701cb22f5ac92cb176a41d0a7ea8f",
+      "trace_sha256": "715bf1b9bff15fb21d4d3ff458813c3140c08e71218813742d74d74a6e110f41",
+      "variance": 5.697546729432851
+    },
+    {
+      "analytical_match": true,
+      "beta": 0.2,
+      "case_id": "beta02",
+      "empirical_verdict": "FAILED",
+      "mean": 1.47430220808855,
+      "model_state_sha256": "7b2c3475bf6ea36e8a4d79d76a69e477c6744ec5caf935a5c367435e644f89d0",
+      "neural_match": false,
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_beta02.json",
+      "report_sha256": "e89968d110752b18f3b4b51467fb59f7c9cba7bec85a8a9dee5137cbb6abed7d",
+      "trace_sha256": "e66b621ea5337b0e98304ee50e98c7bf70e6da91c016c0a74129ccb396a1cec6",
+      "variance": 0.9581149446363684
+    }
+  ],
+  "paper_id": "warin_2101_02044",
+  "schema_version": "investor2.warin-table1-matrix.v1",
+  "source_version": "v4"
+}
