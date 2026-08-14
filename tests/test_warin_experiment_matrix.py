@@ -70,6 +70,17 @@ def test_table1_direct_points_preserve_actual_verdicts_and_hashes() -> None:
                 assert sha256(path) == row[hash_key]
 
 
+def test_table9_selected_scope_is_reproduced_without_promoting_remaining_tables() -> None:
+    rows = by_id(load(MATRIX))
+    selected = rows["s4_3_1_tables9_10_dim4_models1_4_beta0959"]
+    remaining = rows["s4_3_1_tables11_14_dim4_remaining_constraint_models"]
+    assert selected["status"] == "REPRODUCED"
+    assert selected["risk_parameter"] == {"beta": 0.959}
+    assert selected["protocol"] == "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json"
+    assert selected["run"] == "docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306/summary.json"
+    assert remaining["status"] == "NOT_RUN"
+
+
 def test_blocked_rows_have_machine_readable_reasons() -> None:
     matrix = load(MATRIX)
     for row in matrix["experiments"]:
