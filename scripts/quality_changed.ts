@@ -31,7 +31,12 @@ function resolveBase(): string | null {
 const changed = new Set<string>();
 const base = resolveBase();
 if (base) {
-  for (const path of gitLines(["diff", "--name-only", "--diff-filter=ACMR", `${base}...HEAD`])) {
+  for (const path of gitLines([
+    "diff",
+    "--name-only",
+    "--diff-filter=ACMR",
+    `${base}...HEAD`,
+  ])) {
     changed.add(path);
   }
 }
@@ -48,7 +53,12 @@ const tsFiles = maintained.filter((path) => /\.(?:[cm]?[jt]sx?)$/.test(path));
 const pyFiles = maintained.filter((path) => path.endsWith(".py"));
 
 let failed = false;
-function run(label: string, command: string, commandArgs: string[], files: string[]): void {
+function run(
+  label: string,
+  command: string,
+  commandArgs: string[],
+  files: string[],
+): void {
   if (files.length === 0) {
     console.log(`[quality] ${label}: no changed files`);
     return;
@@ -63,11 +73,21 @@ function run(label: string, command: string, commandArgs: string[], files: strin
 }
 
 if (checkTypeScript) {
-  run("Biome", "bun", ["x", "biome", "check", "--config-path=config/biome.json"], tsFiles);
+  run(
+    "Biome",
+    "bun",
+    ["x", "biome", "check", "--config-path=config/biome.json"],
+    tsFiles,
+  );
   run("Oxlint", "bun", ["x", "oxlint"], tsFiles);
 }
 if (checkPython) {
-  run("Ruff format", "uv", ["run", "--no-sync", "ruff", "format", "--check"], pyFiles);
+  run(
+    "Ruff format",
+    "uv",
+    ["run", "--no-sync", "ruff", "format", "--check"],
+    pyFiles,
+  );
   run("Ruff lint", "uv", ["run", "--no-sync", "ruff", "check"], pyFiles);
 }
 
