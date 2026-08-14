@@ -1,0 +1,45 @@
+{
+  "beta": 0.959,
+  "comparison": {
+    "paper_opposite_penalized_objective": 1.373,
+    "paper_unpenalized_score": 1.382,
+    "penalized_objective_abs_error": 0.07510950910760061,
+    "unpenalized_score_abs_error": 0.08410950910760051,
+    "within_predeclared_tolerance": false
+  },
+  "evaluation": {
+    "constraint_diagnostics": {
+      "mean_local_excess_path_sum": 0.0,
+      "mean_lower_bound_excess_path_sum": 0.0,
+      "mean_sum_to_one_error_path_sum": 2.124030590057373e-06,
+      "mean_upper_bound_excess_path_sum": 0.0,
+      "total_mean_constraint_penalty": 0.0
+    },
+    "mean": 1.3358550695240499,
+    "opposite_penalized_objective": 1.2978904908923994,
+    "simulation_count": 100000,
+    "unpenalized_score": 1.2978904908923994,
+    "variance": 0.03958767323425483
+  },
+  "model_id": 1,
+  "paper_id": "warin_2101_02044",
+  "paper_version": "v4",
+  "restart": 3,
+  "runtime": {
+    "device_policy": "CPU",
+    "github_sha": "4a5329f96bb9be500abc8ddb85759a3abcb41be5",
+    "numpy": "2.3.5",
+    "python": "3.12.13",
+    "tensorflow": "2.21.0"
+  },
+  "schema_version": "investor2.warin-table9-run.v1",
+  "seed": 2309,
+  "training": {
+    "batch_size": 300,
+    "iterations": 10000,
+    "learning_rate_final": 1e-05,
+    "learning_rate_initial": 0.001,
+    "model_state_sha256": "f8973f2405a266f6680eda09ab57cfc190e45e82c4ab36187617f30c549a7889",
+    "training_trace_sha256": "b9745715e8b313a233bb707a728a190f06c1a5b367e68e9ca7ff82eba1368b70"
+  }
+}

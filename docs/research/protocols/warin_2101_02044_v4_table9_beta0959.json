@@ -1,0 +1,94 @@
+{
+  "schema_version": "investor2.paper-empirical-protocol.v1",
+  "paper": {
+    "arxiv_id": "2101.02044",
+    "title": "Deep learning for efficient frontier calculation in finance",
+    "selected_version": "v4",
+    "source_url": "https://arxiv.org/abs/2101.02044v4",
+    "source_pdf_url": "https://arxiv.org/pdf/2101.02044v4"
+  },
+  "reproduction_scope": {
+    "paper_section": "4.3.1",
+    "paper_tables": [9, 10],
+    "dimension": 4,
+    "beta": 0.959,
+    "models": [1, 4],
+    "paper_target": {
+      "model_1_unpenalized_score": 1.382,
+      "model_4_unpenalized_score": 1.387,
+      "model_1_opposite_penalized_objective": 1.373,
+      "model_4_opposite_penalized_objective": 1.386
+    },
+    "predeclared_tolerance": {
+      "unpenalized_score_absolute": 0.08,
+      "penalized_objective_absolute": 0.10
+    },
+    "comparison_policy": "Each model is judged independently against the locked table value. The paper-wide claim is not promoted from this point."
+  },
+  "market_model": {
+    "kind": "discrete_correlated_geometric_brownian_motion",
+    "initial_wealth": 1.0,
+    "horizon_years": 10.0,
+    "rebalancing_steps": 120,
+    "mu": [0.01, 0.0225, 0.035, 0.0475],
+    "sigma_diagonal": [0.05, 0.1, 0.15, 0.2],
+    "correlation": [
+      [1.0, 0.805, -0.894, 0.59],
+      [0.805, 1.0, -0.571, 0.473],
+      [-0.894, -0.571, 1.0, -0.772],
+      [0.59, 0.473, -0.772, 1.0]
+    ]
+  },
+  "constraints": {
+    "no_short_selling": true,
+    "no_borrowing": true,
+    "fully_invested": true,
+    "initial_weights": [0.25, 0.25, 0.25, 0.25],
+    "weight_lower": [0.1, 0.1, 0.1, 0.1],
+    "weight_upper": [0.6, 0.6, 0.6, 0.6],
+    "max_absolute_weight_change_per_rebalance": [0.05, 0.05, 0.05, 0.05],
+    "penalty_epsilon": 0.0001
+  },
+  "network": {
+    "hidden_layers": 3,
+    "hidden_width": 14,
+    "hidden_activation": "tanh",
+    "model_1_output": "sigmoid_then_normalize_to_sum_one",
+    "model_4_output": "sigmoid_rescale_to_bounds_then_paper_algorithm_1_projection",
+    "optimizer": "Adam",
+    "learning_rate_initial": 0.001,
+    "learning_rate_final": 0.00001,
+    "gradient_iterations": 10000,
+    "batch_size": 300,
+    "restarts": 4,
+    "selection_rule": "keep minimum penalized objective across four optimizations"
+  },
+  "evaluation": {
+    "simulation_count": 100000,
+    "paper_evaluation_count": "NOT_SPECIFIED_FOR_TABLE_9",
+    "metric": "E(X_T) - beta * Var(X_T)",
+    "constraint_diagnostics": [
+      "mean_local_excess",
+      "mean_lower_bound_excess",
+      "mean_upper_bound_excess",
+      "mean_sum_to_one_error"
+    ]
+  },
+  "implementation_lock": {
+    "python": "3.12",
+    "tensorflow": "2.21.0",
+    "seed_start": 2306,
+    "device": "CPU",
+    "known_deviations": [
+      "The paper does not publish random seeds or TensorFlow version.",
+      "The paper does not state a Table 9 evaluation simulation count; 100000 independent paths are locked here for metric estimation.",
+      "Model 1 and Model 4 are reproduced; Models 2 and 3 are outside this selected comparison."
+    ]
+  },
+  "promotion_policy": {
+    "states": ["REPRODUCED", "FAILED", "BLOCKED"],
+    "metric_tolerance_failure": "FAILED",
+    "non_finite_or_constraint_contract_failure": "BLOCKED",
+    "no_paper_wide_reproduction_from_selected_point": true
+  }
+}

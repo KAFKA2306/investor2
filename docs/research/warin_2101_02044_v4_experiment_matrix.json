@@ -1,0 +1,243 @@
+{
+  "schema_version": "investor2.warin-experiment-matrix.v1",
+  "paper": {
+    "arxiv_id": "2101.02044",
+    "selected_version": "v4",
+    "source_url": "https://arxiv.org/abs/2101.02044v4",
+    "source_pdf_url": "https://arxiv.org/pdf/2101.02044v4",
+    "submitted_at": "2022-02-15T10:34:34Z"
+  },
+  "paper_wide_reproduction_state": "PARTIAL",
+  "paper_wide_empirical_verdict": "NOT_CLAIMED",
+  "table1_matrix_summary": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/summary.json",
+  "status_semantics": {
+    "REPRODUCED": "predeclared numerical target executed and passed its locked comparison gate",
+    "FAILED": "paper-compatible experiment executed but missed its locked comparison gate",
+    "BLOCKED": "exact paper experiment cannot currently be interpreted or reconstructed without inventing a material unpublished input/target",
+    "NOT_RUN": "paper experiment is sufficiently specified to implement further, but no canonical empirical run is yet recorded"
+  },
+  "experiments": [
+    {
+      "id": "s3_2_table1_dim4_direct_beta005",
+      "section": "3.2",
+      "evidence": "Table 1",
+      "method": "point-by-point direct",
+      "dimension": 4,
+      "risk_parameter": {"beta": 0.05},
+      "paper_target": {"analytical_mean": 4.056, "analytical_variance": 31.445, "neural_mean": 3.997, "neural_variance": 29.868},
+      "observed": {"mean": 1.9132914229382743, "variance": 5.697546729432851, "analytical_match": true, "neural_match": false},
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_beta005.json",
+      "report": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta005/report.json",
+      "report_sha256": "f6ef19db50465a395aed6931df9980c07fa701cb22f5ac92cb176a41d0a7ea8f",
+      "training_trace": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta005/training_trace.json",
+      "training_trace_sha256": "715bf1b9bff15fb21d4d3ff458813c3140c08e71218813742d74d74a6e110f41",
+      "model_state": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta005/model_state.json",
+      "model_state_sha256": "1c2290229ab1a1a8d611afbdb74d52c47b745cab774f714086f587efe9ee7190",
+      "status": "FAILED"
+    },
+    {
+      "id": "s3_2_table1_dim4_direct_beta02",
+      "section": "3.2",
+      "evidence": "Table 1",
+      "method": "point-by-point direct",
+      "dimension": 4,
+      "risk_parameter": {"beta": 0.2},
+      "paper_target": {"analytical_mean": 1.779, "analytical_variance": 1.949, "neural_mean": 1.746, "neural_variance": 1.845},
+      "observed": {"mean": 1.47430220808855, "variance": 0.9581149446363684, "analytical_match": true, "neural_match": false},
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_beta02.json",
+      "report": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta02/report.json",
+      "report_sha256": "e89968d110752b18f3b4b51467fb59f7c9cba7bec85a8a9dee5137cbb6abed7d",
+      "training_trace": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta02/training_trace.json",
+      "training_trace_sha256": "e66b621ea5337b0e98304ee50e98c7bf70e6da91c016c0a74129ccb396a1cec6",
+      "model_state": "docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306/beta02/model_state.json",
+      "model_state_sha256": "7b2c3475bf6ea36e8a4d79d76a69e477c6744ec5caf935a5c367435e644f89d0",
+      "status": "FAILED"
+    },
+    {
+      "id": "s3_2_table1_dim4_direct_beta2",
+      "section": "3.2",
+      "evidence": "Table 1",
+      "method": "point-by-point direct",
+      "dimension": 4,
+      "risk_parameter": {"beta": 2.0},
+      "paper_target": {"analytical_mean": 1.077, "analytical_variance": 0.019, "neural_mean": 1.080, "neural_variance": 0.021},
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_beta2.json",
+      "run": "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/manifest.json",
+      "status": "REPRODUCED"
+    },
+    {
+      "id": "s3_2_table2_dim4_auxiliary",
+      "section": "3.2",
+      "evidence": "Table 2",
+      "method": "auxiliary gamma formulations",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s3_3_table3_dim20_direct",
+      "section": "3.3",
+      "evidence": "Figure 2 / Table 3",
+      "method": "direct beta formulations",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"],
+      "reason": "The paper defines mu and sigma deterministically but states that the dimension-20 correlation is picked randomly while avoiding excessive correlations; no exact realization/seed is specified in the paper text."
+    },
+    {
+      "id": "s3_3_table4_dim20_auxiliary",
+      "section": "3.3",
+      "evidence": "Figure 2 / Table 4",
+      "method": "auxiliary gamma formulations",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
+    },
+    {
+      "id": "s4_2_figures3_5_tables5_6_dim4",
+      "section": "4.2",
+      "evidence": "Figures 3-5 / Tables 5-6",
+      "method": "discrete constrained-simplex static/dynamic/global comparisons",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s4_2_figures3_5_tables7_8_dim20",
+      "section": "4.2",
+      "evidence": "Figures 3-5 / Tables 7-8",
+      "method": "discrete constrained-simplex static/dynamic/global comparisons",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
+    },
+    {
+      "id": "s4_3_1_tables9_10_dim4_models1_4_beta0959",
+      "section": "4.3.1",
+      "evidence": "Tables 9-10",
+      "method": "constraint-handling models 1 and 4 at beta=0.959",
+      "dimension": 4,
+      "risk_parameter": {"beta": 0.959},
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json",
+      "run": "docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306/summary.json",
+      "status": "REPRODUCED",
+      "note": "Selected scope covers Models 1 and 4 only; it does not promote Models 2-3 or Tables 11-14."
+    },
+    {
+      "id": "s4_3_1_tables11_14_dim4_remaining_constraint_models",
+      "section": "4.3.1",
+      "evidence": "Tables 11-14",
+      "method": "remaining constraint-handling comparisons outside the selected Tables 9-10 Models 1/4 scope",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s4_3_2_figure6_dim4_projected_vs_penalty",
+      "section": "4.3.2",
+      "evidence": "Figure 6",
+      "method": "model 1 versus projected model 4",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s4_3_2_figure6_dim20_projected_vs_penalty",
+      "section": "4.3.2",
+      "evidence": "Figure 6",
+      "method": "model 1 versus projected model 4",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
+    },
+    {
+      "id": "s4_3_3_figure7_dim4_global_vs_point",
+      "section": "4.3.3",
+      "evidence": "Figure 7",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s4_3_3_figure7_dim20_global_vs_point",
+      "section": "4.3.3",
+      "evidence": "Figure 7",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
+    },
+    {
+      "id": "s5_1_figure8_heston_dim4",
+      "section": "5.1",
+      "evidence": "Figure 8",
+      "model": "Heston",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s5_1_figure9_heston_dim10",
+      "section": "5.1",
+      "evidence": "Figure 9",
+      "model": "Heston",
+      "dimension": 10,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM10_SIMILAR_TEST_CASE_PARAMETERS_NOT_FULLY_PUBLISHED"],
+      "reason": "The paper describes dimension 10 as a similar test case with quite high correlations rather than publishing a complete numerical parameter realization."
+    },
+    {
+      "id": "s5_2_figure10_heston_constraints_dim4",
+      "section": "5.2",
+      "evidence": "Figure 10",
+      "model": "Heston with local/global constraints",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s5_2_figure11_heston_constraints_dim8",
+      "section": "5.2",
+      "evidence": "Figure 11",
+      "model": "Heston with local/global constraints",
+      "dimension": 8,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM8_HIGHER_DIMENSION_PARAMETER_REALIZATION_NOT_FULLY_PUBLISHED"]
+    },
+    {
+      "id": "s6_1_figure12_cvar_dim4",
+      "section": "6.1",
+      "evidence": "Figure 12",
+      "model": "Mean-CVaR, no short selling/no borrowing",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s6_1_figure13_cvar_dim20",
+      "section": "6.1",
+      "evidence": "Figure 13",
+      "model": "Mean-CVaR, no short selling/no borrowing",
+      "dimension": 20,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
+    },
+    {
+      "id": "s6_2_figure14_cvar_constraints_dim4",
+      "section": "6.2",
+      "evidence": "Figure 14",
+      "model": "Mean-CVaR with additional constraints",
+      "dimension": 4,
+      "status": "NOT_RUN"
+    },
+    {
+      "id": "s6_2_figure15_cvar_constraints_dim8",
+      "section": "6.2",
+      "evidence": "Figure 15",
+      "model": "Mean-CVaR with additional constraints",
+      "dimension": 8,
+      "status": "BLOCKED",
+      "reason_codes": ["DIM8_PARAMETER_REALIZATION_NOT_FULLY_PUBLISHED"]
+    },
+    {
+      "id": "s6_2_figure16_cvar_alpha095_local_minima",
+      "section": "6.2",
+      "evidence": "Figure 16",
+      "model": "Mean-CVaR repeated deterministic global runs",
+      "alpha": 0.95,
+      "status": "NOT_RUN",
+      "note": "Paper reports run-to-run local-minimum behavior; a canonical reproduction must use a predeclared seed ensemble rather than a single success run."
+    }
+  ]
+}

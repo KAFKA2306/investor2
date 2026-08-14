@@ -1,0 +1,325 @@
+name: Execute Warin Table 9 constrained comparison
+
+on:
+  pull_request:
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json"
+      - "docs/research/warin_2101_02044_v4_experiment_matrix.json"
+      - "scripts/run_warin_2101_02044_table9_constraints.py"
+      - "scripts/run_warin_2101_02044_table9_single.py"
+      - "scripts/aggregate_warin_2101_02044_table9.py"
+      - ".github/workflows/warin-table9-constraints.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: warin-table9-constraints-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        model: [1, 4]
+        restart: [0, 1, 2, 3]
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 1
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install locked runtime
+        run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
+
+      - name: Compile runners
+        run: |
+          python -m py_compile scripts/run_warin_2101_02044_table9_constraints.py
+          python -m py_compile scripts/run_warin_2101_02044_table9_single.py
+
+      - name: Execute one predeclared restart
+        env:
+          TF_CPP_MIN_LOG_LEVEL: "2"
+          TF_DETERMINISTIC_OPS: "1"
+        run: |
+          out=/tmp/warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          rm -rf "$out"
+          python scripts/run_warin_2101_02044_table9_single.py \
+            --protocol docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json \
+            --model-id ${{ matrix.model }} \
+            --restart ${{ matrix.restart }} \
+            --output-dir "$out"
+
+      - name: Upload restart evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          path: /tmp/warin-table9-model${{ matrix.model }}-restart${{ matrix.restart }}
+          if-no-files-found: error
+
+  aggregate:
+    needs: reproduce
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Download restart evidence
+        uses: actions/download-artifact@v8
+        with:
+          pattern: warin-table9-model*-restart*
+          path: /tmp/warin-table9-downloads
+
+      - name: Aggregate and hash evidence
+        run: |
+          rm -rf docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
+          python scripts/aggregate_warin_2101_02044_table9.py \
+            --protocol docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json \
+            --downloads /tmp/warin-table9-downloads \
+            --output-root docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
+
+      - name: Upload combined evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: warin-table9-constraints
+          path: docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306
+          if-no-files-found: error
+
+      - name: Verify generated scientific outcome matches committed evidence
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          import math
+          import pathlib
+          import subprocess
+
+          root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
+          selected_abs_tolerance = 1e-5
+          selected_rel_tolerance = 1e-5
+
+          def sha256(payload):
+              return hashlib.sha256(payload).hexdigest()
+
+          def committed_bytes(path):
+              return subprocess.check_output(["git", "show", f"HEAD:{path}"])
+
+          def generated_bytes(path):
+              return path.read_bytes()
+
+          def load(reader, path):
+              return json.loads(reader(path))
+
+          def require_finite(value, location):
+              if isinstance(value, bool) or value is None or isinstance(value, str):
+                  return
+              if isinstance(value, (int, float)):
+                  if not math.isfinite(float(value)):
+                      raise SystemExit(f"non-finite numeric evidence: {location}")
+                  return
+              if isinstance(value, dict):
+                  for key, item in value.items():
+                      require_finite(item, f"{location}.{key}")
+                  return
+              if isinstance(value, list):
+                  for index, item in enumerate(value):
+                      require_finite(item, f"{location}[{index}]")
+
+          def verify_internal_hashes(reader, label):
+              summary = load(reader, root / "summary.json")
+              for model in (1, 4):
+                  for restart in range(4):
+                      run_dir = root / f"model{model}" / f"restart{restart}"
+                      report_path = run_dir / "report.json"
+                      trace_path = run_dir / "training_trace.json"
+                      state_path = run_dir / "model_state.json"
+                      report_bytes = reader(report_path)
+                      trace_bytes = reader(trace_path)
+                      state_bytes = reader(state_path)
+                      report = json.loads(report_bytes)
+                      if report["training"]["training_trace_sha256"] != sha256(trace_bytes):
+                          raise SystemExit(f"{label} trace hash mismatch: {trace_path}")
+                      if report["training"]["model_state_sha256"] != sha256(state_bytes):
+                          raise SystemExit(f"{label} model-state hash mismatch: {state_path}")
+                      hashes = summary["artifact_hashes"][f"model{model}_restart{restart}"]
+                      expected = {
+                          "report_sha256": sha256(report_bytes),
+                          "training_trace_sha256": sha256(trace_bytes),
+                          "model_state_sha256": sha256(state_bytes),
+                      }
+                      if hashes != expected:
+                          raise SystemExit(
+                              f"{label} summary artifact hash mismatch: model{model} restart{restart}"
+                          )
+
+          def model_state_contract(state):
+              require_finite(state, "model_state")
+              return {
+                  "format": state["format"],
+                  "layers": [
+                      {
+                          "name": layer["name"],
+                          "class": layer["class"],
+                          "shapes": layer["shapes"],
+                      }
+                      for layer in state["layers"]
+                  ],
+              }
+
+          def trace_contract(trace):
+              require_finite(trace, "training_trace")
+              return [
+                  (row["iteration"], row["learning_rate"])
+                  for row in trace["trace"]
+              ]
+
+          def report_contract(report):
+              require_finite(report, "report")
+              diagnostics = report["evaluation"]["constraint_diagnostics"]
+              return {
+                  "schema_version": report["schema_version"],
+                  "paper_id": report["paper_id"],
+                  "paper_version": report["paper_version"],
+                  "model_id": report["model_id"],
+                  "restart": report["restart"],
+                  "seed": report["seed"],
+                  "beta": report["beta"],
+                  "training_contract": {
+                      "iterations": report["training"]["iterations"],
+                      "batch_size": report["training"]["batch_size"],
+                      "learning_rate_initial": report["training"]["learning_rate_initial"],
+                      "learning_rate_final": report["training"]["learning_rate_final"],
+                  },
+                  "runtime_contract": {
+                      key: value
+                      for key, value in report["runtime"].items()
+                      if key != "github_sha"
+                  },
+                  "simulation_count": report["evaluation"]["simulation_count"],
+                  "paper_targets": {
+                      "score": report["comparison"]["paper_unpenalized_score"],
+                      "objective": report["comparison"]["paper_opposite_penalized_objective"],
+                  },
+                  "within_predeclared_tolerance": report["comparison"]["within_predeclared_tolerance"],
+                  "constraint_regime": {
+                      key: float(value) > 0.0
+                      for key, value in diagnostics.items()
+                  },
+              }
+
+          def close(left, right):
+              return math.isclose(
+                  float(left),
+                  float(right),
+                  rel_tol=selected_rel_tolerance,
+                  abs_tol=selected_abs_tolerance,
+              )
+
+          generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
+          committed_paths = subprocess.check_output(
+              ["git", "ls-tree", "-r", "--name-only", "HEAD", "--", str(root)],
+              text=True,
+          ).splitlines()
+          if [str(path) for path in generated_paths] != committed_paths:
+              raise SystemExit("generated and committed Table 9 evidence file sets differ")
+
+          verify_internal_hashes(committed_bytes, "committed")
+          verify_internal_hashes(generated_bytes, "generated")
+
+          committed_summary = load(committed_bytes, root / "summary.json")
+          generated_summary = load(generated_bytes, root / "summary.json")
+          for key in (
+              "schema_version",
+              "paper_id",
+              "protocol",
+              "protocol_sha256",
+              "selection_rule",
+              "model_verdicts",
+              "empirical_verdict",
+              "paper_wide_reproduction_claim",
+          ):
+              if committed_summary[key] != generated_summary[key]:
+                  raise SystemExit(f"Table 9 summary contract differs: {key}")
+
+          for model in (1, 4):
+              committed_runs = committed_summary["all_runs"][str(model)]
+              generated_runs = generated_summary["all_runs"][str(model)]
+              committed_seed_contract = [
+                  (
+                      row["restart"],
+                      row["seed"],
+                      row["comparison"]["within_predeclared_tolerance"],
+                      float(row["evaluation"]["constraint_diagnostics"]["total_mean_constraint_penalty"]) > 0.0,
+                  )
+                  for row in committed_runs
+              ]
+              generated_seed_contract = [
+                  (
+                      row["restart"],
+                      row["seed"],
+                      row["comparison"]["within_predeclared_tolerance"],
+                      float(row["evaluation"]["constraint_diagnostics"]["total_mean_constraint_penalty"]) > 0.0,
+                  )
+                  for row in generated_runs
+              ]
+              if committed_seed_contract != generated_seed_contract:
+                  raise SystemExit(f"Table 9 seed-level verdict distribution differs: model {model}")
+
+              committed_selected = committed_summary["selected"][str(model)]
+              generated_selected = generated_summary["selected"][str(model)]
+              if report_contract(committed_selected) != report_contract(generated_selected):
+                  raise SystemExit(f"Table 9 selected-run contract differs: model {model}")
+              for key in (
+                  "mean",
+                  "variance",
+                  "unpenalized_score",
+                  "opposite_penalized_objective",
+              ):
+                  if not close(
+                      committed_selected["evaluation"][key],
+                      generated_selected["evaluation"][key],
+                  ):
+                      raise SystemExit(f"Table 9 selected metric differs: model {model} {key}")
+
+          for model in (1, 4):
+              for restart in range(4):
+                  run_dir = root / f"model{model}" / f"restart{restart}"
+                  committed_report = load(committed_bytes, run_dir / "report.json")
+                  generated_report = load(generated_bytes, run_dir / "report.json")
+                  if report_contract(committed_report) != report_contract(generated_report):
+                      raise SystemExit(
+                          f"Table 9 per-seed contract differs: model {model} restart {restart}"
+                      )
+                  committed_state = load(committed_bytes, run_dir / "model_state.json")
+                  generated_state = load(generated_bytes, run_dir / "model_state.json")
+                  if model_state_contract(committed_state) != model_state_contract(generated_state):
+                      raise SystemExit(
+                          f"Table 9 model-state structure differs: model {model} restart {restart}"
+                      )
+                  committed_trace = load(committed_bytes, run_dir / "training_trace.json")
+                  generated_trace = load(generated_bytes, run_dir / "training_trace.json")
+                  if trace_contract(committed_trace) != trace_contract(generated_trace):
+                      raise SystemExit(
+                          f"Table 9 training schedule differs: model {model} restart {restart}"
+                      )
+          PY

@@ -1,0 +1,87 @@
+name: Execute Warin Table 1 empirical matrix
+
+on:
+  pull_request:
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta005.json"
+      - "docs/research/protocols/warin_2101_02044_v4_beta02.json"
+      - "scripts/run_warin_2101_02044_table1_matrix.py"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - ".github/workflows/warin-table1-matrix.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: warin-table1-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Detect immutable evidence already committed
+        id: evidence
+        shell: bash
+        run: |
+          root=docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          if test -f "$root/summary.json" \
+            && test -f "$root/beta005/report.json" \
+            && test -f "$root/beta005/training_trace.json" \
+            && test -f "$root/beta005/model_state.json" \
+            && test -f "$root/beta02/report.json" \
+            && test -f "$root/beta02/training_trace.json" \
+            && test -f "$root/beta02/model_state.json"; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install verification dependency
+        run: python -m pip install --disable-pip-version-check pytest
+
+      - name: Install locked empirical runtime
+        if: steps.evidence.outputs.present != 'true'
+        run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
+
+      - name: Execute predeclared Table 1 points
+        if: steps.evidence.outputs.present != 'true'
+        env:
+          TF_CPP_MIN_LOG_LEVEL: "2"
+          TF_DETERMINISTIC_OPS: "1"
+        run: |
+          rm -rf docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          python scripts/run_warin_2101_02044_table1_matrix.py \
+            --output-root docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+
+      - name: Verify committed evidence hashes
+        if: steps.evidence.outputs.present == 'true'
+        run: python -m pytest -q tests/test_warin_experiment_matrix.py
+
+      - name: Upload generated evidence
+        if: steps.evidence.outputs.present != 'true'
+        uses: actions/upload-artifact@v7
+        with:
+          name: warin-table1-matrix
+          path: docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          if-no-files-found: error
+
+      - name: Require immutable evidence to be committed externally
+        if: steps.evidence.outputs.present != 'true'
+        run: |
+          echo "Generated evidence is available as the warin-table1-matrix artifact."
+          echo "Commit that immutable evidence to the PR branch with a non-GITHUB_TOKEN actor, then rerun CI."
+          exit 1
