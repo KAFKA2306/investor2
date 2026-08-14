@@ -6,6 +6,8 @@ on:
     paths:
       - "package.json"
       - "pyproject.toml"
+      - ".oxlintrc.json"
+      - "config/biome.json"
       - ".github/workflows/bootstrap-quality-tooling.yml"
 
 permissions:
@@ -16,6 +18,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
       - name: Set up Bun
         uses: oven-sh/setup-bun@v2.2.0
         with:
@@ -28,7 +32,23 @@ jobs:
         uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "0.11.32"
-      - name: Refresh locks, generate migration baseline, and capture gate output
+      - name: Remove confirmed TypeScript lint residue
+        shell: python
+        run: |
+          from pathlib import Path
+          import re
+
+          path = Path("src/io/discord.ts")
+          text = path.read_text(encoding="utf-8")
+          text = text.replace("\tChannelType,\n", "")
+          text = text.replace("\tMessageFlags,\n", "")
+          text = re.sub(
+              r"\n\t\tconst isPrivate =\n\t\t\tmessage\.channel\?\.type === ChannelType\.DM \|\|\n\t\t\tmessage\.channel\?\.type === ChannelType\.GroupDM;\n",
+              "\n",
+              text,
+          )
+          path.write_text(text, encoding="utf-8")
+      - name: Refresh locks, format changed TS, generate baseline, and capture gates
         shell: bash
         run: |
           set +e
@@ -46,8 +66,17 @@ jobs:
           }
 
           run_check "bun lock" bun install --lockfile-only
+          run_check "bun ci" bun ci
+          run_check "biome write changed" bun run format
+          run_check "biome changed check" bun run format:check
+          run_check "oxlint" bun run lint
+          run_check "typescript" bun run typecheck
+          run_check "typescript tests" bun run test
+
           run_check "uv lock" uv lock
-          run_check "uv quality sync" uv sync --locked --only-group dev
+          if uv lock --check >/dev/null 2>&1; then
+            run_check "uv quality sync" uv sync --locked --only-group dev
+          fi
 
           if [ -x .venv/bin/pyrefly ]; then
             run_check "pyrefly baseline" uv run --no-sync pyrefly check --baseline=.pyrefly-baseline.json --update-baseline
@@ -56,26 +85,13 @@ jobs:
             run_check "ruff lint" uv run --no-sync ruff check src scripts tests
           fi
 
-          if [ -d node_modules ]; then
-            run_check "biome" bun run format:check
-            run_check "oxlint" bun run lint
-            run_check "typescript" bun run typecheck
-            run_check "typescript tests" bun run test
-          else
-            run_check "bun ci" bun ci
-            run_check "biome" bun run format:check
-            run_check "oxlint" bun run lint
-            run_check "typescript" bun run typecheck
-            run_check "typescript tests" bun run test
-          fi
-
           cat "$report"
-      - name: Commit generated lockfiles and migration evidence
+      - name: Commit generated migration evidence
         shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add bun.lock uv.lock quality-bootstrap-report.txt
+          git add bun.lock uv.lock quality-bootstrap-report.txt src/io/discord.ts src/io/sector_data_fetcher.ts
           if [ -f .pyrefly-baseline.json ]; then
             git add .pyrefly-baseline.json
           fi
@@ -83,4 +99,5 @@ jobs:
             exit 0
           fi
           git commit -m "tooling: refresh locks and migration baseline"
+          git pull --rebase origin chore/quality-gates-2026
           git push origin HEAD:chore/quality-gates-2026
