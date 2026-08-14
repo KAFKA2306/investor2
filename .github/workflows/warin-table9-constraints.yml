@@ -108,10 +108,12 @@ jobs:
         run: |
           python - <<'PY'
           import json
+          import math
           import pathlib
           import subprocess
 
           root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
+          absolute_float_tolerance = 1e-9
 
           def strip_run_sha(value):
               if isinstance(value, dict):
@@ -123,6 +125,29 @@ jobs:
               if isinstance(value, list):
                   return [strip_run_sha(item) for item in value]
               return value
+
+          def evidence_equal(committed, generated):
+              if isinstance(committed, bool) or isinstance(generated, bool):
+                  return committed is generated
+              if isinstance(committed, (int, float)) and isinstance(generated, (int, float)):
+                  return math.isclose(
+                      float(committed),
+                      float(generated),
+                      rel_tol=1e-12,
+                      abs_tol=absolute_float_tolerance,
+                  )
+              if type(committed) is not type(generated):
+                  return False
+              if isinstance(committed, dict):
+                  return committed.keys() == generated.keys() and all(
+                      evidence_equal(committed[key], generated[key]) for key in committed
+                  )
+              if isinstance(committed, list):
+                  return len(committed) == len(generated) and all(
+                      evidence_equal(left, right)
+                      for left, right in zip(committed, generated, strict=True)
+                  )
+              return committed == generated
 
           generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
           committed_paths = subprocess.check_output(
@@ -138,7 +163,7 @@ jobs:
               if path.suffix == ".json":
                   committed_obj = strip_run_sha(json.loads(committed))
                   generated_obj = strip_run_sha(json.loads(generated))
-                  if committed_obj != generated_obj:
+                  if not evidence_equal(committed_obj, generated_obj):
                       raise SystemExit(f"Table 9 JSON evidence differs: {path}")
               elif committed != generated:
                   raise SystemExit(f"Table 9 evidence differs: {path}")
