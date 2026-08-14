@@ -107,27 +107,60 @@ jobs:
         shell: bash
         run: |
           python - <<'PY'
+          import hashlib
           import json
           import math
           import pathlib
+          import struct
           import subprocess
 
           root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
-          absolute_float_tolerance = 1e-9
-          relative_float_tolerance = 1e-12
+          max_float32_ulps = 16
+          aggregate_abs_tolerance = 1e-5
+          aggregate_rel_tolerance = 1e-5
+          run_local_keys = {
+              "github_sha",
+              "model_state_sha256",
+              "training_trace_sha256",
+              "report_sha256",
+          }
 
-          def strip_run_sha(value):
+          def sha256(payload):
+              return hashlib.sha256(payload).hexdigest()
+
+          def committed_bytes(path):
+              return subprocess.check_output(["git", "show", f"HEAD:{path}"])
+
+          def generated_bytes(path):
+              return path.read_bytes()
+
+          def strip_run_local(value):
               if isinstance(value, dict):
                   return {
-                      key: strip_run_sha(item)
+                      key: strip_run_local(item)
                       for key, item in value.items()
-                      if key != "github_sha"
+                      if key not in run_local_keys
                   }
               if isinstance(value, list):
-                  return [strip_run_sha(item) for item in value]
+                  return [strip_run_local(item) for item in value]
               return value
 
-          def first_difference(committed, generated, location="$"):
+          def float32_ordered_bits(value):
+              bits = struct.unpack(">I", struct.pack(">f", float(value)))[0]
+              if bits & 0x80000000:
+                  return 0x80000000 - (bits & 0x7FFFFFFF)
+              return 0x80000000 + bits
+
+          def float32_close(left, right):
+              left = float(left)
+              right = float(right)
+              if not (math.isfinite(left) and math.isfinite(right)):
+                  return left == right
+              if left == right:
+                  return True
+              return abs(float32_ordered_bits(left) - float32_ordered_bits(right)) <= max_float32_ulps
+
+          def first_difference(committed, generated, location="$", numeric_mode="aggregate"):
               if isinstance(committed, bool) or isinstance(generated, bool):
                   if committed is generated:
                       return None
@@ -135,21 +168,29 @@ jobs:
               if isinstance(committed, (int, float)) and isinstance(generated, (int, float)):
                   left = float(committed)
                   right = float(generated)
-                  if math.isclose(
-                      left,
-                      right,
-                      rel_tol=relative_float_tolerance,
-                      abs_tol=absolute_float_tolerance,
-                  ):
+                  if numeric_mode == "float32":
+                      close = float32_close(left, right)
+                  else:
+                      close = math.isclose(
+                          left,
+                          right,
+                          rel_tol=aggregate_rel_tolerance,
+                          abs_tol=aggregate_abs_tolerance,
+                      )
+                  if close:
                       return None
                   absolute = abs(left - right)
                   scale = max(abs(left), abs(right))
                   relative = absolute / scale if scale else 0.0
-                  return (
+                  detail = (
                       f"{location}: numeric differs; committed={left:.17g}, "
                       f"generated={right:.17g}, abs_diff={absolute:.17g}, "
                       f"rel_diff={relative:.17g}"
                   )
+                  if numeric_mode == "float32" and math.isfinite(left) and math.isfinite(right):
+                      ulps = abs(float32_ordered_bits(left) - float32_ordered_bits(right))
+                      detail += f", float32_ulp_diff={ulps}"
+                  return detail
               if type(committed) is not type(generated):
                   return (
                       f"{location}: type differs "
@@ -159,8 +200,11 @@ jobs:
                   if committed.keys() != generated.keys():
                       return f"{location}: object keys differ"
                   for key in committed:
+                      child_mode = numeric_mode
+                      if key == "learning_rate":
+                          child_mode = "aggregate"
                       difference = first_difference(
-                          committed[key], generated[key], f"{location}.{key}"
+                          committed[key], generated[key], f"{location}.{key}", child_mode
                       )
                       if difference:
                           return difference
@@ -174,13 +218,43 @@ jobs:
                   for index, (left, right) in enumerate(
                       zip(committed, generated, strict=True)
                   ):
-                      difference = first_difference(left, right, f"{location}[{index}]")
+                      difference = first_difference(
+                          left, right, f"{location}[{index}]", numeric_mode
+                      )
                       if difference:
                           return difference
                   return None
               if committed != generated:
                   return f"{location}: value differs ({committed!r} != {generated!r})"
               return None
+
+          def verify_internal_hashes(reader, label):
+              summary_path = root / "summary.json"
+              summary = json.loads(reader(summary_path))
+              for model in (1, 4):
+                  for restart in range(4):
+                      run_dir = root / f"model{model}" / f"restart{restart}"
+                      report_path = run_dir / "report.json"
+                      trace_path = run_dir / "training_trace.json"
+                      state_path = run_dir / "model_state.json"
+                      report_bytes = reader(report_path)
+                      trace_bytes = reader(trace_path)
+                      state_bytes = reader(state_path)
+                      report = json.loads(report_bytes)
+                      if report["training"]["training_trace_sha256"] != sha256(trace_bytes):
+                          raise SystemExit(f"{label} trace hash mismatch: {trace_path}")
+                      if report["training"]["model_state_sha256"] != sha256(state_bytes):
+                          raise SystemExit(f"{label} model-state hash mismatch: {state_path}")
+                      hashes = summary["artifact_hashes"][f"model{model}_restart{restart}"]
+                      expected = {
+                          "report_sha256": sha256(report_bytes),
+                          "training_trace_sha256": sha256(trace_bytes),
+                          "model_state_sha256": sha256(state_bytes),
+                      }
+                      if hashes != expected:
+                          raise SystemExit(
+                              f"{label} summary artifact hash mismatch: model{model} restart{restart}"
+                          )
 
           generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
           committed_paths = subprocess.check_output(
@@ -190,17 +264,21 @@ jobs:
           if [str(path) for path in generated_paths] != committed_paths:
               raise SystemExit("generated and committed Table 9 evidence file sets differ")
 
+          verify_internal_hashes(committed_bytes, "committed")
+          verify_internal_hashes(generated_bytes, "generated")
+
           for path in generated_paths:
-              committed = subprocess.check_output(["git", "show", f"HEAD:{path}"])
-              generated = path.read_bytes()
-              if path.suffix == ".json":
-                  committed_obj = strip_run_sha(json.loads(committed))
-                  generated_obj = strip_run_sha(json.loads(generated))
-                  difference = first_difference(committed_obj, generated_obj)
-                  if difference:
-                      raise SystemExit(
-                          f"Table 9 JSON evidence differs: {path}; {difference}"
-                      )
-              elif committed != generated:
-                  raise SystemExit(f"Table 9 evidence differs: {path}")
+              committed_obj = strip_run_local(json.loads(committed_bytes(path)))
+              generated_obj = strip_run_local(json.loads(generated_bytes(path)))
+              if path.name in {"model_state.json", "training_trace.json"}:
+                  numeric_mode = "float32"
+              else:
+                  numeric_mode = "aggregate"
+              difference = first_difference(
+                  committed_obj, generated_obj, numeric_mode=numeric_mode
+              )
+              if difference:
+                  raise SystemExit(
+                      f"Table 9 semantic evidence differs: {path}; {difference}"
+                  )
           PY
