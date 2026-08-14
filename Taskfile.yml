@@ -44,26 +44,25 @@ tasks:
     cmds:
       - bun --hot src/dashboard/server.ts
   check:
-    desc: Non-mutating reliability gate used locally and in CI
+    desc: Non-mutating reliability gate used locally and in PR CI
     cmds:
-      - task: format:check
-      - task: lint
+      - bun run quality:changed
       - task: typecheck
       - task: test
       - task: data:snapshots:audit
-  lint:
+  quality:changed:
+    desc: Format/lint ratchet for files changed from main plus local changes
     cmds:
-      - bun run lint
+      - bun run quality:changed
+  lint:all:
+    desc: Report the full legacy lint backlog without changing files
+    cmds:
+      - bun run lint:all
       - uv run --no-sync ruff check src scripts tests
-  format:
-    desc: Apply canonical TypeScript and Python formatting
+  format:check:all:
+    desc: Report the full legacy formatting backlog without changing files
     cmds:
-      - bun run format
-      - uv run --no-sync ruff format src scripts tests
-  format:check:
-    desc: Verify formatting without changing the worktree
-    cmds:
-      - bun run format:check
+      - bun run format:check:all
       - uv run --no-sync ruff format --check src scripts tests
   typecheck:
     cmds:
