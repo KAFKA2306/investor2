@@ -29,15 +29,35 @@ jobs:
           ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
           fetch-depth: 0
 
+      - name: Detect immutable evidence already committed
+        id: evidence
+        shell: bash
+        run: |
+          root=docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          if test -f "$root/summary.json" \
+            && test -f "$root/beta005/report.json" \
+            && test -f "$root/beta005/training_trace.json" \
+            && test -f "$root/beta005/model_state.json" \
+            && test -f "$root/beta02/report.json" \
+            && test -f "$root/beta02/training_trace.json" \
+            && test -f "$root/beta02/model_state.json"; then
+            echo "present=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "present=false" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Set up Python
+        if: steps.evidence.outputs.present != 'true'
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
       - name: Install locked runtime
+        if: steps.evidence.outputs.present != 'true'
         run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
 
       - name: Execute predeclared Table 1 points
+        if: steps.evidence.outputs.present != 'true'
         env:
           TF_CPP_MIN_LOG_LEVEL: "2"
           TF_DETERMINISTIC_OPS: "1"
@@ -47,7 +67,7 @@ jobs:
             --output-root docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
 
       - name: Commit immutable run evidence to PR branch
-        if: github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request' && steps.evidence.outputs.present != 'true'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -55,6 +75,9 @@ jobs:
           git diff --cached --quiet && exit 0
           git commit -m "research: materialize Warin Table 1 matrix evidence"
           git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: Verify committed evidence hashes
+        run: python -m pytest -q tests/test_warin_experiment_matrix.py
 
       - name: Upload evidence
         uses: actions/upload-artifact@v7
