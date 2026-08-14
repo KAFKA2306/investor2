@@ -114,6 +114,7 @@ jobs:
 
           root = pathlib.Path("docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306")
           absolute_float_tolerance = 1e-9
+          relative_float_tolerance = 1e-12
 
           def strip_run_sha(value):
               if isinstance(value, dict):
@@ -126,28 +127,60 @@ jobs:
                   return [strip_run_sha(item) for item in value]
               return value
 
-          def evidence_equal(committed, generated):
+          def first_difference(committed, generated, location="$"):
               if isinstance(committed, bool) or isinstance(generated, bool):
-                  return committed is generated
+                  if committed is generated:
+                      return None
+                  return f"{location}: boolean differs ({committed!r} != {generated!r})"
               if isinstance(committed, (int, float)) and isinstance(generated, (int, float)):
-                  return math.isclose(
-                      float(committed),
-                      float(generated),
-                      rel_tol=1e-12,
+                  left = float(committed)
+                  right = float(generated)
+                  if math.isclose(
+                      left,
+                      right,
+                      rel_tol=relative_float_tolerance,
                       abs_tol=absolute_float_tolerance,
+                  ):
+                      return None
+                  absolute = abs(left - right)
+                  scale = max(abs(left), abs(right))
+                  relative = absolute / scale if scale else 0.0
+                  return (
+                      f"{location}: numeric differs; committed={left:.17g}, "
+                      f"generated={right:.17g}, abs_diff={absolute:.17g}, "
+                      f"rel_diff={relative:.17g}"
                   )
               if type(committed) is not type(generated):
-                  return False
+                  return (
+                      f"{location}: type differs "
+                      f"({type(committed).__name__} != {type(generated).__name__})"
+                  )
               if isinstance(committed, dict):
-                  return committed.keys() == generated.keys() and all(
-                      evidence_equal(committed[key], generated[key]) for key in committed
-                  )
+                  if committed.keys() != generated.keys():
+                      return f"{location}: object keys differ"
+                  for key in committed:
+                      difference = first_difference(
+                          committed[key], generated[key], f"{location}.{key}"
+                      )
+                      if difference:
+                          return difference
+                  return None
               if isinstance(committed, list):
-                  return len(committed) == len(generated) and all(
-                      evidence_equal(left, right)
-                      for left, right in zip(committed, generated, strict=True)
-                  )
-              return committed == generated
+                  if len(committed) != len(generated):
+                      return (
+                          f"{location}: list length differs "
+                          f"({len(committed)} != {len(generated)})"
+                      )
+                  for index, (left, right) in enumerate(
+                      zip(committed, generated, strict=True)
+                  ):
+                      difference = first_difference(left, right, f"{location}[{index}]")
+                      if difference:
+                          return difference
+                  return None
+              if committed != generated:
+                  return f"{location}: value differs ({committed!r} != {generated!r})"
+              return None
 
           generated_paths = sorted(path for path in root.rglob("*") if path.is_file())
           committed_paths = subprocess.check_output(
@@ -163,8 +196,11 @@ jobs:
               if path.suffix == ".json":
                   committed_obj = strip_run_sha(json.loads(committed))
                   generated_obj = strip_run_sha(json.loads(generated))
-                  if not evidence_equal(committed_obj, generated_obj):
-                      raise SystemExit(f"Table 9 JSON evidence differs: {path}")
+                  difference = first_difference(committed_obj, generated_obj)
+                  if difference:
+                      raise SystemExit(
+                          f"Table 9 JSON evidence differs: {path}; {difference}"
+                      )
               elif committed != generated:
                   raise SystemExit(f"Table 9 evidence differs: {path}")
           PY
