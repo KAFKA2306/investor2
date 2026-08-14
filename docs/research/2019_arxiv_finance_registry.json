@@ -2,6 +2,8 @@
   "papers": [
     {
       "arxiv_id": "1904.04912",
+      "data_access_evidence": "docs/research/data_access/lim_1904_04912_v2_clc_access.json",
+      "data_access_state": "ACCESS_REQUIRED",
       "data_contract_state": "VERIFIED_FULL_TEXT_PROPRIETARY_INPUT_BLOCKED",
       "empirical_reproduction_state": "EMPIRICALLY_RUN",
       "empirical_verdict": "BLOCKED",
@@ -19,7 +21,10 @@
         "volatility": 0.154
       },
       "reason_codes": [
-        "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"
+        "PINNACLE_CLC_ACCESS_REQUIRED",
+        "PAPER_VINTAGE_REVISION_NOT_PROVEN",
+        "PUBLIC_RESEARCH_LICENSE_NOT_VERIFIED",
+        "PUBLIC_REDISTRIBUTION_RIGHT_NOT_VERIFIED"
       ],
       "source_pdf_url": "https://arxiv.org/pdf/1904.04912v2",
       "source_url": "https://arxiv.org/abs/1904.04912v2",
