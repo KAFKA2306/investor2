@@ -110,10 +110,22 @@
       "reason_codes": ["DIM20_RANDOM_CORRELATION_REALIZATION_NOT_PUBLISHED"]
     },
     {
-      "id": "s4_3_1_tables9_14_dim4_constraint_models",
+      "id": "s4_3_1_tables9_10_dim4_models1_4_beta0959",
       "section": "4.3.1",
-      "evidence": "Tables 9-14",
-      "method": "four constraint-handling models including projected feedforward model 4",
+      "evidence": "Tables 9-10",
+      "method": "constraint-handling models 1 and 4 at beta=0.959",
+      "dimension": 4,
+      "risk_parameter": {"beta": 0.959},
+      "protocol": "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json",
+      "run": "docs/research/runs/warin_2101_02044_v4_table9_beta0959_seed2306/summary.json",
+      "status": "REPRODUCED",
+      "note": "Selected scope covers Models 1 and 4 only; it does not promote Models 2-3 or Tables 11-14."
+    },
+    {
+      "id": "s4_3_1_tables11_14_dim4_remaining_constraint_models",
+      "section": "4.3.1",
+      "evidence": "Tables 11-14",
+      "method": "remaining constraint-handling comparisons outside the selected Tables 9-10 Models 1/4 scope",
       "dimension": 4,
       "status": "NOT_RUN"
     },
