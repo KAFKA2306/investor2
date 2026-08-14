@@ -1,0 +1,55 @@
+name: Format Warin PR scripts
+
+on:
+  pull_request:
+    paths:
+      - ".github/workflows/format-warin-pr.yml"
+      - "scripts/run_warin_2101_02044_table1_matrix.py"
+      - "scripts/run_warin_2101_02044_table9_constraints.py"
+      - "scripts/run_warin_2101_02044_table9_single.py"
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Install pinned Ruff
+        run: python -m pip install --disable-pip-version-check "ruff==0.15.5"
+      - name: Apply deterministic lint repair and format
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("scripts/run_warin_2101_02044_table9_constraints.py")
+          text = path.read_text(encoding="utf-8")
+          old = "optimizer.apply_gradients(zip(gradients, model.trainable_variables))"
+          new = "optimizer.apply_gradients(zip(gradients, model.trainable_variables, strict=True))"
+          if old not in text and new not in text:
+              raise SystemExit("expected apply_gradients expression not found")
+          path.write_text(text.replace(old, new), encoding="utf-8")
+          PY
+          ruff format \
+            scripts/run_warin_2101_02044_table1_matrix.py \
+            scripts/run_warin_2101_02044_table9_constraints.py \
+            scripts/run_warin_2101_02044_table9_single.py
+          ruff check \
+            scripts/run_warin_2101_02044_table1_matrix.py \
+            scripts/run_warin_2101_02044_table9_constraints.py \
+            scripts/run_warin_2101_02044_table9_single.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: warin-ruff-formatted
+          path: |
+            scripts/run_warin_2101_02044_table1_matrix.py
+            scripts/run_warin_2101_02044_table9_constraints.py
+            scripts/run_warin_2101_02044_table9_single.py
+          if-no-files-found: error
