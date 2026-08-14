@@ -3,7 +3,6 @@ import { mkdirSync, readFileSync } from "node:fs";
 import { dirname } from "node:path";
 import yaml from "js-yaml";
 import { ConfigSchema } from "../schemas";
-import { fetchWithCache } from "./http";
 import { fetchJPReturns } from "./sector_jp";
 import { fetchUSReturns } from "./sector_us";
 
