@@ -1,0 +1,64 @@
+name: Execute Warin Table 1 empirical matrix
+
+on:
+  pull_request:
+    paths:
+      - "docs/research/protocols/warin_2101_02044_v4_beta005.json"
+      - "docs/research/protocols/warin_2101_02044_v4_beta02.json"
+      - "scripts/run_warin_2101_02044_table1_matrix.py"
+      - "scripts/run_warin_2101_02044_empirical.py"
+      - ".github/workflows/warin-table1-matrix.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: warin-table1-matrix-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - name: Checkout PR head
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Install locked runtime
+        run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
+
+      - name: Execute predeclared Table 1 points
+        env:
+          TF_CPP_MIN_LOG_LEVEL: "2"
+          TF_DETERMINISTIC_OPS: "1"
+        run: |
+          rm -rf docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          python scripts/run_warin_2101_02044_table1_matrix.py \
+            --output-root docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+
+      - name: Commit immutable run evidence to PR branch
+        if: github.event_name == 'pull_request'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          git diff --cached --quiet && exit 0
+          git commit -m "research: materialize Warin Table 1 matrix evidence"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+
+      - name: Upload evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: warin-table1-matrix
+          path: docs/research/runs/warin_2101_02044_v4_table1_matrix_seed2306
+          if-no-files-found: error
