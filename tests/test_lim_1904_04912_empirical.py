@@ -42,7 +42,18 @@ def test_upstream_contracts() -> None:
     assert result["split_contract"]["test_window"]["end"] == 2015
 
 
-def test_missing_data_is_blocked() -> None:
+def test_access_evidence_is_explicit_and_fail_closed() -> None:
+    evidence = mod.load_access_evidence()
+    assert evidence["acquisition"]["state"] == "ACCESS_REQUIRED"
+    assert evidence["acquisition"]["exact_paper_vintage_bytes_available"] is False
+    assert evidence["acquisition"]["exact_paper_vintage_revision_proven"] is False
+    assert evidence["acquisition"]["public_license_for_research_execution"] == "NOT_VERIFIED"
+    assert evidence["rules"]["proxy_data_can_promote_exact_reproduction"] is False
+    assert evidence["paper_requirement"]["contract_count"] == 88
+    assert evidence["current_vendor_observation"]["catalog_contract_count"] == 98
+
+
+def test_missing_data_is_access_required_not_env_placeholder() -> None:
     data = json.loads((ROOT / "docs/research/arxiv_qfin_2019_data_requirements.json").read_text())
     record = mod.find_record(data, "1904.04912")
     old = mod.os.environ.pop("PINNACLE_CLC_DATA_DIR", None)
@@ -52,7 +63,11 @@ def test_missing_data_is_blocked() -> None:
         if old is not None:
             mod.os.environ["PINNACLE_CLC_DATA_DIR"] = old
     assert gate["status"] == "BLOCKED"
-    assert gate["reason_codes"] == ["PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"]
+    assert gate["access_state"] == "ACCESS_REQUIRED"
+    assert "PINNACLE_CLC_ACCESS_REQUIRED" in gate["reason_codes"]
+    assert "PAPER_VINTAGE_REVISION_NOT_PROVEN" in gate["reason_codes"]
+    assert "PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED" not in gate["reason_codes"]
+    assert gate["access_evidence"].endswith("lim_1904_04912_v2_clc_access.json")
 
 
 def test_invalid_dataset_never_passes() -> None:
@@ -80,6 +95,7 @@ def test_invalid_dataset_never_passes() -> None:
             else:
                 mod.os.environ["PINNACLE_CLC_DATA_DIR"] = old
         assert gate["status"] == "BLOCKED"
+        assert gate["access_state"] == "AVAILABLE_LOCAL"
         assert "EXACT_88_TICKER_SET_MISMATCH" in gate["reason_codes"]
         assert any("VENDOR" in code for code in gate["reason_codes"])
 
@@ -87,6 +103,7 @@ def test_invalid_dataset_never_passes() -> None:
 if __name__ == "__main__":
     test_method_contract()
     test_upstream_contracts()
-    test_missing_data_is_blocked()
+    test_access_evidence_is_explicit_and_fail_closed()
+    test_missing_data_is_access_required_not_env_placeholder()
     test_invalid_dataset_never_passes()
     print("ok")
