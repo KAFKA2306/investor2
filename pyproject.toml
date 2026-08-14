@@ -21,11 +21,9 @@ dependencies = [
     "protobuf",
     "pydantic",
     "pyqlib",
-    "pyright",
     "python-dotenv",
     "pyyaml",
     "requests",
-    "ruff",
     "setuptools",
     "tqdm",
     "accelerate",
@@ -41,8 +39,15 @@ dependencies = [
     "datasets",
     "japanize-matplotlib",
     "matplotlib-fontja",
-    "pytest",
     "scikit-learn",
+]
+
+[dependency-groups]
+dev = [
+    "prek==0.4.11",
+    "pyrefly==1.1.1",
+    "pytest",
+    "ruff",
 ]
 
 [tool.uv]
@@ -54,15 +59,19 @@ target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B"]
-ignore = ["E501"] # Line too long (handled by line-length/formatter)
+ignore = ["E501"]
 
-[tool.pyright]
-include = ["ts-agent/src", "llm"]
-exclude = ["**/node_modules", "**/__pycache__", ".venv"]
-typeCheckingMode = "basic"
-pythonVersion = "3.12"
-pythonPlatform = "Linux"
-reportMissingImports = "none"
+[tool.pyrefly]
+project-includes = ["src/**/*.py", "scripts/**/*.py", "tests/**/*.py"]
+project-excludes = ["**/node_modules", "**/__pycache__", "**/*venv/**", "cache/**"]
+search-path = ["."]
+python-version = "3.12"
+python-platform = "linux"
+preset = "strict"
+baseline = ".pyrefly-baseline.json"
+
+[tool.pyrefly.errors]
+missing-import = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
