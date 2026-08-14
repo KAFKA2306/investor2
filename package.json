@@ -4,13 +4,14 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "bun ./node_modules/@biomejs/biome/bin/biome check src",
-    "format": "bun ./node_modules/@biomejs/biome/bin/biome format src --write",
+    "check": "bun run format:check && bun run lint && bun run typecheck && bun run test",
+    "format:check": "biome check --config-path=config/biome.json src tests scripts",
+    "lint": "oxlint --deny-warnings src tests scripts",
+    "format": "biome check --write --config-path=config/biome.json src tests scripts",
     "test": "bun test tests/*.test.ts",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
-    "typecheck": "bun x tsc --noEmit",
-    "start": "bun src/index.ts",
+    "typecheck": "tsc --noEmit",
     "agent:unified": "bun src/agents/unified/unified_agent.ts",
     "edinet": "bun scripts/edinet_cli.ts",
     "jquants:warm-cache": "bun scripts/jquants_cache_warm.ts",
@@ -25,7 +26,9 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.3.2",
     "@types/xml2js": "^0.4.14",
-    "tsx": "^4.21.0"
+    "oxlint": "1.76.0",
+    "tsx": "^4.21.0",
+    "typescript": "7.0.2"
   },
   "dependencies": {
     "@google/genai": "^1.43.0",
