@@ -16,6 +16,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 RUN_ID = "zhang_1911_10107_v1_dqn_table2_seed2306"
 ARXIV_ID = "1911.10107"
+ACCESS_EVIDENCE_PATH = ROOT / "docs/research/data_access/zhang_1911_10107_v1_clc_access.json"
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
 ACTIONS = {-1, 0, 1}
 
@@ -71,7 +72,7 @@ def sign_return_baseline(current_price: float, price_252_days_ago: float) -> int
 
 
 def method_contract_self_test() -> dict[str, Any]:
-    sigma_target = 0.02  # synthetic self-test only; the pinned paper does not specify the calibrated numeric target.
+    sigma_target = 0.02
     gross = paper_reward(
         action_t_minus_1=1,
         action_t_minus_2=0,
@@ -156,18 +157,42 @@ def expected_tickers(data_record: dict[str, Any]) -> list[str]:
     return tickers
 
 
+def load_access_evidence(path: Path = ACCESS_EVIDENCE_PATH) -> dict[str, Any]:
+    evidence = load_json(path)
+    if evidence.get("schema_version") != "investor2.paper-data-access.v1":
+        raise ValueError("unsupported paper data-access evidence schema")
+    if evidence.get("paper_id") != "zhang_1911_10107_v1" or evidence.get("arxiv_id") != ARXIV_ID:
+        raise ValueError("paper data-access evidence identity mismatch")
+    state = evidence.get("acquisition", {}).get("state")
+    if state not in {"AVAILABLE_LOCAL", "ACCESS_REQUIRED", "LICENSE_BLOCKED", "SOURCE_UNAVAILABLE"}:
+        raise ValueError("invalid paper data-access state")
+    reasons = evidence.get("reason_codes")
+    if not isinstance(reasons, list) or not reasons:
+        raise ValueError("paper data-access evidence requires reason codes")
+    return evidence
+
+
 def validate_local_dataset(data_record: dict[str, Any]) -> dict[str, Any]:
+    access = load_access_evidence()
     value = os.environ.get("PINNACLE_CLC_DATA_DIR", "").strip()
     if not value:
         return {
             "status": "BLOCKED",
-            "reason_codes": ["PINNACLE_CLC_DATA_DIR_NOT_CONFIGURED"],
-            "detail": "No licensed paper-vintage Pinnacle CLC dataset was supplied to the empirical runner.",
+            "access_state": access["acquisition"]["state"],
+            "reason_codes": list(access["reason_codes"]),
+            "access_evidence": ACCESS_EVIDENCE_PATH.relative_to(ROOT).as_posix(),
+            "access_evidence_sha256": file_sha256(ACCESS_EVIDENCE_PATH),
+            "detail": "Exact paper-vintage licensed Pinnacle CLC bytes are not available to this runner. Follow the official acquisition path recorded in the access evidence before any exact empirical metric is emitted.",
         }
     root = Path(value).expanduser().resolve()
     manifest_path = root / "dataset_manifest.json"
     if not manifest_path.is_file():
-        return {"status": "BLOCKED", "reason_codes": ["DATASET_MANIFEST_MISSING"], "detail": str(manifest_path)}
+        return {
+            "status": "BLOCKED",
+            "access_state": "AVAILABLE_LOCAL",
+            "reason_codes": ["DATASET_MANIFEST_MISSING"],
+            "detail": str(manifest_path),
+        }
     manifest = load_json(manifest_path)
     reasons: list[str] = []
     required = {
@@ -208,8 +233,12 @@ def validate_local_dataset(data_record: dict[str, Any]) -> dict[str, Any]:
             reasons.append(f"{ticker}_SHA256_MISMATCH")
             continue
         verified.append({"ticker": ticker, "path": rel, "sha256": claimed, "bytes": path.stat().st_size})
+    access_state = "AVAILABLE_LOCAL"
+    if manifest.get("license_allows_research_execution") is False:
+        access_state = "LICENSE_BLOCKED"
     return {
         "status": "PASS" if not reasons else "BLOCKED",
+        "access_state": access_state,
         "reason_codes": reasons,
         "manifest_path": str(manifest_path),
         "manifest_sha256": file_sha256(manifest_path),
@@ -234,7 +263,13 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
     trace.append({"stage": "METHOD_CONTRACT_SELF_TEST", "status": "PASS", "at": now_utc(), "observed": method_test})
 
     data_gate = validate_local_dataset(upstream["data_contract"])
-    trace.append({"stage": "EXACT_DATA_GATE", "status": data_gate["status"], "at": now_utc(), "reason_codes": data_gate.get("reason_codes", [])})
+    trace.append({
+        "stage": "EXACT_DATA_GATE",
+        "status": data_gate["status"],
+        "access_state": data_gate.get("access_state"),
+        "at": now_utc(),
+        "reason_codes": data_gate.get("reason_codes", []),
+    })
 
     source_evidence = {
         "url": "https://arxiv.org/pdf/1911.10107v1",
@@ -247,13 +282,15 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
 
     if data_gate["status"] != "PASS":
         reason_codes = list(data_gate.get("reason_codes", []))
-        training_detail = "Fail-closed: DQN fitting/evaluation cannot execute without the exact licensed 50-contract CLC data gate. No substitute dataset is permitted."
+        training_attempted = False
+        training_detail = "Fail-closed: DQN fitting/evaluation cannot execute without the exact licensed 50-contract CLC data gate. No substitute dataset is permitted to promote exact reproduction."
     else:
         reason_codes = [
             "NUMERIC_VOLATILITY_TARGET_NOT_SPECIFIED_IN_PINNED_PAPER",
             "EXACT_VENDOR_PRICE_FIELD_NOT_SPECIFIED_BY_PINNED_PAPER",
             "VALIDATION_AND_MODEL_SELECTION_PROTOCOL_NOT_SPECIFIED"
         ]
+        training_attempted = True
         training_detail = "Licensed files passed the data gate, but the pinned paper leaves the numeric volatility target, exact vendor price field, and validation/model-selection protocol unspecified; fitting remains blocked rather than inventing them."
     trace.append({"stage": "TRAINING_EVALUATION", "status": "NOT_EXECUTED", "at": now_utc(), "reason_codes": reason_codes, "detail": training_detail})
 
@@ -267,7 +304,7 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
         "empirical_reproduction_state": "EMPIRICALLY_RUN",
         "empirical_verdict": "BLOCKED",
         "stage_reached": "EXACT_DATA_GATE",
-        "training_attempted": True,
+        "training_attempted": training_attempted,
         "training_executed": False,
         "evaluation_executed": False,
         "paper_target": protocol["experiment"]["paper_target"],
@@ -275,6 +312,10 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
         "metric_delta": None,
         "reason_codes": reason_codes,
         "data_gate": data_gate,
+        "data_access_evidence": {
+            "path": ACCESS_EVIDENCE_PATH.relative_to(ROOT).as_posix(),
+            "sha256": file_sha256(ACCESS_EVIDENCE_PATH),
+        },
         "source_pdf": source_evidence,
         "method_contract_self_test": method_test,
         "split_contract_consumed": {
@@ -288,19 +329,14 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
             "python": sys.version.split()[0],
             "platform": platform.platform(),
             "machine": platform.machine(),
-            "device": "NOT_REACHED_DATA_GATE",
+            "device": "NOT_REACHED_DATA_GATE" if data_gate["status"] != "PASS" else "NOT_REACHED_PROTOCOL_GATE",
             "seed": protocol["seed"],
             "github_sha": os.environ.get("GITHUB_SHA", "LOCAL_WORKTREE"),
             "github_run_id": os.environ.get("GITHUB_RUN_ID", "LOCAL"),
         },
         "author_code_and_data": protocol["author_code_and_data"],
-        "current_vendor_reference": {
-            "url": "https://pinnacledata2.com/clc.html",
-            "contract_count": 98,
-            "current_price_usd": 99,
-            "note": "Current commercial availability does not establish access to the paper-vintage 50-series bytes or their revision state."
-        },
-        "fail_closed_statement": "BLOCKED is neither FAILED nor REPRODUCED. No empirical metric is emitted because required exact evidence did not pass its gate.",
+        "current_vendor_reference": load_access_evidence()["current_vendor_observation"],
+        "fail_closed_statement": "BLOCKED is neither FAILED nor REPRODUCED. No empirical metric is emitted unless the exact paper-data gate and downstream protocol gates execute.",
         "started_at": started_at,
         "finished_at": now_utc(),
     }
@@ -321,6 +357,7 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
         "canonical_inputs": {
             "data_contracts": {"path": data_path.relative_to(ROOT).as_posix(), "sha256": file_sha256(data_path)},
             "split_contracts": {"path": split_path.relative_to(ROOT).as_posix(), "sha256": file_sha256(split_path)},
+            "data_access": {"path": ACCESS_EVIDENCE_PATH.relative_to(ROOT).as_posix(), "sha256": file_sha256(ACCESS_EVIDENCE_PATH)},
         },
         "source_pdf": source_evidence,
         "artifacts": {
@@ -343,6 +380,7 @@ def write_run_artifacts(*, out_dir: Path, protocol_path: Path, data_path: Path, 
         "trace_sha256": file_sha256(trace_path),
         "verdict": "BLOCKED",
         "reason_codes": reason_codes,
+        "access_state": data_gate.get("access_state"),
     }
 
 
