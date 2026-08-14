@@ -3,6 +3,17 @@ vars:
   TS_DIR: .
   DASHBOARD_DIR: src/dashboard
 tasks:
+  setup:
+    desc: Install locked project dependencies and the local prek hook
+    cmds:
+      - bun ci
+      - uv sync --locked
+      - uv run --no-sync prek install
+  setup:quality:
+    desc: Install only dependencies required by the fast quality gates
+    cmds:
+      - bun ci
+      - uv sync --locked --only-group dev
   data:fetch:
     cmds:
       - bun src/commands/data_fetch.ts {{.SYMBOL}}
@@ -33,21 +44,31 @@ tasks:
     cmds:
       - bun --hot src/dashboard/server.ts
   check:
+    desc: Non-mutating reliability gate used locally and in CI
     cmds:
+      - task: format:check
       - task: lint
-      - task: format
       - task: typecheck
       - task: test
       - task: data:snapshots:audit
   lint:
     cmds:
-      - bun ./node_modules/@biomejs/biome/bin/biome check src
+      - bun run lint
+      - uv run --no-sync ruff check src scripts tests
   format:
+    desc: Apply canonical TypeScript and Python formatting
     cmds:
-      - bun ./node_modules/@biomejs/biome/bin/biome format src --write
+      - bun run format
+      - uv run --no-sync ruff format src scripts tests
+  format:check:
+    desc: Verify formatting without changing the worktree
+    cmds:
+      - bun run format:check
+      - uv run --no-sync ruff format --check src scripts tests
   typecheck:
     cmds:
       - bun run typecheck
+      - uv run --no-sync pyrefly check
   test:
     cmds:
       - bun run test
