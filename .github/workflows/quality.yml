@@ -10,6 +10,7 @@ on:
       - "bun.lock"
       - "pyproject.toml"
       - "uv.lock"
+      - ".gitignore"
       - ".oxlintrc.json"
       - "config/biome.json"
       - "prek.toml"
