@@ -1,0 +1,812 @@
+{
+  "trace": [
+    {
+      "batch_constraint_penalty": 0.2819429039955139,
+      "batch_mean": 1.3157157897949219,
+      "batch_variance": 0.10102736204862595,
+      "iteration": 1,
+      "learning_rate": 0.001,
+      "penalized_loss": 2818.210205078125
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.332053303718567,
+      "batch_variance": 0.04737904667854309,
+      "iteration": 100,
+      "learning_rate": 0.0009901980198019802,
+      "penalized_loss": -1.2866168022155762
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3304390907287598,
+      "batch_variance": 0.04597526043653488,
+      "iteration": 200,
+      "learning_rate": 0.0009802970297029703,
+      "penalized_loss": -1.286348819732666
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3433750867843628,
+      "batch_variance": 0.05668937787413597,
+      "iteration": 300,
+      "learning_rate": 0.0009703960396039604,
+      "penalized_loss": -1.289009928703308
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.2972114086151123,
+      "batch_variance": 0.0411025770008564,
+      "iteration": 400,
+      "learning_rate": 0.0009604950495049505,
+      "penalized_loss": -1.2577940225601196
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3234652280807495,
+      "batch_variance": 0.051515862345695496,
+      "iteration": 500,
+      "learning_rate": 0.0009505940594059406,
+      "penalized_loss": -1.2740615606307983
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3329237699508667,
+      "batch_variance": 0.0376887321472168,
+      "iteration": 600,
+      "learning_rate": 0.0009406930693069307,
+      "penalized_loss": -1.2967802286148071
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3008537292480469,
+      "batch_variance": 0.045923445373773575,
+      "iteration": 700,
+      "learning_rate": 0.0009307920792079208,
+      "penalized_loss": -1.2568131685256958
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3352042436599731,
+      "batch_variance": 0.04622014984488487,
+      "iteration": 800,
+      "learning_rate": 0.0009208910891089109,
+      "penalized_loss": -1.2908791303634644
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3294535875320435,
+      "batch_variance": 0.05036213621497154,
+      "iteration": 900,
+      "learning_rate": 0.0009109900990099011,
+      "penalized_loss": -1.281156301498413
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3168306350708008,
+      "batch_variance": 0.04944794997572899,
+      "iteration": 1000,
+      "learning_rate": 0.0009010891089108911,
+      "penalized_loss": -1.2694100141525269
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3305646181106567,
+      "batch_variance": 0.05430985242128372,
+      "iteration": 1100,
+      "learning_rate": 0.0008911881188118812,
+      "penalized_loss": -1.2784814834594727
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.332253098487854,
+      "batch_variance": 0.051756396889686584,
+      "iteration": 1200,
+      "learning_rate": 0.0008812871287128713,
+      "penalized_loss": -1.282618761062622
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3264446258544922,
+      "batch_variance": 0.05332143232226372,
+      "iteration": 1300,
+      "learning_rate": 0.0008713861386138614,
+      "penalized_loss": -1.2753093242645264
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3291747570037842,
+      "batch_variance": 0.04942364990711212,
+      "iteration": 1400,
+      "learning_rate": 0.0008614851485148515,
+      "penalized_loss": -1.2817775011062622
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.316602349281311,
+      "batch_variance": 0.04530833289027214,
+      "iteration": 1500,
+      "learning_rate": 0.0008515841584158416,
+      "penalized_loss": -1.2731516361236572
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3127931356430054,
+      "batch_variance": 0.04201748967170715,
+      "iteration": 1600,
+      "learning_rate": 0.0008416831683168317,
+      "penalized_loss": -1.272498369216919
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.320415735244751,
+      "batch_variance": 0.054408326745033264,
+      "iteration": 1700,
+      "learning_rate": 0.0008317821782178218,
+      "penalized_loss": -1.2682381868362427
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3210023641586304,
+      "batch_variance": 0.04792465642094612,
+      "iteration": 1800,
+      "learning_rate": 0.0008218811881188119,
+      "penalized_loss": -1.2750426530838013
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3423763513565063,
+      "batch_variance": 0.053392067551612854,
+      "iteration": 1900,
+      "learning_rate": 0.000811980198019802,
+      "penalized_loss": -1.2911733388900757
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3158276081085205,
+      "batch_variance": 0.05106019228696823,
+      "iteration": 2000,
+      "learning_rate": 0.0008020792079207922,
+      "penalized_loss": -1.266860842704773
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.356543779373169,
+      "batch_variance": 0.05672931671142578,
+      "iteration": 2100,
+      "learning_rate": 0.0007921782178217822,
+      "penalized_loss": -1.3021403551101685
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3433308601379395,
+      "batch_variance": 0.052289340645074844,
+      "iteration": 2200,
+      "learning_rate": 0.0007822772277227723,
+      "penalized_loss": -1.2931853532791138
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3300567865371704,
+      "batch_variance": 0.04581523686647415,
+      "iteration": 2300,
+      "learning_rate": 0.0007723762376237624,
+      "penalized_loss": -1.2861199378967285
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3311288356781006,
+      "batch_variance": 0.04761573299765587,
+      "iteration": 2400,
+      "learning_rate": 0.0007624752475247525,
+      "penalized_loss": -1.2854653596878052
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3106966018676758,
+      "batch_variance": 0.04065795987844467,
+      "iteration": 2500,
+      "learning_rate": 0.0007525742574257426,
+      "penalized_loss": -1.2717056274414062
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3368713855743408,
+      "batch_variance": 0.044351980090141296,
+      "iteration": 2600,
+      "learning_rate": 0.0007426732673267327,
+      "penalized_loss": -1.2943378686904907
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3193870782852173,
+      "batch_variance": 0.045080479234457016,
+      "iteration": 2700,
+      "learning_rate": 0.0007327722772277228,
+      "penalized_loss": -1.27615487575531
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3486669063568115,
+      "batch_variance": 0.051339149475097656,
+      "iteration": 2800,
+      "learning_rate": 0.0007228712871287129,
+      "penalized_loss": -1.299432635307312
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3355602025985718,
+      "batch_variance": 0.049695901572704315,
+      "iteration": 2900,
+      "learning_rate": 0.000712970297029703,
+      "penalized_loss": -1.2879018783569336
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.32858145236969,
+      "batch_variance": 0.056490540504455566,
+      "iteration": 3000,
+      "learning_rate": 0.0007030693069306931,
+      "penalized_loss": -1.2744070291519165
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3164234161376953,
+      "batch_variance": 0.046774908900260925,
+      "iteration": 3100,
+      "learning_rate": 0.0006931683168316832,
+      "penalized_loss": -1.2715662717819214
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3295044898986816,
+      "batch_variance": 0.04349150136113167,
+      "iteration": 3200,
+      "learning_rate": 0.0006832673267326732,
+      "penalized_loss": -1.287796139717102
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3138067722320557,
+      "batch_variance": 0.05197719484567642,
+      "iteration": 3300,
+      "learning_rate": 0.0006733663366336633,
+      "penalized_loss": -1.263960599899292
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.308236002922058,
+      "batch_variance": 0.04065893217921257,
+      "iteration": 3400,
+      "learning_rate": 0.0006634653465346534,
+      "penalized_loss": -1.2692440748214722
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3341064453125,
+      "batch_variance": 0.04769357293844223,
+      "iteration": 3500,
+      "learning_rate": 0.0006535643564356436,
+      "penalized_loss": -1.2883683443069458
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3403689861297607,
+      "batch_variance": 0.04353109374642372,
+      "iteration": 3600,
+      "learning_rate": 0.0006436633663366336,
+      "penalized_loss": -1.2986226081848145
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3361722230911255,
+      "batch_variance": 0.04625801369547844,
+      "iteration": 3700,
+      "learning_rate": 0.0006337623762376238,
+      "penalized_loss": -1.2918107509613037
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.343960165977478,
+      "batch_variance": 0.051513493061065674,
+      "iteration": 3800,
+      "learning_rate": 0.0006238613861386139,
+      "penalized_loss": -1.2945587635040283
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3285422325134277,
+      "batch_variance": 0.04517421871423721,
+      "iteration": 3900,
+      "learning_rate": 0.000613960396039604,
+      "penalized_loss": -1.2852201461791992
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.324306607246399,
+      "batch_variance": 0.05428200960159302,
+      "iteration": 4000,
+      "learning_rate": 0.0006040594059405941,
+      "penalized_loss": -1.2722501754760742
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.312363624572754,
+      "batch_variance": 0.03684919327497482,
+      "iteration": 4100,
+      "learning_rate": 0.0005941584158415843,
+      "penalized_loss": -1.2770252227783203
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.316623330116272,
+      "batch_variance": 0.0498536191880703,
+      "iteration": 4200,
+      "learning_rate": 0.0005842574257425743,
+      "penalized_loss": -1.2688137292861938
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.324100136756897,
+      "batch_variance": 0.04299210011959076,
+      "iteration": 4300,
+      "learning_rate": 0.0005743564356435645,
+      "penalized_loss": -1.2828707695007324
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3195306062698364,
+      "batch_variance": 0.04400555416941643,
+      "iteration": 4400,
+      "learning_rate": 0.0005644554455445545,
+      "penalized_loss": -1.2773293256759644
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3316835165023804,
+      "batch_variance": 0.04125845432281494,
+      "iteration": 4500,
+      "learning_rate": 0.0005545544554455446,
+      "penalized_loss": -1.292116641998291
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3333001136779785,
+      "batch_variance": 0.041861213743686676,
+      "iteration": 4600,
+      "learning_rate": 0.0005446534653465347,
+      "penalized_loss": -1.2931551933288574
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3315300941467285,
+      "batch_variance": 0.050112366676330566,
+      "iteration": 4700,
+      "learning_rate": 0.0005347524752475248,
+      "penalized_loss": -1.2834722995758057
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3299717903137207,
+      "batch_variance": 0.053704578429460526,
+      "iteration": 4800,
+      "learning_rate": 0.0005248514851485149,
+      "penalized_loss": -1.2784690856933594
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3501092195510864,
+      "batch_variance": 0.05637437105178833,
+      "iteration": 4900,
+      "learning_rate": 0.000514950495049505,
+      "penalized_loss": -1.296046257019043
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3564503192901611,
+      "batch_variance": 0.050500597804784775,
+      "iteration": 5000,
+      "learning_rate": 0.0005050495049504951,
+      "penalized_loss": -1.3080202341079712
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3243107795715332,
+      "batch_variance": 0.047183625400066376,
+      "iteration": 5100,
+      "learning_rate": 0.0004951485148514852,
+      "penalized_loss": -1.2790616750717163
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3312195539474487,
+      "batch_variance": 0.04647548124194145,
+      "iteration": 5200,
+      "learning_rate": 0.00048524752475247526,
+      "penalized_loss": -1.2866495847702026
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3565688133239746,
+      "batch_variance": 0.05350594222545624,
+      "iteration": 5300,
+      "learning_rate": 0.00047534653465346535,
+      "penalized_loss": -1.3052566051483154
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3295618295669556,
+      "batch_variance": 0.04449000209569931,
+      "iteration": 5400,
+      "learning_rate": 0.00046544554455445555,
+      "penalized_loss": -1.2868958711624146
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3112508058547974,
+      "batch_variance": 0.04368080571293831,
+      "iteration": 5500,
+      "learning_rate": 0.00045554455445544553,
+      "penalized_loss": -1.269360899925232
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3358333110809326,
+      "batch_variance": 0.042940862476825714,
+      "iteration": 5600,
+      "learning_rate": 0.0004456435643564356,
+      "penalized_loss": -1.294653058052063
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3304111957550049,
+      "batch_variance": 0.05007181316614151,
+      "iteration": 5700,
+      "learning_rate": 0.0004357425742574258,
+      "penalized_loss": -1.2823923826217651
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3337111473083496,
+      "batch_variance": 0.04326189309358597,
+      "iteration": 5800,
+      "learning_rate": 0.0004258415841584159,
+      "penalized_loss": -1.2922229766845703
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3222410678863525,
+      "batch_variance": 0.043435245752334595,
+      "iteration": 5900,
+      "learning_rate": 0.0004159405940594059,
+      "penalized_loss": -1.2805867195129395
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.337193250656128,
+      "batch_variance": 0.04175776243209839,
+      "iteration": 6000,
+      "learning_rate": 0.0004060396039603961,
+      "penalized_loss": -1.297147512435913
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3367146253585815,
+      "batch_variance": 0.046962834894657135,
+      "iteration": 6100,
+      "learning_rate": 0.0003961386138613862,
+      "penalized_loss": -1.2916772365570068
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.315064549446106,
+      "batch_variance": 0.04098132997751236,
+      "iteration": 6200,
+      "learning_rate": 0.00038623762376237627,
+      "penalized_loss": -1.2757635116577148
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3270676136016846,
+      "batch_variance": 0.040845561772584915,
+      "iteration": 6300,
+      "learning_rate": 0.00037633663366336636,
+      "penalized_loss": -1.287896752357483
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3218050003051758,
+      "batch_variance": 0.0455792136490345,
+      "iteration": 6400,
+      "learning_rate": 0.00036643564356435645,
+      "penalized_loss": -1.2780945301055908
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3405228853225708,
+      "batch_variance": 0.044621456414461136,
+      "iteration": 6500,
+      "learning_rate": 0.00035653465346534654,
+      "penalized_loss": -1.2977309226989746
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3537163734436035,
+      "batch_variance": 0.04380832985043526,
+      "iteration": 6600,
+      "learning_rate": 0.00034663366336633674,
+      "penalized_loss": -1.311704158782959
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3125178813934326,
+      "batch_variance": 0.04555114731192589,
+      "iteration": 6700,
+      "learning_rate": 0.0003367326732673267,
+      "penalized_loss": -1.2688343524932861
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3239696025848389,
+      "batch_variance": 0.03703031688928604,
+      "iteration": 6800,
+      "learning_rate": 0.0003268316831683168,
+      "penalized_loss": -1.2884575128555298
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3203295469284058,
+      "batch_variance": 0.047251105308532715,
+      "iteration": 6900,
+      "learning_rate": 0.000316930693069307,
+      "penalized_loss": -1.2750157117843628
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3331927061080933,
+      "batch_variance": 0.049280352890491486,
+      "iteration": 7000,
+      "learning_rate": 0.0003070297029702971,
+      "penalized_loss": -1.2859328985214233
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.32789945602417,
+      "batch_variance": 0.03610483556985855,
+      "iteration": 7100,
+      "learning_rate": 0.0002971287128712871,
+      "penalized_loss": -1.2932748794555664
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.309727430343628,
+      "batch_variance": 0.04273007810115814,
+      "iteration": 7200,
+      "learning_rate": 0.0002872277227722773,
+      "penalized_loss": -1.2687492370605469
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.314690113067627,
+      "batch_variance": 0.04096067324280739,
+      "iteration": 7300,
+      "learning_rate": 0.0002773267326732674,
+      "penalized_loss": -1.2754088640213013
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3411403894424438,
+      "batch_variance": 0.047000009566545486,
+      "iteration": 7400,
+      "learning_rate": 0.00026742574257425746,
+      "penalized_loss": -1.2960673570632935
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3273332118988037,
+      "batch_variance": 0.04942826181650162,
+      "iteration": 7500,
+      "learning_rate": 0.00025752475247524755,
+      "penalized_loss": -1.2799315452575684
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3355371952056885,
+      "batch_variance": 0.04364718496799469,
+      "iteration": 7600,
+      "learning_rate": 0.00024762376237623764,
+      "penalized_loss": -1.2936795949935913
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3178484439849854,
+      "batch_variance": 0.04458453133702278,
+      "iteration": 7700,
+      "learning_rate": 0.00023772277227722773,
+      "penalized_loss": -1.2750918865203857
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3200894594192505,
+      "batch_variance": 0.045580871403217316,
+      "iteration": 7800,
+      "learning_rate": 0.00022782178217821793,
+      "penalized_loss": -1.2763774394989014
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3353029489517212,
+      "batch_variance": 0.043614767491817474,
+      "iteration": 7900,
+      "learning_rate": 0.00021792079207920791,
+      "penalized_loss": -1.2934763431549072
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.336908221244812,
+      "batch_variance": 0.04078094661235809,
+      "iteration": 8000,
+      "learning_rate": 0.000208019801980198,
+      "penalized_loss": -1.2977993488311768
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3217741250991821,
+      "batch_variance": 0.041044529527425766,
+      "iteration": 8100,
+      "learning_rate": 0.0001981188118811882,
+      "penalized_loss": -1.2824124097824097
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.342743158340454,
+      "batch_variance": 0.048530686646699905,
+      "iteration": 8200,
+      "learning_rate": 0.0001882178217821783,
+      "penalized_loss": -1.2962021827697754
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3441799879074097,
+      "batch_variance": 0.0365290641784668,
+      "iteration": 8300,
+      "learning_rate": 0.00017831683168316828,
+      "penalized_loss": -1.3091486692428589
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3385251760482788,
+      "batch_variance": 0.0398431234061718,
+      "iteration": 8400,
+      "learning_rate": 0.00016841584158415847,
+      "penalized_loss": -1.3003156185150146
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.358083724975586,
+      "batch_variance": 0.04537808150053024,
+      "iteration": 8500,
+      "learning_rate": 0.00015851485148514856,
+      "penalized_loss": -1.3145661354064941
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3389041423797607,
+      "batch_variance": 0.04270709678530693,
+      "iteration": 8600,
+      "learning_rate": 0.00014861386138613865,
+      "penalized_loss": -1.2979480028152466
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3441834449768066,
+      "batch_variance": 0.03840508311986923,
+      "iteration": 8700,
+      "learning_rate": 0.00013871287128712875,
+      "penalized_loss": -1.3073530197143555
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3121399879455566,
+      "batch_variance": 0.044324811547994614,
+      "iteration": 8800,
+      "learning_rate": 0.00012881188118811884,
+      "penalized_loss": -1.2696324586868286
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.324122667312622,
+      "batch_variance": 0.04700552299618721,
+      "iteration": 8900,
+      "learning_rate": 0.00011891089108910893,
+      "penalized_loss": -1.2790443897247314
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3384569883346558,
+      "batch_variance": 0.042594991624355316,
+      "iteration": 9000,
+      "learning_rate": 0.00010900990099009912,
+      "penalized_loss": -1.2976083755493164
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.338222622871399,
+      "batch_variance": 0.04759041965007782,
+      "iteration": 9100,
+      "learning_rate": 9.91089108910891e-05,
+      "penalized_loss": -1.2925834655761719
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.326438546180725,
+      "batch_variance": 0.04205390438437462,
+      "iteration": 9200,
+      "learning_rate": 8.92079207920792e-05,
+      "penalized_loss": -1.2861088514328003
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3361175060272217,
+      "batch_variance": 0.03944298252463341,
+      "iteration": 9300,
+      "learning_rate": 7.93069306930694e-05,
+      "penalized_loss": -1.2982916831970215
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3395553827285767,
+      "batch_variance": 0.03794737532734871,
+      "iteration": 9400,
+      "learning_rate": 6.940594059405948e-05,
+      "penalized_loss": -1.3031638860702515
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3231154680252075,
+      "batch_variance": 0.036473385989665985,
+      "iteration": 9500,
+      "learning_rate": 5.950495049504947e-05,
+      "penalized_loss": -1.288137435913086
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3343371152877808,
+      "batch_variance": 0.03447801619768143,
+      "iteration": 9600,
+      "learning_rate": 4.9603960396039665e-05,
+      "penalized_loss": -1.3012727499008179
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.323066234588623,
+      "batch_variance": 0.029231129214167595,
+      "iteration": 9700,
+      "learning_rate": 3.9702970297029756e-05,
+      "penalized_loss": -1.295033574104309
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.35257887840271,
+      "batch_variance": 0.038228631019592285,
+      "iteration": 9800,
+      "learning_rate": 2.9801980198019737e-05,
+      "penalized_loss": -1.3159176111221313
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3313041925430298,
+      "batch_variance": 0.03530071675777435,
+      "iteration": 9900,
+      "learning_rate": 1.9900990099009936e-05,
+      "penalized_loss": -1.2974507808685303
+    },
+    {
+      "batch_constraint_penalty": 0.0,
+      "batch_mean": 1.3356921672821045,
+      "batch_variance": 0.0423680916428566,
+      "iteration": 10000,
+      "learning_rate": 1.0000000000000026e-05,
+      "penalized_loss": -1.2950611114501953
+    }
+  ]
+}
