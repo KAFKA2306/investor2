@@ -47,12 +47,14 @@ jobs:
           fi
 
       - name: Set up Python
-        if: steps.evidence.outputs.present != 'true'
         uses: actions/setup-python@v7
         with:
           python-version: "3.12"
 
-      - name: Install locked runtime
+      - name: Install verification dependency
+        run: python -m pip install --disable-pip-version-check pytest
+
+      - name: Install locked empirical runtime
         if: steps.evidence.outputs.present != 'true'
         run: python -m pip install --disable-pip-version-check "tensorflow==2.21.0" "numpy<2.4"
 
