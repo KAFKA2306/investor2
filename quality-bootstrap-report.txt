@@ -3,7 +3,7 @@
 bun install v1.3.13 (bf2e2cec)
 Saved lockfile
 
-Saved bun.lock (318 packages) [5.00ms]
+Saved bun.lock (318 packages) [7.00ms]
 exit_code=0
 
 ===== bun ci =====
@@ -34,60 +34,19 @@ bun install v1.3.13 (bf2e2cec)
 + xml2js@0.6.2
 + zod@4.3.6
 
-248 packages installed [5.46s]
+248 packages installed [5.26s]
 exit_code=0
 
 ===== biome write changed =====
-$ biome check --write --config-path=config/biome.json --changed --since=main
-Checked 0 files in 309µs. No fixes applied.
-check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  × No files were processed in the specified paths.
-  
-  i Check your biome.json or biome.jsonc to ensure the paths are not ignored by the configuration.
-  
-  i These paths were provided but ignored:
-  
-  ! The list is empty.
-  
-
-error: script "format" exited with code 1
+error: Script not found "format"
 exit_code=1
 
 ===== biome changed check =====
-$ biome ci --config-path=config/biome.json --changed --since=main
-Checked 0 files in 277µs. No fixes applied.
-ci ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-  × No files were processed in the specified paths.
-  
-  i Check your biome.json or biome.jsonc to ensure the paths are not ignored by the configuration.
-  
-  i These paths were provided but ignored:
-  
-  ! The list is empty.
-  
-
-error: script "format:check" exited with code 1
+error: Script not found "format:check"
 exit_code=1
 
 ===== oxlint =====
-$ oxlint src tests scripts
-::warning file=src/commands/fetch_batch.ts,line=6,endLine=6,col=7,endColumn=14,title=eslint(no-unused-vars)::Variable '_config' is declared but never used.
-::warning file=src/commands/sector_spillover_backtest.ts,line=128,endLine=128,col=14,endColumn=15,title=eslint(no-unused-vars)::Variable '_' is declared but never used.
-::warning file=src/commands/research_1_quality.ts,line=25,endLine=25,col=11,endColumn=15,title=eslint(no-unused-vars)::Variable '_pbr' is declared but never used.
-::warning file=src/dashboard/server.ts,line=76,endLine=76,col=10,endColumn=29,title=eslint(no-unused-vars)::Function '_getMarketDataStats' is declared but never used.
-::warning file=src/dashboard/server.ts,line=118,endLine=118,col=10,endColumn=25,title=eslint(no-unused-vars)::Function '_getEdinetStats' is declared but never used.
-::warning file=src/dashboard/server.ts,line=140,endLine=140,col=10,endColumn=25,title=eslint(no-unused-vars)::Function '_getSqliteStats' is declared but never used.
-::warning file=src/dashboard/server.ts,line=163,endLine=163,col=10,endColumn=25,title=eslint(no-unused-vars)::Function '_getLastUpdated' is declared but never used.
-::warning file=src/dashboard/server.ts,line=471,endLine=471,col=9,endColumn=16,title=eslint(no-unused-vars)::Variable '_output' is declared but never used.
-::warning file=src/preprocess/sector_spillover.ts,line=67,endLine=67,col=9,endColumn=11,title=eslint(no-unused-vars)::Variable '_D' is declared but never used.
-::warning file=src/preprocess/sector_spillover.ts,line=416,endLine=416,col=8,endColumn=18,title=eslint(no-unused-vars)::Variable '_jpSectors' is declared but never used.
-::warning file=src/preprocess/sector_spillover.ts,line=417,endLine=417,col=8,endColumn=18,title=eslint(no-unused-vars)::Variable '_usSectors' is declared but never used.
-
-Found 11 warnings and 0 errors.
-Finished in 14ms on 57 files with 96 rules using 4 threads.
-error: script "lint" exited with code 1
+error: Script not found "lint"
 exit_code=1
 
 ===== typescript =====
@@ -104,11 +63,11 @@ bun test v1.3.13 (bf2e2cec)
 ::endgroup::
 
 ::group::tests/hypothesis_lab.test.ts:
-(pass) hypothesis lab > validates the pre-registered hypothesis and frozen MCP capture [8.00ms]
-(pass) hypothesis lab > marks the RION deep dive eligible only after all three gates pass [3.00ms]
-(pass) hypothesis lab > does not confuse cheap growth with the registered dislocation alpha [1.00ms]
-(pass) hypothesis lab > fails closed when seller-flow evidence is removed
-(pass) hypothesis lab > rejects the underlying-reality gate when a required growth leg turns negative [1.00ms]
+(pass) hypothesis lab > validates the pre-registered hypothesis and frozen MCP capture [6.00ms]
+(pass) hypothesis lab > marks the RION deep dive eligible only after all three gates pass [4.00ms]
+(pass) hypothesis lab > does not confuse cheap growth with the registered dislocation alpha
+(pass) hypothesis lab > fails closed when seller-flow evidence is removed [1.00ms]
+(pass) hypothesis lab > rejects the underlying-reality gate when a required growth leg turns negative
 
 ::endgroup::
 
@@ -131,46 +90,28 @@ bun test v1.3.13 (bf2e2cec)
  14 pass
  0 fail
  26 expect() calls
-Ran 14 tests across 4 files. [93.00ms]
+Ran 14 tests across 4 files. [95.00ms]
 exit_code=0
 
 ===== uv lock =====
 Using CPython 3.12.13 interpreter at: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3
-Resolved 466 packages in 4.53s
-Removed fastapi v0.135.1
-Removed fschat v0.2.36
-Removed latex2mathml v3.78.1
-Removed markdown2 v2.5.5
-Removed msgpack v1.1.2
-Removed nh3 v0.3.3
-Removed ninja v1.13.0
-Removed nodeenv v1.10.0
-Added prek v0.4.11
-Added pyrefly v1.1.1
-Removed pyright v1.1.408
-Removed ray v2.54.0
-Removed sentencepiece v0.2.1
-Removed shortuuid v1.0.13
-Removed svgwrite v1.4.3
-Removed vllm v0.1.2
-Removed wavedrom v2.0.3.post3
-Removed xformers v0.0.35
+Resolved 466 packages in 0.91ms
 exit_code=0
 
 ===== uv quality sync =====
 Using CPython 3.12.13 interpreter at: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3
 Creating virtual environment at: .venv
-Resolved 466 packages in 0.91ms
+Resolved 466 packages in 0.81ms
 Downloading pygments (1.2MiB)
-Downloading pyrefly (13.3MiB)
-Downloading ruff (10.7MiB)
 Downloading prek (6.0MiB)
- Downloaded pygments
+Downloading ruff (10.7MiB)
+Downloading pyrefly (13.3MiB)
  Downloaded prek
  Downloaded ruff
  Downloaded pyrefly
-Prepared 8 packages in 608ms
-Installed 8 packages in 8ms
+ Downloaded pygments
+Prepared 8 packages in 393ms
+Installed 8 packages in 15ms
  + iniconfig==2.3.0
  + packaging==26.0
  + pluggy==1.6.0
@@ -183,490 +124,8 @@ exit_code=0
 
 ===== pyrefly baseline =====
  INFO Checking project configured at `/home/runner/work/investor2/investor2/pyproject.toml`
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:24
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                        ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:24
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                        ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:40
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                                        ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:40
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                                        ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:49
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                                                 ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> scripts/audit_input_ledger.py:23:49
-   |
-23 | def audit_entry(entry: dict, registry: dict) -> dict:
-   |                                                 ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-  --> scripts/build_arxiv_stage_b_inputs.py:55:24
-   |
-55 |     records, blocked = [], []
-   |                        ^^
-   |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-  --> scripts/build_arxiv_stage_b_inputs.py:55:28
-   |
-55 |     records, blocked = [], []
-   |                            ^^
-   |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-   --> scripts/daily_trump_chart.py:129:41
-    |
-129 |         "unexpected_transaction_types": [],
-    |                                         ^^
-    |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-  --> scripts/pin_arxiv_versions_by_cutoff.py:78:13
-   |
-78 |     later = [] if selected is None else [
-   |             ^^
-   |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR `autolabel_acc` is missing an annotation for parameter `rects` [implicit-any-parameter]
-  --> scripts/plot_benchmark.py:95:19
-   |
-95 | def autolabel_acc(rects, ax):
-   |                   ^^^^^
-   |
-ERROR `autolabel_acc` is missing an annotation for parameter `ax` [implicit-any-parameter]
-  --> scripts/plot_benchmark.py:95:26
-   |
-95 | def autolabel_acc(rects, ax):
-   |                          ^^
-   |
-ERROR `autolabel_f1` is missing an annotation for parameter `rects` [implicit-any-parameter]
-   --> scripts/plot_benchmark.py:104:18
-    |
-104 | def autolabel_f1(rects, ax):
-    |                  ^^^^^
-    |
-ERROR `autolabel_f1` is missing an annotation for parameter `ax` [implicit-any-parameter]
-   --> scripts/plot_benchmark.py:104:25
-    |
-104 | def autolabel_f1(rects, ax):
-    |                         ^^
-    |
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-   --> scripts/run_lim_1904_04912_empirical.py:213:21
-    |
-213 |         contracts = []
-    |                     ^^
-    |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-   --> scripts/run_zhang_1911_10107_empirical.py:213:21
-    |
-213 |         contracts = []
-    |                     ^^
-    |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Argument `Any | None` is not assignable to parameter `iterable` with type `Iterable[Any]` in function `enumerate.__new__` [bad-argument-type]
-  --> scripts/validate_research_dashboard.py:52:36
-   |
-52 |     for index, record in enumerate(records):
-   |                                    ^^^^^^^
-   |
-  Protocol `Iterable` requires attribute `__iter__`
-  The declared type does not allow `None`. Consider narrowing the value with an `is not None` check.
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-  --> scripts/validate_research_dashboard.py:70:13
-   |
-70 |     require(summary.get("tested_hypotheses") == len(records), "tested_hypotheses does not match repository_results")
-   |             ^^^^^^^^^^^
-   |
-ERROR Argument `Any | None` is not assignable to parameter `obj` with type `Sized` in function `len` [bad-argument-type]
-  --> scripts/validate_research_dashboard.py:70:53
-   |
-70 |     require(summary.get("tested_hypotheses") == len(records), "tested_hypotheses does not match repository_results")
-   |                                                     ^^^^^^^
-   |
-  Protocol `Sized` requires attribute `__len__`
-  The declared type does not allow `None`. Consider narrowing the value with an `is not None` check.
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-  --> scripts/validate_research_dashboard.py:71:13
-   |
-71 |     require(summary.get("confirmed") == verdict_counts["CONFIRMED"], "confirmed summary does not match records")
-   |             ^^^^^^^^^^^
-   |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-  --> scripts/validate_research_dashboard.py:72:13
-   |
-72 |     require(summary.get("not_confirmed") == verdict_counts["NOT_CONFIRMED"], "not_confirmed summary does not match records")
-   |             ^^^^^^^^^^^
-   |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-  --> scripts/validate_research_dashboard.py:76:21
-   |
-76 |     paper_summary = paper_queue.get("summary")
-   |                     ^^^^^^^^^^^^^^^
-   |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-  --> scripts/validate_research_dashboard.py:77:14
-   |
-77 |     papers = paper_queue.get("papers")
-   |              ^^^^^^^^^^^^^^^
-   |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:121:17
-    |
-121 |         require(summary.get(f"papers_2021_{key}") == value, f"papers_2021_{key} summary mismatch")
-    |                 ^^^^^^^^^^^
-    |
-ERROR Type `None` is not iterable [not-iterable]
-   --> scripts/validate_research_dashboard.py:125:91
-    |
-125 |     claim_ids = [require_nonempty_string(item.get("id"), "external_claim.id") for item in claims]
-    |                                                                                           ^^^^^^
-    |
-ERROR Type `None` is not iterable [not-iterable]
-   --> scripts/validate_research_dashboard.py:127:77
-    |
-127 |     unverified = sum(item.get("evidence_state") == "UNVERIFIED" for item in claims)
-    |                                                                             ^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:128:13
-    |
-128 |     require(summary.get("external_claims_unverified") == unverified, "external claim summary does not match records")
-    |             ^^^^^^^^^^^
-    |
-ERROR Argument `Literal[False] | dict[Any, Any]` is not assignable to parameter `condition` with type `bool` in function `require` [bad-argument-type]
-   --> scripts/validate_research_dashboard.py:131:13
-    |
-131 |     require(isinstance(generated_from, dict) and generated_from, "generated_from must be a non-empty object")
-    |             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `items` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:132:96
-    |
-132 |     evidence_refs = [require_nonempty_string(value, f"generated_from.{key}") for key, value in generated_from.items()]
-    |                                                                                                ^^^^^^^^^^^^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:137:15
-    |
-137 |     studies = repeated.get("studies")
-    |               ^^^^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:139:13
-    |
-139 |     require(repeated.get("study_count") == len(studies), "repeated_validation.study_count does not match studies")
-    |             ^^^^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:140:13
-    |
-140 |     require(repeated.get("all_verdicts_stable") is True, "repeated validation verdicts are unstable")
-    |             ^^^^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:144:40
-    |
-144 |     revision = require_nonempty_string(build.get("code_sha"), "build.code_sha")
-    |                                        ^^^^^^^^^
-    |
-ERROR Object of class `NoneType` has no attribute `get` [missing-attribute]
-   --> scripts/validate_research_dashboard.py:145:38
-    |
-145 |     run_id = require_nonempty_string(build.get("run_id"), "build.run_id")
-    |                                      ^^^^^^^^^
-    |
-ERROR `system_predict_ablation` is missing an annotation for parameter `row` [implicit-any-parameter]
-  --> src/commands/bench_ablation.py:20:29
-   |
-20 | def system_predict_ablation(row, mode):
-   |                             ^^^
-   |
-ERROR `system_predict_ablation` is missing an annotation for parameter `mode` [implicit-any-parameter]
-  --> src/commands/bench_ablation.py:20:34
-   |
-20 | def system_predict_ablation(row, mode):
-   |                                  ^^^^
-   |
-ERROR `run_ablation` is missing an annotation for parameter `samples` [implicit-any-parameter]
-  --> src/commands/bench_ablation.py:64:18
-   |
-64 | def run_ablation(samples=20):
-   |                  ^^^^^^^
-   |
-ERROR `extract_features` is missing an annotation for parameter `df` [implicit-any-parameter]
-  --> src/commands/bench_baseline.py:11:22
-   |
-11 | def extract_features(df):
-   |                      ^^
-   |
-ERROR `run_baseline` is missing an annotation for parameter `task` [implicit-any-parameter]
-  --> src/commands/bench_baseline.py:29:18
-   |
-29 | def run_baseline(task="earnings_forecast"):
-   |                  ^^^^
-   |
-ERROR `system_predict` is missing an annotation for parameter `row` [implicit-any-parameter]
-  --> src/commands/bench_eval.py:26:20
-   |
-26 | def system_predict(row, task):
-   |                    ^^^
-   |
-ERROR `system_predict` is missing an annotation for parameter `task` [implicit-any-parameter]
-  --> src/commands/bench_eval.py:26:25
-   |
-26 | def system_predict(row, task):
-   |                         ^^^^
-   |
-ERROR `print_section` is missing an annotation for parameter `title` [implicit-any-parameter]
- --> src/commands/edinet_bench_stats.py:4:19
-  |
-4 | def print_section(title):
-  |                   ^^^^^
-  |
-ERROR `analyze_dataset` is missing an annotation for parameter `name` [implicit-any-parameter]
- --> src/commands/edinet_bench_stats.py:8:21
-  |
-8 | def analyze_dataset(name, df, label_col):
-  |                     ^^^^
-  |
-ERROR `analyze_dataset` is missing an annotation for parameter `df` [implicit-any-parameter]
- --> src/commands/edinet_bench_stats.py:8:27
-  |
-8 | def analyze_dataset(name, df, label_col):
-  |                           ^^
-  |
-ERROR `analyze_dataset` is missing an annotation for parameter `label_col` [implicit-any-parameter]
- --> src/commands/edinet_bench_stats.py:8:31
-  |
-8 | def analyze_dataset(name, df, label_col):
-  |                               ^^^^^^^^^
-  |
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:59:45
-   |
-59 | def record(arxiv_id: str = "2101.00002") -> dict:
-   |                                             ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:59:45
-   |
-59 | def record(arxiv_id: str = "2101.00002") -> dict:
-   |                                             ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:72:35
-   |
-72 | def snapshot_entry(count: int) -> dict:
-   |                                   ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:72:35
-   |
-72 | def snapshot_entry(count: int) -> dict:
-   |                                   ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:84:25
-   |
-84 | def build(records: list[dict]) -> dict:
-   |                         ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:84:25
-   |
-84 | def build(records: list[dict]) -> dict:
-   |                         ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:84:35
-   |
-84 | def build(records: list[dict]) -> dict:
-   |                                   ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_qfin_selection.py:84:35
-   |
-84 | def build(records: list[dict]) -> dict:
-   |                                   ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:36:6
-   |
-36 | ) -> dict:
-   |      ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:36:6
-   |
-36 | ) -> dict:
-   |      ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:49:26
-   |
-49 | def selection(rows: list[dict]) -> dict:
-   |                          ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:49:26
-   |
-49 | def selection(rows: list[dict]) -> dict:
-   |                          ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:49:36
-   |
-49 | def selection(rows: list[dict]) -> dict:
-   |                                    ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:49:36
-   |
-49 | def selection(rows: list[dict]) -> dict:
-   |                                    ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:69:22
-   |
-69 | def build(rows: list[dict], entries: dict[str, dict[str, str]]) -> dict:
-   |                      ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:69:22
-   |
-69 | def build(rows: list[dict], entries: dict[str, dict[str, str]]) -> dict:
-   |                      ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:69:68
-   |
-69 | def build(rows: list[dict], entries: dict[str, dict[str, str]]) -> dict:
-   |                                                                    ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_arxiv_version_pins.py:69:68
-   |
-69 | def build(rows: list[dict], entries: dict[str, dict[str, str]]) -> dict:
-   |                                                                    ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_daily_trump_chart.py:12:26
-   |
-12 | def fixture_payload() -> dict:
-   |                          ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_daily_trump_chart.py:12:26
-   |
-12 | def fixture_payload() -> dict:
-   |                          ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_edinetdb_projection_consumer.py:17:28
-   |
-17 | def sample_projection() -> dict:
-   |                            ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_edinetdb_projection_consumer.py:17:28
-   |
-17 | def sample_projection() -> dict:
-   |                            ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot infer type of empty container; it will be treated as containing `Any` [implicit-any-empty-container]
-   --> tests/test_public_research_manifest.py:118:33
-    |
-118 |     public["external_claims"] = []
-    |                                 ^^
-    |
-  Consider adding a type annotation or initializing with a non-empty value
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_snapshot_store.py:23:45
-   |
-23 | def write_catalog(path: Path, entries: list[dict]) -> None:
-   |                                             ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_snapshot_store.py:23:45
-   |
-23 | def write_catalog(path: Path, entries: list[dict]) -> None:
-   |                                             ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Argument `ModuleSpec | None` is not assignable to parameter `spec` with type `ModuleSpec` in function `_frozen_importlib.module_from_spec` [bad-argument-type]
- --> tests/test_validate_frozen_manifest.py:8:42
-  |
-8 | MODULE = importlib.util.module_from_spec(SPEC)
-  |                                          ^^^^
-  |
-  The declared type does not allow `None`. Consider narrowing the value with an `is not None` check.
-ERROR Cannot determine the type parameter `_KT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_warin_empirical_evidence.py:33:59
-   |
-33 | def make_run(directory: Path, verdict: str = "FAILED") -> dict:
-   |                                                           ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
-ERROR Cannot determine the type parameter `_VT` for generic class `dict` [implicit-any-type-argument]
-  --> tests/test_warin_empirical_evidence.py:33:59
-   |
-33 | def make_run(directory: Path, verdict: str = "FAILED") -> dict:
-   |                                                           ^^^^
-   |
-  Either specify the type argument explicitly, or specify a default for the type variable.
- INFO 73 errors (1 suppressed)
-exit_code=1
+ INFO 0 errors (1 suppressed)
+exit_code=0
 
 ===== pyrefly check =====
  INFO Checking project configured at `/home/runner/work/investor2/investor2/pyproject.toml`
