@@ -1,0 +1,1902 @@
+
+===== bun lock =====
+bun install v1.3.13 (bf2e2cec)
+Resolving dependencies
+Resolved, downloaded and extracted [126]
+Saved lockfile
+
+Saved bun.lock (318 packages) [626.00ms]
+exit_code=0
+
+===== uv lock =====
+Using CPython 3.12.13 interpreter at: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3
+  × Failed to build `vllm==0.1.2`
+  ├─▶ The build backend returned an error
+  ╰─▶ Call to `setuptools.build_meta.build_wheel` failed (exit status: 1)
+
+      [stderr]
+      /home/runner/work/_temp/setup-uv-cache/builds-v0/.tmp0KUl8D/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368:
+      UserWarning: Failed to initialize NumPy: No
+      module named 'numpy' (Triggered internally at
+      /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+        cpu = _conversion_method_template(device=torch.device("cpu"))
+      Traceback (most recent call last):
+        File "<string>", line 14, in <module>
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmp0KUl8D/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 333, in get_requires_for_build_wheel
+          return self._get_build_requires(config_settings, requirements=[])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmp0KUl8D/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 301, in _get_build_requires
+          self.run_setup()
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmp0KUl8D/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 317, in run_setup
+          exec(code, locals())  # noqa: S102 # exec is intentional here
+          ^^^^^^^^^^^^^^^^^^^^
+        File "<string>", line 24, in <module>
+      RuntimeError: Cannot find CUDA_HOME. CUDA must be available in order to
+      build the package.
+
+
+hint: `vllm` (v0.1.2) was included because `finance-investor` (v0.1.0) depends on `vllm`
+hint: Build failures usually indicate a problem with the package or the build environmentexit_code=1
+
+===== uv quality sync =====
+Using CPython 3.12.13 interpreter at: /opt/hostedtoolcache/Python/3.12.13/x64/bin/python3
+Creating virtual environment at: .venv
+  × Failed to build `vllm==0.1.2`
+  ├─▶ The build backend returned an error
+  ╰─▶ Call to `setuptools.build_meta.build_wheel` failed (exit status: 1)
+
+      [stderr]
+      /home/runner/work/_temp/setup-uv-cache/builds-v0/.tmpvjxFSn/lib/python3.12/site-packages/torch/_subclasses/functional_tensor.py:368:
+      UserWarning: Failed to initialize NumPy: No
+      module named 'numpy' (Triggered internally at
+      /__w/pytorch/pytorch/torch/csrc/utils/tensor_numpy.cpp:84.)
+        cpu = _conversion_method_template(device=torch.device("cpu"))
+      Traceback (most recent call last):
+        File "<string>", line 14, in <module>
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmpvjxFSn/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 333, in get_requires_for_build_wheel
+          return self._get_build_requires(config_settings, requirements=[])
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmpvjxFSn/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 301, in _get_build_requires
+          self.run_setup()
+        File
+      "/home/runner/work/_temp/setup-uv-cache/builds-v0/.tmpvjxFSn/lib/python3.12/site-packages/setuptools/build_meta.py",
+      line 317, in run_setup
+          exec(code, locals())  # noqa: S102 # exec is intentional here
+          ^^^^^^^^^^^^^^^^^^^^
+        File "<string>", line 24, in <module>
+      RuntimeError: Cannot find CUDA_HOME. CUDA must be available in order to
+      build the package.
+
+
+hint: `vllm` (v0.1.2) was included because `finance-investor` (v0.1.0) depends on `vllm`
+hint: Build failures usually indicate a problem with the package or the build environmentexit_code=1
+
+===== bun ci =====
+bun install v1.3.13 (bf2e2cec)
+
++ @biomejs/biome@2.4.6
++ @playwright/test@1.58.2
++ @types/adm-zip@0.5.7
++ @types/better-sqlite3@7.6.13
++ @types/bun@1.3.10
++ @types/js-yaml@4.0.9
++ @types/node@25.4.0
++ @types/xml2js@0.4.14
++ oxlint@1.76.0
++ tsx@4.21.0
++ typescript@7.0.2
++ @google/genai@1.44.0
++ @polymarket/clob-client@5.8.0
++ adm-zip@0.5.16
++ apache-arrow@21.1.0
++ better-sqlite3@12.8.0
++ discord.js@14.27.0
++ ethers@6.16.0
++ hono@4.12.8
++ js-yaml@4.1.1
++ pg@8.20.0
++ rxjs@7.8.2
++ xml2js@0.6.2
++ zod@4.3.6
+
+248 packages installed [4.37s]
+exit_code=0
+
+===== biome =====
+$ biome check --config-path=config/biome.json src tests scripts
+src/commands/_config.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+    4 4 │   
+    5 5 │   export const config = ConfigSchema.parse(
+    6   │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+      6 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+    7 7 │   );
+    8 8 │   
+  
+
+src/commands/alpha_swarm_verification.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+      2   2 │   import { getStockPriceHistory } from "../io/stock_data_fetcher";
+      3   3 │   import {
+      4     │ - → generateSpilloverSignals,
+      5     │ - → getDefaultUSToJPMapping,
+      6     │ - → RegularizedPCA,
+          4 │ + ··generateSpilloverSignals,
+          5 │ + ··getDefaultUSToJPMapping,
+          6 │ + ··RegularizedPCA,
+      7   7 │   } from "../preprocess/sector_spillover";
+      8   8 │   import { config } from "./_config";
+      9   9 │   
+     10  10 │   async function verifyAlphaSwarm() {
+     11     │ - → console.log(
+     12     │ - → → "🚀·[Alpha·Swarm·Verification]·Starting·Deep·Empirical·Research...",
+     13     │ - → );
+         11 │ + ··console.log(
+         12 │ + ····"🚀·[Alpha·Swarm·Verification]·Starting·Deep·Empirical·Research...",
+         13 │ + ··);
+     14  14 │   
+     15     │ - → const·fromDate·=·"2024-01-03";
+     16     │ - → const·toDate·=·"2024-06-28";
+     17     │ - → const·TX_COST·=·0.005;·//·50bps
+     18     │ - → const·TAX·=·0.2;
+         15 │ + ··const·fromDate·=·"2024-01-03";
+         16 │ + ··const·toDate·=·"2024-06-28";
+         17 │ + ··const·TX_COST·=·0.005;·//·50bps
+         18 │ + ··const·TAX·=·0.2;
+     19  19 │   
+     20     │ - → //·1.·Get·Macro·Signals·(US·->·JP·Sectors)
+     21     │ - → const·sectorReturns·=·await·getSectorReturns(fromDate,·toDate);
+     22     │ - → const·{·dates,·sectors,·matrix·}·=·pivotToMatrix(sectorReturns,·"default");
+     23     │ - → const·pca·=·new·RegularizedPCA(3,·0.1,·100);
+     24     │ - → const·{·scores·}·=·pca.fit(matrix);
+     25     │ - → const·usSectorNames·=·config.sector_spillover?.us_sectors·??·[];
+     26     │ - → const·usIndices·=·usSectorNames
+     27     │ - → → .map((name)·=>·sectors.indexOf(name))
+     28     │ - → → .filter((i)·=>·i·!==·-1);
+     29     │ - → const·usReturnsMatrix·=·matrix.map((row)·=>·usIndices.map((i)·=>·row[i]));
+     30     │ - → const·usToJpMapping·=·getDefaultUSToJPMapping();
+     31     │ - → const·jpSectors·=·Object.keys(usToJpMapping);
+         20 │ + ··//·1.·Get·Macro·Signals·(US·->·JP·Sectors)
+         21 │ + ··const·sectorReturns·=·await·getSectorReturns(fromDate,·toDate);
+         22 │ + ··const·{·dates,·sectors,·matrix·}·=·pivotToMatrix(sectorReturns,·"default");
+         23 │ + ··const·pca·=·new·RegularizedPCA(3,·0.1,·100);
+         24 │ + ··const·{·scores·}·=·pca.fit(matrix);
+         25 │ + ··const·usSectorNames·=·config.sector_spillover?.us_sectors·??·[];
+         26 │ + ··const·usIndices·=·usSectorNames
+         27 │ + ····.map((name)·=>·sectors.indexOf(name))
+         28 │ + ····.filter((i)·=>·i·!==·-1);
+         29 │ + ··const·usReturnsMatrix·=·matrix.map((row)·=>·usIndices.map((i)·=>·row[i]));
+         30 │ + ··const·usToJpMapping·=·getDefaultUSToJPMapping();
+         31 │ + ··const·jpSectors·=·Object.keys(usToJpMapping);
+     32  32 │   
+     33     │ - → //·signals[date][sector]
+     34     │ - → const·allSignalsByDate·=·dates.map((_d,·idx)·=>·{
+     35     │ - → → const·dayUSReturns·=·usReturnsMatrix.slice(0,·idx·+·1);
+     36     │ - → → const·dayPCAScores·=·scores.slice(0,·idx·+·1);
+     37     │ - → → return·generateSpilloverSignals(
+     38     │ - → → → dayUSReturns,
+     39     │ - → → → dayPCAScores,
+     40     │ - → → → jpSectors,
+     41     │ - → → → usToJpMapping,
+     42     │ - → → → true,
+     43     │ - → → );
+     44     │ - → });
+         33 │ + ··//·signals[date][sector]
+         34 │ + ··const·allSignalsByDate·=·dates.map((_d,·idx)·=>·{
+         35 │ + ····const·dayUSReturns·=·usReturnsMatrix.slice(0,·idx·+·1);
+         36 │ + ····const·dayPCAScores·=·scores.slice(0,·idx·+·1);
+         37 │ + ····return·generateSpilloverSignals(
+         38 │ + ······dayUSReturns,
+         39 │ + ······dayPCAScores,
+         40 │ + ······jpSectors,
+         41 │ + ······usToJpMapping,
+         42 │ + ······true,
+         43 │ + ····);
+         44 │ + ··});
+     45  45 │   
+     46     │ - → //·2.·Define·Alpha·Targets·(High·Swarm·Score·Stocks·identified·in·parallel·research)
+     47     │ - → const·targets·=·[
+     48     │ - → → {·code:·"1333",·name:·"マルハニチロ",·sector:·"1000",·expected:·"LONG"·},
+     49     │ - → → {·code:·"4188",·name:·"三菱ケミカル",·sector:·"7000",·expected:·"SHORT"·},
+     50     │ - → ];
+         46 │ + ··//·2.·Define·Alpha·Targets·(High·Swarm·Score·Stocks·identified·in·parallel·research)
+         47 │ + ··const·targets·=·[
+         48 │ + ····{·code:·"1333",·name:·"マルハニチロ",·sector:·"1000",·expected:·"LONG"·},
+         49 │ + ····{·code:·"4188",·name:·"三菱ケミカル",·sector:·"7000",·expected:·"SHORT"·},
+         50 │ + ··];
+     51  51 │   
+     52     │ - → const·results·=·[];
+         52 │ + ··const·results·=·[];
+     53  53 │   
+     54     │ - → for·(const·target·of·targets)·{
+     55     │ - → → console.log(`\n🔍·Analyzing·Target:·${target.name}·(${target.code})...`);
+     56     │ - → → const·history·=·await·getStockPriceHistory(target.code,·fromDate,·toDate);
+         54 │ + ··for·(const·target·of·targets)·{
+         55 │ + ····console.log(`\n🔍·Analyzing·Target:·${target.name}·(${target.code})...`);
+         56 │ + ····const·history·=·await·getStockPriceHistory(target.code,·fromDate,·toDate);
+     57  57 │   
+     58     │ - → → if·(history.length·===·0)·{
+     59     │ - → → → console.log(`❌·No·price·data·for·${target.code}`);
+     60     │ - → → → continue;
+     61     │ - → → }
+         58 │ + ····if·(history.length·===·0)·{
+         59 │ + ······console.log(`❌·No·price·data·for·${target.code}`);
+         60 │ + ······continue;
+         61 │ + ····}
+     62  62 │   
+     63     │ - → → let·portfolio·=·1.0;
+     64     │ - → → let·totalTrades·=·0;
+     65     │ - → → let·winningTrades·=·0;
+     66     │ - → → let·currentPos·=·0;·//·1·for·LONG,·-1·for·SHORT,·0·for·None
+     67     │ - → → let·entryPrice·=·0;
+         63 │ + ····let·portfolio·=·1.0;
+         64 │ + ····let·totalTrades·=·0;
+         65 │ + ····let·winningTrades·=·0;
+         66 │ + ····let·currentPos·=·0;·//·1·for·LONG,·-1·for·SHORT,·0·for·None
+         67 │ + ····let·entryPrice·=·0;
+     68  68 │   
+     69     │ - → → for·(let·i·=·0;·i·<·history.length;·i++)·{
+     70     │ - → → → const·bar·=·history[i];
+     71     │ - → → → const·daySignals·=·allSignalsByDate[i];
+     72     │ - → → → const·signal·=·daySignals.find((s)·=>·s.jp_sector·===·target.sector);
+         69 │ + ····for·(let·i·=·0;·i·<·history.length;·i++)·{
+         70 │ + ······const·bar·=·history[i];
+         71 │ + ······const·daySignals·=·allSignalsByDate[i];
+         72 │ + ······const·signal·=·daySignals.find((s)·=>·s.jp_sector·===·target.sector);
+     73  73 │   
+     74     │ - → → → if·(!signal)·continue;
+         74 │ + ······if·(!signal)·continue;
+     75  75 │   
+     76     │ - → → → //·Signal·logic:·Focus·ONLY·on·high·confidence·direction
+     77     │ - → → → const·desiredPos·=
+     78     │ - → → → → signal.signal_type·===·"long"
+     79     │ - → → → → → ?·1
+     80     │ - → → → → → :·signal.signal_type·===·"short"
+     81     │ - → → → → → → ?·-1
+     82     │ - → → → → → → :·0;
+         76 │ + ······//·Signal·logic:·Focus·ONLY·on·high·confidence·direction
+         77 │ + ······const·desiredPos·=
+         78 │ + ········signal.signal_type·===·"long"
+         79 │ + ··········?·1
+         80 │ + ··········:·signal.signal_type·===·"short"
+         81 │ + ············?·-1
+         82 │ + ············:·0;
+     83  83 │   
+     84     │ - → → → //·Trade·execution·(at·Open·next·day·or·current·Close)
+     85     │ - → → → if·(desiredPos·!==·currentPos)·{
+     86     │ - → → → → //·Close·previous
+     87     │ - → → → → if·(currentPos·!==·0)·{
+  84 more lines truncated
+  
+
+src/commands/cache_get.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     6  6 │   
+     7  7 │   const config = ConfigSchema.parse(
+     8    │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+        8 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+     9  9 │   );
+    10 10 │   
+    11 11 │   const key = Bun.argv[2];
+    12 12 │   if (!key) {
+    13    │ - → console.error("Usage:·cache_get.ts·KEY");
+    14    │ - → process.exit(1);
+       13 │ + ··console.error("Usage:·cache_get.ts·KEY");
+       14 │ + ··process.exit(1);
+    15 15 │   }
+    16 16 │   
+    ····· │ 
+    27 27 │   
+    28 28 │   const row = db.query("SELECT value FROM http_cache WHERE key = ?").get(key) as
+    29    │ - → |·{·value:·string·}
+    30    │ - → |·undefined;
+       29 │ + ··|·{·value:·string·}
+       30 │ + ··|·undefined;
+    31 31 │   
+    32 32 │   if (!row) {
+    33    │ - → console.log(JSON.stringify({·error:·`Key·not·found:·${key}`·}));
+    34    │ - → process.exit(1);
+       33 │ + ··console.log(JSON.stringify({·error:·`Key·not·found:·${key}`·}));
+       34 │ + ··process.exit(1);
+    35 35 │   }
+    36 36 │   
+  
+
+src/commands/cache_set.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     6  6 │   
+     7  7 │   const config = ConfigSchema.parse(
+     8    │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+        8 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+     9  9 │   );
+    10 10 │   
+    ····· │ 
+    14 14 │   
+    15 15 │   if (!key || !value) {
+    16    │ - → console.error("Usage:·cache_set.ts·KEY·VALUE·[TTL]");
+    17    │ - → process.exit(1);
+       16 │ + ··console.error("Usage:·cache_set.ts·KEY·VALUE·[TTL]");
+       17 │ + ··process.exit(1);
+    18 18 │   }
+    19 19 │   
+    ····· │ 
+    33 33 │   const now = Date.now();
+    34 34 │   db.run(
+    35    │ - → "INSERT·OR·REPLACE·INTO·http_cache·(key,·value,·created_at)·VALUES·(?,·?,·?)",
+    36    │ - → [key,·value,·now],
+       35 │ + ··"INSERT·OR·REPLACE·INTO·http_cache·(key,·value,·created_at)·VALUES·(?,·?,·?)",
+       36 │ + ··[key,·value,·now],
+    37 37 │   );
+    38 38 │   
+    39 39 │   const output: Record<string, unknown> = {
+    40    │ - → key,
+    41    │ - → stored_at:·new·Date(now).toISOString(),
+       40 │ + ··key,
+       41 │ + ··stored_at:·new·Date(now).toISOString(),
+    42 42 │   };
+    43 43 │   if (ttl !== undefined) {
+    44    │ - → output.ttl·=·ttl;
+       44 │ + ··output.ttl·=·ttl;
+    45 45 │   }
+    46 46 │   
+  
+
+src/commands/cache_warm.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+      6   6 │   
+      7   7 │   const config = ConfigSchema.parse(
+      8     │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+          8 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+      9   9 │   );
+     10  10 │   
+     11  11 │   const { values, positionals } = parseArgs({
+     12     │ - → args:·Bun.argv.slice(2),
+     13     │ - → options:·{
+     14     │ - → → ttl:·{·type:·"string",·default:·"86400"·},
+     15     │ - → → parallel:·{·type:·"string",·default:·"3"·},
+     16     │ - → },
+     17     │ - → allowPositionals:·true,
+     18     │ - → strict:·false,
+         12 │ + ··args:·Bun.argv.slice(2),
+         13 │ + ··options:·{
+         14 │ + ····ttl:·{·type:·"string",·default:·"86400"·},
+         15 │ + ····parallel:·{·type:·"string",·default:·"3"·},
+         16 │ + ··},
+         17 │ + ··allowPositionals:·true,
+         18 │ + ··strict:·false,
+     19  19 │   });
+     20  20 │   
+    ······· │ 
+     24  24 │   
+     25  25 │   if (symbols.length === 0) {
+     26     │ - → console.error(
+     27     │ - → → "Usage:·cache_warm.ts·SYMBOL1·SYMBOL2·...·[--ttl·SECONDS]·[--parallel·N]",
+     28     │ - → );
+     29     │ - → process.exit(1);
+         26 │ + ··console.error(
+         27 │ + ····"Usage:·cache_warm.ts·SYMBOL1·SYMBOL2·...·[--ttl·SECONDS]·[--parallel·N]",
+         28 │ + ··);
+         29 │ + ··process.exit(1);
+     30  30 │   }
+     31  31 │   
+    ······· │ 
+     33  33 │   
+     34  34 │   function isCacheFresh(symbol: string, ttlSeconds: number): boolean {
+     35     │ - → const·row·=·db
+     36     │ - → → .query(
+     37     │ - → → → "SELECT·created_at·FROM·http_cache·WHERE·key·LIKE·?·ORDER·BY·created_at·DESC·LIMIT·1",
+     38     │ - → → )
+     39     │ - → → .get(`%${symbol}%`)·as·{·created_at:·number·}·|·undefined;
+     40     │ - → if·(!row)·return·false;
+     41     │ - → const·ageSeconds·=·(Date.now()·-·row.created_at)·/·1000;
+     42     │ - → return·ageSeconds·<·ttlSeconds;
+         35 │ + ··const·row·=·db
+         36 │ + ····.query(
+         37 │ + ······"SELECT·created_at·FROM·http_cache·WHERE·key·LIKE·?·ORDER·BY·created_at·DESC·LIMIT·1",
+         38 │ + ····)
+         39 │ + ····.get(`%${symbol}%`)·as·{·created_at:·number·}·|·undefined;
+         40 │ + ··if·(!row)·return·false;
+         41 │ + ··const·ageSeconds·=·(Date.now()·-·row.created_at)·/·1000;
+         42 │ + ··return·ageSeconds·<·ttlSeconds;
+     43  43 │   }
+     44  44 │   
+     45  45 │   async function warmSymbol(symbol: string): Promise<"warmed" | "skipped"> {
+     46     │ - → if·(isCacheFresh(symbol,·ttl))·return·"skipped";
+         46 │ + ··if·(isCacheFresh(symbol,·ttl))·return·"skipped";
+     47  47 │   
+     48     │ - → const·proc·=·Bun.spawn(["bun",·"run",·"src/commands/data_fetch.ts",·symbol],·{
+     49     │ - → → stdout:·"pipe",
+     50     │ - → → stderr:·"pipe",
+     51     │ - → });
+     52     │ - → const·exitCode·=·await·proc.exited;
+     53     │ - → if·(exitCode·!==·0)·{
+     54     │ - → → const·stderr·=·await·new·Response(proc.stderr).text();
+     55     │ - → → throw·new·Error(stderr.trim()·||·`exit·code·${exitCode}`);
+     56     │ - → }
+     57     │ - → return·"warmed";
+         48 │ + ··const·proc·=·Bun.spawn(["bun",·"run",·"src/commands/data_fetch.ts",·symbol],·{
+         49 │ + ····stdout:·"pipe",
+         50 │ + ····stderr:·"pipe",
+         51 │ + ··});
+         52 │ + ··const·exitCode·=·await·proc.exited;
+         53 │ + ··if·(exitCode·!==·0)·{
+         54 │ + ····const·stderr·=·await·new·Response(proc.stderr).text();
+         55 │ + ····throw·new·Error(stderr.trim()·||·`exit·code·${exitCode}`);
+         56 │ + ··}
+         57 │ + ··return·"warmed";
+     58  58 │   }
+     59  59 │   
+     60  60 │   async function runPool<T, R>(
+     61     │ - → items:·T[],
+     62     │ - → concurrency:·number,
+     63     │ - → fn:·(item:·T)·=>·Promise<R>,
+         61 │ + ··items:·T[],
+         62 │ + ··concurrency:·number,
+         63 │ + ··fn:·(item:·T)·=>·Promise<R>,
+     64  64 │   ): Promise<Array<{ item: T; result?: R; error?: string }>> {
+     65     │ - → const·results:·Array<{·item:·T;·result?:·R;·error?:·string·}>·=·[];
+     66     │ - → let·idx·=·0;
+         65 │ + ··const·results:·Array<{·item:·T;·result?:·R;·error?:·string·}>·=·[];
+         66 │ + ··let·idx·=·0;
+     67  67 │   
+     68     │ - → async·function·worker()·{
+     69     │ - → → while·(idx·<·items.length)·{
+     70     │ - → → → const·i·=·idx++;
+     71     │ - → → → const·item·=·items[i];
+     72     │ - → → → const·r·=·await·fn(item).catch((e:·Error)·=>·({·__error:·e.message·}));
+     73     │ - → → → if·(r·&&·typeof·r·===·"object"·&&·"__error"·in·r)·{
+     74     │ - → → → → results.push({·item,·error:·(r·as·{·__error:·string·}).__error·});
+     75     │ - → → → }·else·{
+     76     │ - → → → → results.push({·item,·result:·r·as·R·});
+     77     │ - → → → }
+     78     │ - → → }
+     79     │ - → }
+         68 │ + ··async·function·worker()·{
+         69 │ + ····while·(idx·<·items.length)·{
+         70 │ + ······const·i·=·idx++;
+         71 │ + ······const·item·=·items[i];
+         72 │ + ······const·r·=·await·fn(item).catch((e:·Error)·=>·({·__error:·e.message·}));
+         73 │ + ······if·(r·&&·typeof·r·===·"object"·&&·"__error"·in·r)·{
+         74 │ + ········results.push({·item,·error:·(r·as·{·__error:·string·}).__error·});
+         75 │ + ······}·else·{
+         76 │ + ········results.push({·item,·result:·r·as·R·});
+         77 │ + ······}
+         78 │ + ····}
+         79 │ + ··}
+     80  80 │   
+     81     │ - → const·workers·=·Array.from(
+     82     │ - → → {·length:·Math.min(concurrency,·items.length)·},
+     83     │ - → → ()·=>·worker(),
+     84     │ - → );
+     85     │ - → await·Promise.all(workers);
+     86     │ - → return·results;
+         81 │ + ··const·workers·=·Array.from(
+         82 │ + ····{·length:·Math.min(concurrency,·items.length)·},
+         83 │ + ····()·=>·worker(),
+         84 │ + ··);
+         85 │ + ··await·Promise.all(workers);
+         86 │ + ··return·results;
+     87  87 │   }
+     88  88 │   
+    ······· │ 
+     94  94 │   
+     95  95 │   for (const r of results) {
+     96     │ - → if·(r.error)·{
+     97     │ - → → hasError·=·true;
+     98     │ - → }·else·if·(r.result·===·"skipped")·{
+     99     │ - → → skipped.push(r.item);
+    100     │ - → }·else·{
+    101     │ - → → warmed.push(r.item);
+    102     │ - → }
+         96 │ + ··if·(r.error)·{
+         97 │ + ····hasError·=·true;
+         98 │ + ··}·else·if·(r.result·===·"skipped")·{
+         99 │ + ····skipped.push(r.item);
+        100 │ + ··}·else·{
+        101 │ + ····warmed.push(r.item);
+        102 │ + ··}
+    103 103 │   }
+  11 more lines truncated
+  
+
+src/commands/check_cached.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     4  4 │   const symbol = process.argv[2];
+     5  5 │   if (!symbol) {
+     6    │ - → console.error("Usage:·check_cached.ts·SYMBOL");
+     7    │ - → process.exit(1);
+        6 │ + ··console.error("Usage:·check_cached.ts·SYMBOL");
+        7 │ + ··process.exit(1);
+     8  8 │   }
+     9  9 │   
+    ····· │ 
+    11 11 │   
+    12 12 │   const rows = db
+    13    │ - → .query(
+    14    │ - → → "SELECT·key,·created_at·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·created_at·DESC·LIMIT·500",
+    15    │ - → )
+    16    │ - → .all()·as·Array<{·key:·string;·created_at:·number·}>;
+       13 │ + ··.query(
+       14 │ + ····"SELECT·key,·created_at·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·created_at·DESC·LIMIT·500",
+       15 │ + ··)
+       16 │ + ··.all()·as·Array<{·key:·string;·created_at:·number·}>;
+    17 17 │   
+    18 18 │   let found = false;
+    ····· │ 
+    20 20 │   
+    21 21 │   for (const row of rows) {
+    22    │ - → const·cached·=·db
+    23    │ - → → .query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+    24    │ - → → .get(row.key)·as·{·value:·string·}·|·undefined;
+    25    │ - → if·(!cached)·continue;
+    26    │ - → const·data·=·JSON.parse(cached.value);
+    27    │ - → if·(!data.data)·continue;
+    28    │ - → const·match·=·data.data.some((bar:·{·Code:·string·})·=>·bar.Code·===·symbol);
+    29    │ - → if·(match)·{
+    30    │ - → → found·=·true;
+    31    │ - → → if·(row.created_at·>·latestCreatedAt)·latestCreatedAt·=·row.created_at;
+    32    │ - → }
+       22 │ + ··const·cached·=·db
+       23 │ + ····.query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+       24 │ + ····.get(row.key)·as·{·value:·string·}·|·undefined;
+       25 │ + ··if·(!cached)·continue;
+       26 │ + ··const·data·=·JSON.parse(cached.value);
+       27 │ + ··if·(!data.data)·continue;
+       28 │ + ··const·match·=·data.data.some((bar:·{·Code:·string·})·=>·bar.Code·===·symbol);
+       29 │ + ··if·(match)·{
+       30 │ + ····found·=·true;
+       31 │ + ····if·(row.created_at·>·latestCreatedAt)·latestCreatedAt·=·row.created_at;
+       32 │ + ··}
+    33 33 │   }
+    34 34 │   
+    ····· │ 
+    36 36 │   
+    37 37 │   if (found) {
+    38    │ - → const·ageHours·=·(Date.now()·-·latestCreatedAt)·/·(1000·*·60·*·60);
+    39    │ - → console.log(
+    40    │ - → → JSON.stringify({
+    41    │ - → → → exists:·true,
+    42    │ - → → → age_hours:·Math.round(ageHours·*·10)·/·10,
+    43    │ - → → → symbol,
+    44    │ - → → }),
+    45    │ - → );
+    46    │ - → process.exit(0);
+       38 │ + ··const·ageHours·=·(Date.now()·-·latestCreatedAt)·/·(1000·*·60·*·60);
+       39 │ + ··console.log(
+       40 │ + ····JSON.stringify({
+       41 │ + ······exists:·true,
+       42 │ + ······age_hours:·Math.round(ageHours·*·10)·/·10,
+       43 │ + ······symbol,
+       44 │ + ····}),
+       45 │ + ··);
+       46 │ + ··process.exit(0);
+    47 47 │   }
+    48 48 │   
+  
+
+src/commands/check_fresh.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     5  5 │   const hours = Number(process.argv[3]);
+     6  6 │   if (!symbol || Number.isNaN(hours)) {
+     7    │ - → console.error("Usage:·check_fresh.ts·SYMBOL·HOURS");
+     8    │ - → process.exit(1);
+        7 │ + ··console.error("Usage:·check_fresh.ts·SYMBOL·HOURS");
+        8 │ + ··process.exit(1);
+     9  9 │   }
+    10 10 │   
+    ····· │ 
+    12 12 │   
+    13 13 │   const rows = db
+    14    │ - → .query(
+    15    │ - → → "SELECT·key,·created_at·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·created_at·DESC·LIMIT·500",
+    16    │ - → )
+    17    │ - → .all()·as·Array<{·key:·string;·created_at:·number·}>;
+       14 │ + ··.query(
+       15 │ + ····"SELECT·key,·created_at·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·created_at·DESC·LIMIT·500",
+       16 │ + ··)
+       17 │ + ··.all()·as·Array<{·key:·string;·created_at:·number·}>;
+    18 18 │   
+    19 19 │   let latestCreatedAt = 0;
+    20 20 │   
+    21 21 │   for (const row of rows) {
+    22    │ - → const·cached·=·db
+    23    │ - → → .query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+    24    │ - → → .get(row.key)·as·{·value:·string·}·|·undefined;
+    25    │ - → if·(!cached)·continue;
+    26    │ - → const·data·=·JSON.parse(cached.value);
+    27    │ - → if·(!data.data)·continue;
+    28    │ - → const·match·=·data.data.some((bar:·{·Code:·string·})·=>·bar.Code·===·symbol);
+    29    │ - → if·(match·&&·row.created_at·>·latestCreatedAt)·{
+    30    │ - → → latestCreatedAt·=·row.created_at;
+    31    │ - → }
+       22 │ + ··const·cached·=·db
+       23 │ + ····.query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+       24 │ + ····.get(row.key)·as·{·value:·string·}·|·undefined;
+       25 │ + ··if·(!cached)·continue;
+       26 │ + ··const·data·=·JSON.parse(cached.value);
+       27 │ + ··if·(!data.data)·continue;
+       28 │ + ··const·match·=·data.data.some((bar:·{·Code:·string·})·=>·bar.Code·===·symbol);
+       29 │ + ··if·(match·&&·row.created_at·>·latestCreatedAt)·{
+       30 │ + ····latestCreatedAt·=·row.created_at;
+       31 │ + ··}
+    32 32 │   }
+    33 33 │   
+    ····· │ 
+    35 35 │   
+    36 36 │   if (latestCreatedAt === 0) {
+    37    │ - → console.log(
+    38    │ - → → JSON.stringify({
+    39    │ - → → → fresh:·false,
+    40    │ - → → → age_hours:·null,
+    41    │ - → → → threshold_hours:·hours,
+    42    │ - → → → symbol,
+    43    │ - → → }),
+    44    │ - → );
+    45    │ - → process.exit(1);
+       37 │ + ··console.log(
+       38 │ + ····JSON.stringify({
+       39 │ + ······fresh:·false,
+       40 │ + ······age_hours:·null,
+       41 │ + ······threshold_hours:·hours,
+       42 │ + ······symbol,
+       43 │ + ····}),
+       44 │ + ··);
+       45 │ + ··process.exit(1);
+    46 46 │   }
+    47 47 │   
+    ····· │ 
+    50 50 │   
+    51 51 │   console.log(
+    52    │ - → JSON.stringify({
+    53    │ - → → fresh,
+    54    │ - → → age_hours:·Math.round(ageHours·*·10)·/·10,
+    55    │ - → → threshold_hours:·hours,
+    56    │ - → → symbol,
+    57    │ - → }),
+       52 │ + ··JSON.stringify({
+       53 │ + ····fresh,
+       54 │ + ····age_hours:·Math.round(ageHours·*·10)·/·10,
+       55 │ + ····threshold_hours:·hours,
+       56 │ + ····symbol,
+       57 │ + ··}),
+    58 58 │   );
+    59 59 │   
+  
+
+src/commands/check_schema.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     3  3 │   
+     4  4 │   const EXPECTED_COLUMNS = [
+     5    │ - → "Code",
+     6    │ - → "Date",
+     7    │ - → "Open",
+     8    │ - → "High",
+     9    │ - → "Low",
+    10    │ - → "Close",
+    11    │ - → "Volume",
+    12    │ - → "TurnoverValue",
+    13    │ - → "AdjustmentFactor",
+    14    │ - → "AdjustmentOpen",
+    15    │ - → "AdjustmentHigh",
+    16    │ - → "AdjustmentLow",
+    17    │ - → "AdjustmentClose",
+    18    │ - → "AdjustmentVolume",
+        5 │ + ··"Code",
+        6 │ + ··"Date",
+        7 │ + ··"Open",
+        8 │ + ··"High",
+        9 │ + ··"Low",
+       10 │ + ··"Close",
+       11 │ + ··"Volume",
+       12 │ + ··"TurnoverValue",
+       13 │ + ··"AdjustmentFactor",
+       14 │ + ··"AdjustmentOpen",
+       15 │ + ··"AdjustmentHigh",
+       16 │ + ··"AdjustmentLow",
+       17 │ + ··"AdjustmentClose",
+       18 │ + ··"AdjustmentVolume",
+    19 19 │   ];
+    20 20 │   
+    21 21 │   const symbol = process.argv[2];
+    22 22 │   if (!symbol) {
+    23    │ - → console.error("Usage:·check_schema.ts·SYMBOL");
+    24    │ - → process.exit(1);
+       23 │ + ··console.error("Usage:·check_schema.ts·SYMBOL");
+       24 │ + ··process.exit(1);
+    25 25 │   }
+    26 26 │   
+    ····· │ 
+    28 28 │   
+    29 29 │   const rows = db
+    30    │ - → .query(
+    31    │ - → → "SELECT·value·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·key·DESC·LIMIT·500",
+    32    │ - → )
+    33    │ - → .all()·as·Array<{·value:·string·}>;
+       30 │ + ··.query(
+       31 │ + ····"SELECT·value·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·key·DESC·LIMIT·500",
+       32 │ + ··)
+       33 │ + ··.all()·as·Array<{·value:·string·}>;
+    34 34 │   
+    35 35 │   let actual: string[] = [];
+    ····· │ 
+    37 37 │   
+    38 38 │   for (const row of rows) {
+    39    │ - → const·data·=·JSON.parse(row.value);
+    40    │ - → if·(!data.data)·continue;
+    41    │ - → for·(const·bar·of·data.data)·{
+    42    │ - → → if·(bar.Code·!==·symbol)·continue;
+    43    │ - → → actual·=·Object.keys(bar);
+    44    │ - → → found·=·true;
+    45    │ - → → break;
+    46    │ - → }
+    47    │ - → if·(found)·break;
+       39 │ + ··const·data·=·JSON.parse(row.value);
+       40 │ + ··if·(!data.data)·continue;
+       41 │ + ··for·(const·bar·of·data.data)·{
+       42 │ + ····if·(bar.Code·!==·symbol)·continue;
+       43 │ + ····actual·=·Object.keys(bar);
+       44 │ + ····found·=·true;
+       45 │ + ····break;
+       46 │ + ··}
+       47 │ + ··if·(found)·break;
+    48 48 │   }
+    49 49 │   
+    ····· │ 
+    51 51 │   
+    52 52 │   if (!found) {
+    53    │ - → console.log(
+    54    │ - → → JSON.stringify({
+    55    │ - → → → schema_ok:·false,
+    56    │ - → → → expected:·EXPECTED_COLUMNS,
+    57    │ - → → → actual:·[],
+    58    │ - → → → missing:·EXPECTED_COLUMNS,
+    59    │ - → → → symbol,
+    60    │ - → → }),
+    61    │ - → );
+    62    │ - → process.exit(1);
+       53 │ + ··console.log(
+       54 │ + ····JSON.stringify({
+       55 │ + ······schema_ok:·false,
+       56 │ + ······expected:·EXPECTED_COLUMNS,
+       57 │ + ······actual:·[],
+       58 │ + ······missing:·EXPECTED_COLUMNS,
+       59 │ + ······symbol,
+       60 │ + ····}),
+       61 │ + ··);
+       62 │ + ··process.exit(1);
+    63 63 │   }
+    64 64 │   
+    ····· │ 
+    67 67 │   
+    68 68 │   console.log(
+    69    │ - → JSON.stringify({
+    70    │ - → → schema_ok:·schemaOk,
+    71    │ - → → expected:·EXPECTED_COLUMNS,
+    72    │ - → → actual,
+    73    │ - → → missing:·missing.length·>·0·?·missing·:·undefined,
+    74    │ - → → symbol,
+    75    │ - → }),
+       69 │ + ··JSON.stringify({
+       70 │ + ····schema_ok:·schemaOk,
+       71 │ + ····expected:·EXPECTED_COLUMNS,
+       72 │ + ····actual,
+       73 │ + ····missing:·missing.length·>·0·?·missing·:·undefined,
+       74 │ + ····symbol,
+       75 │ + ··}),
+    76 76 │   );
+    77 77 │   
+  
+
+src/commands/check_valid.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     6  6 │   const symbol = process.argv[2];
+     7  7 │   if (!symbol) {
+     8    │ - → console.error("Usage:·check_valid.ts·SYMBOL");
+     9    │ - → process.exit(1);
+        8 │ + ··console.error("Usage:·check_valid.ts·SYMBOL");
+        9 │ + ··process.exit(1);
+    10 10 │   }
+    11 11 │   
+    ····· │ 
+    13 13 │   
+    14 14 │   const rows = db
+    15    │ - → .query(
+    16    │ - → → "SELECT·value·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·key·DESC·LIMIT·500",
+    17    │ - → )
+    18    │ - → .all()·as·Array<{·value:·string·}>;
+       15 │ + ··.query(
+       16 │ + ····"SELECT·value·FROM·http_cache·WHERE·key·LIKE·'%/equities/bars/daily?date=%'·ORDER·BY·key·DESC·LIMIT·500",
+       17 │ + ··)
+       18 │ + ··.all()·as·Array<{·value:·string·}>;
+    19 19 │   
+    20 20 │   const errors: string[] = [];
+    ····· │ 
+    23 23 │   
+    24 24 │   for (const row of rows) {
+    25    │ - → const·data·=·JSON.parse(row.value);
+    26    │ - → if·(!data.data)·continue;
+    27    │ - → for·(const·bar·of·data.data)·{
+    28    │ - → → if·(bar.Code·!==·symbol)·continue;
+    29    │ - → → recordCount++;
+       25 │ + ··const·data·=·JSON.parse(row.value);
+       26 │ + ··if·(!data.data)·continue;
+       27 │ + ··for·(const·bar·of·data.data)·{
+       28 │ + ····if·(bar.Code·!==·symbol)·continue;
+       29 │ + ····recordCount++;
+    30 30 │   
+    31    │ - → → for·(const·field·of·REQUIRED_FIELDS)·{
+    32    │ - → → → if·(bar[field]·===·undefined·||·bar[field]·===·null)·{
+    33    │ - → → → → errors.push(`Missing·field:·${field}·on·date·${bar.Date}`);
+    34    │ - → → → }
+    35    │ - → → }
+       31 │ + ····for·(const·field·of·REQUIRED_FIELDS)·{
+       32 │ + ······if·(bar[field]·===·undefined·||·bar[field]·===·null)·{
+       33 │ + ········errors.push(`Missing·field:·${field}·on·date·${bar.Date}`);
+       34 │ + ······}
+       35 │ + ····}
+    36 36 │   
+    37    │ - → → if·(
+    38    │ - → → → bar.AdjustmentClose·!==·undefined·&&
+    39    │ - → → → (typeof·bar.AdjustmentClose·!==·"number"·||
+    40    │ - → → → → Number.isNaN(bar.AdjustmentClose))
+    41    │ - → → )·{
+    42    │ - → → → errors.push(`NaN·in·AdjustmentClose·on·date·${bar.Date}`);
+    43    │ - → → }
+    44    │ - → → if·(
+    45    │ - → → → bar.AdjustmentVolume·!==·undefined·&&
+    46    │ - → → → (typeof·bar.AdjustmentVolume·!==·"number"·||
+    47    │ - → → → → Number.isNaN(bar.AdjustmentVolume))
+    48    │ - → → )·{
+    49    │ - → → → warnings.push(`NaN·in·AdjustmentVolume·on·date·${bar.Date}`);
+    50    │ - → → }
+    51    │ - → }
+       37 │ + ····if·(
+       38 │ + ······bar.AdjustmentClose·!==·undefined·&&
+       39 │ + ······(typeof·bar.AdjustmentClose·!==·"number"·||
+       40 │ + ········Number.isNaN(bar.AdjustmentClose))
+       41 │ + ····)·{
+       42 │ + ······errors.push(`NaN·in·AdjustmentClose·on·date·${bar.Date}`);
+       43 │ + ····}
+       44 │ + ····if·(
+       45 │ + ······bar.AdjustmentVolume·!==·undefined·&&
+       46 │ + ······(typeof·bar.AdjustmentVolume·!==·"number"·||
+       47 │ + ········Number.isNaN(bar.AdjustmentVolume))
+       48 │ + ····)·{
+       49 │ + ······warnings.push(`NaN·in·AdjustmentVolume·on·date·${bar.Date}`);
+       50 │ + ····}
+       51 │ + ··}
+    52 52 │   }
+    53 53 │   
+    ····· │ 
+    55 55 │   
+    56 56 │   if (recordCount === 0) {
+    57    │ - → errors.push(`No·records·found·for·symbol·${symbol}`);
+       57 │ + ··errors.push(`No·records·found·for·symbol·${symbol}`);
+    58 58 │   }
+    59 59 │   
+    ····· │ 
+    61 61 │   
+    62 62 │   console.log(
+    63    │ - → JSON.stringify({·valid,·errors,·warnings,·symbol,·records:·recordCount·}),
+       63 │ + ··JSON.stringify({·valid,·errors,·warnings,·symbol,·records:·recordCount·}),
+    64 64 │   );
+    65 65 │   process.exit(valid ? 0 : 1);
+  
+
+src/commands/data_fetch.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     6  6 │   
+     7  7 │   const config = ConfigSchema.parse(
+     8    │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+        8 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+     9  9 │   );
+    10 10 │   
+    11 11 │   const symbol = Bun.argv[2];
+    12 12 │   if (!symbol) {
+    13    │ - → console.error("Usage:·data_fetch.ts·SYMBOL");
+    14    │ - → process.exit(1);
+       13 │ + ··console.error("Usage:·data_fetch.ts·SYMBOL");
+       14 │ + ··process.exit(1);
+    15 15 │   }
+    16 16 │   
+    17 17 │   const apiKey = process.env.JQUANTS_API_KEY?.trim();
+    18 18 │   if (!apiKey) {
+    19    │ - → throw·new·Error("JQUANTS_API_KEY·is·not·set");
+       19 │ + ··throw·new·Error("JQUANTS_API_KEY·is·not·set");
+    20 20 │   }
+    21 21 │   
+    ····· │ 
+    37 37 │   const to = now.toISOString().split("T")[0];
+    38 38 │   const from = new Date(now.getTime() - 730 * 24 * 60 * 60 * 1000)
+    39    │ - → .toISOString()
+    40    │ - → .split("T")[0];
+       39 │ + ··.toISOString()
+       40 │ + ··.split("T")[0];
+    41 41 │   
+    42 42 │   const url = `${baseUrl}/equities/bars/daily?code=${symbol}&from=${from}&to=${to}`;
+    43 43 │   
+    44 44 │   const cached = db
+    45    │ - → .query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+    46    │ - → .get(url)·as·{·value:·string·}·|·undefined;
+       45 │ + ··.query("SELECT·value·FROM·http_cache·WHERE·key·=·?")
+       46 │ + ··.get(url)·as·{·value:·string·}·|·undefined;
+    47 47 │   
+    48 48 │   let data: { data?: unknown[] };
+    49 49 │   if (cached) {
+    50    │ - → data·=·JSON.parse(cached.value);
+       50 │ + ··data·=·JSON.parse(cached.value);
+    51 51 │   } else {
+    52    │ - → const·response·=·await·fetch(url,·{·headers·});
+    53    │ - → if·(!response.ok)·{
+    54    │ - → → throw·new·Error(`HTTP·${response.status}:·${url}`);
+    55    │ - → }
+    56    │ - → data·=·(await·response.json())·as·{·data?:·unknown[]·};
+    57    │ - → db.run(
+    58    │ - → → "INSERT·OR·REPLACE·INTO·http_cache·(key,·value,·created_at)·VALUES·(?,·?,·?)",
+    59    │ - → → [url,·JSON.stringify(data),·Date.now()],
+    60    │ - → );
+       52 │ + ··const·response·=·await·fetch(url,·{·headers·});
+       53 │ + ··if·(!response.ok)·{
+       54 │ + ····throw·new·Error(`HTTP·${response.status}:·${url}`);
+       55 │ + ··}
+       56 │ + ··data·=·(await·response.json())·as·{·data?:·unknown[]·};
+       57 │ + ··db.run(
+       58 │ + ····"INSERT·OR·REPLACE·INTO·http_cache·(key,·value,·created_at)·VALUES·(?,·?,·?)",
+       59 │ + ····[url,·JSON.stringify(data),·Date.now()],
+       60 │ + ··);
+    61 61 │   }
+    62 62 │   
+    ····· │ 
+    64 64 │   
+    65 65 │   const output = {
+    66    │ - → success:·true,
+    67    │ - → symbol,
+    68    │ - → records,
+    69    │ - → timestamp:·new·Date().toISOString(),
+       66 │ + ··success:·true,
+       67 │ + ··symbol,
+       68 │ + ··records,
+       69 │ + ··timestamp:·new·Date().toISOString(),
+    70 70 │   };
+    71 71 │   
+  
+
+src/commands/decision_check.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     1  1 │   import { readFileSync } from "node:fs";
+     2  2 │   import {
+     3    │ - → DecisionSnapshotSchema,
+     4    │ - → evaluateEntryEligibility,
+        3 │ + ··DecisionSnapshotSchema,
+        4 │ + ··evaluateEntryEligibility,
+     5  5 │   } from "../decision/decision_snapshot";
+     6  6 │   
+    ····· │ 
+     8  8 │   
+     9  9 │   if (!path) {
+    10    │ - → console.error("usage:·bun·src/commands/decision_check.ts·<snapshot.json>");
+    11    │ - → process.exit(1);
+       10 │ + ··console.error("usage:·bun·src/commands/decision_check.ts·<snapshot.json>");
+       11 │ + ··process.exit(1);
+    12 12 │   }
+    13 13 │   
+    14 14 │   try {
+    15    │ - → const·parsed·=·JSON.parse(readFileSync(path,·"utf8"));
+    16    │ - → const·snapshot·=·DecisionSnapshotSchema.parse(parsed);
+    17    │ - → const·result·=·evaluateEntryEligibility(snapshot);
+       15 │ + ··const·parsed·=·JSON.parse(readFileSync(path,·"utf8"));
+       16 │ + ··const·snapshot·=·DecisionSnapshotSchema.parse(parsed);
+       17 │ + ··const·result·=·evaluateEntryEligibility(snapshot);
+    18 18 │   
+    19    │ - → console.log(
+    20    │ - → → JSON.stringify(
+    21    │ - → → → {
+    22    │ - → → → → decision_id:·snapshot.decision_id,
+    23    │ - → → → → proposed_action:·snapshot.proposed_action,
+    24    │ - → → → → ...result,
+    25    │ - → → → },
+    26    │ - → → → null,
+    27    │ - → → → 2,
+    28    │ - → → ),
+    29    │ - → );
+       19 │ + ··console.log(
+       20 │ + ····JSON.stringify(
+       21 │ + ······{
+       22 │ + ········decision_id:·snapshot.decision_id,
+       23 │ + ········proposed_action:·snapshot.proposed_action,
+       24 │ + ········...result,
+       25 │ + ······},
+       26 │ + ······null,
+       27 │ + ······2,
+       28 │ + ····),
+       29 │ + ··);
+    30 30 │   
+    31    │ - → if·(
+    32    │ - → → (snapshot.proposed_action·===·"buy"·||·snapshot.proposed_action·===·"add")·&&
+    33    │ - → → !result.eligible_for_human_review
+    34    │ - → )·{
+    35    │ - → → process.exitCode·=·2;
+    36    │ - → }
+       31 │ + ··if·(
+       32 │ + ····(snapshot.proposed_action·===·"buy"·||
+       33 │ + ······snapshot.proposed_action·===·"add")·&&
+       34 │ + ····!result.eligible_for_human_review
+       35 │ + ··)·{
+       36 │ + ····process.exitCode·=·2;
+       37 │ + ··}
+    37 38 │   } catch (error) {
+    38    │ - → console.error(error·instanceof·Error·?·error.message·:·String(error));
+    39    │ - → process.exitCode·=·1;
+       39 │ + ··console.error(error·instanceof·Error·?·error.message·:·String(error));
+       40 │ + ··process.exitCode·=·1;
+    40 41 │   }
+    41 42 │   
+  
+
+src/commands/discord_bot.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     3  3 │   
+     4  4 │   async function main() {
+     5    │ - → const·discordConfig:·DiscordConfig·=·{
+     6    │ - → → enabled:·config.integrations?.discord?.enabled·??·false,
+     7    │ - → → token:
+     8    │ - → → → process.env[config.integrations?.discord?.tokenEnv·??·"DISCORD_TOKEN"]·??
+     9    │ - → → → "",
+    10    │ - → → webhookUrl:
+    11    │ - → → → process.env[
+    12    │ - → → → → config.integrations?.discord?.webhookUrlEnv·??·"DISCORD_WEBHOOK_URL"
+    13    │ - → → → ]·??·"",
+    14    │ - → → commandPrefix:·config.integrations?.discord?.commandPrefix·??·"!",
+    15    │ - → → maxMessageLength:·config.integrations?.discord?.maxMessageLength·??·2000,
+    16    │ - → };
+        5 │ + ··const·discordConfig:·DiscordConfig·=·{
+        6 │ + ····enabled:·config.integrations?.discord?.enabled·??·false,
+        7 │ + ····token:
+        8 │ + ······process.env[config.integrations?.discord?.tokenEnv·??·"DISCORD_TOKEN"]·??
+        9 │ + ······"",
+       10 │ + ····webhookUrl:
+       11 │ + ······process.env[
+       12 │ + ········config.integrations?.discord?.webhookUrlEnv·??·"DISCORD_WEBHOOK_URL"
+       13 │ + ······]·??·"",
+       14 │ + ····commandPrefix:·config.integrations?.discord?.commandPrefix·??·"!",
+       15 │ + ····maxMessageLength:·config.integrations?.discord?.maxMessageLength·??·2000,
+       16 │ + ··};
+    17 17 │   
+    18    │ - → if·(!discordConfig.enabled)·{
+    19    │ - → → throw·new·Error("Discord·integration·is·not·enabled·in·config");
+    20    │ - → }
+       18 │ + ··if·(!discordConfig.enabled)·{
+       19 │ + ····throw·new·Error("Discord·integration·is·not·enabled·in·config");
+       20 │ + ··}
+    21 21 │   
+    22    │ - → const·bot·=·await·initializeDiscordBot(discordConfig);
+       22 │ + ··const·bot·=·await·initializeDiscordBot(discordConfig);
+    23 23 │   
+    24    │ - → process.on("SIGINT",·async·()·=>·{
+    25    │ - → → await·bot.stop();
+    26    │ - → → process.exit(0);
+    27    │ - → });
+       24 │ + ··process.on("SIGINT",·async·()·=>·{
+       25 │ + ····await·bot.stop();
+       26 │ + ····process.exit(0);
+       27 │ + ··});
+    28 28 │   
+    29    │ - → process.on("SIGTERM",·async·()·=>·{
+    30    │ - → → await·bot.stop();
+    31    │ - → → process.exit(0);
+    32    │ - → });
+       29 │ + ··process.on("SIGTERM",·async·()·=>·{
+       30 │ + ····await·bot.stop();
+       31 │ + ····process.exit(0);
+       32 │ + ··});
+    33 33 │   }
+    34 34 │   
+    35 35 │   main().catch((error) => {
+    36    │ - → throw·error;
+       36 │ + ··throw·error;
+    37 37 │   });
+    38 38 │   
+  
+
+src/commands/fetch_batch.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+      5   5 │   
+      6   6 │   const _config = ConfigSchema.parse(
+      7     │ - → yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+          7 │ + ··yaml.load(readFileSync("config/default.yaml",·"utf-8")),
+      8   8 │   );
+      9   9 │   
+     10  10 │   const { values, positionals } = parseArgs({
+     11     │ - → args:·Bun.argv.slice(2),
+     12     │ - → options:·{
+     13     │ - → → parallel:·{·type:·"string",·default:·"3"·},
+     14     │ - → },
+     15     │ - → allowPositionals:·true,
+     16     │ - → strict:·false,
+         11 │ + ··args:·Bun.argv.slice(2),
+         12 │ + ··options:·{
+         13 │ + ····parallel:·{·type:·"string",·default:·"3"·},
+         14 │ + ··},
+         15 │ + ··allowPositionals:·true,
+         16 │ + ··strict:·false,
+     17  17 │   });
+     18  18 │   
+    ······· │ 
+     21  21 │   
+     22  22 │   if (symbols.length === 0) {
+     23     │ - → console.error("Usage:·fetch_batch.ts·SYMBOL1·SYMBOL2·...·[--parallel·N]");
+     24     │ - → process.exit(1);
+         23 │ + ··console.error("Usage:·fetch_batch.ts·SYMBOL1·SYMBOL2·...·[--parallel·N]");
+         24 │ + ··process.exit(1);
+     25  25 │   }
+     26  26 │   
+     27  27 │   async function fetchSymbol(
+     28     │ - → symbol:·string,
+         28 │ + ··symbol:·string,
+     29  29 │   ): Promise<{ symbol: string; records: number }> {
+     30     │ - → const·proc·=·Bun.spawn(["bun",·"run",·"src/commands/data_fetch.ts",·symbol],·{
+     31     │ - → → stdout:·"pipe",
+     32     │ - → → stderr:·"pipe",
+     33     │ - → });
+     34     │ - → const·exitCode·=·await·proc.exited;
+     35     │ - → const·stdout·=·await·new·Response(proc.stdout).text();
+     36     │ - → if·(exitCode·!==·0)·{
+     37     │ - → → const·stderr·=·await·new·Response(proc.stderr).text();
+     38     │ - → → throw·new·Error(stderr.trim()·||·`exit·code·${exitCode}`);
+     39     │ - → }
+     40     │ - → const·result·=·JSON.parse(stdout.trim());
+     41     │ - → return·{·symbol,·records:·result.records·??·0·};
+         30 │ + ··const·proc·=·Bun.spawn(["bun",·"run",·"src/commands/data_fetch.ts",·symbol],·{
+         31 │ + ····stdout:·"pipe",
+         32 │ + ····stderr:·"pipe",
+         33 │ + ··});
+         34 │ + ··const·exitCode·=·await·proc.exited;
+         35 │ + ··const·stdout·=·await·new·Response(proc.stdout).text();
+         36 │ + ··if·(exitCode·!==·0)·{
+         37 │ + ····const·stderr·=·await·new·Response(proc.stderr).text();
+         38 │ + ····throw·new·Error(stderr.trim()·||·`exit·code·${exitCode}`);
+         39 │ + ··}
+         40 │ + ··const·result·=·JSON.parse(stdout.trim());
+         41 │ + ··return·{·symbol,·records:·result.records·??·0·};
+     42  42 │   }
+     43  43 │   
+     44  44 │   async function runPool<T>(
+     45     │ - → items:·T[],
+     46     │ - → concurrency:·number,
+     47     │ - → fn:·(item:·T)·=>·Promise<unknown>,
+         45 │ + ··items:·T[],
+         46 │ + ··concurrency:·number,
+         47 │ + ··fn:·(item:·T)·=>·Promise<unknown>,
+     48  48 │   ): Promise<{ succeeded: unknown[]; failed: unknown[] }> {
+     49     │ - → const·succeeded:·unknown[]·=·[];
+     50     │ - → const·failed:·unknown[]·=·[];
+     51     │ - → let·idx·=·0;
+         49 │ + ··const·succeeded:·unknown[]·=·[];
+         50 │ + ··const·failed:·unknown[]·=·[];
+         51 │ + ··let·idx·=·0;
+     52  52 │   
+     53     │ - → async·function·worker()·{
+     54     │ - → → while·(idx·<·items.length)·{
+     55     │ - → → → const·i·=·idx++;
+     56     │ - → → → const·item·=·items[i];
+     57     │ - → → → const·result·=·await·fn(item).catch((e:·Error)·=>·({
+     58     │ - → → → → __error:·true,
+     59     │ - → → → → item,
+     60     │ - → → → → error:·e.message,
+     61     │ - → → → }));
+     62     │ - → → → if·(result·&&·typeof·result·===·"object"·&&·"__error"·in·result)·{
+     63     │ - → → → → failed.push(result);
+     64     │ - → → → }·else·{
+     65     │ - → → → → succeeded.push(result);
+     66     │ - → → → }
+     67     │ - → → }
+     68     │ - → }
+         53 │ + ··async·function·worker()·{
+         54 │ + ····while·(idx·<·items.length)·{
+         55 │ + ······const·i·=·idx++;
+         56 │ + ······const·item·=·items[i];
+         57 │ + ······const·result·=·await·fn(item).catch((e:·Error)·=>·({
+         58 │ + ········__error:·true,
+         59 │ + ········item,
+         60 │ + ········error:·e.message,
+         61 │ + ······}));
+         62 │ + ······if·(result·&&·typeof·result·===·"object"·&&·"__error"·in·result)·{
+         63 │ + ········failed.push(result);
+         64 │ + ······}·else·{
+         65 │ + ········succeeded.push(result);
+         66 │ + ······}
+         67 │ + ····}
+         68 │ + ··}
+     69  69 │   
+     70     │ - → const·workers·=·Array.from(
+     71     │ - → → {·length:·Math.min(concurrency,·items.length)·},
+     72     │ - → → ()·=>·worker(),
+     73     │ - → );
+     74     │ - → await·Promise.all(workers);
+     75     │ - → return·{·succeeded,·failed·};
+         70 │ + ··const·workers·=·Array.from(
+         71 │ + ····{·length:·Math.min(concurrency,·items.length)·},
+         72 │ + ····()·=>·worker(),
+         73 │ + ··);
+         74 │ + ··await·Promise.all(workers);
+         75 │ + ··return·{·succeeded,·failed·};
+     76  76 │   }
+     77  77 │   
+     78  78 │   const { succeeded, failed } = await runPool(
+     79     │ - → symbols,
+     80     │ - → parallel,
+     81     │ - → async·(symbol)·=>·{
+     82     │ - → → const·result·=·await·fetchSymbol(symbol);
+     83     │ - → → return·result;
+     84     │ - → },
+         79 │ + ··symbols,
+         80 │ + ··parallel,
+         81 │ + ··async·(symbol)·=>·{
+         82 │ + ····const·result·=·await·fetchSymbol(symbol);
+         83 │ + ····return·result;
+         84 │ + ··},
+     85  85 │   );
+     86  86 │   
+     87  87 │   const totalRecords = (succeeded as Array<{ records: number }>).reduce(
+     88     │ - → (sum,·r)·=>·sum·+·r.records,
+     89     │ - → 0,
+         88 │ + ··(sum,·r)·=>·sum·+·r.records,
+         89 │ + ··0,
+     90  90 │   );
+     91  91 │   
+     92  92 │   const output = {
+     93     │ - → succeeded:·(succeeded·as·Array<{·symbol:·string·}>).map((r)·=>·r.symbol),
+     94     │ - → failed:·(failed·as·Array<{·item:·string;·error:·string·}>).map((f)·=>·({
+     95     │ - → → symbol:·f.item,
+     96     │ - → → error:·f.error,
+     97     │ - → })),
+     98     │ - → total_records:·totalRecords,
+  8 more lines truncated
+  
+
+src/commands/health_check.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     4  4 │   
+     5  5 │   interface Check {
+     6    │ - → name:·string;
+     7    │ - → status:·boolean;
+        6 │ + ··name:·string;
+        7 │ + ··status:·boolean;
+     8  8 │   }
+     9  9 │   
+  
+
+src/commands/hypothesis_lab_run.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     2  2 │   import { join } from "node:path";
+     3  3 │   import {
+     4    │ - → CandidateDeepDiveSchema,
+     5    │ - → evaluateCandidate,
+     6    │ - → HypothesisSpecSchema,
+     7    │ - → McpCaptureSnapshotSchema,
+        4 │ + ··CandidateDeepDiveSchema,
+        5 │ + ··evaluateCandidate,
+        6 │ + ··HypothesisSpecSchema,
+        7 │ + ··McpCaptureSnapshotSchema,
+     8  8 │   } from "../research/hypothesis_lab";
+     9  9 │   
+    10 10 │   const hypothesisPath =
+    11    │ - → Bun.env.HYPOTHESIS_PATH·??
+    12    │ - → "data/hypothesis_lab/hypotheses/growth_value_dislocation_v1.json";
+       11 │ + ··Bun.env.HYPOTHESIS_PATH·??
+       12 │ + ··"data/hypothesis_lab/hypotheses/growth_value_dislocation_v1.json";
+    13 13 │   const capturePath =
+    14    │ - → Bun.env.CAPTURE_PATH·??
+    15    │ - → "data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json";
+       14 │ + ··Bun.env.CAPTURE_PATH·??
+       15 │ + ··"data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json";
+    16 16 │   const deepDiveDir = Bun.env.DEEP_DIVE_DIR ?? "data/hypothesis_lab/deep_dives";
+    17 17 │   
+    18 18 │   const hypothesis = HypothesisSpecSchema.parse(
+    19    │ - → JSON.parse(readFileSync(hypothesisPath,·"utf8")),
+       19 │ + ··JSON.parse(readFileSync(hypothesisPath,·"utf8")),
+    20 20 │   );
+    21 21 │   const capture = McpCaptureSnapshotSchema.parse(
+    22    │ - → JSON.parse(readFileSync(capturePath,·"utf8")),
+       22 │ + ··JSON.parse(readFileSync(capturePath,·"utf8")),
+    23 23 │   );
+    24 24 │   
+    25 25 │   if (capture.hypothesis_id !== hypothesis.hypothesis_id) {
+    26    │ - → throw·new·Error(
+    27    │ - → → `capture·hypothesis·${capture.hypothesis_id}·does·not·match·${hypothesis.hypothesis_id}`,
+    28    │ - → );
+       26 │ + ··throw·new·Error(
+       27 │ + ····`capture·hypothesis·${capture.hypothesis_id}·does·not·match·${hypothesis.hypothesis_id}`,
+       28 │ + ··);
+    29 29 │   }
+    30 30 │   
+    31 31 │   const deepDives = readdirSync(deepDiveDir)
+    32    │ - → .filter((name)·=>·name.endsWith(".json"))
+    33    │ - → .map((name)·=>·{
+    34    │ - → → const·parsed·=·CandidateDeepDiveSchema.parse(
+    35    │ - → → → JSON.parse(readFileSync(join(deepDiveDir,·name),·"utf8")),
+    36    │ - → → );
+    37    │ - → → if·(parsed.hypothesis_id·!==·hypothesis.hypothesis_id)·return·null;
+    38    │ - → → return·{
+    39    │ - → → → candidate_id:·parsed.candidate_id,
+    40    │ - → → → company:·parsed.company,
+    41    │ - → → → declared_status:·parsed.research_status,
+    42    │ - → → → evaluation:·evaluateCandidate(
+    43    │ - → → → → parsed,
+    44    │ - → → → → hypothesis.stage_b.minimum_independent_pressure_signals,
+    45    │ - → → → ),
+    46    │ - → → → limitations:·parsed.limitations,
+    47    │ - → → };
+    48    │ - → })
+    49    │ - → .filter((row)·=>·row·!==·null);
+       32 │ + ··.filter((name)·=>·name.endsWith(".json"))
+       33 │ + ··.map((name)·=>·{
+       34 │ + ····const·parsed·=·CandidateDeepDiveSchema.parse(
+       35 │ + ······JSON.parse(readFileSync(join(deepDiveDir,·name),·"utf8")),
+       36 │ + ····);
+       37 │ + ····if·(parsed.hypothesis_id·!==·hypothesis.hypothesis_id)·return·null;
+       38 │ + ····return·{
+       39 │ + ······candidate_id:·parsed.candidate_id,
+       40 │ + ······company:·parsed.company,
+       41 │ + ······declared_status:·parsed.research_status,
+       42 │ + ······evaluation:·evaluateCandidate(
+       43 │ + ········parsed,
+       44 │ + ········hypothesis.stage_b.minimum_independent_pressure_signals,
+       45 │ + ······),
+       46 │ + ······limitations:·parsed.limitations,
+       47 │ + ····};
+       48 │ + ··})
+       49 │ + ··.filter((row)·=>·row·!==·null);
+    50 50 │   
+    51 51 │   const eligible = deepDives.filter(
+    52    │ - → (row)·=>·row.evaluation.eligible_for_decision_snapshot,
+       52 │ + ··(row)·=>·row.evaluation.eligible_for_decision_snapshot,
+    53 53 │   );
+    54 54 │   
+    55 55 │   process.stdout.write(
+    56    │ - → `${JSON.stringify(
+    57    │ - → → {
+    58    │ - → → → hypothesis_id:·hypothesis.hypothesis_id,
+    59    │ - → → → capture_id:·capture.capture_id,
+    60    │ - → → → information_cutoff:·capture.information_cutoff,
+    61    │ - → → → stage_a_total_matches:·capture.result_count,
+    62    │ - → → → stage_a_rows_stored:·capture.rows.length,
+    63    │ - → → → deep_dives:·deepDives,
+    64    │ - → → → eligible_for_decision_snapshot:·eligible.map((row)·=>·row.candidate_id),
+    65    │ - → → → note:·"Eligibility·is·a·research·gate·only.·It·does·not·authorize·or·execute·a·trade.",
+    66    │ - → → },
+    67    │ - → → null,
+    68    │ - → → 2,
+    69    │ - → )}\n`,
+       56 │ + ··`${JSON.stringify(
+       57 │ + ····{
+       58 │ + ······hypothesis_id:·hypothesis.hypothesis_id,
+       59 │ + ······capture_id:·capture.capture_id,
+       60 │ + ······information_cutoff:·capture.information_cutoff,
+       61 │ + ······stage_a_total_matches:·capture.result_count,
+       62 │ + ······stage_a_rows_stored:·capture.rows.length,
+       63 │ + ······deep_dives:·deepDives,
+       64 │ + ······eligible_for_decision_snapshot:·eligible.map((row)·=>·row.candidate_id),
+       65 │ + ······note:·"Eligibility·is·a·research·gate·only.·It·does·not·authorize·or·execute·a·trade.",
+       66 │ + ····},
+       67 │ + ····null,
+       68 │ + ····2,
+       69 │ + ··)}\n`,
+    70 70 │   );
+    71 71 │   
+  
+
+tests/decision_snapshot.test.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     1  1 │   import { describe, expect, test } from "bun:test";
+     2  2 │   import {
+     3    │ - → DecisionReviewSchema,
+     4    │ - → DecisionSnapshotSchema,
+     5    │ - → evaluateEntryEligibility,
+        3 │ + ··DecisionReviewSchema,
+        4 │ + ··DecisionSnapshotSchema,
+        5 │ + ··evaluateEntryEligibility,
+     6  6 │   } from "../src/decision/decision_snapshot";
+     7  7 │   
+     8  8 │   const evidence = (available_at = "2026-07-29T09:00:00+09:00") => ({
+     9    │ - → assertion_type:·"observed_fact"·as·const,
+    10    │ - → ref:·"https://example.com/evidence",
+    11    │ - → available_at,
+        9 │ + ··assertion_type:·"observed_fact"·as·const,
+       10 │ + ··ref:·"https://example.com/evidence",
+       11 │ + ··available_at,
+    12 12 │   });
+    13 13 │   
+    14 14 │   const gate = (status: "pass" | "fail" | "unknown" = "pass") => ({
+    15    │ - → status,
+    16    │ - → claim:·"testable·claim",
+    17    │ - → evidence:·[evidence()],
+    18    │ - → falsifiers:·["a·named·condition·would·invalidate·this·gate"],
+    19    │ - → unknowns:·[],
+       15 │ + ··status,
+       16 │ + ··claim:·"testable·claim",
+       17 │ + ··evidence:·[evidence()],
+       18 │ + ··falsifiers:·["a·named·condition·would·invalidate·this·gate"],
+       19 │ + ··unknowns:·[],
+    20 20 │   });
+    21 21 │   
+    22 22 │   const snapshot = () => ({
+    23    │ - → schema_version:·"1.0"·as·const,
+    24    │ - → decision_id:·"2026-07-29-test-entry",
+    25    │ - → decision_kind:·"entry_or_add"·as·const,
+    26    │ - → recorded_at:·"2026-07-29T18:00:00+09:00",
+    27    │ - → information_cutoff:·"2026-07-29T17:59:00+09:00",
+    28    │ - → analysis_target:·{·name:·"Analysis·target",·identifier:·"TEST"·},
+    29    │ - → execution_target:·{·name:·"Execution·target",·identifier:·"TEST-ETF"·},
+    30    │ - → proposed_action:·"buy"·as·const,
+    31    │ - → gates:·{
+    32    │ - → → underlying_reality:·gate(),
+    33    │ - → → price_pressure_mechanism:·gate(),
+    34    │ - → → weak_case_margin:·gate(),
+    35    │ - → },
+    36    │ - → assumptions:·["private·scenario·assumption"],
+    37    │ - → provenance:·{
+    38    │ - → → research_commit:·"0123456789abcdef",
+    39    │ - → → evidence_artifacts:·["docs/research/example.md"],
+    40    │ - → },
+       23 │ + ··schema_version:·"1.0"·as·const,
+       24 │ + ··decision_id:·"2026-07-29-test-entry",
+       25 │ + ··decision_kind:·"entry_or_add"·as·const,
+       26 │ + ··recorded_at:·"2026-07-29T18:00:00+09:00",
+       27 │ + ··information_cutoff:·"2026-07-29T17:59:00+09:00",
+       28 │ + ··analysis_target:·{·name:·"Analysis·target",·identifier:·"TEST"·},
+       29 │ + ··execution_target:·{·name:·"Execution·target",·identifier:·"TEST-ETF"·},
+       30 │ + ··proposed_action:·"buy"·as·const,
+       31 │ + ··gates:·{
+       32 │ + ····underlying_reality:·gate(),
+       33 │ + ····price_pressure_mechanism:·gate(),
+       34 │ + ····weak_case_margin:·gate(),
+       35 │ + ··},
+       36 │ + ··assumptions:·["private·scenario·assumption"],
+       37 │ + ··provenance:·{
+       38 │ + ····research_commit:·"0123456789abcdef",
+       39 │ + ····evidence_artifacts:·["docs/research/example.md"],
+       40 │ + ··},
+    41 41 │   });
+    42 42 │   
+    43 43 │   describe("decision snapshot", () => {
+    44    │ - → test("is·eligible·only·when·all·three·gates·pass",·()·=>·{
+    45    │ - → → expect(evaluateEntryEligibility(snapshot())).toEqual({
+    46    │ - → → → eligible_for_human_review:·true,
+    47    │ - → → → blockers:·[],
+    48    │ - → → });
+       44 │ + ··test("is·eligible·only·when·all·three·gates·pass",·()·=>·{
+       45 │ + ····expect(evaluateEntryEligibility(snapshot())).toEqual({
+       46 │ + ······eligible_for_human_review:·true,
+       47 │ + ······blockers:·[],
+       48 │ + ····});
+    49 49 │   
+    50    │ - → → const·blocked·=·snapshot();
+    51    │ - → → blocked.gates.price_pressure_mechanism·=·gate("unknown");
+    52    │ - → → expect(evaluateEntryEligibility(blocked)).toEqual({
+    53    │ - → → → eligible_for_human_review:·false,
+    54    │ - → → → blockers:·["price_pressure_mechanism:unknown"],
+    55    │ - → → });
+    56    │ - → });
+       50 │ + ····const·blocked·=·snapshot();
+       51 │ + ····blocked.gates.price_pressure_mechanism·=·gate("unknown");
+       52 │ + ····expect(evaluateEntryEligibility(blocked)).toEqual({
+       53 │ + ······eligible_for_human_review:·false,
+       54 │ + ······blockers:·["price_pressure_mechanism:unknown"],
+       55 │ + ····});
+       56 │ + ··});
+    57 57 │   
+    58    │ - → test("rejects·evidence·that·was·unavailable·at·the·information·cutoff",·()·=>·{
+    59    │ - → → const·invalid·=·snapshot();
+    60    │ - → → invalid.gates.weak_case_margin.evidence·=·[
+    61    │ - → → → evidence("2026-07-30T09:00:00+09:00"),
+    62    │ - → → ];
+       58 │ + ··test("rejects·evidence·that·was·unavailable·at·the·information·cutoff",·()·=>·{
+       59 │ + ····const·invalid·=·snapshot();
+       60 │ + ····invalid.gates.weak_case_margin.evidence·=·[
+       61 │ + ······evidence("2026-07-30T09:00:00+09:00"),
+       62 │ + ····];
+    63 63 │   
+    64    │ - → → expect(()·=>·DecisionSnapshotSchema.parse(invalid)).toThrow();
+    65    │ - → });
+       64 │ + ····expect(()·=>·DecisionSnapshotSchema.parse(invalid)).toThrow();
+       65 │ + ··});
+    66 66 │   
+    67    │ - → test("rejects·a·snapshot·recorded·before·its·information·cutoff",·()·=>·{
+    68    │ - → → const·invalid·=·snapshot();
+    69    │ - → → invalid.recorded_at·=·"2026-07-29T17:00:00+09:00";
+    70    │ - → → expect(()·=>·DecisionSnapshotSchema.parse(invalid)).toThrow();
+    71    │ - → });
+       67 │ + ··test("rejects·a·snapshot·recorded·before·its·information·cutoff",·()·=>·{
+       68 │ + ····const·invalid·=·snapshot();
+       69 │ + ····invalid.recorded_at·=·"2026-07-29T17:00:00+09:00";
+       70 │ + ····expect(()·=>·DecisionSnapshotSchema.parse(invalid)).toThrow();
+       71 │ + ··});
+    72 72 │   
+    73    │ - → test("keeps·outcome·review·separate·from·the·immutable·snapshot",·()·=>·{
+    74    │ - → → const·parsed·=·DecisionSnapshotSchema.parse(snapshot());
+    75    │ - → → expect(parsed).not.toHaveProperty("learning");
+       73 │ + ··test("keeps·outcome·review·separate·from·the·immutable·snapshot",·()·=>·{
+       74 │ + ····const·parsed·=·DecisionSnapshotSchema.parse(snapshot());
+       75 │ + ····expect(parsed).not.toHaveProperty("learning");
+    76 76 │   
+    77    │ - → → const·review·=·DecisionReviewSchema.parse({
+    78    │ - → → → schema_version:·"1.0",
+    79    │ - → → → review_id:·"review-2026-08-13-test-entry",
+    80    │ - → → → decision_id:·parsed.decision_id,
+    81    │ - → → → original_snapshot_commit:·"abcdef0123456789",
+    82    │ - → → → reviewed_at:·"2026-08-13T12:00:00+09:00",
+    83    │ - → → → outcome_evidence:·[evidence("2026-08-13T11:00:00+09:00")],
+    84    │ - → → → gate_reassessment:·{
+    85    │ - → → → → underlying_reality:·{·verdict:·"supported",·note:·"still·intact"·},
+    86    │ - → → → → price_pressure_mechanism:·{
+    87    │ - → → → → → verdict:·"unclear",
+    88    │ - → → → → → note:·"seller·mechanism·was·not·directly·observable",
+    89    │ - → → → → },
+    90    │ - → → → → weak_case_margin:·{·verdict:·"supported",·note:·"margin·remained"·},
+    91    │ - → → → },
+    92    │ - → → → errors_or_missed_conditions:·["one·mechanism·remained·unverified"],
+    93    │ - → → → learning:·"Keep·hypotheses·distinct·from·directly·observed·facts.",
+    94    │ - → → });
+  25 more lines truncated
+  
+
+tests/dummy.test.ts:1:1 assist/source/organizeImports  FIXABLE  ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × The imports and exports are not sorted.
+  
+  > 1 │ import { test, expect } from "bun:test";
+      │ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    2 │ 
+    3 │ test("environment check", () => {
+  
+  i Safe fix: Organize Imports (Biome)
+  
+    1   │ - import·{·test,·expect·}·from·"bun:test";
+      1 │ + import·{·expect,·test·}·from·"bun:test";
+    2 2 │   
+    3 3 │   test("environment check", () => {
+  
+
+tests/dummy.test.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+    2 2 │   
+    3 3 │   test("environment check", () => {
+    4   │ - → expect(1·+·1).toBe(2);
+      4 │ + ··expect(1·+·1).toBe(2);
+    5 5 │   });
+    6 6 │   
+  
+
+tests/hypothesis_lab.test.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     2  2 │   import { readFileSync } from "node:fs";
+     3  3 │   import {
+     4    │ - → CandidateDeepDiveSchema,
+     5    │ - → evaluateCandidate,
+     6    │ - → HypothesisSpecSchema,
+     7    │ - → McpCaptureSnapshotSchema,
+        4 │ + ··CandidateDeepDiveSchema,
+        5 │ + ··evaluateCandidate,
+        6 │ + ··HypothesisSpecSchema,
+        7 │ + ··McpCaptureSnapshotSchema,
+     8  8 │   } from "../src/research/hypothesis_lab";
+     9  9 │   
+    10 10 │   const hypothesisPath =
+    11    │ - → "data/hypothesis_lab/hypotheses/growth_value_dislocation_v1.json";
+       11 │ + ··"data/hypothesis_lab/hypotheses/growth_value_dislocation_v1.json";
+    12 12 │   const capturePath =
+    13    │ - → "data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json";
+       13 │ + ··"data/hypothesis_lab/captures/2026-08-13-growth-value-dislocation-stage-a.json";
+    14 14 │   const rionPath = "data/hypothesis_lab/deep_dives/2026-08-13-rion-6823.json";
+    15 15 │   const otecPath = "data/hypothesis_lab/deep_dives/2026-08-13-otec-1736.json";
+    16 16 │   
+    17 17 │   describe("hypothesis lab", () => {
+    18    │ - → test("validates·the·pre-registered·hypothesis·and·frozen·MCP·capture",·()·=>·{
+    19    │ - → → const·hypothesis·=·HypothesisSpecSchema.parse(
+    20    │ - → → → JSON.parse(readFileSync(hypothesisPath,·"utf8")),
+    21    │ - → → );
+    22    │ - → → const·capture·=·McpCaptureSnapshotSchema.parse(
+    23    │ - → → → JSON.parse(readFileSync(capturePath,·"utf8")),
+    24    │ - → → );
+       18 │ + ··test("validates·the·pre-registered·hypothesis·and·frozen·MCP·capture",·()·=>·{
+       19 │ + ····const·hypothesis·=·HypothesisSpecSchema.parse(
+       20 │ + ······JSON.parse(readFileSync(hypothesisPath,·"utf8")),
+       21 │ + ····);
+       22 │ + ····const·capture·=·McpCaptureSnapshotSchema.parse(
+       23 │ + ······JSON.parse(readFileSync(capturePath,·"utf8")),
+       24 │ + ····);
+    25 25 │   
+    26    │ - → → expect(capture.hypothesis_id).toBe(hypothesis.hypothesis_id);
+    27    │ - → → expect(capture.result_count).toBe(84);
+    28    │ - → → expect(capture.rows.length).toBe(10);
+    29    │ - → });
+       26 │ + ····expect(capture.hypothesis_id).toBe(hypothesis.hypothesis_id);
+       27 │ + ····expect(capture.result_count).toBe(84);
+       28 │ + ····expect(capture.rows.length).toBe(10);
+       29 │ + ··});
+    30 30 │   
+    31    │ - → test("marks·the·RION·deep·dive·eligible·only·after·all·three·gates·pass",·()·=>·{
+    32    │ - → → const·candidate·=·CandidateDeepDiveSchema.parse(
+    33    │ - → → → JSON.parse(readFileSync(rionPath,·"utf8")),
+    34    │ - → → );
+    35    │ - → → const·result·=·evaluateCandidate(candidate,·2);
+       31 │ + ··test("marks·the·RION·deep·dive·eligible·only·after·all·three·gates·pass",·()·=>·{
+       32 │ + ····const·candidate·=·CandidateDeepDiveSchema.parse(
+       33 │ + ······JSON.parse(readFileSync(rionPath,·"utf8")),
+       34 │ + ····);
+       35 │ + ····const·result·=·evaluateCandidate(candidate,·2);
+    36 36 │   
+    37    │ - → → expect(result).toEqual({
+    38    │ - → → → underlying_reality:·"pass",
+    39    │ - → → → price_pressure_mechanism:·"pass",
+    40    │ - → → → weak_case_margin:·"pass",
+    41    │ - → → → eligible_for_decision_snapshot:·true,
+    42    │ - → → });
+    43    │ - → });
+       37 │ + ····expect(result).toEqual({
+       38 │ + ······underlying_reality:·"pass",
+       39 │ + ······price_pressure_mechanism:·"pass",
+       40 │ + ······weak_case_margin:·"pass",
+       41 │ + ······eligible_for_decision_snapshot:·true,
+       42 │ + ····});
+       43 │ + ··});
+    44 44 │   
+    45    │ - → test("does·not·confuse·cheap·growth·with·the·registered·dislocation·alpha",·()·=>·{
+    46    │ - → → const·control·=·CandidateDeepDiveSchema.parse(
+    47    │ - → → → JSON.parse(readFileSync(otecPath,·"utf8")),
+    48    │ - → → );
+    49    │ - → → const·result·=·evaluateCandidate(control,·2);
+       45 │ + ··test("does·not·confuse·cheap·growth·with·the·registered·dislocation·alpha",·()·=>·{
+       46 │ + ····const·control·=·CandidateDeepDiveSchema.parse(
+       47 │ + ······JSON.parse(readFileSync(otecPath,·"utf8")),
+       48 │ + ····);
+       49 │ + ····const·result·=·evaluateCandidate(control,·2);
+    50 50 │   
+    51    │ - → → expect(result.underlying_reality).toBe("pass");
+    52    │ - → → expect(result.weak_case_margin).toBe("pass");
+    53    │ - → → expect(result.price_pressure_mechanism).toBe("unknown");
+    54    │ - → → expect(result.eligible_for_decision_snapshot).toBe(false);
+    55    │ - → });
+       51 │ + ····expect(result.underlying_reality).toBe("pass");
+       52 │ + ····expect(result.weak_case_margin).toBe("pass");
+       53 │ + ····expect(result.price_pressure_mechanism).toBe("unknown");
+       54 │ + ····expect(result.eligible_for_decision_snapshot).toBe(false);
+       55 │ + ··});
+    56 56 │   
+    57    │ - → test("fails·closed·when·seller-flow·evidence·is·removed",·()·=>·{
+    58    │ - → → const·candidate·=·CandidateDeepDiveSchema.parse(
+    59    │ - → → → JSON.parse(readFileSync(rionPath,·"utf8")),
+    60    │ - → → );
+    61    │ - → → candidate.pressure_signals·=·[];
+       57 │ + ··test("fails·closed·when·seller-flow·evidence·is·removed",·()·=>·{
+       58 │ + ····const·candidate·=·CandidateDeepDiveSchema.parse(
+       59 │ + ······JSON.parse(readFileSync(rionPath,·"utf8")),
+       60 │ + ····);
+       61 │ + ····candidate.pressure_signals·=·[];
+    62 62 │   
+    63    │ - → → const·result·=·evaluateCandidate(candidate,·2);
+    64    │ - → → expect(result.price_pressure_mechanism).toBe("unknown");
+    65    │ - → → expect(result.eligible_for_decision_snapshot).toBe(false);
+    66    │ - → });
+       63 │ + ····const·result·=·evaluateCandidate(candidate,·2);
+       64 │ + ····expect(result.price_pressure_mechanism).toBe("unknown");
+       65 │ + ····expect(result.eligible_for_decision_snapshot).toBe(false);
+       66 │ + ··});
+    67 67 │   
+    68    │ - → test("rejects·the·underlying-reality·gate·when·a·required·growth·leg·turns·negative",·()·=>·{
+    69    │ - → → const·candidate·=·CandidateDeepDiveSchema.parse(
+    70    │ - → → → JSON.parse(readFileSync(rionPath,·"utf8")),
+    71    │ - → → );
+    72    │ - → → candidate.metrics.operating_income_yoy·=·-0.01;
+       68 │ + ··test("rejects·the·underlying-reality·gate·when·a·required·growth·leg·turns·negative",·()·=>·{
+       69 │ + ····const·candidate·=·CandidateDeepDiveSchema.parse(
+       70 │ + ······JSON.parse(readFileSync(rionPath,·"utf8")),
+       71 │ + ····);
+       72 │ + ····candidate.metrics.operating_income_yoy·=·-0.01;
+    73 73 │   
+    74    │ - → → const·result·=·evaluateCandidate(candidate,·2);
+    75    │ - → → expect(result.underlying_reality).toBe("fail");
+    76    │ - → → expect(result.eligible_for_decision_snapshot).toBe(false);
+    77    │ - → });
+       74 │ + ····const·result·=·evaluateCandidate(candidate,·2);
+       75 │ + ····expect(result.underlying_reality).toBe("fail");
+       76 │ + ····expect(result.eligible_for_decision_snapshot).toBe(false);
+       77 │ + ··});
+    78 78 │   });
+    79 79 │   
+  
+
+tests/pipeline_verification.test.ts format ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Formatter would have printed the following content:
+  
+     4  4 │   
+     5  5 │   const outcome = (
+     6    │ - → overrides:·Partial<StandardOutcome>·=·{},
+        6 │ + ··overrides:·Partial<StandardOutcome>·=·{},
+     7  7 │   ): StandardOutcome => ({
+     8    │ - → sharpe:·0.8,
+     9    │ - → ic:·0.04,
+    10    │ - → max_drawdown:·0.2,
+    11    │ - → p_value:·0.05,
+    12    │ - → factor_id:·"F_TEST",
+    13    │ - → backtest_days:·252,
+    14    │ - → ...overrides,
+        8 │ + ··sharpe:·0.8,
+        9 │ + ··ic:·0.04,
+       10 │ + ··max_drawdown:·0.2,
+       11 │ + ··p_value:·0.05,
+       12 │ + ··factor_id:·"F_TEST",
+       13 │ + ··backtest_days:·252,
+       14 │ + ··...overrides,
+    15 15 │   });
+    16 16 │   
+    17 17 │   describe("verification gate", () => {
+    18    │ - → test("promotes·only·when·every·criterion·passes",·()·=>·{
+    19    │ - → → const·result·=·judgeVerification(outcome());
+       18 │ + ··test("promotes·only·when·every·criterion·passes",·()·=>·{
+       19 │ + ····const·result·=·judgeVerification(outcome());
+    20 20 │   
+    21    │ - → → expect(result.verdict).toBe("GO");
+    22    │ - → → expect(result.reasons).toEqual(["All·verification·criteria·passed"]);
+    23    │ - → });
+       21 │ + ····expect(result.verdict).toBe("GO");
+       22 │ + ····expect(result.reasons).toEqual(["All·verification·criteria·passed"]);
+       23 │ + ··});
+    24 24 │   
+    25    │ - → test("treats·drawdown·as·a·positive·loss·magnitude",·()·=>·{
+    26    │ - → → expect(()·=>·judgeVerification(outcome({·max_drawdown:·-0.2·}))).toThrow();
+    27    │ - → });
+       25 │ + ··test("treats·drawdown·as·a·positive·loss·magnitude",·()·=>·{
+       26 │ + ····expect(()·=>·judgeVerification(outcome({·max_drawdown:·-0.2·}))).toThrow();
+       27 │ + ··});
+    28 28 │   
+    29    │ - → test("keeps·one·failed·criterion·on·HOLD·and·multiple·failures·on·PIVOT",·()·=>·{
+    30    │ - → → expect(judgeVerification(outcome({·p_value:·0.3·})).verdict).toBe("HOLD");
+    31    │ - → → expect(
+    32    │ - → → → judgeVerification(outcome({·p_value:·0.3,·max_drawdown:·0.6·})).verdict,
+    33    │ - → → ).toBe("PIVOT");
+    34    │ - → });
+       29 │ + ··test("keeps·one·failed·criterion·on·HOLD·and·multiple·failures·on·PIVOT",·()·=>·{
+       30 │ + ····expect(judgeVerification(outcome({·p_value:·0.3·})).verdict).toBe("HOLD");
+       31 │ + ····expect(
+       32 │ + ······judgeVerification(outcome({·p_value:·0.3,·max_drawdown:·0.6·})).verdict,
+       33 │ + ····).toBe("PIVOT");
+       34 │ + ··});
+    35 35 │   
+    36    │ - → test("rejects·short·backtests·before·promotion",·()·=>·{
+    37    │ - → → const·result·=·judgeVerification(outcome({·backtest_days:·30·}));
+       36 │ + ··test("rejects·short·backtests·before·promotion",·()·=>·{
+       37 │ + ····const·result·=·judgeVerification(outcome({·backtest_days:·30·}));
+    38 38 │   
+    39    │ - → → expect(result.verdict).toBe("HOLD");
+    40    │ - → → expect(result.reasons[0]).toContain("Backtest·days·30·<·60");
+    41    │ - → });
+       39 │ + ····expect(result.verdict).toBe("HOLD");
+       40 │ + ····expect(result.reasons[0]).toContain("Backtest·days·30·<·60");
+       41 │ + ··});
+    42 42 │   });
+    43 43 │   
+  
+
+The number of diagnostics exceeds the limit allowed. Use --max-diagnostics to increase it.
+Diagnostics not shown: 37.
+Checked 57 files in 41ms. No fixes applied.
+Found 57 errors.
+check ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  × Some errors were emitted while running checks.
+  
+
+error: script "format:check" exited with code 1
+exit_code=1
+
+===== oxlint =====
+$ oxlint --deny-warnings src tests scripts
+::warning file=src/io/sector_data_fetcher.ts,line=6,endLine=6,col=10,endColumn=24,title=eslint(no-unused-vars)::Identifier 'fetchWithCache' is imported but never used.
+::warning file=src/io/discord.ts,line=7,endLine=7,col=2,endColumn=14,title=eslint(no-unused-vars)::Identifier 'MessageFlags' is imported but never used.
+::warning file=src/io/discord.ts,line=79,endLine=79,col=12,endColumn=18,title=eslint(no-unused-vars)::Catch parameter '_error' is caught but never used.
+::warning file=src/io/discord.ts,line=95,endLine=95,col=9,endColumn=18,title=eslint(no-unused-vars)::Variable 'isPrivate' is declared but never used. Unused variables should start with a '_'.
+::warning file=src/io/discord.ts,line=196,endLine=196,col=12,endColumn=18,title=eslint(no-unused-vars)::Catch parameter '_error' is caught but never used.
+::warning file=src/preprocess/sector_spillover.ts,line=105,endLine=105,col=16,endColumn=28,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+::warning file=src/preprocess/sector_spillover.ts,line=120,endLine=120,col=15,endColumn=27,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+::warning file=src/preprocess/sector_spillover.ts,line=149,endLine=149,col=4,endColumn=16,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+::warning file=src/preprocess/sector_spillover.ts,line=195,endLine=195,col=12,endColumn=24,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+::warning file=src/preprocess/sector_spillover.ts,line=267,endLine=267,col=4,endColumn=16,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+::warning file=src/preprocess/sector_spillover.ts,line=321,endLine=321,col=26,endColumn=56,title=unicorn(no-new-array)::Do not use `new Array(singleArgument)`.
+
+Found 11 warnings and 0 errors.
+Finished in 17ms on 57 files with 96 rules using 4 threads.
+error: script "lint" exited with code 1
+exit_code=1
+
+===== typescript =====
+$ tsc --noEmit
+exit_code=0
+
+===== typescript tests =====
+$ bun test tests/*.test.ts
+bun test v1.3.13 (bf2e2cec)
+
+::group::tests/dummy.test.ts:
+(pass) environment check
+
+::endgroup::
+
+::group::tests/hypothesis_lab.test.ts:
+(pass) hypothesis lab > validates the pre-registered hypothesis and frozen MCP capture [7.00ms]
+(pass) hypothesis lab > marks the RION deep dive eligible only after all three gates pass [3.00ms]
+(pass) hypothesis lab > does not confuse cheap growth with the registered dislocation alpha [1.00ms]
+(pass) hypothesis lab > fails closed when seller-flow evidence is removed
+(pass) hypothesis lab > rejects the underlying-reality gate when a required growth leg turns negative [1.00ms]
+
+::endgroup::
+
+::group::tests/decision_snapshot.test.ts:
+(pass) decision snapshot > is eligible only when all three gates pass [2.00ms]
+(pass) decision snapshot > rejects evidence that was unavailable at the information cutoff [1.00ms]
+(pass) decision snapshot > rejects a snapshot recorded before its information cutoff
+(pass) decision snapshot > keeps outcome review separate from the immutable snapshot [2.00ms]
+
+::endgroup::
+
+::group::tests/pipeline_verification.test.ts:
+(pass) verification gate > promotes only when every criterion passes [1.00ms]
+(pass) verification gate > treats drawdown as a positive loss magnitude
+(pass) verification gate > keeps one failed criterion on HOLD and multiple failures on PIVOT [1.00ms]
+(pass) verification gate > rejects short backtests before promotion
+
+::endgroup::
+
+ 14 pass
+ 0 fail
+ 26 expect() calls
+Ran 14 tests across 4 files. [90.00ms]
+exit_code=0
