@@ -4,6 +4,11 @@ This directory stores reproducible empirical evidence and explicit non-reproduct
 
 ## Warin arXiv:2101.02044 v4
 
+Primary source:
+
+- https://arxiv.org/abs/2101.02044v4
+- https://arxiv.org/pdf/2101.02044v4
+
 Canonical machine-readable scope is `warin_2101_02044_v4_experiment_matrix.json`.
 
 The current evidence is intentionally **partial**, not a paper-wide reproduction:
