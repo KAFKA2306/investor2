@@ -1,0 +1,68 @@
+{
+  "schema_version": "investor2.sandisk-growth-decision.v1",
+  "as_of": "2026-08-15",
+  "company": {"name": "Sandisk Corporation", "ticker": "SNDK"},
+  "canonical_source": {
+    "repository": "KAFKA2306/semiconductor-earnings-model",
+    "path": "data/financial_analysis/sandisk-long-term-financial-model-2026.json",
+    "role": "growth-semantics authority"
+  },
+  "primary_sources": [
+    "https://investor.sandisk.com/events/event-details/2026-sandisk-investor-day",
+    "https://investor.sandisk.com/news-releases/news-release-details/sandisk-reports-fiscal-third-quarter-2026-financial-results",
+    "https://www.sec.gov/Archives/edgar/data/2023554/000162828026028879/sndkq3-26ex991xpressrelease.htm"
+  ],
+  "decision_rule": {
+    "required_dimensions": ["metric", "unit", "period", "rate_basis", "scope", "value_type", "driver"],
+    "rules": [
+      "Keep revenue growth, bit shipment growth, ASP, mix, and margin as separate series.",
+      "Never interchange QoQ, YoY, CAGR, or issuer long-term target rate bases.",
+      "Preserve 'mid-to-high teens' as issuer wording; do not convert it to a numeric interval.",
+      "Treat 'consistent with bit growth' as a qualitative relation, not a numeric identity.",
+      "Keep actual, issuer guidance, estimate, and scenario values separate.",
+      "If volume, price, or mix contribution is not disclosed quantitatively, retain UNKNOWN rather than allocating revenue growth."
+    ]
+  },
+  "observations": [
+    {
+      "metric": "revenue_growth",
+      "unit": "percent",
+      "period": "Q3 FY2026 vs Q2 FY2026",
+      "rate_basis": "QoQ",
+      "scope": "Sandisk consolidated revenue",
+      "value_type": "actual",
+      "value": 97,
+      "driver": ["mix_shift", "higher_pricing"],
+      "source": "https://investor.sandisk.com/news-releases/news-release-details/sandisk-reports-fiscal-third-quarter-2026-financial-results"
+    },
+    {
+      "metric": "revenue_growth",
+      "unit": "percent",
+      "period": "Q3 FY2026 vs Q3 FY2025",
+      "rate_basis": "YoY",
+      "scope": "Sandisk consolidated revenue",
+      "value_type": "actual",
+      "value": 251,
+      "driver": ["mix_shift", "higher_pricing"],
+      "source": "https://investor.sandisk.com/news-releases/news-release-details/sandisk-reports-fiscal-third-quarter-2026-financial-results"
+    },
+    {
+      "metric": "revenue_growth",
+      "unit": "percent",
+      "period": "FY2028-FY2030",
+      "rate_basis": "issuer_long_term_model_target",
+      "scope": "Sandisk consolidated revenue",
+      "value_type": "issuer_guidance",
+      "value": "mid-to-high teens",
+      "driver": ["bit_growth_relation"],
+      "qualifier": "consistent with bit growth",
+      "numeric_range": null,
+      "source": "https://investor.sandisk.com/events/event-details/2026-sandisk-investor-day"
+    }
+  ],
+  "unknowns": [
+    "Numeric decomposition of Q3 FY2026 revenue growth into volume, price, and mix contributions.",
+    "Numeric equality between long-term revenue growth and bit growth.",
+    "A numeric interval for the issuer phrase 'mid-to-high teens' unless explicitly supplied by the issuer source."
+  ]
+}
