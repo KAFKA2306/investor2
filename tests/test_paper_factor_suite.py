@@ -1,23 +1,16 @@
 from __future__ import annotations
 
-import importlib.util
 import json
-import sys
 from pathlib import Path
 
+from scripts import verify_paper_factor_suite
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "verify_paper_factor_suite.py"
-SPEC = importlib.util.spec_from_file_location("verify_paper_factor_suite", SCRIPT)
-assert SPEC and SPEC.loader
-MODULE = importlib.util.module_from_spec(SPEC)
-sys.modules[SPEC.name] = MODULE
-SPEC.loader.exec_module(MODULE)
 
 
 def test_official_current_multi_paper_suite() -> None:
     registry = ROOT / "docs/research/paper_factor_registry.json"
-    report = MODULE.build_report(registry)
+    report = verify_paper_factor_suite.build_report(registry)
     studies = report["studies"]
     snapshot = json.loads(
         (ROOT / "docs/research/kenneth_french_current_snapshot_2026-06.json").read_text(
