@@ -30,10 +30,28 @@ const pyFiles = maintained.filter((path) => path.endsWith(".py"));
 
 type Check = [boolean, string, string, string[], string[]];
 const checks: Check[] = [
-  [checkTypeScript, "Biome", "bun", ["x", "biome", "check", "--config-path=config/biome.json"], tsFiles],
+  [
+    checkTypeScript,
+    "Biome",
+    "bun",
+    ["x", "biome", "check", "--config-path=config/biome.json"],
+    tsFiles,
+  ],
   [checkTypeScript, "Oxlint", "bun", ["x", "oxlint"], tsFiles],
-  [checkPython, "Ruff format", "uv", ["run", "--no-sync", "ruff", "format", "--check"], pyFiles],
-  [checkPython, "Ruff lint", "uv", ["run", "--no-sync", "ruff", "check"], pyFiles],
+  [
+    checkPython,
+    "Ruff format",
+    "uv",
+    ["run", "--no-sync", "ruff", "format", "--check"],
+    pyFiles,
+  ],
+  [
+    checkPython,
+    "Ruff lint",
+    "uv",
+    ["run", "--no-sync", "ruff", "check"],
+    pyFiles,
+  ],
 ];
 
 let failed = false;
