@@ -1,0 +1,38 @@
+{
+  "schema_version": "investor2.kenneth-french-current-snapshot.v1",
+  "publisher": "Kenneth R. French Data Library",
+  "library_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library.html",
+  "retrieved_on": "2026-08-16",
+  "pinned_last_observation": "2026-06",
+  "authority": "official_primary",
+  "generation_regime": {
+    "current_release": "CIZ",
+    "boundary": "Beginning with the January 2025 data release, the Data Library uses CRSP CIZ inputs for US research returns.",
+    "legacy_fiz_archive_retained_separately": true,
+    "do_not_mix_unlabeled_vintages": true
+  },
+  "datasets": {
+    "ff3_1992_2020": {
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+      "upstream_zip_sha256": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb",
+      "upstream_csv_member": "F-F_Research_Data_Factors.csv",
+      "upstream_csv_sha256": "6a5340a3c7642cf12b2cb4fafd4a47e93d80b159227de53aa0cbc102016b65e2",
+      "normalized_path": "docs/research/data/ff3_1992_2026-06.csv",
+      "normalized_sha256": "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf",
+      "first_observation": "1992-07",
+      "last_observation": "2026-06",
+      "rows": 408
+    },
+    "ff5_2015_2020": {
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
+      "upstream_zip_sha256": "cbc3724812132654fbbe8daae3c46e0f90e70008434f94a7986fe49f1db6ad3b",
+      "upstream_csv_member": "F-F_Research_Data_5_Factors_2x3.csv",
+      "upstream_csv_sha256": "6973d875fd92308133f1569a3318e1e95e22b2b506ed8f5815245b8b4ad9eecb",
+      "normalized_path": "docs/research/data/ff5_2015_2026-06.csv",
+      "normalized_sha256": "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3",
+      "first_observation": "2015-05",
+      "last_observation": "2026-06",
+      "rows": 134
+    }
+  }
+}
