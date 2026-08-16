@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - "scripts/refresh_official_french_factors.py"
+      - "docs/research/paper_factor_registry.json"
       - ".github/workflows/refresh-official-french-factors.yml"
   workflow_dispatch:
 
