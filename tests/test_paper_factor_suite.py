@@ -13,7 +13,9 @@ def test_official_current_multi_paper_suite() -> None:
     registry = ROOT / "docs/research/paper_factor_registry.json"
     report = cast(dict[str, Any], verify_paper_factor_suite.build_report(registry))
     studies = cast(dict[str, Any], report["studies"])
-    snapshot_path = ROOT / "docs/research/kenneth_french_current_snapshot_2026-06.json"
+    snapshot_path = (
+        ROOT / "docs/research/kenneth_french_current_snapshot_2026-06.json"
+    )
     snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
 
     assert len(studies) == 7
