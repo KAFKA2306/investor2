@@ -5,7 +5,6 @@ on:
     paths:
       - "scripts/audit_french_factor_vintages.py"
       - "scripts/verify_paper_factor_suite.py"
-      - "tests/test_paper_factor_suite.py"
       - "docs/research/paper_factor_registry.json"
       - "docs/research/kenneth_french_factor_vintage_contract.json"
       - "docs/research/kenneth_french_current_snapshot_2026-06.json"
@@ -30,20 +29,48 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install regression test dependency
-        run: python -m pip install --disable-pip-version-check pytest
-
       - name: Compile audit
         run: |
           python -m py_compile scripts/audit_french_factor_vintages.py
           python -m py_compile scripts/verify_paper_factor_suite.py
 
       - name: Validate current pinned official suite
-        run: python -m pytest -q tests/test_paper_factor_suite.py
+        run: |
+          mkdir -p artifacts
+          python scripts/verify_paper_factor_suite.py \
+            --registry docs/research/paper_factor_registry.json \
+            --json-output artifacts/official-current-paper-factor-suite.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          report = json.loads(Path("artifacts/official-current-paper-factor-suite.json").read_text())
+          snapshot = json.loads(Path("docs/research/kenneth_french_current_snapshot_2026-06.json").read_text())
+          datasets = report["datasets"]
+          studies = report["studies"]
+
+          assert snapshot["authority"] == "official_primary"
+          assert snapshot["pinned_last_observation"] == "2026-06"
+          assert snapshot["generation_regime"]["current_release"] == "CIZ"
+          assert len(studies) == 7
+
+          ff3 = datasets["ff3_1992_2020"]
+          assert ff3["authority"] == "official_primary"
+          assert (ff3["rows"], ff3["first_observation"], ff3["last_observation"]) == (408, "1992-07", "2026-06")
+          assert ff3["actual_sha256"] == "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf"
+
+          ff5 = datasets["ff5_2015_2020"]
+          assert ff5["authority"] == "official_primary"
+          assert (ff5["rows"], ff5["first_observation"], ff5["last_observation"]) == (134, "2015-05", "2026-06")
+          assert ff5["actual_sha256"] == "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3"
+
+          assert studies["fama_french_1993_smb"]["gross_results"]["full_oos"]["months"] == 400
+          assert studies["fama_french_2015_rmw"]["gross_results"]["full_oos"]["months"] == 134
+          assert all(study["verdict"] in {"not_confirmed", "proxy_not_confirmed"} for study in studies.values())
+          PY
 
       - name: Run empirical audit against Kenneth French July 2020 archives
         run: |
-          mkdir -p artifacts
           python - <<'PY'
           import importlib.util
           import json
@@ -71,7 +98,9 @@ jobs:
       - name: Upload empirical evidence
         uses: actions/upload-artifact@v4
         with:
-          name: french-2020-vintage-empirical-audit
-          path: artifacts/french-2020-vintage-empirical-audit.json
+          name: french-factor-evidence
+          path: |
+            artifacts/official-current-paper-factor-suite.json
+            artifacts/french-2020-vintage-empirical-audit.json
           if-no-files-found: error
           retention-days: 30
