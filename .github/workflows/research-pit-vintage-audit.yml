@@ -8,6 +8,8 @@ on:
       - "docs/research/paper_factor_registry.json"
       - "docs/research/kenneth_french_factor_vintage_contract.json"
       - "docs/research/kenneth_french_current_snapshot_2026-06.json"
+      - "docs/research/multi_paper_oos_summary.md"
+      - "docs/research/official_current_paper_factor_suite.json"
       - "docs/research/data/ff3_1992_2026-06.csv"
       - "docs/research/data/ff5_2015_2026-06.csv"
       - ".github/workflows/research-pit-vintage-audit.yml"
