@@ -4,7 +4,6 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "check": "bun scripts/quality_changed.ts --ts-only && bun run typecheck && bun run test",
     "quality:changed": "bun scripts/quality_changed.ts",
     "quality:ts": "bun scripts/quality_changed.ts --ts-only",
     "quality:python": "bun scripts/quality_changed.ts --python-only",
