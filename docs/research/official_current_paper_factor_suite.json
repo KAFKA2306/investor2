@@ -1,0 +1,973 @@
+{
+  "datasets": {
+    "ff3_1992_2026m06": {
+      "actual_sha256": "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf",
+      "crsp_input_format": "CIZ current-research-return generation",
+      "first_observation": "1992-07",
+      "last_observation": "2026-06",
+      "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors_archive.html",
+      "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors.html",
+      "path": "docs/research/data/ff3_1992_2026-06.csv",
+      "publisher": "Kenneth R. French Data Library",
+      "rows": 408,
+      "sha256": "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf",
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+      "upstream_csv_member": "F-F_Research_Data_Factors.csv",
+      "upstream_csv_sha256": "6a5340a3c7642cf12b2cb4fafd4a47e93d80b159227de53aa0cbc102016b65e2",
+      "upstream_vintage": "current data library observed 2026-08-16; pinned through 2026-06",
+      "upstream_zip_sha256": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb"
+    },
+    "ff5_2015_2026m06": {
+      "actual_sha256": "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3",
+      "crsp_input_format": "CIZ current-research-return generation",
+      "first_observation": "2015-05",
+      "last_observation": "2026-06",
+      "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3_archive.html",
+      "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html",
+      "path": "docs/research/data/ff5_2015_2026-06.csv",
+      "publisher": "Kenneth R. French Data Library",
+      "rows": 134,
+      "sha256": "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3",
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
+      "upstream_csv_member": "F-F_Research_Data_5_Factors_2x3.csv",
+      "upstream_csv_sha256": "6973d875fd92308133f1569a3318e1e95e22b2b506ed8f5815245b8b4ad9eecb",
+      "upstream_vintage": "current data library observed 2026-08-16; pinned through 2026-06",
+      "upstream_zip_sha256": "cbc3724812132654fbbe8daae3c46e0f90e70008434f94a7986fe49f1db6ad3b"
+    }
+  },
+  "method": {
+    "block_bootstrap": {
+      "block_months": 12,
+      "repetitions": 20000,
+      "seed": 2306
+    },
+    "confirmation_gate": "Newey-West t >= 1.96; full block-bootstrap lower bound > 0; late-half annual arithmetic mean > 0; and full mean after a mechanical 25 bps monthly haircut > 0",
+    "cost_warning": "The monthly haircut is a sensitivity test, not an estimate of realized turnover, borrow, spread, market impact, or taxes.",
+    "newey_west_lags": 6,
+    "split": "chronological midpoint with no tuning"
+  },
+  "publication_filter": {
+    "end": null,
+    "start": null
+  },
+  "studies": {
+    "banz_1981_size_late_oos_proxy": {
+      "column": "smb_percent",
+      "dataset": "ff3_1992_2026m06",
+      "doi": "10.1016/0304-405X(81)90018-0",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.021041176470588237,
+          "annualized_sharpe_zero_rf": 0.16983995595832502,
+          "annualized_volatility": 0.12388825910759939,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.03552352941176471,
+            0.0702529411764706
+          ],
+          "cagr": 0.01356969030018118,
+          "cumulative_return": 0.25751002044119775,
+          "end": "2009-06",
+          "iid_t_stat": 0.7002680778664256,
+          "max_drawdown": -0.41276928378222266,
+          "months": 204,
+          "newey_west_t_stat_lag_6": 0.8179032390998988,
+          "positive_month_fraction": 0.5049019607843137,
+          "start": "1992-07"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.00731764705882353,
+          "annualized_sharpe_zero_rf": 0.06791306142744305,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.027373529411764703,
+            0.039058823529411764
+          ],
+          "cagr": 0.0015777415815849682,
+          "cumulative_return": 0.0550634852052978,
+          "end": "2026-06",
+          "iid_t_stat": 0.3959977942150943,
+          "max_drawdown": -0.41276928378222266,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.4418936200946498,
+          "positive_month_fraction": 0.5073529411764706,
+          "start": "1992-07"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": -0.006405882352941177,
+          "annualized_sharpe_zero_rf": -0.07208291119366418,
+          "annualized_volatility": 0.08886825250065969,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.047476470588235294,
+            0.030982352941176468
+          ],
+          "cagr": -0.010272325591572984,
+          "cumulative_return": -0.16098999765017585,
+          "end": "2026-06",
+          "iid_t_stat": -0.297205456653495,
+          "max_drawdown": -0.34936329662650634,
+          "months": 204,
+          "newey_west_t_stat_lag_6": -0.31261565355323895,
+          "positive_month_fraction": 0.5098039215686274,
+          "start": "2009-07"
+        }
+      },
+      "id": "banz_1981_size_late_oos_proxy",
+      "implementation": "proxy",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.00731764705882353,
+          "annualized_sharpe_zero_rf": 0.06791306142744305,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.0015777415815849682,
+          "cumulative_return": 0.0550634852052978,
+          "end": "2026-06",
+          "iid_t_stat": 0.3959977942150943,
+          "max_drawdown": -0.41276928378222266,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.4418936200946498,
+          "positive_month_fraction": 0.5073529411764706,
+          "start": "1992-07"
+        },
+        "10": {
+          "annualized_arithmetic_mean": -0.004682352941176476,
+          "annualized_sharpe_zero_rf": -0.04345562451466618,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.01037941302884493,
+          "cumulative_return": -0.29864721787693216,
+          "end": "2026-06",
+          "iid_t_stat": -0.2533876561054786,
+          "max_drawdown": -0.4478458792595533,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -0.282755081668281,
+          "positive_month_fraction": 0.49264705882352944,
+          "start": "1992-07"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.022682352941176473,
+          "annualized_sharpe_zero_rf": -0.2105086534278299,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.02806998111209591,
+          "cumulative_return": -0.6201694781373788,
+          "end": "2026-06",
+          "iid_t_stat": -1.2274658315863374,
+          "max_drawdown": -0.6714741834466476,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -1.3697281343126764,
+          "positive_month_fraction": 0.45588235294117646,
+          "start": "1992-07"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.05268235294117647,
+          "annualized_sharpe_zero_rf": -0.4889303682831028,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.05691130810135969,
+          "cumulative_return": -0.8636088239149887,
+          "end": "2026-06",
+          "iid_t_stat": -2.8509294573877684,
+          "max_drawdown": -0.8757086917022842,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -3.1813498887200025,
+          "positive_month_fraction": 0.41421568627450983,
+          "start": "1992-07"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "1992-07",
+      "paper": "Banz (1981), The relationship between return and market value of common stocks",
+      "publication_month": "1981-03",
+      "scope_note": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression.",
+      "verdict": "proxy_not_confirmed"
+    },
+    "fama_french_1992_size_proxy": {
+      "column": "smb_percent",
+      "dataset": "ff3_1992_2026m06",
+      "doi": "10.1111/j.1540-6261.1992.tb04398.x",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.021041176470588237,
+          "annualized_sharpe_zero_rf": 0.16983995595832502,
+          "annualized_volatility": 0.12388825910759939,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.03552352941176471,
+            0.0702529411764706
+          ],
+          "cagr": 0.01356969030018118,
+          "cumulative_return": 0.25751002044119775,
+          "end": "2009-06",
+          "iid_t_stat": 0.7002680778664256,
+          "max_drawdown": -0.41276928378222266,
+          "months": 204,
+          "newey_west_t_stat_lag_6": 0.8179032390998988,
+          "positive_month_fraction": 0.5049019607843137,
+          "start": "1992-07"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.00731764705882353,
+          "annualized_sharpe_zero_rf": 0.06791306142744305,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.027373529411764703,
+            0.039058823529411764
+          ],
+          "cagr": 0.0015777415815849682,
+          "cumulative_return": 0.0550634852052978,
+          "end": "2026-06",
+          "iid_t_stat": 0.3959977942150943,
+          "max_drawdown": -0.41276928378222266,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.4418936200946498,
+          "positive_month_fraction": 0.5073529411764706,
+          "start": "1992-07"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": -0.006405882352941177,
+          "annualized_sharpe_zero_rf": -0.07208291119366418,
+          "annualized_volatility": 0.08886825250065969,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.047476470588235294,
+            0.030982352941176468
+          ],
+          "cagr": -0.010272325591572984,
+          "cumulative_return": -0.16098999765017585,
+          "end": "2026-06",
+          "iid_t_stat": -0.297205456653495,
+          "max_drawdown": -0.34936329662650634,
+          "months": 204,
+          "newey_west_t_stat_lag_6": -0.31261565355323895,
+          "positive_month_fraction": 0.5098039215686274,
+          "start": "2009-07"
+        }
+      },
+      "id": "fama_french_1992_size_proxy",
+      "implementation": "proxy",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.00731764705882353,
+          "annualized_sharpe_zero_rf": 0.06791306142744305,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.0015777415815849682,
+          "cumulative_return": 0.0550634852052978,
+          "end": "2026-06",
+          "iid_t_stat": 0.3959977942150943,
+          "max_drawdown": -0.41276928378222266,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.4418936200946498,
+          "positive_month_fraction": 0.5073529411764706,
+          "start": "1992-07"
+        },
+        "10": {
+          "annualized_arithmetic_mean": -0.004682352941176476,
+          "annualized_sharpe_zero_rf": -0.04345562451466618,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.01037941302884493,
+          "cumulative_return": -0.29864721787693216,
+          "end": "2026-06",
+          "iid_t_stat": -0.2533876561054786,
+          "max_drawdown": -0.4478458792595533,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -0.282755081668281,
+          "positive_month_fraction": 0.49264705882352944,
+          "start": "1992-07"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.022682352941176473,
+          "annualized_sharpe_zero_rf": -0.2105086534278299,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.02806998111209591,
+          "cumulative_return": -0.6201694781373788,
+          "end": "2026-06",
+          "iid_t_stat": -1.2274658315863374,
+          "max_drawdown": -0.6714741834466476,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -1.3697281343126764,
+          "positive_month_fraction": 0.45588235294117646,
+          "start": "1992-07"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.05268235294117647,
+          "annualized_sharpe_zero_rf": -0.4889303682831028,
+          "annualized_volatility": 0.10775021630620432,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.05691130810135969,
+          "cumulative_return": -0.8636088239149887,
+          "end": "2026-06",
+          "iid_t_stat": -2.8509294573877684,
+          "max_drawdown": -0.8757086917022842,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -3.1813498887200025,
+          "positive_month_fraction": 0.41421568627450983,
+          "start": "1992-07"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "1992-07",
+      "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "publication_month": "1992-06",
+      "scope_note": "SMB is a return-factor proxy for the paper's security-level size characteristic result.",
+      "verdict": "proxy_not_confirmed"
+    },
+    "fama_french_1992_value_proxy": {
+      "column": "hml_percent",
+      "dataset": "ff3_1992_2026m06",
+      "doi": "10.1111/j.1540-6261.1992.tb04398.x",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.04169411764705883,
+          "annualized_sharpe_zero_rf": 0.3686144557115188,
+          "annualized_volatility": 0.11311037047252713,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.020076470588235296,
+            0.11985882352941178
+          ],
+          "cagr": 0.03593448294537582,
+          "cumulative_return": 0.8224218884741363,
+          "end": "2009-06",
+          "iid_t_stat": 1.5198363360281548,
+          "max_drawdown": -0.39867294174775625,
+          "months": 204,
+          "newey_west_t_stat_lag_6": 1.250133461453785,
+          "positive_month_fraction": 0.5490196078431373,
+          "start": "1992-07"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.02126176470588235,
+          "annualized_sharpe_zero_rf": 0.1876851281272646,
+          "annualized_volatility": 0.11328422724823077,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.028438235294117646,
+            0.06672941176470588
+          ],
+          "cagr": 0.01498222840710417,
+          "cumulative_return": 0.6580090498416005,
+          "end": "2026-06",
+          "iid_t_stat": 1.0943829534879563,
+          "max_drawdown": -0.577863622416786,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.9098165060079751,
+          "positive_month_fraction": 0.4877450980392157,
+          "start": "1992-07"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": 0.0008294117647058782,
+          "annualized_sharpe_zero_rf": 0.007312214025520593,
+          "annualized_volatility": 0.1134282669805782,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.07352941176470588,
+            0.05189411764705882
+          ],
+          "cagr": -0.005546257082580275,
+          "cumulative_return": -0.09021667247982523,
+          "end": "2026-06",
+          "iid_t_stat": 0.030149030784344312,
+          "max_drawdown": -0.5337676504254212,
+          "months": 204,
+          "newey_west_t_stat_lag_6": 0.025723587150407148,
+          "positive_month_fraction": 0.4264705882352941,
+          "start": "2009-07"
+        }
+      },
+      "id": "fama_french_1992_value_proxy",
+      "implementation": "proxy",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.02126176470588235,
+          "annualized_sharpe_zero_rf": 0.1876851281272646,
+          "annualized_volatility": 0.11328422724823077,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.01498222840710417,
+          "cumulative_return": 0.6580090498416005,
+          "end": "2026-06",
+          "iid_t_stat": 1.0943829534879563,
+          "max_drawdown": -0.577863622416786,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.9098165060079751,
+          "positive_month_fraction": 0.4877450980392157,
+          "start": "1992-07"
+        },
+        "10": {
+          "annualized_arithmetic_mean": 0.009261764705882348,
+          "annualized_sharpe_zero_rf": 0.08175687764182542,
+          "annualized_volatility": 0.11328422724823077,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.0028777258691106145,
+          "cumulative_return": 0.1026343351436605,
+          "end": "2026-06",
+          "iid_t_stat": 0.4767204206022372,
+          "max_drawdown": -0.6424376563566031,
+          "months": 408,
+          "newey_west_t_stat_lag_6": 0.39632206078560134,
+          "positive_month_fraction": 0.47058823529411764,
+          "start": "1992-07"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.00873823529411765,
+          "annualized_sharpe_zero_rf": -0.0771354980863333,
+          "annualized_volatility": 0.11328422724823077,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.015031104999092548,
+          "cumulative_return": -0.40246198728307436,
+          "end": "2026-06",
+          "iid_t_stat": -0.44977337872634116,
+          "max_drawdown": -0.7234217788939027,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -0.37391960704795896,
+          "positive_month_fraction": 0.4362745098039216,
+          "start": "1992-07"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.03873823529411765,
+          "annualized_sharpe_zero_rf": -0.34195612429993116,
+          "annualized_volatility": 0.11328422724823077,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.044228955771063116,
+          "cumulative_return": -0.785201348723519,
+          "end": "2026-06",
+          "iid_t_stat": -1.9939297109406386,
+          "max_drawdown": -0.8309142064705741,
+          "months": 408,
+          "newey_west_t_stat_lag_6": -1.657655720103893,
+          "positive_month_fraction": 0.40441176470588236,
+          "start": "1992-07"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "1992-07",
+      "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
+      "publication_month": "1992-06",
+      "scope_note": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result.",
+      "verdict": "proxy_not_confirmed"
+    },
+    "fama_french_1993_hml": {
+      "column": "hml_percent",
+      "dataset": "ff3_1992_2026m06",
+      "doi": "10.1016/0304-405X(93)90023-5",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.04237200000000001,
+          "annualized_sharpe_zero_rf": 0.3701646491071927,
+          "annualized_volatility": 0.11446798094360942,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.026988,
+            0.11499000000000001
+          ],
+          "cagr": 0.03647667937005261,
+          "cumulative_return": 0.8168772316973751,
+          "end": "2009-10",
+          "iid_t_stat": 1.5111908518816712,
+          "max_drawdown": -0.3986729417477559,
+          "months": 200,
+          "newey_west_t_stat_lag_6": 1.2624021197773172,
+          "positive_month_fraction": 0.56,
+          "start": "1993-03"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.018768,
+          "annualized_sharpe_zero_rf": 0.1657282184231782,
+          "annualized_volatility": 0.11324565109411186,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.031011,
+            0.064377
+          ],
+          "cagr": 0.012459115271409082,
+          "cumulative_return": 0.5109490653351165,
+          "end": "2026-06",
+          "iid_t_stat": 0.95683231518939,
+          "max_drawdown": -0.5778636224167861,
+          "months": 400,
+          "newey_west_t_stat_lag_6": 0.7991545230726217,
+          "positive_month_fraction": 0.49,
+          "start": "1993-03"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": -0.0048360000000000035,
+          "annualized_sharpe_zero_rf": -0.04322450002217042,
+          "annualized_volatility": 0.1118809933606995,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.075882,
+            0.052398
+          ],
+          "cagr": -0.01100190626654407,
+          "cumulative_return": -0.16838130888813674,
+          "end": "2026-06",
+          "iid_t_stat": -0.1764632824020628,
+          "max_drawdown": -0.5337676504254212,
+          "months": 200,
+          "newey_west_t_stat_lag_6": -0.14958743590867757,
+          "positive_month_fraction": 0.42,
+          "start": "2009-11"
+        }
+      },
+      "id": "fama_french_1993_hml",
+      "implementation": "factor",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.018768,
+          "annualized_sharpe_zero_rf": 0.1657282184231782,
+          "annualized_volatility": 0.11324565109411186,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.012459115271409082,
+          "cumulative_return": 0.5109490653351165,
+          "end": "2026-06",
+          "iid_t_stat": 0.95683231518939,
+          "max_drawdown": -0.5778636224167861,
+          "months": 400,
+          "newey_west_t_stat_lag_6": 0.7991545230726217,
+          "positive_month_fraction": 0.49,
+          "start": "1993-03"
+        },
+        "10": {
+          "annualized_arithmetic_mean": 0.006767999999999993,
+          "annualized_sharpe_zero_rf": 0.05976388439301305,
+          "annualized_volatility": 0.11324565109411186,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.00038221114918446375,
+          "cumulative_return": 0.012819410595107383,
+          "end": "2026-06",
+          "iid_t_stat": 0.34504694742123754,
+          "max_drawdown": -0.6424376563566033,
+          "months": 400,
+          "newey_west_t_stat_lag_6": 0.288186157936674,
+          "positive_month_fraction": 0.4725,
+          "start": "1993-03"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.011232000000000006,
+          "annualized_sharpe_zero_rf": -0.09918261665223457,
+          "annualized_volatility": 0.11324565109411186,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.01748573635942774,
+          "cumulative_return": -0.4445706837423251,
+          "end": "2026-06",
+          "iid_t_stat": -0.5726311042309908,
+          "max_drawdown": -0.7234217788939026,
+          "months": 400,
+          "newey_west_t_stat_lag_6": -0.47826638976724695,
+          "positive_month_fraction": 0.4375,
+          "start": "1993-03"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.041232000000000005,
+          "annualized_sharpe_zero_rf": -0.3640934517276473,
+          "annualized_volatility": 0.11324565109411186,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.04661679914864736,
+          "cumulative_return": -0.7963349515583698,
+          "end": "2026-06",
+          "iid_t_stat": -2.1020945236513713,
+          "max_drawdown": -0.8309142064705742,
+          "months": 400,
+          "newey_west_t_stat_lag_6": -1.7556873026071154,
+          "positive_month_fraction": 0.405,
+          "start": "1993-03"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "1993-03",
+      "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "publication_month": "1993-02",
+      "scope_note": "Post-publication return of the published HML factor construction.",
+      "verdict": "not_confirmed"
+    },
+    "fama_french_1993_smb": {
+      "column": "smb_percent",
+      "dataset": "ff3_1992_2026m06",
+      "doi": "10.1016/0304-405X(93)90023-5",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.017178000000000002,
+          "annualized_sharpe_zero_rf": 0.13743668048262084,
+          "annualized_volatility": 0.12498846697750529,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.03856199999999999,
+            0.068712
+          ],
+          "cagr": 0.009531113607139208,
+          "cumulative_return": 0.17128290928876533,
+          "end": "2009-10",
+          "iid_t_stat": 0.5610828985405814,
+          "max_drawdown": -0.41276928378222233,
+          "months": 200,
+          "newey_west_t_stat_lag_6": 0.6586119023460556,
+          "positive_month_fraction": 0.5,
+          "start": "1993-03"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.005682000000000001,
+          "annualized_sharpe_zero_rf": 0.052450378333431025,
+          "annualized_volatility": 0.10833096310343268,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.028956,
+            0.037665000000000004
+          ],
+          "cagr": -0.00011980968941860404,
+          "cumulative_return": -0.003985930578814356,
+          "end": "2026-06",
+          "iid_t_stat": 0.3028224004990412,
+          "max_drawdown": -0.41276928378222233,
+          "months": 400,
+          "newey_west_t_stat_lag_6": 0.3386023695340529,
+          "positive_month_fraction": 0.505,
+          "start": "1993-03"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": -0.005814000000000001,
+          "annualized_sharpe_zero_rf": -0.0654710048827714,
+          "annualized_volatility": 0.0888026693711241,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.050112,
+            0.03027
+          ],
+          "cagr": -0.009678472015293371,
+          "cumulative_return": -0.14963834823988653,
+          "end": "2026-06",
+          "iid_t_stat": -0.2672842581834265,
+          "max_drawdown": -0.3493632966265062,
+          "months": 200,
+          "newey_west_t_stat_lag_6": -0.27627193850331544,
+          "positive_month_fraction": 0.51,
+          "start": "2009-11"
+        }
+      },
+      "id": "fama_french_1993_smb",
+      "implementation": "factor",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.005682000000000001,
+          "annualized_sharpe_zero_rf": 0.052450378333431025,
+          "annualized_volatility": 0.10833096310343268,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.00011980968941860404,
+          "cumulative_return": -0.003985930578814356,
+          "end": "2026-06",
+          "iid_t_stat": 0.3028224004990412,
+          "max_drawdown": -0.41276928378222233,
+          "months": 400,
+          "newey_west_t_stat_lag_6": 0.3386023695340529,
+          "positive_month_fraction": 0.505,
+          "start": "1993-03"
+        },
+        "10": {
+          "annualized_arithmetic_mean": -0.006318000000000006,
+          "annualized_sharpe_zero_rf": -0.05832127601383623,
+          "annualized_volatility": 0.10833096310343268,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.012058435743293794,
+          "cumulative_return": -0.33261684257530866,
+          "end": "2026-06",
+          "iid_t_stat": -0.3367180440607081,
+          "max_drawdown": -0.44784587925955277,
+          "months": 400,
+          "newey_west_t_stat_lag_6": -0.37650295155159236,
+          "positive_month_fraction": 0.49,
+          "start": "1993-03"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.024318,
+          "annualized_sharpe_zero_rf": -0.22447875753473695,
+          "annualized_volatility": 0.10833096310343268,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.029721555502646768,
+          "cumulative_return": -0.6342260465182818,
+          "end": "2026-06",
+          "iid_t_stat": -1.2960287109003312,
+          "max_drawdown": -0.6714741834466478,
+          "months": 400,
+          "newey_west_t_stat_lag_6": -1.4491609331800595,
+          "positive_month_fraction": 0.4525,
+          "start": "1993-03"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.054318000000000005,
+          "annualized_sharpe_zero_rf": -0.5014078934029049,
+          "annualized_volatility": 0.10833096310343268,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.05851804033100905,
+          "cumulative_return": -0.8660117377187664,
+          "end": "2026-06",
+          "iid_t_stat": -2.8948798222997034,
+          "max_drawdown": -0.8757086917022844,
+          "months": 400,
+          "newey_west_t_stat_lag_6": -3.236924235894172,
+          "positive_month_fraction": 0.41,
+          "start": "1993-03"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "1993-03",
+      "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
+      "publication_month": "1993-02",
+      "scope_note": "Post-publication return of the published SMB factor construction.",
+      "verdict": "not_confirmed"
+    },
+    "fama_french_2015_cma": {
+      "column": "cma_percent",
+      "dataset": "ff5_2015_2026m06",
+      "doi": "10.1016/j.jfineco.2014.10.010",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": -0.031182089552238806,
+          "annualized_sharpe_zero_rf": -0.5504249224538968,
+          "annualized_volatility": 0.05665094053740016,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.06297313432835822,
+            0.014489552238805973
+          ],
+          "cagr": -0.03227237214687495,
+          "cumulative_return": -0.1673642925433767,
+          "end": "2020-11",
+          "iid_t_stat": -1.3006033498057532,
+          "max_drawdown": -0.20926547098344528,
+          "months": 67,
+          "newey_west_t_stat_lag_6": -1.5085265610539904,
+          "positive_month_fraction": 0.44776119402985076,
+          "start": "2015-05"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": -0.004853731343283582,
+          "annualized_sharpe_zero_rf": -0.05770012492207394,
+          "annualized_volatility": 0.08411994514463735,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.05348059701492537,
+            0.054349253731343285
+          ],
+          "cagr": -0.008319652548514744,
+          "cumulative_return": -0.08907198570546582,
+          "end": "2026-06",
+          "iid_t_stat": -0.19281398456955728,
+          "max_drawdown": -0.2721424977783846,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -0.1869895603598434,
+          "positive_month_fraction": 0.4552238805970149,
+          "start": "2015-05"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": 0.021474626865671642,
+          "annualized_sharpe_zero_rf": 0.2053795711740635,
+          "annualized_volatility": 0.10456067632681658,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.0795223880597015,
+            0.12220298507462686
+          ],
+          "cagr": 0.01622593301713282,
+          "cumulative_return": 0.09402948508785935,
+          "end": "2026-06",
+          "iid_t_stat": 0.48529299338372456,
+          "max_drawdown": -0.2721424977783842,
+          "months": 67,
+          "newey_west_t_stat_lag_6": 0.4619791210915338,
+          "positive_month_fraction": 0.4626865671641791,
+          "start": "2020-12"
+        }
+      },
+      "id": "fama_french_2015_cma",
+      "implementation": "factor",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": -0.004853731343283582,
+          "annualized_sharpe_zero_rf": -0.05770012492207394,
+          "annualized_volatility": 0.08411994514463735,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.008319652548514744,
+          "cumulative_return": -0.08907198570546582,
+          "end": "2026-06",
+          "iid_t_stat": -0.19281398456955728,
+          "max_drawdown": -0.2721424977783846,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -0.1869895603598434,
+          "positive_month_fraction": 0.4552238805970149,
+          "start": "2015-05"
+        },
+        "10": {
+          "annualized_arithmetic_mean": -0.016853731343283586,
+          "annualized_sharpe_zero_rf": -0.2003535703013712,
+          "annualized_volatility": 0.08411994514463735,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.020166206764536176,
+          "cumulative_return": -0.20347033934228165,
+          "end": "2026-06",
+          "iid_t_stat": -0.6695127656086843,
+          "max_drawdown": -0.29671618597468763,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -0.6492884734266151,
+          "positive_month_fraction": 0.4253731343283582,
+          "start": "2015-05"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.03485373134328358,
+          "annualized_sharpe_zero_rf": -0.4143337383703169,
+          "annualized_volatility": 0.08411994514463735,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.03769297886243139,
+          "cumulative_return": -0.3488678464961401,
+          "end": "2026-06",
+          "iid_t_stat": -1.3845609371673744,
+          "max_drawdown": -0.37294424537066395,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -1.342736843026772,
+          "positive_month_fraction": 0.39552238805970147,
+          "start": "2015-05"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.0648537313432836,
+          "annualized_sharpe_zero_rf": -0.77096735181856,
+          "annualized_volatility": 0.08411994514463735,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.06626683951535972,
+          "cumulative_return": -0.5349627533722792,
+          "end": "2026-06",
+          "iid_t_stat": -2.576307889765192,
+          "max_drawdown": -0.5483321225449487,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -2.4984841256937016,
+          "positive_month_fraction": 0.3582089552238806,
+          "start": "2015-05"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "2015-05",
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "publication_month": "2015-04",
+      "scope_note": "Post-publication return of the CMA investment factor.",
+      "verdict": "not_confirmed"
+    },
+    "fama_french_2015_rmw": {
+      "column": "rmw_percent",
+      "dataset": "ff5_2015_2026m06",
+      "doi": "10.1016/j.jfineco.2014.10.010",
+      "gross_results": {
+        "early_half": {
+          "annualized_arithmetic_mean": 0.01484776119402985,
+          "annualized_sharpe_zero_rf": 0.2853723785729633,
+          "annualized_volatility": 0.05202942649277323,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.006626865671641793,
+            0.03621492537313433
+          ],
+          "cagr": 0.013602377066559646,
+          "cumulative_return": 0.07835282497743012,
+          "end": "2020-11",
+          "iid_t_stat": 0.6743086229804927,
+          "max_drawdown": -0.05695540678803401,
+          "months": 67,
+          "newey_west_t_stat_lag_6": 0.9594766747819656,
+          "positive_month_fraction": 0.582089552238806,
+          "start": "2015-05"
+        },
+        "full_oos": {
+          "annualized_arithmetic_mean": 0.017337313432835823,
+          "annualized_sharpe_zero_rf": 0.21412045144873273,
+          "annualized_volatility": 0.08096990883183772,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.01304776119402985,
+            0.0795134328358209
+          ],
+          "cagr": 0.01417186763579159,
+          "cumulative_return": 0.17016134178577302,
+          "end": "2026-06",
+          "iid_t_stat": 0.7155169503951682,
+          "max_drawdown": -0.26150314959493803,
+          "months": 134,
+          "newey_west_t_stat_lag_6": 0.6833608995931375,
+          "positive_month_fraction": 0.582089552238806,
+          "start": "2015-05"
+        },
+        "late_half": {
+          "annualized_arithmetic_mean": 0.019826865671641797,
+          "annualized_sharpe_zero_rf": 0.1934583618905449,
+          "annualized_volatility": 0.10248647552830754,
+          "block_bootstrap_95pct_mean_ci": [
+            -0.040495522388059695,
+            0.13644179104477613
+          ],
+          "cagr": 0.01474167817221761,
+          "cumulative_return": 0.08513773477643083,
+          "end": "2026-06",
+          "iid_t_stat": 0.4571242748257846,
+          "max_drawdown": -0.26150314959493803,
+          "months": 67,
+          "newey_west_t_stat_lag_6": 0.4095822678109555,
+          "positive_month_fraction": 0.582089552238806,
+          "start": "2020-12"
+        }
+      },
+      "id": "fama_french_2015_rmw",
+      "implementation": "factor",
+      "monthly_haircut_sensitivity_bps": {
+        "0": {
+          "annualized_arithmetic_mean": 0.017337313432835823,
+          "annualized_sharpe_zero_rf": 0.21412045144873273,
+          "annualized_volatility": 0.08096990883183772,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.01417186763579159,
+          "cumulative_return": 0.17016134178577302,
+          "end": "2026-06",
+          "iid_t_stat": 0.7155169503951682,
+          "max_drawdown": -0.26150314959493803,
+          "months": 134,
+          "newey_west_t_stat_lag_6": 0.6833608995931375,
+          "positive_month_fraction": 0.582089552238806,
+          "start": "2015-05"
+        },
+        "10": {
+          "annualized_arithmetic_mean": 0.005337313432835816,
+          "annualized_sharpe_zero_rf": 0.06591724641706848,
+          "annualized_volatility": 0.08096990883183772,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": 0.0020793525945048685,
+          "cumulative_return": 0.02346643374215107,
+          "end": "2026-06",
+          "iid_t_stat": 0.22027278018363627,
+          "max_drawdown": -0.2849988038774247,
+          "months": 134,
+          "newey_west_t_stat_lag_6": 0.21037350008135824,
+          "positive_month_fraction": 0.5746268656716418,
+          "start": "2015-05"
+        },
+        "25": {
+          "annualized_arithmetic_mean": -0.012662686567164176,
+          "annualized_sharpe_zero_rf": -0.15638756113042768,
+          "annualized_volatility": 0.08096990883183772,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.015811778547093036,
+          "cumulative_return": -0.16303719995970078,
+          "end": "2026-06",
+          "iid_t_stat": -0.522593475133661,
+          "max_drawdown": -0.31888994463284515,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -0.49910759918631004,
+          "positive_month_fraction": 0.5447761194029851,
+          "start": "2015-05"
+        },
+        "50": {
+          "annualized_arithmetic_mean": -0.04266268656716418,
+          "annualized_sharpe_zero_rf": -0.5268955737095882,
+          "annualized_volatility": 0.08096990883183772,
+          "block_bootstrap_95pct_mean_ci": null,
+          "cagr": -0.04498086700580872,
+          "cumulative_return": -0.40186188871856143,
+          "end": "2026-06",
+          "iid_t_stat": -1.7607039006624903,
+          "max_drawdown": -0.40851734997586664,
+          "months": 134,
+          "newey_west_t_stat_lag_6": -1.681576097965758,
+          "positive_month_fraction": 0.4626865671641791,
+          "start": "2015-05"
+        }
+      },
+      "oos_end": "2026-06",
+      "oos_start": "2015-05",
+      "paper": "Fama and French (2015), A five-factor asset pricing model",
+      "publication_month": "2015-04",
+      "scope_note": "Post-publication return of the RMW profitability factor.",
+      "verdict": "not_confirmed"
+    }
+  },
+  "suite": "classic paper post-publication factor tests"
+}

@@ -1,20 +1,36 @@
 {
   "datasets": {
-    "ff3_1992_2020": {
-      "path": "docs/research/data/ff3_1992_2020.csv",
-      "source_repository": "hannelita/Kenneth-French-Data-Library",
-      "source_commit": "f99404ccfb176aafca535590f2e6c6679ad03330",
-      "source_blob": "ff983775f09f9c47edec881cb952cfa450d1a6f9",
+    "ff3_1992_2026m06": {
+      "path": "docs/research/data/ff3_1992_2026-06.csv",
+      "publisher": "Kenneth R. French Data Library",
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
       "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors.html",
-      "sha256": "8eabadd6ace08a6dd15c30129143920aef47b083b55ecf7976c8620496d6547d"
+      "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors_archive.html",
+      "upstream_zip_sha256": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb",
+      "upstream_csv_member": "F-F_Research_Data_Factors.csv",
+      "upstream_csv_sha256": "6a5340a3c7642cf12b2cb4fafd4a47e93d80b159227de53aa0cbc102016b65e2",
+      "upstream_vintage": "current data library observed 2026-08-16; pinned through 2026-06",
+      "crsp_input_format": "CIZ current-research-return generation",
+      "first_observation": "1992-07",
+      "last_observation": "2026-06",
+      "rows": 408,
+      "sha256": "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf"
     },
-    "ff5_2015_2020": {
-      "path": "docs/research/data/ff5_2015_2020.csv",
-      "source_repository": "hannelita/Kenneth-French-Data-Library",
-      "source_commit": "f99404ccfb176aafca535590f2e6c6679ad03330",
-      "source_blob": "60939e9803578b4c46e12a44d958d2a8e0c9d203",
+    "ff5_2015_2026m06": {
+      "path": "docs/research/data/ff5_2015_2026-06.csv",
+      "publisher": "Kenneth R. French Data Library",
+      "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
       "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html",
-      "sha256": "aec5d51c49cb9f94bf5079c9e5c71bda0dd6a2c4d9160379c256f6a21fd8d31a"
+      "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3_archive.html",
+      "upstream_zip_sha256": "cbc3724812132654fbbe8daae3c46e0f90e70008434f94a7986fe49f1db6ad3b",
+      "upstream_csv_member": "F-F_Research_Data_5_Factors_2x3.csv",
+      "upstream_csv_sha256": "6973d875fd92308133f1569a3318e1e95e22b2b506ed8f5815245b8b4ad9eecb",
+      "upstream_vintage": "current data library observed 2026-08-16; pinned through 2026-06",
+      "crsp_input_format": "CIZ current-research-return generation",
+      "first_observation": "2015-05",
+      "last_observation": "2026-06",
+      "rows": 134,
+      "sha256": "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3"
     }
   },
   "studies": [
@@ -23,10 +39,10 @@
       "paper": "Banz (1981), The relationship between return and market value of common stocks",
       "doi": "10.1016/0304-405X(81)90018-0",
       "publication_month": "1981-03",
-      "dataset": "ff3_1992_2020",
+      "dataset": "ff3_1992_2026m06",
       "column": "smb_percent",
       "oos_start": "1992-07",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "proxy",
       "scope_note": "Delayed post-publication stress test. SMB is a diversified size-factor proxy, not Banz's original NYSE security-level regression."
     },
@@ -35,10 +51,10 @@
       "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
       "doi": "10.1111/j.1540-6261.1992.tb04398.x",
       "publication_month": "1992-06",
-      "dataset": "ff3_1992_2020",
+      "dataset": "ff3_1992_2026m06",
       "column": "smb_percent",
       "oos_start": "1992-07",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "proxy",
       "scope_note": "SMB is a return-factor proxy for the paper's security-level size characteristic result."
     },
@@ -47,10 +63,10 @@
       "paper": "Fama and French (1992), The Cross-Section of Expected Stock Returns",
       "doi": "10.1111/j.1540-6261.1992.tb04398.x",
       "publication_month": "1992-06",
-      "dataset": "ff3_1992_2020",
+      "dataset": "ff3_1992_2026m06",
       "column": "hml_percent",
       "oos_start": "1992-07",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "proxy",
       "scope_note": "HML is a return-factor proxy for the paper's security-level book-to-market characteristic result."
     },
@@ -59,10 +75,10 @@
       "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
       "doi": "10.1016/0304-405X(93)90023-5",
       "publication_month": "1993-02",
-      "dataset": "ff3_1992_2020",
+      "dataset": "ff3_1992_2026m06",
       "column": "smb_percent",
       "oos_start": "1993-03",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "factor",
       "scope_note": "Post-publication return of the published SMB factor construction."
     },
@@ -71,10 +87,10 @@
       "paper": "Fama and French (1993), Common risk factors in the returns on stocks and bonds",
       "doi": "10.1016/0304-405X(93)90023-5",
       "publication_month": "1993-02",
-      "dataset": "ff3_1992_2020",
+      "dataset": "ff3_1992_2026m06",
       "column": "hml_percent",
       "oos_start": "1993-03",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "factor",
       "scope_note": "Post-publication return of the published HML factor construction."
     },
@@ -83,10 +99,10 @@
       "paper": "Fama and French (2015), A five-factor asset pricing model",
       "doi": "10.1016/j.jfineco.2014.10.010",
       "publication_month": "2015-04",
-      "dataset": "ff5_2015_2020",
+      "dataset": "ff5_2015_2026m06",
       "column": "rmw_percent",
       "oos_start": "2015-05",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "factor",
       "scope_note": "Post-publication return of the RMW profitability factor."
     },
@@ -95,10 +111,10 @@
       "paper": "Fama and French (2015), A five-factor asset pricing model",
       "doi": "10.1016/j.jfineco.2014.10.010",
       "publication_month": "2015-04",
-      "dataset": "ff5_2015_2020",
+      "dataset": "ff5_2015_2026m06",
       "column": "cma_percent",
       "oos_start": "2015-05",
-      "oos_end": "2020-02",
+      "oos_end": "2026-06",
       "implementation": "factor",
       "scope_note": "Post-publication return of the CMA investment factor."
     }
