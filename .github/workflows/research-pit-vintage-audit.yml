@@ -5,9 +5,12 @@ on:
     paths:
       - "scripts/audit_french_factor_vintages.py"
       - "scripts/verify_paper_factor_suite.py"
+      - "tests/test_paper_factor_suite.py"
       - "docs/research/paper_factor_registry.json"
-      - "docs/research/data/ff3_1992_2020.csv"
-      - "docs/research/data/ff5_2015_2020.csv"
+      - "docs/research/kenneth_french_factor_vintage_contract.json"
+      - "docs/research/kenneth_french_current_snapshot_2026-06.json"
+      - "docs/research/data/ff3_1992_2026-06.csv"
+      - "docs/research/data/ff5_2015_2026-06.csv"
       - ".github/workflows/research-pit-vintage-audit.yml"
   workflow_dispatch:
 
@@ -28,7 +31,12 @@ jobs:
           python-version: "3.12"
 
       - name: Compile audit
-        run: python -m py_compile scripts/audit_french_factor_vintages.py
+        run: |
+          python -m py_compile scripts/audit_french_factor_vintages.py
+          python -m py_compile scripts/verify_paper_factor_suite.py
+
+      - name: Validate current pinned official suite
+        run: python -m pytest -q tests/test_paper_factor_suite.py
 
       - name: Run empirical audit against Kenneth French July 2020 archives
         run: |
