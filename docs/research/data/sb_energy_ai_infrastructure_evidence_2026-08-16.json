@@ -1,0 +1,87 @@
+{
+  "schema_version": "investor2.sb-energy-ai-infrastructure-evidence.v1",
+  "observed_at": "2026-08-16T09:28:30+09:00",
+  "scope": "Evidence used to audit the SB Energy / SoftBank Group AI-infrastructure valuation thesis. Primary-source facts are separated from reported negotiations and investment inference.",
+  "records": [
+    {
+      "id": "sb_energy_openai_softbank_2026_01_09",
+      "status": "VERIFIED",
+      "source_type": "primary",
+      "source_name": "SB Energy",
+      "published_date": "2026-01-09",
+      "url": "https://sbenergy.com/openai-and-softbank-group-partner-with-sb-energy/",
+      "facts": {
+        "softbank_group_investment_usd": 500000000,
+        "openai_investment_usd": 500000000,
+        "combined_investment_usd": 1000000000,
+        "openai_initial_data_center_lease_gw": 1.2,
+        "ares_redeemable_preferred_equity_usd": 800000000,
+        "sb_energy_developing_several_multi_gw_data_center_campuses": true
+      }
+    },
+    {
+      "id": "openai_sb_energy_partnership_2026_01_09",
+      "status": "VERIFIED",
+      "source_type": "primary",
+      "source_name": "OpenAI",
+      "published_date": "2026-01-09",
+      "url": "https://openai.com/index/stargate-sb-energy-partnership/",
+      "facts": {
+        "softbank_group_and_openai_investment_usd": 1000000000,
+        "openai_initial_data_center_lease_gw": 1.2,
+        "sb_energy_selected_to_build_and_operate_milam_county_site": true,
+        "ares_redeemable_preferred_equity_usd": 800000000
+      }
+    },
+    {
+      "id": "sb_energy_mission_2026_08_16",
+      "status": "VERIFIED",
+      "source_type": "primary",
+      "source_name": "SB Energy",
+      "published_date": null,
+      "url": "https://sbenergy.com/who-we-are/",
+      "facts": {
+        "mission": "To enable the new AI economy by developing, building, and owning its critical physical infrastructure.",
+        "softbank_group_company": true
+      }
+    },
+    {
+      "id": "reuters_sb_energy_ipo_2026_05_26",
+      "status": "OBSERVED",
+      "source_type": "secondary_report",
+      "source_name": "Reuters",
+      "published_date": "2026-05-26",
+      "url": "https://www.reuters.com/world/softbank-hires-banks-us-ipos-sb-energy-ai-robotics-spinoff-roze-sources-say-2026-05-26/",
+      "facts": {
+        "sb_energy_reported_target_valuation_usd_more_than": 50000000000,
+        "sb_energy_reported_target_valuation_usd_100b": false,
+        "roze_reported_rough_valuation_usd": 100000000000
+      },
+      "boundary": "The roughly $100B figure in the report refers to Roze, not SB Energy. SB Energy's reported IPO target is more than $50B and remains non-primary information until issuer/regulatory disclosure is available."
+    },
+    {
+      "id": "reuters_nvidia_sb_energy_2026_08_15",
+      "status": "OBSERVED",
+      "source_type": "secondary_report",
+      "source_name": "Reuters, citing The Information",
+      "published_date": "2026-08-15",
+      "url": "https://www.reuters.com/business/nvidia-talks-invest-3-billion-sb-energy-part-openai-data-center-deal-information-2026-08-15/",
+      "facts": {
+        "nvidia_reported_investment_talks_max_usd": 3000000000,
+        "investment_finalized": false,
+        "issuer_primary_confirmation_found": false
+      },
+      "boundary": "Treat as a reported negotiation, not as completed financing or confirmed NVIDIA ownership."
+    }
+  ],
+  "excluded_claims": [
+    {
+      "claim": "SB Energy IPO valuation is $50B-$100B",
+      "reason": "Only more than $50B is reported for SB Energy; the roughly $100B figure is associated with Roze."
+    },
+    {
+      "claim": "SoftBank Group will retain approximately 83% of SB Energy after the IPO",
+      "reason": "No public primary disclosure supporting this post-IPO ownership percentage was identified as of the observation time."
+    }
+  ]
+}
