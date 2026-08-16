@@ -45,11 +45,7 @@ tasks:
       - bun --hot src/dashboard/server.ts
   check:
     desc: Non-mutating reliability gate used locally and in PR CI
-    cmds:
-      - bun run quality:changed
-      - task: typecheck
-      - task: test
-      - task: data:snapshots:audit
+    deps: [quality:changed, typecheck, test, data:snapshots:audit]
   quality:changed:
     desc: Format/lint ratchet for files changed from main plus local changes
     cmds:
