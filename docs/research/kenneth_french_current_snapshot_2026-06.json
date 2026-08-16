@@ -12,7 +12,7 @@
     "do_not_mix_unlabeled_vintages": true
   },
   "datasets": {
-    "ff3_1992_2026m06": {
+    "ff3_1992_2020": {
       "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
       "upstream_zip_sha256": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb",
       "upstream_csv_member": "F-F_Research_Data_Factors.csv",
@@ -23,7 +23,7 @@
       "last_observation": "2026-06",
       "rows": 408
     },
-    "ff5_2015_2026m06": {
+    "ff5_2015_2020": {
       "source_url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
       "upstream_zip_sha256": "cbc3724812132654fbbe8daae3c46e0f90e70008434f94a7986fe49f1db6ad3b",
       "upstream_csv_member": "F-F_Research_Data_5_Factors_2x3.csv",

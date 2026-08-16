@@ -1,9 +1,11 @@
 {
   "datasets": {
-    "ff3_1992_2026m06": {
+    "ff3_1992_2020": {
       "actual_sha256": "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf",
+      "authority": "official_primary",
       "crsp_input_format": "CIZ current-research-return generation",
       "first_observation": "1992-07",
+      "identifier_note": "legacy stable dataset identifier; provenance and path define the current pinned vintage",
       "last_observation": "2026-06",
       "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors_archive.html",
       "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors.html",
@@ -17,10 +19,12 @@
       "upstream_vintage": "current data library observed 2026-08-16; pinned through 2026-06",
       "upstream_zip_sha256": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb"
     },
-    "ff5_2015_2026m06": {
+    "ff5_2015_2020": {
       "actual_sha256": "a608eca851e909aa18c63c5e58e81160adde81df1cac7b65cb4d33d04925c4a3",
+      "authority": "official_primary",
       "crsp_input_format": "CIZ current-research-return generation",
       "first_observation": "2015-05",
+      "identifier_note": "legacy stable dataset identifier; provenance and path define the current pinned vintage",
       "last_observation": "2026-06",
       "official_archive": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3_archive.html",
       "official_definition": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3.html",
@@ -53,7 +57,7 @@
   "studies": {
     "banz_1981_size_late_oos_proxy": {
       "column": "smb_percent",
-      "dataset": "ff3_1992_2026m06",
+      "dataset": "ff3_1992_2020",
       "doi": "10.1016/0304-405X(81)90018-0",
       "gross_results": {
         "early_half": {
@@ -184,7 +188,7 @@
     },
     "fama_french_1992_size_proxy": {
       "column": "smb_percent",
-      "dataset": "ff3_1992_2026m06",
+      "dataset": "ff3_1992_2020",
       "doi": "10.1111/j.1540-6261.1992.tb04398.x",
       "gross_results": {
         "early_half": {
@@ -315,7 +319,7 @@
     },
     "fama_french_1992_value_proxy": {
       "column": "hml_percent",
-      "dataset": "ff3_1992_2026m06",
+      "dataset": "ff3_1992_2020",
       "doi": "10.1111/j.1540-6261.1992.tb04398.x",
       "gross_results": {
         "early_half": {
@@ -446,7 +450,7 @@
     },
     "fama_french_1993_hml": {
       "column": "hml_percent",
-      "dataset": "ff3_1992_2026m06",
+      "dataset": "ff3_1992_2020",
       "doi": "10.1016/0304-405X(93)90023-5",
       "gross_results": {
         "early_half": {
@@ -577,7 +581,7 @@
     },
     "fama_french_1993_smb": {
       "column": "smb_percent",
-      "dataset": "ff3_1992_2026m06",
+      "dataset": "ff3_1992_2020",
       "doi": "10.1016/0304-405X(93)90023-5",
       "gross_results": {
         "early_half": {
@@ -708,7 +712,7 @@
     },
     "fama_french_2015_cma": {
       "column": "cma_percent",
-      "dataset": "ff5_2015_2026m06",
+      "dataset": "ff5_2015_2020",
       "doi": "10.1016/j.jfineco.2014.10.010",
       "gross_results": {
         "early_half": {
@@ -839,7 +843,7 @@
     },
     "fama_french_2015_rmw": {
       "column": "rmw_percent",
-      "dataset": "ff5_2015_2026m06",
+      "dataset": "ff5_2015_2020",
       "doi": "10.1016/j.jfineco.2014.10.010",
       "gross_results": {
         "early_half": {
