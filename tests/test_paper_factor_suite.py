@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+from typing import Any, cast
 
 from scripts import verify_paper_factor_suite
 
@@ -10,20 +11,18 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def test_official_current_multi_paper_suite() -> None:
     registry = ROOT / "docs/research/paper_factor_registry.json"
-    report = verify_paper_factor_suite.build_report(registry)
-    studies = report["studies"]
-    snapshot = json.loads(
-        (ROOT / "docs/research/kenneth_french_current_snapshot_2026-06.json").read_text(
-            encoding="utf-8"
-        )
-    )
+    report = cast(dict[str, Any], verify_paper_factor_suite.build_report(registry))
+    studies = cast(dict[str, Any], report["studies"])
+    snapshot_path = ROOT / "docs/research/kenneth_french_current_snapshot_2026-06.json"
+    snapshot = json.loads(snapshot_path.read_text(encoding="utf-8"))
 
     assert len(studies) == 7
     assert snapshot["authority"] == "official_primary"
     assert snapshot["pinned_last_observation"] == "2026-06"
     assert snapshot["generation_regime"]["current_release"] == "CIZ"
 
-    ff3 = report["datasets"]["ff3_1992_2020"]
+    datasets = cast(dict[str, Any], report["datasets"])
+    ff3 = datasets["ff3_1992_2020"]
     assert ff3["authority"] == "official_primary"
     assert ff3["rows"] == 408
     assert ff3["first_observation"] == "1992-07"
@@ -32,7 +31,7 @@ def test_official_current_multi_paper_suite() -> None:
         "0f7ad8a9303c54c87da2cd45df3f9fdfd36d39e74ce373f6bd84567276835fcf"
     )
 
-    ff5 = report["datasets"]["ff5_2015_2020"]
+    ff5 = datasets["ff5_2015_2020"]
     assert ff5["authority"] == "official_primary"
     assert ff5["rows"] == 134
     assert ff5["first_observation"] == "2015-05"
