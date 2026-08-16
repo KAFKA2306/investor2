@@ -14,6 +14,15 @@ hooks = [
 repo = "local"
 
 [[repos.hooks]]
+id = "ruff-format"
+name = "Ruff format staged Python files"
+language = "system"
+entry = "uv run --no-sync ruff format"
+files = "\\.py$"
+pass_filenames = true
+stages = ["pre-commit"]
+
+[[repos.hooks]]
 id = "changed-quality"
 name = "Changed-file Biome/Oxlint/Ruff quality ratchet"
 language = "system"
