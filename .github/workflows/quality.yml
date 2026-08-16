@@ -41,16 +41,14 @@ jobs:
         uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "0.11.32"
+      - name: Set up Task
+        uses: go-task/setup-task@v2
+        with:
+          version: "3.52.0"
       - name: Verify lockfiles
         run: |
           bun ci
           uv lock --check
           uv sync --locked --only-group dev
-      - name: Changed-file format and lint ratchet
-        run: bun run quality:changed
-      - name: TypeScript strict check
-        run: bun run typecheck
-      - name: Pyrefly strict check with migration baseline
-        run: uv run --no-sync pyrefly check
-      - name: TypeScript unit tests
-        run: bun run test
+      - name: Run canonical quality gate
+        run: task check

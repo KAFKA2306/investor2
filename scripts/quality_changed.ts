@@ -5,63 +5,61 @@ const args = new Set(process.argv.slice(2));
 const checkTypeScript = !args.has("--python-only");
 const checkPython = !args.has("--ts-only");
 
-function gitLines(gitArgs: string[]): string[] {
-  try {
-    return execFileSync("git", gitArgs, { encoding: "utf8" })
-      .split(/\r?\n/)
-      .map((line) => line.trim())
-      .filter(Boolean);
-  } catch {
-    return [];
-  }
-}
+const gitLines = (...gitArgs: string[]): string[] =>
+  execFileSync("git", gitArgs, { encoding: "utf8" })
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean);
 
-function resolveBase(): string | null {
-  for (const ref of ["origin/main", "main"]) {
-    try {
-      execFileSync("git", ["rev-parse", "--verify", ref], { stdio: "ignore" });
-      return ref;
-    } catch {
-      // Try the next canonical main ref.
-    }
-  }
-  return null;
-}
+const hasRef = (ref: string): boolean => {
+  const result = spawnSync("git", ["rev-parse", "--verify", "--quiet", ref]);
+  if (result.error) throw result.error;
+  return result.status === 0;
+};
 
-const changed = new Set<string>();
-const base = resolveBase();
-if (base) {
-  for (const path of gitLines([
-    "diff",
-    "--name-only",
-    "--diff-filter=ACMR",
-    `${base}...HEAD`,
-  ])) {
-    changed.add(path);
-  }
-}
-for (const gitArgs of [
-  ["diff", "--name-only", "--diff-filter=ACMR"],
-  ["diff", "--cached", "--name-only", "--diff-filter=ACMR"],
-  ["ls-files", "--others", "--exclude-standard"],
-]) {
-  for (const path of gitLines(gitArgs)) changed.add(path);
-}
-
-const maintained = [...changed].filter((path) => existsSync(path));
+const base = hasRef("origin/main") ? "origin/main" : "main";
+const changed = new Set([
+  ...gitLines("diff", "--name-only", "--diff-filter=ACMR", `${base}...HEAD`),
+  ...gitLines("diff", "--name-only", "--diff-filter=ACMR"),
+  ...gitLines("diff", "--cached", "--name-only", "--diff-filter=ACMR"),
+  ...gitLines("ls-files", "--others", "--exclude-standard"),
+]);
+const maintained = [...changed].filter(existsSync);
 const tsFiles = maintained.filter((path) => /\.(?:[cm]?[jt]sx?)$/.test(path));
 const pyFiles = maintained.filter((path) => path.endsWith(".py"));
 
+type Check = [boolean, string, string, string[], string[]];
+const checks: Check[] = [
+  [
+    checkTypeScript,
+    "Biome",
+    "bun",
+    ["x", "biome", "check", "--config-path=config/biome.json"],
+    tsFiles,
+  ],
+  [checkTypeScript, "Oxlint", "bun", ["x", "oxlint"], tsFiles],
+  [
+    checkPython,
+    "Ruff format",
+    "uv",
+    ["run", "--no-sync", "ruff", "format", "--check"],
+    pyFiles,
+  ],
+  [
+    checkPython,
+    "Ruff lint",
+    "uv",
+    ["run", "--no-sync", "ruff", "check"],
+    pyFiles,
+  ],
+];
+
 let failed = false;
-function run(
-  label: string,
-  command: string,
-  commandArgs: string[],
-  files: string[],
-): void {
+for (const [enabled, label, command, commandArgs, files] of checks) {
+  if (!enabled) continue;
   if (files.length === 0) {
     console.log(`[quality] ${label}: no changed files`);
-    return;
+    continue;
   }
   console.log(`[quality] ${label}: ${files.length} changed file(s)`);
   const result = spawnSync(command, [...commandArgs, ...files], {
@@ -69,26 +67,7 @@ function run(
     shell: process.platform === "win32",
   });
   if (result.error) throw result.error;
-  if (result.status !== 0) failed = true;
+  failed ||= result.status !== 0;
 }
 
-if (checkTypeScript) {
-  run(
-    "Biome",
-    "bun",
-    ["x", "biome", "check", "--config-path=config/biome.json"],
-    tsFiles,
-  );
-  run("Oxlint", "bun", ["x", "oxlint"], tsFiles);
-}
-if (checkPython) {
-  run(
-    "Ruff format",
-    "uv",
-    ["run", "--no-sync", "ruff", "format", "--check"],
-    pyFiles,
-  );
-  run("Ruff lint", "uv", ["run", "--no-sync", "ruff", "check"], pyFiles);
-}
-
-if (failed) process.exit(1);
+process.exitCode = failed ? 1 : 0;
