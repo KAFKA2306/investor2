@@ -110,6 +110,24 @@
       "rate_limit_policy": "Use one connection and no more than one legacy arXiv API request every three seconds.",
       "schema_expectations": "investor2.arxiv-qfin-metadata.v1",
       "failure_mode": "fail-closed"
+    },
+    "public_web_research": {
+      "enabled": true,
+      "adapter": "public_web_materialization",
+      "primary_source": "Official issuer/operator pages plus clearly attributed public reporting used for research evidence",
+      "snapshot_required_provenance": [
+        "tool",
+        "operation",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain the timezone-aware retrieval timestamp separately from each source publication or event date.",
+      "revision_pinning_rule": "Materialize normalized claims and source boundaries, pin the artifact by SHA-256, and retain every source URL used.",
+      "retry_policy": "Do not promote reported negotiations or unavailable fields to verified facts; preserve source class and uncertainty.",
+      "rate_limit_policy": "Use normal public-site access and do not bypass access controls or provider limits.",
+      "schema_expectations": "Dataset-specific JSON/NDJSON schema declared by each snapshot entry.",
+      "failure_mode": "fail-closed"
     }
   }
 }
