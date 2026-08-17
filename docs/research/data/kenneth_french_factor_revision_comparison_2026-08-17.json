@@ -1,0 +1,151 @@
+{
+  "audit": "kenneth_french_current_vs_2020_revision_audit",
+  "comparison_policy": "Compare official current files with the pinned July-2020 historical archive on overlapping months only; do not blend vintages.",
+  "datasets": {
+    "ff3": {
+      "archive": {
+        "data_cut": "2020-07",
+        "first_month": "1926-07",
+        "last_month": "2020-07",
+        "sha256_zip": "c0c3726daab4ea744924791243013fac97db9ac8b4c4abb1ef89613bd281e145",
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/Historical_Archives/08%202020%20Update/ftp/F-F_Research_Data_Factors_CSV.zip",
+        "vintage_release": "2020-08",
+        "zip_member": "Historical_Archives/08 2020 Update/ftp/F-F_Research_Data_Factors.CSV"
+      },
+      "current": {
+        "first_month": "1926-07",
+        "last_month": "2026-06",
+        "sha256_zip": "cd6d8e0d175b6f423862a6ad15a3073a6e4264b52b2ac9262396c79f707c6bcb",
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_Factors_CSV.zip",
+        "zip_member": "F-F_Research_Data_Factors.csv"
+      },
+      "dataset": "ff3",
+      "overlap_revision": {
+        "HML": {
+          "changed_months": 1066,
+          "changed_share": 0.9441984056687334,
+          "end": "2020-07",
+          "max_abs_revision_bps": 267.0,
+          "mean_abs_revision_bps": 15.192205491585474,
+          "mean_revision_bps": 1.0132860938883952,
+          "months": 1129,
+          "start": "1926-07"
+        },
+        "Mkt-RF": {
+          "changed_months": 672,
+          "changed_share": 0.5952170062001771,
+          "end": "2020-07",
+          "max_abs_revision_bps": 39.00000000000014,
+          "mean_abs_revision_bps": 1.2099202834366687,
+          "mean_revision_bps": 0.09034543844109835,
+          "months": 1129,
+          "start": "1926-07"
+        },
+        "RF": {
+          "changed_months": 7,
+          "changed_share": 0.006200177147918512,
+          "end": "2020-07",
+          "max_abs_revision_bps": 1.0000000000000027,
+          "mean_abs_revision_bps": 0.006200177147918519,
+          "mean_revision_bps": 0.0008857395925597914,
+          "months": 1129,
+          "start": "1926-07"
+        },
+        "SMB": {
+          "changed_months": 1081,
+          "changed_share": 0.9574844995571302,
+          "end": "2020-07",
+          "max_abs_revision_bps": 171.99999999999994,
+          "mean_abs_revision_bps": 9.448184233835253,
+          "mean_revision_bps": -0.8919397697077053,
+          "months": 1129,
+          "start": "1926-07"
+        }
+      }
+    },
+    "ff5": {
+      "archive": {
+        "data_cut": "2020-07",
+        "first_month": "1963-07",
+        "last_month": "2020-07",
+        "sha256_zip": "e3fc7c6f275cf8637693b81e2f9c9dccba16a3fc86333d87290d9376049eda90",
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/Historical_Archives/08%202020%20Update/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
+        "vintage_release": "2020-08",
+        "zip_member": "Historical_Archives/08 2020 Update/ftp/F-F_Research_Data_5_Factors_2x3.CSV"
+      },
+      "current": {
+        "first_month": "1963-07",
+        "last_month": "2026-06",
+        "sha256_zip": "cbc3724812132654fbbe8daae3c46e0f90e70008434f94a7986fe49f1db6ad3b",
+        "url": "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/F-F_Research_Data_5_Factors_2x3_CSV.zip",
+        "zip_member": "F-F_Research_Data_5_Factors_2x3.csv"
+      },
+      "dataset": "ff5",
+      "overlap_revision": {
+        "CMA": {
+          "changed_months": 651,
+          "changed_share": 0.9503649635036496,
+          "end": "2020-07",
+          "max_abs_revision_bps": 134.00000000000003,
+          "mean_abs_revision_bps": 10.458394160583941,
+          "mean_revision_bps": -0.46715328467153266,
+          "months": 685,
+          "start": "1963-07"
+        },
+        "HML": {
+          "changed_months": 660,
+          "changed_share": 0.9635036496350365,
+          "end": "2020-07",
+          "max_abs_revision_bps": 215.99999999999994,
+          "mean_abs_revision_bps": 17.6992700729927,
+          "mean_revision_bps": 0.5051094890510934,
+          "months": 685,
+          "start": "1963-07"
+        },
+        "Mkt-RF": {
+          "changed_months": 431,
+          "changed_share": 0.6291970802919709,
+          "end": "2020-07",
+          "max_abs_revision_bps": 15.000000000000014,
+          "mean_abs_revision_bps": 1.205839416058393,
+          "mean_revision_bps": 0.27445255474452385,
+          "months": 685,
+          "start": "1963-07"
+        },
+        "RF": {
+          "changed_months": 3,
+          "changed_share": 0.004379562043795621,
+          "end": "2020-07",
+          "max_abs_revision_bps": 1.0000000000000027,
+          "mean_abs_revision_bps": 0.004379562043795632,
+          "mean_revision_bps": 0.004379562043795632,
+          "months": 685,
+          "start": "1963-07"
+        },
+        "RMW": {
+          "changed_months": 661,
+          "changed_share": 0.964963503649635,
+          "end": "2020-07",
+          "max_abs_revision_bps": 148.00000000000009,
+          "mean_abs_revision_bps": 14.496350364963504,
+          "mean_revision_bps": -0.6423357664233585,
+          "months": 685,
+          "start": "1963-07"
+        },
+        "SMB": {
+          "changed_months": 650,
+          "changed_share": 0.948905109489051,
+          "end": "2020-07",
+          "max_abs_revision_bps": 80.0,
+          "mean_abs_revision_bps": 6.675912408759121,
+          "mean_revision_bps": -0.4452554744525544,
+          "months": 685,
+          "start": "1963-07"
+        }
+      }
+    }
+  },
+  "retrieved_at": "2026-08-17T15:14:27.435703+00:00",
+  "schema_version": 1,
+  "source_authority": "Kenneth R. French Data Library"
+}
