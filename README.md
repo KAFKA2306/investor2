@@ -1,5 +1,9 @@
 # AAARTS — 自律型アルファ研究システム
 
+[![Validate and deploy dashboard](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml)
+[![Quality Gates](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml)
+[![Verify deployed GitHub Pages](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml)
+
 **バックテストで勝った。それだけでは、この研究ではまだ何も証明していない。**
 
 未来情報が混ざっていないか。都合のいい期間だけを見ていないか。比較対象を変えても残るか。AAARTSは、好成績の仮説を集めるのではなく、**反証条件を先に置き、実データを時点固定し、時系列OOSと再現可能な証拠を通過した仮説だけを残す**ための研究システムです。
