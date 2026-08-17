@@ -13,11 +13,13 @@ on:
       - "docs/research/official_current_paper_factor_suite.json"
       - "docs/research/data/ff3_1992_2026-06.csv"
       - "docs/research/data/ff5_2015_2026-06.csv"
+      - "docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json"
+      - "data/input_ledger/snapshot_catalog.ndjson"
       - ".github/workflows/research-pit-vintage-audit.yml"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   empirical-vintage-audit:
@@ -26,6 +28,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
 
       - name: Set up Python
         uses: actions/setup-python@v7
@@ -104,6 +108,44 @@ jobs:
           python scripts/compare_french_factor_revisions.py \
             --output artifacts/french-factor-revision-comparison.json
 
+      - name: Verify persisted revision comparison
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          measured = json.loads(Path("artifacts/french-factor-revision-comparison.json").read_text())
+          persisted = json.loads(Path("docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json").read_text())
+          measured.pop("retrieved_at", None)
+          persisted.pop("retrieved_at", None)
+          assert measured == persisted
+          PY
+
+      - name: Register persisted comparison snapshot
+        if: github.event_name == 'pull_request'
+        env:
+          REUSE_KEY: kenneth-french/us-factor-revisions/current-vs-2020-07
+        run: |
+          if python scripts/snapshot_store.py latest --reuse-key "$REUSE_KEY" >/dev/null 2>&1; then
+            echo "snapshot already registered"
+            exit 0
+          fi
+          python scripts/snapshot_store.py register \
+            --dataset-id kenneth_french_factor_revision_comparison \
+            --reuse-key "$REUSE_KEY" \
+            --artifact-path docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at 2026-08-17T15:14:27.435703+00:00 \
+            --schema-version investor2.kenneth-french-factor-revision-comparison.v1 \
+            --provenance-json '{"tool":"GitHub Actions","operation":"download official current FF3/FF5 ZIPs and July 2020 official archive ZIPs; compare overlapping monthly observations","query_or_scope":"US Fama/French 3-factor and 5-factor monthly revision comparison: official July 2020 data cut versus current files through 2026-06","retrieved_at":"2026-08-17T15:14:27.435703+00:00","source_urls":["https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_factors_archive.html","https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/f-f_5_factors_2x3_archive.html","https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library.html"]}'
+          python scripts/snapshot_store.py audit > artifacts/snapshot-catalog-audit.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/input_ledger/snapshot_catalog.ndjson
+          git commit -m "data: register French factor revision comparison"
+          git push origin "HEAD:${GITHUB_HEAD_REF}"
+
       - name: Upload empirical evidence
         uses: actions/upload-artifact@v4
         with:
@@ -112,5 +154,6 @@ jobs:
             artifacts/official-current-paper-factor-suite.json
             artifacts/french-2020-vintage-empirical-audit.json
             artifacts/french-factor-revision-comparison.json
+            artifacts/snapshot-catalog-audit.json
           if-no-files-found: error
           retention-days: 30
