@@ -142,7 +142,7 @@ jobs:
           python scripts/snapshot_store.py audit > artifacts/snapshot-catalog-audit.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/input_ledger/snapshot_catalog.ndjson
+          git add -f data/input_ledger/snapshot_catalog.ndjson
           git commit -m "data: register French factor revision comparison"
           git push origin "HEAD:${GITHUB_HEAD_REF}"
 
