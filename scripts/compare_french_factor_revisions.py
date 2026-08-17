@@ -44,10 +44,7 @@ def load_audit_module() -> Any:
     return module
 
 
-def compare_series(
-    old: list[tuple[str, float]],
-    new: list[tuple[str, float]],
-) -> dict[str, Any]:
+def compare_series(old: list[tuple[str, float]], new: list[tuple[str, float]]) -> dict[str, Any]:
     old_map = dict(old)
     new_map = dict(new)
     common = sorted(set(old_map) & set(new_map))
