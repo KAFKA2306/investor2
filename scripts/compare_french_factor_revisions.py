@@ -45,7 +45,8 @@ def load_audit_module() -> Any:
 
 
 def compare_series(
-    old: list[tuple[str, float]], new: list[tuple[str, float]]
+    old: list[tuple[str, float]],
+    new: list[tuple[str, float]],
 ) -> dict[str, Any]:
     old_map = dict(old)
     new_map = dict(new)
