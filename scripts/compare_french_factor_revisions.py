@@ -105,10 +105,7 @@ def dataset_report(audit: Any, dataset_id: str, spec: dict[str, Any]) -> dict[st
 
 def build_report() -> dict[str, Any]:
     audit = load_audit_module()
-    datasets = {
-        dataset_id: dataset_report(audit, dataset_id, spec)
-        for dataset_id, spec in DATASETS.items()
-    }
+    datasets = {dataset_id: dataset_report(audit, dataset_id, spec) for dataset_id, spec in DATASETS.items()}
     return {
         "schema_version": 1,
         "audit": "kenneth_french_current_vs_2020_revision_audit",
