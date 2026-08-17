@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "scripts/audit_french_factor_vintages.py"
+      - "scripts/compare_french_factor_revisions.py"
       - "scripts/verify_paper_factor_suite.py"
       - "docs/research/paper_factor_registry.json"
       - "docs/research/kenneth_french_factor_vintage_contract.json"
@@ -12,6 +13,8 @@ on:
       - "docs/research/official_current_paper_factor_suite.json"
       - "docs/research/data/ff3_1992_2026-06.csv"
       - "docs/research/data/ff5_2015_2026-06.csv"
+      - "docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json"
+      - "data/input_ledger/snapshot_catalog.ndjson"
       - ".github/workflows/research-pit-vintage-audit.yml"
   workflow_dispatch:
 
@@ -34,6 +37,7 @@ jobs:
       - name: Compile audit
         run: |
           python -m py_compile scripts/audit_french_factor_vintages.py
+          python -m py_compile scripts/compare_french_factor_revisions.py
           python -m py_compile scripts/verify_paper_factor_suite.py
 
       - name: Validate current pinned official suite
@@ -97,6 +101,31 @@ jobs:
           print(json.dumps(summary, indent=2, sort_keys=True))
           PY
 
+      - name: Compare current factors with the July 2020 archive
+        run: |
+          python scripts/compare_french_factor_revisions.py \
+            --output artifacts/french-factor-revision-comparison.json
+
+      - name: Verify persisted revision comparison
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          measured = json.loads(Path("artifacts/french-factor-revision-comparison.json").read_text())
+          persisted = json.loads(Path("docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json").read_text())
+          measured.pop("retrieved_at", None)
+          persisted.pop("retrieved_at", None)
+          assert measured == persisted
+          PY
+
+      - name: Audit registered snapshot
+        run: |
+          python scripts/snapshot_store.py latest \
+            --reuse-key kenneth-french/us-factor-revisions/current-vs-2020-07 \
+            > artifacts/french-factor-revision-snapshot.json
+          python scripts/snapshot_store.py audit > artifacts/snapshot-catalog-audit.json
+
       - name: Upload empirical evidence
         uses: actions/upload-artifact@v4
         with:
@@ -104,5 +133,8 @@ jobs:
           path: |
             artifacts/official-current-paper-factor-suite.json
             artifacts/french-2020-vintage-empirical-audit.json
+            artifacts/french-factor-revision-comparison.json
+            artifacts/french-factor-revision-snapshot.json
+            artifacts/snapshot-catalog-audit.json
           if-no-files-found: error
           retention-days: 30
