@@ -20,8 +20,7 @@ ROOT = Path(__file__).resolve().parents[1]
 AUDIT_PATH = ROOT / "scripts" / "audit_french_factor_vintages.py"
 CURRENT_BASE = "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/ftp/"
 ARCHIVE_BASE = (
-    "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/"
-    "Data_Library/Historical_Archives/08%202020%20Update/ftp/"
+    "https://mba.tuck.dartmouth.edu/pages/faculty/ken.french/Data_Library/Historical_Archives/08%202020%20Update/ftp/"
 )
 DATASETS = {
     "ff3": {
