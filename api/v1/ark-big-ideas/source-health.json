@@ -1,6 +1,6 @@
 {
   "authority_rule": "Each domain repository remains authoritative. investor2 stores locators, readiness state, and content hashes only; it does not copy domain facts into a second authority.",
-  "ready_count": 13,
+  "ready_count": 12,
   "schema_version": 1,
   "source_count": 16,
   "sources": [
@@ -65,22 +65,13 @@
       ]
     },
     {
-      "bytes": 239,
       "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
       "current_repo": "KAFKA2306/kafin3",
       "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
-      "json_type": "object",
-      "live_check": "ok",
+      "live_check": "not_run_by_contract",
       "logical_repo": "multiomics",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
-      "sha256": "80ac9d1fb95ef10d38ff96b05adf2737b55f49bfa74a8d71ccf32ed8d6726783",
-      "status": "ready",
-      "theme": "Multiomics",
-      "top_level_keys": [
-        "datasets",
-        "retrieved_at",
-        "schema_version"
-      ]
+      "status": "deferred_by_user",
+      "theme": "Multiomics"
     },
     {
       "bytes": 582,
@@ -164,7 +155,7 @@
       ]
     },
     {
-      "bytes": 1618,
+      "bytes": 1625,
       "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
       "current_repo": "KAFKA2306/option",
       "issue_url": "https://github.com/KAFKA2306/option/issues/16",
@@ -172,7 +163,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "818944a925d4c3d89a81a0cc79a96bf913ef918bc8add6d47be4d039689e58b0",
+      "sha256": "a72ac4c615e9d1cc5c2a8f01e9235c55e7df23ba306feec681bcf805bd2a2b64",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -216,7 +207,7 @@
       "live_check": "ok",
       "logical_repo": "defi",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/index.json",
-      "sha256": "2e0b7612967d67fd1619b8e1ee05d94acc5735855e6b6edd67b49a9133225b4c",
+      "sha256": "f4ceca90f09693b9c7a7d5e9faa252bfd40ef9fa195ffe622b212ad9f1ef9b21",
       "status": "ready",
       "theme": "DeFi Applications",
       "top_level_keys": [
@@ -259,7 +250,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/index.json",
-      "sha256": "51682c960e0c6216134b1377cdf9b6280a1e8194cd71438a411555739ffb1c4c",
+      "sha256": "656f81990d73036f2abbb6af842ae521042789e4eecdd163f086dadc3fb3b67d",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
@@ -280,7 +271,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/index.json",
-      "sha256": "2527cbf0e077cee51ca58af9630a81205121b51aa72870945d8afa7188501ae5",
+      "sha256": "770ca656471970f809b7328a93dd8f7f8b7ef88ca7b2430f71a30ffa0a193a1d",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
@@ -315,8 +306,8 @@
   "status_counts": {
     "accumulating": 1,
     "blocked_external_evidence": 1,
-    "deferred_by_user": 1,
-    "ready": 13
+    "deferred_by_user": 2,
+    "ready": 12
   },
   "unresolved_count": 2
 }

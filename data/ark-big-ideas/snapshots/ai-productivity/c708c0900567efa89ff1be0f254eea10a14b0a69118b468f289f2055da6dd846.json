@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "publisher": "U.S. Bureau of Labor Statistics",
+  "dataset": "Productivity and Costs",
+  "sector": "Nonfarm business",
+  "rate_basis": "percent change from previous quarter at annual rate",
+  "retrieved_at": "2026-08-17T10:01:57.269645+00:00",
+  "source_url": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+  "source_sha256": "737a28df2c681448bbcb3fc00d77967fe6329e624e30f5365857cdca2b967d4c",
+  "series": {
+    "PRS85006092": "labor_productivity",
+    "PRS85006042": "output",
+    "PRS85006032": "hours_worked",
+    "PRS85006102": "hourly_compensation",
+    "PRS85006152": "real_hourly_compensation",
+    "PRS85006112": "unit_labor_costs"
+  },
+  "observations": [
+    {
+      "period": "2024-Q1",
+      "labor_productivity": 0.2,
+      "output": 0.2,
+      "hours_worked": 0.0,
+      "hourly_compensation": 5.8,
+      "real_hourly_compensation": 2.0,
+      "unit_labor_costs": 5.5
+    },
+    {
+      "period": "2024-Q2",
+      "labor_productivity": 3.7,
+      "output": 4.0,
+      "hours_worked": 0.3,
+      "hourly_compensation": 4.8,
+      "real_hourly_compensation": 2.0,
+      "unit_labor_costs": 1.1
+    },
+    {
+      "period": "2024-Q3",
+      "labor_productivity": 3.7,
+      "output": 3.9,
+      "hours_worked": 0.2,
+      "hourly_compensation": 4.8,
+      "real_hourly_compensation": 3.5,
+      "unit_labor_costs": 1.1
+    },
+    {
+      "period": "2024-Q4",
+      "labor_productivity": 1.4,
+      "output": 1.7,
+      "hours_worked": 0.3,
+      "hourly_compensation": 4.4,
+      "real_hourly_compensation": 1.1,
+      "unit_labor_costs": 2.9
+    },
+    {
+      "period": "2025-Q1",
+      "labor_productivity": -0.9,
+      "output": -0.9,
+      "hours_worked": 0.0,
+      "hourly_compensation": 6.3,
+      "real_hourly_compensation": 2.5,
+      "unit_labor_costs": 7.3
+    },
+    {
+      "period": "2025-Q2",
+      "labor_productivity": 4.2,
+      "output": 5.2,
+      "hours_worked": 1.0,
+      "hourly_compensation": 1.2,
+      "real_hourly_compensation": -0.5,
+      "unit_labor_costs": -2.9
+    },
+    {
+      "period": "2025-Q3",
+      "labor_productivity": 5.2,
+      "output": 5.4,
+      "hours_worked": 0.2,
+      "hourly_compensation": 6.2,
+      "real_hourly_compensation": 3.0,
+      "unit_labor_costs": 1.0
+    },
+    {
+      "period": "2025-Q4",
+      "labor_productivity": 1.6,
+      "output": 1.3,
+      "hours_worked": -0.2,
+      "hourly_compensation": 3.7,
+      "real_hourly_compensation": 1.2,
+      "unit_labor_costs": 2.1
+    },
+    {
+      "period": "2026-Q1",
+      "labor_productivity": 0.8,
+      "footnotes": {
+        "labor_productivity": [
+          "revised"
+        ],
+        "output": [
+          "revised"
+        ],
+        "unit_labor_costs": [
+          "revised"
+        ]
+      },
+      "output": 1.5,
+      "hours_worked": 0.7,
+      "hourly_compensation": 2.1,
+      "real_hourly_compensation": -1.4,
+      "unit_labor_costs": 1.3
+    },
+    {
+      "period": "2026-Q2",
+      "labor_productivity": 1.4,
+      "output": 1.7,
+      "hours_worked": 0.3,
+      "hourly_compensation": 2.7,
+      "real_hourly_compensation": -3.1,
+      "unit_labor_costs": 1.3
+    }
+  ]
+}
