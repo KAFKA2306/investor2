@@ -1,0 +1,249 @@
+{
+  "schema_version": 1,
+  "sources": [
+    {
+      "canonical_url": "https://github.com/KAFKA2306/econalert/blob/main/api/v1/productivity/latest.json",
+      "current_repo": "KAFKA2306/econalert",
+      "issue_url": "https://github.com/KAFKA2306/econalert/issues/12",
+      "logical_repo": "economic-releases",
+      "projection": {
+        "adapter": "bls_productivity",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-productivity/c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846.json",
+        "feed_id": "ai-productivity",
+        "mirror_sha256": "c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846",
+        "mirror_snapshot_id": "d0c1a0839fd024e15852",
+        "row_count": 20
+      },
+      "status": "ready",
+      "theme": "AI Productivity"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/blob/main/api/v1/ai-infrastructure/index.json",
+      "current_repo": "KAFKA2306/semiconductor-earnings-model",
+      "issue_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/issues/132",
+      "logical_repo": "ai-infrastructure",
+      "projection": {
+        "adapter": "ai_infrastructure_capex",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-infrastructure-capex/1c573e420d4118bc968cd6472e81e54d47ca8cbb2ecff03e30c892a0b193a47f.json",
+        "feed_id": "ai-infrastructure-capex",
+        "mirror_sha256": "1c573e420d4118bc968cd6472e81e54d47ca8cbb2ecff03e30c892a0b193a47f",
+        "mirror_snapshot_id": "76bbe75da9c8bd821090",
+        "row_count": 77
+      },
+      "status": "ready",
+      "theme": "AI Infrastructure"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "current_repo": "KAFKA2306/finAnalist",
+      "issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4",
+      "logical_repo": "ai-consumer",
+      "projection": {
+        "adapter": "ai_consumer_metrics",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13.json",
+        "feed_id": "ai-consumer-metrics",
+        "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+        "mirror_snapshot_id": "d4279370da2e572563b7",
+        "row_count": 18
+      },
+      "status": "ready",
+      "theme": "AI Consumer Operating System"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "current_repo": "KAFKA2306/kafin3",
+      "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
+      "logical_repo": "multiomics",
+      "projection": {
+        "excluded": true,
+        "reason": "deferred_by_user"
+      },
+      "status": "deferred_by_user",
+      "theme": "Multiomics"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "current_repo": "KAFKA2306/uranium",
+      "issue_url": "https://github.com/KAFKA2306/uranium/issues/5",
+      "logical_repo": "nuclear-power",
+      "projection": {
+        "adapter": "nuclear_capacity",
+        "artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a.json",
+        "feed_id": "nuclear-capacity",
+        "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+        "mirror_snapshot_id": "49763485fde147d0bae4",
+        "row_count": 8
+      },
+      "status": "ready",
+      "theme": "Distributed Energy / Nuclear"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/oil/tree/main/api/v1/electricity",
+      "current_repo": "KAFKA2306/oil",
+      "issue_url": "https://github.com/KAFKA2306/oil/issues/12",
+      "logical_repo": "energy-supply",
+      "projection": {
+        "excluded": true,
+        "reason": "deferred_by_user"
+      },
+      "status": "deferred_by_user",
+      "theme": "Distributed Energy / Electricity"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-vehicles/blob/main/api/v1/autonomous-vehicles/index.json",
+      "current_repo": "KAFKA2306/autonomous-vehicles",
+      "issue_url": "https://github.com/KAFKA2306/autonomous-vehicles/issues/5",
+      "logical_repo": "autonomous-vehicles",
+      "projection": {
+        "adapter": "autonomous_vehicles_summary",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-vehicles-summary/3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221.json",
+        "feed_id": "autonomous-vehicles-summary",
+        "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
+        "mirror_snapshot_id": "39c510d77aa56a5d7970",
+        "row_count": 5
+      },
+      "status": "ready",
+      "theme": "Autonomous Vehicles"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+      "current_repo": "KAFKA2306/btc_dashboard",
+      "issue_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+      "logical_repo": "bitcoin-network",
+      "projection": {
+        "excluded": true,
+        "reason": "blocked_external_evidence"
+      },
+      "status": "blocked_external_evidence",
+      "theme": "Bitcoin / Network"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/mstr/blob/main/api/v1/bitcoin-treasury/index.json",
+      "current_repo": "KAFKA2306/mstr",
+      "issue_url": "https://github.com/KAFKA2306/mstr/issues/6",
+      "logical_repo": "bitcoin-treasury",
+      "projection": {
+        "adapter": "bitcoin_treasury_snapshots",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-treasury-snapshots/f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92.json",
+        "feed_id": "bitcoin-treasury-snapshots",
+        "mirror_sha256": "f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92",
+        "mirror_snapshot_id": "b68c458b3a8f57afbb91",
+        "row_count": 24
+      },
+      "status": "ready",
+      "theme": "Bitcoin / Treasury"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
+      "current_repo": "KAFKA2306/option",
+      "issue_url": "https://github.com/KAFKA2306/option/issues/16",
+      "logical_repo": "bitcoin-derivatives",
+      "projection": {
+        "adapter": "bitcoin_derivatives_daily",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/011954e98ae58fadb535cf24ededbe5d8cd9bad5afd42ad9f03a23c9d3308fc8.json",
+        "feed_id": "bitcoin-derivatives-daily",
+        "mirror_sha256": "011954e98ae58fadb535cf24ededbe5d8cd9bad5afd42ad9f03a23c9d3308fc8",
+        "mirror_snapshot_id": "e9e6abfae8f06bb09f96",
+        "row_count": 354
+      },
+      "status": "ready",
+      "theme": "Bitcoin / Derivatives"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "current_repo": "KAFKA2306/fx",
+      "issue_url": "https://github.com/KAFKA2306/fx/issues/4",
+      "logical_repo": "tokenized-assets",
+      "projection": {
+        "adapter": "tokenized_assets_issuer",
+        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd.json",
+        "feed_id": "tokenized-assets-issuer",
+        "mirror_sha256": "51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd",
+        "mirror_snapshot_id": "290c6969640e854a2784",
+        "row_count": 16
+      },
+      "status": "ready",
+      "theme": "Tokenized Assets"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "current_repo": "KAFKA2306/skew",
+      "issue_url": "https://github.com/KAFKA2306/skew/issues/11",
+      "logical_repo": "defi",
+      "projection": {
+        "adapter": "defi_daily",
+        "artifact_path": "data/ark-big-ideas/snapshots/defi-daily/45ecf54f123368edaa27d0027707655ec182efae08f7a94395c90ab269d63b9f.json",
+        "feed_id": "defi-daily",
+        "mirror_sha256": "45ecf54f123368edaa27d0027707655ec182efae08f7a94395c90ab269d63b9f",
+        "mirror_snapshot_id": "a3f41ce4d7330e562e0f",
+        "row_count": 279
+      },
+      "status": "ready",
+      "theme": "DeFi Applications"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "current_repo": "KAFKA2306/factory",
+      "issue_url": "https://github.com/KAFKA2306/factory/issues/27",
+      "logical_repo": "factory",
+      "projection": {
+        "adapter": "robotics_deployments",
+        "artifact_path": "data/ark-big-ideas/snapshots/robotics-deployments/8dff3b47038a580d664398e9e1f8cc8e8657339e918c48735fce9350095e309c.json",
+        "feed_id": "robotics-deployments",
+        "mirror_sha256": "8dff3b47038a580d664398e9e1f8cc8e8657339e918c48735fce9350095e309c",
+        "mirror_snapshot_id": "99f223a0ff7726a9c423",
+        "row_count": 40
+      },
+      "status": "ready",
+      "theme": "Robotics"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "current_repo": "KAFKA2306/autonomous-logistics",
+      "issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5",
+      "logical_repo": "autonomous-logistics",
+      "projection": {
+        "adapter": "autonomous_logistics_events",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f.json",
+        "feed_id": "autonomous-logistics-events",
+        "mirror_sha256": "d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f",
+        "mirror_snapshot_id": "4fb8c3e4a8b3c3d905c3",
+        "row_count": 6
+      },
+      "status": "ready",
+      "theme": "Autonomous Logistics"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "current_repo": "KAFKA2306/trahist",
+      "issue_url": "https://github.com/KAFKA2306/trahist/issues/9",
+      "logical_repo": "space-launches",
+      "projection": {
+        "adapter": "space_launches_monthly",
+        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/add29c37024d8c2c6a17a8fd384f2ff3c7fa9dc3038caddc09eba2385f65d277.json",
+        "feed_id": "space-launches-monthly-cadence",
+        "mirror_sha256": "add29c37024d8c2c6a17a8fd384f2ff3c7fa9dc3038caddc09eba2385f65d277",
+        "mirror_snapshot_id": "8f8dbc5ccccdceb3f21b",
+        "row_count": 32
+      },
+      "status": "ready",
+      "theme": "Reusable Rockets"
+    },
+    {
+      "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
+      "current_repo": "KAFKA2306/etf",
+      "issue_url": "https://github.com/KAFKA2306/etf/issues/9",
+      "logical_repo": "ark-etf-holdings",
+      "projection": {
+        "adapter": "ark_etf_holdings_latest",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b.json",
+        "feed_id": "ark-etf-holdings-latest",
+        "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+        "mirror_snapshot_id": "c62efeaf780889539cd3",
+        "row_count": 13
+      },
+      "status": "accumulating",
+      "theme": "ARK Portfolio Exposure"
+    }
+  ]
+}

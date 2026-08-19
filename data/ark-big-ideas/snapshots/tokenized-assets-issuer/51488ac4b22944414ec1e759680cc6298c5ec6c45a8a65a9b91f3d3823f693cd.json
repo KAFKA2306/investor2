@@ -1,0 +1,102 @@
+{
+  "records": [
+    {
+      "as_of": "2026-03-11",
+      "asset_id": "usdc",
+      "circulation_usdc": 78681023356,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-04-29",
+      "reserve_fair_value_usd": 78748550324,
+      "source_evidence": "raw/objects/fa31123de5cbdf280efb18dce82b51150e2e9fa8441ff75712aec40dd7bc5b34.bin",
+      "source_sha256": "fa31123de5cbdf280efb18dce82b51150e2e9fa8441ff75712aec40dd7bc5b34",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20March%2026.pdf"
+    },
+    {
+      "as_of": "2026-03-31",
+      "asset_id": "usdc",
+      "circulation_usdc": 77049290538,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-04-29",
+      "reserve_fair_value_usd": 77125330954,
+      "source_evidence": "raw/objects/fa31123de5cbdf280efb18dce82b51150e2e9fa8441ff75712aec40dd7bc5b34.bin",
+      "source_sha256": "fa31123de5cbdf280efb18dce82b51150e2e9fa8441ff75712aec40dd7bc5b34",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20March%2026.pdf"
+    },
+    {
+      "as_of": "2026-04-06",
+      "asset_id": "usdc",
+      "circulation_usdc": 77745231766,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-05-28",
+      "reserve_fair_value_usd": 77821343057,
+      "source_evidence": "raw/objects/5e590b07a28acc7d6f6d995e8096077b33d19408a60480b7a9f1a10f60c69326.bin",
+      "source_sha256": "5e590b07a28acc7d6f6d995e8096077b33d19408a60480b7a9f1a10f60c69326",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20April%2026.pdf"
+    },
+    {
+      "as_of": "2026-04-30",
+      "asset_id": "usdc",
+      "circulation_usdc": 77047590794,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-05-28",
+      "reserve_fair_value_usd": 77123668726,
+      "source_evidence": "raw/objects/5e590b07a28acc7d6f6d995e8096077b33d19408a60480b7a9f1a10f60c69326.bin",
+      "source_sha256": "5e590b07a28acc7d6f6d995e8096077b33d19408a60480b7a9f1a10f60c69326",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20April%2026.pdf"
+    },
+    {
+      "as_of": "2026-05-05",
+      "asset_id": "usdc",
+      "circulation_usdc": 77963911020,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-06-29",
+      "reserve_fair_value_usd": 78039990342,
+      "source_evidence": "raw/objects/c1a40d889587d91c8f41cdc66f94ad0dda09456cc395b8331f2c79f0b66c95fb.bin",
+      "source_sha256": "c1a40d889587d91c8f41cdc66f94ad0dda09456cc395b8331f2c79f0b66c95fb",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20May%2026.pdf"
+    },
+    {
+      "as_of": "2026-05-29",
+      "asset_id": "usdc",
+      "circulation_usdc": 75885403148,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-06-29",
+      "reserve_fair_value_usd": 75961621872,
+      "source_evidence": "raw/objects/c1a40d889587d91c8f41cdc66f94ad0dda09456cc395b8331f2c79f0b66c95fb.bin",
+      "source_sha256": "c1a40d889587d91c8f41cdc66f94ad0dda09456cc395b8331f2c79f0b66c95fb",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20May%2026.pdf"
+    },
+    {
+      "as_of": "2026-06-02",
+      "asset_id": "usdc",
+      "circulation_usdc": 75812529265,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-07-29",
+      "reserve_fair_value_usd": 75888747989,
+      "source_evidence": "raw/objects/933edcb3846e26e6a87b1476cedc12a14d9e1d3e42dcd30aa73f41d9a4cf5b74.bin",
+      "source_sha256": "933edcb3846e26e6a87b1476cedc12a14d9e1d3e42dcd30aa73f41d9a4cf5b74",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20June%2026.pdf"
+    },
+    {
+      "as_of": "2026-06-30",
+      "asset_id": "usdc",
+      "circulation_usdc": 73268560097,
+      "issuer_scope": "all Circle-approved blockchains",
+      "precision": "exact_reported_units",
+      "report_published_at": "2026-07-29",
+      "reserve_fair_value_usd": 73344909176,
+      "source_evidence": "raw/objects/933edcb3846e26e6a87b1476cedc12a14d9e1d3e42dcd30aa73f41d9a4cf5b74.bin",
+      "source_sha256": "933edcb3846e26e6a87b1476cedc12a14d9e1d3e42dcd30aa73f41d9a4cf5b74",
+      "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20June%2026.pdf"
+    }
+  ],
+  "retrieved_at": "2026-08-18T20:57:57.816484+00:00",
+  "schema_version": 1
+}

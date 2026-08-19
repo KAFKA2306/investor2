@@ -1,0 +1,41 @@
+{
+  "active_feed_count": 13,
+  "authority_rule": "Every feed is a read-only mirror of a canonical domain-repository output. Domain repositories remain authoritative; investor2 only normalizes decision metrics.",
+  "excluded": [
+    {
+      "logical_repo": "multiomics",
+      "status": "deferred_by_user"
+    },
+    {
+      "logical_repo": "energy-supply",
+      "status": "deferred_by_user"
+    },
+    {
+      "logical_repo": "bitcoin-network",
+      "status": "blocked_external_evidence"
+    }
+  ],
+  "metric_row_count": 892,
+  "rules": [
+    "domain repositories remain authoritative; mirrored JSON is evidence only",
+    "deferred and externally blocked domains emit no zero-filled metrics",
+    "fact classes remain explicit instead of being coerced into one series",
+    "ADS and Level 2 ADAS report counts are not safety rates",
+    "Bitcoin perpetual funding/premium and delivery basis remain separate metrics",
+    "issuer-reported token supply and chain-observed supply are not merged",
+    "robotics evidence events are not an installed-population estimate"
+  ],
+  "schema_version": 1,
+  "source_count": 16,
+  "status_counts": {
+    "accumulating": 1,
+    "blocked_external_evidence": 1,
+    "deferred_by_user": 2,
+    "ready": 12
+  },
+  "theme_count": 13,
+  "views": {
+    "evidence_matrix": "evidence-matrix.json",
+    "series": "series.json"
+  }
+}

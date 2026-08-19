@@ -1,0 +1,40 @@
+{
+  "california_dmv": {
+    "autonomous_testing_miles": 3912657.536,
+    "company_permit_group_count": 20,
+    "latest_report_year": 2024,
+    "metric_warning": "testing_miles_per_disengagement is an operational testing metric, not a safety rate or cross-company safety ranking",
+    "period": {
+      "end": "2024-11-30",
+      "start": "2023-12-01"
+    },
+    "publisher": "California Department of Motor Vehicles",
+    "reported_disengagements": 1773,
+    "source_revision_id": "246928648625703fa4a5936b6ec7965a43595573a9740c17b95bf042852fc8cf",
+    "source_urls": [
+      "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
+      "https://www.dmv.ca.gov/portal/file/2024-autonomous-vehicle-disengagement-reports-csv/"
+    ]
+  },
+  "nhtsa_sgo": {
+    "ads": {
+      "california_distinct_same_incident_id_count_2024_plus": 713,
+      "california_report_count_2024_plus": 713,
+      "latest_report_count": 1324,
+      "report_count_2024_plus": 1324,
+      "reporting_entity_count_2024_plus": 16
+    },
+    "comparison_warning": "report counts are not exposure-normalized; ADS and Level 2 ADAS stay separate, and no company safety rate is produced without a matching mileage denominator",
+    "level_2_adas": {
+      "california_distinct_same_incident_id_count_2024_plus": 532,
+      "california_report_count_2024_plus": 533,
+      "latest_report_count": 1915,
+      "report_count_2024_plus": 1904,
+      "reporting_entity_count_2024_plus": 20
+    },
+    "publisher": "National Highway Traffic Safety Administration",
+    "source_page": "https://www.nhtsa.gov/es/node/103486",
+    "source_revision_id": "8b6924e76503126e9ecebbbd68cee7187e88bb6b16d2a52382b1b9d2a78f50a4"
+  },
+  "schema_version": 1
+}

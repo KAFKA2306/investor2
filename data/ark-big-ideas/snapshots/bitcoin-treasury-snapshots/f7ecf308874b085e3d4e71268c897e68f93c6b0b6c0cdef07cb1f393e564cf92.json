@@ -1,0 +1,839 @@
+{
+  "entity": {
+    "cik": "0001050446",
+    "name": "Strategy Inc"
+  },
+  "rule": "A fact becomes visible only at known_at; future filings are never backfilled into earlier snapshots.",
+  "schema_version": 1,
+  "snapshots": [
+    {
+      "known_at": "2024-03-18T00:00:00Z",
+      "state": {},
+      "trigger_event_id": "2024-03-18-convertible-2031"
+    },
+    {
+      "known_at": "2024-09-20T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2024-09-19-holdings-capital-snapshot"
+    },
+    {
+      "known_at": "2024-10-30T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2024-10-30-common-atm"
+    },
+    {
+      "known_at": "2024-11-25T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2024-11-21-convertible-2029"
+    },
+    {
+      "known_at": "2025-02-05T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2025-02-05-strk"
+    },
+    {
+      "known_at": "2025-03-31T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2025-03-25-strf"
+    },
+    {
+      "known_at": "2025-06-16T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "BTC",
+          "value": 252220
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2025-06-10-strd"
+    },
+    {
+      "known_at": "2025-07-29T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-25-167987",
+          "effective_at": "2025-07-29",
+          "fact_class": "state",
+          "known_at": "2025-07-29T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2025-07-29-strc-bitcoin",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312525167987/d43815dex991.htm",
+          "unit": "BTC",
+          "value": 628791
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        }
+      },
+      "trigger_event_id": "2025-07-29-strc-bitcoin"
+    },
+    {
+      "known_at": "2026-05-26T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 9900000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "BTC",
+          "value": 843738
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "convertible_notes_principal_outstanding_usd": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "convertible_notes_principal_outstanding_usd",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "USD",
+          "value": 6700000000
+        },
+        "preferred_stock_notional_outstanding_usd": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "preferred_stock_notional_outstanding_usd",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "USD",
+          "value": 15500000000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        },
+        "usd_reserve": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "usd_reserve",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "USD",
+          "value": 871000000
+        }
+      },
+      "trigger_event_id": "2026-05-25-capital-structure"
+    },
+    {
+      "known_at": "2026-07-06T00:00:00Z",
+      "state": {
+        "assumed_diluted_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "assumed_diluted_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 235118000
+        },
+        "basic_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "basic_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 202635000
+        },
+        "bitcoin_aggregate_purchase_price_usd": {
+          "accession_number": "0001193125-26-295586",
+          "effective_at": "2026-07-05",
+          "fact_class": "state",
+          "known_at": "2026-07-06T00:00:00Z",
+          "name": "bitcoin_aggregate_purchase_price_usd",
+          "source_event_id": "2026-07-05-bitcoin-sales-reserve",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526295586/mstr-20260706.htm",
+          "unit": "USD",
+          "value": 63690000000
+        },
+        "bitcoin_holdings": {
+          "accession_number": "0001193125-26-295586",
+          "effective_at": "2026-07-05",
+          "fact_class": "state",
+          "known_at": "2026-07-06T00:00:00Z",
+          "name": "bitcoin_holdings",
+          "source_event_id": "2026-07-05-bitcoin-sales-reserve",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526295586/mstr-20260706.htm",
+          "unit": "BTC",
+          "value": 843775
+        },
+        "bitcoin_monetization_program_remaining_capacity_usd": {
+          "accession_number": "0001193125-26-295586",
+          "effective_at": "2026-07-05",
+          "fact_class": "state",
+          "known_at": "2026-07-06T00:00:00Z",
+          "name": "bitcoin_monetization_program_remaining_capacity_usd",
+          "source_event_id": "2026-07-05-bitcoin-sales-reserve",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526295586/mstr-20260706.htm",
+          "unit": "USD",
+          "value": 1250000000
+        },
+        "class_a_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_a_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 182995000
+        },
+        "class_b_shares_outstanding": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "class_b_shares_outstanding",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "shares",
+          "value": 19640000
+        },
+        "convertible_notes_principal_outstanding_usd": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "convertible_notes_principal_outstanding_usd",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "USD",
+          "value": 6700000000
+        },
+        "preferred_stock_notional_outstanding_usd": {
+          "accession_number": "0001193125-26-237907",
+          "effective_at": "2026-05-25",
+          "fact_class": "state",
+          "known_at": "2026-05-26T00:00:00Z",
+          "name": "preferred_stock_notional_outstanding_usd",
+          "source_event_id": "2026-05-25-capital-structure",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526237907/mstr-ex99_1.htm",
+          "unit": "USD",
+          "value": 15500000000
+        },
+        "pro_forma_aggregate_indebtedness_usd": {
+          "accession_number": "0001193125-24-222498",
+          "effective_at": "2024-09-19",
+          "fact_class": "state",
+          "known_at": "2024-09-20T00:00:00Z",
+          "name": "pro_forma_aggregate_indebtedness_usd",
+          "source_event_id": "2024-09-19-holdings-capital-snapshot",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+          "unit": "USD",
+          "value": 4274000000
+        },
+        "usd_reserve": {
+          "accession_number": "0001193125-26-295586",
+          "effective_at": "2026-07-05",
+          "fact_class": "state",
+          "known_at": "2026-07-06T00:00:00Z",
+          "name": "usd_reserve",
+          "source_event_id": "2026-07-05-bitcoin-sales-reserve",
+          "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526295586/mstr-20260706.htm",
+          "unit": "USD",
+          "value": 2550000000
+        }
+      },
+      "trigger_event_id": "2026-07-05-bitcoin-sales-reserve"
+    }
+  ]
+}
