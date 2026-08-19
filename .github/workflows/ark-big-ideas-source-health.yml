@@ -1,18 +1,28 @@
-name: ARK Big Ideas source health
+name: ARK Big Ideas evidence
 
 on:
   pull_request:
     paths:
       - data/ark-big-ideas/source-catalog.json
+      - data/ark-big-ideas/metric-catalog.json
+      - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
+      - scripts/build_ark_cross_theme.py
+      - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
+      - tests/test_ark_cross_theme.py
       - .github/workflows/ark-big-ideas-source-health.yml
   push:
     branches: [main]
     paths:
       - data/ark-big-ideas/source-catalog.json
+      - data/ark-big-ideas/metric-catalog.json
+      - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
+      - scripts/build_ark_cross_theme.py
+      - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
+      - tests/test_ark_cross_theme.py
       - .github/workflows/ark-big-ideas-source-health.yml
   schedule:
     - cron: '40 14 * * 1-5'
@@ -22,13 +32,13 @@ permissions:
   contents: write
 
 concurrency:
-  group: ark-big-ideas-source-health
+  group: ark-big-ideas-evidence
   cancel-in-progress: true
 
 jobs:
   verify:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 20
     env:
       PYTHONDONTWRITEBYTECODE: '1'
     steps:
@@ -37,9 +47,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile
-        run: python -m py_compile scripts/build_ark_source_health.py tests/test_ark_source_health.py
+        run: python -m py_compile scripts/build_ark_source_health.py scripts/build_ark_cross_theme.py tests/test_ark_source_health.py tests/test_ark_cross_theme.py
       - name: Unit tests
-        run: python -m unittest tests.test_ark_source_health -v
+        run: python -m unittest tests.test_ark_source_health tests.test_ark_cross_theme -v
       - name: Verify live canonical domain outputs
         run: python scripts/build_ark_source_health.py --output build/source-health.json
       - name: Audit readiness contract
@@ -59,24 +69,65 @@ jobs:
           assert all(s['bytes'] > 0 and len(s['sha256']) == 64 for s in ready)
           print({k: data[k] for k in ('source_count','ready_count','unresolved_count','status_counts')})
           PY
-      - uses: actions/upload-artifact@v7
+      - name: Build cross-theme projection
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python -m scripts.build_ark_cross_theme \
+              --snapshot-root build/ark-domain-snapshots \
+              --api-dir build/ark-api
+          else
+            python -m scripts.build_ark_cross_theme --register
+          fi
+      - name: Audit cross-theme boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          api = Path('build/ark-api') if '${{ github.event_name }}' == 'pull_request' else Path('api/v1/ark-big-ideas')
+          index = json.loads((api / 'index.json').read_text())
+          series = json.loads((api / 'series.json').read_text())['records']
+          matrix = json.loads((api / 'evidence-matrix.json').read_text())['sources']
+          assert index['source_count'] == 16
+          assert index['active_feed_count'] == 13
+          assert index['status_counts']['ready'] == 12
+          assert index['status_counts']['accumulating'] == 1
+          assert index['status_counts']['blocked_external_evidence'] == 1
+          assert index['status_counts']['deferred_by_user'] == 2
+          assert index['metric_row_count'] == len(series)
+          assert len(series) > 300
+          excluded = {row['logical_repo']: row['projection']['reason'] for row in matrix if row['projection'].get('excluded')}
+          assert excluded['multiomics'] == 'deferred_by_user'
+          assert excluded['energy-supply'] == 'deferred_by_user'
+          assert excluded['bitcoin-network'] == 'blocked_external_evidence'
+          assert not any(row['logical_repo'] in excluded for row in series)
+          assert not any(row['metric_id'] in {'safety_rate', 'miles_per_disengagement'} for row in series)
+          print({'feeds': index['active_feed_count'], 'rows': len(series), 'excluded': excluded})
+          PY
+      - name: Audit persistent snapshot catalog
+        if: github.event_name != 'pull_request'
+        run: python scripts/snapshot_store.py audit
+      - name: Upload pull-request evidence
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
         with:
-          name: ark-big-ideas-source-health
-          path: build/source-health.json
+          name: ark-big-ideas-evidence
+          path: |
+            build/source-health.json
+            build/ark-api
           retention-days: 30
-      - name: Publish deterministic source health on main
+      - name: Publish evidence on main
         if: github.event_name != 'pull_request'
         run: |
           mkdir -p api/v1/ark-big-ideas
           cp build/source-health.json api/v1/ark-big-ideas/source-health.json
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add api/v1/ark-big-ideas/source-health.json
+          git add api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
           if git diff --cached --quiet; then
-            echo 'No ARK source hash change.'
+            echo 'No ARK evidence change.'
             exit 0
           fi
-          git commit -m 'data: update ARK Big Ideas source health'
+          git commit -m 'data: update ARK Big Ideas evidence'
           git push
       - name: Clean checkout on pull requests
         if: github.event_name == 'pull_request'
