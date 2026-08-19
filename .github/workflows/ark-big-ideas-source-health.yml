@@ -73,8 +73,8 @@ jobs:
         run: |
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             python -m scripts.build_ark_cross_theme \
-              --snapshot-root build/ark-domain-snapshots \
-              --api-dir build/ark-api
+              --snapshot-root "$PWD/build/ark-domain-snapshots" \
+              --api-dir "$PWD/build/ark-api"
           else
             python -m scripts.build_ark_cross_theme --register
           fi
