@@ -1,0 +1,727 @@
+{
+  "records": [
+    {
+      "claim_id": "great-acceleration",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "AI-led technology investment and co-accelerating technologies could lift real economic growth materially by the end of the decade.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "The projection does not yet contain a real-GDP growth series, so ARK's end-of-decade macro growth outcome is not directly tested.",
+        "observation": {
+          "covered_feeds": [
+            "ai-infrastructure-capex",
+            "ai-productivity",
+            "nuclear-capacity",
+            "robotics-deployments"
+          ],
+          "evidence_row_count": 122
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 122,
+      "measurement_variables": [
+        "capital_expenditures",
+        "labor_productivity",
+        "deployment_evidence",
+        "net_electrical_capacity"
+      ],
+      "source_feed_ids": [
+        "ai-infrastructure-capex",
+        "ai-productivity",
+        "robotics-deployments",
+        "nuclear-capacity"
+      ],
+      "theme": "The Great Acceleration"
+    },
+    {
+      "claim_id": "ai-infrastructure",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "AI is driving a large infrastructure buildout as data-center investment accelerates and compute becomes more specialized.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "directionally_supporting",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Company CapEx is broader than AI-only data-center spending and does not isolate specialized compute investment.",
+        "observation": {
+          "comparisons": [
+            {
+              "entity": "AMD",
+              "first": 142000000,
+              "increased": true,
+              "last": 222000000
+            },
+            {
+              "entity": "AMZN",
+              "first": 871000000,
+              "increased": true,
+              "last": 2006000000
+            },
+            {
+              "entity": "AVGO",
+              "first": 122000000,
+              "increased": true,
+              "last": 237000000
+            },
+            {
+              "entity": "GOOGL",
+              "first": 12012000000,
+              "increased": true,
+              "last": 27851000000
+            },
+            {
+              "entity": "INTC",
+              "first": 5970000000,
+              "increased": false,
+              "last": 3488000000
+            },
+            {
+              "entity": "META",
+              "first": 6400000000,
+              "increased": true,
+              "last": 21383000000
+            },
+            {
+              "entity": "MSFT",
+              "first": 14923000000,
+              "increased": true,
+              "last": 35802000000
+            },
+            {
+              "entity": "MU",
+              "first": 1796000000,
+              "increased": true,
+              "last": 5658000000
+            },
+            {
+              "entity": "NVDA",
+              "first": 31195000,
+              "increased": true,
+              "last": 45182000
+            },
+            {
+              "entity": "ORCL",
+              "first": 2303000000,
+              "increased": true,
+              "last": 16493000000
+            }
+          ],
+          "entities_compared": 10,
+          "share_increasing": 0.9
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
+          "thesis_state": "strengthening"
+        }
+      },
+      "evidence_row_count": 77,
+      "measurement_variables": [
+        "capital_expenditures"
+      ],
+      "source_feed_ids": [
+        "ai-infrastructure-capex"
+      ],
+      "theme": "AI Infrastructure"
+    },
+    {
+      "claim_id": "ai-consumer-operating-system",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "AI is becoming a consumer operating layer across discovery, decisions and transactions, with potentially large adoption and revenue effects.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "User and revenue disclosures show scale but do not directly measure the share of consumer discovery, decisions or transactions controlled by agents.",
+        "observation": {
+          "evidence_row_count": 10,
+          "latest_observations": [
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Google / AI Overviews",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2024-10-28",
+              "source_url": "https://blog.google/products-and-platforms/products/search/ai-overviews-search-october-2024/",
+              "unit": "users",
+              "value": 1000000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Meta / Meta AI",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2024-12-27",
+              "source_url": "https://about.fb.com/news/2024/12/our-year-in-review-metas-2024-highlights/",
+              "unit": "users",
+              "value": 600000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Meta / Meta AI",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2025-03-19",
+              "source_url": "https://about.fb.com/news/2025/03/europe-meet-your-newest-assistant-meta-ai/",
+              "unit": "users",
+              "value": 700000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Google / AI Overviews",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2025-04-24",
+              "source_url": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q1-2025/",
+              "unit": "users",
+              "value": 1500000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Meta / Meta AI",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2025-10-01",
+              "source_url": "https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/",
+              "unit": "users",
+              "value": 1000000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "current_as_of_date"
+              },
+              "entity": "OpenAI / ChatGPT",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "consumer_subscribers",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2026-02-27",
+              "source_url": "https://openai.com/index/scaling-ai-for-everyone/",
+              "unit": "subscribers",
+              "value": 50000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Google / AI Mode",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2026-05-19",
+              "source_url": "https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/",
+              "unit": "users",
+              "value": 1000000000
+            },
+            {
+              "dimensions": {
+                "geography": "global",
+                "reported_period": "monthly"
+              },
+              "entity": "Google / AI Overviews",
+              "fact_class": "observed",
+              "feed_id": "ai-consumer-metrics",
+              "logical_repo": "ai-consumer",
+              "metric_id": "monthly_active_users",
+              "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+              "mirror_snapshot_id": "d4279370da2e572563b7",
+              "period": "2026-06-03",
+              "source_url": "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
+              "unit": "users",
+              "value": 2500000000
+            }
+          ]
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 10,
+      "measurement_variables": [
+        "consumer_users",
+        "consumer_subscribers",
+        "search_users",
+        "search_subscribers",
+        "monthly_active_users",
+        "annual_revenue"
+      ],
+      "source_feed_ids": [
+        "ai-consumer-metrics"
+      ],
+      "theme": "The AI Consumer Operating System"
+    },
+    {
+      "claim_id": "ai-productivity",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "AI adoption is associated with near-term productivity gains and changing labor and enterprise-software economics.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "directionally_supporting",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "BLS nonfarm-business productivity is economy-wide. A positive reading is directionally relevant but cannot be causally attributed to AI.",
+        "observation": {
+          "causal_attribution": "not_established",
+          "latest_labor_productivity": {
+            "dimensions": {
+              "rate_basis": "percent change from previous quarter at annual rate"
+            },
+            "entity": "Nonfarm business",
+            "fact_class": "observed",
+            "feed_id": "ai-productivity",
+            "logical_repo": "economic-releases",
+            "metric_id": "labor_productivity",
+            "mirror_sha256": "c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846",
+            "mirror_snapshot_id": "d0c1a0839fd024e15852",
+            "period": "2026-Q2",
+            "source_url": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+            "unit": "percent_change_qoq_annualized",
+            "value": 1.4
+          }
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
+          "thesis_state": "strengthening"
+        }
+      },
+      "evidence_row_count": 20,
+      "measurement_variables": [
+        "labor_productivity",
+        "unit_labor_costs"
+      ],
+      "source_feed_ids": [
+        "ai-productivity"
+      ],
+      "theme": "AI Productivity"
+    },
+    {
+      "claim_id": "bitcoin",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Growing institutional ownership and changing demand composition could reflect Bitcoin's structural maturation as a store of value.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
+        "observation": {
+          "bitcoin_network": "blocked_external_evidence",
+          "derivatives_metric_rows": 354,
+          "treasury_first": {
+            "dimensions": {
+              "effective_at": "2024-09-19",
+              "trigger_event_id": "2024-09-19-holdings-capital-snapshot"
+            },
+            "entity": "Strategy Inc",
+            "fact_class": "state",
+            "feed_id": "bitcoin-treasury-snapshots",
+            "logical_repo": "bitcoin-treasury",
+            "metric_id": "bitcoin_holdings",
+            "mirror_sha256": "f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92",
+            "mirror_snapshot_id": "b68c458b3a8f57afbb91",
+            "period": "2024-09-20T00:00:00Z",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312524222498/d822569d8k.htm",
+            "unit": "BTC",
+            "value": 252220
+          },
+          "treasury_holdings_increased": true,
+          "treasury_latest": {
+            "dimensions": {
+              "effective_at": "2026-07-05",
+              "trigger_event_id": "2026-07-05-bitcoin-sales-reserve"
+            },
+            "entity": "Strategy Inc",
+            "fact_class": "state",
+            "feed_id": "bitcoin-treasury-snapshots",
+            "logical_repo": "bitcoin-treasury",
+            "metric_id": "bitcoin_holdings",
+            "mirror_sha256": "f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92",
+            "mirror_snapshot_id": "b68c458b3a8f57afbb91",
+            "period": "2026-07-06T00:00:00Z",
+            "source_url": "https://www.sec.gov/Archives/edgar/data/1050446/000119312526295586/mstr-20260706.htm",
+            "unit": "BTC",
+            "value": 843775
+          }
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 363,
+      "measurement_variables": [
+        "bitcoin_holdings",
+        "funding_rate_sum",
+        "perpetual_premium_pct",
+        "annualized_delivery_basis_pct"
+      ],
+      "source_feed_ids": [
+        "bitcoin-treasury-snapshots",
+        "bitcoin-derivatives-daily"
+      ],
+      "theme": "Bitcoin"
+    },
+    {
+      "claim_id": "tokenized-assets",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Stablecoins and tokenization are scaling beyond payments toward core capital-market infrastructure on a small number of blockchains.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "The current cross-theme feed measures issuer-reported USDC circulation and reserves; non-stablecoin tokenized capital-market assets are underrepresented in this projection.",
+        "observation": {
+          "first": {
+            "dimensions": {
+              "issuer_scope": "all Circle-approved blockchains",
+              "report_published_at": "2026-04-29"
+            },
+            "entity": "USDC",
+            "fact_class": "observed",
+            "feed_id": "tokenized-assets-issuer",
+            "logical_repo": "tokenized-assets",
+            "metric_id": "circulation_usdc",
+            "mirror_sha256": "51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd",
+            "mirror_snapshot_id": "290c6969640e854a2784",
+            "period": "2026-03-11",
+            "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20March%2026.pdf",
+            "unit": "USDC",
+            "value": 78681023356
+          },
+          "latest": {
+            "dimensions": {
+              "issuer_scope": "all Circle-approved blockchains",
+              "report_published_at": "2026-07-29"
+            },
+            "entity": "USDC",
+            "fact_class": "observed",
+            "feed_id": "tokenized-assets-issuer",
+            "logical_repo": "tokenized-assets",
+            "metric_id": "circulation_usdc",
+            "mirror_sha256": "51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd",
+            "mirror_snapshot_id": "290c6969640e854a2784",
+            "period": "2026-06-30",
+            "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20June%2026.pdf",
+            "unit": "USDC",
+            "value": 73268560097
+          }
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 16,
+      "measurement_variables": [
+        "circulation_usdc",
+        "reserve_fair_value_usd"
+      ],
+      "source_feed_ids": [
+        "tokenized-assets-issuer"
+      ],
+      "theme": "Tokenized Assets"
+    },
+    {
+      "claim_id": "defi-applications",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Crypto-native financial applications are scaling in activity and could become institution-like platforms with meaningful application-layer economics.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Protocol event counts measure activity, not asset scale, efficiency, revenue parity with incumbents, or institutional user composition.",
+        "observation": {
+          "early_mean": 2162.714285714286,
+          "first_period": "2026-05-18",
+          "latest_period": "2026-08-18",
+          "recent_mean": 1220.0,
+          "window": 7
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 279,
+      "measurement_variables": [
+        "aave_event_count",
+        "aave_liquidation_count",
+        "uniswap_swap_count"
+      ],
+      "source_feed_ids": [
+        "defi-daily"
+      ],
+      "theme": "DeFi Applications"
+    },
+    {
+      "claim_id": "multiomics",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "AI and multiomics could reinforce each other, accelerating discovery and improving precision while changing healthcare economics.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "deferred",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Active Multiomics evaluation is deferred by user instruction; completed domain evidence is intentionally not probed or projected here.",
+        "observation": {
+          "evidence_row_count": 0
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Evaluation is intentionally deferred; no zero or negative inference is created from the absence of active measurements.",
+          "thesis_state": "deferred"
+        }
+      },
+      "evidence_row_count": 0,
+      "measurement_variables": [],
+      "source_feed_ids": [],
+      "theme": "Multiomics"
+    },
+    {
+      "claim_id": "reusable-rockets",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Reusable launch systems are lowering access-to-orbit costs and enabling higher launch cadence and expanding space infrastructure.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "directionally_supporting",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Launch cadence is observed, but this cross-theme feed does not yet carry a comparable launch-cost series or explicit reuse-rate series.",
+        "observation": {
+          "early_mean": 13.0,
+          "first_period": "2024-01",
+          "latest_period": "2026-08",
+          "recent_mean": 14.0,
+          "window": 6
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
+          "thesis_state": "strengthening"
+        }
+      },
+      "evidence_row_count": 32,
+      "measurement_variables": [
+        "completed_launch_count"
+      ],
+      "source_feed_ids": [
+        "space-launches-monthly-cadence"
+      ],
+      "theme": "Reusable Rockets"
+    },
+    {
+      "claim_id": "robotics",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "General-purpose automation may be approaching an inflection as robots expand from narrow tasks toward more open-ended capability.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Factory evidence demonstrates deployment but is not a global installed-base estimate and does not directly quantify general-purpose capability or economy-wide impact.",
+        "observation": {
+          "deployment_events": 31,
+          "status_counts": {
+            "installed": 3,
+            "operational": 21,
+            "ordered": 3,
+            "planned": 4
+          }
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 37,
+      "measurement_variables": [
+        "deployment_evidence",
+        "disclosed_equipment_quantity"
+      ],
+      "source_feed_ids": [
+        "robotics-deployments"
+      ],
+      "theme": "Robotics"
+    },
+    {
+      "claim_id": "distributed-energy",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Rising compute demand is making energy a critical constraint while falling power and storage costs could enable a large expansion of low-cost electricity.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "EIA electricity is deferred, and nuclear capacity alone does not measure total electricity growth, power/storage costs, or the compute-demand constraint.",
+        "observation": {
+          "nuclear_capacity_rows": 8,
+          "under_construction_capacity": [
+            {
+              "dimensions": {
+                "status": "Under Construction"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "net_electrical_capacity",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "MW",
+              "value": 81694.0
+            }
+          ]
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 8,
+      "measurement_variables": [
+        "reactor_count",
+        "net_electrical_capacity"
+      ],
+      "source_feed_ids": [
+        "nuclear-capacity"
+      ],
+      "theme": "Distributed Energy"
+    },
+    {
+      "claim_id": "autonomous-vehicles",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Self-driving vehicles and high utilization could materially change the economics of personal mobility.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "mixed",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Testing, permits and SGO reports show deployment evidence but do not measure unit economics, utilization economics, or an exposure-normalized safety rate.",
+        "observation": {
+          "deployment_metrics": {
+            "autonomous_testing_miles": {
+              "entity": "California DMV autonomous testing",
+              "fact_class": "observed",
+              "feed_id": "autonomous-vehicles-summary",
+              "logical_repo": "autonomous-vehicles",
+              "metric_id": "autonomous_testing_miles",
+              "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
+              "mirror_snapshot_id": "39c510d77aa56a5d7970",
+              "period": "2024-11-30",
+              "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
+              "unit": "miles",
+              "value": 3912657.536
+            },
+            "permitted_company_groups": {
+              "entity": "California DMV autonomous testing",
+              "fact_class": "observed",
+              "feed_id": "autonomous-vehicles-summary",
+              "logical_repo": "autonomous-vehicles",
+              "metric_id": "permitted_company_groups",
+              "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
+              "mirror_snapshot_id": "39c510d77aa56a5d7970",
+              "period": "2024-11-30",
+              "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
+              "unit": "company_groups",
+              "value": 20
+            }
+          },
+          "safety_rate_computed": false
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
+        }
+      },
+      "evidence_row_count": 4,
+      "measurement_variables": [
+        "autonomous_testing_miles",
+        "permitted_company_groups",
+        "sgo_report_count_2024_plus"
+      ],
+      "source_feed_ids": [
+        "autonomous-vehicles-summary"
+      ],
+      "theme": "Autonomous Vehicles"
+    },
+    {
+      "claim_id": "autonomous-logistics",
+      "claim_kind": "ARK 2026 directional hypothesis",
+      "claim_paraphrase": "Autonomous delivery and logistics operations are moving into commercial use and could improve efficiency as scale and operating data accumulate.",
+      "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
+      "deviation": {
+        "classification": "directionally_supporting",
+        "kind": "directional_evidence_gap",
+        "measurement_gap": "Primary-source operating events confirm deployments but do not provide a common cost-per-delivery or global revenue scale series.",
+        "observation": {
+          "commercial_marked_events": 4,
+          "operation_events": 6
+        },
+        "research_implication": {
+          "prescriptive_action": null,
+          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
+          "thesis_state": "strengthening"
+        }
+      },
+      "evidence_row_count": 6,
+      "measurement_variables": [
+        "operation_evidence_event"
+      ],
+      "source_feed_ids": [
+        "autonomous-logistics-events"
+      ],
+      "theme": "Autonomous Logistics"
+    }
+  ],
+  "schema_version": 1
+}

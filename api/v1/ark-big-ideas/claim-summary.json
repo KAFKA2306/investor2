@@ -1,0 +1,14 @@
+{
+  "claim_count": 13,
+  "classification_counts": {
+    "deferred": 1,
+    "directionally_supporting": 4,
+    "mixed": 8
+  },
+  "rules": [
+    "Do not invent a numeric ARK target when the official theme description is directional. Evaluate observed direction and measurement gaps separately.",
+    "A directional-support classification is not causal proof and is not investment advice.",
+    "Missing/deferred evidence is never converted to zero or a negative fact."
+  ],
+  "schema_version": 1
+}

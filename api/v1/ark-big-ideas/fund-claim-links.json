@@ -1,0 +1,179 @@
+{
+  "records": [
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "great-acceleration"
+      ],
+      "claim_themes": [
+        "The Great Acceleration"
+      ],
+      "fund": "ARKK",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 47
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 99.96
+        }
+      },
+      "relation": "broad_disruptive_innovation_proxy"
+    },
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "robotics",
+        "autonomous-vehicles",
+        "autonomous-logistics"
+      ],
+      "claim_themes": [
+        "Robotics",
+        "Autonomous Vehicles",
+        "Autonomous Logistics"
+      ],
+      "fund": "ARKQ",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 39
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 100.02
+        }
+      },
+      "relation": "autonomous_technology_and_robotics_mandate"
+    },
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "ai-consumer-operating-system",
+        "bitcoin"
+      ],
+      "claim_themes": [
+        "The AI Consumer Operating System",
+        "Bitcoin"
+      ],
+      "fund": "ARKW",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 44
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 100.0
+        }
+      },
+      "relation": "next_generation_internet_mandate_proxy"
+    },
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "multiomics"
+      ],
+      "claim_themes": [
+        "Multiomics"
+      ],
+      "fund": "ARKG",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 34
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 100.01
+        }
+      },
+      "relation": "genomic_revolution_mandate_proxy"
+    },
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "bitcoin",
+        "tokenized-assets",
+        "defi-applications"
+      ],
+      "claim_themes": [
+        "Bitcoin",
+        "Tokenized Assets",
+        "DeFi Applications"
+      ],
+      "fund": "ARKF",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 41
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 100.02
+        }
+      },
+      "relation": "fintech_and_blockchain_mandate_proxy"
+    },
+    {
+      "boundary": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+      "claim_ids": [
+        "reusable-rockets",
+        "autonomous-logistics"
+      ],
+      "claim_themes": [
+        "Reusable Rockets",
+        "Autonomous Logistics"
+      ],
+      "fund": "ARKX",
+      "holdings_snapshot_audit": {
+        "holding_row_count": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "holdings",
+          "value": 35
+        },
+        "portfolio_weight_total": {
+          "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
+          "mirror_snapshot_id": "c62efeaf780889539cd3",
+          "period": "2026-08-19",
+          "unit": "percent",
+          "value": 100.0
+        }
+      },
+      "relation": "space_and_defense_mandate_proxy"
+    }
+  ],
+  "schema_version": 1
+}
