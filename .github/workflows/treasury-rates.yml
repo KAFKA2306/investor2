@@ -35,6 +35,11 @@ jobs:
           python-version: "3.12"
       - name: Run focused tests
         run: python -m unittest tests.test_treasury_rates_snapshot
+      - name: Show exact Ruff formatting delta
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m pip install --disable-pip-version-check ruff==0.15.5
+          ruff format --diff tests/test_treasury_rates_snapshot.py
       - name: Download official Treasury CSV files
         shell: bash
         run: |
