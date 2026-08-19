@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "derivation_rule": "This is a fund-level research linkage derived from fund mandates/names, not a constituent-level holdings fact. It must remain separate from the holdings snapshots.",
+  "funds": {
+    "ARKK": {"claim_ids": ["great-acceleration"], "relation": "broad_disruptive_innovation_proxy"},
+    "ARKQ": {"claim_ids": ["robotics", "autonomous-vehicles", "autonomous-logistics"], "relation": "autonomous_technology_and_robotics_mandate"},
+    "ARKW": {"claim_ids": ["ai-consumer-operating-system", "bitcoin"], "relation": "next_generation_internet_mandate_proxy"},
+    "ARKG": {"claim_ids": ["multiomics"], "relation": "genomic_revolution_mandate_proxy"},
+    "ARKF": {"claim_ids": ["bitcoin", "tokenized-assets", "defi-applications"], "relation": "fintech_and_blockchain_mandate_proxy"},
+    "ARKX": {"claim_ids": ["reusable-rockets", "autonomous-logistics"], "relation": "space_and_defense_mandate_proxy"}
+  }
+}

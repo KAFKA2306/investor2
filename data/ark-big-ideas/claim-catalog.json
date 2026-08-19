@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "source_url": "https://www.ark-invest.com/big-ideas-2026",
+  "source_kind": "ARK 2026 directional hypothesis",
+  "target_rule": "Do not invent a numeric ARK target when the official theme description is directional. Evaluate observed direction and measurement gaps separately.",
+  "claims": [
+    {
+      "claim_id": "great-acceleration",
+      "theme": "The Great Acceleration",
+      "claim_paraphrase": "AI-led technology investment and co-accelerating technologies could lift real economic growth materially by the end of the decade.",
+      "source_feed_ids": ["ai-infrastructure-capex", "ai-productivity", "robotics-deployments", "nuclear-capacity"],
+      "measurement_variables": ["capital_expenditures", "labor_productivity", "deployment_evidence", "net_electrical_capacity"],
+      "evaluation_rule": "cross_theme_coverage",
+      "measurement_gap": "The projection does not yet contain a real-GDP growth series, so ARK's end-of-decade macro growth outcome is not directly tested."
+    },
+    {
+      "claim_id": "ai-infrastructure",
+      "theme": "AI Infrastructure",
+      "claim_paraphrase": "AI is driving a large infrastructure buildout as data-center investment accelerates and compute becomes more specialized.",
+      "source_feed_ids": ["ai-infrastructure-capex"],
+      "measurement_variables": ["capital_expenditures"],
+      "evaluation_rule": "entity_trend_share",
+      "measurement_gap": "Company CapEx is broader than AI-only data-center spending and does not isolate specialized compute investment."
+    },
+    {
+      "claim_id": "ai-consumer-operating-system",
+      "theme": "The AI Consumer Operating System",
+      "claim_paraphrase": "AI is becoming a consumer operating layer across discovery, decisions and transactions, with potentially large adoption and revenue effects.",
+      "source_feed_ids": ["ai-consumer-metrics"],
+      "measurement_variables": ["consumer_users", "consumer_subscribers", "search_users", "search_subscribers", "monthly_active_users", "annual_revenue"],
+      "evaluation_rule": "consumer_scale_evidence",
+      "measurement_gap": "User and revenue disclosures show scale but do not directly measure the share of consumer discovery, decisions or transactions controlled by agents."
+    },
+    {
+      "claim_id": "ai-productivity",
+      "theme": "AI Productivity",
+      "claim_paraphrase": "AI adoption is associated with near-term productivity gains and changing labor and enterprise-software economics.",
+      "source_feed_ids": ["ai-productivity"],
+      "measurement_variables": ["labor_productivity", "unit_labor_costs"],
+      "evaluation_rule": "latest_productivity_direction",
+      "measurement_gap": "BLS nonfarm-business productivity is economy-wide. A positive reading is directionally relevant but cannot be causally attributed to AI."
+    },
+    {
+      "claim_id": "bitcoin",
+      "theme": "Bitcoin",
+      "claim_paraphrase": "Growing institutional ownership and changing demand composition could reflect Bitcoin's structural maturation as a store of value.",
+      "source_feed_ids": ["bitcoin-treasury-snapshots", "bitcoin-derivatives-daily"],
+      "measurement_variables": ["bitcoin_holdings", "funding_rate_sum", "perpetual_premium_pct", "annualized_delivery_basis_pct"],
+      "evaluation_rule": "bitcoin_partial",
+      "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed."
+    },
+    {
+      "claim_id": "tokenized-assets",
+      "theme": "Tokenized Assets",
+      "claim_paraphrase": "Stablecoins and tokenization are scaling beyond payments toward core capital-market infrastructure on a small number of blockchains.",
+      "source_feed_ids": ["tokenized-assets-issuer"],
+      "measurement_variables": ["circulation_usdc", "reserve_fair_value_usd"],
+      "evaluation_rule": "issuer_supply_trend",
+      "measurement_gap": "The current cross-theme feed measures issuer-reported USDC circulation and reserves; non-stablecoin tokenized capital-market assets are underrepresented in this projection."
+    },
+    {
+      "claim_id": "defi-applications",
+      "theme": "DeFi Applications",
+      "claim_paraphrase": "Crypto-native financial applications are scaling in activity and could become institution-like platforms with meaningful application-layer economics.",
+      "source_feed_ids": ["defi-daily"],
+      "measurement_variables": ["aave_event_count", "aave_liquidation_count", "uniswap_swap_count"],
+      "evaluation_rule": "recent_vs_early_activity",
+      "measurement_gap": "Protocol event counts measure activity, not asset scale, efficiency, revenue parity with incumbents, or institutional user composition."
+    },
+    {
+      "claim_id": "multiomics",
+      "theme": "Multiomics",
+      "claim_paraphrase": "AI and multiomics could reinforce each other, accelerating discovery and improving precision while changing healthcare economics.",
+      "source_feed_ids": [],
+      "measurement_variables": [],
+      "evaluation_rule": "deferred",
+      "measurement_gap": "Active Multiomics evaluation is deferred by user instruction; completed domain evidence is intentionally not probed or projected here."
+    },
+    {
+      "claim_id": "reusable-rockets",
+      "theme": "Reusable Rockets",
+      "claim_paraphrase": "Reusable launch systems are lowering access-to-orbit costs and enabling higher launch cadence and expanding space infrastructure.",
+      "source_feed_ids": ["space-launches-monthly-cadence"],
+      "measurement_variables": ["completed_launch_count"],
+      "evaluation_rule": "launch_cadence_trend",
+      "measurement_gap": "Launch cadence is observed, but this cross-theme feed does not yet carry a comparable launch-cost series or explicit reuse-rate series."
+    },
+    {
+      "claim_id": "robotics",
+      "theme": "Robotics",
+      "claim_paraphrase": "General-purpose automation may be approaching an inflection as robots expand from narrow tasks toward more open-ended capability.",
+      "source_feed_ids": ["robotics-deployments"],
+      "measurement_variables": ["deployment_evidence", "disclosed_equipment_quantity"],
+      "evaluation_rule": "robotics_deployment_evidence",
+      "measurement_gap": "Factory evidence demonstrates deployment but is not a global installed-base estimate and does not directly quantify general-purpose capability or economy-wide impact."
+    },
+    {
+      "claim_id": "distributed-energy",
+      "theme": "Distributed Energy",
+      "claim_paraphrase": "Rising compute demand is making energy a critical constraint while falling power and storage costs could enable a large expansion of low-cost electricity.",
+      "source_feed_ids": ["nuclear-capacity"],
+      "measurement_variables": ["reactor_count", "net_electrical_capacity"],
+      "evaluation_rule": "distributed_energy_partial",
+      "measurement_gap": "EIA electricity is deferred, and nuclear capacity alone does not measure total electricity growth, power/storage costs, or the compute-demand constraint."
+    },
+    {
+      "claim_id": "autonomous-vehicles",
+      "theme": "Autonomous Vehicles",
+      "claim_paraphrase": "Self-driving vehicles and high utilization could materially change the economics of personal mobility.",
+      "source_feed_ids": ["autonomous-vehicles-summary"],
+      "measurement_variables": ["autonomous_testing_miles", "permitted_company_groups", "sgo_report_count_2024_plus"],
+      "evaluation_rule": "autonomous_vehicle_evidence",
+      "measurement_gap": "Testing, permits and SGO reports show deployment evidence but do not measure unit economics, utilization economics, or an exposure-normalized safety rate."
+    },
+    {
+      "claim_id": "autonomous-logistics",
+      "theme": "Autonomous Logistics",
+      "claim_paraphrase": "Autonomous delivery and logistics operations are moving into commercial use and could improve efficiency as scale and operating data accumulate.",
+      "source_feed_ids": ["autonomous-logistics-events"],
+      "measurement_variables": ["operation_evidence_event"],
+      "evaluation_rule": "autonomous_logistics_commercial",
+      "measurement_gap": "Primary-source operating events confirm deployments but do not provide a common cost-per-delivery or global revenue scale series."
+    }
+  ]
+}
