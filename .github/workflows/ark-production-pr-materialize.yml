@@ -67,7 +67,7 @@ jobs:
           cp build/source-health.json api/v1/ark-big-ideas/source-health.json
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
+          git add -f api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
           if git diff --cached --quiet; then
             echo 'No generated evidence changes.'
             exit 0
