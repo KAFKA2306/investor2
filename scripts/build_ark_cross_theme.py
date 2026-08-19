@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Materialize domain-repository JSON and build a cross-theme ARK evidence projection."""
+"""Materialize domain-repository JSON and build a cross-theme ARK projection."""
 
 from __future__ import annotations
 
@@ -8,9 +8,10 @@ import hashlib
 import json
 import urllib.request
 from collections import Counter
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 from scripts import snapshot_store
 
@@ -19,18 +20,25 @@ DEFAULT_SOURCE_CATALOG = ROOT / "data" / "ark-big-ideas" / "source-catalog.json"
 DEFAULT_METRIC_CATALOG = ROOT / "data" / "ark-big-ideas" / "metric-catalog.json"
 DEFAULT_SNAPSHOT_ROOT = ROOT / "data" / "ark-big-ideas" / "snapshots"
 DEFAULT_API_DIR = ROOT / "api" / "v1" / "ark-big-ideas"
-DEFAULT_SNAPSHOT_CATALOG = ROOT / "data" / "input_ledger" / "snapshot_catalog.ndjson"
+DEFAULT_SNAPSHOT_CATALOG = (
+    ROOT / "data" / "input_ledger" / "snapshot_catalog.ndjson"
+)
 MIRROR_SOURCE = "github_domain_repo_snapshot"
 UA = "investor2-ark-cross-theme/1.0 github.com/KAFKA2306/investor2"
 ACTIVE_STATUSES = {"ready", "accumulating"}
 
 
 def canonical_json(value: object) -> bytes:
-    return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
+    return (
+        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+    ).encode()
 
 
 def fetch_json(url: str) -> tuple[bytes, Any]:
-    request = urllib.request.Request(url, headers={"User-Agent": UA, "Accept": "application/json"})
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": UA, "Accept": "application/json"},
+    )
     with urllib.request.urlopen(request, timeout=90) as response:
         raw = response.read()
     if not raw:
@@ -45,7 +53,10 @@ def load_json(path: Path) -> dict[str, Any]:
     return value
 
 
-def validate_catalogs(source_catalog: dict[str, Any], metric_catalog: dict[str, Any]) -> tuple[dict[str, Any], list[dict[str, Any]]]:
+def validate_catalogs(
+    source_catalog: dict[str, Any],
+    metric_catalog: dict[str, Any],
+) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     sources = source_catalog.get("sources")
     feeds = metric_catalog.get("feeds")
     if not isinstance(sources, list) or not sources:
@@ -56,31 +67,51 @@ def validate_catalogs(source_catalog: dict[str, Any], metric_catalog: dict[str, 
     source_map = {str(row["logical_repo"]): row for row in sources}
     if len(source_map) != len(sources):
         raise ValueError("duplicate logical_repo in source catalog")
+
     feed_ids = [str(row["feed_id"]) for row in feeds]
     if len(feed_ids) != len(set(feed_ids)):
         raise ValueError("duplicate feed_id")
 
     feeds_by_repo = Counter(str(row["logical_repo"]) for row in feeds)
-    active_repos = {repo for repo, row in source_map.items() if row["status"] in ACTIVE_STATUSES}
+    active_repos = {
+        repo
+        for repo, row in source_map.items()
+        if row["status"] in ACTIVE_STATUSES
+    }
     if set(feeds_by_repo) != active_repos:
         missing = sorted(active_repos - set(feeds_by_repo))
         extra = sorted(set(feeds_by_repo) - active_repos)
-        raise ValueError(f"metric feed readiness drift: missing={missing} extra={extra}")
+        raise ValueError(
+            f"metric feed readiness drift: missing={missing} extra={extra}"
+        )
     if any(count != 1 for count in feeds_by_repo.values()):
         raise ValueError("each active logical_repo must have exactly one metric feed")
 
-    required = {"feed_id", "logical_repo", "adapter", "repository", "ref", "raw_url"}
+    required = {
+        "feed_id",
+        "logical_repo",
+        "adapter",
+        "repository",
+        "ref",
+        "raw_url",
+    }
     for feed in feeds:
         missing = required - feed.keys()
         if missing:
             raise ValueError(f"feed missing fields {sorted(missing)}: {feed}")
         source = source_map[str(feed["logical_repo"])]
         if source["status"] not in ACTIVE_STATUSES:
-            raise ValueError(f"inactive source has a metric feed: {feed['logical_repo']}")
+            raise ValueError(
+                f"inactive source has a metric feed: {feed['logical_repo']}"
+            )
         if str(feed["repository"]) != str(source["current_repo"]):
             raise ValueError(f"feed repository drift: {feed['feed_id']}")
-        if not str(feed["raw_url"]).startswith("https://raw.githubusercontent.com/KAFKA2306/"):
-            raise ValueError(f"feed must use KAFKA2306 raw GitHub JSON: {feed['feed_id']}")
+        raw_url = str(feed["raw_url"])
+        prefix = "https://raw.githubusercontent.com/KAFKA2306/"
+        if not raw_url.startswith(prefix):
+            raise ValueError(
+                f"feed must use KAFKA2306 raw GitHub JSON: {feed['feed_id']}"
+            )
     return source_map, feeds
 
 
@@ -139,10 +170,14 @@ def adapt_bls_productivity(payload: dict[str, Any]) -> list[dict[str, Any]]:
     return rows
 
 
-def adapt_ai_infrastructure_capex(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+def adapt_ai_infrastructure_capex(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
     for observation in payload.get("observations", []):
-        if observation.get("concept_id") != "capital_expenditures" or observation.get("value_type") != "actual":
+        if observation.get("concept_id") != "capital_expenditures":
+            continue
+        if observation.get("value_type") != "actual":
             continue
         rows.append(
             metric_row(
@@ -153,14 +188,17 @@ def adapt_ai_infrastructure_capex(payload: dict[str, Any]) -> list[dict[str, Any
                 unit=str(observation["unit"]),
                 entity=str(observation.get("ticker") or observation["entity"]),
                 source_url=observation.get("source_url"),
-                dimensions={"fiscal_period": observation.get("fiscal_period"), "source_tier": observation.get("source_tier")},
+                dimensions={
+                    "fiscal_period": observation.get("fiscal_period"),
+                    "source_tier": observation.get("source_tier"),
+                },
             )
         )
     return rows
 
 
 def adapt_ai_consumer_metrics(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+    rows: list[dict[str, Any]] = []
     for observation in payload.get("observations", []):
         value = observation.get("value")
         if not isinstance(value, (int, float)) or isinstance(value, bool):
@@ -175,31 +213,87 @@ def adapt_ai_consumer_metrics(payload: dict[str, Any]) -> list[dict[str, Any]]:
                 entity=f"{observation['provider']} / {observation['product']}",
                 qualifier=observation.get("qualifier"),
                 source_url=observation.get("source_url"),
-                dimensions={"geography": observation.get("geography"), "reported_period": observation.get("period")},
+                dimensions={
+                    "geography": observation.get("geography"),
+                    "reported_period": observation.get("period"),
+                },
             )
         )
     return rows
 
 
 def adapt_nuclear_capacity(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+    rows: list[dict[str, Any]] = []
     period = str(payload["observed_at"])
-    for key in ("operating", "under_construction", "suspended_operation", "permanent_shutdown"):
+    statuses = (
+        "operating",
+        "under_construction",
+        "suspended_operation",
+        "permanent_shutdown",
+    )
+    for key in statuses:
         state = payload[key]
         dimensions = {"status": state["status"]}
-        rows.append(metric_row(metric_id="reactor_count", period=period, granularity="snapshot", value=state["reactor_count"], unit="reactors", entity="Global nuclear fleet", dimensions=dimensions))
-        rows.append(metric_row(metric_id="net_electrical_capacity", period=period, granularity="snapshot", value=state["net_electrical_capacity_mw"], unit="MW", entity="Global nuclear fleet", dimensions=dimensions))
+        rows.append(
+            metric_row(
+                metric_id="reactor_count",
+                period=period,
+                granularity="snapshot",
+                value=state["reactor_count"],
+                unit="reactors",
+                entity="Global nuclear fleet",
+                dimensions=dimensions,
+            )
+        )
+        rows.append(
+            metric_row(
+                metric_id="net_electrical_capacity",
+                period=period,
+                granularity="snapshot",
+                value=state["net_electrical_capacity_mw"],
+                unit="MW",
+                entity="Global nuclear fleet",
+                dimensions=dimensions,
+            )
+        )
     return rows
 
 
-def adapt_autonomous_vehicles_summary(payload: dict[str, Any]) -> list[dict[str, Any]]:
+def adapt_autonomous_vehicles_summary(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
     dmv = payload["california_dmv"]
     period = str(dmv["period"]["end"])
     source_url = dmv["source_urls"][0]
     rows = [
-        metric_row(metric_id="autonomous_testing_miles", period=period, granularity="reporting_period_end", value=dmv["autonomous_testing_miles"], unit="miles", entity="California DMV autonomous testing", source_url=source_url),
-        metric_row(metric_id="reported_disengagements", period=period, granularity="reporting_period_end", value=dmv["reported_disengagements"], unit="events", entity="California DMV autonomous testing", source_url=source_url, dimensions={"warning": dmv["metric_warning"]}),
-        metric_row(metric_id="permitted_company_groups", period=period, granularity="reporting_period_end", value=dmv["company_permit_group_count"], unit="company_groups", entity="California DMV autonomous testing", source_url=source_url),
+        metric_row(
+            metric_id="autonomous_testing_miles",
+            period=period,
+            granularity="reporting_period_end",
+            value=dmv["autonomous_testing_miles"],
+            unit="miles",
+            entity="California DMV autonomous testing",
+            source_url=source_url,
+        ),
+        metric_row(
+            metric_id="reported_disengagements",
+            period=period,
+            granularity="reporting_period_end",
+            value=dmv["reported_disengagements"],
+            unit="events",
+            entity="California DMV autonomous testing",
+            source_url=source_url,
+            dimensions={"warning": dmv["metric_warning"]},
+        ),
+        metric_row(
+            metric_id="permitted_company_groups",
+            period=period,
+            granularity="reporting_period_end",
+            value=dmv["company_permit_group_count"],
+            unit="company_groups",
+            entity="California DMV autonomous testing",
+            source_url=source_url,
+        ),
     ]
     nhtsa = payload["nhtsa_sgo"]
     for system, label in (("ads", "ADS"), ("level_2_adas", "Level 2 ADAS")):
@@ -219,7 +313,9 @@ def adapt_autonomous_vehicles_summary(payload: dict[str, Any]) -> list[dict[str,
     return rows
 
 
-def adapt_bitcoin_treasury_snapshots(payload: dict[str, Any]) -> list[dict[str, Any]]:
+def adapt_bitcoin_treasury_snapshots(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
     selected = {
         "bitcoin_holdings",
         "bitcoin_aggregate_purchase_price_usd",
@@ -228,7 +324,7 @@ def adapt_bitcoin_treasury_snapshots(payload: dict[str, Any]) -> list[dict[str, 
         "usd_reserve",
     }
     entity = str(payload.get("entity", {}).get("name", "Strategy Inc"))
-    rows = []
+    rows: list[dict[str, Any]] = []
     for snapshot in payload.get("snapshots", []):
         for name, fact in snapshot.get("state", {}).items():
             if name not in selected:
@@ -243,20 +339,28 @@ def adapt_bitcoin_treasury_snapshots(payload: dict[str, Any]) -> list[dict[str, 
                     entity=entity,
                     source_url=fact.get("source_url"),
                     fact_class="state",
-                    dimensions={"effective_at": fact.get("effective_at"), "trigger_event_id": snapshot.get("trigger_event_id")},
+                    dimensions={
+                        "effective_at": fact.get("effective_at"),
+                        "trigger_event_id": snapshot.get("trigger_event_id"),
+                    },
                 )
             )
     return rows
 
 
-def adapt_bitcoin_derivatives_daily(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+def adapt_bitcoin_derivatives_daily(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
     for record in payload.get("records", []):
         contract_type = str(record["contract_type"])
-        metrics = (
-            ("funding_rate_sum", "rate_decimal"),
-            ("perpetual_premium_pct", "percent"),
-        ) if contract_type == "PERPETUAL" else (("annualized_delivery_basis_pct", "percent"),)
+        if contract_type == "PERPETUAL":
+            metrics = (
+                ("funding_rate_sum", "rate_decimal"),
+                ("perpetual_premium_pct", "percent"),
+            )
+        else:
+            metrics = (("annualized_delivery_basis_pct", "percent"),)
         for metric_id, unit in metrics:
             value = record.get(metric_id)
             if value is None:
@@ -276,10 +380,16 @@ def adapt_bitcoin_derivatives_daily(payload: dict[str, Any]) -> list[dict[str, A
     return rows
 
 
-def adapt_tokenized_assets_issuer(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+def adapt_tokenized_assets_issuer(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
+    metrics = (
+        ("circulation_usdc", "USDC"),
+        ("reserve_fair_value_usd", "USD"),
+    )
     for record in payload.get("records", []):
-        for metric_id, unit in (("circulation_usdc", "USDC"), ("reserve_fair_value_usd", "USD")):
+        for metric_id, unit in metrics:
             rows.append(
                 metric_row(
                     metric_id=metric_id,
@@ -289,22 +399,42 @@ def adapt_tokenized_assets_issuer(payload: dict[str, Any]) -> list[dict[str, Any
                     unit=unit,
                     entity=str(record["asset_id"]).upper(),
                     source_url=record.get("source_url"),
-                    dimensions={"issuer_scope": record.get("issuer_scope"), "report_published_at": record.get("report_published_at")},
+                    dimensions={
+                        "issuer_scope": record.get("issuer_scope"),
+                        "report_published_at": record.get("report_published_at"),
+                    },
                 )
             )
     return rows
 
 
 def adapt_defi_daily(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+    rows: list[dict[str, Any]] = []
+    metrics = (
+        ("aave_event_count", "Aave V3"),
+        ("aave_liquidation_count", "Aave V3"),
+        ("uniswap_swap_count", "Uniswap V3"),
+    )
     for record in payload.get("records", []):
-        for metric_id, entity in (("aave_event_count", "Aave V3"), ("aave_liquidation_count", "Aave V3"), ("uniswap_swap_count", "Uniswap V3")):
-            rows.append(metric_row(metric_id=metric_id, period=str(record["date"]), granularity="day", value=record[metric_id], unit="events", entity=entity, fact_class="domain_derived"))
+        for metric_id, entity in metrics:
+            rows.append(
+                metric_row(
+                    metric_id=metric_id,
+                    period=str(record["date"]),
+                    granularity="day",
+                    value=record[metric_id],
+                    unit="events",
+                    entity=entity,
+                    fact_class="domain_derived",
+                )
+            )
     return rows
 
 
-def adapt_robotics_deployments(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+def adapt_robotics_deployments(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
     for record in payload.get("records", []):
         dimensions = {
             "status": record["status"],
@@ -313,17 +443,57 @@ def adapt_robotics_deployments(payload: dict[str, Any]) -> list[dict[str, Any]]:
             "factory": record["factory"],
             "country": record["country"],
         }
-        rows.append(metric_row(metric_id="deployment_evidence", period=str(record["observed_at"]), granularity="event_date", value=1, unit="evidence_events", entity=str(record["company"]), source_url=record.get("source_url"), fact_class="evidence_event", dimensions=dimensions))
+        rows.append(
+            metric_row(
+                metric_id="deployment_evidence",
+                period=str(record["observed_at"]),
+                granularity="event_date",
+                value=1,
+                unit="evidence_events",
+                entity=str(record["company"]),
+                source_url=record.get("source_url"),
+                fact_class="evidence_event",
+                dimensions=dimensions,
+            )
+        )
         if "quantity" in record:
-            rows.append(metric_row(metric_id="disclosed_equipment_quantity", period=str(record["observed_at"]), granularity="event_date", value=record["quantity"], unit=str(record["quantity_unit"]), entity=str(record["company"]), qualifier=record.get("quantity_qualifier"), source_url=record.get("source_url"), dimensions=dimensions))
-        metric = record.get("performance_metric")
-        if isinstance(metric, dict) and isinstance(metric.get("value"), (int, float)):
-            rows.append(metric_row(metric_id=str(metric["name"]), period=str(record["observed_at"]), granularity="event_date", value=metric["value"], unit=str(metric["unit"]), entity=str(record["company"]), qualifier=metric.get("qualifier"), source_url=record.get("source_url"), dimensions=dimensions))
+            rows.append(
+                metric_row(
+                    metric_id="disclosed_equipment_quantity",
+                    period=str(record["observed_at"]),
+                    granularity="event_date",
+                    value=record["quantity"],
+                    unit=str(record["quantity_unit"]),
+                    entity=str(record["company"]),
+                    qualifier=record.get("quantity_qualifier"),
+                    source_url=record.get("source_url"),
+                    dimensions=dimensions,
+                )
+            )
+        performance = record.get("performance_metric")
+        if isinstance(performance, dict) and isinstance(
+            performance.get("value"), (int, float)
+        ):
+            rows.append(
+                metric_row(
+                    metric_id=str(performance["name"]),
+                    period=str(record["observed_at"]),
+                    granularity="event_date",
+                    value=performance["value"],
+                    unit=str(performance["unit"]),
+                    entity=str(record["company"]),
+                    qualifier=performance.get("qualifier"),
+                    source_url=record.get("source_url"),
+                    dimensions=dimensions,
+                )
+            )
     return rows
 
 
-def adapt_autonomous_logistics_events(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    rows = []
+def adapt_autonomous_logistics_events(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
     for record in payload.get("records", []):
         rows.append(
             metric_row(
@@ -335,25 +505,73 @@ def adapt_autonomous_logistics_events(payload: dict[str, Any]) -> list[dict[str,
                 entity=str(record["operator_id"]),
                 source_url=record.get("source_url"),
                 fact_class="evidence_event",
-                dimensions={"event_type": record["event_type"], "mode": record["mode"], "operation_status": record["operation_status"]},
+                dimensions={
+                    "event_type": record["event_type"],
+                    "mode": record["mode"],
+                    "operation_status": record["operation_status"],
+                },
             )
         )
     return rows
 
 
-def adapt_space_launches_monthly(payload: dict[str, Any]) -> list[dict[str, Any]]:
+def adapt_space_launches_monthly(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
     return [
-        metric_row(metric_id="completed_launch_count", period=str(record["month"]), granularity="month", value=record["launch_count"], unit="launches", entity="Tracked reusable-launch operators", fact_class="domain_derived")
+        metric_row(
+            metric_id="completed_launch_count",
+            period=str(record["month"]),
+            granularity="month",
+            value=record["launch_count"],
+            unit="launches",
+            entity="Tracked reusable-launch operators",
+            fact_class="domain_derived",
+        )
         for record in payload.get("records", [])
     ]
 
 
-def adapt_ark_etf_holdings_latest(payload: dict[str, Any]) -> list[dict[str, Any]]:
-    parsed = datetime.strptime(str(payload["as_of"]), "%m/%d/%Y").date().isoformat()
-    rows = [metric_row(metric_id="snapshot_count", period=parsed, granularity="as_of_date", value=payload["snapshot_count"], unit="snapshots", entity="ARK ETF holdings archive", fact_class="audit")]
+def adapt_ark_etf_holdings_latest(
+    payload: dict[str, Any],
+) -> list[dict[str, Any]]:
+    period = datetime.strptime(str(payload["as_of"]), "%m/%d/%Y").date().isoformat()
+    rows = [
+        metric_row(
+            metric_id="snapshot_count",
+            period=period,
+            granularity="as_of_date",
+            value=payload["snapshot_count"],
+            unit="snapshots",
+            entity="ARK ETF holdings archive",
+            fact_class="audit",
+        )
+    ]
     for fund, record in payload.get("funds", {}).items():
-        rows.append(metric_row(metric_id="holding_row_count", period=parsed, granularity="as_of_date", value=record["row_count"], unit="holdings", entity=fund, fact_class="audit", source_url=record.get("source_csv_url")))
-        rows.append(metric_row(metric_id="portfolio_weight_total", period=parsed, granularity="as_of_date", value=record["audit"]["weight_total"], unit="percent", entity=fund, fact_class="audit", source_url=record.get("source_csv_url")))
+        rows.append(
+            metric_row(
+                metric_id="holding_row_count",
+                period=period,
+                granularity="as_of_date",
+                value=record["row_count"],
+                unit="holdings",
+                entity=fund,
+                fact_class="audit",
+                source_url=record.get("source_csv_url"),
+            )
+        )
+        rows.append(
+            metric_row(
+                metric_id="portfolio_weight_total",
+                period=period,
+                granularity="as_of_date",
+                value=record["audit"]["weight_total"],
+                unit="percent",
+                entity=fund,
+                fact_class="audit",
+                source_url=record.get("source_csv_url"),
+            )
+        )
     return rows
 
 
@@ -392,14 +610,28 @@ def materialize_snapshot(
     reuse_key = f"ark-big-ideas:{feed['feed_id']}"
     artifact_path = artifact.relative_to(ROOT).as_posix()
     if not register:
-        return {"snapshot_id": f"preview:{digest[:20]}", "artifact_path": artifact_path, "artifact_sha256": digest, "registered": False}
+        return {
+            "snapshot_id": f"preview:{digest[:20]}",
+            "artifact_path": artifact_path,
+            "artifact_sha256": digest,
+            "registered": False,
+        }
 
     entries = snapshot_store.load_ndjson(snapshot_catalog)
     prior = [entry for entry in entries if entry.get("reuse_key") == reuse_key]
     if prior:
-        latest = max(prior, key=lambda entry: snapshot_store.parse_observed_at(entry["observed_at"]))
+        latest = max(
+            prior,
+            key=lambda entry: snapshot_store.parse_observed_at(entry["observed_at"]),
+        )
         if latest["artifact_sha256"] == digest:
-            return {"snapshot_id": latest["snapshot_id"], "artifact_path": latest["artifact_path"], "artifact_sha256": digest, "registered": True, "reused": True}
+            return {
+                "snapshot_id": latest["snapshot_id"],
+                "artifact_path": latest["artifact_path"],
+                "artifact_sha256": digest,
+                "registered": True,
+                "reused": True,
+            }
 
     registry = snapshot_store.load_registry()
     entry = snapshot_store.build_entry(
@@ -421,7 +653,13 @@ def materialize_snapshot(
         },
     )
     snapshot_store.append_entry(entry, snapshot_catalog)
-    return {"snapshot_id": entry["snapshot_id"], "artifact_path": artifact_path, "artifact_sha256": digest, "registered": True, "reused": False}
+    return {
+        "snapshot_id": entry["snapshot_id"],
+        "artifact_path": artifact_path,
+        "artifact_sha256": digest,
+        "registered": True,
+        "reused": False,
+    }
 
 
 def build_projection(
@@ -444,8 +682,17 @@ def build_projection(
             raise ValueError(f"unknown ARK metric adapter: {adapter_name}")
         raw, payload = fetcher(str(feed["raw_url"]))
         if not isinstance(payload, dict):
-            raise ValueError(f"domain feed must be a JSON object: {feed['feed_id']}")
-        snapshot = materialize_snapshot(feed=feed, raw=raw, snapshot_root=snapshot_root, retrieved_at=retrieved_at, register=register, snapshot_catalog=snapshot_catalog)
+            raise ValueError(
+                f"domain feed must be a JSON object: {feed['feed_id']}"
+            )
+        snapshot = materialize_snapshot(
+            feed=feed,
+            raw=raw,
+            snapshot_root=snapshot_root,
+            retrieved_at=retrieved_at,
+            register=register,
+            snapshot_catalog=snapshot_catalog,
+        )
         source = source_map[str(feed["logical_repo"])]
         adapted = ADAPTERS[adapter_name](payload)
         if not adapted:
@@ -472,10 +719,22 @@ def build_projection(
             "artifact_path": snapshot["artifact_path"],
         }
 
-    series.sort(key=lambda row: (str(row["logical_repo"]), str(row["metric_id"]), str(row.get("entity", "")), str(row["period"])))
+    series.sort(
+        key=lambda row: (
+            str(row["logical_repo"]),
+            str(row["metric_id"]),
+            str(row.get("entity", "")),
+            str(row["period"]),
+        )
+    )
     matrix_rows = []
     for source in source_catalog["sources"]:
         evidence = feed_evidence.get(str(source["logical_repo"]))
+        projection = (
+            evidence
+            if evidence is not None
+            else {"excluded": True, "reason": source["status"]}
+        )
         matrix_rows.append(
             {
                 "theme": source["theme"],
@@ -484,14 +743,19 @@ def build_projection(
                 "status": source["status"],
                 "issue_url": source["issue_url"],
                 "canonical_url": source["canonical_url"],
-                "projection": evidence if evidence is not None else {"excluded": True, "reason": source["status"]},
+                "projection": projection,
             }
         )
 
-    status_counts = dict(sorted(Counter(str(row["status"]) for row in source_catalog["sources"]).items()))
+    status_counts = dict(
+        sorted(
+            Counter(
+                str(row["status"]) for row in source_catalog["sources"]
+            ).items()
+        )
+    )
     index = {
         "schema_version": 1,
-        "generated_at": retrieved_at,
         "authority_rule": metric_catalog["authority_rule"],
         "source_count": len(source_catalog["sources"]),
         "active_feed_count": len(feeds),
@@ -503,26 +767,49 @@ def build_projection(
             for row in source_catalog["sources"]
             if row["status"] not in ACTIVE_STATUSES
         ],
-        "views": {"series": "series.json", "evidence_matrix": "evidence-matrix.json"},
+        "views": {
+            "series": "series.json",
+            "evidence_matrix": "evidence-matrix.json",
+        },
         "rules": [
             "domain repositories remain authoritative; mirrored JSON is evidence only",
             "deferred and externally blocked domains emit no zero-filled metrics",
-            "observed/state/evidence-event/domain-derived/audit fact classes remain explicit",
+            "fact classes remain explicit instead of being coerced into one series",
             "ADS and Level 2 ADAS report counts are not safety rates",
             "Bitcoin perpetual funding/premium and delivery basis remain separate metrics",
-            "issuer-reported token supply and chain-observed supply are never implicitly merged",
-            "robotics evidence counts are evidence events, not an estimate of the global installed robot population",
+            "issuer-reported token supply and chain-observed supply are not merged",
+            "robotics evidence events are not an installed-population estimate",
         ],
     }
-    return index, {"schema_version": 1, "records": series}, {"schema_version": 1, "sources": matrix_rows}
+    return (
+        index,
+        {"schema_version": 1, "records": series},
+        {"schema_version": 1, "sources": matrix_rows},
+    )
 
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--source-catalog", type=Path, default=DEFAULT_SOURCE_CATALOG)
-    parser.add_argument("--metric-catalog", type=Path, default=DEFAULT_METRIC_CATALOG)
-    parser.add_argument("--snapshot-root", type=Path, default=DEFAULT_SNAPSHOT_ROOT)
-    parser.add_argument("--snapshot-catalog", type=Path, default=DEFAULT_SNAPSHOT_CATALOG)
+    parser.add_argument(
+        "--source-catalog",
+        type=Path,
+        default=DEFAULT_SOURCE_CATALOG,
+    )
+    parser.add_argument(
+        "--metric-catalog",
+        type=Path,
+        default=DEFAULT_METRIC_CATALOG,
+    )
+    parser.add_argument(
+        "--snapshot-root",
+        type=Path,
+        default=DEFAULT_SNAPSHOT_ROOT,
+    )
+    parser.add_argument(
+        "--snapshot-catalog",
+        type=Path,
+        default=DEFAULT_SNAPSHOT_CATALOG,
+    )
     parser.add_argument("--api-dir", type=Path, default=DEFAULT_API_DIR)
     parser.add_argument("--register", action="store_true")
     args = parser.parse_args()
@@ -540,7 +827,16 @@ def main() -> None:
     (args.api_dir / "index.json").write_bytes(canonical_json(index))
     (args.api_dir / "series.json").write_bytes(canonical_json(series))
     (args.api_dir / "evidence-matrix.json").write_bytes(canonical_json(matrix))
-    print(json.dumps({"feeds": index["active_feed_count"], "rows": index["metric_row_count"], "status_counts": index["status_counts"]}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "feeds": index["active_feed_count"],
+                "rows": index["metric_row_count"],
+                "status_counts": index["status_counts"],
+            },
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":
