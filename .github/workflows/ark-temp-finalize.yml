@@ -1,0 +1,60 @@
+name: ARK branch finalizer
+
+on:
+  push:
+    branches: [feat/ark-cross-theme-projection]
+    paths:
+      - .github/workflows/ark-temp-finalize.yml
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feat/ark-cross-theme-projection
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Install exact formatter
+        run: python -m pip install 'ruff==0.15.5'
+      - name: Add canonical ARK entry points
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('README.md')
+          text = path.read_text(encoding='utf-8')
+          badge = '[![ARK Big Ideas evidence](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml)'
+          if badge not in text:
+              first_blank = text.find('\n\n')
+              if first_blank < 0:
+                  raise SystemExit('README heading boundary not found')
+              text = text[:first_blank + 2] + badge + '\n' + text[first_blank + 2:]
+
+          heading = '## ARK Big Ideas 2026 cross-theme evidence'
+          if heading not in text:
+              section = '''\n## ARK Big Ideas 2026 cross-theme evidence\n\nARK各domainの正準JSONを別のauthorityへコピーせず、content-addressed mirrorとして時点固定し、投資判断用のlong-form metricへ横断投影します。\n\n- [Cross-theme index](api/v1/ark-big-ideas/index.json)\n- [Normalized series](api/v1/ark-big-ideas/series.json)\n- [Evidence matrix](api/v1/ark-big-ideas/evidence-matrix.json)\n- [Source readiness catalog](data/ark-big-ideas/source-catalog.json)\n- [Metric feed catalog](data/ark-big-ideas/metric-catalog.json)\n\n`deferred_by_user` と `blocked_external_evidence` は0値へ変換せず、evidence matrixで明示的に除外します。Multiomicsはdomain実装を維持したままactive probingから保留し、Bitcoin networkは同期済みBitcoin Core実観測が揃うまで外部evidence blockerとして扱います。\n'''
+              marker = '\n## License'
+              if marker in text:
+                  text = text.replace(marker, section + marker, 1)
+              else:
+                  text = text.rstrip() + '\n' + section
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Format Python exactly like Quality Gates
+        run: ruff format scripts/build_ark_cross_theme.py tests/test_ark_cross_theme.py
+      - name: Commit finalized branch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add README.md scripts/build_ark_cross_theme.py tests/test_ark_cross_theme.py
+          if git diff --cached --quiet; then
+            echo 'No finalization changes.'
+            exit 0
+          fi
+          git commit -m 'chore: finalize ARK cross-theme projection'
+          git push
