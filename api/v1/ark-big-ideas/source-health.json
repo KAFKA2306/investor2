@@ -55,7 +55,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/index.json",
-      "sha256": "959758f79eb7aec88ee9b520a00b6860c755ad0cbb43dadd1bf31792471a577b",
+      "sha256": "9eca94ad1028efd59cfeca0d942fd5fec41a4c92f3b06b36386ef6e98203733c",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -73,7 +73,7 @@
       "live_check": "ok",
       "logical_repo": "multiomics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
-      "sha256": "f62d317843173e931374c8b0d7ba201f41164b2486690167492ad58bba38adc4",
+      "sha256": "80ac9d1fb95ef10d38ff96b05adf2737b55f49bfa74a8d71ccf32ed8d6726783",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
@@ -150,7 +150,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "eeec3002a5f1437ac980e69640173972c8f135e41ee1b7fd014c40550459996b",
+      "sha256": "a679c1eb090c3f26055ae1c7d923d0e4def6127f37bed06e4314aebe68c181f2",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -302,7 +302,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "c860313a8d9c61d7fca945d2796c317bb55beba4c180a90e492ca35e3d2ce322",
+      "sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [
