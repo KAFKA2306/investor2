@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "authority_rule": "Every feed is a read-only mirror of a canonical domain-repository output. Domain repositories remain authoritative; investor2 only normalizes decision metrics.",
+  "feeds": [
+    {
+      "feed_id": "ai-productivity",
+      "logical_repo": "economic-releases",
+      "adapter": "bls_productivity",
+      "repository": "KAFKA2306/econalert",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/econalert/main/api/v1/productivity/latest.json"
+    },
+    {
+      "feed_id": "ai-infrastructure-capex",
+      "logical_repo": "ai-infrastructure",
+      "adapter": "ai_infrastructure_capex",
+      "repository": "KAFKA2306/semiconductor-earnings-model",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/semiconductor-earnings-model/main/api/v1/ai-infrastructure/index.json"
+    },
+    {
+      "feed_id": "ai-consumer-metrics",
+      "logical_repo": "ai-consumer",
+      "adapter": "ai_consumer_metrics",
+      "repository": "KAFKA2306/finAnalist",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json"
+    },
+    {
+      "feed_id": "nuclear-capacity",
+      "logical_repo": "nuclear-power",
+      "adapter": "nuclear_capacity",
+      "repository": "KAFKA2306/uranium",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json"
+    },
+    {
+      "feed_id": "autonomous-vehicles-summary",
+      "logical_repo": "autonomous-vehicles",
+      "adapter": "autonomous_vehicles_summary",
+      "repository": "KAFKA2306/autonomous-vehicles",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-vehicles/main/api/v1/autonomous-vehicles/summary.json"
+    },
+    {
+      "feed_id": "bitcoin-treasury-snapshots",
+      "logical_repo": "bitcoin-treasury",
+      "adapter": "bitcoin_treasury_snapshots",
+      "repository": "KAFKA2306/mstr",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/snapshots.json"
+    },
+    {
+      "feed_id": "bitcoin-derivatives-daily",
+      "logical_repo": "bitcoin-derivatives",
+      "adapter": "bitcoin_derivatives_daily",
+      "repository": "KAFKA2306/option",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/daily.json"
+    },
+    {
+      "feed_id": "tokenized-assets-issuer",
+      "logical_repo": "tokenized-assets",
+      "adapter": "tokenized_assets_issuer",
+      "repository": "KAFKA2306/fx",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json"
+    },
+    {
+      "feed_id": "defi-daily",
+      "logical_repo": "defi",
+      "adapter": "defi_daily",
+      "repository": "KAFKA2306/skew",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json"
+    },
+    {
+      "feed_id": "robotics-deployments",
+      "logical_repo": "factory",
+      "adapter": "robotics_deployments",
+      "repository": "KAFKA2306/factory",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json"
+    },
+    {
+      "feed_id": "autonomous-logistics-events",
+      "logical_repo": "autonomous-logistics",
+      "adapter": "autonomous_logistics_events",
+      "repository": "KAFKA2306/autonomous-logistics",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json"
+    },
+    {
+      "feed_id": "space-launches-monthly-cadence",
+      "logical_repo": "space-launches",
+      "adapter": "space_launches_monthly",
+      "repository": "KAFKA2306/trahist",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json"
+    },
+    {
+      "feed_id": "ark-etf-holdings-latest",
+      "logical_repo": "ark-etf-holdings",
+      "adapter": "ark_etf_holdings_latest",
+      "repository": "KAFKA2306/etf",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json"
+    }
+  ]
+}
