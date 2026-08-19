@@ -49,10 +49,10 @@ jobs:
           from pathlib import Path
           data = json.loads(Path('build/source-health.json').read_text())
           assert data['source_count'] == 16
-          assert data['ready_count'] == 13
+          assert data['ready_count'] == 12
           assert data['status_counts']['accumulating'] == 1
           assert data['status_counts']['blocked_external_evidence'] == 1
-          assert data['status_counts']['deferred_by_user'] == 1
+          assert data['status_counts']['deferred_by_user'] == 2
           assert data['unresolved_count'] == 2
           ready = [s for s in data['sources'] if s['status'] == 'ready']
           assert ready and all(s['live_check'] == 'ok' for s in ready)
