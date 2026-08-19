@@ -100,10 +100,13 @@ def main() -> None:
         args.output_dir,
         args.latest_path,
     )
-    try:
-        print(artifact.relative_to(Path.cwd()).as_posix())
-    except ValueError:
-        print(artifact.as_posix())
+    resolved_artifact = artifact.resolve()
+    root = Path.cwd().resolve()
+    print(
+        resolved_artifact.relative_to(root).as_posix()
+        if resolved_artifact.is_relative_to(root)
+        else artifact.as_posix()
+    )
 
 
 if __name__ == "__main__":
