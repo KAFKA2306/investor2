@@ -16,15 +16,11 @@ class TreasuryRatesSnapshotTest(unittest.TestCase):
             nominal = root / "nominal.csv"
             real = root / "real.csv"
             nominal.write_text(
-                "Date,1 Mo,10 Yr,30 Yr\n"
-                "08/17/2026,3.80,4.72,5.31\n"
-                "08/18/2026,3.79,4.71,5.28\n",
+                "Date,1 Mo,10 Yr,30 Yr\n08/17/2026,3.80,4.72,5.31\n08/18/2026,3.79,4.71,5.28\n",
                 encoding="utf-8",
             )
             real.write_text(
-                "Date,5 Yr,10 Yr,20 Yr,30 Yr\n"
-                "08/17/2026,2.22,2.44,2.84,3.06\n"
-                "08/18/2026,N/A,2.43,2.83,3.05\n",
+                "Date,5 Yr,10 Yr,20 Yr,30 Yr\n08/17/2026,2.22,2.44,2.84,3.06\n08/18/2026,N/A,2.43,2.83,3.05\n",
                 encoding="utf-8",
             )
 
