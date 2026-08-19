@@ -1,0 +1,66 @@
+name: ARK main materialize once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/ark-main-materialize-once.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ark-big-ideas-evidence
+  cancel-in-progress: true
+
+jobs:
+  materialize:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Unit contracts
+        run: python -m unittest tests.test_ark_source_health tests.test_ark_cross_theme -v
+      - name: Verify source health
+        run: python scripts/build_ark_source_health.py --output build/source-health.json
+      - name: Materialize domain mirrors and projection
+        run: python -m scripts.build_ark_cross_theme --register
+      - name: Audit persistent snapshots
+        run: python scripts/snapshot_store.py audit
+      - name: Audit production projection
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          index = json.loads(Path('api/v1/ark-big-ideas/index.json').read_text())
+          series = json.loads(Path('api/v1/ark-big-ideas/series.json').read_text())['records']
+          matrix = json.loads(Path('api/v1/ark-big-ideas/evidence-matrix.json').read_text())['sources']
+          assert index['source_count'] == 16
+          assert index['active_feed_count'] == 13
+          assert index['metric_row_count'] == len(series)
+          assert len(series) > 300
+          excluded = {row['logical_repo']: row['projection']['reason'] for row in matrix if row['projection'].get('excluded')}
+          assert excluded == {
+              'multiomics': 'deferred_by_user',
+              'energy-supply': 'deferred_by_user',
+              'bitcoin-network': 'blocked_external_evidence',
+          }
+          print({'rows': len(series), 'excluded': excluded})
+          PY
+      - name: Commit production evidence
+        run: |
+          cp build/source-health.json api/v1/ark-big-ideas/source-health.json
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
+          if git diff --cached --quiet; then
+            echo 'No ARK production evidence change.'
+            exit 0
+          fi
+          git commit -m 'data: materialize ARK cross-theme evidence'
+          git push
