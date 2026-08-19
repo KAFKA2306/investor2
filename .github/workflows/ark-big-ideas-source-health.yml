@@ -36,6 +36,11 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
+      - name: Show repository Ruff format delta
+        if: github.event_name == 'pull_request'
+        run: |
+          python -m pip install ruff==0.15.5
+          ruff format --diff scripts/build_ark_source_health.py
       - name: Compile
         run: python -m py_compile scripts/build_ark_source_health.py tests/test_ark_source_health.py
       - name: Unit tests
