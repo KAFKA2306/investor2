@@ -4,6 +4,13 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 22 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/treasury_rates_snapshot.py"
+      - "tests/test_treasury_rates_snapshot.py"
+      - ".github/workflows/treasury-rates.yml"
   pull_request:
     paths:
       - "scripts/treasury_rates_snapshot.py"
