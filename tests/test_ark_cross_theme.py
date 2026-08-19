@@ -17,9 +17,7 @@ class ArkCrossThemeTest(unittest.TestCase):
                     "logical_repo": "economic-releases",
                     "current_repo": "KAFKA2306/econalert",
                     "status": "ready",
-                    "canonical_url": (
-                        "https://github.com/KAFKA2306/econalert/blob/main/latest.json"
-                    ),
+                    "canonical_url": ("https://github.com/KAFKA2306/econalert/blob/main/latest.json"),
                     "issue_url": "https://github.com/KAFKA2306/econalert/issues/12",
                 },
                 {
@@ -27,9 +25,7 @@ class ArkCrossThemeTest(unittest.TestCase):
                     "logical_repo": "multiomics",
                     "current_repo": "KAFKA2306/kafin3",
                     "status": "deferred_by_user",
-                    "canonical_url": (
-                        "https://github.com/KAFKA2306/kafin3/blob/main/index.json"
-                    ),
+                    "canonical_url": ("https://github.com/KAFKA2306/kafin3/blob/main/index.json"),
                     "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
                 },
             ]
@@ -43,10 +39,7 @@ class ArkCrossThemeTest(unittest.TestCase):
                     "adapter": "bls_productivity",
                     "repository": "KAFKA2306/econalert",
                     "ref": "main",
-                    "raw_url": (
-                        "https://raw.githubusercontent.com/KAFKA2306/"
-                        "econalert/main/latest.json"
-                    ),
+                    "raw_url": ("https://raw.githubusercontent.com/KAFKA2306/econalert/main/latest.json"),
                 }
             ],
         }
@@ -77,17 +70,8 @@ class ArkCrossThemeTest(unittest.TestCase):
             shutil.rmtree(temp)
         self.assertEqual(index["active_feed_count"], 1)
         self.assertEqual(index["status_counts"]["deferred_by_user"], 1)
-        self.assertFalse(
-            any(
-                row["logical_repo"] == "multiomics"
-                for row in series["records"]
-            )
-        )
-        deferred = next(
-            row
-            for row in matrix["sources"]
-            if row["logical_repo"] == "multiomics"
-        )
+        self.assertFalse(any(row["logical_repo"] == "multiomics" for row in series["records"]))
+        deferred = next(row for row in matrix["sources"] if row["logical_repo"] == "multiomics")
         self.assertEqual(
             deferred["projection"],
             {"excluded": True, "reason": "deferred_by_user"},
@@ -167,14 +151,8 @@ class ArkCrossThemeTest(unittest.TestCase):
             ]
         }
         rows = MODULE.adapt_robotics_deployments(payload)
-        event = next(
-            row for row in rows if row["metric_id"] == "deployment_evidence"
-        )
-        quantity = next(
-            row
-            for row in rows
-            if row["metric_id"] == "disclosed_equipment_quantity"
-        )
+        event = next(row for row in rows if row["metric_id"] == "deployment_evidence")
+        quantity = next(row for row in rows if row["metric_id"] == "disclosed_equipment_quantity")
         self.assertEqual(event["value"], 1)
         self.assertEqual(event["unit"], "evidence_events")
         self.assertEqual(quantity["value"], 4)

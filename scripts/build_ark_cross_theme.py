@@ -20,18 +20,14 @@ DEFAULT_SOURCE_CATALOG = ROOT / "data" / "ark-big-ideas" / "source-catalog.json"
 DEFAULT_METRIC_CATALOG = ROOT / "data" / "ark-big-ideas" / "metric-catalog.json"
 DEFAULT_SNAPSHOT_ROOT = ROOT / "data" / "ark-big-ideas" / "snapshots"
 DEFAULT_API_DIR = ROOT / "api" / "v1" / "ark-big-ideas"
-DEFAULT_SNAPSHOT_CATALOG = (
-    ROOT / "data" / "input_ledger" / "snapshot_catalog.ndjson"
-)
+DEFAULT_SNAPSHOT_CATALOG = ROOT / "data" / "input_ledger" / "snapshot_catalog.ndjson"
 MIRROR_SOURCE = "github_domain_repo_snapshot"
 UA = "investor2-ark-cross-theme/1.0 github.com/KAFKA2306/investor2"
 ACTIVE_STATUSES = {"ready", "accumulating"}
 
 
 def canonical_json(value: object) -> bytes:
-    return (
-        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    ).encode()
+    return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
 
 
 def fetch_json(url: str) -> tuple[bytes, Any]:
@@ -73,17 +69,11 @@ def validate_catalogs(
         raise ValueError("duplicate feed_id")
 
     feeds_by_repo = Counter(str(row["logical_repo"]) for row in feeds)
-    active_repos = {
-        repo
-        for repo, row in source_map.items()
-        if row["status"] in ACTIVE_STATUSES
-    }
+    active_repos = {repo for repo, row in source_map.items() if row["status"] in ACTIVE_STATUSES}
     if set(feeds_by_repo) != active_repos:
         missing = sorted(active_repos - set(feeds_by_repo))
         extra = sorted(set(feeds_by_repo) - active_repos)
-        raise ValueError(
-            f"metric feed readiness drift: missing={missing} extra={extra}"
-        )
+        raise ValueError(f"metric feed readiness drift: missing={missing} extra={extra}")
     if any(count != 1 for count in feeds_by_repo.values()):
         raise ValueError("each active logical_repo must have exactly one metric feed")
 
@@ -101,17 +91,13 @@ def validate_catalogs(
             raise ValueError(f"feed missing fields {sorted(missing)}: {feed}")
         source = source_map[str(feed["logical_repo"])]
         if source["status"] not in ACTIVE_STATUSES:
-            raise ValueError(
-                f"inactive source has a metric feed: {feed['logical_repo']}"
-            )
+            raise ValueError(f"inactive source has a metric feed: {feed['logical_repo']}")
         if str(feed["repository"]) != str(source["current_repo"]):
             raise ValueError(f"feed repository drift: {feed['feed_id']}")
         raw_url = str(feed["raw_url"])
         prefix = "https://raw.githubusercontent.com/KAFKA2306/"
         if not raw_url.startswith(prefix):
-            raise ValueError(
-                f"feed must use KAFKA2306 raw GitHub JSON: {feed['feed_id']}"
-            )
+            raise ValueError(f"feed must use KAFKA2306 raw GitHub JSON: {feed['feed_id']}")
     return source_map, feeds
 
 
@@ -471,9 +457,7 @@ def adapt_robotics_deployments(
                 )
             )
         performance = record.get("performance_metric")
-        if isinstance(performance, dict) and isinstance(
-            performance.get("value"), (int, float)
-        ):
+        if isinstance(performance, dict) and isinstance(performance.get("value"), (int, float)):
             rows.append(
                 metric_row(
                     metric_id=str(performance["name"]),
@@ -682,9 +666,7 @@ def build_projection(
             raise ValueError(f"unknown ARK metric adapter: {adapter_name}")
         raw, payload = fetcher(str(feed["raw_url"]))
         if not isinstance(payload, dict):
-            raise ValueError(
-                f"domain feed must be a JSON object: {feed['feed_id']}"
-            )
+            raise ValueError(f"domain feed must be a JSON object: {feed['feed_id']}")
         snapshot = materialize_snapshot(
             feed=feed,
             raw=raw,
@@ -730,11 +712,7 @@ def build_projection(
     matrix_rows = []
     for source in source_catalog["sources"]:
         evidence = feed_evidence.get(str(source["logical_repo"]))
-        projection = (
-            evidence
-            if evidence is not None
-            else {"excluded": True, "reason": source["status"]}
-        )
+        projection = evidence if evidence is not None else {"excluded": True, "reason": source["status"]}
         matrix_rows.append(
             {
                 "theme": source["theme"],
@@ -747,13 +725,7 @@ def build_projection(
             }
         )
 
-    status_counts = dict(
-        sorted(
-            Counter(
-                str(row["status"]) for row in source_catalog["sources"]
-            ).items()
-        )
-    )
+    status_counts = dict(sorted(Counter(str(row["status"]) for row in source_catalog["sources"]).items()))
     index = {
         "schema_version": 1,
         "authority_rule": metric_catalog["authority_rule"],
