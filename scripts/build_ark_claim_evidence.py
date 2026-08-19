@@ -107,28 +107,58 @@ def evaluate(claim: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
             if len(ordered) < 2:
                 continue
             first, last = ordered[0], ordered[-1]
-            comparisons.append({"entity": entity, "first": first["value"], "last": last["value"], "increased": last["value"] > first["value"]})
-        positive = sum(item["increased"] for item in comparisons)
+            comparisons.append(
+                {
+                    "entity": entity,
+                    "first": first["value"],
+                    "last": last["value"],
+                    "increased": last["value"] > first["value"],
+                }
+            )
+        positive = sum(1 for item in comparisons if item["increased"] is True)
         share = positive / len(comparisons) if comparisons else 0.0
         classification = "directionally_supporting" if comparisons and share >= 0.6 else "mixed"
-        return evaluation_result(classification, {"entities_compared": len(comparisons), "share_increasing": round(share, 4), "comparisons": comparisons[:10]}, gap)
+        return evaluation_result(
+            classification,
+            {
+                "entities_compared": len(comparisons),
+                "share_increasing": round(share, 4),
+                "comparisons": comparisons[:10],
+            },
+            gap,
+        )
 
     if rule == "consumer_scale_evidence":
         latest = sorted(rows, key=lambda row: str(row["period"]))[-8:]
-        return evaluation_result("mixed", {"evidence_row_count": len(rows), "latest_observations": [evidence_ref(row) for row in latest]}, gap)
+        return evaluation_result(
+            "mixed",
+            {"evidence_row_count": len(rows), "latest_observations": [evidence_ref(row) for row in latest]},
+            gap,
+        )
 
     if rule == "latest_productivity_direction":
-        productivity = sorted([row for row in rows if row["metric_id"] == "labor_productivity"], key=lambda row: str(row["period"]))
+        productivity = sorted(
+            [row for row in rows if row["metric_id"] == "labor_productivity"], key=lambda row: str(row["period"])
+        )
         if not productivity:
             return evaluation_result("unresolved", {"evidence_row_count": len(rows)}, gap)
         latest = productivity[-1]
         classification = "directionally_supporting" if latest["value"] > 0 else "mixed"
-        return evaluation_result(classification, {"latest_labor_productivity": evidence_ref(latest), "causal_attribution": "not_established"}, gap)
+        return evaluation_result(
+            classification,
+            {"latest_labor_productivity": evidence_ref(latest), "causal_attribution": "not_established"},
+            gap,
+        )
 
     if rule == "bitcoin_partial":
-        holdings = sorted([row for row in rows if row["metric_id"] == "bitcoin_holdings"], key=lambda row: str(row["period"]))
+        holdings = sorted(
+            [row for row in rows if row["metric_id"] == "bitcoin_holdings"], key=lambda row: str(row["period"])
+        )
         derivatives = [row for row in rows if row["feed_id"] == "bitcoin-derivatives-daily"]
-        observation: dict[str, Any] = {"derivatives_metric_rows": len(derivatives), "bitcoin_network": "blocked_external_evidence"}
+        observation: dict[str, Any] = {
+            "derivatives_metric_rows": len(derivatives),
+            "bitcoin_network": "blocked_external_evidence",
+        }
         if holdings:
             observation["treasury_first"] = evidence_ref(holdings[0])
             observation["treasury_latest"] = evidence_ref(holdings[-1])
@@ -136,11 +166,15 @@ def evaluate(claim: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
         return evaluation_result("mixed", observation, gap)
 
     if rule == "issuer_supply_trend":
-        supply = sorted([row for row in rows if row["metric_id"] == "circulation_usdc"], key=lambda row: str(row["period"]))
+        supply = sorted(
+            [row for row in rows if row["metric_id"] == "circulation_usdc"], key=lambda row: str(row["period"])
+        )
         if len(supply) < 2:
             return evaluation_result("mixed", {"evidence_row_count": len(rows)}, gap)
         classification = classify_trend(supply[0]["value"], supply[-1]["value"])
-        return evaluation_result(classification, {"first": evidence_ref(supply[0]), "latest": evidence_ref(supply[-1])}, gap)
+        return evaluation_result(
+            classification, {"first": evidence_ref(supply[0]), "latest": evidence_ref(supply[-1])}, gap
+        )
 
     if rule in {"recent_vs_early_activity", "launch_cadence_trend"}:
         ordered = sorted(rows, key=lambda row: str(row["period"]))
@@ -148,19 +182,53 @@ def evaluate(claim: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
         early = mean(float(row["value"]) for row in ordered[:window])
         recent = mean(float(row["value"]) for row in ordered[-window:])
         classification = classify_trend(early, recent)
-        return evaluation_result(classification, {"window": window, "early_mean": early, "recent_mean": recent, "first_period": ordered[0]["period"], "latest_period": ordered[-1]["period"]}, gap)
+        return evaluation_result(
+            classification,
+            {
+                "window": window,
+                "early_mean": early,
+                "recent_mean": recent,
+                "first_period": ordered[0]["period"],
+                "latest_period": ordered[-1]["period"],
+            },
+            gap,
+        )
 
     if rule == "robotics_deployment_evidence":
-        status_counts = Counter(str(row.get("dimensions", {}).get("status", "unknown")) for row in rows if row["metric_id"] == "deployment_evidence")
+        status_counts = Counter(
+            str(row.get("dimensions", {}).get("status", "unknown"))
+            for row in rows
+            if row["metric_id"] == "deployment_evidence"
+        )
         classification = "mixed" if sum(status_counts.values()) else "unresolved"
-        return evaluation_result(classification, {"deployment_events": sum(status_counts.values()), "status_counts": dict(sorted(status_counts.items()))}, gap)
+        return evaluation_result(
+            classification,
+            {"deployment_events": sum(status_counts.values()), "status_counts": dict(sorted(status_counts.items()))},
+            gap,
+        )
 
     if rule == "distributed_energy_partial":
-        construction = [row for row in rows if row["metric_id"] == "net_electrical_capacity" and "construction" in str(row.get("dimensions", {}).get("status", "")).casefold()]
-        return evaluation_result("mixed", {"nuclear_capacity_rows": len(rows), "under_construction_capacity": [evidence_ref(row) for row in construction]}, gap)
+        construction = [
+            row
+            for row in rows
+            if row["metric_id"] == "net_electrical_capacity"
+            and "construction" in str(row.get("dimensions", {}).get("status", "")).casefold()
+        ]
+        return evaluation_result(
+            "mixed",
+            {
+                "nuclear_capacity_rows": len(rows),
+                "under_construction_capacity": [evidence_ref(row) for row in construction],
+            },
+            gap,
+        )
 
     if rule == "autonomous_vehicle_evidence":
-        metrics = {row["metric_id"]: evidence_ref(row) for row in rows if row["metric_id"] in {"autonomous_testing_miles", "permitted_company_groups"}}
+        metrics = {
+            row["metric_id"]: evidence_ref(row)
+            for row in rows
+            if row["metric_id"] in {"autonomous_testing_miles", "permitted_company_groups"}
+        }
         classification = "mixed" if metrics else "unresolved"
         return evaluation_result(classification, {"deployment_metrics": metrics, "safety_rate_computed": False}, gap)
 
@@ -171,52 +239,76 @@ def evaluate(claim: dict[str, Any], rows: list[dict[str, Any]]) -> dict[str, Any
             if "commercial" in " ".join(str(value) for value in dims.values()).casefold():
                 commercial += 1
         classification = "directionally_supporting" if commercial > 0 else "mixed"
-        return evaluation_result(classification, {"operation_events": len(rows), "commercial_marked_events": commercial}, gap)
+        return evaluation_result(
+            classification, {"operation_events": len(rows), "commercial_marked_events": commercial}, gap
+        )
 
     raise ValueError(f"unknown evaluation rule: {rule}")
 
 
-def build_fund_links(fund_map: dict[str, Any], series: list[dict[str, Any]], claims_by_id: dict[str, dict[str, Any]]) -> dict[str, Any]:
+def build_fund_links(
+    fund_map: dict[str, Any], series: list[dict[str, Any]], claims_by_id: dict[str, dict[str, Any]]
+) -> dict[str, Any]:
     holdings = [row for row in series if row.get("feed_id") == "ark-etf-holdings-latest"]
     by_fund: dict[str, dict[str, Any]] = defaultdict(dict)
     for row in holdings:
         entity = str(row.get("entity", ""))
         if entity in fund_map["funds"]:
-            by_fund[entity][row["metric_id"]] = {"value": row["value"], "unit": row["unit"], "period": row["period"], "mirror_snapshot_id": row["mirror_snapshot_id"], "mirror_sha256": row["mirror_sha256"]}
+            by_fund[entity][row["metric_id"]] = {
+                "value": row["value"],
+                "unit": row["unit"],
+                "period": row["period"],
+                "mirror_snapshot_id": row["mirror_snapshot_id"],
+                "mirror_sha256": row["mirror_sha256"],
+            }
     records = []
     for fund, mapping in fund_map["funds"].items():
-        records.append({
-            "fund": fund,
-            "relation": mapping["relation"],
-            "claim_ids": mapping["claim_ids"],
-            "claim_themes": [claims_by_id[claim_id]["theme"] for claim_id in mapping["claim_ids"]],
-            "holdings_snapshot_audit": by_fund.get(fund, {}),
-            "boundary": fund_map["derivation_rule"],
-        })
+        records.append(
+            {
+                "fund": fund,
+                "relation": mapping["relation"],
+                "claim_ids": mapping["claim_ids"],
+                "claim_themes": [claims_by_id[claim_id]["theme"] for claim_id in mapping["claim_ids"]],
+                "holdings_snapshot_audit": by_fund.get(fund, {}),
+                "boundary": fund_map["derivation_rule"],
+            }
+        )
     return {"schema_version": 1, "records": records}
 
 
-def build(series_doc: dict[str, Any], claims_doc: dict[str, Any], fund_map: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
+def build(
+    series_doc: dict[str, Any], claims_doc: dict[str, Any], fund_map: dict[str, Any]
+) -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
     series = series_doc["records"]
     claims = claims_doc["claims"]
     if len(claims) != 13 or len({claim["claim_id"] for claim in claims}) != 13:
         raise ValueError("claim catalog must contain exactly 13 unique ARK 2026 themes")
-    records = []
+    records: list[dict[str, Any]] = []
     for claim in claims:
         selected = rows_for(claim, series)
         result = evaluate(claim, selected)
-        records.append({
-            "claim_id": claim["claim_id"],
-            "theme": claim["theme"],
-            "claim_kind": claims_doc["source_kind"],
-            "claim_source_url": claims_doc["source_url"],
-            "claim_paraphrase": claim["claim_paraphrase"],
-            "measurement_variables": claim["measurement_variables"],
-            "source_feed_ids": claim["source_feed_ids"],
-            "evidence_row_count": len(selected),
-            "deviation": {"kind": "directional_evidence_gap", **result},
-        })
-    counts = Counter(record["deviation"]["classification"] for record in records)
+        records.append(
+            {
+                "claim_id": claim["claim_id"],
+                "theme": claim["theme"],
+                "claim_kind": claims_doc["source_kind"],
+                "claim_source_url": claims_doc["source_url"],
+                "claim_paraphrase": claim["claim_paraphrase"],
+                "measurement_variables": claim["measurement_variables"],
+                "source_feed_ids": claim["source_feed_ids"],
+                "evidence_row_count": len(selected),
+                "deviation": {"kind": "directional_evidence_gap", **result},
+            }
+        )
+    counts: Counter[str] = Counter()
+    for record in records:
+        deviation = record.get("deviation")
+        if not isinstance(deviation, dict):
+            raise ValueError("claim evidence missing deviation object")
+        classification = deviation.get("classification")
+        if not isinstance(classification, str):
+            raise ValueError("claim evidence missing classification")
+        counts[classification] += 1
     summary = {
         "schema_version": 1,
         "claim_count": len(records),
@@ -243,7 +335,16 @@ def main() -> None:
     (args.output_dir / "claim-summary.json").write_bytes(canonical_json(summary))
     (args.output_dir / "claim-evidence.json").write_bytes(canonical_json(evidence))
     (args.output_dir / "fund-claim-links.json").write_bytes(canonical_json(funds))
-    print(json.dumps({"claims": summary["claim_count"], "classes": summary["classification_counts"], "funds": len(funds["records"])}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "claims": summary["claim_count"],
+                "classes": summary["classification_counts"],
+                "funds": len(funds["records"]),
+            },
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":
