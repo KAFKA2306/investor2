@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "authority_rule": "Each domain repository remains authoritative. investor2 stores locators, readiness state, and content hashes only; it does not copy domain facts into a second authority.",
+  "status_definitions": {
+    "ready": "Domain acceptance criteria are complete and the canonical JSON is eligible for live health checks.",
+    "accumulating": "Collector is operational but a time-based acceptance window is not complete.",
+    "blocked_external_evidence": "Implementation exists but completion requires evidence from infrastructure not available to this workflow.",
+    "deferred_by_user": "Existing domain work is intentionally excluded from active work and live probing for now."
+  },
+  "sources": [
+    {
+      "theme": "AI Productivity",
+      "logical_repo": "economic-releases",
+      "current_repo": "KAFKA2306/econalert",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/econalert/blob/main/api/v1/productivity/latest.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/econalert/main/api/v1/productivity/latest.json",
+      "issue_url": "https://github.com/KAFKA2306/econalert/issues/12"
+    },
+    {
+      "theme": "AI Infrastructure",
+      "logical_repo": "ai-infrastructure",
+      "current_repo": "KAFKA2306/semiconductor-earnings-model",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/blob/main/api/v1/ai-infrastructure/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/semiconductor-earnings-model/main/api/v1/ai-infrastructure/index.json",
+      "issue_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/issues/132"
+    },
+    {
+      "theme": "AI Consumer Operating System",
+      "logical_repo": "ai-consumer",
+      "current_repo": "KAFKA2306/finAnalist",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/index.json",
+      "issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4"
+    },
+    {
+      "theme": "Multiomics",
+      "logical_repo": "multiomics",
+      "current_repo": "KAFKA2306/kafin3",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
+      "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6"
+    },
+    {
+      "theme": "Distributed Energy / Nuclear",
+      "logical_repo": "nuclear-power",
+      "current_repo": "KAFKA2306/uranium",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
+      "issue_url": "https://github.com/KAFKA2306/uranium/issues/5"
+    },
+    {
+      "theme": "Distributed Energy / Electricity",
+      "logical_repo": "energy-supply",
+      "current_repo": "KAFKA2306/oil",
+      "status": "deferred_by_user",
+      "check_live": false,
+      "canonical_url": "https://github.com/KAFKA2306/oil/tree/main/api/v1/electricity",
+      "raw_url": null,
+      "issue_url": "https://github.com/KAFKA2306/oil/issues/12"
+    },
+    {
+      "theme": "Autonomous Vehicles",
+      "logical_repo": "autonomous-vehicles",
+      "current_repo": "KAFKA2306/autonomous-vehicles",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-vehicles/blob/main/api/v1/autonomous-vehicles/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-vehicles/main/api/v1/autonomous-vehicles/index.json",
+      "issue_url": "https://github.com/KAFKA2306/autonomous-vehicles/issues/5"
+    },
+    {
+      "theme": "Bitcoin / Network",
+      "logical_repo": "bitcoin-network",
+      "current_repo": "KAFKA2306/btc_dashboard",
+      "status": "blocked_external_evidence",
+      "check_live": false,
+      "canonical_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+      "raw_url": null,
+      "issue_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3"
+    },
+    {
+      "theme": "Bitcoin / Treasury",
+      "logical_repo": "bitcoin-treasury",
+      "current_repo": "KAFKA2306/mstr",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/mstr/blob/main/api/v1/bitcoin-treasury/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
+      "issue_url": "https://github.com/KAFKA2306/mstr/issues/6"
+    },
+    {
+      "theme": "Bitcoin / Derivatives",
+      "logical_repo": "bitcoin-derivatives",
+      "current_repo": "KAFKA2306/option",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
+      "issue_url": "https://github.com/KAFKA2306/option/issues/16"
+    },
+    {
+      "theme": "Tokenized Assets",
+      "logical_repo": "tokenized-assets",
+      "current_repo": "KAFKA2306/fx",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/index.json",
+      "issue_url": "https://github.com/KAFKA2306/fx/issues/4"
+    },
+    {
+      "theme": "DeFi Applications",
+      "logical_repo": "defi",
+      "current_repo": "KAFKA2306/skew",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/index.json",
+      "issue_url": "https://github.com/KAFKA2306/skew/issues/11"
+    },
+    {
+      "theme": "Robotics",
+      "logical_repo": "factory",
+      "current_repo": "KAFKA2306/factory",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/index.json",
+      "issue_url": "https://github.com/KAFKA2306/factory/issues/27"
+    },
+    {
+      "theme": "Autonomous Logistics",
+      "logical_repo": "autonomous-logistics",
+      "current_repo": "KAFKA2306/autonomous-logistics",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/index.json",
+      "issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5"
+    },
+    {
+      "theme": "Reusable Rockets",
+      "logical_repo": "space-launches",
+      "current_repo": "KAFKA2306/trahist",
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/index.json",
+      "issue_url": "https://github.com/KAFKA2306/trahist/issues/9"
+    },
+    {
+      "theme": "ARK Portfolio Exposure",
+      "logical_repo": "ark-etf-holdings",
+      "current_repo": "KAFKA2306/etf",
+      "status": "accumulating",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
+      "issue_url": "https://github.com/KAFKA2306/etf/issues/9"
+    }
+  ]
+}

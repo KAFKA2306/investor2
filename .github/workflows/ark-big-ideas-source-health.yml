@@ -1,0 +1,85 @@
+name: ARK Big Ideas source health
+
+on:
+  pull_request:
+    paths:
+      - data/ark-big-ideas/source-catalog.json
+      - scripts/build_ark_source_health.py
+      - tests/test_ark_source_health.py
+      - .github/workflows/ark-big-ideas-source-health.yml
+  push:
+    branches: [main]
+    paths:
+      - data/ark-big-ideas/source-catalog.json
+      - scripts/build_ark_source_health.py
+      - tests/test_ark_source_health.py
+      - .github/workflows/ark-big-ideas-source-health.yml
+  schedule:
+    - cron: '40 14 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ark-big-ideas-source-health
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Compile
+        run: python -m py_compile scripts/build_ark_source_health.py tests/test_ark_source_health.py
+      - name: Unit tests
+        run: python -m unittest tests.test_ark_source_health -v
+      - name: Verify live canonical domain outputs
+        run: python scripts/build_ark_source_health.py --output build/source-health.json
+      - name: Audit readiness contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          data = json.loads(Path('build/source-health.json').read_text())
+          assert data['source_count'] == 16
+          assert data['ready_count'] == 13
+          assert data['status_counts']['accumulating'] == 1
+          assert data['status_counts']['blocked_external_evidence'] == 1
+          assert data['status_counts']['deferred_by_user'] == 1
+          assert data['unresolved_count'] == 2
+          ready = [s for s in data['sources'] if s['status'] == 'ready']
+          assert ready and all(s['live_check'] == 'ok' for s in ready)
+          assert all(s['bytes'] > 0 and len(s['sha256']) == 64 for s in ready)
+          print({k: data[k] for k in ('source_count','ready_count','unresolved_count','status_counts')})
+          PY
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ark-big-ideas-source-health
+          path: build/source-health.json
+          retention-days: 30
+      - name: Publish deterministic source health on main
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p api/v1/ark-big-ideas
+          cp build/source-health.json api/v1/ark-big-ideas/source-health.json
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add api/v1/ark-big-ideas/source-health.json
+          if git diff --cached --quiet; then
+            echo 'No ARK source hash change.'
+            exit 0
+          fi
+          git commit -m 'data: update ARK Big Ideas source health'
+          git push
+      - name: Clean checkout on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          rm -rf build
+          test -z "$(git status --porcelain --untracked-files=all)"
