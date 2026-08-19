@@ -1,5 +1,6 @@
 {
   "schema_version": 1,
+  "projection_version": 1,
   "parent_issue_url": "https://github.com/KAFKA2306/investor2/issues/111",
   "authority_rule": "Every feed is a read-only mirror of a canonical domain-repository output. Domain repositories remain authoritative; investor2 only normalizes decision metrics.",
   "feeds": [
