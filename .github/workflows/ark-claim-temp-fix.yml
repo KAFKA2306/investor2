@@ -1,0 +1,59 @@
+name: ARK claim quality fixer
+
+on:
+  push:
+    branches: [feat/ark-claim-evidence]
+    paths:
+      - .github/workflows/ark-claim-temp-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: feat/ark-claim-evidence
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Apply exact pyrefly fixes
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/build_ark_claim_evidence.py')
+          text = path.read_text(encoding='utf-8')
+          old_positive = '        positive = sum(item["increased"] for item in comparisons)'
+          new_positive = '        positive = sum(1 for item in comparisons if item["increased"] is True)'
+          if old_positive not in text:
+              raise SystemExit('positive-count target not found')
+          text = text.replace(old_positive, new_positive, 1)
+
+          old_records = '    records = []\n    for claim in claims:'
+          new_records = '    records: list[dict[str, Any]] = []\n    for claim in claims:'
+          if old_records not in text:
+              raise SystemExit('records type target not found')
+          text = text.replace(old_records, new_records, 1)
+
+          old_counts = '    counts = Counter(record["deviation"]["classification"] for record in records)'
+          new_counts = '''    counts: Counter[str] = Counter()\n    for record in records:\n        deviation = record.get("deviation")\n        if not isinstance(deviation, dict):\n            raise ValueError("claim evidence missing deviation object")\n        classification = deviation.get("classification")\n        if not isinstance(classification, str):\n            raise ValueError("claim evidence missing classification")\n        counts[classification] += 1'''
+          if old_counts not in text:
+              raise SystemExit('classification-count target not found')
+          text = text.replace(old_counts, new_counts, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+      - name: Format with quality-gate Ruff
+        run: |
+          python -m pip install 'ruff==0.15.5'
+          ruff format scripts/build_ark_claim_evidence.py tests/test_ark_claim_evidence.py
+          ruff check scripts/build_ark_claim_evidence.py tests/test_ark_claim_evidence.py
+      - name: Commit fixed branch
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/build_ark_claim_evidence.py tests/test_ark_claim_evidence.py
+          git commit -m 'chore: satisfy ARK claim quality gate'
+          git push origin HEAD:feat/ark-claim-evidence
