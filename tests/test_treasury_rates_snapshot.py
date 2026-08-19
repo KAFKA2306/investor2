@@ -6,7 +6,11 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.treasury_rates_snapshot import build_payload, materialize_snapshot
+from scripts.treasury_rates_snapshot import (
+    OFFICIAL_URLS,
+    build_payload,
+    materialize_snapshot,
+)
 
 
 class TreasuryRatesSnapshotTest(unittest.TestCase):
@@ -40,7 +44,7 @@ class TreasuryRatesSnapshotTest(unittest.TestCase):
         payload = {
             "schema_version": "investor2.us-treasury-yield-curves.v1",
             "source": "U.S. Department of the Treasury",
-            "source_urls": {},
+            "source_urls": OFFICIAL_URLS,
             "latest_nominal_date": "2026-08-18",
             "latest_real_date": "2026-08-18",
             "records": [{"curve": "nominal", "date": "2026-08-18", "30_yr": 5.28}],
@@ -49,10 +53,15 @@ class TreasuryRatesSnapshotTest(unittest.TestCase):
             root = Path(tmp)
             latest = root / "latest.json"
             artifact = materialize_snapshot(payload, root / "snapshots", latest)
-            serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+            serialized = (
+                json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+            )
             expected_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()[:12]
 
-            self.assertEqual(artifact.name, f"us_treasury_yield_curves_2026-08-18_{expected_hash}.json")
+            self.assertEqual(
+                artifact.name,
+                f"us_treasury_yield_curves_2026-08-18_{expected_hash}.json",
+            )
             self.assertEqual(latest.read_text(encoding="utf-8"), serialized)
 
 
