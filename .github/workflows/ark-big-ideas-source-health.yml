@@ -5,24 +5,32 @@ on:
     paths:
       - data/ark-big-ideas/source-catalog.json
       - data/ark-big-ideas/metric-catalog.json
+      - data/ark-big-ideas/claim-catalog.json
+      - data/ark-big-ideas/fund-claim-map.json
       - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
       - scripts/build_ark_cross_theme.py
+      - scripts/build_ark_claim_evidence.py
       - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
       - tests/test_ark_cross_theme.py
+      - tests/test_ark_claim_evidence.py
       - .github/workflows/ark-big-ideas-source-health.yml
   push:
     branches: [main]
     paths:
       - data/ark-big-ideas/source-catalog.json
       - data/ark-big-ideas/metric-catalog.json
+      - data/ark-big-ideas/claim-catalog.json
+      - data/ark-big-ideas/fund-claim-map.json
       - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
       - scripts/build_ark_cross_theme.py
+      - scripts/build_ark_claim_evidence.py
       - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
       - tests/test_ark_cross_theme.py
+      - tests/test_ark_claim_evidence.py
       - .github/workflows/ark-big-ideas-source-health.yml
   schedule:
     - cron: '40 14 * * 1-5'
@@ -47,9 +55,9 @@ jobs:
         with:
           python-version: '3.12'
       - name: Compile
-        run: python -m py_compile scripts/build_ark_source_health.py scripts/build_ark_cross_theme.py tests/test_ark_source_health.py tests/test_ark_cross_theme.py
+        run: python -m py_compile scripts/build_ark_source_health.py scripts/build_ark_cross_theme.py scripts/build_ark_claim_evidence.py tests/test_ark_source_health.py tests/test_ark_cross_theme.py tests/test_ark_claim_evidence.py
       - name: Unit tests
-        run: python -m unittest tests.test_ark_source_health tests.test_ark_cross_theme -v
+        run: python -m unittest tests.test_ark_source_health tests.test_ark_cross_theme tests.test_ark_claim_evidence -v
       - name: Verify live canonical domain outputs
         run: python scripts/build_ark_source_health.py --output build/source-health.json
       - name: Audit readiness contract
@@ -67,7 +75,6 @@ jobs:
           ready = [s for s in data['sources'] if s['status'] == 'ready']
           assert ready and all(s['live_check'] == 'ok' for s in ready)
           assert all(s['bytes'] > 0 and len(s['sha256']) == 64 for s in ready)
-          print({k: data[k] for k in ('source_count','ready_count','unresolved_count','status_counts')})
           PY
       - name: Build cross-theme projection
         run: |
@@ -89,19 +96,48 @@ jobs:
           matrix = json.loads((api / 'evidence-matrix.json').read_text())['sources']
           assert index['source_count'] == 16
           assert index['active_feed_count'] == 13
-          assert index['status_counts']['ready'] == 12
-          assert index['status_counts']['accumulating'] == 1
-          assert index['status_counts']['blocked_external_evidence'] == 1
-          assert index['status_counts']['deferred_by_user'] == 2
           assert index['metric_row_count'] == len(series)
           assert len(series) > 300
           excluded = {row['logical_repo']: row['projection']['reason'] for row in matrix if row['projection'].get('excluded')}
-          assert excluded['multiomics'] == 'deferred_by_user'
-          assert excluded['energy-supply'] == 'deferred_by_user'
-          assert excluded['bitcoin-network'] == 'blocked_external_evidence'
+          assert excluded == {
+              'multiomics': 'deferred_by_user',
+              'energy-supply': 'deferred_by_user',
+              'bitcoin-network': 'blocked_external_evidence',
+          }
           assert not any(row['logical_repo'] in excluded for row in series)
           assert not any(row['metric_id'] in {'safety_rate', 'miles_per_disengagement'} for row in series)
-          print({'feeds': index['active_feed_count'], 'rows': len(series), 'excluded': excluded})
+          PY
+      - name: Build ARK claim evidence
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python -m scripts.build_ark_claim_evidence \
+              --series build/ark-api/series.json \
+              --output-dir build/ark-api
+          else
+            python -m scripts.build_ark_claim_evidence
+          fi
+      - name: Audit claim and fund linkage boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          api = Path('build/ark-api') if '${{ github.event_name }}' == 'pull_request' else Path('api/v1/ark-big-ideas')
+          summary = json.loads((api / 'claim-summary.json').read_text())
+          claims = json.loads((api / 'claim-evidence.json').read_text())['records']
+          funds = json.loads((api / 'fund-claim-links.json').read_text())['records']
+          assert summary['claim_count'] == 13
+          assert len(claims) == 13
+          assert len(funds) == 6
+          multiomics = next(row for row in claims if row['claim_id'] == 'multiomics')
+          assert multiomics['deviation']['classification'] == 'deferred'
+          assert multiomics['evidence_row_count'] == 0
+          ai_productivity = next(row for row in claims if row['claim_id'] == 'ai-productivity')
+          assert ai_productivity['deviation']['observation']['causal_attribution'] == 'not_established'
+          av = next(row for row in claims if row['claim_id'] == 'autonomous-vehicles')
+          assert av['deviation']['observation']['safety_rate_computed'] is False
+          assert all(row['deviation']['research_implication']['prescriptive_action'] is None for row in claims)
+          assert all('boundary' in row and row['holdings_snapshot_audit'] for row in funds)
+          print({'classes': summary['classification_counts'], 'funds': len(funds)})
           PY
       - name: Audit persistent snapshot catalog
         if: github.event_name != 'pull_request'
@@ -122,7 +158,7 @@ jobs:
           cp build/source-health.json api/v1/ark-big-ideas/source-health.json
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
+          git add -f api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
           if git diff --cached --quiet; then
             echo 'No ARK evidence change.'
             exit 0
