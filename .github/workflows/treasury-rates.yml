@@ -1,0 +1,116 @@
+name: Collect U.S. Treasury yield curves
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 22 * * *"
+  pull_request:
+    paths:
+      - "scripts/treasury_rates_snapshot.py"
+      - "tests/test_treasury_rates_snapshot.py"
+      - ".github/workflows/treasury-rates.yml"
+      - "data/input_ledger/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: treasury-rates
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run focused tests
+        run: python -m unittest tests.test_treasury_rates_snapshot
+      - name: Download official Treasury CSV files
+        shell: bash
+        run: |
+          set -euo pipefail
+          year="$(date -u +%Y)"
+          mkdir -p /tmp/treasury-rates
+          nominal_url="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/${year}/all?_format=csv&field_tdr_date_value=${year}&page=&type=daily_treasury_yield_curve"
+          real_url="https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/${year}/all?_format=csv&field_tdr_date_value=${year}&page=&type=daily_treasury_real_yield_curve"
+          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+            --user-agent "KAFKA2306/investor2 Treasury collector" \
+            "$nominal_url" -o /tmp/treasury-rates/nominal.csv
+          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+            --user-agent "KAFKA2306/investor2 Treasury collector" \
+            "$real_url" -o /tmp/treasury-rates/real.csv
+      - name: Verify live Treasury payload on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/treasury_rates_snapshot.py \
+            --nominal-csv /tmp/treasury-rates/nominal.csv \
+            --real-csv /tmp/treasury-rates/real.csv \
+            --output-dir /tmp/treasury-rates/output
+          test -n "$(find /tmp/treasury-rates/output -name 'us_treasury_yield_curves_*.json' -print -quit)"
+      - name: Materialize and register accepted snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/treasury_rates_snapshot.py \
+            --nominal-csv /tmp/treasury-rates/nominal.csv \
+            --real-csv /tmp/treasury-rates/real.csv \
+            --output-dir data/snapshots/us_treasury \
+            --latest-path data/treasury_rates/latest.json)"
+
+          if latest_json="$(python scripts/snapshot_store.py latest --reuse-key us/treasury/yield-curves 2>/dev/null)"; then
+            latest_artifact="$(python -c 'import json,sys; print(json.load(sys.stdin)["artifact_path"])' <<<"$latest_json")"
+            if [ "$latest_artifact" = "$artifact_path" ]; then
+              echo "Treasury source content unchanged; reusing accepted snapshot."
+              exit 0
+            fi
+          fi
+
+          observed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          year="$(date -u +%Y)"
+          provenance="$(YEAR="$year" OBSERVED_AT="$observed_at" python - <<'PY'
+          import json
+          import os
+
+          year = os.environ["YEAR"]
+          observed_at = os.environ["OBSERVED_AT"]
+          urls = [
+              f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/{year}/all?_format=csv&field_tdr_date_value={year}&page=&type=daily_treasury_yield_curve",
+              f"https://home.treasury.gov/resource-center/data-chart-center/interest-rates/daily-treasury-rates.csv/{year}/all?_format=csv&field_tdr_date_value={year}&page=&type=daily_treasury_real_yield_curve",
+          ]
+          print(json.dumps({
+              "tool": "curl",
+              "operation": "download official Treasury nominal and real yield-curve CSV files",
+              "query_or_scope": f"calendar year {year}; all published daily rows",
+              "retrieved_at": observed_at,
+              "source_urls": urls,
+          }, separators=(",", ":")))
+          PY
+          )"
+
+          python scripts/snapshot_store.py register \
+            --dataset-id us_treasury_yield_curves \
+            --reuse-key us/treasury/yield-curves \
+            --artifact-path "$artifact_path" \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at "$observed_at" \
+            --schema-version investor2.us-treasury-yield-curves.v1 \
+            --provenance-json "$provenance"
+          python scripts/snapshot_store.py audit
+      - name: Commit changed accepted snapshot
+        if: github.event_name != 'pull_request'
+        run: |
+          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson data/snapshots/us_treasury data/treasury_rates/latest.json \
+             && [ -z "$(git status --porcelain --untracked-files=all data/snapshots/us_treasury data/treasury_rates/latest.json)" ]; then
+            echo "No accepted Treasury data change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/input_ledger/snapshot_catalog.ndjson data/snapshots/us_treasury data/treasury_rates/latest.json
+          git commit -m "data: refresh U.S. Treasury yield curves"
+          git push
