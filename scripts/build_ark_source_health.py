@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Verify canonical ARK Big Ideas outputs without creating a second authority."""
+
 from __future__ import annotations
 
 import argparse
@@ -22,9 +23,7 @@ UA = "investor2-ark-source-health/1.0 github.com/KAFKA2306/investor2"
 
 
 def canonical_json(value: object) -> bytes:
-    return (
-        json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
-    ).encode()
+    return (json.dumps(value, ensure_ascii=False, indent=2, sort_keys=True) + "\n").encode()
 
 
 def validate_catalog(catalog: dict[str, Any]) -> list[dict[str, Any]]:
@@ -65,12 +64,8 @@ def validate_catalog(catalog: dict[str, Any]) -> list[dict[str, Any]]:
             raise ValueError(f"live source requires raw_url: {logical_id}")
         if source["status"] == "ready" and not source["check_live"]:
             raise ValueError(f"ready source must be live checked: {logical_id}")
-        if not str(source["canonical_url"]).startswith(
-            "https://github.com/KAFKA2306/"
-        ):
-            raise ValueError(
-                f"canonical source must stay in KAFKA2306 GitHub: {logical_id}"
-            )
+        if not str(source["canonical_url"]).startswith("https://github.com/KAFKA2306/"):
+            raise ValueError(f"canonical source must stay in KAFKA2306 GitHub: {logical_id}")
 
     return sources
 
@@ -92,9 +87,7 @@ def source_shape(payload: Any) -> dict[str, Any]:
         return {"json_type": "object", "top_level_keys": sorted(payload.keys())}
     if isinstance(payload, list):
         return {"json_type": "array", "item_count": len(payload)}
-    raise ValueError(
-        f"canonical JSON must be object or array, got {type(payload).__name__}"
-    )
+    raise ValueError(f"canonical JSON must be object or array, got {type(payload).__name__}")
 
 
 def build_health(catalog: dict[str, Any]) -> dict[str, Any]:
@@ -128,10 +121,7 @@ def build_health(catalog: dict[str, Any]) -> dict[str, Any]:
         checked.append(record)
 
     ready = status_counts["ready"]
-    unresolved = (
-        status_counts["accumulating"]
-        + status_counts["blocked_external_evidence"]
-    )
+    unresolved = status_counts["accumulating"] + status_counts["blocked_external_evidence"]
     return {
         "schema_version": 1,
         "authority_rule": catalog["authority_rule"],
