@@ -1,5 +1,6 @@
 # AAARTS — 自律型アルファ研究システム
 
+[![ARK Big Ideas evidence](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml)
 [![Validate and deploy dashboard](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml)
 [![Quality Gates](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml)
 [![Verify deployed GitHub Pages](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml)
@@ -168,3 +169,15 @@ task dashboard:dev       # ダッシュボードとAPIを起動
 このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。Hypothesis LabのcandidateやDecision Snapshot eligibilityも自動売買許可ではありません。
 
 **README最終監査:** 2026-08-15
+
+## ARK Big Ideas 2026 cross-theme evidence
+
+ARK各domainの正準JSONを別のauthorityへコピーせず、content-addressed mirrorとして時点固定し、投資判断用のlong-form metricへ横断投影します。
+
+- [Cross-theme index](api/v1/ark-big-ideas/index.json)
+- [Normalized series](api/v1/ark-big-ideas/series.json)
+- [Evidence matrix](api/v1/ark-big-ideas/evidence-matrix.json)
+- [Source readiness catalog](data/ark-big-ideas/source-catalog.json)
+- [Metric feed catalog](data/ark-big-ideas/metric-catalog.json)
+
+`deferred_by_user` と `blocked_external_evidence` は0値へ変換せず、evidence matrixで明示的に除外します。Multiomicsはdomain実装を維持したままactive probingから保留し、Bitcoin networkは同期済みBitcoin Core実観測が揃うまで外部evidence blockerとして扱います。
