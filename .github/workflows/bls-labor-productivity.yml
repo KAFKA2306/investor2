@@ -14,23 +14,18 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Probe official BLS Series Report
+      - name: Inspect official BLS Series Report form
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/bls-productivity
-          for series in PRS85006091 PRS85006093; do
-            curl --fail --location --retry 1 \
-              --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2/issues)" \
-              "https://data.bls.gov/timeseries/$series" \
-              -o "/tmp/bls-productivity/$series.html"
-            echo "=== $series status/content ==="
-            wc -c "/tmp/bls-productivity/$series.html"
-            grep -E -i -m 20 "Annual|2025|2024|$series" "/tmp/bls-productivity/$series.html" || true
-          done
-          python - <<'PY'
-          from pathlib import Path
-          for path in sorted(Path('/tmp/bls-productivity').glob('*.html')):
-              text = path.read_text(encoding='utf-8', errors='replace')
-              print(path.name, 'Annual' in text, '2025' in text, text[:120].replace('\n', ' '))
-          PY
+          curl --fail --location --retry 1 \
+            --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2/issues)" \
+            "https://data.bls.gov/timeseries/PRS85006091" \
+            -o /tmp/bls-productivity/series.html
+          echo "=== forms ==="
+          grep -n -i -E '<form|</form>' /tmp/bls-productivity/series.html || true
+          echo "=== annual average neighborhood ==="
+          grep -n -i -B 12 -A 24 'annualAveragesRequested' /tmp/bls-productivity/series.html || true
+          echo "=== input/select names ==="
+          grep -E -i '<(input|select)[^>]+(name|id)=' /tmp/bls-productivity/series.html | tail -80 || true
