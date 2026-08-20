@@ -67,10 +67,10 @@ jobs:
           from pathlib import Path
           data = json.loads(Path('build/source-health.json').read_text())
           assert data['source_count'] == 16
-          assert data['ready_count'] == 12
+          assert data['ready_count'] == 14
           assert data['status_counts']['accumulating'] == 1
           assert data['status_counts']['blocked_external_evidence'] == 1
-          assert data['status_counts']['deferred_by_user'] == 2
+          assert data['status_counts']['deferred_by_user'] == 0
           assert data['unresolved_count'] == 2
           ready = [s for s in data['sources'] if s['status'] == 'ready']
           assert ready and all(s['live_check'] == 'ok' for s in ready)
@@ -95,16 +95,14 @@ jobs:
           series = json.loads((api / 'series.json').read_text())['records']
           matrix = json.loads((api / 'evidence-matrix.json').read_text())['sources']
           assert index['source_count'] == 16
-          assert index['active_feed_count'] == 13
+          assert index['active_feed_count'] == 15
           assert index['metric_row_count'] == len(series)
           assert len(series) > 300
           excluded = {row['logical_repo']: row['projection']['reason'] for row in matrix if row['projection'].get('excluded')}
-          assert excluded == {
-              'multiomics': 'deferred_by_user',
-              'energy-supply': 'deferred_by_user',
-              'bitcoin-network': 'blocked_external_evidence',
-          }
+          assert excluded == {'bitcoin-network': 'blocked_external_evidence'}
           assert not any(row['logical_repo'] in excluded for row in series)
+          assert any(row['logical_repo'] == 'multiomics' for row in series)
+          assert any(row['logical_repo'] == 'energy-supply' for row in series)
           assert not any(row['metric_id'] in {'safety_rate', 'miles_per_disengagement'} for row in series)
           PY
       - name: Build ARK claim evidence
@@ -129,8 +127,11 @@ jobs:
           assert len(claims) == 13
           assert len(funds) == 6
           multiomics = next(row for row in claims if row['claim_id'] == 'multiomics')
-          assert multiomics['deviation']['classification'] == 'deferred'
-          assert multiomics['evidence_row_count'] == 0
+          assert multiomics['deviation']['classification'] == 'mixed'
+          assert multiomics['evidence_row_count'] > 0
+          energy = next(row for row in claims if row['claim_id'] == 'distributed-energy')
+          assert energy['deviation']['classification'] == 'mixed'
+          assert energy['evidence_row_count'] > 0
           ai_productivity = next(row for row in claims if row['claim_id'] == 'ai-productivity')
           assert ai_productivity['deviation']['observation']['causal_attribution'] == 'not_established'
           av = next(row for row in claims if row['claim_id'] == 'autonomous-vehicles')
