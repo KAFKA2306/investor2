@@ -4,143 +4,156 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-import time
+import re
+from collections.abc import Iterable, Iterator
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
-from urllib.error import HTTPError, URLError
-from urllib.request import Request, urlopen
+from xml.etree import ElementTree as ET
+from zipfile import ZipFile
 
 SCHEMA_VERSION = "investor2.bls-nonfarm-business-labor-productivity-annual.v1"
 SOURCE = "U.S. Bureau of Labor Statistics"
-API_URL = "https://api.bls.gov/publicAPI/v1/timeseries/data/"
-SERIES_IDS = {
-    "percent_change": "PRS85006091",
-    "index": "PRS85006093",
-}
-ANNUAL_PERIOD = "Q05"
-FIRST_YEAR = 1948
-MAX_YEARS_PER_REQUEST = 10
-MAX_QUERIES_PER_DAY = 25
-USER_AGENT = "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2)"
+WORKBOOK_URL = "https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx"
 OFFICIAL_URLS = {
-    "api": API_URL,
-    "api_docs": "https://www.bls.gov/developers/home.htm",
-    "api_faq": "https://www.bls.gov/developers/api_faqs.htm",
-    "series_metadata": "https://download.bls.gov/pub/time.series/pr/pr.series",
-    "sector_metadata": "https://download.bls.gov/pub/time.series/pr/pr.sector",
-    "measure_metadata": "https://download.bls.gov/pub/time.series/pr/pr.measure",
-    "duration_metadata": "https://download.bls.gov/pub/time.series/pr/pr.duration",
-    "period_metadata": "https://download.bls.gov/pub/time.series/pr/pr.period",
+    "workbook": WORKBOOK_URL,
+    "tables": "https://www.bls.gov/productivity/tables/home.htm",
+    "latest_release": "https://www.bls.gov/news.release/prod2.htm",
 }
+SECTOR = "Nonfarm business sector"
+BASIS = "All workers"
+MEASURE = "Labor productivity"
+PERCENT_CHANGE_UNITS = "% Change from previous year"
+ANNUAL_PERIOD = "Annual"
+FIRST_YEAR = 1948
+EXPECTED_HEADER = ["Sector", "Basis", "Measure", "Units", "Year", "Qtr", "Value"]
+MAIN_NS = "http://schemas.openxmlformats.org/spreadsheetml/2006/main"
+OFFICE_REL_NS = "http://schemas.openxmlformats.org/officeDocument/2006/relationships"
+PACKAGE_REL_NS = "http://schemas.openxmlformats.org/package/2006/relationships"
+CELL_REF_RE = re.compile(r"^([A-Z]+)")
 
 
-def request_windows(start_year: int, end_year: int) -> list[tuple[int, int]]:
-    if start_year > end_year:
-        raise ValueError("start_year must not exceed end_year")
-    windows: list[tuple[int, int]] = []
-    current = start_year
-    while current <= end_year:
-        window_end = min(current + MAX_YEARS_PER_REQUEST - 1, end_year)
-        windows.append((current, window_end))
-        current = window_end + 1
-    return windows
+def column_index(cell_reference: str) -> int:
+    match = CELL_REF_RE.match(cell_reference)
+    if match is None:
+        raise AssertionError(f"invalid XLSX cell reference: {cell_reference!r}")
+    index = 0
+    for letter in match.group(1):
+        index = index * 26 + ord(letter) - ord("A") + 1
+    return index - 1
 
 
-def fetch_api_window(start_year: int, end_year: int, *, retries: int = 2) -> list[dict[str, Any]]:
-    payload = json.dumps(
-        {
-            "seriesid": list(SERIES_IDS.values()),
-            "startyear": str(start_year),
-            "endyear": str(end_year),
-        },
-        separators=(",", ":"),
-    ).encode("utf-8")
-    request = Request(
-        API_URL,
-        data=payload,
-        headers={
-            "Content-Type": "application/json",
-            "User-Agent": USER_AGENT,
-        },
-        method="POST",
-    )
-
-    last_error: Exception | None = None
-    for attempt in range(retries):
-        try:
-            with urlopen(request, timeout=45) as response:
-                body = json.load(response)
-        except (HTTPError, URLError, TimeoutError, json.JSONDecodeError) as exc:
-            last_error = exc
-            if attempt + 1 < retries:
-                time.sleep(5)
-                continue
-            raise RuntimeError(f"BLS API request failed for {start_year}-{end_year}: {exc}") from exc
-
-        if body.get("status") != "REQUEST_SUCCEEDED":
-            raise RuntimeError(
-                f"BLS API request did not succeed for {start_year}-{end_year}: "
-                f"status={body.get('status')!r}, message={body.get('message')!r}"
-            )
-        series = body.get("Results", {}).get("series")
-        if not isinstance(series, list):
-            raise AssertionError(f"BLS API response missing Results.series for {start_year}-{end_year}")
-        return series
-
-    raise RuntimeError(f"BLS API request failed for {start_year}-{end_year}: {last_error}")
-
-
-def fetch_api_history(start_year: int = FIRST_YEAR, end_year: int | None = None) -> list[dict[str, Any]]:
-    resolved_end_year = end_year or datetime.now(UTC).year
-    merged: dict[str, list[dict[str, Any]]] = {series_id: [] for series_id in SERIES_IDS.values()}
-    windows = request_windows(start_year, resolved_end_year)
-    if len(windows) > MAX_QUERIES_PER_DAY:
-        raise AssertionError(f"BLS API request plan exceeds unregistered daily query limit: {len(windows)}")
-
-    for start, end in windows:
-        window_series = fetch_api_window(start, end)
-        returned_ids = [entry.get("seriesID") for entry in window_series]
-        expected_ids = list(SERIES_IDS.values())
-        if sorted(returned_ids) != sorted(expected_ids):
-            raise AssertionError(
-                f"BLS API returned unexpected series IDs for {start}-{end}: "
-                f"{returned_ids!r} != {expected_ids!r}"
-            )
-        for entry in window_series:
-            data = entry.get("data")
-            if not isinstance(data, list):
-                raise AssertionError(f"BLS API series {entry.get('seriesID')} missing data list")
-            merged[entry["seriesID"]].extend(data)
-
-    return [{"seriesID": series_id, "data": data} for series_id, data in merged.items()]
-
-
-def annual_values(series: list[dict[str, Any]], series_id: str) -> dict[int, float]:
-    matches = [entry for entry in series if entry.get("seriesID") == series_id]
-    if len(matches) != 1:
-        raise AssertionError(f"expected exactly one BLS series {series_id}, found {len(matches)}")
-
-    values: dict[int, float] = {}
-    for observation in matches[0].get("data", []):
-        if observation.get("period") != ANNUAL_PERIOD:
-            continue
-        year = int(observation["year"])
-        if year in values:
-            raise AssertionError(f"duplicate BLS annual observation: {series_id} {year}")
-        values[year] = float(observation["value"])
-    if not values:
-        raise AssertionError(f"no annual observations found for BLS series {series_id}")
+def shared_strings(archive: ZipFile) -> list[str]:
+    path = "xl/sharedStrings.xml"
+    if path not in archive.namelist():
+        return []
+    root = ET.fromstring(archive.read(path))
+    values: list[str] = []
+    for item in root.findall(f"{{{MAIN_NS}}}si"):
+        values.append("".join(node.text or "" for node in item.iter(f"{{{MAIN_NS}}}t")))
     return values
 
 
-def build_payload(series: list[dict[str, Any]]) -> dict[str, Any]:
-    percent_by_year = annual_values(series, SERIES_IDS["percent_change"])
-    index_by_year = annual_values(series, SERIES_IDS["index"])
+def worksheet_path(archive: ZipFile, sheet_name: str) -> str:
+    workbook = ET.fromstring(archive.read("xl/workbook.xml"))
+    relationship_id: str | None = None
+    for sheet in workbook.findall(f".//{{{MAIN_NS}}}sheet"):
+        if sheet.attrib.get("name") == sheet_name:
+            relationship_id = sheet.attrib.get(f"{{{OFFICE_REL_NS}}}id")
+            break
+    if relationship_id is None:
+        raise AssertionError(f"XLSX workbook missing sheet {sheet_name!r}")
+
+    relationships = ET.fromstring(archive.read("xl/_rels/workbook.xml.rels"))
+    target: str | None = None
+    for relationship in relationships.findall(f"{{{PACKAGE_REL_NS}}}Relationship"):
+        if relationship.attrib.get("Id") == relationship_id:
+            target = relationship.attrib.get("Target")
+            break
+    if target is None:
+        raise AssertionError(f"XLSX workbook missing relationship for sheet {sheet_name!r}")
+    if target.startswith("/"):
+        return target.lstrip("/")
+    return f"xl/{target}"
+
+
+def cell_text(cell: ET.Element, strings: list[str]) -> str:
+    cell_type = cell.attrib.get("t")
+    value_node = cell.find(f"{{{MAIN_NS}}}v")
+    if cell_type == "inlineStr":
+        return "".join(node.text or "" for node in cell.iter(f"{{{MAIN_NS}}}t"))
+    if value_node is None or value_node.text is None:
+        return ""
+    if cell_type == "s":
+        index = int(value_node.text)
+        if index >= len(strings):
+            raise AssertionError(f"XLSX shared-string index out of range: {index}")
+        return strings[index]
+    return value_node.text
+
+
+def workbook_rows(workbook_path: Path, sheet_name: str = "MachineReadable") -> Iterator[list[str]]:
+    with ZipFile(workbook_path) as archive:
+        strings = shared_strings(archive)
+        sheet_path = worksheet_path(archive, sheet_name)
+        with archive.open(sheet_path) as sheet:
+            for _, row in ET.iterparse(sheet, events=("end",)):
+                if row.tag != f"{{{MAIN_NS}}}row":
+                    continue
+                values = [""] * len(EXPECTED_HEADER)
+                for cell in row.findall(f"{{{MAIN_NS}}}c"):
+                    reference = cell.attrib.get("r")
+                    if reference is None:
+                        raise AssertionError("XLSX cell is missing its reference")
+                    index = column_index(reference)
+                    if index < len(values):
+                        values[index] = cell_text(cell, strings)
+                yield values
+                row.clear()
+
+
+def add_observation(values: dict[int, float], year: int, raw_value: str, label: str) -> None:
+    if raw_value in {"", "N.A."}:
+        return
+    if year in values:
+        raise AssertionError(f"duplicate BLS annual observation: {label} {year}")
+    values[year] = float(raw_value)
+
+
+def build_payload(rows: Iterable[list[str]]) -> dict[str, object]:
+    iterator = iter(rows)
+    try:
+        header = next(iterator)
+    except StopIteration as exc:
+        raise AssertionError("BLS workbook MachineReadable sheet is empty") from exc
+    if header != EXPECTED_HEADER:
+        raise AssertionError(f"unexpected BLS workbook header: {header!r}")
+
+    percent_by_year: dict[int, float] = {}
+    index_by_year: dict[int, float] = {}
+    index_units: str | None = None
+
+    for row in iterator:
+        if row[0] != SECTOR or row[1] != BASIS or row[2] != MEASURE or row[5] != ANNUAL_PERIOD:
+            continue
+        year = int(row[4])
+        units = row[3]
+        if units == PERCENT_CHANGE_UNITS:
+            add_observation(percent_by_year, year, row[6], "percent_change")
+        elif units.startswith("Index ("):
+            if index_units is not None and units != index_units:
+                raise AssertionError(
+                    f"multiple BLS labor-productivity index definitions found: {index_units!r}, {units!r}"
+                )
+            index_units = units
+            add_observation(index_by_year, year, row[6], "index")
+
+    if not percent_by_year:
+        raise AssertionError("BLS workbook contains no annual labor-productivity percent-change observations")
+    if not index_by_year or index_units is None:
+        raise AssertionError("BLS workbook contains no annual labor-productivity index observations")
 
     percent_years = set(percent_by_year)
-    index_years = set(index_by_year)
-    missing_index = sorted(percent_years - index_years)
+    missing_index = sorted(percent_years - set(index_by_year))
     if missing_index:
         raise AssertionError(f"BLS index missing annual years present in percent-change series: {missing_index}")
 
@@ -162,40 +175,48 @@ def build_payload(series: list[dict[str, Any]]) -> dict[str, Any]:
         "schema_version": SCHEMA_VERSION,
         "source": SOURCE,
         "source_urls": OFFICIAL_URLS,
-        "sector": "Nonfarm Business",
-        "measure": "Labor productivity (output per hour)",
+        "sector": SECTOR,
+        "basis": BASIS,
+        "measure": MEASURE,
         "frequency": "annual",
         "annual_period": ANNUAL_PERIOD,
-        "series_ids": SERIES_IDS,
+        "percent_change_definition": PERCENT_CHANGE_UNITS,
+        "index_definition": index_units,
         "first_year": years[0],
         "latest_year": years[-1],
         "records": records,
     }
 
 
-def validate_historical_coverage(payload: dict[str, Any]) -> None:
-    records = payload["records"]
-    if payload["first_year"] != FIRST_YEAR:
-        raise AssertionError(f"unexpected first annual percent-change year: {payload['first_year']} != {FIRST_YEAR}")
+def validate_historical_coverage(payload: dict[str, object]) -> None:
+    first_year = payload.get("first_year")
+    latest_year = payload.get("latest_year")
+    records = payload.get("records")
+    if first_year != FIRST_YEAR:
+        raise AssertionError(f"unexpected first annual percent-change year: {first_year!r} != {FIRST_YEAR}")
+    if not isinstance(latest_year, int):
+        raise AssertionError(f"invalid latest year: {latest_year!r}")
+    if not isinstance(records, list):
+        raise AssertionError("BLS payload records must be a list")
 
     stale_before = max(2025, datetime.now(UTC).year - 2)
-    if payload["latest_year"] < stale_before:
-        raise AssertionError(
-            f"BLS annual history is stale: latest year {payload['latest_year']} < required {stale_before}"
-        )
+    if latest_year < stale_before:
+        raise AssertionError(f"BLS annual history is stale: latest year {latest_year} < required {stale_before}")
 
-    expected_count = payload["latest_year"] - payload["first_year"] + 1
+    expected_count = latest_year - FIRST_YEAR + 1
     if len(records) != expected_count:
         raise AssertionError(f"non-contiguous annual record count: {len(records)} != {expected_count}")
 
 
-def materialize_snapshot(payload: dict[str, Any], output_dir: Path, latest_path: Path | None) -> Path:
+def materialize_snapshot(payload: dict[str, object], output_dir: Path, latest_path: Path | None) -> Path:
     serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     digest = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
+    latest_year = payload.get("latest_year")
+    if not isinstance(latest_year, int):
+        raise AssertionError(f"invalid latest year: {latest_year!r}")
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    artifact = output_dir / (
-        f"bls_nonfarm_business_labor_productivity_annual_{payload['latest_year']}_{digest[:12]}.json"
-    )
+    artifact = output_dir / f"bls_nonfarm_business_labor_productivity_annual_{latest_year}_{digest[:12]}.json"
     artifact.write_text(serialized, encoding="utf-8")
     if latest_path is not None:
         latest_path.parent.mkdir(parents=True, exist_ok=True)
@@ -205,14 +226,14 @@ def materialize_snapshot(payload: dict[str, Any], output_dir: Path, latest_path:
 
 def main() -> None:
     parser = argparse.ArgumentParser(
-        description="Materialize BLS Nonfarm Business annual labor productivity from the official Public Data API."
+        description="Materialize BLS Nonfarm Business annual labor productivity from the official XLSX workbook."
     )
+    parser.add_argument("--workbook", type=Path, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--latest-path", type=Path)
-    parser.add_argument("--end-year", type=int)
     args = parser.parse_args()
 
-    payload = build_payload(fetch_api_history(end_year=args.end_year))
+    payload = build_payload(workbook_rows(args.workbook))
     validate_historical_coverage(payload)
     artifact = materialize_snapshot(payload, args.output_dir, args.latest_path)
     resolved_artifact = artifact.resolve()
