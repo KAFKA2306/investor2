@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000" role="img" aria-labelledby="title desc">
+  <title id="title">米国企業利益の高水準を分解する — 2026-08-21</title>
+  <desc id="desc">BEA由来の企業利益/GDI、BLSの生産性・労働コスト・付加価値価格・unit profitsを用いた定量要約。</desc>
+  <defs>
+    <style>
+      .bg{fill:#0b1220}.panel{fill:#111b2e;stroke:#334155;stroke-width:2}.muted{fill:#94a3b8}.white{fill:#f8fafc}.cyan{fill:#67e8f9}.amber{fill:#fbbf24}.green{fill:#6ee7b7}.red{fill:#fdba74}
+      text{font-family:'Noto Sans CJK JP','Noto Sans JP',sans-serif}.h1{font-size:48px;font-weight:700}.h2{font-size:28px;font-weight:700}.big{font-size:58px;font-weight:700}.mid{font-size:27px}.small{font-size:21px}.tiny{font-size:17px}.mono{font-family:'Noto Sans Mono CJK JP',monospace}
+    </style>
+  </defs>
+  <rect class="bg" width="1600" height="1000"/>
+  <text x="55" y="75" class="white h1">米国企業利益はなぜ高いのか</text>
+  <text x="58" y="118" class="cyan mid">2026-08-21 時点の公式系列を、利益・分配・生産性に分解</text>
+
+  <rect x="55" y="155" width="720" height="245" rx="18" class="panel"/>
+  <text x="85" y="200" class="white h2">1. 企業利益 / GDI</text>
+  <text x="85" y="285" class="cyan big">14.019300%</text>
+  <text x="85" y="330" class="white mid">2026 Q1: 4,426.485 / 31,574.222 × 100</text>
+  <text x="85" y="367" class="muted small">CPROFIT / GDI（ともに10億ドル、季節調整済み年率）</text>
+  <text x="465" y="245" class="amber mid">企業利益 YoY  +12.837893%</text>
+  <text x="465" y="292" class="green mid">GDI YoY        +5.614770%</text>
+  <text x="465" y="345" class="muted tiny">Richmond Fedの公表時点では</text>
+  <text x="465" y="375" class="muted tiny">2025 Q4 / 2026 Q1 = 13.9%（1947年以降最高）</text>
+
+  <rect x="825" y="155" width="720" height="245" rx="18" class="panel"/>
+  <text x="855" y="200" class="white h2">2. BLS 非農業企業部門 — 2026 Q2 YoY</text>
+  <text x="855" y="262" class="white mid">労働生産性</text><text x="1190" y="262" class="green mid">+2.2%</text>
+  <text x="855" y="310" class="white mid">時間当たり報酬</text><text x="1190" y="310" class="white mid">+3.7%</text>
+  <text x="855" y="358" class="white mid">単位労働コスト</text><text x="1190" y="358" class="cyan mid">+1.4%</text>
+  <text x="855" y="406" class="white mid">付加価値価格</text><text x="1190" y="406" class="amber mid">+4.9%</text>
+
+  <rect x="55" y="435" width="720" height="245" rx="18" class="panel"/>
+  <text x="85" y="480" class="white h2">3. 分配の恒等式</text>
+  <text x="85" y="535" class="white mid mono">Labor share ∝ ULC / Value-added output price</text>
+  <text x="85" y="585" class="white mid mono">Δlog share ≈ 1.4 − 4.9 = −3.5%</text>
+  <text x="85" y="630" class="cyan mid mono">丸め済み前年比からの厳密変化 = −3.336511%</text>
+  <text x="85" y="670" class="muted small">BLS公表の労働分配率水準: 52.9%（1947年以降最低）</text>
+
+  <rect x="825" y="435" width="720" height="245" rx="18" class="panel"/>
+  <text x="855" y="480" class="white h2">4. BLS 非金融法人 — 2026 Q1</text>
+  <text x="855" y="540" class="white mid">Unit profits 前期比年率</text><text x="1270" y="540" class="amber mid">+18.6%</text>
+  <text x="855" y="588" class="white mid">Unit profits 前年比</text><text x="1270" y="588" class="amber mid">+6.8%</text>
+  <text x="855" y="636" class="white mid">単位労働コスト 前期比年率</text><text x="1270" y="636" class="cyan mid">+0.7%</text>
+  <text x="855" y="684" class="white mid">付加価値価格 前期比年率</text><text x="1270" y="684" class="green mid">+3.7%</text>
+
+  <rect x="55" y="715" width="1490" height="175" rx="18" class="panel"/>
+  <text x="85" y="765" class="white h2">5. 経済学的な判定</text>
+  <text x="85" y="815" class="green mid">観測された直接的事実:</text>
+  <text x="395" y="815" class="white mid">付加価値価格の伸びが単位労働コストを上回り、労働分配率が低下。</text>
+  <text x="85" y="857" class="red mid">まだ未証明:</text>
+  <text x="300" y="857" class="white mid">記録的な企業利益の「主因」がAIであること、14%前後の利益シェアが長期持続すること。</text>
+
+  <text x="55" y="935" class="muted tiny">Sources: BEA Corporate Profits / GDI; FRED CPROFIT / GDI distribution; BLS Productivity and Costs Q2 2026; Richmond Fed (2026-07-07); CBO Economic Outlook 2026–2036.</text>
+  <text x="55" y="970" class="muted tiny">Canonical data path: KAFKA2306/econalert → api/v1/profit-distribution/　|　Values are source-period specific; do not mix YoY and quarterly annualized rates.</text>
+</svg>
