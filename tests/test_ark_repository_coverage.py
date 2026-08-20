@@ -46,9 +46,7 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
         )
 
     def test_catalog_has_exactly_13_ark_themes(self):
-        themes = MODULE.validate_catalog(
-            load("data/ark-big-ideas/repository-coverage-catalog.json")
-        )
+        themes = MODULE.validate_catalog(load("data/ark-big-ideas/repository-coverage-catalog.json"))
         self.assertEqual(len(themes), 13)
         self.assertEqual(len({row["theme"] for row in themes}), 13)
 
@@ -56,11 +54,7 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
         result = self.build()
         bitcoin = next(row for row in result["records"] if row["theme"] == "Bitcoin")
         self.assertEqual(len(bitcoin["components"]), 3)
-        network = next(
-            row
-            for row in bitcoin["components"]
-            if row["logical_repo"] == "bitcoin-network"
-        )
+        network = next(row for row in bitcoin["components"] if row["logical_repo"] == "bitcoin-network")
         self.assertFalse(network["real_data_exists"])
         self.assertFalse(network["investor2_integration_exists"])
         self.assertFalse(bitcoin["real_data_exists"])
@@ -68,9 +62,7 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
 
     def test_multiomics_legacy_feed_does_not_complete_canonical_repo(self):
         result = self.build()
-        multiomics = next(
-            row for row in result["records"] if row["theme"] == "Multiomics"
-        )
+        multiomics = next(row for row in result["records"] if row["theme"] == "Multiomics")
         component = multiomics["components"][0]
         self.assertEqual(component["current_repo"], "KAFKA2306/multiomics")
         self.assertEqual(component["source_catalog_repo"], "KAFKA2306/kafin3")
@@ -81,11 +73,7 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
 
     def test_great_acceleration_does_not_require_a_dedicated_repo(self):
         result = self.build()
-        row = next(
-            record
-            for record in result["records"]
-            if record["theme"] == "The Great Acceleration"
-        )
+        row = next(record for record in result["records"] if record["theme"] == "The Great Acceleration")
         self.assertFalse(row["dedicated_repository_required"])
         self.assertEqual(row["canonical_repositories"], ["KAFKA2306/investor2"])
         self.assertTrue(row["real_data_exists"])
@@ -93,11 +81,7 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
 
     def test_noncanonical_robot_and_space_repos_are_never_counted(self):
         result = self.build()
-        repos = {
-            repo
-            for row in result["records"]
-            for repo in row["canonical_repositories"]
-        }
+        repos = {repo for row in result["records"] for repo in row["canonical_repositories"]}
         self.assertNotIn("KAFKA2306/robot", repos)
         self.assertNotIn("KAFKA2306/space", repos)
         self.assertIn("KAFKA2306/factory", repos)

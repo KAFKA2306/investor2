@@ -77,7 +77,7 @@ def blob_path(url: str | None, repository: str) -> str | None:
     prefix = f"https://github.com/{repository}/blob/"
     if not url or not url.startswith(prefix):
         return None
-    rest = url[len(prefix):]
+    rest = url[len(prefix) :]
     return rest.split("/", 1)[1] if "/" in rest else None
 
 
@@ -95,9 +95,7 @@ def probe_repository(repository: str, evidence_url: str | None) -> dict[str, Any
             }
         raise
     branch = repo["default_branch"]
-    workflows = request(
-        f"https://api.github.com/repos/{encoded}/actions/workflows?per_page=100"
-    )
+    workflows = request(f"https://api.github.com/repos/{encoded}/actions/workflows?per_page=100")
     scheduled = False
     for workflow in workflows.get("workflows", []):
         path = workflow.get("path")
@@ -119,8 +117,7 @@ def probe_repository(repository: str, evidence_url: str | None) -> dict[str, Any
     path = blob_path(evidence_url, repository)
     if path:
         commits = request(
-            f"https://api.github.com/repos/{encoded}/commits"
-            f"?path={urllib.parse.quote(path, safe='/')}&per_page=1"
+            f"https://api.github.com/repos/{encoded}/commits?path={urllib.parse.quote(path, safe='/')}&per_page=1"
         )
         if commits:
             evidence_commit = commits[0].get("sha")
@@ -156,18 +153,12 @@ def probe_output(url: str | None) -> dict[str, bool]:
         elif isinstance(value, list):
             for child in value:
                 walk(child, key)
-        elif (
-            isinstance(value, str)
-            and value.startswith("http")
-            and ("source" in key or "url" in key)
-        ):
+        elif isinstance(value, str) and value.startswith("http") and ("source" in key or "url" in key):
             urls.append(value)
 
     walk(payload)
     primary = any(
-        "github.com/KAFKA2306/" not in url
-        and "raw.githubusercontent.com/KAFKA2306/" not in url
-        for url in urls
+        "github.com/KAFKA2306/" not in url and "raw.githubusercontent.com/KAFKA2306/" not in url for url in urls
     )
     return {"available": True, "primary": primary, "raw": raw_hash}
 
@@ -281,22 +272,16 @@ def build(
             )
 
         commits = [
-            component["latest_evidence_commit"]
-            for component in components
-            if component["latest_evidence_commit"]
+            component["latest_evidence_commit"] for component in components if component["latest_evidence_commit"]
         ]
         record = {
             "theme": theme["theme"],
             "claim_id": theme["claim_id"],
             "dedicated_repository_required": bool(theme["dedicated_repository_required"]),
             "canonical_repositories": [component["current_repo"] for component in components],
-            "current_repository_urls": [
-                component["current_repository_url"] for component in components
-            ],
+            "current_repository_urls": [component["current_repository_url"] for component in components],
             "target_repository_names": [component["target_repo"] for component in components],
-            "implementation_issue_urls": [
-                component["implementation_issue_url"] for component in components
-            ],
+            "implementation_issue_urls": [component["implementation_issue_url"] for component in components],
             "components": components,
             "latest_evidence_commit": commits[0] if len(commits) == 1 else (commits or None),
         }
@@ -389,10 +374,7 @@ def write_markdown(path: Path, result: dict[str, Any]) -> None:
         "|---|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in result["records"]:
-        repos = "<br>".join(
-            f"[{repo}](https://github.com/{repo})"
-            for repo in row["canonical_repositories"]
-        )
+        repos = "<br>".join(f"[{repo}](https://github.com/{repo})" for repo in row["canonical_repositories"])
         lines.append(
             f"| {row['theme']} | {repos} | {yes(row['real_data_exists'])} | "
             f"{yes(row['primary_source_provenance_exists'])} | {yes(row['reproducible_from_raw'])} | "
@@ -406,19 +388,10 @@ def write_markdown(path: Path, result: dict[str, Any]) -> None:
         "- The Great Acceleration は横断統合であり専用repositoryを要求しない。",
         "- Bitcoin は network / treasury / derivatives を別componentとして判定する。",
         "- Distributed Energy は electricity / nuclear を別componentとして判定する。",
-        (
-            "- Multiomics は canonical `KAFKA2306/multiomics` と legacy "
-            "`KAFKA2306/kafin3` を同一視しない。"
-        ),
-        (
-            "- non-canonical `KAFKA2306/robot` / `KAFKA2306/space` は"
-            "coverageへ加算しない。"
-        ),
+        ("- Multiomics は canonical `KAFKA2306/multiomics` と legacy `KAFKA2306/kafin3` を同一視しない。"),
+        ("- non-canonical `KAFKA2306/robot` / `KAFKA2306/space` はcoverageへ加算しない。"),
         "",
-        (
-            "ARK forecastとの比較は "
-            "[#119](https://github.com/KAFKA2306/investor2/issues/119) の責務とする。"
-        ),
+        ("ARK forecastとの比較は [#119](https://github.com/KAFKA2306/investor2/issues/119) の責務とする。"),
         "",
     ]
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -453,9 +426,7 @@ def main() -> None:
             {
                 "themes": result["theme_count"],
                 "real_data": sum(row["real_data_exists"] for row in result["records"]),
-                "integrated": sum(
-                    row["investor2_integration_exists"] for row in result["records"]
-                ),
+                "integrated": sum(row["investor2_integration_exists"] for row in result["records"]),
             }
         )
     )
