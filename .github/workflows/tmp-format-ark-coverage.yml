@@ -1,0 +1,42 @@
+name: Temporary format ARK coverage
+
+on:
+  push:
+    branches:
+      - fix/ark-repository-coverage-120
+    paths:
+      - scripts/build_ark_repository_coverage.py
+      - tests/test_ark_repository_coverage.py
+      - .github/workflows/tmp-format-ark-coverage.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: fix/ark-repository-coverage-120
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: '0.11.32'
+      - name: Install locked dev tools
+        run: uv sync --locked --only-group dev
+      - name: Format coverage files
+        run: uv run --no-sync ruff format scripts/build_ark_repository_coverage.py tests/test_ark_repository_coverage.py
+      - name: Commit formatter output
+        run: |
+          if git diff --quiet; then
+            echo 'Already formatted.'
+            exit 0
+          fi
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add scripts/build_ark_repository_coverage.py tests/test_ark_repository_coverage.py
+          git commit -m 'style: format ARK repository coverage'
+          git push origin HEAD:fix/ark-repository-coverage-120
