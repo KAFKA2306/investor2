@@ -50,9 +50,5 @@ jobs:
           bun ci
           uv lock --check
           uv sync --locked --only-group dev
-      - name: Show canonical Ruff formatting diff
-        run: |
-          uv run --no-sync ruff format scripts/build_ark_repository_coverage.py tests/test_ark_repository_coverage.py
-          git diff -- scripts/build_ark_repository_coverage.py tests/test_ark_repository_coverage.py
       - name: Run canonical quality gate
         run: task check
