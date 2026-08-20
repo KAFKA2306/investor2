@@ -42,8 +42,8 @@
       "theme": "Multiomics",
       "logical_repo": "multiomics",
       "current_repo": "KAFKA2306/kafin3",
-      "status": "deferred_by_user",
-      "check_live": false,
+      "status": "ready",
+      "check_live": true,
       "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
       "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6"
@@ -62,10 +62,10 @@
       "theme": "Distributed Energy / Electricity",
       "logical_repo": "energy-supply",
       "current_repo": "KAFKA2306/oil",
-      "status": "deferred_by_user",
-      "check_live": false,
-      "canonical_url": "https://github.com/KAFKA2306/oil/tree/main/api/v1/electricity",
-      "raw_url": null,
+      "status": "ready",
+      "check_live": true,
+      "canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/index.json",
       "issue_url": "https://github.com/KAFKA2306/oil/issues/12"
     },
     {
