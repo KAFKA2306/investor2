@@ -41,12 +41,12 @@
     {
       "theme": "Multiomics",
       "logical_repo": "multiomics",
-      "current_repo": "KAFKA2306/kafin3",
+      "current_repo": "KAFKA2306/multiomics",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
-      "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6"
+      "canonical_url": "https://github.com/KAFKA2306/multiomics/blob/main/api/v1/multiomics/index.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
+      "issue_url": "https://github.com/KAFKA2306/multiomics/issues/1"
     },
     {
       "theme": "Distributed Energy / Nuclear",
