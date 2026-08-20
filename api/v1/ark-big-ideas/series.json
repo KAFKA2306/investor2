@@ -2239,7 +2239,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "aurora",
       "fact_class": "evidence_event",
@@ -2261,7 +2261,7 @@
         "mode": "drone_package_delivery",
         "operation_status": "regulatory_authorization"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "drone-express",
       "fact_class": "evidence_event",
@@ -2283,7 +2283,7 @@
         "mode": "drone_package_delivery",
         "operation_status": "regulatory_authorization"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "flytrex",
       "fact_class": "evidence_event",
@@ -2305,7 +2305,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "gatik",
       "fact_class": "evidence_event",
@@ -2327,7 +2327,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "kodiak",
       "fact_class": "evidence_event",
@@ -2349,7 +2349,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "kodiak",
       "fact_class": "evidence_event",
@@ -14649,7 +14649,7 @@
         "factory": "CATL Guiyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "observed",
@@ -14674,7 +14674,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -14699,7 +14699,7 @@
         "factory": "BMW Group Plant Steyr",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14723,7 +14723,7 @@
         "factory": "BMW Group Plant Dingolfing",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14747,7 +14747,7 @@
         "factory": "BMW Group Plant Leipzig",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14771,7 +14771,7 @@
         "factory": "BMW Group Plant Oxford",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14795,7 +14795,7 @@
         "factory": "BMW Group Plant Debrecen",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14819,7 +14819,7 @@
         "factory": "BMW Group Plant Regensburg",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14843,7 +14843,7 @@
         "factory": "BMW Group Plant Spartanburg",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14867,7 +14867,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14891,7 +14891,7 @@
         "factory": "CATL Yibin Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14915,7 +14915,7 @@
         "factory": "CATL Guiyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14939,7 +14939,7 @@
         "factory": "CATL Liyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14963,7 +14963,7 @@
         "factory": "CATL Ningde Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14987,7 +14987,7 @@
         "factory": "Dongfeng Honda NEV Production Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Dongfeng Honda Automobile Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15011,7 +15011,7 @@
         "factory": "Factory ZERO",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15035,7 +15035,7 @@
         "factory": "Spring Hill Manufacturing",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15059,7 +15059,7 @@
         "factory": "Flint Assembly",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15083,7 +15083,7 @@
         "factory": "Hyundai Ulsan EV-dedicated Plant",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15107,7 +15107,7 @@
         "factory": "Hyundai Motor Ulsan Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15131,7 +15131,7 @@
         "factory": "Hyundai Motor Group Metaplant America",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15155,7 +15155,7 @@
         "factory": "Hyundai Motor Group Innovation Center Singapore",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Group",
       "fact_class": "evidence_event",
@@ -15179,7 +15179,7 @@
         "factory": "Factory 56, Sindelfingen",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Mercedes-Benz Group AG",
       "fact_class": "evidence_event",
@@ -15203,7 +15203,7 @@
         "factory": "Panasonic Cycle Technology Kashiwara Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Cycle Technology Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15227,7 +15227,7 @@
         "factory": "Panasonic Energy Kansas Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Energy Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15251,7 +15251,7 @@
         "factory": "Bosch Stuttgart-Feuerbach Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Robert Bosch GmbH",
       "fact_class": "evidence_event",
@@ -15275,7 +15275,7 @@
         "factory": "Siemens Haguenau Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Siemens AG",
       "fact_class": "evidence_event",
@@ -15299,7 +15299,7 @@
         "factory": "Siemens Amberg Future Factory",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Siemens AG",
       "fact_class": "evidence_event",
@@ -15323,7 +15323,7 @@
         "factory": "Motomachi Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Toyota Motor Corporation",
       "fact_class": "evidence_event",
@@ -15347,7 +15347,7 @@
         "factory": "Teiho Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Toyota Motor Corporation",
       "fact_class": "evidence_event",
@@ -15371,7 +15371,7 @@
         "factory": "Volkswagen Emden Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15395,7 +15395,7 @@
         "factory": "Volkswagen Hanover Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15419,7 +15419,7 @@
         "factory": "Volkswagen Chattanooga Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15443,7 +15443,7 @@
         "factory": "BMW Group Plant Steyr",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -15468,7 +15468,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -15493,7 +15493,7 @@
         "factory": "Hyundai Motor Group Metaplant America",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "observed",
@@ -15518,7 +15518,7 @@
         "factory": "Hyundai Motor Group Innovation Center Singapore",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Group",
       "fact_class": "observed",
@@ -15543,7 +15543,7 @@
         "factory": "Factory 56, Sindelfingen",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Mercedes-Benz Group AG",
       "fact_class": "observed",
@@ -15568,7 +15568,7 @@
         "factory": "Volkswagen Hanover Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "observed",
@@ -15593,7 +15593,7 @@
         "factory": "Panasonic Energy Kansas Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Energy Co., Ltd.",
       "fact_class": "observed",
@@ -15871,7 +15871,7 @@
       "value": 220
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15887,7 +15887,7 @@
       "value": 11
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15903,7 +15903,7 @@
       "value": 10
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15919,7 +15919,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15935,7 +15935,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15951,7 +15951,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15967,7 +15967,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15983,7 +15983,7 @@
       "value": 6
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15999,7 +15999,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16015,7 +16015,7 @@
       "value": 10
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16031,7 +16031,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16047,7 +16047,7 @@
       "value": 21
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16063,7 +16063,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16079,7 +16079,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16095,7 +16095,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16111,7 +16111,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16127,7 +16127,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16143,7 +16143,7 @@
       "value": 19
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16159,7 +16159,7 @@
       "value": 20
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16175,7 +16175,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16191,7 +16191,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16207,7 +16207,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16223,7 +16223,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16239,7 +16239,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16255,7 +16255,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16271,7 +16271,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16287,7 +16287,7 @@
       "value": 12
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16303,7 +16303,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16319,7 +16319,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16335,7 +16335,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16351,7 +16351,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16367,7 +16367,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16387,7 +16387,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16408,7 +16408,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16429,7 +16429,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16450,7 +16450,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16471,7 +16471,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16492,7 +16492,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16513,7 +16513,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16534,7 +16534,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16555,7 +16555,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16576,7 +16576,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16597,7 +16597,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16618,7 +16618,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16639,7 +16639,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16660,7 +16660,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16681,7 +16681,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16702,7 +16702,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",

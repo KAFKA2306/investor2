@@ -158,7 +158,7 @@
       "theme": "Bitcoin / Derivatives"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
       "current_repo": "KAFKA2306/fx",
       "issue_url": "https://github.com/KAFKA2306/fx/issues/4",
       "logical_repo": "tokenized-assets",
@@ -190,7 +190,7 @@
       "theme": "DeFi Applications"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
       "current_repo": "KAFKA2306/factory",
       "issue_url": "https://github.com/KAFKA2306/factory/issues/27",
       "logical_repo": "factory",
@@ -206,7 +206,7 @@
       "theme": "Robotics"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
       "current_repo": "KAFKA2306/autonomous-logistics",
       "issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5",
       "logical_repo": "autonomous-logistics",
@@ -222,7 +222,7 @@
       "theme": "Autonomous Logistics"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "current_repo": "KAFKA2306/trahist",
       "issue_url": "https://github.com/KAFKA2306/trahist/issues/9",
       "logical_repo": "space-launches",

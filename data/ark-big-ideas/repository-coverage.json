@@ -1,6 +1,6 @@
 {
   "ark_source_url": "https://www.ark-invest.com/big-ideas-2026",
-  "checked_at": "2026-08-20T05:16:06+00:00",
+  "checked_at": "2026-08-20T05:32:09+00:00",
   "coverage_rule": "Theme booleans are true only when every required component is verified; repository or Issue existence alone is insufficient.",
   "live_github_checks": true,
   "mapping_source_url": "https://github.com/KAFKA2306/investor2/issues/111",
@@ -342,7 +342,7 @@
       "components": [
         {
           "canonical_alignment": true,
-          "canonical_output_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+          "canonical_output_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/issuer.json",
           "current_repo": "KAFKA2306/fx",
           "current_repository_url": "https://github.com/KAFKA2306/fx",
           "derived_output_exists": true,
@@ -355,10 +355,10 @@
           "mirror_sha256": "51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd",
           "primary_source_provenance_exists": true,
           "public_view_exists": false,
-          "raw_evidence_exists": false,
+          "raw_evidence_exists": true,
           "real_data_exists": true,
           "repository_exists": true,
-          "reproducible_from_raw": false,
+          "reproducible_from_raw": true,
           "scheduled_workflow_exists": true,
           "source_catalog_repo": "KAFKA2306/fx",
           "source_status": "ready",
@@ -378,10 +378,10 @@
       "latest_workflow_passed": false,
       "primary_source_provenance_exists": true,
       "public_view_exists": false,
-      "raw_evidence_exists": false,
+      "raw_evidence_exists": true,
       "real_data_exists": true,
       "repository_exists": true,
-      "reproducible_from_raw": false,
+      "reproducible_from_raw": true,
       "scheduled_workflow_exists": true,
       "target_repository_names": [
         "tokenized-assets"
@@ -504,7 +504,7 @@
       "components": [
         {
           "canonical_alignment": true,
-          "canonical_output_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+          "canonical_output_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
           "current_repo": "KAFKA2306/trahist",
           "current_repository_url": "https://github.com/KAFKA2306/trahist",
           "derived_output_exists": true,
@@ -517,10 +517,10 @@
           "mirror_sha256": "add29c37024d8c2c6a17a8fd384f2ff3c7fa9dc3038caddc09eba2385f65d277",
           "primary_source_provenance_exists": true,
           "public_view_exists": false,
-          "raw_evidence_exists": false,
+          "raw_evidence_exists": true,
           "real_data_exists": true,
           "repository_exists": true,
-          "reproducible_from_raw": false,
+          "reproducible_from_raw": true,
           "scheduled_workflow_exists": true,
           "source_catalog_repo": "KAFKA2306/trahist",
           "source_status": "ready",
@@ -540,10 +540,10 @@
       "latest_workflow_passed": true,
       "primary_source_provenance_exists": true,
       "public_view_exists": false,
-      "raw_evidence_exists": false,
+      "raw_evidence_exists": true,
       "real_data_exists": true,
       "repository_exists": true,
-      "reproducible_from_raw": false,
+      "reproducible_from_raw": true,
       "scheduled_workflow_exists": true,
       "target_repository_names": [
         "space-launches"
@@ -558,7 +558,7 @@
       "components": [
         {
           "canonical_alignment": true,
-          "canonical_output_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+          "canonical_output_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/records.json",
           "current_repo": "KAFKA2306/factory",
           "current_repository_url": "https://github.com/KAFKA2306/factory",
           "derived_output_exists": true,
@@ -571,10 +571,10 @@
           "mirror_sha256": "8dff3b47038a580d664398e9e1f8cc8e8657339e918c48735fce9350095e309c",
           "primary_source_provenance_exists": true,
           "public_view_exists": false,
-          "raw_evidence_exists": false,
+          "raw_evidence_exists": true,
           "real_data_exists": true,
           "repository_exists": true,
-          "reproducible_from_raw": false,
+          "reproducible_from_raw": true,
           "scheduled_workflow_exists": true,
           "source_catalog_repo": "KAFKA2306/factory",
           "source_status": "ready",
@@ -594,10 +594,10 @@
       "latest_workflow_passed": true,
       "primary_source_provenance_exists": true,
       "public_view_exists": false,
-      "raw_evidence_exists": false,
+      "raw_evidence_exists": true,
       "real_data_exists": true,
       "repository_exists": true,
-      "reproducible_from_raw": false,
+      "reproducible_from_raw": true,
       "scheduled_workflow_exists": true,
       "target_repository_names": [
         "factory"
@@ -751,7 +751,7 @@
       "components": [
         {
           "canonical_alignment": true,
-          "canonical_output_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+          "canonical_output_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/events.json",
           "current_repo": "KAFKA2306/autonomous-logistics",
           "current_repository_url": "https://github.com/KAFKA2306/autonomous-logistics",
           "derived_output_exists": true,
@@ -764,10 +764,10 @@
           "mirror_sha256": "d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f",
           "primary_source_provenance_exists": true,
           "public_view_exists": false,
-          "raw_evidence_exists": false,
+          "raw_evidence_exists": true,
           "real_data_exists": true,
           "repository_exists": true,
-          "reproducible_from_raw": false,
+          "reproducible_from_raw": true,
           "scheduled_workflow_exists": true,
           "source_catalog_repo": "KAFKA2306/autonomous-logistics",
           "source_status": "ready",
@@ -787,10 +787,10 @@
       "latest_workflow_passed": true,
       "primary_source_provenance_exists": true,
       "public_view_exists": false,
-      "raw_evidence_exists": false,
+      "raw_evidence_exists": true,
       "real_data_exists": true,
       "repository_exists": true,
-      "reproducible_from_raw": false,
+      "reproducible_from_raw": true,
       "scheduled_workflow_exists": true,
       "target_repository_names": [
         "autonomous-logistics"
