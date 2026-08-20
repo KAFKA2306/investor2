@@ -1,0 +1,194 @@
+{
+  "schema_version": 1,
+  "ark_source_url": "https://www.ark-invest.com/big-ideas-2026",
+  "mapping_source_url": "https://github.com/KAFKA2306/investor2/issues/111",
+  "themes": [
+    {
+      "theme": "The Great Acceleration",
+      "claim_id": "great-acceleration",
+      "dedicated_repository_required": false,
+      "components": [
+        {
+          "logical_repo": null,
+          "current_repo": "KAFKA2306/investor2",
+          "target_repo": "investor2",
+          "implementation_issue_url": "https://github.com/KAFKA2306/investor2/issues/111"
+        }
+      ]
+    },
+    {
+      "theme": "AI Infrastructure",
+      "claim_id": "ai-infrastructure",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "ai-infrastructure",
+          "current_repo": "KAFKA2306/semiconductor-earnings-model",
+          "target_repo": "ai-infrastructure",
+          "implementation_issue_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/issues/132"
+        }
+      ]
+    },
+    {
+      "theme": "The AI Consumer Operating System",
+      "claim_id": "ai-consumer-operating-system",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "ai-consumer",
+          "current_repo": "KAFKA2306/finAnalist",
+          "target_repo": "ai-consumer",
+          "implementation_issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4"
+        }
+      ]
+    },
+    {
+      "theme": "AI Productivity",
+      "claim_id": "ai-productivity",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "economic-releases",
+          "current_repo": "KAFKA2306/econalert",
+          "target_repo": "economic-releases",
+          "implementation_issue_url": "https://github.com/KAFKA2306/econalert/issues/12"
+        }
+      ]
+    },
+    {
+      "theme": "Bitcoin",
+      "claim_id": "bitcoin",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "bitcoin-network",
+          "current_repo": "KAFKA2306/btc_dashboard",
+          "target_repo": "bitcoin-network",
+          "implementation_issue_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3"
+        },
+        {
+          "logical_repo": "bitcoin-treasury",
+          "current_repo": "KAFKA2306/mstr",
+          "target_repo": "bitcoin-treasury",
+          "implementation_issue_url": "https://github.com/KAFKA2306/mstr/issues/6"
+        },
+        {
+          "logical_repo": "bitcoin-derivatives",
+          "current_repo": "KAFKA2306/option",
+          "target_repo": "bitcoin-derivatives",
+          "implementation_issue_url": "https://github.com/KAFKA2306/option/issues/16"
+        }
+      ]
+    },
+    {
+      "theme": "Tokenized Assets",
+      "claim_id": "tokenized-assets",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "tokenized-assets",
+          "current_repo": "KAFKA2306/fx",
+          "target_repo": "tokenized-assets",
+          "implementation_issue_url": "https://github.com/KAFKA2306/fx/issues/4"
+        }
+      ]
+    },
+    {
+      "theme": "DeFi Applications",
+      "claim_id": "defi-applications",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "defi",
+          "current_repo": "KAFKA2306/skew",
+          "target_repo": "defi",
+          "implementation_issue_url": "https://github.com/KAFKA2306/skew/issues/11"
+        }
+      ]
+    },
+    {
+      "theme": "Multiomics",
+      "claim_id": "multiomics",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "multiomics",
+          "current_repo": "KAFKA2306/multiomics",
+          "target_repo": "multiomics",
+          "implementation_issue_url": "https://github.com/KAFKA2306/multiomics/issues/1"
+        }
+      ]
+    },
+    {
+      "theme": "Reusable Rockets",
+      "claim_id": "reusable-rockets",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "space-launches",
+          "current_repo": "KAFKA2306/trahist",
+          "target_repo": "space-launches",
+          "implementation_issue_url": "https://github.com/KAFKA2306/trahist/issues/9"
+        }
+      ]
+    },
+    {
+      "theme": "Robotics",
+      "claim_id": "robotics",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "factory",
+          "current_repo": "KAFKA2306/factory",
+          "target_repo": "factory",
+          "implementation_issue_url": "https://github.com/KAFKA2306/factory/issues/27"
+        }
+      ]
+    },
+    {
+      "theme": "Distributed Energy",
+      "claim_id": "distributed-energy",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "energy-supply",
+          "current_repo": "KAFKA2306/oil",
+          "target_repo": "energy-supply",
+          "implementation_issue_url": "https://github.com/KAFKA2306/oil/issues/12"
+        },
+        {
+          "logical_repo": "nuclear-power",
+          "current_repo": "KAFKA2306/uranium",
+          "target_repo": "nuclear-power",
+          "implementation_issue_url": "https://github.com/KAFKA2306/uranium/issues/5"
+        }
+      ]
+    },
+    {
+      "theme": "Autonomous Vehicles",
+      "claim_id": "autonomous-vehicles",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "autonomous-vehicles",
+          "current_repo": "KAFKA2306/autonomous-vehicles",
+          "target_repo": "autonomous-vehicles",
+          "implementation_issue_url": "https://github.com/KAFKA2306/autonomous-vehicles/issues/5"
+        }
+      ]
+    },
+    {
+      "theme": "Autonomous Logistics",
+      "claim_id": "autonomous-logistics",
+      "dedicated_repository_required": true,
+      "components": [
+        {
+          "logical_repo": "autonomous-logistics",
+          "current_repo": "KAFKA2306/autonomous-logistics",
+          "target_repo": "autonomous-logistics",
+          "implementation_issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5"
+        }
+      ]
+    }
+  ]
+}
