@@ -6,6 +6,10 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "docs/specs/paper_reproduction_store.md"
+      - "api/v1/ark-big-ideas/forecast-comparison.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.csv"
+      - "data/ark-big-ideas/forecast-catalog.json"
+      - "scripts/build_ark_forecast_comparison.py"
       - "scripts/build_research_verification_manifest.py"
       - "scripts/build_public_research_manifest.py"
       - "scripts/validate_research_dashboard.py"
@@ -13,6 +17,8 @@ on:
       - "scripts/verify_2021_arxiv_methods.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
+      - "tests/test_ark_forecast_catalog.py"
+      - "tests/test_ark_forecast_comparison.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_public_research_manifest.py"
       - "tests/test_research_dashboard_validation.py"
@@ -27,6 +33,10 @@ on:
       - "docs/aaarts-dashboard/**"
       - "docs/research/**"
       - "docs/specs/paper_reproduction_store.md"
+      - "api/v1/ark-big-ideas/forecast-comparison.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.csv"
+      - "data/ark-big-ideas/forecast-catalog.json"
+      - "scripts/build_ark_forecast_comparison.py"
       - "scripts/build_research_verification_manifest.py"
       - "scripts/build_public_research_manifest.py"
       - "scripts/validate_research_dashboard.py"
@@ -34,6 +44,8 @@ on:
       - "scripts/verify_2021_arxiv_methods.py"
       - "scripts/daily_trump_chart.py"
       - "scripts/kioxia_quarterly_chart.py"
+      - "tests/test_ark_forecast_catalog.py"
+      - "tests/test_ark_forecast_comparison.py"
       - "tests/test_research_verification_manifest.py"
       - "tests/test_public_research_manifest.py"
       - "tests/test_research_dashboard_validation.py"
@@ -80,6 +92,8 @@ jobs:
           python -m pytest -q \
             tests/test_2021_arxiv_methods.py \
             tests/test_repeated_paper_validation.py \
+            tests/test_ark_forecast_catalog.py \
+            tests/test_ark_forecast_comparison.py \
             tests/test_research_verification_manifest.py \
             tests/test_public_research_manifest.py \
             tests/test_research_dashboard_validation.py \
@@ -90,12 +104,15 @@ jobs:
         run: |
           set -euo pipefail
           rm -rf _site validation-report
-          mkdir -p _site/data _site/trump-daily-chart _site/kioxia-quarterly validation-report
+          mkdir -p _site/data _site/trump-daily-chart _site/kioxia-quarterly _site/ark-forecast-comparison validation-report
           python scripts/build_research_verification_manifest.py \
             --output validation-report/internal-research-manifest.json
           python scripts/build_public_research_manifest.py \
             --output _site/data/research_public_manifest.json \
             --expected-revision "${GITHUB_SHA}"
+          python scripts/build_ark_forecast_comparison.py \
+            --json-output _site/data/ark-forecast-comparison.json \
+            --csv-output _site/data/ark-forecast-comparison.csv
           python scripts/daily_trump_chart.py --output-dir _site/trump-daily-chart
           python scripts/kioxia_quarterly_chart.py \
             --input docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
@@ -103,6 +120,7 @@ jobs:
           cp docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
             _site/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
           cp docs/aaarts-dashboard/index.html _site/index.html
+          cp docs/aaarts-dashboard/ark-forecast-comparison.html _site/ark-forecast-comparison/index.html
           touch _site/.nojekyll
 
       - name: Serve and validate candidate site
@@ -139,6 +157,25 @@ jobs:
           spec.loader.exec_module(module)
           data = json.loads(Path('validation-report/candidate-public-manifest.json').read_text(encoding='utf-8'))
           module.validate_public_manifest(data, expected_revision=os.environ['GITHUB_SHA'])
+          PY
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/data/ark-forecast-comparison.json \
+            -o validation-report/ark-forecast-comparison.json
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/data/ark-forecast-comparison.csv \
+            -o validation-report/ark-forecast-comparison.csv
+          curl --fail --silent --show-error \
+            http://127.0.0.1:4173/ark-forecast-comparison/ \
+            -o validation-report/ark-forecast-comparison.html
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          payload = json.loads(Path('validation-report/ark-forecast-comparison.json').read_text(encoding='utf-8'))
+          assert len(payload['themes']) == 13
+          assert sum(row['forecast_count'] for row in payload['themes']) >= 2
+          page = Path('validation-report/ark-forecast-comparison.html').read_text(encoding='utf-8')
+          assert 'ARK Big Ideas 2026 Forecast Comparison' in page
+          assert 'definition, unit, scope, geography and period' in page
           PY
           curl --fail --silent --show-error \
             http://127.0.0.1:4173/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
