@@ -60,16 +60,17 @@ class ArkRepositoryCoverageTest(unittest.TestCase):
         self.assertFalse(bitcoin["real_data_exists"])
         self.assertFalse(bitcoin["investor2_integration_exists"])
 
-    def test_multiomics_legacy_feed_does_not_complete_canonical_repo(self):
+    def test_multiomics_uses_canonical_repository(self):
         result = self.build()
         multiomics = next(row for row in result["records"] if row["theme"] == "Multiomics")
         component = multiomics["components"][0]
         self.assertEqual(component["current_repo"], "KAFKA2306/multiomics")
-        self.assertEqual(component["source_catalog_repo"], "KAFKA2306/kafin3")
-        self.assertFalse(component["canonical_alignment"])
-        self.assertFalse(component["real_data_exists"])
+        self.assertEqual(component["source_catalog_repo"], "KAFKA2306/multiomics")
+        self.assertTrue(component["canonical_alignment"])
+        self.assertTrue(component["real_data_exists"])
         self.assertTrue(component["investor2_integration_exists"])
-        self.assertFalse(multiomics["real_data_exists"])
+        self.assertTrue(multiomics["real_data_exists"])
+        self.assertTrue(multiomics["investor2_integration_exists"])
 
     def test_great_acceleration_does_not_require_a_dedicated_repo(self):
         result = self.build()
