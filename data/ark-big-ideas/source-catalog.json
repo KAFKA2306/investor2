@@ -114,8 +114,8 @@
       "current_repo": "KAFKA2306/fx",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/provenance.json",
       "issue_url": "https://github.com/KAFKA2306/fx/issues/4"
     },
     {
@@ -124,8 +124,8 @@
       "current_repo": "KAFKA2306/skew",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/provenance.json",
       "issue_url": "https://github.com/KAFKA2306/skew/issues/11"
     },
     {
@@ -134,8 +134,8 @@
       "current_repo": "KAFKA2306/factory",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/provenance.json",
       "issue_url": "https://github.com/KAFKA2306/factory/issues/27"
     },
     {
@@ -144,8 +144,8 @@
       "current_repo": "KAFKA2306/autonomous-logistics",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/provenance.json",
       "issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5"
     },
     {
@@ -154,8 +154,8 @@
       "current_repo": "KAFKA2306/trahist",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/provenance.json",
       "issue_url": "https://github.com/KAFKA2306/trahist/issues/9"
     },
     {
