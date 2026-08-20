@@ -46,6 +46,17 @@ jobs:
           scripts/query_market_news.py
           scripts/verify_alpha_vantage.py
           tests/test_market_data_sources.py
+      - name: Print formatter diff
+        run: >-
+          uv run ruff format --diff
+          src/io/market_data_sources.py
+          scripts/build_edinet_issuer_master.py
+          scripts/fetch_edinet_filings.py
+          scripts/ingest_gdelt_news.py
+          scripts/query_market_news.py
+          scripts/verify_alpha_vantage.py
+          tests/test_market_data_sources.py
+          || true
 
   edinet-live-master-smoke:
     runs-on: ubuntu-latest
