@@ -10,9 +10,10 @@ import os
 import urllib.error
 import urllib.parse
 import urllib.request
+from collections.abc import Callable
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any, Callable
+from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DATA = ROOT / "data" / "ark-big-ideas"
@@ -86,10 +87,17 @@ def probe_repository(repository: str, evidence_url: str | None) -> dict[str, Any
         repo = request(f"https://api.github.com/repos/{encoded}")
     except urllib.error.HTTPError as exc:
         if exc.code == 404:
-            return {"exists": False, "scheduled": False, "latest_passed": False, "evidence_commit": None}
+            return {
+                "exists": False,
+                "scheduled": False,
+                "latest_passed": False,
+                "evidence_commit": None,
+            }
         raise
     branch = repo["default_branch"]
-    workflows = request(f"https://api.github.com/repos/{encoded}/actions/workflows?per_page=100")
+    workflows = request(
+        f"https://api.github.com/repos/{encoded}/actions/workflows?per_page=100"
+    )
     scheduled = False
     for workflow in workflows.get("workflows", []):
         path = workflow.get("path")
@@ -148,7 +156,11 @@ def probe_output(url: str | None) -> dict[str, bool]:
         elif isinstance(value, list):
             for child in value:
                 walk(child, key)
-        elif isinstance(value, str) and value.startswith("http") and ("source" in key or "url" in key):
+        elif (
+            isinstance(value, str)
+            and value.startswith("http")
+            and ("source" in key or "url" in key)
+        ):
             urls.append(value)
 
     walk(payload)
@@ -158,6 +170,10 @@ def probe_output(url: str | None) -> dict[str, bool]:
         for url in urls
     )
     return {"available": True, "primary": primary, "raw": raw_hash}
+
+
+def all_components(components: list[dict[str, Any]], field: str) -> bool:
+    return all(bool(component[field]) for component in components)
 
 
 def build(
@@ -196,7 +212,12 @@ def build(
                 and row_count > 0
             )
             canonical_url = source.get("canonical_url") if source and aligned else None
-            repo_state = {"exists": False, "scheduled": False, "latest_passed": False, "evidence_commit": None}
+            repo_state = {
+                "exists": False,
+                "scheduled": False,
+                "latest_passed": False,
+                "evidence_commit": None,
+            }
             output_state = {"available": False, "primary": False, "raw": False}
             if live:
                 repo_state = repo_probe(expected_repo, canonical_url)
@@ -233,9 +254,15 @@ def build(
         if not theme["dedicated_repository_required"]:
             claim = claims.get(theme["claim_id"], {})
             evidence_rows = claim.get("evidence_row_count", 0)
-            state = repo_probe("KAFKA2306/investor2", None) if live else {
-                "exists": False, "scheduled": False, "latest_passed": False, "evidence_commit": None
-            }
+            if live:
+                state = repo_probe("KAFKA2306/investor2", None)
+            else:
+                state = {
+                    "exists": False,
+                    "scheduled": False,
+                    "latest_passed": False,
+                    "evidence_commit": None,
+                }
             has_evidence = isinstance(evidence_rows, int) and evidence_rows > 0
             components[0].update(
                 repository_exists=bool(state["exists"]),
@@ -248,38 +275,54 @@ def build(
                 latest_workflow_passed=bool(state["latest_passed"]),
                 investor2_integration_exists=has_evidence,
                 latest_evidence_commit=state["evidence_commit"],
-                canonical_output_url="https://github.com/KAFKA2306/investor2/blob/main/api/v1/ark-big-ideas/claim-evidence.json",
+                canonical_output_url=(
+                    "https://github.com/KAFKA2306/investor2/blob/main/api/v1/ark-big-ideas/claim-evidence.json"
+                ),
             )
 
-        def every(field: str) -> bool:
-            return all(bool(component[field]) for component in components)
-
-        commits = [component["latest_evidence_commit"] for component in components if component["latest_evidence_commit"]]
+        commits = [
+            component["latest_evidence_commit"]
+            for component in components
+            if component["latest_evidence_commit"]
+        ]
         record = {
             "theme": theme["theme"],
             "claim_id": theme["claim_id"],
             "dedicated_repository_required": bool(theme["dedicated_repository_required"]),
             "canonical_repositories": [component["current_repo"] for component in components],
-            "current_repository_urls": [component["current_repository_url"] for component in components],
+            "current_repository_urls": [
+                component["current_repository_url"] for component in components
+            ],
             "target_repository_names": [component["target_repo"] for component in components],
-            "implementation_issue_urls": [component["implementation_issue_url"] for component in components],
+            "implementation_issue_urls": [
+                component["implementation_issue_url"] for component in components
+            ],
             "components": components,
             "latest_evidence_commit": commits[0] if len(commits) == 1 else (commits or None),
         }
         for field in (
-            "repository_exists", "real_data_exists", "primary_source_provenance_exists",
-            "raw_evidence_exists", "derived_output_exists", "reproducible_from_raw",
-            "scheduled_workflow_exists", "latest_workflow_passed", "public_view_exists",
+            "repository_exists",
+            "real_data_exists",
+            "primary_source_provenance_exists",
+            "raw_evidence_exists",
+            "derived_output_exists",
+            "reproducible_from_raw",
+            "scheduled_workflow_exists",
+            "latest_workflow_passed",
+            "public_view_exists",
             "investor2_integration_exists",
         ):
-            record[field] = every(field)
+            record[field] = all_components(components, field)
         records.append(record)
 
     return {
         "schema_version": 1,
         "ark_source_url": catalog["ark_source_url"],
         "mapping_source_url": catalog["mapping_source_url"],
-        "coverage_rule": "Theme booleans are true only when every required component is verified; repository or Issue existence alone is insufficient.",
+        "coverage_rule": (
+            "Theme booleans are true only when every required component is verified; "
+            "repository or Issue existence alone is insufficient."
+        ),
         "checked_at": checked_at or datetime.now(UTC).replace(microsecond=0).isoformat(),
         "live_github_checks": live,
         "theme_count": len(records),
@@ -288,53 +331,96 @@ def build(
 
 
 def write_csv(path: Path, result: dict[str, Any]) -> None:
-    fields = ["theme", "canonical_repo", "real_data", "primary_source_provenance", "reproducible",
-              "scheduled_workflow", "latest_workflow_passed", "public_view", "investor2_integration", "evidence_commit"]
+    fields = [
+        "theme",
+        "canonical_repo",
+        "real_data",
+        "primary_source_provenance",
+        "reproducible",
+        "scheduled_workflow",
+        "latest_workflow_passed",
+        "public_view",
+        "investor2_integration",
+        "evidence_commit",
+    ]
     path.parent.mkdir(parents=True, exist_ok=True)
     with path.open("w", encoding="utf-8", newline="") as handle:
         writer = csv.DictWriter(handle, fieldnames=fields)
         writer.writeheader()
         for row in result["records"]:
-            writer.writerow({
-                "theme": row["theme"],
-                "canonical_repo": " + ".join(row["canonical_repositories"]),
-                "real_data": str(row["real_data_exists"]).lower(),
-                "primary_source_provenance": str(row["primary_source_provenance_exists"]).lower(),
-                "reproducible": str(row["reproducible_from_raw"]).lower(),
-                "scheduled_workflow": str(row["scheduled_workflow_exists"]).lower(),
-                "latest_workflow_passed": str(row["latest_workflow_passed"]).lower(),
-                "public_view": str(row["public_view_exists"]).lower(),
-                "investor2_integration": str(row["investor2_integration_exists"]).lower(),
-                "evidence_commit": json.dumps(row["latest_evidence_commit"]) if row["latest_evidence_commit"] else "",
-            })
+            writer.writerow(
+                {
+                    "theme": row["theme"],
+                    "canonical_repo": " + ".join(row["canonical_repositories"]),
+                    "real_data": str(row["real_data_exists"]).lower(),
+                    "primary_source_provenance": str(row["primary_source_provenance_exists"]).lower(),
+                    "reproducible": str(row["reproducible_from_raw"]).lower(),
+                    "scheduled_workflow": str(row["scheduled_workflow_exists"]).lower(),
+                    "latest_workflow_passed": str(row["latest_workflow_passed"]).lower(),
+                    "public_view": str(row["public_view_exists"]).lower(),
+                    "investor2_integration": str(row["investor2_integration_exists"]).lower(),
+                    "evidence_commit": json.dumps(row["latest_evidence_commit"])
+                    if row["latest_evidence_commit"]
+                    else "",
+                }
+            )
 
 
 def write_markdown(path: Path, result: dict[str, Any]) -> None:
-    yes = lambda value: "yes" if value else "no"
+    def yes(value: object) -> str:
+        return "yes" if value else "no"
+
     lines = [
-        "# ARK Big Ideas 2026 × KAFKA2306 repository coverage", "",
-        "13テーマを、repository名やIssueの存在ではなく、実データ、一次情報provenance、再生成可能性、GitHub Actions、investor2統合で比較する。", "",
+        "# ARK Big Ideas 2026 × KAFKA2306 repository coverage",
+        "",
+        (
+            "13テーマを、repository名やIssueの存在ではなく、実データ、一次情報provenance、"
+            "再生成可能性、GitHub Actions、investor2統合で比較する。"
+        ),
+        "",
         f"- ARK official source: {result['ark_source_url']}",
         f"- canonical mapping: {result['mapping_source_url']}",
-        f"- checked_at: `{result['checked_at']}`", "",
-        "| Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |",
+        f"- checked_at: `{result['checked_at']}`",
+        "",
+        (
+            "| Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | "
+            "Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |"
+        ),
         "|---|---|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for row in result["records"]:
-        repos = "<br>".join(f"[{repo}](https://github.com/{repo})" for repo in row["canonical_repositories"])
+        repos = "<br>".join(
+            f"[{repo}](https://github.com/{repo})"
+            for repo in row["canonical_repositories"]
+        )
         lines.append(
             f"| {row['theme']} | {repos} | {yes(row['real_data_exists'])} | "
             f"{yes(row['primary_source_provenance_exists'])} | {yes(row['reproducible_from_raw'])} | "
             f"{yes(row['scheduled_workflow_exists'])} | {yes(row['latest_workflow_passed'])} | "
             f"{yes(row['public_view_exists'])} | {yes(row['investor2_integration_exists'])} |"
         )
-    lines += ["", "## Boundaries", "",
-              "- The Great Acceleration は横断統合であり専用repositoryを要求しない。",
-              "- Bitcoin は network / treasury / derivatives を別componentとして判定する。",
-              "- Distributed Energy は electricity / nuclear を別componentとして判定する。",
-              "- Multiomics は canonical `KAFKA2306/multiomics` と legacy `KAFKA2306/kafin3` を同一視しない。",
-              "- non-canonical `KAFKA2306/robot` / `KAFKA2306/space` はcoverageへ加算しない。", "",
-              "ARK forecastとの比較は [#119](https://github.com/KAFKA2306/investor2/issues/119) の責務とする。", ""]
+    lines += [
+        "",
+        "## Boundaries",
+        "",
+        "- The Great Acceleration は横断統合であり専用repositoryを要求しない。",
+        "- Bitcoin は network / treasury / derivatives を別componentとして判定する。",
+        "- Distributed Energy は electricity / nuclear を別componentとして判定する。",
+        (
+            "- Multiomics は canonical `KAFKA2306/multiomics` と legacy "
+            "`KAFKA2306/kafin3` を同一視しない。"
+        ),
+        (
+            "- non-canonical `KAFKA2306/robot` / `KAFKA2306/space` は"
+            "coverageへ加算しない。"
+        ),
+        "",
+        (
+            "ARK forecastとの比較は "
+            "[#119](https://github.com/KAFKA2306/investor2/issues/119) の責務とする。"
+        ),
+        "",
+    ]
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text("\n".join(lines), encoding="utf-8")
 
@@ -351,15 +437,28 @@ def main() -> None:
     parser.add_argument("--markdown-output", type=Path, default=DEFAULT_MARKDOWN_OUTPUT)
     parser.add_argument("--live", action="store_true")
     args = parser.parse_args()
-    result = build(load(args.catalog), load(args.source_catalog), load(args.evidence_matrix),
-                   load(args.claim_evidence), live=args.live)
+    result = build(
+        load(args.catalog),
+        load(args.source_catalog),
+        load(args.evidence_matrix),
+        load(args.claim_evidence),
+        live=args.live,
+    )
     write_json(args.data_output, result)
     write_json(args.api_output, result)
     write_csv(args.csv_output, result)
     write_markdown(args.markdown_output, result)
-    print(json.dumps({"themes": result["theme_count"],
-                      "real_data": sum(row["real_data_exists"] for row in result["records"]),
-                      "integrated": sum(row["investor2_integration_exists"] for row in result["records"])}))
+    print(
+        json.dumps(
+            {
+                "themes": result["theme_count"],
+                "real_data": sum(row["real_data_exists"] for row in result["records"]),
+                "integrated": sum(
+                    row["investor2_integration_exists"] for row in result["records"]
+                ),
+            }
+        )
+    )
 
 
 if __name__ == "__main__":
