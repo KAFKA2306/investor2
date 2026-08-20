@@ -6,45 +6,63 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.bls_labor_productivity_snapshot import (
-    SERIES_IDS,
-    build_payload,
-    materialize_snapshot,
-    request_windows,
-)
+from scripts.bls_labor_productivity_snapshot import EXPECTED_HEADER, build_payload, materialize_snapshot
 
 
 class BlsLaborProductivitySnapshotTest(unittest.TestCase):
-    def test_request_windows_respect_unregistered_api_limit(self) -> None:
-        windows = request_windows(1948, 2026)
-        self.assertEqual(windows[0], (1948, 1957))
-        self.assertEqual(windows[-1], (2018, 2026))
-        self.assertEqual(len(windows), 8)
-        self.assertTrue(all(end - start + 1 <= 10 for start, end in windows))
-
-    def test_extracts_only_official_annual_average_rows(self) -> None:
-        series = [
-            {
-                "seriesID": SERIES_IDS["percent_change"],
-                "data": [
-                    {"year": "2024", "period": "Q01", "value": "3.3"},
-                    {"year": "2024", "period": "Q05", "value": "3.0"},
-                    {"year": "2025", "period": "Q05", "value": "2.1"},
-                ],
-            },
-            {
-                "seriesID": SERIES_IDS["index"],
-                "data": [
-                    {"year": "2024", "period": "Q05", "value": "115.366"},
-                    {"year": "2025", "period": "Q05", "value": "117.785"},
-                ],
-            },
+    def test_extracts_official_annual_rows(self) -> None:
+        rows = [
+            EXPECTED_HEADER,
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "% Change from previous year",
+                "2024",
+                "Annual",
+                "3.0",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "% Change from previous year",
+                "2025",
+                "Annual",
+                "2.1",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "Index (2017=100)",
+                "2024",
+                "Annual",
+                "115.366",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "Index (2017=100)",
+                "2025",
+                "Annual",
+                "117.785",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "% Change from previous year",
+                "2025",
+                "1",
+                "9.9",
+            ],
         ]
 
-        payload = build_payload(series)
+        payload = build_payload(rows)
 
-        self.assertEqual(payload["series_ids"]["percent_change"], "PRS85006091")
-        self.assertEqual(payload["series_ids"]["index"], "PRS85006093")
+        self.assertEqual(payload["index_definition"], "Index (2017=100)")
         self.assertEqual(
             payload["records"],
             [
@@ -54,25 +72,42 @@ class BlsLaborProductivitySnapshotTest(unittest.TestCase):
         )
 
     def test_fails_closed_when_index_history_is_incomplete(self) -> None:
-        series = [
-            {
-                "seriesID": SERIES_IDS["percent_change"],
-                "data": [
-                    {"year": "2024", "period": "Q05", "value": "3.0"},
-                    {"year": "2025", "period": "Q05", "value": "2.1"},
-                ],
-            },
-            {
-                "seriesID": SERIES_IDS["index"],
-                "data": [{"year": "2025", "period": "Q05", "value": "117.785"}],
-            },
+        rows = [
+            EXPECTED_HEADER,
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "% Change from previous year",
+                "2024",
+                "Annual",
+                "3.0",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "% Change from previous year",
+                "2025",
+                "Annual",
+                "2.1",
+            ],
+            [
+                "Nonfarm business sector",
+                "All workers",
+                "Labor productivity",
+                "Index (2017=100)",
+                "2025",
+                "Annual",
+                "117.785",
+            ],
         ]
 
         with self.assertRaisesRegex(AssertionError, "index missing annual years"):
-            build_payload(series)
+            build_payload(rows)
 
     def test_materialized_filename_is_content_addressed(self) -> None:
-        payload = {
+        payload: dict[str, object] = {
             "schema_version": "investor2.bls-nonfarm-business-labor-productivity-annual.v1",
             "source": "U.S. Bureau of Labor Statistics",
             "latest_year": 2025,
