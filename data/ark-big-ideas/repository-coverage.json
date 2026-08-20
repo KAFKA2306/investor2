@@ -1,6 +1,6 @@
 {
   "ark_source_url": "https://www.ark-invest.com/big-ideas-2026",
-  "checked_at": "2026-08-20T05:32:09+00:00",
+  "checked_at": "2026-08-20T10:31:35+00:00",
   "coverage_rule": "Theme booleans are true only when every required component is verified; repository or Issue existence alone is insufficient.",
   "live_github_checks": true,
   "mapping_source_url": "https://github.com/KAFKA2306/investor2/issues/111",
