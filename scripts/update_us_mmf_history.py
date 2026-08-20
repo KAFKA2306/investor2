@@ -189,14 +189,14 @@ def latest_existing_artifact() -> dict[str, Any] | None:
     return json.loads(paths[-1].read_text(encoding="utf-8"))
 
 
-def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str, bytes]:
+def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str | None, bytes | None, list[str]]:
     urls: list[str] = []
     if existing:
         current = existing.get("sources", {}).get("taxable_mmf_yield", {}).get("data_url")
         if isinstance(current, str):
             urls.append(current)
 
-    discovery_error: Exception | None = None
+    errors: list[str] = []
     try:
         page = fetch_bytes(ICI_PAGE_URL).decode("utf-8", errors="replace")
         hrefs = re.findall(r'href=["\']([^"\']+\.xlsx(?:\?[^"\']*)?)["\']', page, flags=re.IGNORECASE)
@@ -205,20 +205,35 @@ def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str, bytes]:
             if url not in urls:
                 urls.append(url)
     except Exception as exc:
-        discovery_error = exc
+        errors.append(f"{ICI_PAGE_URL}: discovery failed: {exc}")
 
-    errors: list[str] = []
     for url in urls[:12]:
         try:
             raw = fetch_bytes(url)
             parse_ici_workbook(raw)
-            return url, raw
+            return url, raw, errors
         except Exception as exc:
             errors.append(f"{url}: {exc}")
 
-    if discovery_error is not None:
-        errors.append(f"{ICI_PAGE_URL}: discovery failed: {discovery_error}")
-    raise AssertionError("no usable ICI supplemental workbook found: " + " | ".join(errors))
+    if existing:
+        return None, None, errors
+    raise AssertionError("no usable ICI supplemental workbook found and no verified baseline exists: " + " | ".join(errors))
+
+
+def retained_ici_records(existing: dict[str, Any] | None, now: datetime) -> list[dict[str, Any]]:
+    if not existing:
+        raise AssertionError("ICI is unavailable and no verified ICI baseline exists")
+    records = [record for record in existing.get("records", []) if record.get("type") == "taxable_mmf_yield"]
+    if not records:
+        raise AssertionError("verified baseline contains no ICI taxable-MMF yield records")
+    latest_year = max(int(record["year"]) for record in records)
+    required_year = now.year - 1 if now.month >= 4 else now.year - 2
+    if latest_year < required_year:
+        raise AssertionError(
+            f"ICI annual series is stale: latest verified year={latest_year}, required>={required_year}; "
+            "GitHub-hosted runner cannot retrieve the official ICI workbook, so a new primary-source snapshot is required"
+        )
+    return records
 
 
 def infer_ici_pdf_url(data_url: str, existing: dict[str, Any] | None) -> str:
@@ -271,14 +286,34 @@ def main() -> int:
     args = parser.parse_args()
 
     existing = latest_existing_artifact()
+    now = datetime.now(timezone.utc)
     fred_records = parse_fred_csv(fetch_bytes(FRED_CSV_URL))
-    ici_url, ici_raw = discover_ici_workbook(existing)
-    ici_records = parse_ici_workbook(ici_raw)
-    retrieved_at = datetime.now(timezone.utc).isoformat()
+    ici_url, ici_raw, ici_errors = discover_ici_workbook(existing)
+    if ici_raw is not None and ici_url is not None:
+        ici_records = parse_ici_workbook(ici_raw)
+        ici_access = {"status": "verified_live", "verified_at": now.isoformat(), "errors": ici_errors}
+    else:
+        ici_records = retained_ici_records(existing, now)
+        previous_verified_at = None if not existing else existing.get("retrieved_at")
+        ici_access = {
+            "status": "retained_verified_snapshot",
+            "verified_at": previous_verified_at,
+            "errors": ici_errors,
+        }
+        ici_url = existing.get("sources", {}).get("taxable_mmf_yield", {}).get("data_url") if existing else None
+    retrieved_at = now.isoformat()
 
     payload: dict[str, Any] = {
         "schema_version": "investor2.us-mmf-history.v1",
         "retrieved_at": retrieved_at,
+        "component_status": {
+            "total_financial_assets": {"status": "verified_live", "verified_at": retrieved_at},
+            "taxable_mmf_yield": ici_access,
+            "break_the_buck": {
+                "status": "historical_fixed_evidence",
+                "verified_at": existing.get("retrieved_at") if existing else retrieved_at,
+            },
+        },
         "semantics": {
             "total_financial_assets": "Annual year-end total financial assets; million USD.",
             "taxable_mmf_yield": "ICI Figure 9 year-end gross yield on taxable money market funds; percent.",
@@ -295,7 +330,7 @@ def main() -> int:
             "taxable_mmf_yield": {
                 "publisher": "Investment Company Institute",
                 "figure": "Figure 9",
-                "pdf_url": infer_ici_pdf_url(ici_url, existing),
+                "pdf_url": infer_ici_pdf_url(ici_url, existing) if isinstance(ici_url, str) else None,
                 "data_url": ici_url,
             },
             "break_the_buck": {"publisher": "U.S. Securities and Exchange Commission", "urls": SEC_URLS},
@@ -325,7 +360,9 @@ def main() -> int:
     sys.path.insert(0, str(ROOT / "scripts"))
     from snapshot_store import append_entry, build_entry, load_registry
 
-    source_urls = [FRED_SERIES_URL, FRED_CSV_URL, ICI_PAGE_URL, ici_url, infer_ici_pdf_url(ici_url, existing), *SEC_URLS]
+    source_urls = [FRED_SERIES_URL, FRED_CSV_URL, ICI_PAGE_URL, *SEC_URLS]
+    if isinstance(ici_url, str):
+        source_urls.extend([ici_url, infer_ici_pdf_url(ici_url, existing)])
     source_urls = list(dict.fromkeys(source_urls))
     entry = build_entry(
         root=ROOT,
