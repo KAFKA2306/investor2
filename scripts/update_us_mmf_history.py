@@ -190,18 +190,22 @@ def latest_existing_artifact() -> dict[str, Any] | None:
 
 
 def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str, bytes]:
-    page = fetch_bytes(ICI_PAGE_URL).decode("utf-8", errors="replace")
-    hrefs = re.findall(r'href=["\']([^"\']+\.xlsx(?:\?[^"\']*)?)["\']', page, flags=re.IGNORECASE)
     urls: list[str] = []
-    for href in hrefs:
-        url = urljoin(ICI_PAGE_URL, href)
-        if url not in urls:
-            urls.append(url)
-
     if existing:
         current = existing.get("sources", {}).get("taxable_mmf_yield", {}).get("data_url")
-        if isinstance(current, str) and current not in urls:
+        if isinstance(current, str):
             urls.append(current)
+
+    discovery_error: Exception | None = None
+    try:
+        page = fetch_bytes(ICI_PAGE_URL).decode("utf-8", errors="replace")
+        hrefs = re.findall(r'href=["\']([^"\']+\.xlsx(?:\?[^"\']*)?)["\']', page, flags=re.IGNORECASE)
+        for href in hrefs:
+            url = urljoin(ICI_PAGE_URL, href)
+            if url not in urls:
+                urls.append(url)
+    except Exception as exc:
+        discovery_error = exc
 
     errors: list[str] = []
     for url in urls[:12]:
@@ -211,6 +215,9 @@ def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str, bytes]:
             return url, raw
         except Exception as exc:
             errors.append(f"{url}: {exc}")
+
+    if discovery_error is not None:
+        errors.append(f"{ICI_PAGE_URL}: discovery failed: {discovery_error}")
     raise AssertionError("no usable ICI supplemental workbook found: " + " | ".join(errors))
 
 
