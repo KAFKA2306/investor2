@@ -54,8 +54,8 @@
       "current_repo": "KAFKA2306/uranium",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
+      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/status-events-2026.json",
       "issue_url": "https://github.com/KAFKA2306/uranium/issues/5"
     },
     {
