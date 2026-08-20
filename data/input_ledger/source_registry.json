@@ -97,6 +97,56 @@
       "rate_limit_policy": "Do not refetch unchanged accepted content solely to create another snapshot row.",
       "schema_expectations": "The original domain schema is preserved byte-for-byte; investor2 adapters only emit a separate cross-theme projection.",
       "failure_mode": "fail-closed"
+    },
+    "edinet_issuer_master": {
+      "enabled": true,
+      "adapter": "edinet_code_list",
+      "primary_source": "https://disclosure2dl.edinet-fsa.go.jp/searchdocument/codelist/Edinetcode.zip",
+      "snapshot_required_provenance": ["source_url", "source_retrieved_at", "source_sha256", "issuers_sha256"],
+      "canonical_timestamp_rule": "Use source_retrieved_at only as retrieval time; issuer attributes come directly from the downloaded EDINET code list.",
+      "revision_pinning_rule": "Pin the original ZIP bytes by SHA-256 and the sorted normalized issuer set by a second SHA-256.",
+      "retry_policy": "Fail closed on download, decoding, required-column, duplicate-code, or missing-industry errors; keep the last valid master.",
+      "rate_limit_policy": "Use the fixed EDINET code-list download URL and do not poll more often than the scheduled daily update.",
+      "schema_expectations": "investor2.edinet-issuer-master.v1",
+      "failure_mode": "fail-closed"
+    },
+    "edinet_api_filings": {
+      "enabled": true,
+      "adapter": "edinet_api_v2_incremental",
+      "primary_source": "https://api.edinet-fsa.go.jp/api/v2/documents.json",
+      "snapshot_required_provenance": ["doc_id", "submitted_at", "retrieved_at", "source_url"],
+      "canonical_timestamp_rule": "Preserve EDINET submitDateTime and operation time separately from retrieval time.",
+      "revision_pinning_rule": "Treat docID as the source-side identity; retain parentDocID relationships and SHA-256 for downloaded document bytes.",
+      "retry_policy": "Do not replace valid state on malformed responses; HTTP/provider 429 requires waiting before retrying.",
+      "rate_limit_policy": "Do not bypass EDINET API limits or make duplicate requests for already-known docIDs.",
+      "schema_expectations": "NDJSON records emitted by scripts/fetch_edinet_filings.py plus investor2.edinet-filing-state.v1",
+      "failure_mode": "fail-closed"
+    },
+    "gdelt_news_discovery": {
+      "enabled": true,
+      "adapter": "gdelt_gkg_bulk_discovery",
+      "primary_source": "http://data.gdeltproject.org/gdeltv2/lastupdate.txt",
+      "snapshot_required_provenance": ["source_url", "source_retrieved_at", "source_sha256", "attribution"],
+      "canonical_timestamp_rule": "Retain the GDELT observed timestamp and repository retrieval time separately.",
+      "revision_pinning_rule": "Pin each downloaded GKG ZIP by SHA-256 and normalized discovery events by a second SHA-256.",
+      "retry_policy": "A missing or malformed GKG archive is not replaced with synthetic news; candidate mappings remain candidate.",
+      "rate_limit_policy": "Prefer GDELT raw/bulk files over repeated search-API calls.",
+      "schema_expectations": "investor2.gdelt-company-news-discovery.v1",
+      "failure_mode": "fail-closed",
+      "evidence_role": "discovery-only"
+    },
+    "alpha_vantage_market_data": {
+      "enabled": false,
+      "adapter": "alpha_vantage_verification",
+      "primary_source": "https://www.alphavantage.co/query",
+      "snapshot_required_provenance": ["verified_at", "qualification_status", "qualification_evidence_url", "symbol_template", "results"],
+      "canonical_timestamp_rule": "Do not treat provider responses as canonical market observations until qualification, symbol rules, coverage, and data-use conditions are verified.",
+      "revision_pinning_rule": "Store only the verification report; do not publish raw provider responses from this adapter.",
+      "retry_policy": "Rate-limit, provider-information, unsupported-symbol, and malformed responses are explicit non-success states.",
+      "rate_limit_policy": "Never create multiple keys or otherwise evade the provider's free-tier or project limits.",
+      "schema_expectations": "investor2.alpha-vantage-verification.v1",
+      "failure_mode": "fail-closed",
+      "disabled_reason": "Provider qualification for this repository, Japanese symbol rules/coverage, and redistribution conditions are not yet verified."
     }
   }
 }
