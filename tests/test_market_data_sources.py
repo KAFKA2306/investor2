@@ -8,6 +8,7 @@ import pytest
 
 from src.io.market_data_sources import (
     build_company_aliases,
+    classify_edinet_documents,
     diff_issuer_masters,
     filter_edinet_documents,
     normalize_security_code,
@@ -61,7 +62,9 @@ def edinet_fixture() -> bytes:
 
 
 def test_edinet_master_and_normalized_join_code() -> None:
-    master = parse_edinet_code_zip(edinet_fixture(), retrieved_at="2026-08-20T00:00:00Z")
+    master = parse_edinet_code_zip(
+        edinet_fixture(), retrieved_at="2026-08-20T00:00:00Z"
+    )
     assert master["issuer_count"] == 1
     assert master["issuers"][0]["security_code"] == "1234"
     assert master["issuers"][0]["edinet_security_code"] == "12340"
@@ -72,21 +75,41 @@ def test_edinet_master_rejects_duplicate_security_code() -> None:
     payload = edinet_fixture()
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
         text = archive.read("EdinetcodeDlInfo.csv").decode("cp932")
-    duplicate = text + "E00002,内国法人・組合,上場,03-31,別会社,OTHER,銀行業,12340,9999999999999\n"
+    duplicate = (
+        text
+        + "E00002,内国法人・組合,上場,03-31,別会社,OTHER,銀行業,12340,9999999999999\n"
+    )
     with pytest.raises(ValueError, match="duplicate security_code"):
-        parse_edinet_code_zip(make_zip("EdinetcodeDlInfo.csv", duplicate.encode("cp932")))
+        parse_edinet_code_zip(
+            make_zip("EdinetcodeDlInfo.csv", duplicate.encode("cp932"))
+        )
 
 
 def test_diff_tracks_modified_and_added() -> None:
     before = {
         "issuers": [
-            {"security_code": "1234", "issuer_name": "A", "industry": "銀行業", "edinet_code": "E1"}
+            {
+                "security_code": "1234",
+                "issuer_name": "A",
+                "industry": "銀行業",
+                "edinet_code": "E1",
+            }
         ]
     }
     after = {
         "issuers": [
-            {"security_code": "1234", "issuer_name": "A", "industry": "保険業", "edinet_code": "E1"},
-            {"security_code": "5678", "issuer_name": "B", "industry": "小売業", "edinet_code": "E2"},
+            {
+                "security_code": "1234",
+                "issuer_name": "A",
+                "industry": "保険業",
+                "edinet_code": "E1",
+            },
+            {
+                "security_code": "5678",
+                "issuer_name": "B",
+                "industry": "小売業",
+                "edinet_code": "E2",
+            },
         ]
     }
     diff = diff_issuer_masters(before, after)
@@ -107,13 +130,19 @@ def test_document_filter_is_incremental_and_joins_master() -> None:
                 "xbrlFlag": "1",
                 "parentDocID": None,
             },
-            {"docID": "S2", "edinetCode": "E1", "docDescription": "その他書類"},
+            {
+                "docID": "S2",
+                "edinetCode": "E1",
+                "docDescription": "その他書類",
+            },
         ]
     }
     rows = filter_edinet_documents(
         payload,
         known_doc_ids=set(),
-        issuer_by_edinet_code={"E1": {"security_code": "1234", "issuer_name": "A"}},
+        issuer_by_edinet_code={
+            "E1": {"security_code": "1234", "issuer_name": "A"}
+        },
     )
     assert [row["doc_id"] for row in rows] == ["S1"]
     assert rows[0]["security_code"] == "1234"
@@ -172,16 +201,40 @@ def test_gdelt_last_update_and_candidate_mapping() -> None:
 
 
 def test_alias_builder_ignores_too_short_aliases() -> None:
-    assert build_company_aliases(
-        {"issuers": [{"security_code": "1", "issuer_name": "ABC", "issuer_name_en": None}]}
-    ) == {}
+    assert (
+        build_company_aliases(
+            {
+                "issuers": [
+                    {
+                        "security_code": "1",
+                        "issuer_name": "ABC",
+                        "issuer_name_en": None,
+                    }
+                ]
+            }
+        )
+        == {}
+    )
 
 
 def test_alpha_vantage_parser_preserves_provider_states() -> None:
-    assert parse_alpha_vantage_daily({"Note": "limit"}, security_code="1", symbol="1").status == "rate_limited"
-    assert parse_alpha_vantage_daily({"Error Message": "bad"}, security_code="1", symbol="1").status == "unsupported"
+    assert (
+        parse_alpha_vantage_daily(
+            {"Note": "limit"}, security_code="1", symbol="1"
+        ).status
+        == "rate_limited"
+    )
+    assert (
+        parse_alpha_vantage_daily(
+            {"Error Message": "bad"}, security_code="1", symbol="1"
+        ).status
+        == "unsupported"
+    )
     payload = {"Time Series (Daily)": {"2026-08-20": {"1. open": "1"}}}
-    assert parse_alpha_vantage_daily(payload, security_code="1", symbol="1").observations == 1
+    assert (
+        parse_alpha_vantage_daily(payload, security_code="1", symbol="1").observations
+        == 1
+    )
 
 
 def test_security_code_preserves_non_filler_forms() -> None:
@@ -206,3 +259,50 @@ def test_query_gdelt_events_dedup_and_filters() -> None:
         observed_to="20260820235959",
     )
     assert rows == [row]
+
+
+def test_edinet_master_rejects_duplicate_corporate_number() -> None:
+    payload = edinet_fixture()
+    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+        text = archive.read("EdinetcodeDlInfo.csv").decode("cp932")
+    duplicate = (
+        text
+        + "E00002,内国法人・組合,上場,03-31,別会社,OTHER,銀行業,56780,1234567890123\n"
+    )
+    with pytest.raises(ValueError, match="duplicate corporate_number"):
+        parse_edinet_code_zip(
+            make_zip("EdinetcodeDlInfo.csv", duplicate.encode("cp932"))
+        )
+
+
+def test_edinet_master_rejects_invalid_security_code() -> None:
+    payload = edinet_fixture()
+    with zipfile.ZipFile(io.BytesIO(payload)) as archive:
+        text = archive.read("EdinetcodeDlInfo.csv").decode("cp932")
+    invalid = text.replace("12340", "12B40")
+    with pytest.raises(ValueError, match="invalid security_code"):
+        parse_edinet_code_zip(
+            make_zip("EdinetcodeDlInfo.csv", invalid.encode("cp932"))
+        )
+
+
+def test_edinet_document_classification_preserves_skip_reasons() -> None:
+    payload = {
+        "metadata": {"status": "200"},
+        "results": [
+            {"docID": "KNOWN", "docTypeCode": "120", "edinetCode": "E1"},
+            {"docID": "OTHER", "docTypeCode": "999", "edinetCode": "E1"},
+            {"docID": "NEW", "docTypeCode": "180", "edinetCode": "E1"},
+        ],
+    }
+    accepted, reasons = classify_edinet_documents(
+        payload,
+        known_doc_ids={"KNOWN"},
+        issuer_by_edinet_code={"E1": {"security_code": "1234"}},
+    )
+    assert [row["doc_id"] for row in accepted] == ["NEW"]
+    assert reasons == {
+        "accepted": 1,
+        "already_known_doc_id": 1,
+        "non_target_document_type": 1,
+    }
