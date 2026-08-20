@@ -3,9 +3,8 @@ name: Collect BLS labor productivity
 on:
   workflow_dispatch:
   schedule:
-    # BLS Productivity and Costs releases are scheduled for 08:30 ET.
-    # 14:47 UTC is after that release time in both EST and EDT.
-    - cron: "47 14 * * 1-5"
+    # BLS API v1 can lag published releases by one day, so run every day.
+    - cron: "47 14 * * *"
   push:
     branches:
       - main
@@ -36,27 +35,12 @@ jobs:
           python-version: "3.12"
       - name: Run focused tests
         run: python -m unittest tests.test_bls_labor_productivity_snapshot
-      - name: Download official BLS Productivity and Costs flat files
+      - name: Verify live BLS API payload on pull requests
+        if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p /tmp/bls-productivity
-          base_url="https://download.bls.gov/pub/time.series/pr"
-          for name in pr.series pr.sector pr.measure pr.duration pr.period pr.data.1.AllData; do
-            curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
-              --user-agent "KAFKA2306/investor2 BLS productivity collector" \
-              "$base_url/$name" -o "/tmp/bls-productivity/$name"
-          done
-      - name: Verify live BLS payload on pull requests
-        if: github.event_name == 'pull_request'
-        run: |
           python scripts/bls_labor_productivity_snapshot.py \
-            --series /tmp/bls-productivity/pr.series \
-            --sector /tmp/bls-productivity/pr.sector \
-            --measure /tmp/bls-productivity/pr.measure \
-            --duration /tmp/bls-productivity/pr.duration \
-            --period /tmp/bls-productivity/pr.period \
-            --data /tmp/bls-productivity/pr.data.1.AllData \
             --output-dir /tmp/bls-productivity/output
           test -n "$(find /tmp/bls-productivity/output -name 'bls_nonfarm_business_labor_productivity_annual_*.json' -print -quit)"
       - name: Materialize and register accepted snapshot
@@ -65,12 +49,6 @@ jobs:
         run: |
           set -euo pipefail
           artifact_path="$(python scripts/bls_labor_productivity_snapshot.py \
-            --series /tmp/bls-productivity/pr.series \
-            --sector /tmp/bls-productivity/pr.sector \
-            --measure /tmp/bls-productivity/pr.measure \
-            --duration /tmp/bls-productivity/pr.duration \
-            --period /tmp/bls-productivity/pr.period \
-            --data /tmp/bls-productivity/pr.data.1.AllData \
             --output-dir data/snapshots/bls_labor_productivity \
             --latest-path data/bls_labor_productivity/latest.json)"
 
@@ -88,19 +66,20 @@ jobs:
           import os
 
           observed_at = os.environ["OBSERVED_AT"]
-          base = "https://download.bls.gov/pub/time.series/pr"
           urls = [
-              f"{base}/pr.series",
-              f"{base}/pr.sector",
-              f"{base}/pr.measure",
-              f"{base}/pr.duration",
-              f"{base}/pr.period",
-              f"{base}/pr.data.1.AllData",
+              "https://api.bls.gov/publicAPI/v1/timeseries/data/",
+              "https://www.bls.gov/developers/home.htm",
+              "https://www.bls.gov/developers/api_faqs.htm",
+              "https://download.bls.gov/pub/time.series/pr/pr.series",
+              "https://download.bls.gov/pub/time.series/pr/pr.sector",
+              "https://download.bls.gov/pub/time.series/pr/pr.measure",
+              "https://download.bls.gov/pub/time.series/pr/pr.duration",
+              "https://download.bls.gov/pub/time.series/pr/pr.period",
           ]
           print(json.dumps({
-              "tool": "curl",
-              "operation": "download official BLS Productivity and Costs flat files and normalize annual labor productivity",
-              "query_or_scope": "Nonfarm Business; Labor productivity (output per hour); Annual Average; annual percent change and index",
+              "tool": "Python urllib",
+              "operation": "request official BLS Public Data API v1 in <=10-year windows and normalize annual observations",
+              "query_or_scope": "PRS85006091 and PRS85006093; Q05 Annual Average; 1948 through current year",
               "retrieved_at": observed_at,
               "source_urls": urls,
           }, separators=(",", ":")))
