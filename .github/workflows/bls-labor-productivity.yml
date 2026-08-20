@@ -1,0 +1,133 @@
+name: Collect BLS labor productivity
+
+on:
+  workflow_dispatch:
+  schedule:
+    # BLS Productivity and Costs releases are scheduled for 08:30 ET.
+    # 14:47 UTC is after that release time in both EST and EDT.
+    - cron: "47 14 * * 1-5"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/bls_labor_productivity_snapshot.py"
+      - "tests/test_bls_labor_productivity_snapshot.py"
+      - ".github/workflows/bls-labor-productivity.yml"
+  pull_request:
+    paths:
+      - "scripts/bls_labor_productivity_snapshot.py"
+      - "tests/test_bls_labor_productivity_snapshot.py"
+      - ".github/workflows/bls-labor-productivity.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: bls-labor-productivity
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run focused tests
+        run: python -m unittest tests.test_bls_labor_productivity_snapshot
+      - name: Download official BLS Productivity and Costs flat files
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bls-productivity
+          base_url="https://download.bls.gov/pub/time.series/pr"
+          for name in pr.series pr.sector pr.measure pr.duration pr.period pr.data.1.AllData; do
+            curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+              --user-agent "KAFKA2306/investor2 BLS productivity collector" \
+              "$base_url/$name" -o "/tmp/bls-productivity/$name"
+          done
+      - name: Verify live BLS payload on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/bls_labor_productivity_snapshot.py \
+            --series /tmp/bls-productivity/pr.series \
+            --sector /tmp/bls-productivity/pr.sector \
+            --measure /tmp/bls-productivity/pr.measure \
+            --duration /tmp/bls-productivity/pr.duration \
+            --period /tmp/bls-productivity/pr.period \
+            --data /tmp/bls-productivity/pr.data.1.AllData \
+            --output-dir /tmp/bls-productivity/output
+          test -n "$(find /tmp/bls-productivity/output -name 'bls_nonfarm_business_labor_productivity_annual_*.json' -print -quit)"
+      - name: Materialize and register accepted snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/bls_labor_productivity_snapshot.py \
+            --series /tmp/bls-productivity/pr.series \
+            --sector /tmp/bls-productivity/pr.sector \
+            --measure /tmp/bls-productivity/pr.measure \
+            --duration /tmp/bls-productivity/pr.duration \
+            --period /tmp/bls-productivity/pr.period \
+            --data /tmp/bls-productivity/pr.data.1.AllData \
+            --output-dir data/snapshots/bls_labor_productivity \
+            --latest-path data/bls_labor_productivity/latest.json)"
+
+          if latest_json="$(python scripts/snapshot_store.py latest --reuse-key us/bls/nonfarm-business/labor-productivity/annual 2>/dev/null)"; then
+            latest_artifact="$(python -c 'import json,sys; print(json.load(sys.stdin)["artifact_path"])' <<<"$latest_json")"
+            if [ "$latest_artifact" = "$artifact_path" ]; then
+              echo "BLS labor-productivity source content unchanged; reusing accepted snapshot."
+              exit 0
+            fi
+          fi
+
+          observed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          provenance="$(OBSERVED_AT="$observed_at" python - <<'PY'
+          import json
+          import os
+
+          observed_at = os.environ["OBSERVED_AT"]
+          base = "https://download.bls.gov/pub/time.series/pr"
+          urls = [
+              f"{base}/pr.series",
+              f"{base}/pr.sector",
+              f"{base}/pr.measure",
+              f"{base}/pr.duration",
+              f"{base}/pr.period",
+              f"{base}/pr.data.1.AllData",
+          ]
+          print(json.dumps({
+              "tool": "curl",
+              "operation": "download official BLS Productivity and Costs flat files and normalize annual labor productivity",
+              "query_or_scope": "Nonfarm Business; Labor productivity (output per hour); Annual Average; annual percent change and index",
+              "retrieved_at": observed_at,
+              "source_urls": urls,
+          }, separators=(",", ":")))
+          PY
+          )"
+
+          python scripts/snapshot_store.py register \
+            --dataset-id bls_nonfarm_business_labor_productivity_annual \
+            --reuse-key us/bls/nonfarm-business/labor-productivity/annual \
+            --artifact-path "$artifact_path" \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at "$observed_at" \
+            --schema-version investor2.bls-nonfarm-business-labor-productivity-annual.v1 \
+            --provenance-json "$provenance"
+          python scripts/snapshot_store.py audit
+      - name: Commit changed accepted snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json \
+             && [ -z "$(git status --porcelain --untracked-files=all data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json)" ]; then
+            echo "No accepted BLS labor-productivity data change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/input_ledger/snapshot_catalog.ndjson data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json
+          git commit -m "data: refresh BLS labor productivity"
+          git push
