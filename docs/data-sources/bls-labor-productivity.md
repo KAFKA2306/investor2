@@ -4,31 +4,24 @@ This repository stores the U.S. Bureau of Labor Statistics (BLS) Nonfarm Busines
 
 ## Official source
 
-Continuous collection uses the BLS Public Data API version 1:
+Continuous collection uses the historical workbook that BLS links from the current Productivity and Costs release for full historical annual and quarterly measures:
 
-- `https://api.bls.gov/publicAPI/v1/timeseries/data/`
-- API documentation: `https://www.bls.gov/developers/home.htm`
-- API limits and behavior: `https://www.bls.gov/developers/api_faqs.htm`
+- `https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx`
+- tables index: `https://www.bls.gov/productivity/tables/home.htm`
+- current release: `https://www.bls.gov/news.release/prod2.htm`
 
-BLS documents version 1 as open for public use without registration. Unregistered requests are limited to 25 queries per day, 25 series per query, and 10 years per query. The current 1948-to-present collection therefore requests both required series together in eight non-overlapping windows. BLS also documents a one-day lag between published data and availability through the API.
+The collector reads the workbook's `MachineReadable` sheet directly. No annual values are recomputed from quarterly observations.
 
-The API does not return series metadata. The series contract was therefore verified on 2026-08-21 against the official BLS Productivity and Costs (`pr`) metadata files:
+The current workbook identifies the selected rows as:
 
-- `https://download.bls.gov/pub/time.series/pr/pr.series`
-- `https://download.bls.gov/pub/time.series/pr/pr.sector`
-- `https://download.bls.gov/pub/time.series/pr/pr.measure`
-- `https://download.bls.gov/pub/time.series/pr/pr.duration`
-- `https://download.bls.gov/pub/time.series/pr/pr.period`
+- sector: `Nonfarm business sector`
+- basis: `All workers`
+- measure: `Labor productivity`
+- annual period: `Annual`
+- annual change: `% Change from previous year`
+- index: currently `Index (2017=100)`
 
-That metadata identifies:
-
-- sector: `Nonfarm Business` (`8500`)
-- measure: `Labor productivity (output per hour)` (`09`)
-- annual period: `Annual Average` (`Q05`)
-- annual percent-change series: `PRS85006091`
-- index series: `PRS85006093`; the metadata verified on 2026-08-21 labels it `Index (2017=100)`
-
-The collector pins the two official series IDs and does not infer replacements. A missing series, missing annual year, duplicate year, incomplete index coverage, malformed API response, or stale history causes collection to fail rather than synthesize data.
+The collector discovers the index definition from the workbook rather than hard-coding the base year. A changed workbook header, multiple index definitions, duplicate year, missing annual year, incomplete index coverage, malformed XLSX structure, or stale history causes collection to fail rather than synthesize data.
 
 ## Repository outputs
 
@@ -50,8 +43,8 @@ No missing values are interpolated. The annual percent-change history must remai
 
 ## Continuous collection
 
-`.github/workflows/bls-labor-productivity.yml` runs every day at `14:47 UTC` and can also be run manually. Daily execution is intentional because the unregistered API is documented as lagging published releases by one day; a weekend run can therefore capture a Friday release as soon as it becomes available through the API.
+`.github/workflows/bls-labor-productivity.yml` runs on weekdays at `14:47 UTC`, after the scheduled `08:30 ET` Productivity and Costs release time in both daylight and standard time. It can also be run manually.
 
-Each run requests the complete official history, normalizes only `Q05` annual observations, and reconstructs the deterministic snapshot. A new content-addressed snapshot and ledger entry are committed only when the normalized BLS content changes. Historical BLS revisions therefore remain recoverable through immutable snapshot paths and Git history, while unchanged polling produces no data commit.
+Each run downloads the current official workbook, checks that it is an XLSX archive, parses the `MachineReadable` sheet with the Python standard library, and reconstructs the deterministic normalized snapshot. A new content-addressed snapshot and ledger entry are committed only when the normalized BLS data changes. Historical BLS revisions therefore remain recoverable through immutable snapshot paths and Git history, while unchanged polling produces no data commit.
 
-The workflow requires no API key or repository secret.
+The workflow requires no API key, repository secret, or third-party data provider.
