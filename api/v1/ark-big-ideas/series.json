@@ -14555,6 +14555,94 @@
     },
     {
       "dimensions": {
+        "geography": "US48",
+        "reported_period": "daily actual"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/metrics.json",
+      "entity": "U.S. Energy Information Administration / US48 electricity demand",
+      "fact_class": "observed",
+      "feed_id": "energy-supply-metrics",
+      "logical_repo": "energy-supply",
+      "metric_id": "electricity_demand",
+      "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+      "mirror_snapshot_id": "469bb5fb49587f026701",
+      "period": "2026-08-18",
+      "period_granularity": "as_of_date",
+      "qualifier": "sum of complete hourly observations for the UTC day",
+      "source_url": "https://www.eia.gov/opendata/bulk/EBA.zip",
+      "theme": "Distributed Energy / Electricity",
+      "unit": "megawatthours",
+      "value": 14777912.51
+    },
+    {
+      "dimensions": {
+        "geography": "US48",
+        "reported_period": "daily actual"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/metrics.json",
+      "entity": "U.S. Energy Information Administration / US48 net generation",
+      "fact_class": "observed",
+      "feed_id": "energy-supply-metrics",
+      "logical_repo": "energy-supply",
+      "metric_id": "net_generation",
+      "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+      "mirror_snapshot_id": "469bb5fb49587f026701",
+      "period": "2026-08-17",
+      "period_granularity": "as_of_date",
+      "qualifier": "sum of complete hourly observations for the UTC day",
+      "source_url": "https://www.eia.gov/opendata/bulk/EBA.zip",
+      "theme": "Distributed Energy / Electricity",
+      "unit": "megawatthours",
+      "value": 14373366.71
+    },
+    {
+      "dimensions": {
+        "geography": "United States and Puerto Rico where reported",
+        "reported_period": "monthly reported inventory"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/metrics.json",
+      "entity": "U.S. Energy Information Administration / EIA-860M operating generators",
+      "fact_class": "observed",
+      "feed_id": "energy-supply-metrics",
+      "logical_repo": "energy-supply",
+      "metric_id": "operating_net_summer_capacity",
+      "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+      "mirror_snapshot_id": "469bb5fb49587f026701",
+      "period": "2026-06",
+      "period_granularity": "as_of_date",
+      "qualifier": "reported operating net summer capacity; not a forecast",
+      "source_url": "https://www.eia.gov/electricity/data/eia860m/xls/june_generator2026.xlsx",
+      "theme": "Distributed Energy / Electricity",
+      "unit": "MW",
+      "value": 1311987.9
+    },
+    {
+      "dimensions": {
+        "geography": "United States and Puerto Rico where reported",
+        "reported_period": "monthly reported inventory"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/metrics.json",
+      "entity": "U.S. Energy Information Administration / EIA-860M planned generators",
+      "fact_class": "observed",
+      "feed_id": "energy-supply-metrics",
+      "logical_repo": "energy-supply",
+      "metric_id": "planned_net_summer_capacity",
+      "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+      "mirror_snapshot_id": "469bb5fb49587f026701",
+      "period": "2026-06",
+      "period_granularity": "as_of_date",
+      "qualifier": "reported planned capacity; kept separate from operating capacity",
+      "source_url": "https://www.eia.gov/electricity/data/eia860m/xls/june_generator2026.xlsx",
+      "theme": "Distributed Energy / Electricity",
+      "unit": "MW",
+      "value": 278074.2
+    },
+    {
+      "dimensions": {
         "country": "CN",
         "deployment_stage": "production",
         "equipment_type": "automated_production_line",
@@ -15521,6 +15609,116 @@
       "theme": "Robotics",
       "unit": "percent",
       "value": 20
+    },
+    {
+      "dimensions": {
+        "geography": "global registry",
+        "reported_period": "5-year coverage"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json",
+      "entity": "ClinicalTrials.gov / Multiomics-related trial ledger",
+      "fact_class": "observed",
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "metric_id": "clinical_trial_count",
+      "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+      "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+      "period": "2026-08-19",
+      "period_granularity": "as_of_date",
+      "qualifier": "registered studies; trial registration is not a trial result or approval",
+      "source_url": "https://clinicaltrials.gov/api/v2/version",
+      "theme": "Multiomics",
+      "unit": "studies",
+      "value": 2570
+    },
+    {
+      "dimensions": {
+        "geography": "United States",
+        "reported_period": "5-year coverage"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json",
+      "entity": "U.S. Food and Drug Administration / Drugs@FDA approval ledger",
+      "fact_class": "observed",
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "metric_id": "fda_approval_count",
+      "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+      "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+      "period": "2026-08-19",
+      "period_granularity": "as_of_date",
+      "qualifier": "official approval records; not company press-release claims",
+      "source_url": "https://www.fda.gov/media/89850/download?attachment=",
+      "theme": "Multiomics",
+      "unit": "approval records",
+      "value": 25318
+    },
+    {
+      "dimensions": {
+        "geography": "global registry",
+        "reported_period": "5-year coverage"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json",
+      "entity": "ClinicalTrials.gov / Explicit multiomics modality records",
+      "fact_class": "observed",
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "metric_id": "multiomics_trial_count",
+      "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+      "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+      "period": "2026-08-19",
+      "period_granularity": "as_of_date",
+      "qualifier": "only explicitly classified modality records; unknown is not inferred",
+      "source_url": "https://clinicaltrials.gov/api/v2/version",
+      "theme": "Multiomics",
+      "unit": "studies",
+      "value": 128
+    },
+    {
+      "dimensions": {
+        "geography": "program-level benchmark",
+        "reported_period": "observation date"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json",
+      "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+      "fact_class": "observed",
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "metric_id": "sequencing_cost_per_genome_usd",
+      "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+      "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+      "period": "2022-05-31",
+      "period_granularity": "as_of_date",
+      "qualifier": "NHGRI Genome Sequencing Program production-oriented sequencing cost accounting",
+      "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+      "theme": "Multiomics",
+      "unit": "USD/genome",
+      "value": 524.6246837058089
+    },
+    {
+      "dimensions": {
+        "geography": "program-level benchmark",
+        "reported_period": "observation date"
+      },
+      "domain_canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
+      "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json",
+      "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+      "fact_class": "observed",
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "metric_id": "sequencing_cost_per_megabase_usd",
+      "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+      "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+      "period": "2022-05-31",
+      "period_granularity": "as_of_date",
+      "qualifier": "NHGRI Genome Sequencing Program production-oriented sequencing cost accounting",
+      "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+      "theme": "Multiomics",
+      "unit": "USD/megabase",
+      "value": 0.005829163152286766
     },
     {
       "dimensions": {

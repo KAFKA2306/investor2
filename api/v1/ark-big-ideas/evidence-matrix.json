@@ -55,10 +55,14 @@
       "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
       "logical_repo": "multiomics",
       "projection": {
-        "excluded": true,
-        "reason": "deferred_by_user"
+        "adapter": "ai_consumer_metrics",
+        "artifact_path": "data/ark-big-ideas/snapshots/multiomics-metrics/dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615.json",
+        "feed_id": "multiomics-metrics",
+        "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+        "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+        "row_count": 5
       },
-      "status": "deferred_by_user",
+      "status": "ready",
       "theme": "Multiomics"
     },
     {
@@ -78,15 +82,19 @@
       "theme": "Distributed Energy / Nuclear"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/oil/tree/main/api/v1/electricity",
+      "canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
       "current_repo": "KAFKA2306/oil",
       "issue_url": "https://github.com/KAFKA2306/oil/issues/12",
       "logical_repo": "energy-supply",
       "projection": {
-        "excluded": true,
-        "reason": "deferred_by_user"
+        "adapter": "ai_consumer_metrics",
+        "artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8.json",
+        "feed_id": "energy-supply-metrics",
+        "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+        "mirror_snapshot_id": "469bb5fb49587f026701",
+        "row_count": 4
       },
-      "status": "deferred_by_user",
+      "status": "ready",
       "theme": "Distributed Energy / Electricity"
     },
     {

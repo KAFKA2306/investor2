@@ -8,15 +8,17 @@
       "deviation": {
         "classification": "mixed",
         "kind": "directional_evidence_gap",
-        "measurement_gap": "The projection does not yet contain a real-GDP growth series, so ARK's end-of-decade macro growth outcome is not directly tested.",
+        "measurement_gap": "The projection does not yet contain a real-GDP growth series or a causal decomposition across the co-accelerating technologies, so ARK's end-of-decade macro growth outcome is not directly tested.",
         "observation": {
           "covered_feeds": [
             "ai-infrastructure-capex",
             "ai-productivity",
+            "energy-supply-metrics",
+            "multiomics-metrics",
             "nuclear-capacity",
             "robotics-deployments"
           ],
-          "evidence_row_count": 122
+          "evidence_row_count": 127
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -24,18 +26,25 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 122,
+      "evidence_row_count": 127,
       "measurement_variables": [
         "capital_expenditures",
         "labor_productivity",
         "deployment_evidence",
-        "net_electrical_capacity"
+        "net_electrical_capacity",
+        "electricity_demand",
+        "net_generation",
+        "operating_net_summer_capacity",
+        "clinical_trial_count",
+        "sequencing_cost_per_genome_usd"
       ],
       "source_feed_ids": [
         "ai-infrastructure-capex",
         "ai-productivity",
         "robotics-deployments",
-        "nuclear-capacity"
+        "nuclear-capacity",
+        "energy-supply-metrics",
+        "multiomics-metrics"
       ],
       "theme": "The Great Acceleration"
     },
@@ -510,21 +519,116 @@
       "claim_paraphrase": "AI and multiomics could reinforce each other, accelerating discovery and improving precision while changing healthcare economics.",
       "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
       "deviation": {
-        "classification": "deferred",
+        "classification": "mixed",
         "kind": "directional_evidence_gap",
-        "measurement_gap": "Active Multiomics evaluation is deferred by user instruction; completed domain evidence is intentionally not probed or projected here.",
+        "measurement_gap": "Clinical-trial registrations, official approval records and sequencing costs establish research scale and economics but do not isolate AI causality, discovery quality, precision outcomes, or resulting healthcare economics.",
         "observation": {
-          "evidence_row_count": 0
+          "evidence_row_count": 5,
+          "latest_observations": [
+            {
+              "dimensions": {
+                "geography": "program-level benchmark",
+                "reported_period": "observation date"
+              },
+              "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "sequencing_cost_per_genome_usd",
+              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+              "period": "2022-05-31",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+              "unit": "USD/genome",
+              "value": 524.6246837058089
+            },
+            {
+              "dimensions": {
+                "geography": "program-level benchmark",
+                "reported_period": "observation date"
+              },
+              "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "sequencing_cost_per_megabase_usd",
+              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+              "period": "2022-05-31",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+              "unit": "USD/megabase",
+              "value": 0.005829163152286766
+            },
+            {
+              "dimensions": {
+                "geography": "global registry",
+                "reported_period": "5-year coverage"
+              },
+              "entity": "ClinicalTrials.gov / Multiomics-related trial ledger",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "clinical_trial_count",
+              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+              "period": "2026-08-19",
+              "source_url": "https://clinicaltrials.gov/api/v2/version",
+              "unit": "studies",
+              "value": 2570
+            },
+            {
+              "dimensions": {
+                "geography": "United States",
+                "reported_period": "5-year coverage"
+              },
+              "entity": "U.S. Food and Drug Administration / Drugs@FDA approval ledger",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "fda_approval_count",
+              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+              "period": "2026-08-19",
+              "source_url": "https://www.fda.gov/media/89850/download?attachment=",
+              "unit": "approval records",
+              "value": 25318
+            },
+            {
+              "dimensions": {
+                "geography": "global registry",
+                "reported_period": "5-year coverage"
+              },
+              "entity": "ClinicalTrials.gov / Explicit multiomics modality records",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "multiomics_trial_count",
+              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
+              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+              "period": "2026-08-19",
+              "source_url": "https://clinicaltrials.gov/api/v2/version",
+              "unit": "studies",
+              "value": 128
+            }
+          ]
         },
         "research_implication": {
           "prescriptive_action": null,
-          "text": "Evaluation is intentionally deferred; no zero or negative inference is created from the absence of active measurements.",
-          "thesis_state": "deferred"
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 0,
-      "measurement_variables": [],
-      "source_feed_ids": [],
+      "evidence_row_count": 5,
+      "measurement_variables": [
+        "clinical_trial_count",
+        "multiomics_trial_count",
+        "fda_approval_count",
+        "sequencing_cost_per_genome_usd",
+        "sequencing_cost_per_megabase_usd"
+      ],
+      "source_feed_ids": [
+        "multiomics-metrics"
+      ],
       "theme": "Multiomics"
     },
     {
@@ -600,10 +704,25 @@
       "deviation": {
         "classification": "mixed",
         "kind": "directional_evidence_gap",
-        "measurement_gap": "EIA electricity is deferred, and nuclear capacity alone does not measure total electricity growth, power/storage costs, or the compute-demand constraint.",
+        "measurement_gap": "EIA demand, generation and generator inventory plus nuclear capacity establish system scale and planned supply, but they do not isolate compute demand, distributed-generation adoption, storage cost declines, or delivered electricity cost.",
         "observation": {
-          "nuclear_capacity_rows": 8,
-          "under_construction_capacity": [
+          "evidence_row_count": 12,
+          "latest_observations": [
+            {
+              "dimensions": {
+                "status": "Operational"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "net_electrical_capacity",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "MW",
+              "value": 379608.0
+            },
             {
               "dimensions": {
                 "status": "Under Construction"
@@ -618,6 +737,96 @@
               "period": "2026-08-18T20:35:33.778220+00:00",
               "unit": "MW",
               "value": 81694.0
+            },
+            {
+              "dimensions": {
+                "status": "Suspended Operation"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "net_electrical_capacity",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "MW",
+              "value": 19387.0
+            },
+            {
+              "dimensions": {
+                "status": "Permanent Shutdown"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "net_electrical_capacity",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "MW",
+              "value": 110812.0
+            },
+            {
+              "dimensions": {
+                "status": "Operational"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "reactor_count",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "reactors",
+              "value": 417
+            },
+            {
+              "dimensions": {
+                "status": "Under Construction"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "reactor_count",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "reactors",
+              "value": 78
+            },
+            {
+              "dimensions": {
+                "status": "Suspended Operation"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "reactor_count",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "reactors",
+              "value": 21
+            },
+            {
+              "dimensions": {
+                "status": "Permanent Shutdown"
+              },
+              "entity": "Global nuclear fleet",
+              "fact_class": "observed",
+              "feed_id": "nuclear-capacity",
+              "logical_repo": "nuclear-power",
+              "metric_id": "reactor_count",
+              "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+              "mirror_snapshot_id": "49763485fde147d0bae4",
+              "period": "2026-08-18T20:35:33.778220+00:00",
+              "unit": "reactors",
+              "value": 220
             }
           ]
         },
@@ -627,13 +836,18 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 8,
+      "evidence_row_count": 12,
       "measurement_variables": [
         "reactor_count",
-        "net_electrical_capacity"
+        "net_electrical_capacity",
+        "electricity_demand",
+        "net_generation",
+        "operating_net_summer_capacity",
+        "planned_net_summer_capacity"
       ],
       "source_feed_ids": [
-        "nuclear-capacity"
+        "nuclear-capacity",
+        "energy-supply-metrics"
       ],
       "theme": "Distributed Energy"
     },

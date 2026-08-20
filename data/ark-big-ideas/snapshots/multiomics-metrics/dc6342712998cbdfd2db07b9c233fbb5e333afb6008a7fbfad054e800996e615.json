@@ -1,0 +1,65 @@
+{
+  "observations": [
+    {
+      "as_of": "2026-08-19",
+      "geography": "global registry",
+      "metric": "clinical_trial_count",
+      "period": "5-year coverage",
+      "product": "Multiomics-related trial ledger",
+      "provider": "ClinicalTrials.gov",
+      "qualifier": "registered studies; trial registration is not a trial result or approval",
+      "source_url": "https://clinicaltrials.gov/api/v2/version",
+      "unit": "studies",
+      "value": 2570
+    },
+    {
+      "as_of": "2026-08-19",
+      "geography": "global registry",
+      "metric": "multiomics_trial_count",
+      "period": "5-year coverage",
+      "product": "Explicit multiomics modality records",
+      "provider": "ClinicalTrials.gov",
+      "qualifier": "only explicitly classified modality records; unknown is not inferred",
+      "source_url": "https://clinicaltrials.gov/api/v2/version",
+      "unit": "studies",
+      "value": 128
+    },
+    {
+      "as_of": "2026-08-19",
+      "geography": "United States",
+      "metric": "fda_approval_count",
+      "period": "5-year coverage",
+      "product": "Drugs@FDA approval ledger",
+      "provider": "U.S. Food and Drug Administration",
+      "qualifier": "official approval records; not company press-release claims",
+      "source_url": "https://www.fda.gov/media/89850/download?attachment=",
+      "unit": "approval records",
+      "value": 25318
+    },
+    {
+      "as_of": "2022-05-31",
+      "geography": "program-level benchmark",
+      "metric": "sequencing_cost_per_genome_usd",
+      "period": "observation date",
+      "product": "DNA sequencing cost history",
+      "provider": "National Human Genome Research Institute",
+      "qualifier": "NHGRI Genome Sequencing Program production-oriented sequencing cost accounting",
+      "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+      "unit": "USD/genome",
+      "value": 524.6246837058089
+    },
+    {
+      "as_of": "2022-05-31",
+      "geography": "program-level benchmark",
+      "metric": "sequencing_cost_per_megabase_usd",
+      "period": "observation date",
+      "product": "DNA sequencing cost history",
+      "provider": "National Human Genome Research Institute",
+      "qualifier": "NHGRI Genome Sequencing Program production-oriented sequencing cost accounting",
+      "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+      "unit": "USD/megabase",
+      "value": 0.005829163152286766
+    }
+  ],
+  "schema_version": 1
+}

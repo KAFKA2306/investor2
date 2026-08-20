@@ -1,6 +1,6 @@
 {
   "authority_rule": "Each domain repository remains authoritative. investor2 stores locators, readiness state, and content hashes only; it does not copy domain facts into a second authority.",
-  "ready_count": 12,
+  "ready_count": 14,
   "schema_version": 1,
   "source_count": 16,
   "sources": [
@@ -65,13 +65,22 @@
       ]
     },
     {
+      "bytes": 239,
       "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
       "current_repo": "KAFKA2306/kafin3",
       "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
-      "live_check": "not_run_by_contract",
+      "json_type": "object",
+      "live_check": "ok",
       "logical_repo": "multiomics",
-      "status": "deferred_by_user",
-      "theme": "Multiomics"
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
+      "sha256": "80ac9d1fb95ef10d38ff96b05adf2737b55f49bfa74a8d71ccf32ed8d6726783",
+      "status": "ready",
+      "theme": "Multiomics",
+      "top_level_keys": [
+        "datasets",
+        "retrieved_at",
+        "schema_version"
+      ]
     },
     {
       "bytes": 582,
@@ -94,13 +103,23 @@
       ]
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/oil/tree/main/api/v1/electricity",
+      "bytes": 1293,
+      "canonical_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
       "current_repo": "KAFKA2306/oil",
       "issue_url": "https://github.com/KAFKA2306/oil/issues/12",
-      "live_check": "not_run_by_contract",
+      "json_type": "object",
+      "live_check": "ok",
       "logical_repo": "energy-supply",
-      "status": "deferred_by_user",
-      "theme": "Distributed Energy / Electricity"
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/index.json",
+      "sha256": "791b5199ea8e629797cd3bfb36fdd449df2e583ac90a512565d76a225f0916a4",
+      "status": "ready",
+      "theme": "Distributed Energy / Electricity",
+      "top_level_keys": [
+        "datasets",
+        "namespace",
+        "publisher",
+        "schema_version"
+      ]
     },
     {
       "bytes": 1139,
@@ -306,8 +325,8 @@
   "status_counts": {
     "accumulating": 1,
     "blocked_external_evidence": 1,
-    "deferred_by_user": 2,
-    "ready": 12
+    "deferred_by_user": 0,
+    "ready": 14
   },
   "unresolved_count": 2
 }
