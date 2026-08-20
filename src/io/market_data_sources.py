@@ -19,9 +19,7 @@ EDINET_DOCUMENT_ENDPOINT = "https://api.edinet-fsa.go.jp/api/v2/documents/{doc_i
 GDELT_LAST_UPDATE_URL = "http://data.gdeltproject.org/gdeltv2/lastupdate.txt"
 ALPHA_VANTAGE_ENDPOINT = "https://www.alphavantage.co/query"
 SECURITY_CODE_LETTERS = "ACDFGHJKLMNPRSTUWXY"
-SECURITY_CODE_PATTERN = re.compile(
-    rf"[0-9][0-9{SECURITY_CODE_LETTERS}][0-9][0-9{SECURITY_CODE_LETTERS}]"
-)
+SECURITY_CODE_PATTERN = re.compile(rf"[0-9][0-9{SECURITY_CODE_LETTERS}][0-9][0-9{SECURITY_CODE_LETTERS}]")
 
 # EDINET API Specification v2 (June 2026), document type codes.
 EDINET_TARGET_DOC_TYPE_CODES = {
@@ -170,9 +168,7 @@ def audit_edinet_issuers(issuers: Iterable[dict[str, Any]]) -> None:
             raise ValueError(f"duplicate {field}: {sorted(duplicates)[:5]}")
 
     corporate_numbers = [str(row["corporate_number"]) for row in rows if row.get("corporate_number")]
-    duplicate_corporate_numbers = {
-        value for value, count in Counter(corporate_numbers).items() if count > 1
-    }
+    duplicate_corporate_numbers = {value for value, count in Counter(corporate_numbers).items() if count > 1}
     if duplicate_corporate_numbers:
         raise ValueError(f"duplicate corporate_number: {sorted(duplicate_corporate_numbers)[:5]}")
 
@@ -265,8 +261,7 @@ def classify_edinet_documents(
                 "doc_id": doc_id,
                 "parent_doc_id": row.get("parentDocID"),
                 "edinet_code": edinet_code or None,
-                "security_code": issuer.get("security_code")
-                or normalize_security_code(row.get("secCode")),
+                "security_code": issuer.get("security_code") or normalize_security_code(row.get("secCode")),
                 "document_type_code": doc_type_code or None,
                 "document_description": description or None,
                 "submitted_at": row.get("submitDateTime"),
@@ -340,14 +335,10 @@ def parse_gdelt_gkg_zip(
     for code, code_aliases in aliases.items():
         for alias in code_aliases:
             alias_to_codes.setdefault(alias, set()).add(code)
-    issuer_by_code = {
-        row["security_code"]: row for row in issuer_master.get("issuers", [])
-    }
+    issuer_by_code = {row["security_code"]: row for row in issuer_master.get("issuers", [])}
     retrieved_at = retrieved_at or utc_now_iso()
     with zipfile.ZipFile(io.BytesIO(payload)) as archive:
-        csv_names = [
-            name for name in archive.namelist() if name.lower().endswith(".csv")
-        ]
+        csv_names = [name for name in archive.namelist() if name.lower().endswith(".csv")]
         if len(csv_names) != 1:
             raise ValueError("expected one GDELT GKG CSV")
         text = archive.read(csv_names[0]).decode("utf-8", errors="replace")
@@ -364,11 +355,7 @@ def parse_gdelt_gkg_zip(
             cols[3],
             cols[4],
         )
-        organization_tokens = [
-            token.rsplit("#", 1)[-1]
-            for token in cols[13].split(";")
-            if token.strip()
-        ]
+        organization_tokens = [token.rsplit("#", 1)[-1] for token in cols[13].split(";") if token.strip()]
         matched_codes: set[str] = set()
         evidence_by_code: dict[str, str] = {}
         for token in organization_tokens:

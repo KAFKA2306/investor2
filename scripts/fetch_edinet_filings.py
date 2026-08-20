@@ -40,14 +40,10 @@ def fetch(url: str, *, attempts: int = 3) -> bytes:
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--date", default=date.today().isoformat())
-    parser.add_argument(
-        "--issuer-master", default="data/market/edinet_issuer_master.json"
-    )
+    parser.add_argument("--issuer-master", default="data/market/edinet_issuer_master.json")
     parser.add_argument("--state", default="data/market/edinet_filing_state.json")
     parser.add_argument("--output", default="data/market/edinet_filings.ndjson")
-    parser.add_argument(
-        "--audit-output", default="data/market/edinet_filings_audit_latest.json"
-    )
+    parser.add_argument("--audit-output", default="data/market/edinet_filings_audit_latest.json")
     parser.add_argument("--download-documents", action="store_true")
     args = parser.parse_args()
 
@@ -58,21 +54,14 @@ def main() -> int:
     master = json.loads(Path(args.issuer_master).read_text())
     issuer_by_edinet = {row["edinet_code"]: row for row in master["issuers"]}
     state_path = Path(args.state)
-    state = (
-        json.loads(state_path.read_text())
-        if state_path.exists()
-        else {"known_doc_ids": []}
-    )
+    if state_path.exists():
+        state: dict[str, object] = json.loads(state_path.read_text())
+    else:
+        state = {"known_doc_ids": list[str]()}
     known_values = state.get("known_doc_ids")
-    known: set[str] = (
-        {str(value) for value in known_values}
-        if isinstance(known_values, list)
-        else set()
-    )
+    known: set[str] = {str(value) for value in known_values} if isinstance(known_values, list) else set()
 
-    query = urlencode(
-        {"date": args.date, "type": "2", "Subscription-Key": api_key}
-    )
+    query = urlencode({"date": args.date, "type": "2", "Subscription-Key": api_key})
     payload = json.loads(fetch(f"{EDINET_LIST_ENDPOINT}?{query}"))
     records, reason_counts = classify_edinet_documents(
         payload,
@@ -89,23 +78,13 @@ def main() -> int:
             record["source_url"] = f"{EDINET_LIST_ENDPOINT}?date={args.date}&type=2"
             record["accepted"] = True
             if args.download_documents:
-                document_query = urlencode(
-                    {"type": "1", "Subscription-Key": api_key}
-                )
-                document_url = (
-                    EDINET_DOCUMENT_ENDPOINT.format(doc_id=record["doc_id"])
-                    + f"?{document_query}"
-                )
+                document_query = urlencode({"type": "1", "Subscription-Key": api_key})
+                document_url = EDINET_DOCUMENT_ENDPOINT.format(doc_id=record["doc_id"]) + f"?{document_query}"
                 raw = fetch(document_url)
-                record["document_source_url"] = (
-                    EDINET_DOCUMENT_ENDPOINT.format(doc_id=record["doc_id"])
-                    + "?type=1"
-                )
+                record["document_source_url"] = EDINET_DOCUMENT_ENDPOINT.format(doc_id=record["doc_id"]) + "?type=1"
                 record["document_sha256"] = sha256_bytes(raw)
                 record["document_bytes"] = len(raw)
-            handle.write(
-                json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n"
-            )
+            handle.write(json.dumps(record, ensure_ascii=False, sort_keys=True) + "\n")
             known.add(record["doc_id"])
 
     state_payload = {
@@ -113,9 +92,7 @@ def main() -> int:
         "updated_at": retrieved_at,
         "known_doc_ids": sorted(known),
     }
-    state_path.write_text(
-        json.dumps(state_payload, ensure_ascii=False, indent=2) + "\n"
-    )
+    state_path.write_text(json.dumps(state_payload, ensure_ascii=False, indent=2) + "\n")
     audit_payload = {
         "schema_version": "investor2.edinet-filing-audit.v1",
         "date": args.date,
@@ -127,9 +104,7 @@ def main() -> int:
     }
     audit_path = Path(args.audit_output)
     audit_path.parent.mkdir(parents=True, exist_ok=True)
-    audit_path.write_text(
-        json.dumps(audit_payload, ensure_ascii=False, indent=2) + "\n"
-    )
+    audit_path.write_text(json.dumps(audit_payload, ensure_ascii=False, indent=2) + "\n")
     print(json.dumps(audit_payload, ensure_ascii=False, sort_keys=True))
     return 0
 

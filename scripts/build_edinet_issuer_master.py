@@ -26,21 +26,15 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default=EDINET_CODELIST_URL)
     parser.add_argument("--output", default="data/market/edinet_issuer_master.json")
-    parser.add_argument(
-        "--diff-output", default="data/market/edinet_issuer_master_diff.json"
-    )
+    parser.add_argument("--diff-output", default="data/market/edinet_issuer_master_diff.json")
     args = parser.parse_args()
     output = Path(args.output)
     previous = json.loads(output.read_text()) if output.exists() else None
-    master = parse_edinet_code_zip(
-        fetch(args.url), source_url=args.url, retrieved_at=utc_now_iso()
-    )
+    master = parse_edinet_code_zip(fetch(args.url), source_url=args.url, retrieved_at=utc_now_iso())
     diff = diff_issuer_masters(previous, master)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(json.dumps(master, ensure_ascii=False, indent=2) + "\n")
-    Path(args.diff_output).write_text(
-        json.dumps(diff, ensure_ascii=False, indent=2) + "\n"
-    )
+    Path(args.diff_output).write_text(json.dumps(diff, ensure_ascii=False, indent=2) + "\n")
     print(
         json.dumps(
             {

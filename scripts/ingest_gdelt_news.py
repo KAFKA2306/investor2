@@ -24,12 +24,8 @@ def fetch(url: str) -> bytes:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "--issuer-master", default="data/market/edinet_issuer_master.json"
-    )
-    parser.add_argument(
-        "--output", default="data/market/gdelt_company_news_latest.json"
-    )
+    parser.add_argument("--issuer-master", default="data/market/edinet_issuer_master.json")
+    parser.add_argument("--output", default="data/market/gdelt_company_news_latest.json")
     args = parser.parse_args()
     master = json.loads(Path(args.issuer_master).read_text())
     latest = fetch(GDELT_LAST_UPDATE_URL).decode("utf-8")
