@@ -1,0 +1,50 @@
+name: Register ARK forecast source snapshot
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/register-ark-forecast-source.yml
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Register source snapshot once
+        run: |
+          if python scripts/snapshot_store.py latest --reuse-key ark-big-ideas/2026/ai-consumer-operating-system/forecast-source >/dev/null 2>&1; then
+            echo 'ARK forecast source snapshot already registered.'
+            python scripts/snapshot_store.py audit
+            python -m pytest -q tests/test_ark_forecast_catalog.py
+            exit 0
+          fi
+          python scripts/snapshot_store.py register \
+            --dataset-id ark-big-ideas-2026-ai-consumer-forecast-source \
+            --reuse-key ark-big-ideas/2026/ai-consumer-operating-system/forecast-source \
+            --artifact-path data/ark-big-ideas/snapshots/ark-big-ideas-2026-ai-consumer-forecast-source.json \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at '2026-08-21T02:01:14+09:00' \
+            --schema-version investor2.ark-big-ideas-forecast-source.v1 \
+            --provenance-json '{"tool":"ChatGPT web.run","operation":"primary-source verification","query_or_scope":"ARK Big Ideas 2026 The AI Consumer Operating System numeric forecast cited in official Newsletter #495","retrieved_at":"2026-08-21T02:01:14+09:00","source_urls":["https://www.ark-invest.com/newsletters/issue-495","https://www.ark-invest.com/big-ideas-2026"]}'
+          python scripts/snapshot_store.py audit
+          python -m pytest -q tests/test_ark_forecast_catalog.py
+      - name: Commit catalog registration when created
+        run: |
+          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson; then
+            echo 'No catalog registration change.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/input_ledger/snapshot_catalog.ndjson
+          git commit -m 'data: register ARK forecast source snapshot'
+          git push origin HEAD:${{ github.head_ref }}
