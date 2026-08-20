@@ -7,14 +7,17 @@ on:
       - data/ark-big-ideas/metric-catalog.json
       - data/ark-big-ideas/claim-catalog.json
       - data/ark-big-ideas/fund-claim-map.json
+      - data/ark-big-ideas/repository-coverage-catalog.json
       - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
       - scripts/build_ark_cross_theme.py
       - scripts/build_ark_claim_evidence.py
+      - scripts/build_ark_repository_coverage.py
       - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
       - tests/test_ark_cross_theme.py
       - tests/test_ark_claim_evidence.py
+      - tests/test_ark_repository_coverage.py
       - .github/workflows/ark-big-ideas-source-health.yml
   push:
     branches: [main]
@@ -23,14 +26,17 @@ on:
       - data/ark-big-ideas/metric-catalog.json
       - data/ark-big-ideas/claim-catalog.json
       - data/ark-big-ideas/fund-claim-map.json
+      - data/ark-big-ideas/repository-coverage-catalog.json
       - data/input_ledger/source_registry.json
       - scripts/build_ark_source_health.py
       - scripts/build_ark_cross_theme.py
       - scripts/build_ark_claim_evidence.py
+      - scripts/build_ark_repository_coverage.py
       - scripts/snapshot_store.py
       - tests/test_ark_source_health.py
       - tests/test_ark_cross_theme.py
       - tests/test_ark_claim_evidence.py
+      - tests/test_ark_repository_coverage.py
       - .github/workflows/ark-big-ideas-source-health.yml
   schedule:
     - cron: '40 14 * * 1-5'
@@ -49,15 +55,31 @@ jobs:
     timeout-minutes: 20
     env:
       PYTHONDONTWRITEBYTECODE: '1'
+      GITHUB_TOKEN: ${{ github.token }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
         with:
           python-version: '3.12'
       - name: Compile
-        run: python -m py_compile scripts/build_ark_source_health.py scripts/build_ark_cross_theme.py scripts/build_ark_claim_evidence.py tests/test_ark_source_health.py tests/test_ark_cross_theme.py tests/test_ark_claim_evidence.py
+        run: >-
+          python -m py_compile
+          scripts/build_ark_source_health.py
+          scripts/build_ark_cross_theme.py
+          scripts/build_ark_claim_evidence.py
+          scripts/build_ark_repository_coverage.py
+          tests/test_ark_source_health.py
+          tests/test_ark_cross_theme.py
+          tests/test_ark_claim_evidence.py
+          tests/test_ark_repository_coverage.py
       - name: Unit tests
-        run: python -m unittest tests.test_ark_source_health tests.test_ark_cross_theme tests.test_ark_claim_evidence -v
+        run: >-
+          python -m unittest
+          tests.test_ark_source_health
+          tests.test_ark_cross_theme
+          tests.test_ark_claim_evidence
+          tests.test_ark_repository_coverage
+          -v
       - name: Verify live canonical domain outputs
         run: python scripts/build_ark_source_health.py --output build/source-health.json
       - name: Audit readiness contract
@@ -138,7 +160,43 @@ jobs:
           assert av['deviation']['observation']['safety_rate_computed'] is False
           assert all(row['deviation']['research_implication']['prescriptive_action'] is None for row in claims)
           assert all('boundary' in row and row['holdings_snapshot_audit'] for row in funds)
-          print({'classes': summary['classification_counts'], 'funds': len(funds)})
+          PY
+      - name: Build repository coverage
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            python -m scripts.build_ark_repository_coverage \
+              --live \
+              --evidence-matrix build/ark-api/evidence-matrix.json \
+              --claim-evidence build/ark-api/claim-evidence.json \
+              --data-output build/repository-coverage.json \
+              --api-output build/ark-api/repository-coverage.json \
+              --csv-output build/ark-api/repository-coverage.csv \
+              --markdown-output build/repository-coverage.md
+          else
+            python -m scripts.build_ark_repository_coverage --live
+          fi
+      - name: Audit repository coverage boundaries
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          path = Path('build/repository-coverage.json') if '${{ github.event_name }}' == 'pull_request' else Path('data/ark-big-ideas/repository-coverage.json')
+          data = json.loads(path.read_text())
+          assert data['theme_count'] == 13
+          assert data['live_github_checks'] is True
+          records = {row['theme']: row for row in data['records']}
+          assert len(records) == 13
+          assert records['The Great Acceleration']['dedicated_repository_required'] is False
+          bitcoin = records['Bitcoin']
+          network = next(c for c in bitcoin['components'] if c['logical_repo'] == 'bitcoin-network')
+          assert network['real_data_exists'] is False
+          multiomics = records['Multiomics']['components'][0]
+          assert multiomics['current_repo'] == 'KAFKA2306/multiomics'
+          assert multiomics['source_catalog_repo'] == 'KAFKA2306/kafin3'
+          assert multiomics['canonical_alignment'] is False
+          repos = {repo for row in data['records'] for repo in row['canonical_repositories']}
+          assert 'KAFKA2306/robot' not in repos
+          assert 'KAFKA2306/space' not in repos
           PY
       - name: Audit persistent snapshot catalog
         if: github.event_name != 'pull_request'
@@ -151,6 +209,8 @@ jobs:
           path: |
             build/source-health.json
             build/ark-api
+            build/repository-coverage.json
+            build/repository-coverage.md
           retention-days: 30
       - name: Publish evidence on main
         if: github.event_name != 'pull_request'
@@ -159,7 +219,12 @@ jobs:
           cp build/source-health.json api/v1/ark-big-ideas/source-health.json
           git config user.name github-actions[bot]
           git config user.email 41898282+github-actions[bot]@users.noreply.github.com
-          git add -f api/v1/ark-big-ideas data/ark-big-ideas/snapshots data/input_ledger/snapshot_catalog.ndjson
+          git add -f \
+            api/v1/ark-big-ideas \
+            data/ark-big-ideas/snapshots \
+            data/ark-big-ideas/repository-coverage.json \
+            data/input_ledger/snapshot_catalog.ndjson \
+            docs/ark-big-ideas/repository-coverage.md
           if git diff --cached --quiet; then
             echo 'No ARK evidence change.'
             exit 0
