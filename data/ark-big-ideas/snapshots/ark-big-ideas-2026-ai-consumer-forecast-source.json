@@ -1,0 +1,40 @@
+{
+  "big_ideas_2026_page": 31,
+  "published_at": "2026-01-26",
+  "publisher": "ARK Investment Management LLC",
+  "records": [
+    {
+      "ark_claim_paraphrase": "AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.",
+      "baseline_period": null,
+      "baseline_period_reason": "The official newsletter uses 'today' and does not identify one calendar year for the baseline in the prose.",
+      "baseline_qualifier": "approximately",
+      "baseline_unit": "USD billion",
+      "baseline_value": 20,
+      "claim_id": "ai-consumer-operating-system",
+      "comparison_reason": "The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.",
+      "comparison_status": "not_comparable",
+      "forecast_id": "ai-consumer-mediated-revenue-2030",
+      "growth_rate": 105,
+      "growth_rate_basis": "stated_by_ark",
+      "growth_rate_unit": "percent_per_year",
+      "observed_series_id": null,
+      "scope": "AI-mediated revenue",
+      "source_page": 31,
+      "target_period": "2030",
+      "target_qualifier": "nearly",
+      "target_unit": "USD billion",
+      "target_value": 900,
+      "theme": "The AI Consumer Operating System"
+    }
+  ],
+  "retrieved_at": "2026-08-21T02:01:14+09:00",
+  "schema_version": "investor2.ark-big-ideas-forecast-source.v1",
+  "source_boundaries": {
+    "actual_periods_explicitly_noted": [
+      "2024",
+      "2025"
+    ],
+    "forecast_is_not_observed_fact": true
+  },
+  "source_url": "https://www.ark-invest.com/newsletters/issue-495"
+}
