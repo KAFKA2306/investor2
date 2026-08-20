@@ -3,8 +3,9 @@ name: Collect BLS labor productivity
 on:
   workflow_dispatch:
   schedule:
-    # BLS API v1 can lag published releases by one day, so run every day.
-    - cron: "47 14 * * *"
+    # BLS Productivity and Costs releases are scheduled for 08:30 ET.
+    # 14:47 UTC is after that release time in both EST and EDT.
+    - cron: "47 14 * * 1-5"
   push:
     branches:
       - main
@@ -35,12 +36,23 @@ jobs:
           python-version: "3.12"
       - name: Run focused tests
         run: python -m unittest tests.test_bls_labor_productivity_snapshot
-      - name: Verify live BLS API payload on pull requests
+      - name: Download official BLS historical workbook
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/bls-productivity
+          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+            --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2)" \
+            "https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx" \
+            -o /tmp/bls-productivity/labor-productivity-major-sectors.xlsx
+          test "$(head -c 2 /tmp/bls-productivity/labor-productivity-major-sectors.xlsx)" = "PK"
+      - name: Verify live BLS workbook on pull requests
         if: github.event_name == 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
           python scripts/bls_labor_productivity_snapshot.py \
+            --workbook /tmp/bls-productivity/labor-productivity-major-sectors.xlsx \
             --output-dir /tmp/bls-productivity/output
           test -n "$(find /tmp/bls-productivity/output -name 'bls_nonfarm_business_labor_productivity_annual_*.json' -print -quit)"
       - name: Materialize and register accepted snapshot
@@ -49,6 +61,7 @@ jobs:
         run: |
           set -euo pipefail
           artifact_path="$(python scripts/bls_labor_productivity_snapshot.py \
+            --workbook /tmp/bls-productivity/labor-productivity-major-sectors.xlsx \
             --output-dir data/snapshots/bls_labor_productivity \
             --latest-path data/bls_labor_productivity/latest.json)"
 
@@ -67,19 +80,14 @@ jobs:
 
           observed_at = os.environ["OBSERVED_AT"]
           urls = [
-              "https://api.bls.gov/publicAPI/v1/timeseries/data/",
-              "https://www.bls.gov/developers/home.htm",
-              "https://www.bls.gov/developers/api_faqs.htm",
-              "https://download.bls.gov/pub/time.series/pr/pr.series",
-              "https://download.bls.gov/pub/time.series/pr/pr.sector",
-              "https://download.bls.gov/pub/time.series/pr/pr.measure",
-              "https://download.bls.gov/pub/time.series/pr/pr.duration",
-              "https://download.bls.gov/pub/time.series/pr/pr.period",
+              "https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx",
+              "https://www.bls.gov/productivity/tables/home.htm",
+              "https://www.bls.gov/news.release/prod2.htm",
           ]
           print(json.dumps({
-              "tool": "Python urllib",
-              "operation": "request official BLS Public Data API v1 in <=10-year windows and normalize annual observations",
-              "query_or_scope": "PRS85006091 and PRS85006093; Q05 Annual Average; 1948 through current year",
+              "tool": "curl + Python standard library",
+              "operation": "download the official BLS historical productivity workbook and normalize MachineReadable annual rows",
+              "query_or_scope": "Nonfarm business sector; All workers; Labor productivity; Annual; percent change and index",
               "retrieved_at": observed_at,
               "source_urls": urls,
           }, separators=(",", ":")))
