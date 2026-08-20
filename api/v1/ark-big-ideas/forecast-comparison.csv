@@ -1,0 +1,14 @@
+theme,forecast_id,ark_claim_paraphrase,baseline_value,baseline_unit,baseline_period,target_value,target_unit,target_period,scope,comparison_status,comparison_reason,observed_series_id,source_url,source_page
+The Great Acceleration,,,,,,,,,,,,,,
+AI Infrastructure,,,,,,,,,,,,,,
+The AI Consumer Operating System,ai-consumer-mediated-revenue-2030,AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.,20,USD billion,,900,USD billion,2030,AI-mediated revenue,not_comparable,The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.,,https://www.ark-invest.com/newsletters/issue-495,31
+AI Productivity,,,,,,,,,,,,,,
+Bitcoin,,,,,,,,,,,,,,
+Tokenized Assets,,,,,,,,,,,,,,
+DeFi Applications,,,,,,,,,,,,,,
+Multiomics,,,,,,,,,,,,,,
+Reusable Rockets,,,,,,,,,,,,,,
+Robotics,,,,,,,,,,,,,,
+Distributed Energy,,,,,,,,,,,,,,
+Autonomous Vehicles,autonomous-technology-platform-enterprise-value-2030,Autonomous technology platforms could generate $34 trillion in enterprise value in 2030.,,,,34,USD trillion,2030,autonomous technology platforms / robotaxi ecosystem enterprise value opportunity,not_comparable,"The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",,https://www.ark-invest.com/newsletters/issue-507,99
+Autonomous Logistics,,,,,,,,,,,,,,

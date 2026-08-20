@@ -1,0 +1,52 @@
+name: ARK forecast comparison
+
+on:
+  pull_request:
+    paths:
+      - "data/ark-big-ideas/forecast-catalog.json"
+      - "data/ark-big-ideas/snapshots/ark-big-ideas-2026-*-forecast-source.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.csv"
+      - "scripts/build_ark_forecast_comparison.py"
+      - "tests/test_ark_forecast_catalog.py"
+      - "tests/test_ark_forecast_comparison.py"
+      - ".github/workflows/ark-forecast-comparison.yml"
+  push:
+    branches: [main]
+    paths:
+      - "data/ark-big-ideas/forecast-catalog.json"
+      - "data/ark-big-ideas/snapshots/ark-big-ideas-2026-*-forecast-source.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.json"
+      - "api/v1/ark-big-ideas/forecast-comparison.csv"
+      - "scripts/build_ark_forecast_comparison.py"
+      - "tests/test_ark_forecast_catalog.py"
+      - "tests/test_ark_forecast_comparison.py"
+      - ".github/workflows/ark-forecast-comparison.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Compile
+        run: >-
+          python -m py_compile
+          scripts/build_ark_forecast_comparison.py
+          tests/test_ark_forecast_catalog.py
+          tests/test_ark_forecast_comparison.py
+      - name: Verify catalog and deterministic comparison outputs
+        run: >-
+          python -m unittest
+          tests.test_ark_forecast_catalog
+          tests.test_ark_forecast_comparison
+          -v
+      - name: Clean checkout
+        run: test -z "$(git status --porcelain --untracked-files=all)"

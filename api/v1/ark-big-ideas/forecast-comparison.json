@@ -1,0 +1,104 @@
+{
+  "schema_version": "investor2.ark-big-ideas-forecast-comparison.v1",
+  "themes": [
+    {
+      "theme": "The Great Acceleration",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "AI Infrastructure",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "The AI Consumer Operating System",
+      "forecast_count": 1,
+      "forecasts": [
+        {
+          "forecast_id": "ai-consumer-mediated-revenue-2030",
+          "ark_claim_paraphrase": "AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.",
+          "baseline_value": 20,
+          "baseline_unit": "USD billion",
+          "baseline_period": null,
+          "target_value": 900,
+          "target_unit": "USD billion",
+          "target_period": "2030",
+          "scope": "AI-mediated revenue",
+          "comparison_status": "not_comparable",
+          "comparison_reason": "The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.",
+          "observed_series_id": null,
+          "source_url": "https://www.ark-invest.com/newsletters/issue-495",
+          "source_page": 31
+        }
+      ]
+    },
+    {
+      "theme": "AI Productivity",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Bitcoin",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Tokenized Assets",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "DeFi Applications",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Multiomics",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Reusable Rockets",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Robotics",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Distributed Energy",
+      "forecast_count": 0,
+      "forecasts": []
+    },
+    {
+      "theme": "Autonomous Vehicles",
+      "forecast_count": 1,
+      "forecasts": [
+        {
+          "forecast_id": "autonomous-technology-platform-enterprise-value-2030",
+          "ark_claim_paraphrase": "Autonomous technology platforms could generate $34 trillion in enterprise value in 2030.",
+          "baseline_value": null,
+          "baseline_unit": null,
+          "baseline_period": null,
+          "target_value": 34,
+          "target_unit": "USD trillion",
+          "target_period": "2030",
+          "scope": "autonomous technology platforms / robotaxi ecosystem enterprise value opportunity",
+          "comparison_status": "not_comparable",
+          "comparison_reason": "The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",
+          "observed_series_id": null,
+          "source_url": "https://www.ark-invest.com/newsletters/issue-507",
+          "source_page": 99
+        }
+      ]
+    },
+    {
+      "theme": "Autonomous Logistics",
+      "forecast_count": 0,
+      "forecasts": []
+    }
+  ]
+}
