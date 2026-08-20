@@ -4,12 +4,18 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '17 4 12 * *'
+  pull_request:
+    paths:
+      - 'scripts/update_us_mmf_history.py'
+      - '.github/workflows/us-mmf-history-refresh.yml'
+      - 'scripts/snapshot_store.py'
+      - 'data/input_ledger/source_registry.json'
 
 permissions:
   contents: write
 
 concurrency:
-  group: us-mmf-history-refresh
+  group: us-mmf-history-refresh-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -30,13 +36,19 @@ jobs:
       - name: Install workbook parser
         run: python -m pip install 'openpyxl>=3.1,<4'
 
+      - name: Validate U.S. MMF sources on pull requests
+        if: github.event_name == 'pull_request'
+        run: python scripts/update_us_mmf_history.py --check-only
+
       - name: Refresh U.S. MMF history
+        if: github.event_name != 'pull_request'
         run: python scripts/update_us_mmf_history.py
 
       - name: Audit snapshot catalog
         run: python scripts/snapshot_store.py audit
 
       - name: Commit changed data
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           if git diff --quiet -- data/market data/input_ledger/snapshot_catalog.ndjson; then
