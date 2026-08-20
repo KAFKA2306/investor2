@@ -527,88 +527,88 @@
           "latest_observations": [
             {
               "dimensions": {
-                "geography": "program-level benchmark",
-                "reported_period": "observation date"
+                "geography": null,
+                "reported_period": null
               },
-              "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+              "entity": "NHGRI / DNA sequencing costs",
               "fact_class": "observed",
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "sequencing_cost_per_genome_usd",
-              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
-              "period": "2022-05-31",
-              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
-              "unit": "USD/genome",
-              "value": 524.6246837058089
+              "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+              "mirror_snapshot_id": "6e218c799c2ecf5d2077",
+              "period": "2021",
+              "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb",
+              "unit": "USD_per_human_genome",
+              "value": 562
             },
             {
               "dimensions": {
-                "geography": "program-level benchmark",
-                "reported_period": "observation date"
+                "geography": null,
+                "reported_period": null
               },
-              "entity": "National Human Genome Research Institute / DNA sequencing cost history",
+              "entity": "NHGRI / DNA sequencing costs",
               "fact_class": "observed",
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "sequencing_cost_per_megabase_usd",
-              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
-              "period": "2022-05-31",
-              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
-              "unit": "USD/megabase",
-              "value": 0.005829163152286766
+              "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+              "mirror_snapshot_id": "6e218c799c2ecf5d2077",
+              "period": "2021",
+              "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb",
+              "unit": "USD_per_megabase",
+              "value": 0.006
             },
             {
               "dimensions": {
-                "geography": "global registry",
-                "reported_period": "5-year coverage"
+                "geography": null,
+                "reported_period": null
               },
-              "entity": "ClinicalTrials.gov / Multiomics-related trial ledger",
+              "entity": "ClinicalTrials.gov / canonical Multiomics tracked studies",
               "fact_class": "observed",
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "clinical_trial_count",
-              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
-              "period": "2026-08-19",
-              "source_url": "https://clinicaltrials.gov/api/v2/version",
+              "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+              "mirror_snapshot_id": "6e218c799c2ecf5d2077",
+              "period": "2026-05-15",
+              "source_url": "https://clinicaltrials.gov/study/NCT06264180",
               "unit": "studies",
-              "value": 2570
+              "value": 1
             },
             {
               "dimensions": {
-                "geography": "United States",
-                "reported_period": "5-year coverage"
+                "geography": null,
+                "reported_period": null
               },
-              "entity": "U.S. Food and Drug Administration / Drugs@FDA approval ledger",
-              "fact_class": "observed",
-              "feed_id": "multiomics-metrics",
-              "logical_repo": "multiomics",
-              "metric_id": "fda_approval_count",
-              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
-              "period": "2026-08-19",
-              "source_url": "https://www.fda.gov/media/89850/download?attachment=",
-              "unit": "approval records",
-              "value": 25318
-            },
-            {
-              "dimensions": {
-                "geography": "global registry",
-                "reported_period": "5-year coverage"
-              },
-              "entity": "ClinicalTrials.gov / Explicit multiomics modality records",
+              "entity": "ClinicalTrials.gov / canonical Multiomics tracked studies",
               "fact_class": "observed",
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "multiomics_trial_count",
-              "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-              "mirror_snapshot_id": "ce98c175c46c66e7cadf",
-              "period": "2026-08-19",
-              "source_url": "https://clinicaltrials.gov/api/v2/version",
+              "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+              "mirror_snapshot_id": "6e218c799c2ecf5d2077",
+              "period": "2026-05-15",
+              "source_url": "https://clinicaltrials.gov/study/NCT06264180",
               "unit": "studies",
-              "value": 128
+              "value": 1
+            },
+            {
+              "dimensions": {
+                "geography": null,
+                "reported_period": null
+              },
+              "entity": "U.S. Food and Drug Administration / canonical Multiomics tracked approvals",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "fda_approval_count",
+              "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+              "mirror_snapshot_id": "6e218c799c2ecf5d2077",
+              "period": "2026-08-06",
+              "source_url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-vusolimogene-oderparepvec-wtpg-combination-nivolumab-melanoma",
+              "unit": "approvals",
+              "value": 1
             }
           ]
         },

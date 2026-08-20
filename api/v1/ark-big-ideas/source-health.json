@@ -65,21 +65,24 @@
       ]
     },
     {
-      "bytes": 239,
-      "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
-      "current_repo": "KAFKA2306/kafin3",
-      "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
+      "bytes": 592,
+      "canonical_url": "https://github.com/KAFKA2306/multiomics/blob/main/api/v1/multiomics/index.json",
+      "current_repo": "KAFKA2306/multiomics",
+      "issue_url": "https://github.com/KAFKA2306/multiomics/issues/1",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "multiomics",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/index.json",
-      "sha256": "80ac9d1fb95ef10d38ff96b05adf2737b55f49bfa74a8d71ccf32ed8d6726783",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
+      "sha256": "c62694ca5463a30366cbda8d7e22417761d6fb0f8ae76247a3f4669fabe533cd",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
-        "datasets",
+        "canonical_data_path",
+        "metrics_path",
+        "observation_counts",
         "retrieved_at",
-        "schema_version"
+        "schema_version",
+        "source_urls"
       ]
     },
     {

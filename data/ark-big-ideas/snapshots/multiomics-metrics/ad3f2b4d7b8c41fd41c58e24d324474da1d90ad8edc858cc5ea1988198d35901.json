@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "retrieved_at": "2026-08-20T04:50:00Z",
+  "observations": [
+    {
+      "metric": "clinical_trial_count",
+      "as_of": "2026-05-15",
+      "value": 1,
+      "unit": "studies",
+      "provider": "ClinicalTrials.gov",
+      "product": "canonical Multiomics tracked studies",
+      "qualifier": "tracked_repository_records",
+      "source_url": "https://clinicaltrials.gov/study/NCT06264180"
+    },
+    {
+      "metric": "fda_approval_count",
+      "as_of": "2026-08-06",
+      "value": 1,
+      "unit": "approvals",
+      "provider": "U.S. Food and Drug Administration",
+      "product": "canonical Multiomics tracked approvals",
+      "qualifier": "tracked_repository_records",
+      "source_url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-vusolimogene-oderparepvec-wtpg-combination-nivolumab-melanoma"
+    },
+    {
+      "metric": "multiomics_trial_count",
+      "as_of": "2026-05-15",
+      "value": 1,
+      "unit": "studies",
+      "provider": "ClinicalTrials.gov",
+      "product": "canonical Multiomics tracked studies",
+      "qualifier": "tracked_repository_records",
+      "source_url": "https://clinicaltrials.gov/study/NCT06264180"
+    },
+    {
+      "metric": "sequencing_cost_per_genome_usd",
+      "as_of": "2021",
+      "value": 562,
+      "unit": "USD_per_human_genome",
+      "provider": "NHGRI",
+      "product": "DNA sequencing costs",
+      "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb"
+    },
+    {
+      "metric": "sequencing_cost_per_megabase_usd",
+      "as_of": "2021",
+      "value": 0.006,
+      "unit": "USD_per_megabase",
+      "provider": "NHGRI",
+      "product": "DNA sequencing costs",
+      "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb"
+    }
+  ]
+}

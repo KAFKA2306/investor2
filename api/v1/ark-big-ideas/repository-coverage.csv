@@ -6,7 +6,7 @@ AI Productivity,KAFKA2306/econalert,true,true,true,true,true,false,true,"""e15d6
 Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""37fa070e2e7ce2d77f8f35b5ba282b17fbbaeace"", ""d4acd0b7539a63b1b7e059b75aa5fb5113967960""]"
 Tokenized Assets,KAFKA2306/fx,true,false,false,true,false,false,true,"""e5c2ff7105d0431c6f160c65e3b053aaf23e05ec"""
 DeFi Applications,KAFKA2306/skew,true,true,false,true,true,false,true,"""0f2fc65b98992e765ec2048176ffd80414a0e674"""
-Multiomics,KAFKA2306/multiomics,false,false,false,false,true,false,true,
+Multiomics,KAFKA2306/multiomics,true,true,false,true,true,false,true,"""a3509d59b2a351cba56fd35b3a6ece640a43461b"""
 Reusable Rockets,KAFKA2306/trahist,true,false,false,true,true,false,true,"""0c6b9027f5f0300f0a921c1a0027a710be5eab7d"""
 Robotics,KAFKA2306/factory,true,false,false,true,true,false,true,"""c62b924a198fc1bb369e440e7a3b8897343fb3ed"""
 Distributed Energy,KAFKA2306/oil + KAFKA2306/uranium,true,false,false,true,true,false,true,"[""be2f0e21b292b952f1e12878143ffe54660ddfd4"", ""0db350800aa170cccbd96ee999e72d370da0cc87""]"

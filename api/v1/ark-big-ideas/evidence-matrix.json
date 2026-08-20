@@ -50,16 +50,16 @@
       "theme": "AI Consumer Operating System"
     },
     {
-      "canonical_url": "https://github.com/KAFKA2306/kafin3/blob/main/api/v1/multiomics/index.json",
-      "current_repo": "KAFKA2306/kafin3",
-      "issue_url": "https://github.com/KAFKA2306/kafin3/issues/6",
+      "canonical_url": "https://github.com/KAFKA2306/multiomics/blob/main/api/v1/multiomics/index.json",
+      "current_repo": "KAFKA2306/multiomics",
+      "issue_url": "https://github.com/KAFKA2306/multiomics/issues/1",
       "logical_repo": "multiomics",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/multiomics-metrics/dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/multiomics-metrics/ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901.json",
         "feed_id": "multiomics-metrics",
-        "mirror_sha256": "dc6342712998cbdfd2db07b9c233fbb5e333afb6008a7fbfad054e800996e615",
-        "mirror_snapshot_id": "ce98c175c46c66e7cadf",
+        "mirror_sha256": "ad3f2b4d7b8c41fd41c58e24d324474da1d90ad8edc858cc5ea1988198d35901",
+        "mirror_snapshot_id": "6e218c799c2ecf5d2077",
         "row_count": 5
       },
       "status": "ready",

@@ -4,7 +4,7 @@
 
 - ARK official source: https://www.ark-invest.com/big-ideas-2026
 - canonical mapping: https://github.com/KAFKA2306/investor2/issues/111
-- checked_at: `2026-08-20T03:39:45+00:00`
+- checked_at: `2026-08-20T05:05:10+00:00`
 
 | Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
@@ -15,7 +15,7 @@
 | Bitcoin | [KAFKA2306/btc_dashboard](https://github.com/KAFKA2306/btc_dashboard)<br>[KAFKA2306/mstr](https://github.com/KAFKA2306/mstr)<br>[KAFKA2306/option](https://github.com/KAFKA2306/option) | no | no | no | no | no | no | no |
 | Tokenized Assets | [KAFKA2306/fx](https://github.com/KAFKA2306/fx) | yes | no | no | yes | no | no | yes |
 | DeFi Applications | [KAFKA2306/skew](https://github.com/KAFKA2306/skew) | yes | yes | no | yes | yes | no | yes |
-| Multiomics | [KAFKA2306/multiomics](https://github.com/KAFKA2306/multiomics) | no | no | no | no | yes | no | yes |
+| Multiomics | [KAFKA2306/multiomics](https://github.com/KAFKA2306/multiomics) | yes | yes | no | yes | yes | no | yes |
 | Reusable Rockets | [KAFKA2306/trahist](https://github.com/KAFKA2306/trahist) | yes | no | no | yes | yes | no | yes |
 | Robotics | [KAFKA2306/factory](https://github.com/KAFKA2306/factory) | yes | no | no | yes | yes | no | yes |
 | Distributed Energy | [KAFKA2306/oil](https://github.com/KAFKA2306/oil)<br>[KAFKA2306/uranium](https://github.com/KAFKA2306/uranium) | yes | no | no | yes | yes | no | yes |
