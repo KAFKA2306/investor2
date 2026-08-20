@@ -1,0 +1,48 @@
+name: Register ARK autonomous forecast snapshot
+
+on:
+  push:
+    branches:
+      - research/issue-119-autonomous-vehicles-forecast
+    paths:
+      - data/ark-big-ideas/snapshots/ark-big-ideas-2026-autonomous-vehicles-forecast-source.json
+      - .github/workflows/register-ark-autonomous-forecast-snapshot.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  register:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: research/issue-119-autonomous-vehicles-forecast
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Register source snapshot
+        run: |
+          python scripts/snapshot_store.py register \
+            --dataset-id ark-big-ideas-2026-autonomous-vehicles-forecast-source \
+            --reuse-key ark-big-ideas/2026/autonomous-vehicles/forecast-source \
+            --artifact-path data/ark-big-ideas/snapshots/ark-big-ideas-2026-autonomous-vehicles-forecast-source.json \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at '2026-08-21T02:57:48+09:00' \
+            --schema-version investor2.ark-big-ideas-forecast-source.v1 \
+            --provenance-json '{"operation":"primary-source verification","query_or_scope":"ARK Big Ideas 2026 Autonomous Vehicles numeric enterprise-value forecast cited in official Newsletter #507","retrieved_at":"2026-08-21T02:57:48+09:00","source_urls":["https://www.ark-invest.com/newsletters/issue-507","https://www.ark-invest.com/big-ideas-2026"],"tool":"ChatGPT web.run"}'
+          python scripts/snapshot_store.py audit
+      - name: Commit canonical catalog entry
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f data/input_ledger/snapshot_catalog.ndjson
+          if git diff --cached --quiet; then
+            echo 'No catalog change.'
+            exit 0
+          fi
+          git commit -m 'data: register ARK autonomous forecast source snapshot'
+          git push origin HEAD:research/issue-119-autonomous-vehicles-forecast
