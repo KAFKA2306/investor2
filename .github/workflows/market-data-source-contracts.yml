@@ -36,7 +36,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv run pytest -q tests/test_market_data_sources.py
+      - run: uv run python -m pytest -q tests/test_market_data_sources.py
       - run: >-
           uv run ruff check
           src/io/market_data_sources.py
@@ -52,7 +52,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv run python scripts/build_edinet_issuer_master.py --output /tmp/edinet.json --diff-output /tmp/edinet-diff.json
+      - run: uv run python -m scripts.build_edinet_issuer_master --output /tmp/edinet.json --diff-output /tmp/edinet-diff.json
       - run: >-
           uv run python -c
           "import json; d=json.load(open('/tmp/edinet.json')); assert d['issuer_count'] > 1000; print(d['issuer_count'], d['source_sha256'])"
@@ -62,8 +62,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv run python scripts/build_edinet_issuer_master.py --output /tmp/edinet.json --diff-output /tmp/edinet-diff.json
-      - run: uv run python scripts/ingest_gdelt_news.py --issuer-master /tmp/edinet.json --output /tmp/gdelt.json
+      - run: uv run python -m scripts.build_edinet_issuer_master --output /tmp/edinet.json --diff-output /tmp/edinet-diff.json
+      - run: uv run python -m scripts.ingest_gdelt_news --issuer-master /tmp/edinet.json --output /tmp/gdelt.json
       - run: >-
           uv run python -c
           "import json; d=json.load(open('/tmp/gdelt.json')); assert d['schema_version']=='investor2.gdelt-company-news-discovery.v1'; assert len(d['source_sha256'])==64; print(d['event_count'], d['source_url'])"
