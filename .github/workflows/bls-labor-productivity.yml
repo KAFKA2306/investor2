@@ -2,121 +2,35 @@ name: Collect BLS labor productivity
 
 on:
   workflow_dispatch:
-  schedule:
-    # BLS Productivity and Costs releases are scheduled for 08:30 ET.
-    # 14:47 UTC is after that release time in both EST and EDT.
-    - cron: "47 14 * * 1-5"
-  push:
-    branches:
-      - main
-    paths:
-      - "scripts/bls_labor_productivity_snapshot.py"
-      - "tests/test_bls_labor_productivity_snapshot.py"
-      - ".github/workflows/bls-labor-productivity.yml"
   pull_request:
     paths:
-      - "scripts/bls_labor_productivity_snapshot.py"
-      - "tests/test_bls_labor_productivity_snapshot.py"
       - ".github/workflows/bls-labor-productivity.yml"
 
 permissions:
-  contents: write
-
-concurrency:
-  group: bls-labor-productivity
-  cancel-in-progress: false
+  contents: read
 
 jobs:
-  collect:
-    # BLS blocks direct file downloads from the Linux hosted-runner network.
-    # The macOS runner preserves direct official-source collection without a proxy.
-    runs-on: macos-latest
+  probe-series-report:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-      - name: Run focused tests
-        run: python -m unittest tests.test_bls_labor_productivity_snapshot
-      - name: Download official BLS historical workbook
+      - name: Probe official BLS Series Report
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/bls-productivity
-          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
-            --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2)" \
-            "https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx" \
-            -o /tmp/bls-productivity/labor-productivity-major-sectors.xlsx
-          test "$(head -c 2 /tmp/bls-productivity/labor-productivity-major-sectors.xlsx)" = "PK"
-      - name: Verify live BLS workbook on pull requests
-        if: github.event_name == 'pull_request'
-        shell: bash
-        run: |
-          set -euo pipefail
-          python scripts/bls_labor_productivity_snapshot.py \
-            --workbook /tmp/bls-productivity/labor-productivity-major-sectors.xlsx \
-            --output-dir /tmp/bls-productivity/output
-          test -n "$(find /tmp/bls-productivity/output -name 'bls_nonfarm_business_labor_productivity_annual_*.json' -print -quit)"
-      - name: Materialize and register accepted snapshot
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: |
-          set -euo pipefail
-          artifact_path="$(python scripts/bls_labor_productivity_snapshot.py \
-            --workbook /tmp/bls-productivity/labor-productivity-major-sectors.xlsx \
-            --output-dir data/snapshots/bls_labor_productivity \
-            --latest-path data/bls_labor_productivity/latest.json)"
-
-          if latest_json="$(python scripts/snapshot_store.py latest --reuse-key us/bls/nonfarm-business/labor-productivity/annual 2>/dev/null)"; then
-            latest_artifact="$(python -c 'import json,sys; print(json.load(sys.stdin)["artifact_path"])' <<<"$latest_json")"
-            if [ "$latest_artifact" = "$artifact_path" ]; then
-              echo "BLS labor-productivity source content unchanged; reusing accepted snapshot."
-              exit 0
-            fi
-          fi
-
-          observed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
-          provenance="$(OBSERVED_AT="$observed_at" python - <<'PY'
-          import json
-          import os
-
-          observed_at = os.environ["OBSERVED_AT"]
-          urls = [
-              "https://www.bls.gov/web/prod2/labor-productivity-major-sectors.xlsx",
-              "https://www.bls.gov/productivity/tables/home.htm",
-              "https://www.bls.gov/news.release/prod2.htm",
-          ]
-          print(json.dumps({
-              "tool": "curl + Python standard library",
-              "operation": "download the official BLS historical productivity workbook and normalize MachineReadable annual rows",
-              "query_or_scope": "Nonfarm business sector; All workers; Labor productivity; Annual; percent change and index",
-              "retrieved_at": observed_at,
-              "source_urls": urls,
-          }, separators=(",", ":")))
+          for series in PRS85006091 PRS85006093; do
+            curl --fail --location --retry 1 \
+              --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2/issues)" \
+              "https://data.bls.gov/timeseries/$series" \
+              -o "/tmp/bls-productivity/$series.html"
+            echo "=== $series status/content ==="
+            wc -c "/tmp/bls-productivity/$series.html"
+            grep -E -i -m 20 "Annual|2025|2024|$series" "/tmp/bls-productivity/$series.html" || true
+          done
+          python - <<'PY'
+          from pathlib import Path
+          for path in sorted(Path('/tmp/bls-productivity').glob('*.html')):
+              text = path.read_text(encoding='utf-8', errors='replace')
+              print(path.name, 'Annual' in text, '2025' in text, text[:120].replace('\n', ' '))
           PY
-          )"
-
-          python scripts/snapshot_store.py register \
-            --dataset-id bls_nonfarm_business_labor_productivity_annual \
-            --reuse-key us/bls/nonfarm-business/labor-productivity/annual \
-            --artifact-path "$artifact_path" \
-            --source public_web_research \
-            --source-kind official_web \
-            --observed-at "$observed_at" \
-            --schema-version investor2.bls-nonfarm-business-labor-productivity-annual.v1 \
-            --provenance-json "$provenance"
-          python scripts/snapshot_store.py audit
-      - name: Commit changed accepted snapshot
-        if: github.event_name != 'pull_request'
-        shell: bash
-        run: |
-          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json \
-             && [ -z "$(git status --porcelain --untracked-files=all data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json)" ]; then
-            echo "No accepted BLS labor-productivity data change; nothing to commit."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/input_ledger/snapshot_catalog.ndjson data/snapshots/bls_labor_productivity data/bls_labor_productivity/latest.json
-          git commit -m "data: refresh BLS labor productivity"
-          git push
