@@ -5,7 +5,7 @@
         "geography": "global",
         "reported_period": "current_as_of_date"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT",
       "fact_class": "observed",
@@ -27,7 +27,7 @@
         "geography": "global",
         "reported_period": "first_week"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT image generation",
       "fact_class": "observed",
@@ -49,7 +49,7 @@
         "geography": "global",
         "reported_period": "first_week"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT image generation",
       "fact_class": "observed",
@@ -71,7 +71,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Google / AI Mode",
       "fact_class": "observed",
@@ -93,7 +93,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Google / AI Overviews",
       "fact_class": "observed",
@@ -115,7 +115,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Google / AI Overviews",
       "fact_class": "observed",
@@ -137,7 +137,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Google / AI Overviews",
       "fact_class": "observed",
@@ -159,7 +159,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -181,7 +181,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -203,7 +203,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -225,7 +225,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -247,7 +247,7 @@
         "geography": "global",
         "reported_period": "monthly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -269,7 +269,7 @@
         "geography": "United States",
         "reported_period": "previous_6_months"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Google / AI Mode",
       "fact_class": "observed",
@@ -291,7 +291,7 @@
         "geography": "global",
         "reported_period": "weekly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "Meta / Meta AI",
       "fact_class": "observed",
@@ -313,7 +313,7 @@
         "geography": "global",
         "reported_period": "weekly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT",
       "fact_class": "observed",
@@ -335,7 +335,7 @@
         "geography": "global",
         "reported_period": "weekly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT",
       "fact_class": "observed",
@@ -357,7 +357,7 @@
         "geography": "global",
         "reported_period": "weekly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT",
       "fact_class": "observed",
@@ -379,7 +379,7 @@
         "geography": "global",
         "reported_period": "weekly"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "entity": "OpenAI / ChatGPT",
       "fact_class": "observed",
@@ -2239,7 +2239,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "aurora",
       "fact_class": "evidence_event",
@@ -2261,7 +2261,7 @@
         "mode": "drone_package_delivery",
         "operation_status": "regulatory_authorization"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "drone-express",
       "fact_class": "evidence_event",
@@ -2283,7 +2283,7 @@
         "mode": "drone_package_delivery",
         "operation_status": "regulatory_authorization"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "flytrex",
       "fact_class": "evidence_event",
@@ -2305,7 +2305,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "gatik",
       "fact_class": "evidence_event",
@@ -2327,7 +2327,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "kodiak",
       "fact_class": "evidence_event",
@@ -2349,7 +2349,7 @@
         "mode": "autonomous_trucking",
         "operation_status": "commercial_driverless"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
       "entity": "kodiak",
       "fact_class": "evidence_event",
@@ -9690,7 +9690,7 @@
       "value": 2550000000
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9706,7 +9706,7 @@
       "value": 5514
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9722,7 +9722,7 @@
       "value": 4572
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9738,7 +9738,7 @@
       "value": 4401
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9754,7 +9754,7 @@
       "value": 3748
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9770,7 +9770,7 @@
       "value": 3986
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9786,7 +9786,7 @@
       "value": 4350
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9802,7 +9802,7 @@
       "value": 2726
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9818,7 +9818,7 @@
       "value": 3383
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9834,7 +9834,7 @@
       "value": 3844
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9850,7 +9850,7 @@
       "value": 5544
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9866,7 +9866,7 @@
       "value": 5287
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9882,7 +9882,7 @@
       "value": 4333
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9898,7 +9898,7 @@
       "value": 2959
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9914,7 +9914,7 @@
       "value": 3069
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9930,7 +9930,7 @@
       "value": 4604
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9946,7 +9946,7 @@
       "value": 7659
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9962,7 +9962,7 @@
       "value": 7574
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9978,7 +9978,7 @@
       "value": 8885
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -9994,7 +9994,7 @@
       "value": 14030
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10010,7 +10010,7 @@
       "value": 6339
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10026,7 +10026,7 @@
       "value": 4698
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10042,7 +10042,7 @@
       "value": 4887
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10058,7 +10058,7 @@
       "value": 4625
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10074,7 +10074,7 @@
       "value": 4575
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10090,7 +10090,7 @@
       "value": 3907
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10106,7 +10106,7 @@
       "value": 3521
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10122,7 +10122,7 @@
       "value": 2774
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10138,7 +10138,7 @@
       "value": 2974
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10154,7 +10154,7 @@
       "value": 5698
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10170,7 +10170,7 @@
       "value": 3932
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10186,7 +10186,7 @@
       "value": 3946
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10202,7 +10202,7 @@
       "value": 4967
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10218,7 +10218,7 @@
       "value": 3858
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10234,7 +10234,7 @@
       "value": 2911
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10250,7 +10250,7 @@
       "value": 3024
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10266,7 +10266,7 @@
       "value": 4020
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10282,7 +10282,7 @@
       "value": 4260
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10298,7 +10298,7 @@
       "value": 6528
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10314,7 +10314,7 @@
       "value": 6320
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10330,7 +10330,7 @@
       "value": 5529
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10346,7 +10346,7 @@
       "value": 3303
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10362,7 +10362,7 @@
       "value": 3323
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10378,7 +10378,7 @@
       "value": 4414
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10394,7 +10394,7 @@
       "value": 5399
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10410,7 +10410,7 @@
       "value": 5392
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10426,7 +10426,7 @@
       "value": 5218
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10442,7 +10442,7 @@
       "value": 4454
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10458,7 +10458,7 @@
       "value": 3218
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10474,7 +10474,7 @@
       "value": 2814
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10490,7 +10490,7 @@
       "value": 4180
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10506,7 +10506,7 @@
       "value": 3696
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10522,7 +10522,7 @@
       "value": 4095
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10538,7 +10538,7 @@
       "value": 4057
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10554,7 +10554,7 @@
       "value": 4164
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10570,7 +10570,7 @@
       "value": 3168
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10586,7 +10586,7 @@
       "value": 3802
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10602,7 +10602,7 @@
       "value": 4439
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10618,7 +10618,7 @@
       "value": 4366
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10634,7 +10634,7 @@
       "value": 4619
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10650,7 +10650,7 @@
       "value": 4045
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10666,7 +10666,7 @@
       "value": 3961
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10682,7 +10682,7 @@
       "value": 3088
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10698,7 +10698,7 @@
       "value": 2690
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10714,7 +10714,7 @@
       "value": 3630
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10730,7 +10730,7 @@
       "value": 5332
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10746,7 +10746,7 @@
       "value": 3678
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10762,7 +10762,7 @@
       "value": 4002
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10778,7 +10778,7 @@
       "value": 3476
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10794,7 +10794,7 @@
       "value": 2429
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10810,7 +10810,7 @@
       "value": 2860
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10826,7 +10826,7 @@
       "value": 4247
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10842,7 +10842,7 @@
       "value": 3725
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10858,7 +10858,7 @@
       "value": 3457
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10874,7 +10874,7 @@
       "value": 3497
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10890,7 +10890,7 @@
       "value": 4172
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10906,7 +10906,7 @@
       "value": 3550
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10922,7 +10922,7 @@
       "value": 3272
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10938,7 +10938,7 @@
       "value": 3641
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10954,7 +10954,7 @@
       "value": 3613
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10970,7 +10970,7 @@
       "value": 3903
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -10986,7 +10986,7 @@
       "value": 3547
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11002,7 +11002,7 @@
       "value": 3589
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11018,7 +11018,7 @@
       "value": 3187
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11034,7 +11034,7 @@
       "value": 3075
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11050,7 +11050,7 @@
       "value": 4009
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11066,7 +11066,7 @@
       "value": 4222
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11082,7 +11082,7 @@
       "value": 4053
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11098,7 +11098,7 @@
       "value": 3864
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11114,7 +11114,7 @@
       "value": 3979
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11130,7 +11130,7 @@
       "value": 3075
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11146,7 +11146,7 @@
       "value": 3196
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11162,7 +11162,7 @@
       "value": 4129
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11178,7 +11178,7 @@
       "value": 3692
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11194,7 +11194,7 @@
       "value": 12
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11210,7 +11210,7 @@
       "value": 58
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11226,7 +11226,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11242,7 +11242,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11258,7 +11258,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11274,7 +11274,7 @@
       "value": 35
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11290,7 +11290,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11306,7 +11306,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11322,7 +11322,7 @@
       "value": 6
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11338,7 +11338,7 @@
       "value": 12
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11354,7 +11354,7 @@
       "value": 58
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11370,7 +11370,7 @@
       "value": 8
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11386,7 +11386,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11402,7 +11402,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11418,7 +11418,7 @@
       "value": 32
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11434,7 +11434,7 @@
       "value": 166
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11450,7 +11450,7 @@
       "value": 115
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11466,7 +11466,7 @@
       "value": 252
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11482,7 +11482,7 @@
       "value": 1114
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11498,7 +11498,7 @@
       "value": 202
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11514,7 +11514,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11530,7 +11530,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11546,7 +11546,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11562,7 +11562,7 @@
       "value": 12
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11578,7 +11578,7 @@
       "value": 4
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11594,7 +11594,7 @@
       "value": 4
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11610,7 +11610,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11626,7 +11626,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11642,7 +11642,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11658,7 +11658,7 @@
       "value": 8
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11674,7 +11674,7 @@
       "value": 6
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11690,7 +11690,7 @@
       "value": 9
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11706,7 +11706,7 @@
       "value": 4
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11722,7 +11722,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11738,7 +11738,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11754,7 +11754,7 @@
       "value": 9
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11770,7 +11770,7 @@
       "value": 6
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11786,7 +11786,7 @@
       "value": 50
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11802,7 +11802,7 @@
       "value": 56
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11818,7 +11818,7 @@
       "value": 29
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11834,7 +11834,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11850,7 +11850,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11866,7 +11866,7 @@
       "value": 56
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11882,7 +11882,7 @@
       "value": 11
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11898,7 +11898,7 @@
       "value": 21
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11914,7 +11914,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11930,7 +11930,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11946,7 +11946,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11962,7 +11962,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11978,7 +11978,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -11994,7 +11994,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12010,7 +12010,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12026,7 +12026,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12042,7 +12042,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12058,7 +12058,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12074,7 +12074,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12090,7 +12090,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12106,7 +12106,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12122,7 +12122,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12138,7 +12138,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12154,7 +12154,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12170,7 +12170,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12186,7 +12186,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12202,7 +12202,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12218,7 +12218,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12234,7 +12234,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12250,7 +12250,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12266,7 +12266,7 @@
       "value": 4
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12282,7 +12282,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12298,7 +12298,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12314,7 +12314,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12330,7 +12330,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12346,7 +12346,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12362,7 +12362,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12378,7 +12378,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12394,7 +12394,7 @@
       "value": 7
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12410,7 +12410,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12426,7 +12426,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12442,7 +12442,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12458,7 +12458,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12474,7 +12474,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12490,7 +12490,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12506,7 +12506,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12522,7 +12522,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12538,7 +12538,7 @@
       "value": 4
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12554,7 +12554,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12570,7 +12570,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12586,7 +12586,7 @@
       "value": 0
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12602,7 +12602,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12618,7 +12618,7 @@
       "value": 5
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12634,7 +12634,7 @@
       "value": 1
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12650,7 +12650,7 @@
       "value": 2
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Aave V3",
       "fact_class": "domain_derived",
@@ -12666,7 +12666,7 @@
       "value": 3
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12682,7 +12682,7 @@
       "value": 324
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12698,7 +12698,7 @@
       "value": 258
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12714,7 +12714,7 @@
       "value": 262
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12730,7 +12730,7 @@
       "value": 418
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12746,7 +12746,7 @@
       "value": 293
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12762,7 +12762,7 @@
       "value": 289
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12778,7 +12778,7 @@
       "value": 208
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12794,7 +12794,7 @@
       "value": 237
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12810,7 +12810,7 @@
       "value": 419
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12826,7 +12826,7 @@
       "value": 453
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12842,7 +12842,7 @@
       "value": 381
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12858,7 +12858,7 @@
       "value": 347
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12874,7 +12874,7 @@
       "value": 237
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12890,7 +12890,7 @@
       "value": 251
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12906,7 +12906,7 @@
       "value": 384
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12922,7 +12922,7 @@
       "value": 731
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12938,7 +12938,7 @@
       "value": 656
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12954,7 +12954,7 @@
       "value": 869
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12970,7 +12970,7 @@
       "value": 1465
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -12986,7 +12986,7 @@
       "value": 1975
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13002,7 +13002,7 @@
       "value": 1461
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13018,7 +13018,7 @@
       "value": 1342
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13034,7 +13034,7 @@
       "value": 928
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13050,7 +13050,7 @@
       "value": 768
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13066,7 +13066,7 @@
       "value": 627
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13082,7 +13082,7 @@
       "value": 770
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13098,7 +13098,7 @@
       "value": 549
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13114,7 +13114,7 @@
       "value": 414
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13130,7 +13130,7 @@
       "value": 619
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13146,7 +13146,7 @@
       "value": 850
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13162,7 +13162,7 @@
       "value": 686
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13178,7 +13178,7 @@
       "value": 681
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13194,7 +13194,7 @@
       "value": 476
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13210,7 +13210,7 @@
       "value": 589
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13226,7 +13226,7 @@
       "value": 408
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13242,7 +13242,7 @@
       "value": 622
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13258,7 +13258,7 @@
       "value": 880
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13274,7 +13274,7 @@
       "value": 1132
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13290,7 +13290,7 @@
       "value": 1157
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13306,7 +13306,7 @@
       "value": 912
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13322,7 +13322,7 @@
       "value": 344
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13338,7 +13338,7 @@
       "value": 472
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13354,7 +13354,7 @@
       "value": 940
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13370,7 +13370,7 @@
       "value": 663
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13386,7 +13386,7 @@
       "value": 771
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13402,7 +13402,7 @@
       "value": 626
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13418,7 +13418,7 @@
       "value": 437
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13434,7 +13434,7 @@
       "value": 335
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13450,7 +13450,7 @@
       "value": 350
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13466,7 +13466,7 @@
       "value": 618
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13482,7 +13482,7 @@
       "value": 671
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13498,7 +13498,7 @@
       "value": 534
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13514,7 +13514,7 @@
       "value": 389
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13530,7 +13530,7 @@
       "value": 416
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13546,7 +13546,7 @@
       "value": 198
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13562,7 +13562,7 @@
       "value": 237
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13578,7 +13578,7 @@
       "value": 605
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13594,7 +13594,7 @@
       "value": 432
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13610,7 +13610,7 @@
       "value": 385
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13626,7 +13626,7 @@
       "value": 324
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13642,7 +13642,7 @@
       "value": 469
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13658,7 +13658,7 @@
       "value": 81
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13674,7 +13674,7 @@
       "value": 140
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13690,7 +13690,7 @@
       "value": 458
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13706,7 +13706,7 @@
       "value": 243
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13722,7 +13722,7 @@
       "value": 415
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13738,7 +13738,7 @@
       "value": 339
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13754,7 +13754,7 @@
       "value": 340
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13770,7 +13770,7 @@
       "value": 179
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13786,7 +13786,7 @@
       "value": 445
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13802,7 +13802,7 @@
       "value": 610
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13818,7 +13818,7 @@
       "value": 586
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13834,7 +13834,7 @@
       "value": 579
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13850,7 +13850,7 @@
       "value": 1744
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13866,7 +13866,7 @@
       "value": 805
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13882,7 +13882,7 @@
       "value": 432
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13898,7 +13898,7 @@
       "value": 357
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13914,7 +13914,7 @@
       "value": 664
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13930,7 +13930,7 @@
       "value": 471
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13946,7 +13946,7 @@
       "value": 417
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13962,7 +13962,7 @@
       "value": 372
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13978,7 +13978,7 @@
       "value": 354
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -13994,7 +13994,7 @@
       "value": 180
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14010,7 +14010,7 @@
       "value": 232
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14026,7 +14026,7 @@
       "value": 381
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14042,7 +14042,7 @@
       "value": 352
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14058,7 +14058,7 @@
       "value": 286
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14074,7 +14074,7 @@
       "value": 291
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14090,7 +14090,7 @@
       "value": 218
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14106,7 +14106,7 @@
       "value": 107
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14122,7 +14122,7 @@
       "value": 181
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14138,7 +14138,7 @@
       "value": 207
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/daily.json",
       "entity": "Uniswap V3",
       "fact_class": "domain_derived",
@@ -14649,7 +14649,7 @@
         "factory": "CATL Guiyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "observed",
@@ -14674,7 +14674,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -14699,7 +14699,7 @@
         "factory": "BMW Group Plant Steyr",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14723,7 +14723,7 @@
         "factory": "BMW Group Plant Dingolfing",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14747,7 +14747,7 @@
         "factory": "BMW Group Plant Leipzig",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14771,7 +14771,7 @@
         "factory": "BMW Group Plant Oxford",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14795,7 +14795,7 @@
         "factory": "BMW Group Plant Debrecen",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14819,7 +14819,7 @@
         "factory": "BMW Group Plant Regensburg",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14843,7 +14843,7 @@
         "factory": "BMW Group Plant Spartanburg",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14867,7 +14867,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "evidence_event",
@@ -14891,7 +14891,7 @@
         "factory": "CATL Yibin Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14915,7 +14915,7 @@
         "factory": "CATL Guiyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14939,7 +14939,7 @@
         "factory": "CATL Liyang Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14963,7 +14963,7 @@
         "factory": "CATL Ningde Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Contemporary Amperex Technology Co., Limited",
       "fact_class": "evidence_event",
@@ -14987,7 +14987,7 @@
         "factory": "Dongfeng Honda NEV Production Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Dongfeng Honda Automobile Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15011,7 +15011,7 @@
         "factory": "Factory ZERO",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15035,7 +15035,7 @@
         "factory": "Spring Hill Manufacturing",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15059,7 +15059,7 @@
         "factory": "Flint Assembly",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "General Motors Company",
       "fact_class": "evidence_event",
@@ -15083,7 +15083,7 @@
         "factory": "Hyundai Ulsan EV-dedicated Plant",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15107,7 +15107,7 @@
         "factory": "Hyundai Motor Ulsan Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15131,7 +15131,7 @@
         "factory": "Hyundai Motor Group Metaplant America",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "evidence_event",
@@ -15155,7 +15155,7 @@
         "factory": "Hyundai Motor Group Innovation Center Singapore",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Group",
       "fact_class": "evidence_event",
@@ -15179,7 +15179,7 @@
         "factory": "Factory 56, Sindelfingen",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Mercedes-Benz Group AG",
       "fact_class": "evidence_event",
@@ -15203,7 +15203,7 @@
         "factory": "Panasonic Cycle Technology Kashiwara Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Cycle Technology Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15227,7 +15227,7 @@
         "factory": "Panasonic Energy Kansas Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Energy Co., Ltd.",
       "fact_class": "evidence_event",
@@ -15251,7 +15251,7 @@
         "factory": "Bosch Stuttgart-Feuerbach Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Robert Bosch GmbH",
       "fact_class": "evidence_event",
@@ -15275,7 +15275,7 @@
         "factory": "Siemens Haguenau Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Siemens AG",
       "fact_class": "evidence_event",
@@ -15299,7 +15299,7 @@
         "factory": "Siemens Amberg Future Factory",
         "status": "planned"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Siemens AG",
       "fact_class": "evidence_event",
@@ -15323,7 +15323,7 @@
         "factory": "Motomachi Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Toyota Motor Corporation",
       "fact_class": "evidence_event",
@@ -15347,7 +15347,7 @@
         "factory": "Teiho Plant",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Toyota Motor Corporation",
       "fact_class": "evidence_event",
@@ -15371,7 +15371,7 @@
         "factory": "Volkswagen Emden Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15395,7 +15395,7 @@
         "factory": "Volkswagen Hanover Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15419,7 +15419,7 @@
         "factory": "Volkswagen Chattanooga Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "evidence_event",
@@ -15443,7 +15443,7 @@
         "factory": "BMW Group Plant Steyr",
         "status": "installed"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -15468,7 +15468,7 @@
         "factory": "BMW Group Plant Munich",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Bayerische Motoren Werke Aktiengesellschaft",
       "fact_class": "observed",
@@ -15493,7 +15493,7 @@
         "factory": "Hyundai Motor Group Metaplant America",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Company",
       "fact_class": "observed",
@@ -15518,7 +15518,7 @@
         "factory": "Hyundai Motor Group Innovation Center Singapore",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Hyundai Motor Group",
       "fact_class": "observed",
@@ -15543,7 +15543,7 @@
         "factory": "Factory 56, Sindelfingen",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Mercedes-Benz Group AG",
       "fact_class": "observed",
@@ -15568,7 +15568,7 @@
         "factory": "Volkswagen Hanover Plant",
         "status": "ordered"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Volkswagen AG",
       "fact_class": "observed",
@@ -15593,7 +15593,7 @@
         "factory": "Panasonic Energy Kansas Factory",
         "status": "operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
       "entity": "Panasonic Energy Co., Ltd.",
       "fact_class": "observed",
@@ -15722,7 +15722,7 @@
       "dimensions": {
         "status": "Operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15741,7 +15741,7 @@
       "dimensions": {
         "status": "Under Construction"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15760,7 +15760,7 @@
       "dimensions": {
         "status": "Suspended Operation"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15779,7 +15779,7 @@
       "dimensions": {
         "status": "Permanent Shutdown"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15798,7 +15798,7 @@
       "dimensions": {
         "status": "Operational"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15817,7 +15817,7 @@
       "dimensions": {
         "status": "Under Construction"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15836,7 +15836,7 @@
       "dimensions": {
         "status": "Suspended Operation"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15855,7 +15855,7 @@
       "dimensions": {
         "status": "Permanent Shutdown"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
       "entity": "Global nuclear fleet",
       "fact_class": "observed",
@@ -15871,7 +15871,7 @@
       "value": 220
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15887,7 +15887,7 @@
       "value": 11
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15903,7 +15903,7 @@
       "value": 10
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15919,7 +15919,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15935,7 +15935,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15951,7 +15951,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15967,7 +15967,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15983,7 +15983,7 @@
       "value": 6
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -15999,7 +15999,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16015,7 +16015,7 @@
       "value": 10
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16031,7 +16031,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16047,7 +16047,7 @@
       "value": 21
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16063,7 +16063,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16079,7 +16079,7 @@
       "value": 15
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16095,7 +16095,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16111,7 +16111,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16127,7 +16127,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16143,7 +16143,7 @@
       "value": 19
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16159,7 +16159,7 @@
       "value": 20
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16175,7 +16175,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16191,7 +16191,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16207,7 +16207,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16223,7 +16223,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16239,7 +16239,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16255,7 +16255,7 @@
       "value": 17
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16271,7 +16271,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16287,7 +16287,7 @@
       "value": 12
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16303,7 +16303,7 @@
       "value": 18
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16319,7 +16319,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16335,7 +16335,7 @@
       "value": 13
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16351,7 +16351,7 @@
       "value": 16
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16367,7 +16367,7 @@
       "value": 14
     },
     {
-      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/monthly-cadence.json",
       "entity": "Tracked reusable-launch operators",
       "fact_class": "domain_derived",
@@ -16387,7 +16387,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16408,7 +16408,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16429,7 +16429,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16450,7 +16450,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16471,7 +16471,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16492,7 +16492,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16513,7 +16513,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16534,7 +16534,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16555,7 +16555,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16576,7 +16576,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-04-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16597,7 +16597,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16618,7 +16618,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-05-28"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16639,7 +16639,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16660,7 +16660,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-06-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16681,7 +16681,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",
@@ -16702,7 +16702,7 @@
         "issuer_scope": "all Circle-approved blockchains",
         "report_published_at": "2026-07-29"
       },
-      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "domain_canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "domain_json_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
       "entity": "USDC",
       "fact_class": "observed",

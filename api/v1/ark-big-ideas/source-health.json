@@ -47,19 +47,19 @@
       ]
     },
     {
-      "bytes": 246,
-      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+      "bytes": 8237,
+      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
       "current_repo": "KAFKA2306/finAnalist",
       "issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "ai-consumer",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/index.json",
-      "sha256": "9eca94ad1028efd59cfeca0d942fd5fec41a4c92f3b06b36386ef6e98203733c",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
+      "sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
-        "datasets",
+        "observations",
         "retrieved_at",
         "schema_version"
       ]
@@ -86,23 +86,23 @@
       ]
     },
     {
-      "bytes": 582,
-      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+      "bytes": 9032,
+      "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "current_repo": "KAFKA2306/uranium",
       "issue_url": "https://github.com/KAFKA2306/uranium/issues/5",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "nuclear-power",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json",
-      "sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/status-events-2026.json",
+      "sha256": "414b4cf9e3b8bf3379d2baeea8739352f901e4b6c7e6ae8c4f2c32defdd152fa",
       "status": "ready",
       "theme": "Distributed Energy / Nuclear",
       "top_level_keys": [
+        "event_count",
+        "events",
         "observed_at",
-        "operating",
-        "permanent_shutdown",
-        "suspended_operation",
-        "under_construction"
+        "publisher",
+        "schema_version"
       ]
     },
     {
@@ -200,110 +200,101 @@
       ]
     },
     {
-      "bytes": 1847,
-      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+      "bytes": 313782,
+      "canonical_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/provenance.json",
       "current_repo": "KAFKA2306/fx",
       "issue_url": "https://github.com/KAFKA2306/fx/issues/4",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/index.json",
-      "sha256": "e24e0a8ffc98221aa6af5b9463392513b92467e0472dce756a9f94d997a365b1",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/provenance.json",
+      "sha256": "c5741da13595385fe937fcb6602c44eaf99690214fb8ff9d84da68c3679a90a2",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
-        "coverage",
-        "dataset",
+        "evidence",
         "retrieved_at",
-        "rules",
-        "schema_version",
-        "views"
+        "rpc_transport",
+        "schema_version"
       ]
     },
     {
-      "bytes": 2009,
-      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+      "bytes": 399981,
+      "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "current_repo": "KAFKA2306/skew",
       "issue_url": "https://github.com/KAFKA2306/skew/issues/11",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "defi",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/index.json",
-      "sha256": "f4ceca90f09693b9c7a7d5e9faa252bfd40ef9fa195ffe622b212ad9f1ef9b21",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/provenance.json",
+      "sha256": "bc8f9b171d1b3e179048c1d089035951b8078a733e5756094a357ead81a17b88",
       "status": "ready",
       "theme": "DeFi Applications",
       "top_level_keys": [
-        "coverage",
-        "dataset",
-        "protocols",
+        "chain_id",
+        "contract_history",
+        "contract_raw_refs",
+        "contracts",
+        "dates",
+        "event_topics",
+        "finalized",
         "retrieved_at",
-        "rules",
-        "schema_version",
-        "views"
+        "schema_version"
       ]
     },
     {
-      "bytes": 1787,
-      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+      "bytes": 13838,
+      "canonical_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/provenance.json",
       "current_repo": "KAFKA2306/factory",
       "issue_url": "https://github.com/KAFKA2306/factory/issues/27",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "factory",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/index.json",
-      "sha256": "74ec80220c36b971e57b7f3c99e950dab5a4cb8b80a69a6217115c18a5c08e64",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/provenance.json",
+      "sha256": "b24aa79b47b6fcbf0e051cea44e4391cc8eedff61ba4889fd67b918a4c7a849a",
       "status": "ready",
       "theme": "Robotics",
       "top_level_keys": [
-        "coverage",
-        "dataset",
         "retrieved_at",
-        "rules",
         "schema_version",
-        "views"
+        "sources"
       ]
     },
     {
-      "bytes": 1305,
-      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+      "bytes": 2746,
+      "canonical_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/provenance.json",
       "current_repo": "KAFKA2306/autonomous-logistics",
       "issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/index.json",
-      "sha256": "656f81990d73036f2abbb6af842ae521042789e4eecdd163f086dadc3fb3b67d",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/provenance.json",
+      "sha256": "c457e04632a6b793d9ee8c7803af16445b83d26e6098dd019312b95f0564db0f",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
-        "coverage",
-        "dataset",
         "retrieved_at",
-        "rules",
         "schema_version",
-        "views"
+        "sources"
       ]
     },
     {
-      "bytes": 1624,
-      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+      "bytes": 4635,
+      "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/provenance.json",
       "current_repo": "KAFKA2306/trahist",
       "issue_url": "https://github.com/KAFKA2306/trahist/issues/9",
       "json_type": "object",
       "live_check": "ok",
       "logical_repo": "space-launches",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/index.json",
-      "sha256": "770ca656471970f809b7328a93dd8f7f8b7ef88ca7b2430f71a30ffa0a193a1d",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/provenance.json",
+      "sha256": "74285955a90478c129559b6d1935e163e70efa66f2940139520f00bb835fe2b4",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
-        "coverage",
-        "dataset",
         "retrieved_at",
-        "rules",
+        "reviewed_sources",
         "schema_version",
-        "source_limitations",
-        "views"
+        "sources"
       ]
     },
     {
