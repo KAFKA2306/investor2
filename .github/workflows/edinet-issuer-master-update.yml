@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: astral-sh/setup-uv@v6
-      - run: uv run python scripts/build_edinet_issuer_master.py
+      - run: uv run python -m scripts.build_edinet_issuer_master
       - run: >-
           uv run python -c
           "import json; d=json.load(open('data/market/edinet_issuer_master.json')); assert d['issuer_count'] > 1000; assert len(d['source_sha256'])==64"
