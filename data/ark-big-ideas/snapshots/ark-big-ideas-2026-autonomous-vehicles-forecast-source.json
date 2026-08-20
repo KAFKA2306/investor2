@@ -1,0 +1,36 @@
+{
+  "big_ideas_2026_page": 99,
+  "published_at": "2026-04-27",
+  "publisher": "ARK Investment Management LLC",
+  "records": [
+    {
+      "ark_claim_paraphrase": "Autonomous technology platforms could generate $34 trillion in enterprise value in 2030.",
+      "baseline_period": null,
+      "baseline_qualifier": null,
+      "baseline_unit": null,
+      "baseline_value": null,
+      "claim_id": "autonomous-vehicles",
+      "comparison_reason": "The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",
+      "comparison_status": "not_comparable",
+      "forecast_id": "autonomous-technology-platform-enterprise-value-2030",
+      "growth_rate": null,
+      "growth_rate_basis": null,
+      "growth_rate_unit": null,
+      "observed_series_id": null,
+      "scope": "autonomous technology platforms / robotaxi ecosystem enterprise value opportunity",
+      "source_page": 99,
+      "target_period": "2030",
+      "target_qualifier": null,
+      "target_unit": "USD trillion",
+      "target_value": 34,
+      "theme": "Autonomous Vehicles"
+    }
+  ],
+  "retrieved_at": "2026-08-21T02:57:48+09:00",
+  "schema_version": "investor2.ark-big-ideas-forecast-source.v1",
+  "source_boundaries": {
+    "forecast_is_not_observed_fact": true,
+    "official_newsletter_cites_big_ideas_2026_page": 99
+  },
+  "source_url": "https://www.ark-invest.com/newsletters/issue-507"
+}
