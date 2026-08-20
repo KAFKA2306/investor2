@@ -21,6 +21,7 @@ SERIES_IDS = {
 ANNUAL_PERIOD = "Q05"
 FIRST_YEAR = 1948
 MAX_YEARS_PER_REQUEST = 10
+MAX_QUERIES_PER_DAY = 25
 USER_AGENT = "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2)"
 OFFICIAL_URLS = {
     "api": API_URL,
@@ -93,8 +94,11 @@ def fetch_api_window(start_year: int, end_year: int, *, retries: int = 2) -> lis
 def fetch_api_history(start_year: int = FIRST_YEAR, end_year: int | None = None) -> list[dict[str, Any]]:
     resolved_end_year = end_year or datetime.now(UTC).year
     merged: dict[str, list[dict[str, Any]]] = {series_id: [] for series_id in SERIES_IDS.values()}
+    windows = request_windows(start_year, resolved_end_year)
+    if len(windows) > MAX_QUERIES_PER_DAY:
+        raise AssertionError(f"BLS API request plan exceeds unregistered daily query limit: {len(windows)}")
 
-    for start, end in request_windows(start_year, resolved_end_year):
+    for start, end in windows:
         window_series = fetch_api_window(start, end)
         returned_ids = [entry.get("seriesID") for entry in window_series]
         expected_ids = list(SERIES_IDS.values())
