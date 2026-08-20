@@ -1,0 +1,53 @@
+name: Refresh U.S. MMF history
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 4 12 * *'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: us-mmf-history-refresh
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    if: github.repository == 'KAFKA2306/investor2'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install workbook parser
+        run: python -m pip install 'openpyxl>=3.1,<4'
+
+      - name: Refresh U.S. MMF history
+        run: python scripts/update_us_mmf_history.py
+
+      - name: Audit snapshot catalog
+        run: python scripts/snapshot_store.py audit
+
+      - name: Commit changed data
+        shell: bash
+        run: |
+          if git diff --quiet -- data/market data/input_ledger/snapshot_catalog.ndjson; then
+            echo 'No source data changes detected.'
+            exit 0
+          fi
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add data/market data/input_ledger/snapshot_catalog.ndjson
+          git commit -m 'data: refresh US MMF history'
+          git pull --rebase origin main
+          python scripts/snapshot_store.py audit
+          git push origin HEAD:main
