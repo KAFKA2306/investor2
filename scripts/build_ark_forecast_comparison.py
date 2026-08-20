@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Build deterministic ARK Big Ideas forecast comparison JSON and CSV views."""
+
 from __future__ import annotations
 
 import argparse
@@ -87,10 +88,7 @@ def build(catalog: dict[str, object]) -> dict[str, object]:
 
 def write_json(payload: dict[str, object], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        json.dumps(payload, ensure_ascii=False, indent=2) + "\n",
-        encoding="utf-8",
-    )
+    path.write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
 def write_csv(payload: dict[str, object], path: Path) -> None:
