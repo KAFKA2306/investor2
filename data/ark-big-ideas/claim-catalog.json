@@ -8,10 +8,10 @@
       "claim_id": "great-acceleration",
       "theme": "The Great Acceleration",
       "claim_paraphrase": "AI-led technology investment and co-accelerating technologies could lift real economic growth materially by the end of the decade.",
-      "source_feed_ids": ["ai-infrastructure-capex", "ai-productivity", "robotics-deployments", "nuclear-capacity"],
-      "measurement_variables": ["capital_expenditures", "labor_productivity", "deployment_evidence", "net_electrical_capacity"],
+      "source_feed_ids": ["ai-infrastructure-capex", "ai-productivity", "robotics-deployments", "nuclear-capacity", "energy-supply-metrics", "multiomics-metrics"],
+      "measurement_variables": ["capital_expenditures", "labor_productivity", "deployment_evidence", "net_electrical_capacity", "electricity_demand", "net_generation", "operating_net_summer_capacity", "clinical_trial_count", "sequencing_cost_per_genome_usd"],
       "evaluation_rule": "cross_theme_coverage",
-      "measurement_gap": "The projection does not yet contain a real-GDP growth series, so ARK's end-of-decade macro growth outcome is not directly tested."
+      "measurement_gap": "The projection does not yet contain a real-GDP growth series or a causal decomposition across the co-accelerating technologies, so ARK's end-of-decade macro growth outcome is not directly tested."
     },
     {
       "claim_id": "ai-infrastructure",
@@ -71,10 +71,10 @@
       "claim_id": "multiomics",
       "theme": "Multiomics",
       "claim_paraphrase": "AI and multiomics could reinforce each other, accelerating discovery and improving precision while changing healthcare economics.",
-      "source_feed_ids": [],
-      "measurement_variables": [],
-      "evaluation_rule": "deferred",
-      "measurement_gap": "Active Multiomics evaluation is deferred by user instruction; completed domain evidence is intentionally not probed or projected here."
+      "source_feed_ids": ["multiomics-metrics"],
+      "measurement_variables": ["clinical_trial_count", "multiomics_trial_count", "fda_approval_count", "sequencing_cost_per_genome_usd", "sequencing_cost_per_megabase_usd"],
+      "evaluation_rule": "consumer_scale_evidence",
+      "measurement_gap": "Clinical-trial registrations, official approval records and sequencing costs establish research scale and economics but do not isolate AI causality, discovery quality, precision outcomes, or resulting healthcare economics."
     },
     {
       "claim_id": "reusable-rockets",
@@ -98,10 +98,10 @@
       "claim_id": "distributed-energy",
       "theme": "Distributed Energy",
       "claim_paraphrase": "Rising compute demand is making energy a critical constraint while falling power and storage costs could enable a large expansion of low-cost electricity.",
-      "source_feed_ids": ["nuclear-capacity"],
-      "measurement_variables": ["reactor_count", "net_electrical_capacity"],
-      "evaluation_rule": "distributed_energy_partial",
-      "measurement_gap": "EIA electricity is deferred, and nuclear capacity alone does not measure total electricity growth, power/storage costs, or the compute-demand constraint."
+      "source_feed_ids": ["nuclear-capacity", "energy-supply-metrics"],
+      "measurement_variables": ["reactor_count", "net_electrical_capacity", "electricity_demand", "net_generation", "operating_net_summer_capacity", "planned_net_summer_capacity"],
+      "evaluation_rule": "consumer_scale_evidence",
+      "measurement_gap": "EIA demand, generation and generator inventory plus nuclear capacity establish system scale and planned supply, but they do not isolate compute demand, distributed-generation adoption, storage cost declines, or delivered electricity cost."
     },
     {
       "claim_id": "autonomous-vehicles",
