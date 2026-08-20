@@ -1,0 +1,49 @@
+{
+  "schema_version": "investor2.alpha-vantage-verification.v1",
+  "checked_on": "2026-08-20",
+  "official_sources": [
+    "https://www.alphavantage.co/support/",
+    "https://www.alphavantage.co/documentation/",
+    "https://www.alphavantage.co/terms_of_service/",
+    "https://www.alphavantage.co/realtime_data_policy/"
+  ],
+  "free_service": {
+    "documented_daily_request_limit": 25,
+    "verified_open_source_or_educational_projects": "official support page says unlimited API requests are available",
+    "this_repository_qualification_status": "unverified"
+  },
+  "license_and_use": {
+    "default_license": "personal_non_commercial_unless_otherwise_agreed_in_writing",
+    "provider_commercial_use_examples_include": [
+      "investment analysis",
+      "research",
+      "testing",
+      "monitoring"
+    ],
+    "written_commercial_agreement_for_this_repository": false,
+    "public_redistribution_authorization": "unverified"
+  },
+  "japan_coverage": {
+    "documented_global_equity_support": true,
+    "tokyo_symbol_rule_from_verified_official_documentation": "unverified",
+    "tested_security_count": 0,
+    "coverage_test_status": "not_run_precondition_failed"
+  },
+  "quality_test": {
+    "ohlcv_comparison_status": "not_run_precondition_failed",
+    "mismatch_count": null
+  },
+  "request_limit_test": {
+    "status": "not_run_precondition_failed",
+    "reason": "The repository has no verified open-source qualification or written authorization for the intended public investment-research use, so quota probing would not establish canonical-source eligibility."
+  },
+  "final_decision": "reject",
+  "canonical_source_enabled": false,
+  "decision_reason": [
+    "The official support page conditions unlimited requests on verified open-source or educational-project status; this repository has no provider verification evidence.",
+    "The official Terms of Service grants personal non-commercial use by default unless otherwise agreed in writing and lists investment analysis, research, testing, and monitoring among commercial-use examples.",
+    "The intended public investment-research pipeline therefore lacks documented authorization under the default license.",
+    "Tokyo/Japanese symbol rules and public redistribution terms were not verified from official documentation, and unsupported details are not inferred."
+  ],
+  "reconsideration_condition": "Re-evaluate only after written provider authorization/qualification and explicit data-use/redistribution terms for this repository are available."
+}
