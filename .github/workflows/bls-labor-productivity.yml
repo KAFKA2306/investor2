@@ -14,18 +14,27 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Inspect official BLS Series Report form
+      - name: Probe official BLS annual-average output
         shell: bash
         run: |
           set -euo pipefail
           mkdir -p /tmp/bls-productivity
-          curl --fail --location --retry 1 \
-            --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2/issues)" \
-            "https://data.bls.gov/timeseries/PRS85006091" \
-            -o /tmp/bls-productivity/series.html
-          echo "=== forms ==="
-          grep -n -i -E '<form|</form>' /tmp/bls-productivity/series.html || true
-          echo "=== annual average neighborhood ==="
-          grep -n -i -B 12 -A 24 'annualAveragesRequested' /tmp/bls-productivity/series.html || true
-          echo "=== input/select names ==="
-          grep -E -i '<(input|select)[^>]+(name|id)=' /tmp/bls-productivity/series.html | tail -80 || true
+          for series in PRS85006091 PRS85006093; do
+            curl --fail --location --retry 1 \
+              --user-agent "KAFKA2306/investor2 (+https://github.com/KAFKA2306/investor2/issues)" \
+              --data-urlencode "request_action=get_data" \
+              --data-urlencode "reformat=true" \
+              --data-urlencode "from_results_page=true" \
+              --data-urlencode "from_year=1948" \
+              --data-urlencode "to_year=2026" \
+              --data-urlencode "annualAveragesRequested=true" \
+              --data-urlencode "initial_request=false" \
+              --data-urlencode "data_tool=latest_numbers" \
+              --data-urlencode "series_id=$series" \
+              --data-urlencode "original_annualAveragesRequested=false" \
+              "https://data.bls.gov/pdq/SurveyOutputServlet" \
+              -o "/tmp/bls-productivity/$series.html"
+            echo "=== $series headers/annual rows ==="
+            grep -E -i -m 12 '<TH scope="col">|<TH scope="row">(1948|2023|2024|2025)</TH>' "/tmp/bls-productivity/$series.html" || true
+            grep -E -i -m 8 'Annual|annual average' "/tmp/bls-productivity/$series.html" || true
+          done
