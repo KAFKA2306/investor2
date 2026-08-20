@@ -8,10 +8,10 @@
       "logical_repo": "economic-releases",
       "projection": {
         "adapter": "bls_productivity",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-productivity/c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-productivity/ca7cf8810c9c1f9f17b5fbe4b1c1ada9660b127071dffac8c4b130bdb60c2569.json",
         "feed_id": "ai-productivity",
-        "mirror_sha256": "c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846",
-        "mirror_snapshot_id": "d0c1a0839fd024e15852",
+        "mirror_sha256": "ca7cf8810c9c1f9f17b5fbe4b1c1ada9660b127071dffac8c4b130bdb60c2569",
+        "mirror_snapshot_id": "87fd1d63938fe3e12934",
         "row_count": 20
       },
       "status": "ready",
@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/d30097b1f239f6a58ea2002adc743885ba08c5b7b6be40e2dc640c2988d5144c.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
-        "mirror_snapshot_id": "d4279370da2e572563b7",
+        "mirror_sha256": "d30097b1f239f6a58ea2002adc743885ba08c5b7b6be40e2dc640c2988d5144c",
+        "mirror_snapshot_id": "7cd8adefea341737ce00",
         "row_count": 18
       },
       "status": "ready",
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/799932df4e12ead22b43a4014f6de8fe7bf2d6396b27bb308a20bafd7fc5cbf3.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "2ffdebb72420d06d89e36feb8a398d4c028e5e1bcd0fa955d788d936a75fd82b",
-        "mirror_snapshot_id": "c62efeaf780889539cd3",
+        "mirror_sha256": "799932df4e12ead22b43a4014f6de8fe7bf2d6396b27bb308a20bafd7fc5cbf3",
+        "mirror_snapshot_id": "b91437742cbe1afc7351",
         "row_count": 13
       },
       "status": "accumulating",
