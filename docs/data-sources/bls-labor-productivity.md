@@ -1,27 +1,34 @@
 # BLS labor productivity data
 
-This repository stores the U.S. Bureau of Labor Statistics (BLS) Nonfarm Business sector annual labor-productivity history as a reproducible, content-addressed snapshot.
+This repository stores the U.S. Bureau of Labor Statistics (BLS) Nonfarm Business sector annual labor-productivity history as reproducible, content-addressed snapshots.
 
 ## Official source
 
-The collector uses the BLS Productivity and Costs (`pr`) time-series flat files directly:
+Continuous collection uses the BLS Public Data API version 1:
+
+- `https://api.bls.gov/publicAPI/v1/timeseries/data/`
+- API documentation: `https://www.bls.gov/developers/home.htm`
+- API limits and behavior: `https://www.bls.gov/developers/api_faqs.htm`
+
+BLS documents version 1 as open for public use without registration. Unregistered requests are limited to 25 queries per day, 25 series per query, and 10 years per query. The current 1948-to-present collection therefore requests both required series together in eight non-overlapping windows. BLS also documents a one-day lag between published data and availability through the API.
+
+The API does not return series metadata. The series contract was therefore verified on 2026-08-21 against the official BLS Productivity and Costs (`pr`) metadata files:
 
 - `https://download.bls.gov/pub/time.series/pr/pr.series`
 - `https://download.bls.gov/pub/time.series/pr/pr.sector`
 - `https://download.bls.gov/pub/time.series/pr/pr.measure`
 - `https://download.bls.gov/pub/time.series/pr/pr.duration`
 - `https://download.bls.gov/pub/time.series/pr/pr.period`
-- `https://download.bls.gov/pub/time.series/pr/pr.data.1.AllData`
 
-The BLS release documentation states that full historical annual and quarterly productivity measures include percent changes and indexes. The current source metadata identifies:
+That metadata identifies:
 
 - sector: `Nonfarm Business` (`8500`)
 - measure: `Labor productivity (output per hour)` (`09`)
 - annual period: `Annual Average` (`Q05`)
 - annual percent-change series: `PRS85006091`
-- index series: `PRS85006093`, currently `2017=100`
+- index series: `PRS85006093`; the metadata verified on 2026-08-21 labels it `Index (2017=100)`
 
-The collector resolves those identifiers from the BLS metadata files rather than relying on the numeric codes alone. If the metadata no longer maps uniquely, collection fails instead of silently selecting another series.
+The collector pins the two official series IDs and does not infer replacements. A missing series, missing annual year, duplicate year, incomplete index coverage, malformed API response, or stale history causes collection to fail rather than synthesize data.
 
 ## Repository outputs
 
@@ -39,12 +46,12 @@ The normalized record schema is:
 }
 ```
 
-No missing values are interpolated. The percent-change history must be contiguous, and every percent-change year must have an official BLS index value. The historical contract begins in 1948. A source change that violates those checks fails closed.
+No missing values are interpolated. The annual percent-change history must remain contiguous from 1948, and every percent-change year must have an official BLS index observation.
 
 ## Continuous collection
 
-`.github/workflows/bls-labor-productivity.yml` runs on weekdays at `14:47 UTC`, after the BLS Productivity and Costs scheduled `08:30 ET` release time in both daylight and standard time. It can also be run manually.
+`.github/workflows/bls-labor-productivity.yml` runs every day at `14:47 UTC` and can also be run manually. Daily execution is intentional because the unregistered API is documented as lagging published releases by one day; a weekend run can therefore capture a Friday release as soon as it becomes available through the API.
 
-Each run downloads the current official flat files and rebuilds the complete annual history. A new snapshot and ledger entry are committed only when the normalized BLS content changes. Historical revisions therefore remain recoverable through the content-addressed snapshot path and Git history without creating duplicate commits when BLS data is unchanged.
+Each run requests the complete official history, normalizes only `Q05` annual observations, and reconstructs the deterministic snapshot. A new content-addressed snapshot and ledger entry are committed only when the normalized BLS content changes. Historical BLS revisions therefore remain recoverable through immutable snapshot paths and Git history, while unchanged polling produces no data commit.
 
-The workflow requires no API key.
+The workflow requires no API key or repository secret.
