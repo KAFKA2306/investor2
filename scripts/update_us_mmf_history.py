@@ -8,7 +8,7 @@ import io
 import json
 import re
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
 from urllib.parse import urljoin
@@ -217,7 +217,9 @@ def discover_ici_workbook(existing: dict[str, Any] | None) -> tuple[str | None, 
 
     if existing:
         return None, None, errors
-    raise AssertionError("no usable ICI supplemental workbook found and no verified baseline exists: " + " | ".join(errors))
+    raise AssertionError(
+        "no usable ICI supplemental workbook found and no verified baseline exists: " + " | ".join(errors)
+    )
 
 
 def retained_ici_records(existing: dict[str, Any] | None, now: datetime) -> list[dict[str, Any]]:
@@ -282,11 +284,13 @@ def compact_json(payload: dict[str, Any]) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Refresh the reusable U.S. money market fund history snapshot.")
-    parser.add_argument("--check-only", action="store_true", help="Fetch and validate sources without writing a snapshot.")
+    parser.add_argument(
+        "--check-only", action="store_true", help="Fetch and validate sources without writing a snapshot."
+    )
     args = parser.parse_args()
 
     existing = latest_existing_artifact()
-    now = datetime.now(timezone.utc)
+    now = datetime.now(UTC)
     fred_records = parse_fred_csv(fetch_bytes(FRED_CSV_URL))
     ici_url, ici_raw, ici_errors = discover_ici_workbook(existing)
     if ici_raw is not None and ici_url is not None:
@@ -383,7 +387,16 @@ def main() -> int:
         },
     )
     append_entry(entry)
-    print(json.dumps({"artifact_path": entry["artifact_path"], "snapshot_id": entry["snapshot_id"], "artifact_sha256": artifact_sha256}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "artifact_path": entry["artifact_path"],
+                "snapshot_id": entry["snapshot_id"],
+                "artifact_sha256": artifact_sha256,
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 
