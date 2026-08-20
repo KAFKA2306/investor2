@@ -32,9 +32,9 @@
       "feed_id": "multiomics-metrics",
       "logical_repo": "multiomics",
       "adapter": "ai_consumer_metrics",
-      "repository": "KAFKA2306/kafin3",
+      "repository": "KAFKA2306/multiomics",
       "ref": "main",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json"
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/metrics.json"
     },
     {
       "feed_id": "nuclear-capacity",

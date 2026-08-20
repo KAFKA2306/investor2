@@ -192,8 +192,11 @@ jobs:
           assert network['real_data_exists'] is False
           multiomics = records['Multiomics']['components'][0]
           assert multiomics['current_repo'] == 'KAFKA2306/multiomics'
-          assert multiomics['source_catalog_repo'] == 'KAFKA2306/kafin3'
-          assert multiomics['canonical_alignment'] is False
+          assert multiomics['source_catalog_repo'] == 'KAFKA2306/multiomics'
+          assert multiomics['canonical_alignment'] is True
+          assert multiomics['real_data_exists'] is True
+          assert multiomics['primary_source_provenance_exists'] is True
+          assert multiomics['investor2_integration_exists'] is True
           repos = {repo for row in data['records'] for repo in row['canonical_repositories']}
           assert 'KAFKA2306/robot' not in repos
           assert 'KAFKA2306/space' not in repos
