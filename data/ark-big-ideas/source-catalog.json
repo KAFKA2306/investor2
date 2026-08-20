@@ -34,8 +34,8 @@
       "current_repo": "KAFKA2306/finAnalist",
       "status": "ready",
       "check_live": true,
-      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
-      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/index.json",
+      "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/metrics.json",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
       "issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4"
     },
     {
