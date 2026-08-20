@@ -1,0 +1,803 @@
+{
+  "ark_source_url": "https://www.ark-invest.com/big-ideas-2026",
+  "checked_at": "2026-08-20T03:39:45+00:00",
+  "coverage_rule": "Theme booleans are true only when every required component is verified; repository or Issue existence alone is insufficient.",
+  "live_github_checks": true,
+  "mapping_source_url": "https://github.com/KAFKA2306/investor2/issues/111",
+  "records": [
+    {
+      "canonical_repositories": [
+        "KAFKA2306/investor2"
+      ],
+      "claim_id": "great-acceleration",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/investor2/blob/main/api/v1/ark-big-ideas/claim-evidence.json",
+          "current_repo": "KAFKA2306/investor2",
+          "current_repository_url": "https://github.com/KAFKA2306/investor2",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/investor2/issues/111",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": null,
+          "latest_workflow_passed": true,
+          "logical_repo": null,
+          "mirror_artifact_path": null,
+          "mirror_sha256": null,
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": true,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": true,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": null,
+          "source_status": null,
+          "target_repo": "investor2"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/investor2"
+      ],
+      "dedicated_repository_required": false,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/investor2/issues/111"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": null,
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": true,
+      "public_view_exists": false,
+      "raw_evidence_exists": true,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": true,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "investor2"
+      ],
+      "theme": "The Great Acceleration"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/semiconductor-earnings-model"
+      ],
+      "claim_id": "ai-infrastructure",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/blob/main/api/v1/ai-infrastructure/index.json",
+          "current_repo": "KAFKA2306/semiconductor-earnings-model",
+          "current_repository_url": "https://github.com/KAFKA2306/semiconductor-earnings-model",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/semiconductor-earnings-model/issues/132",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "7f416429d02aadc65c12a62dbd32127dcebcfcd4",
+          "latest_workflow_passed": true,
+          "logical_repo": "ai-infrastructure",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/ai-infrastructure-capex/1c573e420d4118bc968cd6472e81e54d47ca8cbb2ecff03e30c892a0b193a47f.json",
+          "mirror_sha256": "1c573e420d4118bc968cd6472e81e54d47ca8cbb2ecff03e30c892a0b193a47f",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": true,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": true,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/semiconductor-earnings-model",
+          "source_status": "ready",
+          "target_repo": "ai-infrastructure"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/semiconductor-earnings-model"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/semiconductor-earnings-model/issues/132"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "7f416429d02aadc65c12a62dbd32127dcebcfcd4",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": true,
+      "public_view_exists": false,
+      "raw_evidence_exists": true,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": true,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "ai-infrastructure"
+      ],
+      "theme": "AI Infrastructure"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/finAnalist"
+      ],
+      "claim_id": "ai-consumer-operating-system",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-consumer/index.json",
+          "current_repo": "KAFKA2306/finAnalist",
+          "current_repository_url": "https://github.com/KAFKA2306/finAnalist",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/finAnalist/issues/4",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "feaa4f3f0a12a7f3c8b191ed3c8a3503fd57c538",
+          "latest_workflow_passed": true,
+          "logical_repo": "ai-consumer",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13.json",
+          "mirror_sha256": "13ff3dff5a1d4811f6ab6157d33b28b44b1f60a7ba57f71e92a777d411ff4a13",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/finAnalist",
+          "source_status": "ready",
+          "target_repo": "ai-consumer"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/finAnalist"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/finAnalist/issues/4"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "feaa4f3f0a12a7f3c8b191ed3c8a3503fd57c538",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "ai-consumer"
+      ],
+      "theme": "The AI Consumer Operating System"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/econalert"
+      ],
+      "claim_id": "ai-productivity",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/econalert/blob/main/api/v1/productivity/latest.json",
+          "current_repo": "KAFKA2306/econalert",
+          "current_repository_url": "https://github.com/KAFKA2306/econalert",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/econalert/issues/12",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "e15d66472154a56383e173c2ac7319ba8baac502",
+          "latest_workflow_passed": true,
+          "logical_repo": "economic-releases",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/ai-productivity/c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846.json",
+          "mirror_sha256": "c708c0900567efa89ff1be0f254eea10a14b0a69118b468f289f2055da6dd846",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": true,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": true,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/econalert",
+          "source_status": "ready",
+          "target_repo": "economic-releases"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/econalert"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/econalert/issues/12"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "e15d66472154a56383e173c2ac7319ba8baac502",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": true,
+      "public_view_exists": false,
+      "raw_evidence_exists": true,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": true,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "economic-releases"
+      ],
+      "theme": "AI Productivity"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/btc_dashboard",
+        "KAFKA2306/mstr",
+        "KAFKA2306/option"
+      ],
+      "claim_id": "bitcoin",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+          "current_repo": "KAFKA2306/btc_dashboard",
+          "current_repository_url": "https://github.com/KAFKA2306/btc_dashboard",
+          "derived_output_exists": false,
+          "implementation_issue_url": "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+          "investor2_integration_exists": false,
+          "latest_evidence_commit": null,
+          "latest_workflow_passed": false,
+          "logical_repo": "bitcoin-network",
+          "mirror_artifact_path": null,
+          "mirror_sha256": null,
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": false,
+          "repository_exists": false,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": false,
+          "source_catalog_repo": "KAFKA2306/btc_dashboard",
+          "source_status": "blocked_external_evidence",
+          "target_repo": "bitcoin-network"
+        },
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/mstr/blob/main/api/v1/bitcoin-treasury/index.json",
+          "current_repo": "KAFKA2306/mstr",
+          "current_repository_url": "https://github.com/KAFKA2306/mstr",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/mstr/issues/6",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "37fa070e2e7ce2d77f8f35b5ba282b17fbbaeace",
+          "latest_workflow_passed": true,
+          "logical_repo": "bitcoin-treasury",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/bitcoin-treasury-snapshots/f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92.json",
+          "mirror_sha256": "f7ecf308874b085e3d4e71268c897e68f93c6b0b6c0cdef07cb1f393e564cf92",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/mstr",
+          "source_status": "ready",
+          "target_repo": "bitcoin-treasury"
+        },
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
+          "current_repo": "KAFKA2306/option",
+          "current_repository_url": "https://github.com/KAFKA2306/option",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/option/issues/16",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "d4acd0b7539a63b1b7e059b75aa5fb5113967960",
+          "latest_workflow_passed": true,
+          "logical_repo": "bitcoin-derivatives",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/011954e98ae58fadb535cf24ededbe5d8cd9bad5afd42ad9f03a23c9d3308fc8.json",
+          "mirror_sha256": "011954e98ae58fadb535cf24ededbe5d8cd9bad5afd42ad9f03a23c9d3308fc8",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/option",
+          "source_status": "ready",
+          "target_repo": "bitcoin-derivatives"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/btc_dashboard",
+        "https://github.com/KAFKA2306/mstr",
+        "https://github.com/KAFKA2306/option"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": false,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/btc_dashboard/issues/3",
+        "https://github.com/KAFKA2306/mstr/issues/6",
+        "https://github.com/KAFKA2306/option/issues/16"
+      ],
+      "investor2_integration_exists": false,
+      "latest_evidence_commit": [
+        "37fa070e2e7ce2d77f8f35b5ba282b17fbbaeace",
+        "d4acd0b7539a63b1b7e059b75aa5fb5113967960"
+      ],
+      "latest_workflow_passed": false,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": false,
+      "repository_exists": false,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": false,
+      "target_repository_names": [
+        "bitcoin-network",
+        "bitcoin-treasury",
+        "bitcoin-derivatives"
+      ],
+      "theme": "Bitcoin"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/fx"
+      ],
+      "claim_id": "tokenized-assets",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/fx/blob/main/api/v1/tokenized-assets/index.json",
+          "current_repo": "KAFKA2306/fx",
+          "current_repository_url": "https://github.com/KAFKA2306/fx",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/fx/issues/4",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "e5c2ff7105d0431c6f160c65e3b053aaf23e05ec",
+          "latest_workflow_passed": false,
+          "logical_repo": "tokenized-assets",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd.json",
+          "mirror_sha256": "51488ac4b22944414ec1e759680cc6298c5ec6c45a8a65a9b91f3d3823f693cd",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/fx",
+          "source_status": "ready",
+          "target_repo": "tokenized-assets"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/fx"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/fx/issues/4"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "e5c2ff7105d0431c6f160c65e3b053aaf23e05ec",
+      "latest_workflow_passed": false,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "tokenized-assets"
+      ],
+      "theme": "Tokenized Assets"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/skew"
+      ],
+      "claim_id": "defi-applications",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/index.json",
+          "current_repo": "KAFKA2306/skew",
+          "current_repository_url": "https://github.com/KAFKA2306/skew",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/skew/issues/11",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "0f2fc65b98992e765ec2048176ffd80414a0e674",
+          "latest_workflow_passed": true,
+          "logical_repo": "defi",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/defi-daily/45ecf54f123368edaa27d0027707655ec182efae08f7a94395c90ab269d63b9f.json",
+          "mirror_sha256": "45ecf54f123368edaa27d0027707655ec182efae08f7a94395c90ab269d63b9f",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/skew",
+          "source_status": "ready",
+          "target_repo": "defi"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/skew"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/skew/issues/11"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "0f2fc65b98992e765ec2048176ffd80414a0e674",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": true,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "defi"
+      ],
+      "theme": "DeFi Applications"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/multiomics"
+      ],
+      "claim_id": "multiomics",
+      "components": [
+        {
+          "canonical_alignment": false,
+          "canonical_output_url": null,
+          "current_repo": "KAFKA2306/multiomics",
+          "current_repository_url": "https://github.com/KAFKA2306/multiomics",
+          "derived_output_exists": false,
+          "implementation_issue_url": "https://github.com/KAFKA2306/multiomics/issues/1",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": null,
+          "latest_workflow_passed": true,
+          "logical_repo": "multiomics",
+          "mirror_artifact_path": null,
+          "mirror_sha256": null,
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": false,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": false,
+          "source_catalog_repo": "KAFKA2306/kafin3",
+          "source_status": "ready",
+          "target_repo": "multiomics"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/multiomics"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": false,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/multiomics/issues/1"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": null,
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": false,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": false,
+      "target_repository_names": [
+        "multiomics"
+      ],
+      "theme": "Multiomics"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/trahist"
+      ],
+      "claim_id": "reusable-rockets",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/index.json",
+          "current_repo": "KAFKA2306/trahist",
+          "current_repository_url": "https://github.com/KAFKA2306/trahist",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/trahist/issues/9",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "0c6b9027f5f0300f0a921c1a0027a710be5eab7d",
+          "latest_workflow_passed": true,
+          "logical_repo": "space-launches",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/add29c37024d8c2c6a17a8fd384f2ff3c7fa9dc3038caddc09eba2385f65d277.json",
+          "mirror_sha256": "add29c37024d8c2c6a17a8fd384f2ff3c7fa9dc3038caddc09eba2385f65d277",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/trahist",
+          "source_status": "ready",
+          "target_repo": "space-launches"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/trahist"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/trahist/issues/9"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "0c6b9027f5f0300f0a921c1a0027a710be5eab7d",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "space-launches"
+      ],
+      "theme": "Reusable Rockets"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/factory"
+      ],
+      "claim_id": "robotics",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/factory/blob/main/api/v1/robotics/index.json",
+          "current_repo": "KAFKA2306/factory",
+          "current_repository_url": "https://github.com/KAFKA2306/factory",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/factory/issues/27",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "c62b924a198fc1bb369e440e7a3b8897343fb3ed",
+          "latest_workflow_passed": true,
+          "logical_repo": "factory",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/robotics-deployments/8dff3b47038a580d664398e9e1f8cc8e8657339e918c48735fce9350095e309c.json",
+          "mirror_sha256": "8dff3b47038a580d664398e9e1f8cc8e8657339e918c48735fce9350095e309c",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/factory",
+          "source_status": "ready",
+          "target_repo": "factory"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/factory"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/factory/issues/27"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "c62b924a198fc1bb369e440e7a3b8897343fb3ed",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "factory"
+      ],
+      "theme": "Robotics"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/oil",
+        "KAFKA2306/uranium"
+      ],
+      "claim_id": "distributed-energy",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/oil/blob/main/api/v1/electricity/index.json",
+          "current_repo": "KAFKA2306/oil",
+          "current_repository_url": "https://github.com/KAFKA2306/oil",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/oil/issues/12",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "be2f0e21b292b952f1e12878143ffe54660ddfd4",
+          "latest_workflow_passed": true,
+          "logical_repo": "energy-supply",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8.json",
+          "mirror_sha256": "4375ee052517d49a5b1f9f8eb7189c49d4144da9f6e38df5a96c0720b5bf85c8",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/oil",
+          "source_status": "ready",
+          "target_repo": "energy-supply"
+        },
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/capacity.json",
+          "current_repo": "KAFKA2306/uranium",
+          "current_repository_url": "https://github.com/KAFKA2306/uranium",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/uranium/issues/5",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "0db350800aa170cccbd96ee999e72d370da0cc87",
+          "latest_workflow_passed": true,
+          "logical_repo": "nuclear-power",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a.json",
+          "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/uranium",
+          "source_status": "ready",
+          "target_repo": "nuclear-power"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/oil",
+        "https://github.com/KAFKA2306/uranium"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/oil/issues/12",
+        "https://github.com/KAFKA2306/uranium/issues/5"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": [
+        "be2f0e21b292b952f1e12878143ffe54660ddfd4",
+        "0db350800aa170cccbd96ee999e72d370da0cc87"
+      ],
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "energy-supply",
+        "nuclear-power"
+      ],
+      "theme": "Distributed Energy"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/autonomous-vehicles"
+      ],
+      "claim_id": "autonomous-vehicles",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/autonomous-vehicles/blob/main/api/v1/autonomous-vehicles/index.json",
+          "current_repo": "KAFKA2306/autonomous-vehicles",
+          "current_repository_url": "https://github.com/KAFKA2306/autonomous-vehicles",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/autonomous-vehicles/issues/5",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "d467567c13257f76b6c04eafff740bef0ac2e63d",
+          "latest_workflow_passed": true,
+          "logical_repo": "autonomous-vehicles",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/autonomous-vehicles-summary/3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221.json",
+          "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
+          "primary_source_provenance_exists": true,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/autonomous-vehicles",
+          "source_status": "ready",
+          "target_repo": "autonomous-vehicles"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/autonomous-vehicles"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/autonomous-vehicles/issues/5"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "d467567c13257f76b6c04eafff740bef0ac2e63d",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": true,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "autonomous-vehicles"
+      ],
+      "theme": "Autonomous Vehicles"
+    },
+    {
+      "canonical_repositories": [
+        "KAFKA2306/autonomous-logistics"
+      ],
+      "claim_id": "autonomous-logistics",
+      "components": [
+        {
+          "canonical_alignment": true,
+          "canonical_output_url": "https://github.com/KAFKA2306/autonomous-logistics/blob/main/api/v1/autonomous-logistics/index.json",
+          "current_repo": "KAFKA2306/autonomous-logistics",
+          "current_repository_url": "https://github.com/KAFKA2306/autonomous-logistics",
+          "derived_output_exists": true,
+          "implementation_issue_url": "https://github.com/KAFKA2306/autonomous-logistics/issues/5",
+          "investor2_integration_exists": true,
+          "latest_evidence_commit": "4fb743184a49ccbf658150f6f040118869a09aab",
+          "latest_workflow_passed": true,
+          "logical_repo": "autonomous-logistics",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f.json",
+          "mirror_sha256": "d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f",
+          "primary_source_provenance_exists": false,
+          "public_view_exists": false,
+          "raw_evidence_exists": false,
+          "real_data_exists": true,
+          "repository_exists": true,
+          "reproducible_from_raw": false,
+          "scheduled_workflow_exists": true,
+          "source_catalog_repo": "KAFKA2306/autonomous-logistics",
+          "source_status": "ready",
+          "target_repo": "autonomous-logistics"
+        }
+      ],
+      "current_repository_urls": [
+        "https://github.com/KAFKA2306/autonomous-logistics"
+      ],
+      "dedicated_repository_required": true,
+      "derived_output_exists": true,
+      "implementation_issue_urls": [
+        "https://github.com/KAFKA2306/autonomous-logistics/issues/5"
+      ],
+      "investor2_integration_exists": true,
+      "latest_evidence_commit": "4fb743184a49ccbf658150f6f040118869a09aab",
+      "latest_workflow_passed": true,
+      "primary_source_provenance_exists": false,
+      "public_view_exists": false,
+      "raw_evidence_exists": false,
+      "real_data_exists": true,
+      "repository_exists": true,
+      "reproducible_from_raw": false,
+      "scheduled_workflow_exists": true,
+      "target_repository_names": [
+        "autonomous-logistics"
+      ],
+      "theme": "Autonomous Logistics"
+    }
+  ],
+  "schema_version": 1,
+  "theme_count": 13
+}
