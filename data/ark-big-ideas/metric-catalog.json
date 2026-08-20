@@ -29,12 +29,28 @@
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json"
     },
     {
+      "feed_id": "multiomics-metrics",
+      "logical_repo": "multiomics",
+      "adapter": "ai_consumer_metrics",
+      "repository": "KAFKA2306/kafin3",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/kafin3/main/api/v1/multiomics/metrics.json"
+    },
+    {
       "feed_id": "nuclear-capacity",
       "logical_repo": "nuclear-power",
       "adapter": "nuclear_capacity",
       "repository": "KAFKA2306/uranium",
       "ref": "main",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/capacity.json"
+    },
+    {
+      "feed_id": "energy-supply-metrics",
+      "logical_repo": "energy-supply",
+      "adapter": "ai_consumer_metrics",
+      "repository": "KAFKA2306/oil",
+      "ref": "main",
+      "raw_url": "https://raw.githubusercontent.com/KAFKA2306/oil/main/api/v1/electricity/metrics.json"
     },
     {
       "feed_id": "autonomous-vehicles-summary",
