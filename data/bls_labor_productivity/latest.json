@@ -1,0 +1,430 @@
+{
+  "annual_value_source": "BLS Series Report annual average column",
+  "first_year": 1948,
+  "frequency": "annual",
+  "latest_year": 2025,
+  "measure": "Labor productivity (output per hour)",
+  "records": [
+    {
+      "index": 23.05,
+      "percent_change": 2.5,
+      "year": 1948
+    },
+    {
+      "index": 23.783,
+      "percent_change": 3.2,
+      "year": 1949
+    },
+    {
+      "index": 25.377,
+      "percent_change": 6.7,
+      "year": 1950
+    },
+    {
+      "index": 26.023,
+      "percent_change": 2.5,
+      "year": 1951
+    },
+    {
+      "index": 26.519,
+      "percent_change": 1.9,
+      "year": 1952
+    },
+    {
+      "index": 27.17,
+      "percent_change": 2.5,
+      "year": 1953
+    },
+    {
+      "index": 27.701,
+      "percent_change": 2.0,
+      "year": 1954
+    },
+    {
+      "index": 28.887,
+      "percent_change": 4.3,
+      "year": 1955
+    },
+    {
+      "index": 28.719,
+      "percent_change": -0.6,
+      "year": 1956
+    },
+    {
+      "index": 29.455,
+      "percent_change": 2.6,
+      "year": 1957
+    },
+    {
+      "index": 30.133,
+      "percent_change": 2.3,
+      "year": 1958
+    },
+    {
+      "index": 31.199,
+      "percent_change": 3.5,
+      "year": 1959
+    },
+    {
+      "index": 31.563,
+      "percent_change": 1.2,
+      "year": 1960
+    },
+    {
+      "index": 32.596,
+      "percent_change": 3.3,
+      "year": 1961
+    },
+    {
+      "index": 34.074,
+      "percent_change": 4.5,
+      "year": 1962
+    },
+    {
+      "index": 35.231,
+      "percent_change": 3.4,
+      "year": 1963
+    },
+    {
+      "index": 36.156,
+      "percent_change": 2.6,
+      "year": 1964
+    },
+    {
+      "index": 37.311,
+      "percent_change": 3.2,
+      "year": 1965
+    },
+    {
+      "index": 38.652,
+      "percent_change": 3.6,
+      "year": 1966
+    },
+    {
+      "index": 39.372,
+      "percent_change": 1.9,
+      "year": 1967
+    },
+    {
+      "index": 40.747,
+      "percent_change": 3.5,
+      "year": 1968
+    },
+    {
+      "index": 40.816,
+      "percent_change": 0.2,
+      "year": 1969
+    },
+    {
+      "index": 41.398,
+      "percent_change": 1.4,
+      "year": 1970
+    },
+    {
+      "index": 43.019,
+      "percent_change": 3.9,
+      "year": 1971
+    },
+    {
+      "index": 44.514,
+      "percent_change": 3.5,
+      "year": 1972
+    },
+    {
+      "index": 45.879,
+      "percent_change": 3.1,
+      "year": 1973
+    },
+    {
+      "index": 45.116,
+      "percent_change": -1.7,
+      "year": 1974
+    },
+    {
+      "index": 46.328,
+      "percent_change": 2.7,
+      "year": 1975
+    },
+    {
+      "index": 47.94,
+      "percent_change": 3.5,
+      "year": 1976
+    },
+    {
+      "index": 48.77,
+      "percent_change": 1.7,
+      "year": 1977
+    },
+    {
+      "index": 49.466,
+      "percent_change": 1.4,
+      "year": 1978
+    },
+    {
+      "index": 49.36,
+      "percent_change": -0.2,
+      "year": 1979
+    },
+    {
+      "index": 49.338,
+      "percent_change": 0.0,
+      "year": 1980
+    },
+    {
+      "index": 50.058,
+      "percent_change": 1.5,
+      "year": 1981
+    },
+    {
+      "index": 49.647,
+      "percent_change": -0.8,
+      "year": 1982
+    },
+    {
+      "index": 51.684,
+      "percent_change": 4.1,
+      "year": 1983
+    },
+    {
+      "index": 52.838,
+      "percent_change": 2.2,
+      "year": 1984
+    },
+    {
+      "index": 53.754,
+      "percent_change": 1.7,
+      "year": 1985
+    },
+    {
+      "index": 55.352,
+      "percent_change": 3.0,
+      "year": 1986
+    },
+    {
+      "index": 55.654,
+      "percent_change": 0.5,
+      "year": 1987
+    },
+    {
+      "index": 56.569,
+      "percent_change": 1.6,
+      "year": 1988
+    },
+    {
+      "index": 57.069,
+      "percent_change": 0.9,
+      "year": 1989
+    },
+    {
+      "index": 58.026,
+      "percent_change": 1.7,
+      "year": 1990
+    },
+    {
+      "index": 58.975,
+      "percent_change": 1.6,
+      "year": 1991
+    },
+    {
+      "index": 61.605,
+      "percent_change": 4.5,
+      "year": 1992
+    },
+    {
+      "index": 61.677,
+      "percent_change": 0.1,
+      "year": 1993
+    },
+    {
+      "index": 62.103,
+      "percent_change": 0.7,
+      "year": 1994
+    },
+    {
+      "index": 62.772,
+      "percent_change": 1.1,
+      "year": 1995
+    },
+    {
+      "index": 64.092,
+      "percent_change": 2.1,
+      "year": 1996
+    },
+    {
+      "index": 65.329,
+      "percent_change": 1.9,
+      "year": 1997
+    },
+    {
+      "index": 67.516,
+      "percent_change": 3.3,
+      "year": 1998
+    },
+    {
+      "index": 70.162,
+      "percent_change": 3.9,
+      "year": 1999
+    },
+    {
+      "index": 72.256,
+      "percent_change": 3.0,
+      "year": 2000
+    },
+    {
+      "index": 74.115,
+      "percent_change": 2.6,
+      "year": 2001
+    },
+    {
+      "index": 77.292,
+      "percent_change": 4.3,
+      "year": 2002
+    },
+    {
+      "index": 80.143,
+      "percent_change": 3.7,
+      "year": 2003
+    },
+    {
+      "index": 82.528,
+      "percent_change": 3.0,
+      "year": 2004
+    },
+    {
+      "index": 84.332,
+      "percent_change": 2.2,
+      "year": 2005
+    },
+    {
+      "index": 85.163,
+      "percent_change": 1.0,
+      "year": 2006
+    },
+    {
+      "index": 86.642,
+      "percent_change": 1.7,
+      "year": 2007
+    },
+    {
+      "index": 87.891,
+      "percent_change": 1.4,
+      "year": 2008
+    },
+    {
+      "index": 91.425,
+      "percent_change": 4.0,
+      "year": 2009
+    },
+    {
+      "index": 94.428,
+      "percent_change": 3.3,
+      "year": 2010
+    },
+    {
+      "index": 94.303,
+      "percent_change": -0.1,
+      "year": 2011
+    },
+    {
+      "index": 95.075,
+      "percent_change": 0.8,
+      "year": 2012
+    },
+    {
+      "index": 95.79,
+      "percent_change": 0.8,
+      "year": 2013
+    },
+    {
+      "index": 96.685,
+      "percent_change": 0.9,
+      "year": 2014
+    },
+    {
+      "index": 97.93,
+      "percent_change": 1.3,
+      "year": 2015
+    },
+    {
+      "index": 98.685,
+      "percent_change": 0.8,
+      "year": 2016
+    },
+    {
+      "index": 100.0,
+      "percent_change": 1.3,
+      "year": 2017
+    },
+    {
+      "index": 101.372,
+      "percent_change": 1.4,
+      "year": 2018
+    },
+    {
+      "index": 103.631,
+      "percent_change": 2.2,
+      "year": 2019
+    },
+    {
+      "index": 109.071,
+      "percent_change": 5.2,
+      "year": 2020
+    },
+    {
+      "index": 111.46,
+      "percent_change": 2.2,
+      "year": 2021
+    },
+    {
+      "index": 109.764,
+      "percent_change": -1.5,
+      "year": 2022
+    },
+    {
+      "index": 112.026,
+      "percent_change": 2.1,
+      "year": 2023
+    },
+    {
+      "index": 115.366,
+      "percent_change": 3.0,
+      "year": 2024
+    },
+    {
+      "index": 117.785,
+      "percent_change": 2.1,
+      "year": 2025
+    }
+  ],
+  "schema_version": "investor2.bls-nonfarm-business-labor-productivity-annual.v1",
+  "sector": "Nonfarm Business",
+  "series_catalog": {
+    "index": {
+      "Base Year": "2017",
+      "Duration": "Index (2017=100)",
+      "Measure": "Labor productivity (output per hour)",
+      "Sector": "Nonfarm Business",
+      "Series Id": "PRS85006093"
+    },
+    "percent_change": {
+      "Base Year": "-",
+      "Duration": "% Change same quarter 1 year ago",
+      "Measure": "Labor productivity (output per hour)",
+      "Sector": "Nonfarm Business",
+      "Series Id": "PRS85006091"
+    }
+  },
+  "series_ids": {
+    "index": "PRS85006093",
+    "percent_change": "PRS85006091"
+  },
+  "source": "U.S. Bureau of Labor Statistics",
+  "source_urls": {
+    "index_series": "https://data.bls.gov/timeseries/PRS85006093",
+    "latest_release": "https://www.bls.gov/news.release/prod2.htm",
+    "percent_change_series": "https://data.bls.gov/timeseries/PRS85006091",
+    "series_output": "https://data.bls.gov/pdq/SurveyOutputServlet",
+    "series_report": "https://data.bls.gov/series-report",
+    "tables": "https://www.bls.gov/productivity/tables/home.htm"
+  }
+}
