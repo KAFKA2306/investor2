@@ -2,24 +2,36 @@ name: Collect BLS labor productivity
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "47 14 * * 1-5"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/bls-labor-productivity.yml"
+      - "scripts/bls_labor_productivity_snapshot.py"
+      - "tests/test_bls_labor_productivity_snapshot.py"
+      - "docs/data-sources/bls-labor-productivity.md"
   pull_request:
     paths:
       - ".github/workflows/bls-labor-productivity.yml"
+      - "scripts/bls_labor_productivity_snapshot.py"
+      - "tests/test_bls_labor_productivity_snapshot.py"
+      - "docs/data-sources/bls-labor-productivity.md"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
-  probe-series-report:
+  collect:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v6
-      - uses: astral-sh/setup-uv@v9.0.0
+      - uses: actions/setup-python@v6
         with:
-          version: "0.11.32"
-      - name: Show Ruff formatting diff
-        run: uvx --from ruff==0.15.5 ruff format --diff scripts/bls_labor_productivity_snapshot.py tests/test_bls_labor_productivity_snapshot.py
-      - name: Probe official BLS annual-average output
+          python-version: "3.12"
+
+      - name: Download official BLS Series Reports
         shell: bash
         run: |
           set -euo pipefail
@@ -39,7 +51,93 @@ jobs:
               --data-urlencode "original_annualAveragesRequested=false" \
               "https://data.bls.gov/pdq/SurveyOutputServlet" \
               -o "/tmp/bls-productivity/$series.html"
-            echo "=== $series headers/annual rows ==="
-            grep -E -i -m 12 '<TH scope="col">|<TH scope="row">(1948|2023|2024|2025)</TH>' "/tmp/bls-productivity/$series.html" || true
-            grep -E -i -m 8 'Annual|annual average' "/tmp/bls-productivity/$series.html" || true
           done
+
+      - name: Run focused regression tests
+        run: python -m unittest -v tests.test_bls_labor_productivity_snapshot
+
+      - name: Verify official data on pull requests
+        if: github.event_name == 'pull_request'
+        run: |
+          python scripts/bls_labor_productivity_snapshot.py \
+            --percent-html /tmp/bls-productivity/PRS85006091.html \
+            --index-html /tmp/bls-productivity/PRS85006093.html \
+            --output-dir /tmp/bls-snapshots \
+            --latest-path /tmp/bls-latest.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('/tmp/bls-latest.json').read_text())
+          print({
+              'first_year': payload['first_year'],
+              'latest_year': payload['latest_year'],
+              'records': len(payload['records']),
+              'latest': payload['records'][-1],
+          })
+          PY
+
+      - name: Materialize canonical snapshot
+        id: materialize
+        if: github.event_name != 'pull_request'
+        run: |
+          artifact=$(python scripts/bls_labor_productivity_snapshot.py \
+            --percent-html /tmp/bls-productivity/PRS85006091.html \
+            --index-html /tmp/bls-productivity/PRS85006093.html \
+            --output-dir data/snapshots/bls_labor_productivity \
+            --latest-path data/bls_labor_productivity/latest.json)
+          echo "artifact=$artifact" >> "$GITHUB_OUTPUT"
+
+      - name: Register and commit changed data
+        if: github.event_name != 'pull_request'
+        env:
+          ARTIFACT: ${{ steps.materialize.outputs.artifact }}
+        run: |
+          set -euo pipefail
+          if git ls-files --error-unmatch "$ARTIFACT" >/dev/null 2>&1 && \
+             git diff --quiet -- data/bls_labor_productivity/latest.json; then
+            echo 'No new normalized BLS labor-productivity snapshot.'
+            exit 0
+          fi
+
+          if git ls-files --error-unmatch "$ARTIFACT" >/dev/null 2>&1; then
+            echo "Latest view changed without a new content-addressed artifact: $ARTIFACT" >&2
+            exit 1
+          fi
+
+          retrieved_at=$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+          provenance=$(RETRIEVED_AT="$retrieved_at" python - <<'PY'
+          import json
+          import os
+
+          print(json.dumps({
+              'tool': 'GitHub Actions curl + repository parser',
+              'operation': 'download BLS Series Report annual-average output and normalize two official series',
+              'query_or_scope': 'Nonfarm Business labor productivity annual history, 1948-present; PRS85006091 and PRS85006093',
+              'retrieved_at': os.environ['RETRIEVED_AT'],
+              'source_urls': [
+                  'https://data.bls.gov/timeseries/PRS85006091',
+                  'https://data.bls.gov/timeseries/PRS85006093',
+                  'https://data.bls.gov/pdq/SurveyOutputServlet',
+                  'https://www.bls.gov/productivity/tables/home.htm',
+              ],
+          }, separators=(',', ':')))
+          PY
+          )
+
+          python scripts/snapshot_store.py register \
+            --dataset-id bls_nonfarm_business_labor_productivity_annual \
+            --reuse-key us/bls/nonfarm-business/labor-productivity/annual \
+            --artifact-path "$ARTIFACT" \
+            --source public_web_research \
+            --source-kind official_web \
+            --observed-at "$retrieved_at" \
+            --schema-version investor2.bls-nonfarm-business-labor-productivity-annual.v1 \
+            --provenance-json "$provenance"
+          python scripts/snapshot_store.py audit >/dev/null
+
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -f "$ARTIFACT" data/bls_labor_productivity/latest.json data/input_ledger/snapshot_catalog.ndjson
+          git commit -m 'data: snapshot BLS labor productivity'
+          git push
