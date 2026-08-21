@@ -1,14 +1,14 @@
-theme,forecast_id,ark_claim_paraphrase,baseline_value,baseline_unit,baseline_period,target_value,target_unit,target_period,scope,comparison_status,comparison_reason,observed_series_id,source_url,source_page
-The Great Acceleration,,,,,,,,,,,,,,
-AI Infrastructure,,,,,,,,,,,,,,
-The AI Consumer Operating System,ai-consumer-mediated-revenue-2030,AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.,20,USD billion,,900,USD billion,2030,AI-mediated revenue,not_comparable,The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.,,https://www.ark-invest.com/newsletters/issue-495,31
-AI Productivity,,,,,,,,,,,,,,
-Bitcoin,,,,,,,,,,,,,,
-Tokenized Assets,,,,,,,,,,,,,,
-DeFi Applications,,,,,,,,,,,,,,
-Multiomics,,,,,,,,,,,,,,
-Reusable Rockets,,,,,,,,,,,,,,
-Robotics,,,,,,,,,,,,,,
-Distributed Energy,,,,,,,,,,,,,,
-Autonomous Vehicles,autonomous-technology-platform-enterprise-value-2030,Autonomous technology platforms could generate $34 trillion in enterprise value in 2030.,,,,34,USD trillion,2030,autonomous technology platforms / robotaxi ecosystem enterprise value opportunity,not_comparable,"The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",,https://www.ark-invest.com/newsletters/issue-507,99
-Autonomous Logistics,,,,,,,,,,,,,,
+theme,forecast_id,ark_claim_paraphrase,baseline_value,baseline_unit,baseline_period,target_value,target_unit,target_period,scope,comparison_status,comparison_reason,observed_series_id,observed_repository,observed_source_url,observed_sha256,observed_value,observed_unit,observed_period,absolute_gap,absolute_gap_unit,target_date_reached,source_url,source_page
+The Great Acceleration,global-real-gdp-growth-2030,ARK forecasts global real GDP growth of 7.3% in 2030.,3,percent,,7.3,percent,2030,global real GDP growth,comparable,ARK's global real GDP growth forecast and the World Bank World GDP growth observation both use annual real GDP growth in percent at global/World scope.,econalert/world-gdp-growth,KAFKA2306/econalert,https://raw.githubusercontent.com/KAFKA2306/econalert/main/api/v1/world-gdp-growth.json,48fa167bc1f554188c7d94f441fd3ac903ee9772ddb3fb2041c15cbb8927c9b0,2.9,percent,2025,4.4,percentage_points,False,https://research.ark-invest.com/hubfs/1_Download_Files_ARK-Invest/Big_Ideas/ARKInvest%20BigIdeas2026.pdf,11
+AI Infrastructure,,,,,,,,,,,,,,,,,,,,,,,
+The AI Consumer Operating System,ai-consumer-mediated-revenue-2030,AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.,20,USD billion,,900,USD billion,2030,AI-mediated revenue,not_comparable,The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.,,,,,,,,,,,https://www.ark-invest.com/newsletters/issue-495,31
+AI Productivity,,,,,,,,,,,,,,,,,,,,,,,
+Bitcoin,,,,,,,,,,,,,,,,,,,,,,,
+Tokenized Assets,,,,,,,,,,,,,,,,,,,,,,,
+DeFi Applications,,,,,,,,,,,,,,,,,,,,,,,
+Multiomics,,,,,,,,,,,,,,,,,,,,,,,
+Reusable Rockets,,,,,,,,,,,,,,,,,,,,,,,
+Robotics,,,,,,,,,,,,,,,,,,,,,,,
+Distributed Energy,,,,,,,,,,,,,,,,,,,,,,,
+Autonomous Vehicles,autonomous-technology-platform-enterprise-value-2030,Autonomous technology platforms could generate $34 trillion in enterprise value in 2030.,,,,34,USD trillion,2030,autonomous technology platforms / robotaxi ecosystem enterprise value opportunity,not_comparable,"The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",,,,,,,,,,,https://www.ark-invest.com/newsletters/issue-507,99
+Autonomous Logistics,,,,,,,,,,,,,,,,,,,,,,,

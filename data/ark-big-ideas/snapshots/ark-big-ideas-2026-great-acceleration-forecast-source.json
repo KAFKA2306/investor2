@@ -1,0 +1,35 @@
+{
+  "big_ideas_2026_page": 11,
+  "published_at": "2026-03-02",
+  "publisher": "ARK Investment Management LLC",
+  "records": [
+    {
+      "ark_claim_paraphrase": "ARK forecasts global real GDP growth of 7.3% in 2030.",
+      "baseline_period": null,
+      "baseline_qualifier": "historical_long_run_average",
+      "baseline_unit": "percent",
+      "baseline_value": 3,
+      "claim_id": "the-great-acceleration",
+      "forecast_id": "global-real-gdp-growth-2030",
+      "growth_rate": null,
+      "growth_rate_basis": null,
+      "growth_rate_unit": null,
+      "scope": "global real GDP growth",
+      "source_page": 11,
+      "target_period": "2030",
+      "target_qualifier": null,
+      "target_unit": "percent",
+      "target_value": 7.3,
+      "theme": "The Great Acceleration"
+    }
+  ],
+  "retrieved_at": "2026-08-21T19:03:31+09:00",
+  "schema_version": "investor2.ark-big-ideas-forecast-source.v1",
+  "source_boundaries": {
+    "forecast_is_not_observed_fact": true,
+    "exact_target_value_source": "ARK Big Ideas 2026 page 11",
+    "newsletter_reference_date": "2026-03-02",
+    "newsletter_wording": "7-8%+ by 2030"
+  },
+  "source_url": "https://research.ark-invest.com/hubfs/1_Download_Files_ARK-Invest/Big_Ideas/ARKInvest%20BigIdeas2026.pdf"
+}

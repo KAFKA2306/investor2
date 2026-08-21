@@ -24,6 +24,19 @@ THEMES = (
     "Autonomous Logistics",
 )
 
+COMPARISON_FIELDS = (
+    "observed_series_id",
+    "observed_repository",
+    "observed_source_url",
+    "observed_sha256",
+    "observed_value",
+    "observed_unit",
+    "observed_period",
+    "absolute_gap",
+    "absolute_gap_unit",
+    "target_date_reached",
+)
+
 CSV_FIELDS = (
     "theme",
     "forecast_id",
@@ -37,7 +50,7 @@ CSV_FIELDS = (
     "scope",
     "comparison_status",
     "comparison_reason",
-    "observed_series_id",
+    *COMPARISON_FIELDS,
     "source_url",
     "source_page",
 )
@@ -46,7 +59,7 @@ CSV_FIELDS = (
 def comparison_forecast(forecast: dict[str, object]) -> dict[str, object]:
     comparison = forecast["comparison"]
     assert isinstance(comparison, dict)
-    return {
+    row = {
         "forecast_id": forecast["forecast_id"],
         "ark_claim_paraphrase": forecast["ark_claim_paraphrase"],
         "baseline_value": forecast["baseline_value"],
@@ -58,10 +71,12 @@ def comparison_forecast(forecast: dict[str, object]) -> dict[str, object]:
         "scope": forecast["scope"],
         "comparison_status": comparison["status"],
         "comparison_reason": comparison["reason"],
-        "observed_series_id": comparison["observed_series_id"],
         "source_url": forecast["source_url"],
         "source_page": forecast["source_page"],
     }
+    for field in COMPARISON_FIELDS:
+        row[field] = comparison.get(field)
+    return row
 
 
 def build(catalog: dict[str, object]) -> dict[str, object]:

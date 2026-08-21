@@ -34,27 +34,36 @@ class ArkForecastComparisonTest(unittest.TestCase):
             self.assertEqual(generated_json.read_bytes(), COMMITTED_JSON.read_bytes())
             self.assertEqual(generated_csv.read_bytes(), COMMITTED_CSV.read_bytes())
 
-    def test_all_thirteen_themes_remain_visible_without_invented_comparisons(self) -> None:
+    def test_all_thirteen_themes_and_comparison_boundaries(self) -> None:
         payload = json.loads(COMMITTED_JSON.read_text(encoding="utf-8"))
         themes = payload["themes"]
         self.assertEqual(len(themes), 13)
         self.assertEqual(len({row["theme"] for row in themes}), 13)
-        self.assertEqual(sum(row["forecast_count"] for row in themes), 2)
+        self.assertEqual(sum(row["forecast_count"] for row in themes), 3)
 
-        forbidden = {
-            "absolute_gap",
-            "relative_gap",
-            "required_cagr",
-            "observed_cagr",
-            "verdict",
-        }
         forecasts = [forecast for row in themes for forecast in row["forecasts"]]
-        self.assertEqual({row["comparison_status"] for row in forecasts}, {"not_comparable"})
+        by_id = {row["forecast_id"]: row for row in forecasts}
+        self.assertEqual({row["comparison_status"] for row in forecasts}, {"comparable", "not_comparable"})
+
+        acceleration = by_id["global-real-gdp-growth-2030"]
+        self.assertEqual(acceleration["observed_series_id"], "econalert/world-gdp-growth")
+        self.assertEqual(acceleration["observed_value"], 2.9)
+        self.assertEqual(acceleration["observed_period"], "2025")
+        self.assertEqual(acceleration["absolute_gap"], 4.4)
+        self.assertEqual(acceleration["absolute_gap_unit"], "percentage_points")
+        self.assertFalse(acceleration["target_date_reached"])
+
         for forecast in forecasts:
-            self.assertTrue(forbidden.isdisjoint(forecast))
-            self.assertIsNone(forecast["observed_series_id"])
-            self.assertTrue(forecast["source_url"].startswith("https://www.ark-invest.com/"))
+            self.assertNotIn("verdict", forecast)
+            self.assertNotIn("required_cagr", forecast)
+            self.assertNotIn("observed_cagr", forecast)
             self.assertIsInstance(forecast["source_page"], int)
+            if forecast["comparison_status"] == "not_comparable":
+                self.assertIsNone(forecast["observed_series_id"])
+                self.assertIsNone(forecast["absolute_gap"])
+            else:
+                self.assertTrue(forecast["observed_source_url"].startswith("https://raw.githubusercontent.com/"))
+                self.assertEqual(len(forecast["observed_sha256"]), 64)
 
 
 if __name__ == "__main__":
