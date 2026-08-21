@@ -152,7 +152,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             break
 
     if not records:
-        dominant_reason = max(rejections, key=rejections.get) if rejections else "no_candidate"
+        dominant_reason = max(rejections.items(), key=lambda item: item[1])[0] if rejections else "no_candidate"
         raise NoQuotedMarketError(dominant_reason)
 
     observed_at = utc_now_iso()
