@@ -3,6 +3,9 @@ from __future__ import annotations
 import json
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
+
+import pytest
 
 from scripts import polymarket_snapshot
 from src.io.providers.polymarket import GammaMarket, GammaMarketPage
@@ -30,7 +33,7 @@ def _market() -> GammaMarket:
     )
 
 
-def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch) -> None:
+def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(
         polymarket_snapshot,
         "fetch_markets_page",
@@ -58,7 +61,7 @@ def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch)
 
 
 def test_write_snapshot_is_deterministic_for_same_payload(tmp_path: Path) -> None:
-    snapshot = {
+    snapshot: dict[str, Any] = {
         "schema_version": "investor2.polymarket-market-snapshot.v1",
         "observed_at": "2026-08-21T12:00:00Z",
         "source": "polymarket_market_data",
