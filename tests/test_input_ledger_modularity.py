@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 from pathlib import Path
+from typing import Any
 
 import pytest
 
@@ -13,7 +14,7 @@ LEDGER = ROOT / "data/input_ledger/accepted.ndjson"
 REGISTRY = ROOT / "data/input_ledger/source_registry.json"
 
 
-def _load_current() -> tuple[list[dict], dict]:
+def _load_current() -> tuple[list[dict[str, Any]], dict[str, Any]]:
     entries = [json.loads(line) for line in LEDGER.read_text(encoding="utf-8").splitlines() if line.strip()]
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
     return entries, registry
