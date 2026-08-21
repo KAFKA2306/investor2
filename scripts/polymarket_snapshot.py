@@ -40,10 +40,26 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
         raise ValueError("Polymarket spread is outside [0, 1]")
 
 
+def _gamma_has_live_book(market: GammaMarket) -> bool:
+    if market.best_bid is None or market.best_ask is None:
+        return False
+    if not Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1"):
+        return False
+    return True
+
+
 def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
     if min_liquidity < 0:
         raise ValueError("min_liquidity must be non-negative")
-    markets = fetch_markets(limit=100, offset=0, session=session)
+    markets = fetch_markets(
+        limit=100,
+        offset=0,
+        closed=False,
+        order="liquidity_num",
+        ascending=False,
+        liquidity_num_min=min_liquidity,
+        session=session,
+    )
     live = [
         market
         for market in markets
@@ -57,6 +73,7 @@ def discover_live_markets(*, min_liquidity: float, session: requests.Session) ->
         and market.question
         and market.clob_token_ids
         and (market.liquidity_num or 0) >= min_liquidity
+        and _gamma_has_live_book(market)
     ]
     live.sort(key=lambda market: market.liquidity_num or 0, reverse=True)
     if not live:
@@ -128,8 +145,10 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
                 "closed": False,
                 "enable_order_book": True,
                 "accepting_orders": True,
+                "gamma_best_bid_ask_required": True,
                 "complete_clob_quote": True,
-                "client_order": "liquidity_num desc",
+                "order": "liquidity_num",
+                "ascending": False,
                 "liquidity_num_min": min_liquidity,
                 "max_markets": max_markets,
             },
@@ -150,6 +169,52 @@ def write_snapshot(snapshot: dict[str, Any], output: Path) -> str:
     output.parent.mkdir(parents=True, exist_ok=True)
     output.write_text(payload, encoding="utf-8")
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
+
+
+def _health_failure_code(error: Exception) -> str:
+    if isinstance(error, requests.HTTPError):
+        status = error.response.status_code if error.response is not None else None
+        if status is not None:
+            return f"http_{status}"
+        return "http_error"
+    if isinstance(error, requests.RequestException):
+        return "network"
+    if isinstance(error, AssertionError):
+        return "no_quoted_market"
+    if isinstance(error, (ValueError, TypeError)):
+        return "schema_or_value"
+    return "unexpected"
+
+
+def _run_health(*, gamma_only: bool, min_liquidity: float) -> int:
+    try:
+        if gamma_only:
+            discover_live_markets(min_liquidity=min_liquidity, session=requests.Session())
+            stage = "gamma"
+        else:
+            collect_snapshot(max_markets=1, min_liquidity=min_liquidity)
+            stage = "full"
+    except Exception as error:  # noqa: BLE001 - health mode must redact upstream payloads and identifiers.
+        print(
+            json.dumps(
+                {
+                    "schema_version": HEALTH_SCHEMA_VERSION,
+                    "stage": "gamma" if gamma_only else "full",
+                    "status": "FAIL",
+                    "reason": _health_failure_code(error),
+                },
+                sort_keys=True,
+            )
+        )
+        return 1
+
+    print(
+        json.dumps(
+            {"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"},
+            sort_keys=True,
+        )
+    )
+    return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -181,18 +246,11 @@ def main() -> None:
         raise SystemExit("--output is required unless a health mode is used")
 
     if args.health_gamma:
-        discover_live_markets(min_liquidity=args.min_liquidity, session=requests.Session())
-        print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": "gamma", "status": "PASS"}, sort_keys=True))
-        return
-
-    snapshot = collect_snapshot(
-        max_markets=1 if args.health_only else args.max_markets,
-        min_liquidity=args.min_liquidity,
-    )
+        raise SystemExit(_run_health(gamma_only=True, min_liquidity=args.min_liquidity))
     if args.health_only:
-        print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": "full", "status": "PASS"}, sort_keys=True))
-        return
+        raise SystemExit(_run_health(gamma_only=False, min_liquidity=args.min_liquidity))
 
+    snapshot = collect_snapshot(max_markets=args.max_markets, min_liquidity=args.min_liquidity)
     assert args.output is not None
     digest = write_snapshot(snapshot, args.output)
     print(
