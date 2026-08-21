@@ -13,9 +13,28 @@ class ArkForecastCatalogTest(unittest.TestCase):
     def test_forecast_sources_are_pinned_and_not_overinterpreted(self) -> None:
         catalog = json.loads(CATALOG.read_text(encoding="utf-8"))
         self.assertEqual(catalog["schema_version"], "investor2.ark-big-ideas-forecast-catalog.v1")
-        self.assertEqual(len(catalog["forecasts"]), 2)
+        self.assertEqual(len(catalog["forecasts"]), 3)
 
         forecasts = {row["forecast_id"]: row for row in catalog["forecasts"]}
+
+        acceleration = forecasts["global-real-gdp-growth-2030"]
+        self.assertEqual(acceleration["target_value"], 7.3)
+        self.assertEqual(acceleration["target_unit"], "percent")
+        self.assertEqual(acceleration["target_period"], "2030")
+        self.assertEqual(acceleration["source_page"], 11)
+        self.assertEqual(acceleration["comparison"]["status"], "comparable")
+        self.assertEqual(acceleration["comparison"]["observed_value"], 2.9)
+        self.assertEqual(acceleration["comparison"]["observed_period"], "2025")
+        self.assertEqual(acceleration["comparison"]["observed_unit"], "percent")
+        self.assertEqual(acceleration["comparison"]["absolute_gap"], 4.4)
+        self.assertEqual(acceleration["comparison"]["absolute_gap_unit"], "percentage_points")
+        self.assertFalse(acceleration["comparison"]["target_date_reached"])
+        self.assertEqual(acceleration["comparison"]["observed_repository"], "KAFKA2306/econalert")
+        self.assertEqual(
+            acceleration["comparison"]["observed_sha256"],
+            "48fa167bc1f554188c7d94f441fd3ac903ee9772ddb3fb2041c15cbb8927c9b0",
+        )
+
         consumer = forecasts["ai-consumer-mediated-revenue-2030"]
         self.assertEqual(consumer["target_value"], 900)
         self.assertEqual(consumer["target_unit"], "USD billion")
@@ -33,10 +52,11 @@ class ArkForecastCatalogTest(unittest.TestCase):
         self.assertEqual(autonomous["comparison"]["status"], "not_comparable")
         self.assertIsNone(autonomous["comparison"]["observed_series_id"])
 
-        forbidden = {"absolute_gap", "relative_gap", "required_cagr", "observed_cagr", "verdict"}
         for forecast in forecasts.values():
-            self.assertTrue(forbidden.isdisjoint(forecast))
-            self.assertTrue(forbidden.isdisjoint(forecast["comparison"]))
+            comparison = forecast["comparison"]
+            self.assertNotIn("verdict", comparison)
+            self.assertNotIn("required_cagr", comparison)
+            self.assertNotIn("observed_cagr", comparison)
             snapshot_path = ROOT / forecast["source_snapshot_path"]
             snapshot_bytes = snapshot_path.read_bytes()
             self.assertEqual(hashlib.sha256(snapshot_bytes).hexdigest(), forecast["source_snapshot_sha256"])
