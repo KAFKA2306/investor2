@@ -21,7 +21,7 @@ def main() -> None:
     print(
         json.dumps(
             {
-                "schema_version": "investor2.input-ledger-audit.v2",
+                "schema_version": "investor2.input-ledger-audit.v1",
                 "status": "PASS",
                 "artifacts": results,
             },
