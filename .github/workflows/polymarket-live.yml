@@ -29,7 +29,7 @@ jobs:
   health:
     name: Validate live Gamma and CLOB access
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 5
     steps:
       - uses: actions/checkout@v7
       - name: Set up Python
@@ -40,9 +40,11 @@ jobs:
         uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "0.11.32"
-      - name: Install locked runtime
-        run: uv sync --locked
+      - name: Install minimal health runtime
+        run: |
+          uv venv .polymarket-venv
+          uv pip install --python .polymarket-venv/bin/python requests==2.32.5 pydantic==2.12.5
       - name: Validate Gamma discovery without publishing observations
-        run: uv run --no-sync python scripts/polymarket_snapshot.py --health-gamma
+        run: .polymarket-venv/bin/python scripts/polymarket_snapshot.py --health-gamma
       - name: Validate CLOB quotes without publishing observations
-        run: uv run --no-sync python scripts/polymarket_snapshot.py --health-only
+        run: .polymarket-venv/bin/python scripts/polymarket_snapshot.py --health-only
