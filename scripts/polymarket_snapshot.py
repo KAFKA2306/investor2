@@ -29,6 +29,18 @@ SCHEMA_VERSION = "investor2.polymarket-market-snapshot.v1"
 HEALTH_SCHEMA_VERSION = "investor2.polymarket-source-health.v1"
 
 
+class MarketQuoteRejected(Exception):
+    def __init__(self, reason: str) -> None:
+        super().__init__(reason)
+        self.reason = reason
+
+
+class NoQuotedMarketError(AssertionError):
+    def __init__(self, dominant_reason: str) -> None:
+        super().__init__("Polymarket live markets did not expose a complete quoted order book")
+        self.dominant_reason = dominant_reason
+
+
 def utc_now_iso() -> str:
     return datetime.now(UTC).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
@@ -78,36 +90,47 @@ def discover_live_markets(*, min_liquidity: float, session: requests.Session) ->
     return live
 
 
-def _quote_market(market: GammaMarket, *, session: requests.Session) -> dict[str, Any] | None:
+def _quote_market(market: GammaMarket, *, session: requests.Session) -> dict[str, Any]:
     try:
         normalized = normalize_market(market)
-        outcomes = normalized["outcomes"]
-        token_ids = normalized["token_ids"]
-        if not outcomes or not token_ids or len(outcomes) != len(token_ids):
-            return None
+    except (ValueError, TypeError, InvalidOperation) as error:
+        raise MarketQuoteRejected("gamma_normalize") from error
 
-        quotes: list[dict[str, str]] = []
-        for outcome, token_id in zip(outcomes, token_ids, strict=True):
+    outcomes = normalized["outcomes"]
+    token_ids = normalized["token_ids"]
+    if not outcomes or not token_ids or len(outcomes) != len(token_ids):
+        raise MarketQuoteRejected("outcome_token_mapping")
+
+    quotes: list[dict[str, str]] = []
+    for outcome, token_id in zip(outcomes, token_ids, strict=True):
+        try:
             midpoint = fetch_midpoint_if_available(token_id, session=session)
-            if midpoint is None:
-                return None
+        except (ValueError, TypeError, InvalidOperation) as error:
+            raise MarketQuoteRejected("midpoint_schema") from error
+        if midpoint is None:
+            raise MarketQuoteRejected("midpoint_unavailable")
+
+        try:
             spread = fetch_spread_if_available(token_id, session=session)
-            if spread is None:
-                return None
+        except (ValueError, TypeError, InvalidOperation) as error:
+            raise MarketQuoteRejected("spread_schema") from error
+        if spread is None:
+            raise MarketQuoteRejected("spread_unavailable")
+
+        try:
             _validate_quote(midpoint, spread)
-            quotes.append(
-                {
-                    "outcome": outcome,
-                    "token_id": token_id,
-                    "midpoint": str(midpoint),
-                    "spread": str(spread),
-                }
-            )
-        return {**normalized, "quotes": quotes}
-    except (ValueError, TypeError, InvalidOperation):
-        # A malformed/stale market is rejected as a unit. The source passes only
-        # when at least one complete Gamma identity + CLOB quote survives.
-        return None
+        except (ValueError, InvalidOperation) as error:
+            raise MarketQuoteRejected("quote_range") from error
+
+        quotes.append(
+            {
+                "outcome": outcome,
+                "token_id": token_id,
+                "midpoint": str(midpoint),
+                "spread": str(spread),
+            }
+        )
+    return {**normalized, "quotes": quotes}
 
 
 def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
@@ -117,16 +140,20 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
     session = requests.Session()
     markets = discover_live_markets(min_liquidity=min_liquidity, session=session)
     records: list[dict[str, Any]] = []
+    rejections: dict[str, int] = {}
     for market in markets:
-        quoted = _quote_market(market, session=session)
-        if quoted is None:
+        try:
+            quoted = _quote_market(market, session=session)
+        except MarketQuoteRejected as error:
+            rejections[error.reason] = rejections.get(error.reason, 0) + 1
             continue
         records.append(quoted)
         if len(records) >= max_markets:
             break
 
     if not records:
-        raise AssertionError("Polymarket live markets did not expose a complete quoted order book")
+        dominant_reason = max(rejections, key=rejections.get) if rejections else "no_candidate"
+        raise NoQuotedMarketError(dominant_reason)
 
     observed_at = utc_now_iso()
     return {
@@ -178,6 +205,8 @@ def _health_failure_code(error: Exception) -> str:
         return f"http_{status}" if status is not None else "http_error"
     if isinstance(error, requests.RequestException):
         return "network"
+    if isinstance(error, NoQuotedMarketError):
+        return f"no_quoted_market_{error.dominant_reason}"
     if isinstance(error, AssertionError):
         return "no_quoted_market"
     if isinstance(error, (ValueError, TypeError, InvalidOperation)):
