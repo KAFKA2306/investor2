@@ -18,7 +18,8 @@ sys.path.insert(0, str(ROOT))
 from src.io.providers.polymarket import (  # noqa: E402
     CLOB_BASE_URL,
     GAMMA_BASE_URL,
-    fetch_markets_page,
+    GammaMarket,
+    fetch_markets,
     fetch_midpoint,
     fetch_spread,
     normalize_market,
@@ -39,27 +40,37 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
         raise ValueError("Polymarket spread is outside [0, 1]")
 
 
-def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
-    if max_markets <= 0:
-        raise ValueError("max_markets must be positive")
+def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
     if min_liquidity < 0:
         raise ValueError("min_liquidity must be non-negative")
-
-    session = requests.Session()
-    page = fetch_markets_page(
+    markets = fetch_markets(
         limit=100,
+        offset=0,
         closed=False,
         order="liquidity_num",
         ascending=False,
         liquidity_num_min=min_liquidity,
         session=session,
     )
+    live = [
+        market
+        for market in markets
+        if market.active and not market.closed and market.enable_order_book and market.accepting_orders
+    ]
+    if not live:
+        raise AssertionError("Polymarket returned no active order-book markets matching the collection scope")
+    return live
+
+
+def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
+    if max_markets <= 0:
+        raise ValueError("max_markets must be positive")
+
+    session = requests.Session()
+    markets = discover_live_markets(min_liquidity=min_liquidity, session=session)
 
     records: list[dict[str, Any]] = []
-    for market in page.markets:
-        if not market.active or market.closed or not market.enable_order_book or not market.accepting_orders:
-            continue
-
+    for market in markets:
         normalized = normalize_market(market)
         outcomes = normalized["outcomes"]
         token_ids = normalized["token_ids"]
@@ -87,7 +98,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             break
 
     if not records:
-        raise AssertionError("Polymarket returned no active order-book markets matching the collection scope")
+        raise AssertionError("Polymarket live markets did not expose complete outcome/token mappings")
 
     observed_at = utc_now_iso()
     return {
@@ -96,7 +107,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
         "source": "polymarket_market_data",
         "provenance": {
             "endpoints": [
-                f"{GAMMA_BASE_URL}/markets/keyset",
+                f"{GAMMA_BASE_URL}/markets",
                 f"{CLOB_BASE_URL}/midpoint",
                 f"{CLOB_BASE_URL}/spread",
             ],
@@ -112,7 +123,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             },
             "retrieved_at": observed_at,
             "source_urls": [
-                "https://docs.polymarket.com/api-reference/markets/list-markets-keyset-pagination",
+                "https://docs.polymarket.com/api-reference/markets/list-markets",
                 "https://docs.polymarket.com/api-reference/data/get-midpoint-price",
                 "https://docs.polymarket.com/api-reference/market-data/get-spread",
             ],
@@ -132,6 +143,11 @@ def write_snapshot(snapshot: dict[str, Any], output: Path) -> str:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Collect read-only Polymarket market observations.")
     parser.add_argument(
+        "--health-gamma",
+        action="store_true",
+        help="Validate live Gamma discovery without persisting data.",
+    )
+    parser.add_argument(
         "--health-only",
         action="store_true",
         help="Validate live Gamma/CLOB access without persisting data.",
@@ -148,20 +164,21 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    if not args.health_only and args.output is None:
-        raise SystemExit("--output is required unless --health-only is used")
+    health_mode = args.health_gamma or args.health_only
+    if not health_mode and args.output is None:
+        raise SystemExit("--output is required unless a health mode is used")
+
+    if args.health_gamma:
+        discover_live_markets(min_liquidity=args.min_liquidity, session=requests.Session())
+        print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": "gamma", "status": "PASS"}, sort_keys=True))
+        return
 
     snapshot = collect_snapshot(
         max_markets=1 if args.health_only else args.max_markets,
         min_liquidity=args.min_liquidity,
     )
     if args.health_only:
-        print(
-            json.dumps(
-                {"schema_version": HEALTH_SCHEMA_VERSION, "status": "PASS"},
-                sort_keys=True,
-            )
-        )
+        print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": "full", "status": "PASS"}, sort_keys=True))
         return
 
     assert args.output is not None
