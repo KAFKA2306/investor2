@@ -36,6 +36,7 @@ EXPECTED_PERCENT_DURATION = "% Change same quarter 1 year ago"
 EXPECTED_DATA_HEADER = ["Year", "Qtr1", "Qtr2", "Qtr3", "Qtr4", "Annual"]
 FIRST_YEAR = 1948
 NUMBER_RE = re.compile(r"^[+-]?\d+(?:\.\d+)?$")
+FOOTNOTE_RE = re.compile(r"^[A-Z]+\s*:\s*\S.*$")
 
 
 class SeriesReportParser(HTMLParser):
@@ -110,6 +111,8 @@ def parse_series_report(path: Path, *, expected_series_id: str) -> tuple[dict[st
 
     annual_values: dict[int, float] = {}
     for row in parser.data_rows[1:]:
+        if len(row) == 1 and FOOTNOTE_RE.fullmatch(row[0]):
+            continue
         if len(row) != len(EXPECTED_DATA_HEADER):
             raise AssertionError(f"unexpected BLS Series Report row width: {row!r}")
         if not row[0].isdigit():
