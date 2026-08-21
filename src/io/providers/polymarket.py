@@ -5,7 +5,7 @@ from decimal import Decimal
 from typing import Any, Literal
 
 import requests
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, TypeAdapter
 
 GAMMA_BASE_URL = "https://gamma-api.polymarket.com"
 CLOB_BASE_URL = "https://clob.polymarket.com"
@@ -16,21 +16,27 @@ PriceInterval = Literal["max", "all", "1m", "1w", "1d", "6h", "1h"]
 class GammaMarket(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: str
-    question: str
-    condition_id: str = Field(alias="conditionId")
-    slug: str
+    id: str | None = None
+    question: str | None = None
+    condition_id: str | None = Field(default=None, alias="conditionId")
+    slug: str | None = None
     resolution_source: str | None = Field(default=None, alias="resolutionSource")
     start_date: str | None = Field(default=None, alias="startDate")
     end_date: str | None = Field(default=None, alias="endDate")
-    active: bool
-    closed: bool
+    active: bool | None = None
+    closed: bool | None = None
+    enable_order_book: bool | None = Field(default=None, alias="enableOrderBook")
+    accepting_orders: bool | None = Field(default=None, alias="acceptingOrders")
     outcomes: str | list[str] | None = None
     outcome_prices: str | list[str] | None = Field(default=None, alias="outcomePrices")
     clob_token_ids: str | list[str] | None = Field(default=None, alias="clobTokenIds")
     volume_num: float | None = Field(default=None, alias="volumeNum")
     liquidity_num: float | None = Field(default=None, alias="liquidityNum")
     volume_24h: float | None = Field(default=None, alias="volume24hr")
+    best_bid: Decimal | None = Field(default=None, alias="bestBid")
+    best_ask: Decimal | None = Field(default=None, alias="bestAsk")
+    spread: Decimal | None = None
+    last_trade_price: Decimal | None = Field(default=None, alias="lastTradePrice")
 
 
 class GammaMarketPage(BaseModel):
@@ -39,7 +45,9 @@ class GammaMarketPage(BaseModel):
 
 
 class MidpointResponse(BaseModel):
-    mid_price: Decimal
+    # The API Reference documents `mid_price`, while Polymarket's official
+    # agent-skills examples and the live CLOB currently use `mid`.
+    mid_price: Decimal = Field(validation_alias=AliasChoices("mid_price", "mid"))
 
 
 class SpreadResponse(BaseModel):
@@ -55,6 +63,9 @@ class PriceHistoryResponse(BaseModel):
     history: list[PricePoint]
 
 
+_GAMMA_MARKETS = TypeAdapter(list[GammaMarket])
+
+
 def _decode_string_list(value: str | list[str] | None, *, field_name: str) -> list[str]:
     if value is None:
         return []
@@ -67,6 +78,9 @@ def _decode_string_list(value: str | list[str] | None, *, field_name: str) -> li
 
 
 def normalize_market(market: GammaMarket) -> dict[str, Any]:
+    if not market.id or not market.condition_id or not market.slug or not market.question:
+        raise ValueError("Polymarket market identity is incomplete")
+
     outcomes = _decode_string_list(market.outcomes, field_name="outcomes")
     token_ids = _decode_string_list(market.clob_token_ids, field_name="clobTokenIds")
     outcome_prices = _decode_string_list(market.outcome_prices, field_name="outcomePrices")
@@ -85,13 +99,51 @@ def normalize_market(market: GammaMarket) -> dict[str, Any]:
         "end_date": market.end_date,
         "active": market.active,
         "closed": market.closed,
+        "enable_order_book": market.enable_order_book,
+        "accepting_orders": market.accepting_orders,
         "outcomes": outcomes,
         "token_ids": token_ids,
         "gamma_outcome_prices": [str(Decimal(value)) for value in outcome_prices],
         "volume": market.volume_num,
         "volume_24h": market.volume_24h,
         "liquidity": market.liquidity_num,
+        "gamma_best_bid": str(market.best_bid) if market.best_bid is not None else None,
+        "gamma_best_ask": str(market.best_ask) if market.best_ask is not None else None,
+        "gamma_spread": str(market.spread) if market.spread is not None else None,
+        "gamma_last_trade_price": str(market.last_trade_price) if market.last_trade_price is not None else None,
     }
+
+
+def fetch_markets(
+    *,
+    limit: int = 100,
+    offset: int = 0,
+    closed: bool | None = None,
+    order: str | None = None,
+    ascending: bool | None = None,
+    liquidity_num_min: float | None = None,
+    volume_num_min: float | None = None,
+    session: requests.Session | None = None,
+) -> list[GammaMarket]:
+    if limit < 0:
+        raise ValueError("limit must be non-negative")
+    if offset < 0:
+        raise ValueError("offset must be non-negative")
+    params: dict[str, Any] = {"limit": limit, "offset": offset}
+    if closed is not None:
+        params["closed"] = closed
+    if order:
+        params["order"] = order
+    if ascending is not None:
+        params["ascending"] = ascending
+    if liquidity_num_min is not None:
+        params["liquidity_num_min"] = liquidity_num_min
+    if volume_num_min is not None:
+        params["volume_num_min"] = volume_num_min
+    client = session or requests.Session()
+    response = client.get(f"{GAMMA_BASE_URL}/markets", params=params, timeout=REQUEST_TIMEOUT_SECONDS)
+    response.raise_for_status()
+    return _GAMMA_MARKETS.validate_python(response.json())
 
 
 def fetch_markets_page(
@@ -135,6 +187,19 @@ def fetch_midpoint(token_id: str, *, session: requests.Session | None = None) ->
     return MidpointResponse.model_validate(response.json()).mid_price
 
 
+def fetch_midpoint_if_available(token_id: str, *, session: requests.Session | None = None) -> Decimal | None:
+    client = session or requests.Session()
+    response = client.get(
+        f"{CLOB_BASE_URL}/midpoint",
+        params={"token_id": token_id},
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    if response.status_code in {400, 404}:
+        return None
+    response.raise_for_status()
+    return MidpointResponse.model_validate(response.json()).mid_price
+
+
 def fetch_spread(token_id: str, *, session: requests.Session | None = None) -> Decimal:
     client = session or requests.Session()
     response = client.get(
@@ -142,6 +207,19 @@ def fetch_spread(token_id: str, *, session: requests.Session | None = None) -> D
         params={"token_id": token_id},
         timeout=REQUEST_TIMEOUT_SECONDS,
     )
+    response.raise_for_status()
+    return SpreadResponse.model_validate(response.json()).spread
+
+
+def fetch_spread_if_available(token_id: str, *, session: requests.Session | None = None) -> Decimal | None:
+    client = session or requests.Session()
+    response = client.get(
+        f"{CLOB_BASE_URL}/spread",
+        params={"token_id": token_id},
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    if response.status_code in {400, 404}:
+        return None
     response.raise_for_status()
     return SpreadResponse.model_validate(response.json()).spread
 

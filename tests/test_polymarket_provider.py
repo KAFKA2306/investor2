@@ -47,9 +47,14 @@ def test_normalize_market_rejects_token_outcome_mismatch() -> None:
         normalize_market(market)
 
 
-def test_clob_responses_parse_prices_as_decimal() -> None:
-    midpoint = MidpointResponse.model_validate({"mid_price": "0.45"})
-    history = PriceHistoryResponse.model_validate({"history": [{"t": 1_787_000_000, "p": 0.45}]})
+@pytest.mark.parametrize("payload", [{"mid_price": "0.45"}, {"mid": "0.45"}])
+def test_midpoint_response_accepts_documented_and_live_keys(payload: dict[str, str]) -> None:
+    midpoint = MidpointResponse.model_validate(payload)
 
     assert midpoint.mid_price == Decimal("0.45")
+
+
+def test_price_history_parses_prices_as_decimal() -> None:
+    history = PriceHistoryResponse.model_validate({"history": [{"t": 1_787_000_000, "p": 0.45}]})
+
     assert history.history[0].p == Decimal("0.45")

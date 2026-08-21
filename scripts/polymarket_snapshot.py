@@ -6,7 +6,7 @@ import hashlib
 import json
 import sys
 from datetime import UTC, datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -18,14 +18,27 @@ sys.path.insert(0, str(ROOT))
 from src.io.providers.polymarket import (  # noqa: E402
     CLOB_BASE_URL,
     GAMMA_BASE_URL,
-    fetch_markets_page,
-    fetch_midpoint,
-    fetch_spread,
+    GammaMarket,
+    fetch_markets,
+    fetch_midpoint_if_available,
+    fetch_spread_if_available,
     normalize_market,
 )
 
 SCHEMA_VERSION = "investor2.polymarket-market-snapshot.v1"
 HEALTH_SCHEMA_VERSION = "investor2.polymarket-source-health.v1"
+
+
+class MarketQuoteRejected(Exception):
+    def __init__(self, reason: str) -> None:
+        super().__init__(reason)
+        self.reason = reason
+
+
+class NoQuotedMarketError(AssertionError):
+    def __init__(self, dominant_reason: str) -> None:
+        super().__init__("Polymarket live markets did not expose a complete quoted order book")
+        self.dominant_reason = dominant_reason
 
 
 def utc_now_iso() -> str:
@@ -39,52 +52,108 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
         raise ValueError("Polymarket spread is outside [0, 1]")
 
 
-def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
-    if max_markets <= 0:
-        raise ValueError("max_markets must be positive")
+def _gamma_has_live_book(market: GammaMarket) -> bool:
+    if market.best_bid is None or market.best_ask is None:
+        return False
+    try:
+        return Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1")
+    except InvalidOperation:
+        return False
+
+
+def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
     if min_liquidity < 0:
         raise ValueError("min_liquidity must be non-negative")
 
-    session = requests.Session()
-    page = fetch_markets_page(
-        limit=min(100, max(20, max_markets * 4)),
-        closed=False,
-        order="liquidity_num",
-        ascending=False,
-        liquidity_num_min=min_liquidity,
-        session=session,
-    )
+    # Keep the upstream request deliberately conservative. Gamma has rejected
+    # some optional sort/filter combinations with HTTP 422; selection is cheap
+    # and deterministic on the returned page, so do it locally instead.
+    markets = fetch_markets(limit=100, offset=0, closed=False, session=session)
+    live = [
+        market
+        for market in markets
+        if market.active is True
+        and market.closed is False
+        and market.enable_order_book is True
+        and market.accepting_orders is True
+        and market.id
+        and market.condition_id
+        and market.slug
+        and market.question
+        and market.clob_token_ids
+        and (market.liquidity_num or 0) >= min_liquidity
+        and _gamma_has_live_book(market)
+    ]
+    live.sort(key=lambda market: market.liquidity_num or 0, reverse=True)
+    if not live:
+        raise AssertionError("Polymarket returned no active order-book markets matching the collection scope")
+    return live
 
-    records: list[dict[str, Any]] = []
-    for market in page.markets:
+
+def _quote_market(market: GammaMarket, *, session: requests.Session) -> dict[str, Any]:
+    try:
         normalized = normalize_market(market)
-        outcomes = normalized["outcomes"]
-        token_ids = normalized["token_ids"]
-        if not outcomes or not token_ids:
-            continue
-        if len(outcomes) != len(token_ids):
-            raise ValueError("Polymarket normalized outcome/token mapping is invalid")
+    except (ValueError, TypeError, InvalidOperation) as error:
+        raise MarketQuoteRejected("gamma_normalize") from error
 
-        quotes: list[dict[str, str]] = []
-        for outcome, token_id in zip(outcomes, token_ids, strict=True):
-            midpoint = fetch_midpoint(token_id, session=session)
-            spread = fetch_spread(token_id, session=session)
+    outcomes = normalized["outcomes"]
+    token_ids = normalized["token_ids"]
+    if not outcomes or not token_ids or len(outcomes) != len(token_ids):
+        raise MarketQuoteRejected("outcome_token_mapping")
+
+    quotes: list[dict[str, str]] = []
+    for outcome, token_id in zip(outcomes, token_ids, strict=True):
+        try:
+            midpoint = fetch_midpoint_if_available(token_id, session=session)
+        except (ValueError, TypeError, InvalidOperation) as error:
+            raise MarketQuoteRejected("midpoint_schema") from error
+        if midpoint is None:
+            raise MarketQuoteRejected("midpoint_unavailable")
+
+        try:
+            spread = fetch_spread_if_available(token_id, session=session)
+        except (ValueError, TypeError, InvalidOperation) as error:
+            raise MarketQuoteRejected("spread_schema") from error
+        if spread is None:
+            raise MarketQuoteRejected("spread_unavailable")
+
+        try:
             _validate_quote(midpoint, spread)
-            quotes.append(
-                {
-                    "outcome": outcome,
-                    "token_id": token_id,
-                    "midpoint": str(midpoint),
-                    "spread": str(spread),
-                }
-            )
+        except (ValueError, InvalidOperation) as error:
+            raise MarketQuoteRejected("quote_range") from error
 
-        records.append({**normalized, "quotes": quotes})
+        quotes.append(
+            {
+                "outcome": outcome,
+                "token_id": token_id,
+                "midpoint": str(midpoint),
+                "spread": str(spread),
+            }
+        )
+    return {**normalized, "quotes": quotes}
+
+
+def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
+    if max_markets <= 0:
+        raise ValueError("max_markets must be positive")
+
+    session = requests.Session()
+    markets = discover_live_markets(min_liquidity=min_liquidity, session=session)
+    records: list[dict[str, Any]] = []
+    rejections: dict[str, int] = {}
+    for market in markets:
+        try:
+            quoted = _quote_market(market, session=session)
+        except MarketQuoteRejected as error:
+            rejections[error.reason] = rejections.get(error.reason, 0) + 1
+            continue
+        records.append(quoted)
         if len(records) >= max_markets:
             break
 
     if not records:
-        raise AssertionError("Polymarket returned no active CLOB markets matching the collection scope")
+        dominant_reason = max(rejections.items(), key=lambda item: item[1])[0] if rejections else "no_candidate"
+        raise NoQuotedMarketError(dominant_reason)
 
     observed_at = utc_now_iso()
     return {
@@ -93,22 +162,29 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
         "source": "polymarket_market_data",
         "provenance": {
             "endpoints": [
-                f"{GAMMA_BASE_URL}/markets/keyset",
+                f"{GAMMA_BASE_URL}/markets",
                 f"{CLOB_BASE_URL}/midpoint",
                 f"{CLOB_BASE_URL}/spread",
             ],
             "query_or_scope": {
-                "closed": False,
-                "order": "liquidity_num",
-                "ascending": False,
-                "liquidity_num_min": min_liquidity,
+                "server_query": {"closed": False, "limit": 100, "offset": 0},
+                "client_filters": {
+                    "active": True,
+                    "closed": False,
+                    "enable_order_book": True,
+                    "accepting_orders": True,
+                    "gamma_best_bid_ask_required": True,
+                    "complete_clob_quote": True,
+                    "liquidity_num_min": min_liquidity,
+                },
+                "client_order": "liquidity_num desc",
                 "max_markets": max_markets,
             },
             "retrieved_at": observed_at,
             "source_urls": [
-                "https://docs.polymarket.com/api-reference/markets/list-markets-keyset-pagination",
+                "https://docs.polymarket.com/api-reference/markets/list-markets",
                 "https://docs.polymarket.com/api-reference/data/get-midpoint-price",
-                "https://docs.polymarket.com/api-reference/market-data/get-spreads",
+                "https://docs.polymarket.com/api-reference/market-data/get-spread",
             ],
             "storage_visibility": "private-only",
         },
@@ -123,18 +199,65 @@ def write_snapshot(snapshot: dict[str, Any], output: Path) -> str:
     return hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+def _health_failure_code(error: Exception) -> str:
+    if isinstance(error, requests.HTTPError):
+        status = error.response.status_code if error.response is not None else None
+        return f"http_{status}" if status is not None else "http_error"
+    if isinstance(error, requests.RequestException):
+        return "network"
+    if isinstance(error, NoQuotedMarketError):
+        return f"no_quoted_market_{error.dominant_reason}"
+    if isinstance(error, AssertionError):
+        return "no_quoted_market"
+    if isinstance(error, (ValueError, TypeError, InvalidOperation)):
+        return "schema_or_value"
+    return "unexpected"
+
+
+def _run_health(*, gamma_only: bool, min_liquidity: float) -> int:
+    try:
+        if gamma_only:
+            discover_live_markets(min_liquidity=min_liquidity, session=requests.Session())
+            stage = "gamma"
+        else:
+            collect_snapshot(max_markets=1, min_liquidity=min_liquidity)
+            stage = "full"
+    except Exception as error:  # noqa: BLE001 - redact upstream payloads and identifiers.
+        print(
+            json.dumps(
+                {
+                    "schema_version": HEALTH_SCHEMA_VERSION,
+                    "stage": "gamma" if gamma_only else "full",
+                    "status": "FAIL",
+                    "reason": _health_failure_code(error),
+                },
+                sort_keys=True,
+            )
+        )
+        return 1
+
+    print(
+        json.dumps(
+            {"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"},
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Collect read-only Polymarket market observations.")
+    parser.add_argument(
+        "--health-gamma",
+        action="store_true",
+        help="Validate live Gamma discovery without persisting data.",
+    )
     parser.add_argument(
         "--health-only",
         action="store_true",
         help="Validate live Gamma/CLOB access without persisting data.",
     )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        help="Private output path for a normalized snapshot.",
-    )
+    parser.add_argument("--output", type=Path, help="Private output path for a normalized snapshot.")
     parser.add_argument("--max-markets", type=int, default=20)
     parser.add_argument("--min-liquidity", type=float, default=1000.0)
     return parser
@@ -142,31 +265,21 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = build_parser().parse_args()
-    if not args.health_only and args.output is None:
-        raise SystemExit("--output is required unless --health-only is used")
+    health_mode = args.health_gamma or args.health_only
+    if not health_mode and args.output is None:
+        raise SystemExit("--output is required unless a health mode is used")
 
-    snapshot = collect_snapshot(
-        max_markets=1 if args.health_only else args.max_markets,
-        min_liquidity=args.min_liquidity,
-    )
+    if args.health_gamma:
+        raise SystemExit(_run_health(gamma_only=True, min_liquidity=args.min_liquidity))
     if args.health_only:
-        print(
-            json.dumps(
-                {"schema_version": HEALTH_SCHEMA_VERSION, "status": "PASS"},
-                sort_keys=True,
-            )
-        )
-        return
+        raise SystemExit(_run_health(gamma_only=False, min_liquidity=args.min_liquidity))
 
+    snapshot = collect_snapshot(max_markets=args.max_markets, min_liquidity=args.min_liquidity)
     assert args.output is not None
     digest = write_snapshot(snapshot, args.output)
     print(
         json.dumps(
-            {
-                "schema_version": SCHEMA_VERSION,
-                "status": "PASS",
-                "artifact_sha256": digest,
-            },
+            {"schema_version": SCHEMA_VERSION, "status": "PASS", "artifact_sha256": digest},
             sort_keys=True,
         )
     )
