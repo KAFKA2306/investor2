@@ -1,0 +1,26 @@
+{
+  "schema_version": "investor2.input-source-registry.v1",
+  "sources": {
+    "polymarket_market_data": {
+      "enabled": true,
+      "adapter": "polymarket_api_materialization",
+      "primary_source": "Polymarket Gamma API and CLOB API",
+      "snapshot_required_provenance": [
+        "endpoints",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls",
+        "storage_visibility"
+      ],
+      "canonical_timestamp_rule": "Retain UTC retrieval time separately from market start/end/resolution timestamps and CLOB price-point timestamps.",
+      "revision_pinning_rule": "When persisted in an authorized private sink, pin each normalized snapshot by deterministic SHA-256 and retain market/condition/token identities without rewriting prior observations.",
+      "retry_policy": "Fail closed on network, schema, identity, token/outcome cardinality, or price-range errors; a failed run must not replace prior valid observations.",
+      "rate_limit_policy": "Use the documented public Gamma/CLOB endpoints at the scheduled hourly cadence; do not split requests to evade provider limits.",
+      "schema_expectations": "investor2.polymarket-market-snapshot.v1",
+      "failure_mode": "fail-closed",
+      "storage_policy": "private-only",
+      "public_repository_policy": "Public Git history, workflow logs, caches, and artifacts must not contain raw, derived, aggregated, or anonymized Polymarket observations. Public workflows may expose only PASS/FAIL source-health state.",
+      "licensing_reference": "https://institutional.polymarket.com/"
+    }
+  }
+}

@@ -8,14 +8,14 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
-from src.io.input_ledger import audit_entries  # noqa: E402
+from src.io.input_ledger import audit_entries, load_source_registry  # noqa: E402
 
 LEDGER = ROOT / "data/input_ledger/accepted.ndjson"
 REGISTRY = ROOT / "data/input_ledger/source_registry.json"
 
 
 def main() -> None:
-    registry = json.loads(REGISTRY.read_text(encoding="utf-8"))
+    registry = load_source_registry(REGISTRY)
     entries = [json.loads(line) for line in LEDGER.read_text(encoding="utf-8").splitlines() if line.strip()]
     results = audit_entries(entries, registry, ROOT)
     print(

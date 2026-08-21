@@ -99,6 +99,10 @@ def fetch_markets_page(
     limit: int = 100,
     after_cursor: str | None = None,
     closed: bool = False,
+    order: str | None = None,
+    ascending: bool | None = None,
+    liquidity_num_min: float | None = None,
+    volume_num_min: float | None = None,
     session: requests.Session | None = None,
 ) -> GammaMarketPage:
     if not 1 <= limit <= 100:
@@ -106,6 +110,14 @@ def fetch_markets_page(
     params: dict[str, Any] = {"limit": limit, "closed": closed}
     if after_cursor:
         params["after_cursor"] = after_cursor
+    if order:
+        params["order"] = order
+    if ascending is not None:
+        params["ascending"] = ascending
+    if liquidity_num_min is not None:
+        params["liquidity_num_min"] = liquidity_num_min
+    if volume_num_min is not None:
+        params["volume_num_min"] = volume_num_min
     client = session or requests.Session()
     response = client.get(f"{GAMMA_BASE_URL}/markets/keyset", params=params, timeout=REQUEST_TIMEOUT_SECONDS)
     response.raise_for_status()
