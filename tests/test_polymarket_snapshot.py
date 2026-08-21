@@ -23,6 +23,8 @@ def _market() -> GammaMarket:
             "endDate": "2026-12-31T00:00:00Z",
             "active": True,
             "closed": False,
+            "enableOrderBook": True,
+            "acceptingOrders": True,
             "outcomes": '["Yes", "No"]',
             "outcomePrices": '["0.64", "0.36"]',
             "clobTokenIds": '["yes-token", "no-token"]',
@@ -58,6 +60,22 @@ def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch:
         "midpoint": "0.64",
         "spread": "0.02",
     }
+
+
+def test_collect_snapshot_skips_markets_without_live_order_book(monkeypatch: pytest.MonkeyPatch) -> None:
+    disabled = _market().model_copy(update={"accepting_orders": False})
+    monkeypatch.setattr(
+        polymarket_snapshot,
+        "fetch_markets_page",
+        lambda **_: GammaMarketPage(markets=[disabled, _market()], next_cursor=None),
+    )
+    monkeypatch.setattr(polymarket_snapshot, "fetch_midpoint", lambda _token_id, **_: Decimal("0.5"))
+    monkeypatch.setattr(polymarket_snapshot, "fetch_spread", lambda _token_id, **_: Decimal("0.02"))
+
+    snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
+
+    assert len(snapshot["records"]) == 1
+    assert snapshot["records"][0]["accepting_orders"] is True
 
 
 def test_write_snapshot_is_deterministic_for_same_payload(tmp_path: Path) -> None:
