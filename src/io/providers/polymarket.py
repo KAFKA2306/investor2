@@ -25,6 +25,8 @@ class GammaMarket(BaseModel):
     end_date: str | None = Field(default=None, alias="endDate")
     active: bool
     closed: bool
+    enable_order_book: bool = Field(default=False, alias="enableOrderBook")
+    accepting_orders: bool = Field(default=False, alias="acceptingOrders")
     outcomes: str | list[str] | None = None
     outcome_prices: str | list[str] | None = Field(default=None, alias="outcomePrices")
     clob_token_ids: str | list[str] | None = Field(default=None, alias="clobTokenIds")
@@ -85,6 +87,8 @@ def normalize_market(market: GammaMarket) -> dict[str, Any]:
         "end_date": market.end_date,
         "active": market.active,
         "closed": market.closed,
+        "enable_order_book": market.enable_order_book,
+        "accepting_orders": market.accepting_orders,
         "outcomes": outcomes,
         "token_ids": token_ids,
         "gamma_outcome_prices": [str(Decimal(value)) for value in outcome_prices],
