@@ -31,18 +31,28 @@ def _market(*, market_id: str = "123") -> GammaMarket:
             "volumeNum": 1000.0,
             "volume24hr": 125.0,
             "liquidityNum": 2500.0,
+            "bestBid": "0.63",
+            "bestAsk": "0.65",
+            "spread": "0.02",
+            "lastTradePrice": "0.64",
         }
     )
 
 
-def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_collect_snapshot_preserves_point_in_time_market_and_quotes(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [_market()])
     monkeypatch.setattr(
         polymarket_snapshot,
         "fetch_midpoint_if_available",
         lambda token_id, **_: Decimal("0.64") if token_id.startswith("yes-token") else Decimal("0.36"),
     )
-    monkeypatch.setattr(polymarket_snapshot, "fetch_spread_if_available", lambda _token_id, **_: Decimal("0.02"))
+    monkeypatch.setattr(
+        polymarket_snapshot,
+        "fetch_spread_if_available",
+        lambda _token_id, **_: Decimal("0.02"),
+    )
 
     snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
 
@@ -50,6 +60,8 @@ def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch:
     assert snapshot["source"] == "polymarket_market_data"
     assert snapshot["provenance"]["storage_visibility"] == "private-only"
     assert snapshot["records"][0]["condition_id"] == "0xcondition-123"
+    assert snapshot["records"][0]["gamma_best_bid"] == "0.63"
+    assert snapshot["records"][0]["gamma_best_ask"] == "0.65"
     assert snapshot["records"][0]["quotes"][0] == {
         "outcome": "Yes",
         "token_id": "yes-token-123",
@@ -58,9 +70,16 @@ def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch:
     }
 
 
-def test_discover_live_markets_skips_markets_without_live_order_book(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_discover_live_markets_skips_markets_without_live_order_book(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
     disabled = _market().model_copy(update={"accepting_orders": False})
-    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [disabled, _market()])
+    no_quotes = _market(market_id="no-quotes").model_copy(update={"best_bid": None})
+    monkeypatch.setattr(
+        polymarket_snapshot,
+        "fetch_markets",
+        lambda **_: [disabled, no_quotes, _market()],
+    )
 
     markets = polymarket_snapshot.discover_live_markets(
         min_liquidity=1000.0,
@@ -69,20 +88,39 @@ def test_discover_live_markets_skips_markets_without_live_order_book(monkeypatch
 
     assert len(markets) == 1
     assert markets[0].accepting_orders is True
+    assert markets[0].best_bid == Decimal("0.63")
 
 
-def test_collect_snapshot_skips_market_without_complete_clob_quote(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [_market(market_id="sparse"), _market(market_id="quoted")])
+def test_collect_snapshot_skips_market_without_complete_clob_quote(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setattr(
+        polymarket_snapshot,
+        "fetch_markets",
+        lambda **_: [_market(market_id="sparse"), _market(market_id="quoted")],
+    )
     monkeypatch.setattr(
         polymarket_snapshot,
         "fetch_midpoint_if_available",
         lambda token_id, **_: None if token_id == "yes-token-sparse" else Decimal("0.5"),
     )
-    monkeypatch.setattr(polymarket_snapshot, "fetch_spread_if_available", lambda _token_id, **_: Decimal("0.02"))
+    monkeypatch.setattr(
+        polymarket_snapshot,
+        "fetch_spread_if_available",
+        lambda _token_id, **_: Decimal("0.02"),
+    )
 
     snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
 
     assert snapshot["records"][0]["market_id"] == "quoted"
+
+
+def test_health_failure_code_redacts_http_details() -> None:
+    response = polymarket_snapshot.requests.Response()
+    response.status_code = 404
+    error = polymarket_snapshot.requests.HTTPError(response=response)
+
+    assert polymarket_snapshot._health_failure_code(error) == "http_404"
 
 
 def test_write_snapshot_is_deterministic_for_same_payload(tmp_path: Path) -> None:
