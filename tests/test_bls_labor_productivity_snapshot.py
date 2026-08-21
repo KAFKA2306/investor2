@@ -33,11 +33,7 @@ def write_series_report(
     catalog = "".join(f"<tr><th>{key}:</th><td>{value}</td></tr>" for key, value in catalog_rows.items())
     header = "".join(f"<th>{cell}</th>" for cell in EXPECTED_DATA_HEADER)
     rows = "".join(
-        "<tr>"
-        f"<th>{year}</th>"
-        "<td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td>"
-        f"<td>{annual}</td>"
-        "</tr>"
+        f"<tr><th>{year}</th><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>{annual}</td></tr>"
         for year, annual in annual_values
     )
     path.write_text(
