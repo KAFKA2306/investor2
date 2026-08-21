@@ -6,7 +6,7 @@ import hashlib
 import json
 import sys
 from datetime import UTC, datetime
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from typing import Any
 
@@ -43,7 +43,10 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
 def _gamma_has_live_book(market: GammaMarket) -> bool:
     if market.best_bid is None or market.best_ask is None:
         return False
-    return Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1")
+    try:
+        return Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1")
+    except InvalidOperation:
+        return False
 
 
 def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
@@ -76,32 +79,35 @@ def discover_live_markets(*, min_liquidity: float, session: requests.Session) ->
 
 
 def _quote_market(market: GammaMarket, *, session: requests.Session) -> dict[str, Any] | None:
-    normalized = normalize_market(market)
-    outcomes = normalized["outcomes"]
-    token_ids = normalized["token_ids"]
-    if not outcomes or not token_ids:
-        return None
-    if len(outcomes) != len(token_ids):
-        raise ValueError("Polymarket normalized outcome/token mapping is invalid")
+    try:
+        normalized = normalize_market(market)
+        outcomes = normalized["outcomes"]
+        token_ids = normalized["token_ids"]
+        if not outcomes or not token_ids or len(outcomes) != len(token_ids):
+            return None
 
-    quotes: list[dict[str, str]] = []
-    for outcome, token_id in zip(outcomes, token_ids, strict=True):
-        midpoint = fetch_midpoint_if_available(token_id, session=session)
-        if midpoint is None:
-            return None
-        spread = fetch_spread_if_available(token_id, session=session)
-        if spread is None:
-            return None
-        _validate_quote(midpoint, spread)
-        quotes.append(
-            {
-                "outcome": outcome,
-                "token_id": token_id,
-                "midpoint": str(midpoint),
-                "spread": str(spread),
-            }
-        )
-    return {**normalized, "quotes": quotes}
+        quotes: list[dict[str, str]] = []
+        for outcome, token_id in zip(outcomes, token_ids, strict=True):
+            midpoint = fetch_midpoint_if_available(token_id, session=session)
+            if midpoint is None:
+                return None
+            spread = fetch_spread_if_available(token_id, session=session)
+            if spread is None:
+                return None
+            _validate_quote(midpoint, spread)
+            quotes.append(
+                {
+                    "outcome": outcome,
+                    "token_id": token_id,
+                    "midpoint": str(midpoint),
+                    "spread": str(spread),
+                }
+            )
+        return {**normalized, "quotes": quotes}
+    except (ValueError, TypeError, InvalidOperation):
+        # A malformed/stale market is rejected as a unit. The source passes only
+        # when at least one complete Gamma identity + CLOB quote survives.
+        return None
 
 
 def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
@@ -174,7 +180,7 @@ def _health_failure_code(error: Exception) -> str:
         return "network"
     if isinstance(error, AssertionError):
         return "no_quoted_market"
-    if isinstance(error, (ValueError, TypeError)):
+    if isinstance(error, (ValueError, TypeError, InvalidOperation)):
         return "schema_or_value"
     return "unexpected"
 
@@ -201,14 +207,27 @@ def _run_health(*, gamma_only: bool, min_liquidity: float) -> int:
         )
         return 1
 
-    print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"}, sort_keys=True))
+    print(
+        json.dumps(
+            {"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"},
+            sort_keys=True,
+        )
+    )
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Collect read-only Polymarket market observations.")
-    parser.add_argument("--health-gamma", action="store_true", help="Validate live Gamma discovery without persisting data.")
-    parser.add_argument("--health-only", action="store_true", help="Validate live Gamma/CLOB access without persisting data.")
+    parser.add_argument(
+        "--health-gamma",
+        action="store_true",
+        help="Validate live Gamma discovery without persisting data.",
+    )
+    parser.add_argument(
+        "--health-only",
+        action="store_true",
+        help="Validate live Gamma/CLOB access without persisting data.",
+    )
     parser.add_argument("--output", type=Path, help="Private output path for a normalized snapshot.")
     parser.add_argument("--max-markets", type=int, default=20)
     parser.add_argument("--min-liquidity", type=float, default=1000.0)
@@ -229,7 +248,12 @@ def main() -> None:
     snapshot = collect_snapshot(max_markets=args.max_markets, min_liquidity=args.min_liquidity)
     assert args.output is not None
     digest = write_snapshot(snapshot, args.output)
-    print(json.dumps({"schema_version": SCHEMA_VERSION, "status": "PASS", "artifact_sha256": digest}, sort_keys=True))
+    print(
+        json.dumps(
+            {"schema_version": SCHEMA_VERSION, "status": "PASS", "artifact_sha256": digest},
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":
