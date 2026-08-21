@@ -8,7 +8,7 @@ import re
 from datetime import UTC, datetime
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any
+from typing import Any, override
 
 SCHEMA_VERSION = "investor2.bls-nonfarm-business-labor-productivity-annual.v1"
 SOURCE = "U.S. Bureau of Labor Statistics"
@@ -52,6 +52,7 @@ class SeriesReportParser(HTMLParser):
     def _attrs(attrs: list[tuple[str, str | None]]) -> dict[str, str]:
         return {key: value or "" for key, value in attrs}
 
+    @override
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         attributes = self._attrs(attrs)
         if tag == "table":
@@ -69,10 +70,12 @@ class SeriesReportParser(HTMLParser):
             self._cell_tag = tag
             self._cell_parts = []
 
+    @override
     def handle_data(self, data: str) -> None:
         if self._cell_tag is not None:
             self._cell_parts.append(data)
 
+    @override
     def handle_endtag(self, tag: str) -> None:
         if tag in {"th", "td"} and self._cell_tag == tag and self._row is not None:
             text = " ".join("".join(self._cell_parts).split())
@@ -89,7 +92,9 @@ class SeriesReportParser(HTMLParser):
             self._table = None
 
 
-def parse_series_report(path: Path, *, expected_series_id: str) -> tuple[dict[str, str], dict[int, float]]:
+def parse_series_report(
+    path: Path, *, expected_series_id: str
+) -> tuple[dict[str, str], dict[int, float]]:
     parser = SeriesReportParser()
     parser.feed(path.read_text(encoding="utf-8", errors="strict"))
     parser.close()
@@ -131,10 +136,14 @@ def build_payload(percent_path: Path, index_path: Path) -> dict[str, Any]:
     percent_catalog, percent_by_year = parse_series_report(
         percent_path, expected_series_id=SERIES_IDS["percent_change"]
     )
-    index_catalog, index_by_year = parse_series_report(index_path, expected_series_id=SERIES_IDS["index"])
+    index_catalog, index_by_year = parse_series_report(
+        index_path, expected_series_id=SERIES_IDS["index"]
+    )
 
     if percent_catalog.get("Duration") != EXPECTED_PERCENT_DURATION:
-        raise AssertionError(f"unexpected BLS percent-change duration: {percent_catalog.get('Duration')!r}")
+        raise AssertionError(
+            f"unexpected BLS percent-change duration: {percent_catalog.get('Duration')!r}"
+        )
 
     percent_years = set(percent_by_year)
     index_years = set(index_by_year)
@@ -191,14 +200,18 @@ def validate_historical_coverage(payload: dict[str, Any]) -> None:
 
     stale_before = max(2025, datetime.now(UTC).year - 2)
     if latest_year < stale_before:
-        raise AssertionError(f"BLS annual history is stale: latest year {latest_year} < required {stale_before}")
+        raise AssertionError(
+            f"BLS annual history is stale: latest year {latest_year} < required {stale_before}"
+        )
 
     expected_count = latest_year - FIRST_YEAR + 1
     if len(records) != expected_count:
         raise AssertionError(f"non-contiguous annual record count: {len(records)} != {expected_count}")
 
 
-def materialize_snapshot(payload: dict[str, Any], output_dir: Path, latest_path: Path | None) -> Path:
+def materialize_snapshot(
+    payload: dict[str, Any], output_dir: Path, latest_path: Path | None
+) -> Path:
     serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
     digest = hashlib.sha256(serialized.encode("utf-8")).hexdigest()
     latest_year = payload.get("latest_year")
@@ -206,7 +219,10 @@ def materialize_snapshot(payload: dict[str, Any], output_dir: Path, latest_path:
         raise AssertionError(f"invalid latest year: {latest_year!r}")
 
     output_dir.mkdir(parents=True, exist_ok=True)
-    artifact = output_dir / f"bls_nonfarm_business_labor_productivity_annual_{latest_year}_{digest[:12]}.json"
+    artifact = (
+        output_dir
+        / f"bls_nonfarm_business_labor_productivity_annual_{latest_year}_{digest[:12]}.json"
+    )
     artifact.write_text(serialized, encoding="utf-8")
     if latest_path is not None:
         latest_path.parent.mkdir(parents=True, exist_ok=True)
