@@ -43,20 +43,22 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
 def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
     if min_liquidity < 0:
         raise ValueError("min_liquidity must be non-negative")
-    markets = fetch_markets(
-        limit=100,
-        offset=0,
-        closed=False,
-        order="liquidity_num",
-        ascending=False,
-        liquidity_num_min=min_liquidity,
-        session=session,
-    )
+    markets = fetch_markets(limit=100, offset=0, session=session)
     live = [
         market
         for market in markets
-        if market.active and not market.closed and market.enable_order_book and market.accepting_orders
+        if market.active is True
+        and market.closed is False
+        and market.enable_order_book is True
+        and market.accepting_orders is True
+        and market.id
+        and market.condition_id
+        and market.slug
+        and market.question
+        and market.clob_token_ids
+        and (market.liquidity_num or 0) >= min_liquidity
     ]
+    live.sort(key=lambda market: market.liquidity_num or 0, reverse=True)
     if not live:
         raise AssertionError("Polymarket returned no active order-book markets matching the collection scope")
     return live
@@ -112,12 +114,11 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
                 f"{CLOB_BASE_URL}/spread",
             ],
             "query_or_scope": {
-                "closed": False,
                 "active": True,
+                "closed": False,
                 "enable_order_book": True,
                 "accepting_orders": True,
-                "order": "liquidity_num",
-                "ascending": False,
+                "client_order": "liquidity_num desc",
                 "liquidity_num_min": min_liquidity,
                 "max_markets": max_markets,
             },
