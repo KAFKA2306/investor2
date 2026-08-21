@@ -4,6 +4,12 @@ on:
   schedule:
     - cron: "17 * * * *"
   workflow_dispatch:
+  pull_request:
+    paths:
+      - "src/io/providers/polymarket.py"
+      - "scripts/polymarket_snapshot.py"
+      - "data/input_ledger/source_registry.d/polymarket_market_data.json"
+      - ".github/workflows/polymarket-live.yml"
   push:
     branches: [main]
     paths:
@@ -16,7 +22,7 @@ permissions:
   contents: read
 
 concurrency:
-  group: polymarket-live-source-health
+  group: polymarket-live-source-health-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: false
 
 jobs:
@@ -37,4 +43,11 @@ jobs:
       - name: Install locked runtime
         run: uv sync --locked
       - name: Validate Polymarket source without publishing observations
-        run: uv run --no-sync python scripts/polymarket_snapshot.py --health-only
+        shell: bash
+        run: |
+          if uv run --no-sync python scripts/polymarket_snapshot.py --health-only >/dev/null 2>&1; then
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","status":"PASS"}'
+          else
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","status":"FAIL"}'
+            exit 1
+          fi
