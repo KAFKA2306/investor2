@@ -16,17 +16,17 @@ PriceInterval = Literal["max", "all", "1m", "1w", "1d", "6h", "1h"]
 class GammaMarket(BaseModel):
     model_config = ConfigDict(extra="allow", populate_by_name=True)
 
-    id: str
-    question: str
-    condition_id: str = Field(alias="conditionId")
-    slug: str
+    id: str | None = None
+    question: str | None = None
+    condition_id: str | None = Field(default=None, alias="conditionId")
+    slug: str | None = None
     resolution_source: str | None = Field(default=None, alias="resolutionSource")
     start_date: str | None = Field(default=None, alias="startDate")
     end_date: str | None = Field(default=None, alias="endDate")
-    active: bool
-    closed: bool
-    enable_order_book: bool = Field(default=False, alias="enableOrderBook")
-    accepting_orders: bool = Field(default=False, alias="acceptingOrders")
+    active: bool | None = None
+    closed: bool | None = None
+    enable_order_book: bool | None = Field(default=None, alias="enableOrderBook")
+    accepting_orders: bool | None = Field(default=None, alias="acceptingOrders")
     outcomes: str | list[str] | None = None
     outcome_prices: str | list[str] | None = Field(default=None, alias="outcomePrices")
     clob_token_ids: str | list[str] | None = Field(default=None, alias="clobTokenIds")
@@ -72,6 +72,9 @@ def _decode_string_list(value: str | list[str] | None, *, field_name: str) -> li
 
 
 def normalize_market(market: GammaMarket) -> dict[str, Any]:
+    if not market.id or not market.condition_id or not market.slug or not market.question:
+        raise ValueError("Polymarket market identity is incomplete")
+
     outcomes = _decode_string_list(market.outcomes, field_name="outcomes")
     token_ids = _decode_string_list(market.clob_token_ids, field_name="clobTokenIds")
     outcome_prices = _decode_string_list(market.outcome_prices, field_name="outcomePrices")
@@ -105,7 +108,7 @@ def fetch_markets(
     *,
     limit: int = 100,
     offset: int = 0,
-    closed: bool = False,
+    closed: bool | None = None,
     order: str | None = None,
     ascending: bool | None = None,
     liquidity_num_min: float | None = None,
@@ -116,7 +119,9 @@ def fetch_markets(
         raise ValueError("limit must be non-negative")
     if offset < 0:
         raise ValueError("offset must be non-negative")
-    params: dict[str, Any] = {"limit": limit, "offset": offset, "closed": closed}
+    params: dict[str, Any] = {"limit": limit, "offset": offset}
+    if closed is not None:
+        params["closed"] = closed
     if order:
         params["order"] = order
     if ascending is not None:
