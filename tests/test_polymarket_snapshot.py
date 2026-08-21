@@ -8,7 +8,7 @@ from typing import Any
 import pytest
 
 from scripts import polymarket_snapshot
-from src.io.providers.polymarket import GammaMarket, GammaMarketPage
+from src.io.providers.polymarket import GammaMarket
 
 
 def _market() -> GammaMarket:
@@ -36,11 +36,7 @@ def _market() -> GammaMarket:
 
 
 def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_markets_page",
-        lambda **_: GammaMarketPage(markets=[_market()], next_cursor=None),
-    )
+    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [_market()])
     monkeypatch.setattr(
         polymarket_snapshot,
         "fetch_midpoint",
@@ -62,20 +58,17 @@ def test_collect_snapshot_preserves_point_in_time_market_and_quotes(monkeypatch:
     }
 
 
-def test_collect_snapshot_skips_markets_without_live_order_book(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_discover_live_markets_skips_markets_without_live_order_book(monkeypatch: pytest.MonkeyPatch) -> None:
     disabled = _market().model_copy(update={"accepting_orders": False})
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_markets_page",
-        lambda **_: GammaMarketPage(markets=[disabled, _market()], next_cursor=None),
+    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [disabled, _market()])
+
+    markets = polymarket_snapshot.discover_live_markets(
+        min_liquidity=1000.0,
+        session=polymarket_snapshot.requests.Session(),
     )
-    monkeypatch.setattr(polymarket_snapshot, "fetch_midpoint", lambda _token_id, **_: Decimal("0.5"))
-    monkeypatch.setattr(polymarket_snapshot, "fetch_spread", lambda _token_id, **_: Decimal("0.02"))
 
-    snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
-
-    assert len(snapshot["records"]) == 1
-    assert snapshot["records"][0]["accepting_orders"] is True
+    assert len(markets) == 1
+    assert markets[0].accepting_orders is True
 
 
 def test_write_snapshot_is_deterministic_for_same_payload(tmp_path: Path) -> None:
