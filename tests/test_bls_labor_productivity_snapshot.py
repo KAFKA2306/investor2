@@ -23,6 +23,7 @@ def write_series_report(
     series_id: str,
     duration: str,
     annual_values: list[tuple[int, str]],
+    footnotes: tuple[str, ...] = (),
 ) -> None:
     catalog_rows = {
         "Series Id": series_id,
@@ -36,10 +37,11 @@ def write_series_report(
         f"<tr><th>{year}</th><td>1.0</td><td>1.0</td><td>1.0</td><td>1.0</td><td>{annual}</td></tr>"
         for year, annual in annual_values
     )
+    notes = "".join(f"<tr><td>{note}</td></tr>" for note in footnotes)
     path.write_text(
         "<html><body>"
         f'<table id="catalog1" class="catalog">{catalog}</table>'
-        f'<table id="table1" class="regular-data"><tr>{header}</tr>{rows}</table>'
+        f'<table id="table1" class="regular-data"><tr>{header}</tr>{rows}{notes}</table>'
         "</body></html>",
         encoding="utf-8",
     )
@@ -56,12 +58,14 @@ class BlsLaborProductivitySnapshotTest(unittest.TestCase):
                 series_id=SERIES_IDS["percent_change"],
                 duration=EXPECTED_PERCENT_DURATION,
                 annual_values=[(2024, "3.0"), (2025, "2.1")],
+                footnotes=("R : revised",),
             )
             write_series_report(
                 index,
                 series_id=SERIES_IDS["index"],
                 duration="Index",
                 annual_values=[(2024, "115.366"), (2025, "117.785")],
+                footnotes=("R : revised",),
             )
 
             payload = build_payload(percent, index)
