@@ -47,7 +47,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
 
     session = requests.Session()
     page = fetch_markets_page(
-        limit=min(100, max(20, max_markets * 4)),
+        limit=100,
         closed=False,
         order="liquidity_num",
         ascending=False,
@@ -57,6 +57,9 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
 
     records: list[dict[str, Any]] = []
     for market in page.markets:
+        if not market.active or market.closed or not market.enable_order_book or not market.accepting_orders:
+            continue
+
         normalized = normalize_market(market)
         outcomes = normalized["outcomes"]
         token_ids = normalized["token_ids"]
@@ -84,7 +87,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             break
 
     if not records:
-        raise AssertionError("Polymarket returned no active CLOB markets matching the collection scope")
+        raise AssertionError("Polymarket returned no active order-book markets matching the collection scope")
 
     observed_at = utc_now_iso()
     return {
@@ -99,6 +102,9 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             ],
             "query_or_scope": {
                 "closed": False,
+                "active": True,
+                "enable_order_book": True,
+                "accepting_orders": True,
                 "order": "liquidity_num",
                 "ascending": False,
                 "liquidity_num_min": min_liquidity,
@@ -108,7 +114,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             "source_urls": [
                 "https://docs.polymarket.com/api-reference/markets/list-markets-keyset-pagination",
                 "https://docs.polymarket.com/api-reference/data/get-midpoint-price",
-                "https://docs.polymarket.com/api-reference/market-data/get-spreads",
+                "https://docs.polymarket.com/api-reference/market-data/get-spread",
             ],
             "storage_visibility": "private-only",
         },
