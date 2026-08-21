@@ -177,6 +177,19 @@ def fetch_midpoint(token_id: str, *, session: requests.Session | None = None) ->
     return MidpointResponse.model_validate(response.json()).mid_price
 
 
+def fetch_midpoint_if_available(token_id: str, *, session: requests.Session | None = None) -> Decimal | None:
+    client = session or requests.Session()
+    response = client.get(
+        f"{CLOB_BASE_URL}/midpoint",
+        params={"token_id": token_id},
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    if response.status_code == 404:
+        return None
+    response.raise_for_status()
+    return MidpointResponse.model_validate(response.json()).mid_price
+
+
 def fetch_spread(token_id: str, *, session: requests.Session | None = None) -> Decimal:
     client = session or requests.Session()
     response = client.get(
@@ -184,6 +197,19 @@ def fetch_spread(token_id: str, *, session: requests.Session | None = None) -> D
         params={"token_id": token_id},
         timeout=REQUEST_TIMEOUT_SECONDS,
     )
+    response.raise_for_status()
+    return SpreadResponse.model_validate(response.json()).spread
+
+
+def fetch_spread_if_available(token_id: str, *, session: requests.Session | None = None) -> Decimal | None:
+    client = session or requests.Session()
+    response = client.get(
+        f"{CLOB_BASE_URL}/spread",
+        params={"token_id": token_id},
+        timeout=REQUEST_TIMEOUT_SECONDS,
+    )
+    if response.status_code == 404:
+        return None
     response.raise_for_status()
     return SpreadResponse.model_validate(response.json()).spread
 
