@@ -5,7 +5,7 @@ from decimal import Decimal
 from typing import Any, Literal
 
 import requests
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
 
 GAMMA_BASE_URL = "https://gamma-api.polymarket.com"
 CLOB_BASE_URL = "https://clob.polymarket.com"
@@ -57,6 +57,9 @@ class PriceHistoryResponse(BaseModel):
     history: list[PricePoint]
 
 
+_GAMMA_MARKETS = TypeAdapter(list[GammaMarket])
+
+
 def _decode_string_list(value: str | list[str] | None, *, field_name: str) -> list[str]:
     if value is None:
         return []
@@ -96,6 +99,36 @@ def normalize_market(market: GammaMarket) -> dict[str, Any]:
         "volume_24h": market.volume_24h,
         "liquidity": market.liquidity_num,
     }
+
+
+def fetch_markets(
+    *,
+    limit: int = 100,
+    offset: int = 0,
+    closed: bool = False,
+    order: str | None = None,
+    ascending: bool | None = None,
+    liquidity_num_min: float | None = None,
+    volume_num_min: float | None = None,
+    session: requests.Session | None = None,
+) -> list[GammaMarket]:
+    if limit < 0:
+        raise ValueError("limit must be non-negative")
+    if offset < 0:
+        raise ValueError("offset must be non-negative")
+    params: dict[str, Any] = {"limit": limit, "offset": offset, "closed": closed}
+    if order:
+        params["order"] = order
+    if ascending is not None:
+        params["ascending"] = ascending
+    if liquidity_num_min is not None:
+        params["liquidity_num_min"] = liquidity_num_min
+    if volume_num_min is not None:
+        params["volume_num_min"] = volume_num_min
+    client = session or requests.Session()
+    response = client.get(f"{GAMMA_BASE_URL}/markets", params=params, timeout=REQUEST_TIMEOUT_SECONDS)
+    response.raise_for_status()
+    return _GAMMA_MARKETS.validate_python(response.json())
 
 
 def fetch_markets_page(
