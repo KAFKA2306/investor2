@@ -20,8 +20,8 @@ from src.io.providers.polymarket import (  # noqa: E402
     GAMMA_BASE_URL,
     GammaMarket,
     fetch_markets,
-    fetch_midpoint,
-    fetch_spread,
+    fetch_midpoint_if_available,
+    fetch_spread_if_available,
     normalize_market,
 )
 
@@ -64,6 +64,35 @@ def discover_live_markets(*, min_liquidity: float, session: requests.Session) ->
     return live
 
 
+def _quote_market(market: GammaMarket, *, session: requests.Session) -> dict[str, Any] | None:
+    normalized = normalize_market(market)
+    outcomes = normalized["outcomes"]
+    token_ids = normalized["token_ids"]
+    if not outcomes or not token_ids:
+        return None
+    if len(outcomes) != len(token_ids):
+        raise ValueError("Polymarket normalized outcome/token mapping is invalid")
+
+    quotes: list[dict[str, str]] = []
+    for outcome, token_id in zip(outcomes, token_ids, strict=True):
+        midpoint = fetch_midpoint_if_available(token_id, session=session)
+        if midpoint is None:
+            return None
+        spread = fetch_spread_if_available(token_id, session=session)
+        if spread is None:
+            return None
+        _validate_quote(midpoint, spread)
+        quotes.append(
+            {
+                "outcome": outcome,
+                "token_id": token_id,
+                "midpoint": str(midpoint),
+                "spread": str(spread),
+            }
+        )
+    return {**normalized, "quotes": quotes}
+
+
 def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any]:
     if max_markets <= 0:
         raise ValueError("max_markets must be positive")
@@ -73,34 +102,15 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
 
     records: list[dict[str, Any]] = []
     for market in markets:
-        normalized = normalize_market(market)
-        outcomes = normalized["outcomes"]
-        token_ids = normalized["token_ids"]
-        if not outcomes or not token_ids:
+        quoted = _quote_market(market, session=session)
+        if quoted is None:
             continue
-        if len(outcomes) != len(token_ids):
-            raise ValueError("Polymarket normalized outcome/token mapping is invalid")
-
-        quotes: list[dict[str, str]] = []
-        for outcome, token_id in zip(outcomes, token_ids, strict=True):
-            midpoint = fetch_midpoint(token_id, session=session)
-            spread = fetch_spread(token_id, session=session)
-            _validate_quote(midpoint, spread)
-            quotes.append(
-                {
-                    "outcome": outcome,
-                    "token_id": token_id,
-                    "midpoint": str(midpoint),
-                    "spread": str(spread),
-                }
-            )
-
-        records.append({**normalized, "quotes": quotes})
+        records.append(quoted)
         if len(records) >= max_markets:
             break
 
     if not records:
-        raise AssertionError("Polymarket live markets did not expose complete outcome/token mappings")
+        raise AssertionError("Polymarket live markets did not expose a complete quoted order book")
 
     observed_at = utc_now_iso()
     return {
@@ -118,6 +128,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
                 "closed": False,
                 "enable_order_book": True,
                 "accepting_orders": True,
+                "complete_clob_quote": True,
                 "client_order": "liquidity_num desc",
                 "liquidity_num_min": min_liquidity,
                 "max_markets": max_markets,
