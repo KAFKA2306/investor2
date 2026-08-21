@@ -3,8 +3,34 @@
   "themes": [
     {
       "theme": "The Great Acceleration",
-      "forecast_count": 0,
-      "forecasts": []
+      "forecast_count": 1,
+      "forecasts": [
+        {
+          "forecast_id": "global-real-gdp-growth-2030",
+          "ark_claim_paraphrase": "ARK forecasts global real GDP growth of 7.3% in 2030.",
+          "baseline_value": 3,
+          "baseline_unit": "percent",
+          "baseline_period": null,
+          "target_value": 7.3,
+          "target_unit": "percent",
+          "target_period": "2030",
+          "scope": "global real GDP growth",
+          "comparison_status": "comparable",
+          "comparison_reason": "ARK's global real GDP growth forecast and the World Bank World GDP growth observation both use annual real GDP growth in percent at global/World scope.",
+          "source_url": "https://research.ark-invest.com/hubfs/1_Download_Files_ARK-Invest/Big_Ideas/ARKInvest%20BigIdeas2026.pdf",
+          "source_page": 11,
+          "observed_series_id": "econalert/world-gdp-growth",
+          "observed_repository": "KAFKA2306/econalert",
+          "observed_source_url": "https://raw.githubusercontent.com/KAFKA2306/econalert/main/api/v1/world-gdp-growth.json",
+          "observed_sha256": "48fa167bc1f554188c7d94f441fd3ac903ee9772ddb3fb2041c15cbb8927c9b0",
+          "observed_value": 2.9,
+          "observed_unit": "percent",
+          "observed_period": "2025",
+          "absolute_gap": 4.4,
+          "absolute_gap_unit": "percentage_points",
+          "target_date_reached": false
+        }
+      ]
     },
     {
       "theme": "AI Infrastructure",
@@ -27,9 +53,18 @@
           "scope": "AI-mediated revenue",
           "comparison_status": "not_comparable",
           "comparison_reason": "The current canonical AI-consumer feed does not contain a definition- and unit-matched AI-mediated revenue series.",
-          "observed_series_id": null,
           "source_url": "https://www.ark-invest.com/newsletters/issue-495",
-          "source_page": 31
+          "source_page": 31,
+          "observed_series_id": null,
+          "observed_repository": null,
+          "observed_source_url": null,
+          "observed_sha256": null,
+          "observed_value": null,
+          "observed_unit": null,
+          "observed_period": null,
+          "absolute_gap": null,
+          "absolute_gap_unit": null,
+          "target_date_reached": null
         }
       ]
     },
@@ -89,9 +124,18 @@
           "scope": "autonomous technology platforms / robotaxi ecosystem enterprise value opportunity",
           "comparison_status": "not_comparable",
           "comparison_reason": "The canonical autonomous-vehicles feed contains operational testing and incident-report observations, not a definition- and unit-matched enterprise-value series for autonomous technology platforms.",
-          "observed_series_id": null,
           "source_url": "https://www.ark-invest.com/newsletters/issue-507",
-          "source_page": 99
+          "source_page": 99,
+          "observed_series_id": null,
+          "observed_repository": null,
+          "observed_source_url": null,
+          "observed_sha256": null,
+          "observed_value": null,
+          "observed_unit": null,
+          "observed_period": null,
+          "absolute_gap": null,
+          "absolute_gap_unit": null,
+          "target_date_reached": null
         }
       ]
     },
