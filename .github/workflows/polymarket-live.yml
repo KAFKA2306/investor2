@@ -1,0 +1,40 @@
+name: Polymarket live source health
+
+on:
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "src/io/providers/polymarket.py"
+      - "scripts/polymarket_snapshot.py"
+      - "data/input_ledger/source_registry.d/polymarket_market_data.json"
+      - ".github/workflows/polymarket-live.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: polymarket-live-source-health
+  cancel-in-progress: false
+
+jobs:
+  health:
+    name: Validate live Gamma and CLOB access
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Install locked runtime
+        run: uv sync --locked
+      - name: Validate Polymarket source without publishing observations
+        run: uv run --no-sync python scripts/polymarket_snapshot.py --health-only
