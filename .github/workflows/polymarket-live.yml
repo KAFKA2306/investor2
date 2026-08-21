@@ -42,12 +42,21 @@ jobs:
           version: "0.11.32"
       - name: Install locked runtime
         run: uv sync --locked
-      - name: Validate Polymarket source without publishing observations
+      - name: Validate Gamma discovery without publishing observations
+        shell: bash
+        run: |
+          if uv run --no-sync python scripts/polymarket_snapshot.py --health-gamma >/dev/null 2>&1; then
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","stage":"gamma","status":"PASS"}'
+          else
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","stage":"gamma","status":"FAIL"}'
+            exit 1
+          fi
+      - name: Validate CLOB quotes without publishing observations
         shell: bash
         run: |
           if uv run --no-sync python scripts/polymarket_snapshot.py --health-only >/dev/null 2>&1; then
-            echo '{"schema_version":"investor2.polymarket-source-health.v1","status":"PASS"}'
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","stage":"clob","status":"PASS"}'
           else
-            echo '{"schema_version":"investor2.polymarket-source-health.v1","status":"FAIL"}'
+            echo '{"schema_version":"investor2.polymarket-source-health.v1","stage":"clob","status":"FAIL"}'
             exit 1
           fi
