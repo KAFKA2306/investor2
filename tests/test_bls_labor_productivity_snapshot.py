@@ -31,7 +31,8 @@ def write_series_report(
         "Duration": duration,
     }
     catalog = "".join(
-        f"<tr><th>{key}:</th><td>{value}</td></tr>" for key, value in catalog_rows.items()
+        f"<tr><th>{key}:</th><td>{value}</td></tr>"
+        for key, value in catalog_rows.items()
     )
     header = "".join(f"<th>{cell}</th>" for cell in EXPECTED_DATA_HEADER)
     rows = "".join(
@@ -100,7 +101,9 @@ class BlsLaborProductivitySnapshotTest(unittest.TestCase):
                 annual_values=[(2025, "117.785")],
             )
 
-            with self.assertRaisesRegex(AssertionError, "missing index years=\[2024\]"):
+            with self.assertRaisesRegex(
+                AssertionError, r"missing index years=\[2024\]"
+            ):
                 build_payload(percent, index)
 
     def test_rejects_wrong_series_identity(self) -> None:
@@ -135,7 +138,9 @@ class BlsLaborProductivitySnapshotTest(unittest.TestCase):
             root = Path(tmp)
             latest = root / "latest.json"
             artifact = materialize_snapshot(payload, root / "snapshots", latest)
-            serialized = json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+            serialized = (
+                json.dumps(payload, ensure_ascii=False, sort_keys=True, indent=2) + "\n"
+            )
             expected_hash = hashlib.sha256(serialized.encode("utf-8")).hexdigest()[:12]
             self.assertEqual(
                 artifact.name,
