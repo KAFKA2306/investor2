@@ -33,6 +33,10 @@ class GammaMarket(BaseModel):
     volume_num: float | None = Field(default=None, alias="volumeNum")
     liquidity_num: float | None = Field(default=None, alias="liquidityNum")
     volume_24h: float | None = Field(default=None, alias="volume24hr")
+    best_bid: Decimal | None = Field(default=None, alias="bestBid")
+    best_ask: Decimal | None = Field(default=None, alias="bestAsk")
+    spread: Decimal | None = None
+    last_trade_price: Decimal | None = Field(default=None, alias="lastTradePrice")
 
 
 class GammaMarketPage(BaseModel):
@@ -101,6 +105,10 @@ def normalize_market(market: GammaMarket) -> dict[str, Any]:
         "volume": market.volume_num,
         "volume_24h": market.volume_24h,
         "liquidity": market.liquidity_num,
+        "gamma_best_bid": str(market.best_bid) if market.best_bid is not None else None,
+        "gamma_best_ask": str(market.best_ask) if market.best_ask is not None else None,
+        "gamma_spread": str(market.spread) if market.spread is not None else None,
+        "gamma_last_trade_price": str(market.last_trade_price) if market.last_trade_price is not None else None,
     }
 
 
@@ -184,7 +192,7 @@ def fetch_midpoint_if_available(token_id: str, *, session: requests.Session | No
         params={"token_id": token_id},
         timeout=REQUEST_TIMEOUT_SECONDS,
     )
-    if response.status_code == 404:
+    if response.status_code in {400, 404}:
         return None
     response.raise_for_status()
     return MidpointResponse.model_validate(response.json()).mid_price
@@ -208,7 +216,7 @@ def fetch_spread_if_available(token_id: str, *, session: requests.Session | None
         params={"token_id": token_id},
         timeout=REQUEST_TIMEOUT_SECONDS,
     )
-    if response.status_code == 404:
+    if response.status_code in {400, 404}:
         return None
     response.raise_for_status()
     return SpreadResponse.model_validate(response.json()).spread
