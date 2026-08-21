@@ -109,6 +109,33 @@ Treat material claims as:
 - **UNVERIFIED** — not inspected and never stated as fact;
 - **FABRICATED** — forbidden.
 
+## 🔀 PR Merge and Product/Data Release Are Separate
+
+Do not use one completion gate for both repository integration and external release.
+
+### PR merge conditions
+
+A PR may merge when the bounded repository-local change is correct on the exact reviewed head revision:
+
+- the Goal Contract and repository-local Acceptance Criteria for the change are satisfied;
+- source identity, period, units, vintage, provenance, schemas, and model/result boundaries remain correct;
+- the relevant deterministic tests/audits/builds pass;
+- required repository artifacts are reproducible from the reviewed inputs/code;
+- no unresolved review, data-integrity, or correctness blocker remains.
+
+Post-merge production deployment, a future external observation, public traffic, live third-party runtime, downstream adoption, or release-only evidence is **not** a merge condition unless the PR itself changes the release mechanism and that release mechanism must be validated before merge.
+
+### Product/data release conditions
+
+Release is a separate post-merge decision. Treat a product, API, dataset, model, research surface, or public view as released only after:
+
+- the merged `main` revision is read back;
+- the release artifact/surface is proven to derive from that merged revision or its versioned canonical artifacts;
+- every release surface in scope is directly verified, such as the deployed URL/API, published dataset/model, live collection, release manifest/hash, or external publication receipt;
+- rollback/rebuild/recovery expectations required by the owning contract remain valid.
+
+A merged PR does not prove release. A release blocker does not retroactively invalidate a correctly merged repository change. Report merge evidence and release evidence independently. Do not invent custom status names; state `merged` and `released` separately with direct evidence.
+
 ## 🧪 Builder / Auditor Separation
 
 Treat implementation and acceptance as separate phases even when one agent performs both sequentially.
@@ -133,19 +160,19 @@ Implementation intent is never acceptance evidence.
 
 ## 🏁 Fixed Point
 
-Stop when all are true:
+Stop when all are true for the bounded workline:
 
 - the requested Decision/Outcome is materially improved or the bounded evidence test has reached a truthful negative result;
 - remaining uncertainty is explicitly known rather than silently guessed away;
 - required evidence is persisted in the canonical repository surface;
 - relevant `task check` / focused tests / audits pass, or the exact blocker is recorded;
-- exact-head CI is verified when applicable;
+- exact-head CI is verified when applicable to merge;
 - the Capability Delta is usable by a future run without rediscovering the same evidence/process;
-- owning Issue/PR state is correct;
+- owning Issue/PR state is correct for the repository-local outcome;
 - temporary files, duplicate branches/PRs, and superseded helper paths created by the task are removed;
 - additional ideas no longer change the current Decision/Acceptance Criteria and therefore belong to a separate Goal.
 
-At the fixed point, stop. Do not turn a completed Decision into an unbounded refactor or research sweep.
+If release is in scope, continue with the separate release conditions after merge and record any release blocker without relabeling the merged change as failed. At the fixed point, stop. Do not turn a completed Decision into an unbounded refactor or research sweep.
 
 ## 📣 Final Report Contract
 
@@ -156,6 +183,8 @@ Report verified outcome rather than tool activity. Include as applicable:
 - Capability Delta left behind;
 - Issue/PR/commit or stable artifact location;
 - tests/audits/exact-head CI result;
+- `merged`: yes/no with direct repository evidence;
+- `released`: yes/no with direct release/publication evidence when release is in scope;
 - remaining blocker and exact next action if unfinished.
 
 ---
