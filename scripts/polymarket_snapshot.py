@@ -43,23 +43,17 @@ def _validate_quote(midpoint: Decimal, spread: Decimal) -> None:
 def _gamma_has_live_book(market: GammaMarket) -> bool:
     if market.best_bid is None or market.best_ask is None:
         return False
-    if not Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1"):
-        return False
-    return True
+    return Decimal("0") <= market.best_bid <= market.best_ask <= Decimal("1")
 
 
 def discover_live_markets(*, min_liquidity: float, session: requests.Session) -> list[GammaMarket]:
     if min_liquidity < 0:
         raise ValueError("min_liquidity must be non-negative")
-    markets = fetch_markets(
-        limit=100,
-        offset=0,
-        closed=False,
-        order="liquidity_num",
-        ascending=False,
-        liquidity_num_min=min_liquidity,
-        session=session,
-    )
+
+    # Keep the upstream request deliberately conservative. Gamma has rejected
+    # some optional sort/filter combinations with HTTP 422; selection is cheap
+    # and deterministic on the returned page, so do it locally instead.
+    markets = fetch_markets(limit=100, offset=0, closed=False, session=session)
     live = [
         market
         for market in markets
@@ -116,7 +110,6 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
 
     session = requests.Session()
     markets = discover_live_markets(min_liquidity=min_liquidity, session=session)
-
     records: list[dict[str, Any]] = []
     for market in markets:
         quoted = _quote_market(market, session=session)
@@ -141,15 +134,17 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
                 f"{CLOB_BASE_URL}/spread",
             ],
             "query_or_scope": {
-                "active": True,
-                "closed": False,
-                "enable_order_book": True,
-                "accepting_orders": True,
-                "gamma_best_bid_ask_required": True,
-                "complete_clob_quote": True,
-                "order": "liquidity_num",
-                "ascending": False,
-                "liquidity_num_min": min_liquidity,
+                "server_query": {"closed": False, "limit": 100, "offset": 0},
+                "client_filters": {
+                    "active": True,
+                    "closed": False,
+                    "enable_order_book": True,
+                    "accepting_orders": True,
+                    "gamma_best_bid_ask_required": True,
+                    "complete_clob_quote": True,
+                    "liquidity_num_min": min_liquidity,
+                },
+                "client_order": "liquidity_num desc",
                 "max_markets": max_markets,
             },
             "retrieved_at": observed_at,
@@ -174,9 +169,7 @@ def write_snapshot(snapshot: dict[str, Any], output: Path) -> str:
 def _health_failure_code(error: Exception) -> str:
     if isinstance(error, requests.HTTPError):
         status = error.response.status_code if error.response is not None else None
-        if status is not None:
-            return f"http_{status}"
-        return "http_error"
+        return f"http_{status}" if status is not None else "http_error"
     if isinstance(error, requests.RequestException):
         return "network"
     if isinstance(error, AssertionError):
@@ -194,7 +187,7 @@ def _run_health(*, gamma_only: bool, min_liquidity: float) -> int:
         else:
             collect_snapshot(max_markets=1, min_liquidity=min_liquidity)
             stage = "full"
-    except Exception as error:  # noqa: BLE001 - health mode must redact upstream payloads and identifiers.
+    except Exception as error:  # noqa: BLE001 - redact upstream payloads and identifiers.
         print(
             json.dumps(
                 {
@@ -208,32 +201,15 @@ def _run_health(*, gamma_only: bool, min_liquidity: float) -> int:
         )
         return 1
 
-    print(
-        json.dumps(
-            {"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"},
-            sort_keys=True,
-        )
-    )
+    print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "stage": stage, "status": "PASS"}, sort_keys=True))
     return 0
 
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Collect read-only Polymarket market observations.")
-    parser.add_argument(
-        "--health-gamma",
-        action="store_true",
-        help="Validate live Gamma discovery without persisting data.",
-    )
-    parser.add_argument(
-        "--health-only",
-        action="store_true",
-        help="Validate live Gamma/CLOB access without persisting data.",
-    )
-    parser.add_argument(
-        "--output",
-        type=Path,
-        help="Private output path for a normalized snapshot.",
-    )
+    parser.add_argument("--health-gamma", action="store_true", help="Validate live Gamma discovery without persisting data.")
+    parser.add_argument("--health-only", action="store_true", help="Validate live Gamma/CLOB access without persisting data.")
+    parser.add_argument("--output", type=Path, help="Private output path for a normalized snapshot.")
     parser.add_argument("--max-markets", type=int, default=20)
     parser.add_argument("--min-liquidity", type=float, default=1000.0)
     return parser
@@ -253,16 +229,7 @@ def main() -> None:
     snapshot = collect_snapshot(max_markets=args.max_markets, min_liquidity=args.min_liquidity)
     assert args.output is not None
     digest = write_snapshot(snapshot, args.output)
-    print(
-        json.dumps(
-            {
-                "schema_version": SCHEMA_VERSION,
-                "status": "PASS",
-                "artifact_sha256": digest,
-            },
-            sort_keys=True,
-        )
-    )
+    print(json.dumps({"schema_version": SCHEMA_VERSION, "status": "PASS", "artifact_sha256": digest}, sort_keys=True))
 
 
 if __name__ == "__main__":
