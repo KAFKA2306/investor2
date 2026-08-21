@@ -109,6 +109,17 @@ Treat material claims as:
 - **UNVERIFIED** — not inspected and never stated as fact;
 - **FABRICATED** — forbidden.
 
+## 🌿 Branch Lifecycle
+
+Aside from the repository default branch and unavoidable platform-managed/protected branches, a persistent branch is permitted only while it is the head branch of a currently open PR.
+
+- Creating a work branch creates an obligation to open or reuse its canonical PR immediately in the same workline.
+- Do not use branches as backlog, continuation state, backup, archive, release-waiting state, or evidence storage. Durable continuation belongs in Issues/PRs, commits, canonical artifacts, and `main` history.
+- After a PR is merged or closed, delete its head branch after verifying the PR/main state. A branch with no open PR is an orphan and must be deleted.
+- Before starting and before reporting completion, compare non-default branches with currently open PR heads. Any unmatched task branch is a cleanup failure.
+- Do not report the repository at fixed point while an orphan task branch remains.
+- If the available GitHub surface cannot delete a branch, record that as a tooling blocker and leave cleanup explicitly incomplete. Never create, preserve, rename, or move another orphan branch as a workaround.
+
 ## 🔀 PR Merge and Product/Data Release Are Separate
 
 Do not use one completion gate for both repository integration and external release.
@@ -154,7 +165,8 @@ Independently verifies:
 - deterministic checks on the relevant commit/revision;
 - result/claim boundaries and whether stronger conclusions exceed the evidence;
 - Capability Delta is real and reusable rather than prose-only;
-- no duplicate workline or task-created residue remains.
+- no duplicate workline or task-created residue remains;
+- every non-default task branch is the head of a currently open PR, with no orphan branch remaining.
 
 Implementation intent is never acceptance evidence.
 
@@ -169,10 +181,10 @@ Stop when all are true for the bounded workline:
 - exact-head CI is verified when applicable to merge;
 - the Capability Delta is usable by a future run without rediscovering the same evidence/process;
 - owning Issue/PR state is correct for the repository-local outcome;
-- temporary files, duplicate branches/PRs, and superseded helper paths created by the task are removed;
+- temporary files, duplicate PRs, superseded helper paths, and every orphan task branch created or encountered by the workline are removed;
 - additional ideas no longer change the current Decision/Acceptance Criteria and therefore belong to a separate Goal.
 
-If release is in scope, continue with the separate release conditions after merge and record any release blocker without relabeling the merged change as failed. At the fixed point, stop. Do not turn a completed Decision into an unbounded refactor or research sweep.
+If release is in scope, continue with the separate release conditions after merge and record any release blocker without relabeling the merged change as failed. A release wait never justifies retaining the merged PR head branch. At the fixed point, stop. Do not turn a completed Decision into an unbounded refactor or research sweep.
 
 ## 📣 Final Report Contract
 
@@ -185,6 +197,7 @@ Report verified outcome rather than tool activity. Include as applicable:
 - tests/audits/exact-head CI result;
 - `merged`: yes/no with direct repository evidence;
 - `released`: yes/no with direct release/publication evidence when release is in scope;
+- branch cleanup: orphan branches remaining/removed and any deletion-tool blocker;
 - remaining blocker and exact next action if unfinished.
 
 ---
