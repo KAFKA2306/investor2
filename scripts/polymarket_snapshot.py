@@ -92,7 +92,11 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
         "observed_at": observed_at,
         "source": "polymarket_market_data",
         "provenance": {
-            "endpoints": [f"{GAMMA_BASE_URL}/markets/keyset", f"{CLOB_BASE_URL}/midpoint", f"{CLOB_BASE_URL}/spread"],
+            "endpoints": [
+                f"{GAMMA_BASE_URL}/markets/keyset",
+                f"{CLOB_BASE_URL}/midpoint",
+                f"{CLOB_BASE_URL}/spread",
+            ],
             "query_or_scope": {
                 "closed": False,
                 "order": "liquidity_num",
@@ -104,7 +108,7 @@ def collect_snapshot(*, max_markets: int, min_liquidity: float) -> dict[str, Any
             "source_urls": [
                 "https://docs.polymarket.com/api-reference/markets/list-markets-keyset-pagination",
                 "https://docs.polymarket.com/api-reference/data/get-midpoint-price",
-                "https://docs.polymarket.com/api-reference/market-data/get-spread",
+                "https://docs.polymarket.com/api-reference/market-data/get-spreads",
             ],
             "storage_visibility": "private-only",
         },
@@ -121,8 +125,16 @@ def write_snapshot(snapshot: dict[str, Any], output: Path) -> str:
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="Collect read-only Polymarket market observations.")
-    parser.add_argument("--health-only", action="store_true", help="Validate live Gamma/CLOB access without persisting data.")
-    parser.add_argument("--output", type=Path, help="Private output path for a normalized snapshot.")
+    parser.add_argument(
+        "--health-only",
+        action="store_true",
+        help="Validate live Gamma/CLOB access without persisting data.",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        help="Private output path for a normalized snapshot.",
+    )
     parser.add_argument("--max-markets", type=int, default=20)
     parser.add_argument("--min-liquidity", type=float, default=1000.0)
     return parser
@@ -138,12 +150,26 @@ def main() -> None:
         min_liquidity=args.min_liquidity,
     )
     if args.health_only:
-        print(json.dumps({"schema_version": HEALTH_SCHEMA_VERSION, "status": "PASS"}, sort_keys=True))
+        print(
+            json.dumps(
+                {"schema_version": HEALTH_SCHEMA_VERSION, "status": "PASS"},
+                sort_keys=True,
+            )
+        )
         return
 
     assert args.output is not None
     digest = write_snapshot(snapshot, args.output)
-    print(json.dumps({"schema_version": SCHEMA_VERSION, "status": "PASS", "artifact_sha256": digest}, sort_keys=True))
+    print(
+        json.dumps(
+            {
+                "schema_version": SCHEMA_VERSION,
+                "status": "PASS",
+                "artifact_sha256": digest,
+            },
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":
