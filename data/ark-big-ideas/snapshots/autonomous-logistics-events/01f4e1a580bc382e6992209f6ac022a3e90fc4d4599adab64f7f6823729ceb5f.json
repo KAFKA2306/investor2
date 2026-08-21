@@ -1,0 +1,77 @@
+{
+  "records": [
+    {
+      "effective_at": "2024-09-05",
+      "event_id": "drone-express-part135-2024",
+      "event_type": "regulatory_authorization",
+      "mode": "drone_package_delivery",
+      "operation_status": "regulatory_authorization",
+      "operator_id": "drone-express",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "effective_at": "2025-01-31",
+      "event_id": "flytrex-part135-2025",
+      "event_type": "regulatory_authorization",
+      "mode": "drone_package_delivery",
+      "operation_status": "regulatory_authorization",
+      "operator_id": "flytrex",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "effective_at": "2026-06-30",
+      "event_id": "aurora-current-2026",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "aurora",
+      "source_evidence_path": "raw/objects/b7d5f2edae50ca8e18980cebdf94c7af2f478f28a36acfa4bc5175160724c2c7.html",
+      "source_id": "aurora-q2-2026",
+      "source_sha256": "b7d5f2edae50ca8e18980cebdf94c7af2f478f28a36acfa4bc5175160724c2c7",
+      "source_url": "https://ir.aurora.tech/sec-filings/all-sec-filings/content/0001828108-26-000075/aurora26q2shareholderlet.htm"
+    },
+    {
+      "effective_at": "2026-01-27",
+      "event_id": "gatik-scale-2026",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "gatik",
+      "source_evidence_path": "raw/objects/216e4cc4157717a160c3cb019f8d0270e98d89714fee88068e4565f154870a22.html",
+      "source_id": "gatik-2026-scale",
+      "source_sha256": "216e4cc4157717a160c3cb019f8d0270e98d89714fee88068e4565f154870a22",
+      "source_url": "https://archive.gatik.ai/news/press-releases/gatik-becomes-first-us-company-to-operate-fully-driverless-trucks-at-scale-for-commercial-deliveries/"
+    },
+    {
+      "effective_at": "2024-12-01",
+      "event_id": "kodiak-launch-2024",
+      "event_type": "commercial_service_start",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "kodiak",
+      "source_evidence_path": "raw/objects/1865868e8755182ca198bcc90ef56cc764b038e90b1055b98f1aeb91c15daf05.html",
+      "source_id": "kodiak-2025-commercial",
+      "source_sha256": "1865868e8755182ca198bcc90ef56cc764b038e90b1055b98f1aeb91c15daf05",
+      "source_url": "https://kodiak.ai/news/kodiak-delivers-two-additional-driverless-trucks"
+    },
+    {
+      "effective_at": "2025-06-10",
+      "event_id": "kodiak-scale-2025",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "kodiak",
+      "source_evidence_path": "raw/objects/1865868e8755182ca198bcc90ef56cc764b038e90b1055b98f1aeb91c15daf05.html",
+      "source_id": "kodiak-2025-commercial",
+      "source_sha256": "1865868e8755182ca198bcc90ef56cc764b038e90b1055b98f1aeb91c15daf05",
+      "source_url": "https://kodiak.ai/news/kodiak-delivers-two-additional-driverless-trucks"
+    }
+  ],
+  "schema_version": 1
+}

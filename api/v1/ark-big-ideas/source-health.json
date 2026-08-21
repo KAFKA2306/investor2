@@ -55,7 +55,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "d30097b1f239f6a58ea2002adc743885ba08c5b7b6be40e2dc640c2988d5144c",
+      "sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -163,7 +163,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "f4ea135e00dd4e2230773c6b39ca4a890bc3ce1eafe078a3cf20695f80c4d712",
+      "sha256": "45fc6c32961acc11972a89f331d86e3fd6611878dde63f07408656f884374781",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -185,7 +185,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "a72ac4c615e9d1cc5c2a8f01e9235c55e7df23ba306feec681bcf805bd2a2b64",
+      "sha256": "4ba0db12431b27af7252370041d9a916da21642c03ac6a82343e0339514a394f",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -267,7 +267,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
-      "sha256": "d8777f59d449e92e04c777e81c49f5c9498cf0f84a399cbed87e7b358ae07e7f",
+      "sha256": "01f4e1a580bc382e6992209f6ac022a3e90fc4d4599adab64f7f6823729ceb5f",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
@@ -276,7 +276,7 @@
       ]
     },
     {
-      "bytes": 291293,
+      "bytes": 291808,
       "canonical_url": "https://github.com/KAFKA2306/trahist/blob/main/api/v1/space-launches/launches.json",
       "current_repo": "KAFKA2306/trahist",
       "issue_url": "https://github.com/KAFKA2306/trahist/issues/9",
@@ -284,7 +284,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "83da6ea62e50d23f2283610a48697c5521c3c1911aafde82d067745e4f3c86b1",
+      "sha256": "e05320bbbf178623fe6a126f181a9a231ab82e29572f0cdc9082d2c6d2053cb9",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
@@ -293,7 +293,7 @@
       ]
     },
     {
-      "bytes": 2686,
+      "bytes": 2684,
       "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
       "current_repo": "KAFKA2306/etf",
       "issue_url": "https://github.com/KAFKA2306/etf/issues/9",
@@ -301,7 +301,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "799932df4e12ead22b43a4014f6de8fe7bf2d6396b27bb308a20bafd7fc5cbf3",
+      "sha256": "9d054a9cec363fae04c6b730bdda6ccf859919959ca6976f05ed3799500cbe3a",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [
