@@ -5,7 +5,7 @@ from decimal import Decimal
 from typing import Any, Literal
 
 import requests
-from pydantic import BaseModel, ConfigDict, Field, TypeAdapter
+from pydantic import AliasChoices, BaseModel, ConfigDict, Field, TypeAdapter
 
 GAMMA_BASE_URL = "https://gamma-api.polymarket.com"
 CLOB_BASE_URL = "https://clob.polymarket.com"
@@ -45,7 +45,9 @@ class GammaMarketPage(BaseModel):
 
 
 class MidpointResponse(BaseModel):
-    mid_price: Decimal
+    # The API Reference documents `mid_price`, while Polymarket's official
+    # agent-skills examples and the live CLOB currently use `mid`.
+    mid_price: Decimal = Field(validation_alias=AliasChoices("mid_price", "mid"))
 
 
 class SpreadResponse(BaseModel):
