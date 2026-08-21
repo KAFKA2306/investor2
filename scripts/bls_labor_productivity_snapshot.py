@@ -98,9 +98,7 @@ def parse_series_report(path: Path, *, expected_series_id: str) -> tuple[dict[st
     parser.close()
 
     if parser.catalog.get("Series Id") != expected_series_id:
-        raise AssertionError(
-            f"unexpected BLS series id: {parser.catalog.get('Series Id')!r} != {expected_series_id!r}"
-        )
+        raise AssertionError(f"unexpected BLS series id: {parser.catalog.get('Series Id')!r} != {expected_series_id!r}")
     if parser.catalog.get("Sector") != EXPECTED_SECTOR:
         raise AssertionError(f"unexpected BLS sector: {parser.catalog.get('Sector')!r}")
     if parser.catalog.get("Measure") != EXPECTED_MEASURE:
@@ -131,7 +129,9 @@ def parse_series_report(path: Path, *, expected_series_id: str) -> tuple[dict[st
 
 
 def build_payload(percent_path: Path, index_path: Path) -> dict[str, Any]:
-    percent_catalog, percent_by_year = parse_series_report(percent_path, expected_series_id=SERIES_IDS["percent_change"])
+    percent_catalog, percent_by_year = parse_series_report(
+        percent_path, expected_series_id=SERIES_IDS["percent_change"]
+    )
     index_catalog, index_by_year = parse_series_report(index_path, expected_series_id=SERIES_IDS["index"])
 
     if percent_catalog.get("Duration") != EXPECTED_PERCENT_DURATION:
