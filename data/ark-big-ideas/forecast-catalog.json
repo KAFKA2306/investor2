@@ -1,6 +1,43 @@
 {
   "forecasts": [
     {
+      "ark_claim_paraphrase": "ARK forecasts global real GDP growth of 7.3% in 2030.",
+      "baseline_period": null,
+      "baseline_qualifier": "historical_long_run_average",
+      "baseline_unit": "percent",
+      "baseline_value": 3,
+      "claim_id": "the-great-acceleration",
+      "comparison": {
+        "absolute_gap": 4.4,
+        "absolute_gap_unit": "percentage_points",
+        "observed_period": "2025",
+        "observed_repository": "KAFKA2306/econalert",
+        "observed_series_id": "econalert/world-gdp-growth",
+        "observed_sha256": "48fa167bc1f554188c7d94f441fd3ac903ee9772ddb3fb2041c15cbb8927c9b0",
+        "observed_source_url": "https://raw.githubusercontent.com/KAFKA2306/econalert/main/api/v1/world-gdp-growth.json",
+        "observed_unit": "percent",
+        "observed_value": 2.9,
+        "reason": "ARK's global real GDP growth forecast and the World Bank World GDP growth observation both use annual real GDP growth in percent at global/World scope.",
+        "status": "comparable",
+        "target_date_reached": false
+      },
+      "forecast_id": "global-real-gdp-growth-2030",
+      "growth_rate": null,
+      "growth_rate_basis": null,
+      "growth_rate_unit": null,
+      "published_at": "2026-03-02",
+      "scope": "global real GDP growth",
+      "source_page": 11,
+      "source_snapshot_path": "data/ark-big-ideas/snapshots/ark-big-ideas-2026-great-acceleration-forecast-source.json",
+      "source_snapshot_sha256": "1886fe22194d1fac1eceda061dda64716ad31e648886b491473468d3795ae019",
+      "source_url": "https://research.ark-invest.com/hubfs/1_Download_Files_ARK-Invest/Big_Ideas/ARKInvest%20BigIdeas2026.pdf",
+      "target_period": "2030",
+      "target_qualifier": null,
+      "target_unit": "percent",
+      "target_value": 7.3,
+      "theme": "The Great Acceleration"
+    },
+    {
       "ark_claim_paraphrase": "AI-mediated revenue could rise from approximately $20 billion to nearly $900 billion by 2030.",
       "baseline_period": null,
       "baseline_qualifier": "approximately",
