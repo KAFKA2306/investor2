@@ -14,6 +14,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Show Ruff formatting diff
+        run: uvx --from ruff==0.15.5 ruff format --diff scripts/bls_labor_productivity_snapshot.py tests/test_bls_labor_productivity_snapshot.py
       - name: Probe official BLS annual-average output
         shell: bash
         run: |
