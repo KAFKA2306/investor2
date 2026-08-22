@@ -108,7 +108,9 @@ def main() -> None:
             agent_window=args.agent_window,
             horizon=args.horizon,
         )
-        losses.append(ppo_update(model, optimizer, rollout, hidden_size=args.hidden_size, device=device))
+        losses.append(
+            ppo_update(model, optimizer, rollout, hidden_size=args.hidden_size, device=device)
+        )
         validation_weights = deterministic_weights(
             model,
             features,
@@ -127,12 +129,16 @@ def main() -> None:
         )
         if validation_metrics.annualized_sharpe > best_validation_sharpe:
             best_validation_sharpe = validation_metrics.annualized_sharpe
-            best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
+            best_state = {
+                key: value.detach().cpu().clone() for key, value in model.state_dict().items()
+            }
 
     if best_state is None:
         raise AssertionError("no validation checkpoint selected")
     model.load_state_dict(best_state)
-    test_decision_start, test_decision_end, test_target_start, test_target_end = next_period_bounds(test_start, test_end)
+    test_decision_start, test_decision_end, test_target_start, test_target_end = next_period_bounds(
+        test_start, test_end
+    )
     raw_weights = deterministic_weights(
         model,
         features,
@@ -195,7 +201,12 @@ def main() -> None:
             "claim_boundary": "Paper-semantics implementation smoke on surrogate inputs; not a Table-4 reproduction.",
         },
     )
-    print(json.dumps({"result": str(args.output), "metrics": metrics_to_dict(metrics)}, sort_keys=True))
+    print(
+        json.dumps(
+            {"result": str(args.output), "metrics": metrics_to_dict(metrics)},
+            sort_keys=True,
+        )
+    )
 
 
 if __name__ == "__main__":
