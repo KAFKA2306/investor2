@@ -15,7 +15,9 @@ NEUTRALITY_TOLERANCE = 1e-6
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Compare confirmatory AlphaZeroBeta folds with the lambda_corr=0 ablation.")
+    parser = argparse.ArgumentParser(
+        description="Compare confirmatory AlphaZeroBeta folds with the lambda_corr=0 ablation."
+    )
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--primary-weights", required=True, nargs="+", type=Path)
     parser.add_argument("--ablation-weights", required=True, nargs="+", type=Path)
@@ -186,7 +188,10 @@ def main() -> None:
             },
             "gates": gates,
             "verdict": verdict,
-            "claim_boundary": "confirm is an independent mechanism-validation verdict, not exact reproduction of the paper's licensed-data results.",
+            "claim_boundary": (
+                "confirm is an independent mechanism-validation verdict, not exact reproduction of the paper's "
+                "licensed-data results."
+            ),
         },
     )
     print(json.dumps({"output": str(args.output), "verdict": verdict, "gates": gates}, sort_keys=True))
