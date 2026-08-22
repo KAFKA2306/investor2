@@ -1,0 +1,158 @@
+{
+  "benchmark": "SPY",
+  "candidate_universe": [
+    "QQQ",
+    "IWM",
+    "DIA",
+    "TLT",
+    "GLD",
+    "XLF",
+    "XLK",
+    "XLE",
+    "XLV",
+    "XLI",
+    "XLP",
+    "XLY"
+  ],
+  "candidate_universe_contract": "Fixed broad/sector ETF candidate set declared before OOS outcomes are observed; all instruments predate the 2020-2024 sample. Final assets are selected only by pre-cutoff mean dollar volume. This is a bounded fixed-universe mechanism validation, not an exhaustive investable-universe claim.",
+  "normalized_benchmark_sha256": "ea59fcecff3923df232ef4f2e912283f48bf721a4d8ba5973917e3331f4dea51",
+  "normalized_prices_sha256": "9195f9602a48b56d3afd4f48d229ffa33e501e4a4733f2bc0dd29edf0b644bb0",
+  "records": [
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "143cc825a40b0d956e499def4339483435b5f0ceaec062e6976f7d109b5643b1",
+      "row_count": 1258,
+      "symbol": "QQQ",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/QQQ?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "68037fe6ea03501d1199e1529eef550bc79b2a51f3c5e7d11c1ca5d31c6dd0dc",
+      "row_count": 1258,
+      "symbol": "IWM",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/IWM?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "c98ff4d0eece86b040d35fa22fb4d5adf8bdb8f2f70ecfdf3769573eb8a7e3a8",
+      "row_count": 1258,
+      "symbol": "DIA",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/DIA?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "31da26d9d5f6de9f72e24d650b116ac6d21cf3e8a9bdf6646a3d747d113afe44",
+      "row_count": 1258,
+      "symbol": "TLT",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/TLT?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "c059e45a0911aa33ee548008edcb9ceca440e29b6d1110be0a493c21cd1587d1",
+      "row_count": 1258,
+      "symbol": "GLD",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/GLD?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "550bec9954eaa18ec3d7f1a3e62e5e6fa2eb8faf53683e6a14ef1ca3024621bc",
+      "row_count": 1258,
+      "symbol": "XLF",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLF?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "2d9d206080a7c5ff7b3b86bbe6e9f5eaa0e41ec9155b5019bf5d6f25c3675b5a",
+      "row_count": 1258,
+      "symbol": "XLK",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLK?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "a5a260434e17137ef47674f4ea50e8280ae0eca0908a97852da62c45738ed027",
+      "row_count": 1258,
+      "symbol": "XLE",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLE?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "e0b715942197261030f817bbe770b76a8d0837b999f42331237943c2b0e37235",
+      "row_count": 1258,
+      "symbol": "XLV",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLV?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "866f26c01aae60f6ffc2bda37d27c9ddf12d356651819135713fe58090414342",
+      "row_count": 1258,
+      "symbol": "XLI",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLI?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "3c3fdf030cd6ec65a898d03489dd5b5c28ac5aa607d37c0a136e9997c254cdb7",
+      "row_count": 1258,
+      "symbol": "XLP",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLP?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "2bcfbc752713755585ece31f22a265bf8976c59c1a19d823bb01a572ab577ce3",
+      "row_count": 1258,
+      "symbol": "XLY",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/XLY?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    },
+    {
+      "date_end": "2024-12-31",
+      "date_start": "2020-01-02",
+      "price_field": "adjusted_close_when_available",
+      "provider": "yahoo_chart",
+      "raw_sha256": "0d97dc0f1114baa9dbd60719d82b497f0d8088fd5db13ba9655d95daa3492e4a",
+      "row_count": 1258,
+      "symbol": "SPY",
+      "url": "https://query1.finance.yahoo.com/v8/finance/chart/SPY?period1=1577836800&period2=1735689600&interval=1d&events=history&includeAdjustedClose=true"
+    }
+  ],
+  "retrieved_at": "2026-08-22T06:26:24.795621+00:00",
+  "schema_version": "investor2.alphazerobeta-market-source-snapshot.v1",
+  "source_window": {
+    "end": "2024-12-31",
+    "start": "2020-01-01"
+  }
+}

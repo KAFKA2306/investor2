@@ -1,0 +1,32 @@
+{
+  "ablation_lambda_corr": 0.0,
+  "benchmark": "SPY",
+  "candidate_etfs": [
+    "QQQ",
+    "IWM",
+    "DIA",
+    "TLT",
+    "GLD",
+    "XLF",
+    "XLK",
+    "XLE",
+    "XLV",
+    "XLI",
+    "XLP",
+    "XLY"
+  ],
+  "hidden_size": 64,
+  "horizon": 60,
+  "iterations": 4,
+  "max_assets": 8,
+  "primary_borrow_fee_bps_per_year": 100.0,
+  "primary_lambda_corr": 0.5,
+  "primary_transaction_cost_bps_per_side": 15.0,
+  "schema_version": "investor2.alphazerobeta-empirical-run-contract.v1",
+  "seed": 2306,
+  "source_end": "2024-12-31",
+  "source_start": "2020-01-01",
+  "test_end": "2024-12-31",
+  "test_start": "2024-01-01",
+  "universe_cutoff": "2023-06-30"
+}

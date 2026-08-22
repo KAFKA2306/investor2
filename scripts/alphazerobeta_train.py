@@ -278,7 +278,9 @@ def main() -> None:
     if best_state is None:
         raise AssertionError("no validation checkpoint selected")
     model.load_state_dict(best_state)
-    test_decision_start, test_decision_end, test_target_start, test_target_end = next_period_bounds(test_start, test_end)
+    test_decision_start, test_decision_end, test_target_start, test_target_end = next_period_bounds(
+        test_start, test_end
+    )
     raw_weights = deterministic_weights(
         model,
         features,

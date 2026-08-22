@@ -1,0 +1,38 @@
+{
+  "ablation_lambda_corr_0": {
+    "annualized_sharpe": -0.28080981125916765,
+    "benchmark_correlation": -0.2247939163458007,
+    "cumulative_return": -0.018399398956314483,
+    "max_drawdown": -0.06313754562456753,
+    "observations": 250
+  },
+  "claim_boundary": "confirm is an independent mechanism-validation verdict, not exact reproduction of the paper's licensed-data results.",
+  "cost_assumptions": {
+    "borrow_fee_bps_per_year": 0.0,
+    "classification": "pre-registered sensitivity assumption, not realized execution cost",
+    "transaction_cost_bps_per_side": 30.0
+  },
+  "dataset": "docs/research/results/alphazerobeta_2024/etf_panel.npz",
+  "fold_count": 2,
+  "gates": {
+    "absolute_correlation_lt_lambda_corr_zero": true,
+    "absolute_correlation_lte_0_15": false,
+    "dollar_neutrality": true,
+    "minimum_confirmatory_folds": true,
+    "sharpe_gt_lambda_corr_zero": false
+  },
+  "hypothesis_id": "alphazerobeta_market_neutral_v1",
+  "neutrality": {
+    "max_abs_net_exposure_across_folds": 3.166496753692627e-08,
+    "max_fold_mean_gross_exposure": 1.000000000130139
+  },
+  "primary_lambda_corr_0_5": {
+    "annualized_sharpe": -0.3151601033967603,
+    "benchmark_correlation": -0.19507193247163546,
+    "cumulative_return": -0.019111383923799186,
+    "max_drawdown": -0.05811527819200013,
+    "observations": 250
+  },
+  "schema_version": "investor2.alphazerobeta-comparison.v1",
+  "verdict": "reject"
+}

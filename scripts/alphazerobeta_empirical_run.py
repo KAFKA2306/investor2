@@ -14,8 +14,8 @@ import urllib.request
 from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
+from typing import Any
 
-import numpy as np
 import pandas as pd
 
 from src.research.alphazerobeta import write_json
@@ -162,7 +162,7 @@ def run(command: list[str]) -> None:
     subprocess.run(command, check=True, env=env)
 
 
-def read_json(path: Path) -> dict[str, object]:
+def read_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
@@ -319,6 +319,8 @@ def write_summary(
     assert isinstance(primary, dict) and isinstance(ablation, dict)
     primary_return = float(primary["cumulative_return"])
     ablation_return = float(ablation["cumulative_return"])
+    primary_money_scaling = [money(primary_return, 1_000_000.0), money(primary_return, 10_000_000.0)]
+    ablation_money_scaling = [money(ablation_return, 1_000_000.0), money(ablation_return, 10_000_000.0)]
     summary = {
         "schema_version": "investor2.alphazerobeta-empirical-summary.v1",
         "generated_at": datetime.now(UTC).isoformat(),
@@ -331,8 +333,8 @@ def write_summary(
         "fold_count": int(comparison_payload["fold_count"]),
         "primary_lambda_corr_0_5": primary,
         "ablation_lambda_corr_0": ablation,
-        "primary_money_scaling": [money(primary_return, 1_000_000.0), money(primary_return, 10_000_000.0)],
-        "ablation_money_scaling": [money(ablation_return, 1_000_000.0), money(ablation_return, 10_000_000.0)],
+        "primary_money_scaling": primary_money_scaling,
+        "ablation_money_scaling": ablation_money_scaling,
         "verdict": comparison_payload["verdict"],
         "gates": comparison_payload["gates"],
         "primary_fold_results": [str(path) for path in primary_folds],
@@ -353,10 +355,9 @@ def write_summary(
     summary_path = output_dir / "summary.json"
     write_json(summary_path, summary)
 
-    p_money = summary["primary_money_scaling"]
-    a_money = summary["ablation_money_scaling"]
-    assert isinstance(p_money, list) and isinstance(a_money, list)
-    markdown = f"""# AlphaZeroBeta empirical validation — 2024 OOS\n\n- Verdict: **{summary['verdict']}**\n- Fold count: {summary['fold_count']}\n- Scope: bounded fixed-universe independent mechanism validation; not exact paper reproduction and not a live-trading promise.\n- Primary costs: {PRIMARY_TRANSACTION_COST_BPS:g} bps per side + {PRIMARY_BORROW_FEE_BPS:g} bps/year borrow.\n- Timing: features/decision at `t` are evaluated only against realized return at `t+1`.\n\n## Primary `lambda_corr=0.5`\n\n- Cumulative after-cost return: {100 * primary_return:.4f}%\n- Annualized Sharpe: {float(primary['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(primary['benchmark_correlation']):.4f}\n- Maximum drawdown: {100 * float(primary['max_drawdown']):.4f}%\n- JPY 1,000,000 -> JPY {float(p_money[0]['final_equity_jpy']):,.0f} (P/L JPY {float(p_money[0]['profit_loss_jpy']):+,.0f})\n- JPY 10,000,000 -> JPY {float(p_money[1]['final_equity_jpy']):,.0f} (P/L JPY {float(p_money[1]['profit_loss_jpy']):+,.0f})\n\n## Ablation `lambda_corr=0`\n\n- Cumulative after-cost return: {100 * ablation_return:.4f}%\n- Annualized Sharpe: {float(ablation['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(ablation['benchmark_correlation']):.4f}\n- Maximum drawdown: {100 * float(ablation['max_drawdown']):.4f}%\n- JPY 1,000,000 -> JPY {float(a_money[0]['final_equity_jpy']):,.0f} (P/L JPY {float(a_money[0]['profit_loss_jpy']):+,.0f})\n- JPY 10,000,000 -> JPY {float(a_money[1]['final_equity_jpy']):,.0f} (P/L JPY {float(a_money[1]['profit_loss_jpy']):+,.0f})\n\n## Gates\n\n```json\n{json.dumps(summary['gates'], ensure_ascii=False, indent=2, sort_keys=True)}\n```\n"""
+    p_money = primary_money_scaling
+    a_money = ablation_money_scaling
+    markdown = f"""# AlphaZeroBeta empirical validation — 2024 OOS\n\n- Verdict: **{summary["verdict"]}**\n- Fold count: {summary["fold_count"]}\n- Scope: bounded fixed-universe independent mechanism validation; not exact paper reproduction and not a live-trading promise.\n- Primary costs: {PRIMARY_TRANSACTION_COST_BPS:g} bps per side + {PRIMARY_BORROW_FEE_BPS:g} bps/year borrow.\n- Timing: features/decision at `t` are evaluated only against realized return at `t+1`.\n\n## Primary `lambda_corr=0.5`\n\n- Cumulative after-cost return: {100 * primary_return:.4f}%\n- Annualized Sharpe: {float(primary["annualized_sharpe"]):.4f}\n- Benchmark correlation: {float(primary["benchmark_correlation"]):.4f}\n- Maximum drawdown: {100 * float(primary["max_drawdown"]):.4f}%\n- JPY 1,000,000 -> JPY {float(p_money[0]["final_equity_jpy"]):,.0f} (P/L JPY {float(p_money[0]["profit_loss_jpy"]):+,.0f})\n- JPY 10,000,000 -> JPY {float(p_money[1]["final_equity_jpy"]):,.0f} (P/L JPY {float(p_money[1]["profit_loss_jpy"]):+,.0f})\n\n## Ablation `lambda_corr=0`\n\n- Cumulative after-cost return: {100 * ablation_return:.4f}%\n- Annualized Sharpe: {float(ablation["annualized_sharpe"]):.4f}\n- Benchmark correlation: {float(ablation["benchmark_correlation"]):.4f}\n- Maximum drawdown: {100 * float(ablation["max_drawdown"]):.4f}%\n- JPY 1,000,000 -> JPY {float(a_money[0]["final_equity_jpy"]):,.0f} (P/L JPY {float(a_money[0]["profit_loss_jpy"]):+,.0f})\n- JPY 10,000,000 -> JPY {float(a_money[1]["final_equity_jpy"]):,.0f} (P/L JPY {float(a_money[1]["profit_loss_jpy"]):+,.0f})\n\n## Gates\n\n```json\n{json.dumps(summary["gates"], ensure_ascii=False, indent=2, sort_keys=True)}\n```\n"""
     (output_dir / "SUMMARY.md").write_text(markdown, encoding="utf-8")
 
 
