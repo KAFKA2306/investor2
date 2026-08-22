@@ -78,7 +78,7 @@ def test_paper_walk_forward_contract_has_22_nonoverlapping_folds() -> None:
     assert len(folds) == 22
     assert folds[0].test_start >= "2014-01-01"
     assert folds[-1].test_end == "2024-12-31"
-    for left, right in zip(folds, folds[1:], strict=True):
+    for left, right in zip(folds[:-1], folds[1:], strict=True):
         assert left.test_indices[1] <= right.test_indices[0]
 
 
