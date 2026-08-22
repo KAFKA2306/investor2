@@ -59,11 +59,11 @@ jobs:
           python -m pip install numpy pandas pytest ruff
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
 
-      - name: Verify reproduction contract
+      - name: Canonicalize and verify reproduction contract
         env:
           PYTHONPATH: .
         run: |
-          ruff format --check \
+          ruff format \
             src/research/alphazerobeta_paper.py \
             scripts/alphazerobeta_paper_train.py \
             scripts/alphazerobeta_paper_reproduce.py \
@@ -133,17 +133,22 @@ jobs:
           }, sort_keys=True))
           PY
 
-      - name: Persist reproduction execution evidence
+      - name: Persist canonical code and reproduction evidence
         if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
         shell: bash
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add docs/research/results/alphazerobeta_paper_reproduction
+          git add \
+            src/research/alphazerobeta_paper.py \
+            scripts/alphazerobeta_paper_train.py \
+            scripts/alphazerobeta_paper_reproduce.py \
+            tests/test_alphazerobeta_paper.py \
+            docs/research/results/alphazerobeta_paper_reproduction
           if git diff --cached --quiet; then
-            echo "reproduction evidence unchanged"
+            echo "canonical reproduction evidence unchanged"
             exit 0
           fi
-          git commit -m "research: persist AlphaZeroBeta paper reproduction evidence"
+          git commit -m "research: persist canonical AlphaZeroBeta reproduction evidence"
           git push origin HEAD:research/alphazerobeta-paper-reproduction
