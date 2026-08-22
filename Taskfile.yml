@@ -1,7 +1,4 @@
 version: "3"
-vars:
-  TS_DIR: .
-  DASHBOARD_DIR: src/dashboard
 tasks:
   setup:
     desc: Install locked project dependencies and the local prek hook
@@ -83,12 +80,6 @@ tasks:
     desc: Validate the 2010s paper collection catalog
     cmds:
       - python3 scripts/validate_paper_catalog.py
-  polymarket:bot:
-    cmds:
-      - bun src/agents/polymarket_trading_bot.ts
-  polymarket:backtest:
-    cmds:
-      - bun src/agents/polymarket/run_backtest.ts
   websearch:sync:
     cmds:
       - bun src/io/websearch.ts
