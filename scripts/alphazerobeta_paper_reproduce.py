@@ -26,9 +26,7 @@ PUBLIC_BORROW_BPS = 30.0
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Execute the disclosed AlphaZeroBeta paper reproduction contract."
-    )
+    parser = argparse.ArgumentParser(description="Execute the disclosed AlphaZeroBeta paper reproduction contract.")
     parser.add_argument("--mode", choices=["exact-paper", "public-surrogate"], required=True)
     parser.add_argument("--dataset", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--manifest", type=Path)

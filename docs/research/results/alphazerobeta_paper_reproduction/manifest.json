@@ -1,0 +1,99 @@
+{
+  "architecture": {
+    "agent_window": 100,
+    "cnn_filters": [
+      32,
+      64,
+      64
+    ],
+    "cnn_kernels": [
+      8,
+      4,
+      3
+    ],
+    "cnn_strides": [
+      4,
+      2,
+      1
+    ],
+    "gru_hidden": 512,
+    "head_hidden": 512
+  },
+  "comparison": {
+    "ablation_lambda_corr_0": {
+      "annualized_sharpe": 0.13378590318196132,
+      "benchmark_correlation": 0.7062887908326351,
+      "cumulative_return": 0.006823731282043166,
+      "max_drawdown": -0.07201304476144266,
+      "observations": 250
+    },
+    "claim_boundary": "confirm is an independent mechanism-validation verdict, not exact reproduction of the paper's licensed-data results.",
+    "cost_assumptions": {
+      "borrow_fee_bps_per_year": 30.0,
+      "classification": "pre-registered sensitivity assumption, not realized execution cost",
+      "transaction_cost_bps_per_side": 15.0
+    },
+    "dataset": "docs/research/results/alphazerobeta_2024/etf_panel.npz",
+    "fold_count": 2,
+    "gates": {
+      "absolute_correlation_lt_lambda_corr_zero": true,
+      "absolute_correlation_lte_0_15": false,
+      "dollar_neutrality": true,
+      "minimum_confirmatory_folds": true,
+      "sharpe_gt_lambda_corr_zero": false
+    },
+    "hypothesis_id": "alphazerobeta_market_neutral_v1",
+    "neutrality": {
+      "max_abs_net_exposure_across_folds": 2.60770320892334e-08,
+      "max_fold_mean_gross_exposure": 1.0000000021503708
+    },
+    "primary_lambda_corr_0_5": {
+      "annualized_sharpe": -0.26627120368749707,
+      "benchmark_correlation": 0.6103656318412156,
+      "cumulative_return": -0.017573471133670138,
+      "max_drawdown": -0.07440343452295128,
+      "observations": 250
+    },
+    "schema_version": "investor2.alphazerobeta-comparison.v1",
+    "verdict": "reject"
+  },
+  "dataset": "docs/research/results/alphazerobeta_2024/etf_panel.npz",
+  "deviations_from_table4_replication": [
+    "uses the frozen public Yahoo ETF panel from the prior bounded validation, not licensed Bloomberg/FMP data",
+    "uses 8 ETFs instead of a paper equity-index constituent universe",
+    "uses 17 price/volume-derived features instead of the paper feature catalog",
+    "weekly/monthly public-smoke channels use the existing 5/21-day stepped frozen daily tensor rather than rebuilt end-of-period vendor panels",
+    "covers only the two 2024 OOS folds available in the frozen panel instead of 22 folds over 2014-2024",
+    "uses one fixed seed rather than nine independent RL initializations per fold",
+    "charges the U.S. large-cap non-top-decile rate (15 bps/side) to every surrogate asset because the frozen model input does not retain the paper monthly ADV cost bucket",
+    "uses Appendix-D-style 10 training iterations as an execution smoke; the paper does not disclose the total production update count/early-stopping budget needed to recreate Table 4"
+  ],
+  "exact_paper_result_reproduction": false,
+  "execution_smoke": {
+    "borrow_fee_bps_per_year": 30.0,
+    "folds": 2,
+    "horizon": 200,
+    "iterations_per_fold": 10,
+    "seed": 2306,
+    "transaction_cost_bps_per_side": 15.0
+  },
+  "execution_status": "completed",
+  "mode": "public-surrogate",
+  "paper": "AlphaZeroBeta: Deep Reinforcement Learning for Market-Neutral Portfolios, arXiv:2607.18001v1",
+  "ppo": {
+    "clip": 0.2,
+    "entropy_coefficient": 0.01,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "learning_rate": 0.0003,
+    "ppo_epochs": 10,
+    "value_loss_coefficient": 0.5
+  },
+  "reward_state": {
+    "lambda_corr": 0.5,
+    "lambda_turnover": 0.001,
+    "semantics": "Appendix D.4.2: previous weights reapplied to asset returns over [t-W,t)",
+    "sigma_corr_window": 60
+  },
+  "schema_version": "investor2.alphazerobeta-paper-reproduction.v1"
+}

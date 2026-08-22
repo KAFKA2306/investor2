@@ -113,11 +113,7 @@ class PaperAlphaZeroBetaEnvironment:
         portfolio = self.asset_returns[s : self.t] @ self.previous_weights
         benchmark = self.benchmark_returns[s : self.t]
         sigma = max(float(portfolio.std(ddof=0)), 1e-8)
-        if (
-            portfolio.size < 2
-            or float(portfolio.std(ddof=0)) <= 1e-12
-            or float(benchmark.std(ddof=0)) <= 1e-12
-        ):
+        if portfolio.size < 2 or float(portfolio.std(ddof=0)) <= 1e-12 or float(benchmark.std(ddof=0)) <= 1e-12:
             corr = 0.0
         else:
             corr = float(np.corrcoef(portfolio, benchmark)[0, 1])
@@ -129,19 +125,22 @@ class PaperAlphaZeroBetaEnvironment:
         rp_t = float(weights @ self.asset_returns[self.t + 1])
         rm_t = float(self.benchmark_returns[self.t + 1])
         turnover = float(np.abs(weights - self.previous_weights).sum())
-        reward = float(
-            (rp_t - rm_t) / sigma - self.lambda_corr * corr - self.lambda_turnover * turnover
-        )
+        reward = float((rp_t - rm_t) / sigma - self.lambda_corr * corr - self.lambda_turnover * turnover)
         self.previous_weights = weights
         self.t += 1
         done = self.t >= self.end - 1
-        return self.t, reward, done, {
-            "portfolio_return": rp_t,
-            "benchmark_return": rm_t,
-            "turnover": turnover,
-            "rolling_sigma": sigma,
-            "rolling_correlation": corr,
-        }
+        return (
+            self.t,
+            reward,
+            done,
+            {
+                "portfolio_return": rp_t,
+                "benchmark_return": rm_t,
+                "turnover": turnover,
+                "rolling_sigma": sigma,
+                "rolling_correlation": corr,
+            },
+        )
 
 
 def paper_fold_contract(dates: pd.DatetimeIndex) -> list[WalkForwardFold]:

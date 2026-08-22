@@ -1,0 +1,80 @@
+{
+  "blockers": [
+    "missing exact-paper dataset manifest"
+  ],
+  "evaluation_window": {
+    "end": "2024-12-31",
+    "start": "2014-01-01"
+  },
+  "mode": "exact-paper",
+  "paper_cost_schedule": {
+    "china_proxy": {
+      "borrow_bps_per_year": 120.0,
+      "other_bps_per_side": 30.0,
+      "top_decile_bps_per_side": 30.0
+    },
+    "hong_kong": {
+      "borrow_bps_per_year": 75.0,
+      "other_bps_per_side": 20.0,
+      "top_decile_bps_per_side": 10.0
+    },
+    "uk_germany": {
+      "borrow_bps_per_year": 45.0,
+      "other_bps_per_side": 15.0,
+      "top_decile_bps_per_side": 10.0
+    },
+    "us_large_cap": {
+      "borrow_bps_per_year": 30.0,
+      "other_bps_per_side": 15.0,
+      "top_decile_bps_per_side": 5.0
+    }
+  },
+  "paper_hyperparameters": {
+    "agent_window": 100,
+    "entropy_coefficient": 0.01,
+    "gae_lambda": 0.95,
+    "gamma": 0.99,
+    "head_hidden": 512,
+    "hidden_size": 512,
+    "lambda_corr": 0.5,
+    "lambda_turnover": 0.001,
+    "learning_rate": 0.0003,
+    "minibatch_trajectories": 256,
+    "ppo_clip": 0.2,
+    "ppo_epochs": 10,
+    "restarts_per_fold": 9,
+    "test_months": 6,
+    "train_months": 36,
+    "validation_months": 6,
+    "value_loss_coefficient": 0.5,
+    "vol_corr_window": 60,
+    "walk_forward_splits": 22
+  },
+  "paper_result_samples_per_market": 198,
+  "ready": false,
+  "required_feature_groups": [
+    "price_based",
+    "volume_liquidity",
+    "technical_indicators",
+    "corporate_actions",
+    "fundamentals",
+    "earnings_surprises",
+    "insider_trading",
+    "sentiment",
+    "governance",
+    "macroeconomic",
+    "rates_curves",
+    "volatility_options",
+    "cross_asset_indices",
+    "sector_indices",
+    "metadata"
+  ],
+  "required_time_varying_indices": [
+    "GSPC",
+    "NDX",
+    "FTSE",
+    "GDAXI",
+    "HSI",
+    "DJI"
+  ]
+}
