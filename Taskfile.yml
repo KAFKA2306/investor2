@@ -67,6 +67,7 @@ tasks:
   test:
     cmds:
       - bun run test
+      - uv run --no-sync pytest -q tests/test_alphazerobeta.py
   pipeline:run:
     desc: Legacy experimental orchestrator; not the canonical alpha-discovery path
     cmds:
