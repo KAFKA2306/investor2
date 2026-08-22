@@ -5,6 +5,7 @@
 - Scope: bounded fixed-universe independent mechanism validation; not exact paper reproduction and not a live-trading promise.
 - Primary costs: 15 bps per side + 100 bps/year borrow.
 - Timing: features/decision at `t` are evaluated only against realized return at `t+1`.
+- Verification: persisted weight artifacts were independently recomputed by the CPU audit path; the fold metrics match the stored training results.
 
 ## Primary `lambda_corr=0.5`
 
