@@ -1,9 +1,9 @@
 {
   "ablation_lambda_corr_0": {
-    "annualized_sharpe": 0.13378590318196132,
-    "benchmark_correlation": 0.7062887908326351,
-    "cumulative_return": 0.006823731282043166,
-    "max_drawdown": -0.07201304476144266,
+    "annualized_sharpe": 0.09621210371533034,
+    "benchmark_correlation": 0.6925634027095949,
+    "cumulative_return": 0.00418557435838518,
+    "max_drawdown": -0.07139702209385457,
     "observations": 250
   },
   "claim_boundary": "confirm is an independent mechanism-validation verdict, not exact reproduction of the paper's licensed-data results.",
@@ -23,14 +23,14 @@
   },
   "hypothesis_id": "alphazerobeta_market_neutral_v1",
   "neutrality": {
-    "max_abs_net_exposure_across_folds": 2.60770320892334e-08,
-    "max_fold_mean_gross_exposure": 1.0000000021503708
+    "max_abs_net_exposure_across_folds": 3.3527612686157227e-08,
+    "max_fold_mean_gross_exposure": 1.0000000011811896
   },
   "primary_lambda_corr_0_5": {
-    "annualized_sharpe": -0.26627120368749707,
-    "benchmark_correlation": 0.6103656318412156,
-    "cumulative_return": -0.017573471133670138,
-    "max_drawdown": -0.07440343452295128,
+    "annualized_sharpe": -0.26657514113220926,
+    "benchmark_correlation": 0.6082715122138661,
+    "cumulative_return": -0.017712761900500862,
+    "max_drawdown": -0.07538860484241439,
     "observations": 250
   },
   "schema_version": "investor2.alphazerobeta-comparison.v1",

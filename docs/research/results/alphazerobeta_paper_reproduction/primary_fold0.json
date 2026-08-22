@@ -1,6 +1,11 @@
 {
   "claim_boundary": "Paper-semantics implementation smoke on surrogate inputs; not a Table-4 reproduction.",
   "dataset": "docs/research/results/alphazerobeta_2024/etf_panel.npz",
+  "determinism": {
+    "mkldnn_enabled": false,
+    "torch_deterministic_algorithms": true,
+    "torch_num_threads": 1
+  },
   "device": "cpu",
   "evaluation_cost_assumptions": {
     "borrow_fee_bps_per_year": 30.0,
@@ -29,13 +34,13 @@
     "validation_start": "2023-07-03"
   },
   "metrics": {
-    "annualized_sharpe": 0.5191351131405827,
-    "benchmark_correlation": 0.5169469005531477,
-    "cumulative_return": 0.01542423875931842,
+    "annualized_sharpe": 0.5191758633339505,
+    "benchmark_correlation": 0.5169407454903432,
+    "cumulative_return": 0.015425386134720664,
     "max_abs_net_exposure": 2.60770320892334e-08,
-    "max_drawdown": -0.05392960657436541,
-    "mean_gross_exposure": 1.0000000021503708,
-    "mean_turnover": 0.008251516012156882,
+    "max_drawdown": -0.0539280168578643,
+    "mean_gross_exposure": 1.0000000011811896,
+    "mean_turnover": 0.008251639067884384,
     "observations": 123
   },
   "paper": "arXiv:2607.18001v1 Appendix D",
@@ -43,12 +48,12 @@
     "end": "2024-06-28",
     "start": "2024-01-03"
   },
-  "schema_version": "investor2.alphazerobeta-paper-fold-result.v1",
+  "schema_version": "investor2.alphazerobeta-paper-fold-result.v2",
   "seed": 2306,
   "training": {
     "agent_window": 100,
-    "best_validation_sharpe": 0.5640896272841761,
-    "final_loss": 3109732608.0,
+    "best_validation_sharpe": 0.5641305972902916,
+    "final_loss": 3109632000.0,
     "hidden_size": 512,
     "horizon": 200,
     "iterations": 10,

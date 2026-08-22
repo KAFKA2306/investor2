@@ -11,17 +11,17 @@
 
 ## Primary lambda_corr=0.5
 
-- Cumulative after-cost return: -1.7573%
-- Annualized Sharpe: -0.2663
-- Benchmark correlation: 0.6104
-- Maximum drawdown: -7.4403%
+- Cumulative after-cost return: -1.7713%
+- Annualized Sharpe: -0.2666
+- Benchmark correlation: 0.6083
+- Maximum drawdown: -7.5389%
 
 ## Lambda_corr=0 ablation
 
-- Cumulative after-cost return: 0.6824%
-- Annualized Sharpe: 0.1338
-- Benchmark correlation: 0.7063
-- Maximum drawdown: -7.2013%
+- Cumulative after-cost return: 0.4186%
+- Annualized Sharpe: 0.0962
+- Benchmark correlation: 0.6926
+- Maximum drawdown: -7.1397%
 
 ## Claim boundary
 
