@@ -1,0 +1,72 @@
+{
+  "schema_version": "1.0",
+  "hypothesis_id": "alphazerobeta_market_neutral_v1",
+  "status": "pre_registered",
+  "source": {
+    "title": "AlphaZeroBeta: Deep Reinforcement Learning for Market-Neutral Portfolios",
+    "author": "Boris Belyakov",
+    "arxiv_id": "2607.18001v1",
+    "submitted_at": "2026-07-20",
+    "url": "https://arxiv.org/abs/2607.18001",
+    "related_doi": "10.1186/s40854-026-00955-4"
+  },
+  "thesis": "A recurrent policy with explicit dollar-neutral projection, a rolling benchmark-correlation penalty, and a turnover penalty can improve risk-adjusted out-of-sample returns while preserving near-zero benchmark correlation compared with an otherwise identical return-seeking recurrent policy without the correlation penalty.",
+  "mechanism": [
+    "Center each target weight vector so sum(weights)=0 and scale it to gross exposure <= 1.",
+    "Optimize risk-adjusted benchmark-relative return with a rolling correlation penalty (lambda_corr=0.5).",
+    "Penalize L1 weight turnover (lambda_turnover=0.001).",
+    "Use a CNN-GRU policy/value network and recurrent PPO with gamma=0.99, GAE=0.95, clip=0.20, learning_rate=3e-4, 10 PPO epochs, and a 100-observation multi-scale window."
+  ],
+  "validation_contract": {
+    "split": "36-month train + 6-month validation + non-overlapping 6-month test; advance 6 months; reset model weights each fold",
+    "minimum_confirmatory_test_folds": 2,
+    "primary_comparator": "same architecture, data, seed set, split, and costs with lambda_corr=0",
+    "primary_metrics": [
+      "after-cost annualized Sharpe ratio",
+      "Pearson correlation with benchmark",
+      "maximum drawdown",
+      "turnover",
+      "net and gross exposure"
+    ],
+    "cost_sensitivity_bps_per_side": [5, 15, 30],
+    "borrow_fee_sensitivity_bps_per_year": [0, 100],
+    "primary_cost_assumption": {
+      "transaction_cost_bps_per_side": 15,
+      "borrow_fee_bps_per_year": 100,
+      "classification": "pre-registered sensitivity assumption, not realized execution cost"
+    }
+  },
+  "confirmation_gate": [
+    "Across the aggregated untouched test folds, absolute benchmark correlation is <= 0.15 under the primary cost assumption.",
+    "After-cost annualized Sharpe is greater than the lambda_corr=0 ablation on the same test observations.",
+    "Absolute benchmark correlation is lower than the lambda_corr=0 ablation on the same test observations.",
+    "Dollar-neutrality is mechanically satisfied: max absolute net exposure <= 1e-6 and gross exposure <= 1 plus numerical tolerance.",
+    "No split, universe cutoff, feature definition, cost assumption, or gate is changed after inspecting test outcomes without a new hypothesis version."
+  ],
+  "falsifiers": [
+    "The confirmatory OOS folds do not satisfy the correlation gate.",
+    "The explicit correlation penalty does not improve both benchmark correlation and Sharpe versus lambda_corr=0 on the same OOS observations.",
+    "The result depends on future constituent membership, backward-filled information, or test-period data used in universe selection or normalization.",
+    "The strategy loses its positive risk-adjusted result under the pre-registered primary cost assumption.",
+    "The result cannot be reproduced from frozen dataset and weight artifacts."
+  ],
+  "replication_boundary": {
+    "paper_exact_replication": false,
+    "reason": "The paper uses licensed Bloomberg and Financial Modeling Prep data and states that the complete code base is not redistributable.",
+    "aaarts_target": "Independent mechanism replication on a frozen locally available market dataset. Exact paper performance is not claimed.",
+    "survivorship_requirement": "A confirmatory run requires point-in-time constituent membership or an explicitly bounded fixed-universe caveat; otherwise the run remains feasibility-only."
+  },
+  "gpu_boundary": {
+    "cpu_side": [
+      "dataset normalization and PIT-safe feature construction",
+      "universe selection from pre-cutoff observations",
+      "walk-forward split construction",
+      "market-neutral projection and reward implementation",
+      "model construction and unit tests",
+      "weight-path evaluation and artifact auditing"
+    ],
+    "gpu_only": [
+      "recurrent PPO parameter optimization for a bounded fold/seed run"
+    ]
+  }
+}
