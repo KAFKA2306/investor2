@@ -5,7 +5,7 @@ from typing import Literal
 
 import pandas as pd
 
-from src.research.alphazerobeta import make_walk_forward_folds
+from src.research.alphazerobeta import WalkForwardFold, make_walk_forward_folds
 
 PaperMarket = Literal["us_large_cap", "uk_germany", "hong_kong", "china_proxy"]
 
@@ -69,7 +69,7 @@ REQUIRED_FEATURE_GROUPS = (
 TIME_VARYING_INDICES = ("GSPC", "NDX", "FTSE", "GDAXI", "HSI", "DJI")
 
 
-def paper_fold_contract(dates: pd.DatetimeIndex) -> list[object]:
+def paper_fold_contract(dates: pd.DatetimeIndex) -> list[WalkForwardFold]:
     folds = make_walk_forward_folds(
         dates,
         test_start="2014-01-01",
@@ -95,7 +95,8 @@ def exact_paper_readiness(manifest: dict[str, object] | None) -> dict[str, objec
         if not source_end or pd.Timestamp(source_end) < pd.Timestamp("2024-12-31"):
             blockers.append("source history must include 2024-12-31")
 
-        feature_groups = set(map(str, manifest.get("feature_groups", [])))
+        feature_groups_raw = manifest.get("feature_groups", [])
+        feature_groups = set(map(str, feature_groups_raw if isinstance(feature_groups_raw, list) else []))
         missing_groups = sorted(set(REQUIRED_FEATURE_GROUPS) - feature_groups)
         if missing_groups:
             blockers.append("missing feature groups: " + ", ".join(missing_groups))
@@ -108,7 +109,8 @@ def exact_paper_readiness(manifest: dict[str, object] | None) -> dict[str, objec
         if bad_membership:
             blockers.append("missing time-varying constituent history: " + ", ".join(bad_membership))
 
-        providers = {str(value).lower() for value in manifest.get("providers", [])}
+        providers_raw = manifest.get("providers", [])
+        providers = {str(value).lower() for value in providers_raw if isinstance(providers_raw, list)}
         if "bloomberg" not in providers:
             blockers.append("paper-result replication requires the licensed Bloomberg/vendor data contract")
 
@@ -132,6 +134,7 @@ def public_surrogate_deviations() -> list[str]:
         "uses the frozen public Yahoo ETF panel from the prior bounded validation, not licensed Bloomberg/FMP data",
         "uses 8 ETFs instead of a paper equity-index constituent universe",
         "uses 17 price/volume-derived features instead of the paper feature catalog",
+        "weekly/monthly public-smoke channels use the existing 5/21-day stepped frozen daily tensor rather than rebuilt end-of-period vendor panels",
         "covers only the two 2024 OOS folds available in the frozen panel instead of 22 folds over 2014-2024",
         "uses one fixed seed rather than nine independent RL initializations per fold",
         "charges the U.S. large-cap non-top-decile rate (15 bps/side) to every surrogate asset because the frozen model input does not retain the paper monthly ADV cost bucket",
