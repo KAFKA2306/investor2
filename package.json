@@ -13,10 +13,8 @@
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui",
     "typecheck": "tsc --noEmit",
-    "agent:unified": "bun src/agents/unified/unified_agent.ts",
     "edinet": "bun scripts/edinet_cli.ts",
-    "jquants:warm-cache": "bun scripts/jquants_cache_warm.ts",
-    "db:migrate": "bun src/db/scripts/migrate_to_postgres.ts"
+    "jquants:warm-cache": "bun scripts/jquants_cache_warm.ts"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.4",
