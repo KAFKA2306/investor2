@@ -1,0 +1,42 @@
+{
+  "schema_version": "investor2.alphazerobeta-source-evidence.v1",
+  "records": [
+    {
+      "arxiv_id": "2607.18001v1",
+      "title": "AlphaZeroBeta: Deep Reinforcement Learning for Market-Neutral Portfolios",
+      "author": "Boris Belyakov",
+      "submitted_at": "2026-07-20",
+      "primary_class": "q-fin.PM",
+      "doi": "10.1186/s40854-026-00955-4",
+      "claims": {
+        "objective": "Market-neutral portfolio construction with benchmark-relative alpha and near-zero systematic market exposure.",
+        "reward_components": [
+          "risk-adjusted benchmark-relative return",
+          "rolling portfolio/benchmark correlation penalty",
+          "L1 turnover penalty"
+        ],
+        "architecture": "CNN-GRU policy/value network trained with Recurrent PPO",
+        "walk_forward": "36-month training + 6-month validation + non-overlapping 6-month test; advance 6 months and reset model weights each fold",
+        "reported_test_period": "2014-2024",
+        "reported_markets": 7,
+        "data_boundary": "Paper reports Bloomberg Terminal and Financial Modeling Prep inputs; complete licensed-data-dependent code/data are not redistributable.",
+        "paper_hyperparameters": {
+          "lambda_corr": 0.5,
+          "lambda_turnover": 0.001,
+          "gamma": 0.99,
+          "gae_lambda": 0.95,
+          "ppo_clip": 0.2,
+          "learning_rate": 0.0003,
+          "ppo_epochs": 10,
+          "agent_window": 100,
+          "volatility_correlation_window_business_days": 60
+        }
+      },
+      "source_urls": [
+        "https://arxiv.org/abs/2607.18001",
+        "https://arxiv.org/pdf/2607.18001",
+        "https://doi.org/10.1186/s40854-026-00955-4"
+      ]
+    }
+  ]
+}
