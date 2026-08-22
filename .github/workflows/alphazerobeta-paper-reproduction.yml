@@ -1,0 +1,142 @@
+name: AlphaZeroBeta paper reproduction
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/alphazerobeta-paper-reproduction
+    paths:
+      - src/research/alphazerobeta.py
+      - src/research/alphazerobeta_paper.py
+      - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_compare.py
+      - scripts/alphazerobeta_paper_reproduce.py
+      - tests/test_alphazerobeta.py
+      - tests/test_alphazerobeta_paper.py
+      - docs/research/alphazerobeta-paper-reproduction.md
+      - .github/workflows/alphazerobeta-paper-reproduction.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - src/research/alphazerobeta.py
+      - src/research/alphazerobeta_paper.py
+      - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_compare.py
+      - scripts/alphazerobeta_paper_reproduce.py
+      - tests/test_alphazerobeta.py
+      - tests/test_alphazerobeta_paper.py
+      - docs/research/alphazerobeta-paper-reproduction.md
+      - .github/workflows/alphazerobeta-paper-reproduction.yml
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alphazerobeta-paper-reproduction-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  reproduce:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install focused dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas pytest ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Verify reproduction contract
+        env:
+          PYTHONPATH: .
+        run: |
+          ruff format --check \
+            src/research/alphazerobeta_paper.py \
+            scripts/alphazerobeta_paper_reproduce.py \
+            tests/test_alphazerobeta_paper.py
+          ruff check \
+            src/research/alphazerobeta_paper.py \
+            scripts/alphazerobeta_paper_reproduce.py \
+            tests/test_alphazerobeta_paper.py
+          python -m pytest -q tests/test_alphazerobeta.py tests/test_alphazerobeta_paper.py tests/test_alphazerobeta_timing.py
+
+      - name: Prove exact-paper mode fails closed without licensed inputs
+        env:
+          PYTHONPATH: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -rf /tmp/alphazerobeta-exact
+          if python scripts/alphazerobeta_paper_reproduce.py \
+              --mode exact-paper \
+              --output-dir /tmp/alphazerobeta-exact; then
+            echo "exact-paper mode unexpectedly ran without the required data contract" >&2
+            exit 1
+          fi
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('/tmp/alphazerobeta-exact/exact_paper_readiness.json')
+          payload = json.loads(p.read_text())
+          assert payload['ready'] is False
+          assert payload['blockers']
+          print('EXACT_PAPER_FAIL_CLOSED=PASS')
+          PY
+
+      - name: Execute disclosed 512-wide public surrogate
+        env:
+          PYTHONPATH: .
+        run: |
+          rm -rf docs/research/results/alphazerobeta_paper_reproduction
+          python scripts/alphazerobeta_paper_reproduce.py \
+            --mode public-surrogate \
+            --dataset docs/research/results/alphazerobeta_2024/etf_panel.npz \
+            --output-dir docs/research/results/alphazerobeta_paper_reproduction
+
+      - name: Verify measured evidence
+        shell: bash
+        run: |
+          python - <<'PY'
+          import json
+          import math
+          from pathlib import Path
+          root = Path('docs/research/results/alphazerobeta_paper_reproduction')
+          manifest = json.loads((root / 'manifest.json').read_text())
+          comparison = json.loads((root / 'comparison.json').read_text())
+          assert manifest['execution_status'] == 'completed'
+          assert manifest['exact_paper_result_reproduction'] is False
+          assert comparison['fold_count'] == 2
+          for key in ('primary_lambda_corr_0_5', 'ablation_lambda_corr_0'):
+              metrics = comparison[key]
+              for metric in ('cumulative_return', 'annualized_sharpe', 'benchmark_correlation', 'max_drawdown'):
+                  assert math.isfinite(float(metrics[metric]))
+          print(json.dumps({
+              'primary': comparison['primary_lambda_corr_0_5'],
+              'ablation': comparison['ablation_lambda_corr_0'],
+              'verdict': comparison['verdict'],
+          }, sort_keys=True))
+          PY
+
+      - name: Persist reproduction execution evidence
+        if: github.event_name == 'push' && github.actor != 'github-actions[bot]'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/research/results/alphazerobeta_paper_reproduction
+          if git diff --cached --quiet; then
+            echo "reproduction evidence unchanged"
+            exit 0
+          fi
+          git commit -m "research: persist AlphaZeroBeta paper reproduction evidence"
+          git push origin HEAD:research/alphazerobeta-paper-reproduction
