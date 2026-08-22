@@ -66,7 +66,7 @@ def train_fold(dataset: Path, output: Path, fold_index: int, lambda_corr: float)
     run(
         [
             sys.executable,
-            "scripts/alphazerobeta_paper_train.py",
+            "scripts/alphazerobeta_train.py",
             "--dataset",
             str(dataset),
             "--output",
@@ -97,6 +97,8 @@ def train_fold(dataset: Path, output: Path, fold_index: int, lambda_corr: float)
             str(lambda_corr),
             "--lambda-turnover",
             str(PAPER_HYPERPARAMETERS.lambda_turnover),
+            "--reward-semantics",
+            "paper",
         ]
     )
     return output.with_suffix(".weights.npz")

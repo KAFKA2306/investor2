@@ -27,10 +27,11 @@ from src.research.alphazerobeta import (
     multiscale_window,
     write_json,
 )
+from src.research.alphazerobeta_paper import PaperAlphaZeroBetaEnvironment
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run one bounded AlphaZeroBeta recurrent-PPO fold.")
+    parser = argparse.ArgumentParser(description="Run one AlphaZeroBeta recurrent-PPO fold.")
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--test-start", required=True)
@@ -46,6 +47,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--borrow-fee-bps", type=float, default=100.0)
     parser.add_argument("--lambda-corr", type=float, default=0.5)
     parser.add_argument("--lambda-turnover", type=float, default=0.001)
+    parser.add_argument("--reward-semantics", choices=["bounded", "paper"], default="bounded")
     return parser.parse_args()
 
 
@@ -55,6 +57,13 @@ def seed_all(seed: int) -> None:
     torch.manual_seed(seed)
     if torch.cuda.is_available():
         torch.cuda.manual_seed_all(seed)
+
+
+def configure_reproducible_cpu() -> None:
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
+    torch.backends.mkldnn.enabled = False
 
 
 def tensor_window(
@@ -69,7 +78,7 @@ def tensor_window(
 
 def collect_trajectory(
     model: PolicyValueNet,
-    env: AlphaZeroBetaEnvironment,
+    env: AlphaZeroBetaEnvironment | PaperAlphaZeroBetaEnvironment,
     features: np.ndarray,
     device: torch.device,
     *,
@@ -201,7 +210,11 @@ def main() -> None:
     args = parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but torch.cuda.is_available() is false")
+    paper_semantics = args.reward_semantics == "paper"
+    if paper_semantics and args.device == "cpu":
+        configure_reproducible_cpu()
     seed_all(args.seed)
+
     data = np.load(args.dataset, allow_pickle=False)
     dates = data["dates"].astype(str)
     features = data["features"].astype(np.float32)
@@ -214,6 +227,7 @@ def main() -> None:
     train_start, train_end = fold.train_indices
     validation_start, validation_end = fold.validation_indices
     test_start, test_end = fold.test_indices
+
     device = torch.device(args.device)
     feature_dim = features.shape[1] * features.shape[2]
     model = PolicyValueNet(
@@ -224,7 +238,7 @@ def main() -> None:
         agent_window=args.agent_window,
     ).to(device)
     optimizer = Adam(model.parameters(), lr=PAPER_LEARNING_RATE)
-    losses = []
+    losses: list[float] = []
     best_validation_sharpe = float("-inf")
     best_state: dict[str, torch.Tensor] | None = None
     train_span = train_end - train_start - 1
@@ -235,10 +249,12 @@ def main() -> None:
     validation_decision_start, validation_decision_end, validation_target_start, validation_target_end = (
         next_period_bounds(validation_start, validation_end)
     )
+
+    environment_type = PaperAlphaZeroBetaEnvironment if paper_semantics else AlphaZeroBetaEnvironment
     for iteration in range(args.iterations):
         segment_start = train_start + (iteration * segment) % max_offset
         segment_end = min(segment_start + segment + 1, train_end)
-        env = AlphaZeroBetaEnvironment(
+        env = environment_type(
             returns,
             benchmark,
             start=segment_start,
@@ -275,6 +291,7 @@ def main() -> None:
         if validation_metrics.annualized_sharpe > best_validation_sharpe:
             best_validation_sharpe = validation_metrics.annualized_sharpe
             best_state = {key: value.detach().cpu().clone() for key, value in model.state_dict().items()}
+
     if best_state is None:
         raise AssertionError("no validation checkpoint selected")
     model.load_state_dict(best_state)
@@ -299,6 +316,7 @@ def main() -> None:
         transaction_cost_bps_per_side=args.transaction_cost_bps,
         borrow_fee_bps_per_year=args.borrow_fee_bps,
     )
+
     args.output.parent.mkdir(parents=True, exist_ok=True)
     weights_path = args.output.with_suffix(".weights.npz")
     np.savez_compressed(
@@ -311,12 +329,19 @@ def main() -> None:
     write_json(
         args.output,
         {
-            "schema_version": "investor2.alphazerobeta-fold-result.v2",
+            "schema_version": "investor2.alphazerobeta-fold-result.v3",
             "hypothesis_id": "alphazerobeta_market_neutral_v1",
+            "paper": "arXiv:2607.18001v1 Appendix D" if paper_semantics else None,
             "dataset": str(args.dataset),
             "device": str(device),
             "cuda_device_name": torch.cuda.get_device_name(0) if device.type == "cuda" else None,
             "seed": args.seed,
+            "reward_semantics": args.reward_semantics,
+            "determinism": {
+                "torch_deterministic_algorithms": paper_semantics and args.device == "cpu",
+                "torch_num_threads": torch.get_num_threads(),
+                "mkldnn_enabled": torch.backends.mkldnn.enabled,
+            },
             "fold": asdict(fold),
             "realized_oos_dates": {
                 "start": str(dates[test_target_start]),
@@ -331,18 +356,31 @@ def main() -> None:
                 "best_validation_sharpe": best_validation_sharpe,
                 "lambda_corr": args.lambda_corr,
                 "lambda_turnover": args.lambda_turnover,
+                "reward_history_semantics": (
+                    "Appendix D.4.2: previous weights reapplied over [t-W,t)"
+                    if paper_semantics
+                    else "realized portfolio-return history"
+                ),
             },
             "evaluation_cost_assumptions": {
                 "transaction_cost_bps_per_side": args.transaction_cost_bps,
                 "borrow_fee_bps_per_year": args.borrow_fee_bps,
-                "classification": "assumption, not realized execution cost",
+                "classification": (
+                    "public-surrogate execution assumption"
+                    if paper_semantics
+                    else "assumption, not realized execution cost"
+                ),
             },
             "metrics": metrics_to_dict(metrics),
             "weights_artifact": str(weights_path),
-            "claim_boundary": "One bounded fold is a feasibility result, not hypothesis confirmation.",
+            "claim_boundary": (
+                "Paper-semantics implementation smoke on surrogate inputs; not a Table-4 reproduction."
+                if paper_semantics
+                else "One bounded fold is a feasibility result, not hypothesis confirmation."
+            ),
         },
     )
-    print(json.dumps({"result": str(args.output), "metrics": metrics_to_dict(metrics)}))
+    print(json.dumps({"result": str(args.output), "metrics": metrics_to_dict(metrics)}, sort_keys=True))
 
 
 if __name__ == "__main__":
