@@ -1,15 +1,3 @@
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 📍 UNIFIED DATA PATH ARCHITECTURE (統合データ管理構造)
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# ⚠️  重要: 以下の paths セクションは「真実の源（SSOT）」です。
-#
-#   ハードコードされたパスを使用してはいけません！❌
-#   代わりに src/system/path_registry.ts から PathRegistry をインポートして使用してください。✅
-#
-# マスターロケーション: /mnt/d/investor_all_cached_data/
-# 詳細は DATA_STRUCTURE.md を参照してください。
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
 project:
   name: investor-ts
 
@@ -29,9 +17,9 @@ allocation:
 polymarket:
   clob_url: "https://clob.polymarket.com"
   chain_id: 137
-  discovery_interval_ms: 300000 # 🎀 5分ごとに新マーケットを探索！
-  loop_delay_ms: 5000           # 🎀 5秒ごとにスキャン！(プロの釣り師基準)
-  arb_threshold: 0.97           # 🎀 0.97 未満（3%以上の乖離）を狙うよっ！
+  discovery_interval_ms: 300000
+  loop_delay_ms: 5000
+  arb_threshold: 0.97
   fee_rate: 0.02
   gas_cost: 0.007
   default_trade_size: 5
@@ -47,11 +35,11 @@ quant:
   polygonscan_api_url: "https://api.polygonscan.com/api"
   imitation_delay_ms: 1000
   target_addresses:
-    - "0x019782cab5d844f02bafb71f512758be78579f3c" # majorexploiter
-    - "0x2a2C53bD278c04DA9962Fcf96490E17F3DfB9Bc1" # 0x2a2C...Bc1
-    - "0x5e524f43357198fa815e6766f02fe686b444b064" # beachboy4 (placeholder address, need to verify)
-    - "0x572c8005aa033237175f16de725969b044cd0383" # HorizonSplendidView (placeholder)
-    - "0xaab29084bcc42daff9e11b4a5a4cc55cda3eb306" # 432614799197 (placeholder)
+    - "0x019782cab5d844f02bafb71f512758be78579f3c"
+    - "0x2a2C53bD278c04DA9962Fcf96490E17F3DfB9Bc1"
+    - "0x5e524f43357198fa815e6766f02fe686b444b064"
+    - "0x572c8005aa033237175f16de725969b044cd0383"
+    - "0xaab29084bcc42daff9e11b4a5a4cc55cda3eb306"
 
 alpha:
   les:
@@ -69,7 +57,6 @@ alpha:
         pead5d: 0.2
 
 paths:
-  # Core roots (new centralized location)
   data: /mnt/d/investor_all_cached_data/jquants
   logs: /mnt/d/investor_all_cached_data/logs
   verification: /mnt/d/investor_all_cached_data/outputs
@@ -78,7 +65,6 @@ paths:
   preprocessed: /mnt/d/investor_all_cached_data/preprocessed
   websearch: /mnt/d/investor_all_cached_data/websearch
 
-  # J-Quants market data (under jquants root)
   marketdataRoot: /mnt/d/investor_all_cached_data/jquants
   marketdataPricesGz: /mnt/d/investor_all_cached_data/jquants/raw_stock_price.csv.gz
   marketdataPricesCsv: /mnt/d/investor_all_cached_data/jquants/raw_stock_price.csv
@@ -90,13 +76,11 @@ paths:
   marketdataLabelsCsv: /mnt/d/investor_all_cached_data/jquants/stock_labels.csv
   marketdataStatementsDir: /mnt/d/investor_all_cached_data/jquants/raw_statements
 
-  # Pipeline outputs (under outputs root)
   outputsRoot: /mnt/d/investor_all_cached_data/outputs
   outputsVerificationJson: /mnt/d/investor_all_cached_data/outputs/standard_verification_data.json
   outputsVerificationPlotDir: /mnt/d/investor_all_cached_data/outputs
   outputsPlaybook: /mnt/d/investor_all_cached_data/outputs/playbook.yaml
 
-  # SQLite caches (under cache root)
   cacheDir: /mnt/d/investor_all_cached_data/cache
   cacheMarketSqlite: /mnt/d/investor_all_cached_data/cache/market_cache.sqlite
   cacheMarketdataSqlite: /mnt/d/investor_all_cached_data/cache/marketdata.sqlite
@@ -106,7 +90,6 @@ paths:
   cacheEdinetSqlite: /mnt/d/investor_all_cached_data/cache/edinet_cache.sqlite
   cacheUqtlSqlite: /mnt/d/investor_all_cached_data/cache/uqtl.sqlite
 
-  # Logical cache (论理キャッシュ) - markets, fundamental, macro separated
   cacheMarketsPolymarket: /mnt/d/investor_all_cached_data/cache/markets/polymarket.sqlite
   cacheMarketsJquants: /mnt/d/investor_all_cached_data/cache/markets/jquants.sqlite
   cacheMarketsYahoo: /mnt/d/investor_all_cached_data/cache/markets/yahoo.sqlite
@@ -117,14 +100,10 @@ paths:
   cacheBacktestResults: /mnt/d/investor_all_cached_data/cache/backtest/results.sqlite
   cacheWebSearch: /mnt/d/investor_all_cached_data/cache/websearch/tavily.sqlite
 
-  # EDINET data (under edinet root)
   edinetDocsDir: /mnt/d/investor_all_cached_data/edinet/docs
   edinetSearchSqlite: /mnt/d/investor_all_cached_data/edinet/search.sqlite
-
-  # Logs (under logs root)
   logsUnifiedDir: /mnt/d/investor_all_cached_data/logs/unified
 
-  # Documentation (local to repo)
   docsRoot: ./docs
   docsDiagramsDir: ./docs/diagrams
   docsPaperDir: ./docs/paper
@@ -167,45 +146,6 @@ execution:
   costs:
     feeBps: 1.0
     slippageBps: 0.5
-
-pipelineBlueprint:
-  stateMonitor:
-    regimeUpdateFrequencyMinutes: 60
-    volatilityLookbackDays: 20
-    regimeThreshold: 0.55
-    volatilityThreshold: 0.5
-  dataAcceptance:
-    minQualityScore: 0.82
-    minCoverageRate: 0.8
-    maxMissingRate: 0.08
-    maxLatencyMinutes: 40
-    requireLeakFree: true
-    minSourceConsistency: 0.01
-  researchDesign:
-    trainDays: 252
-    validationDays: 63
-    forwardDays: 63
-  verificationAcceptance:
-    minSharpe: 0.25
-    maxPValue: 0.20
-    maxDrawdown: 0.45
-    minBacktestDays: 60
-  executionConstraints:
-    maxPositionWeight: 0.12
-    maxTurnover: 0.9
-    minLiquidityJpy: 100000000
-  executionQuality:
-    minFillRate: 0.95
-    maxSlippageBps: 2.0
-    maxExecutionLatencyMs: 3000
-  driftRetraining:
-    maxTrackingError: 0.03
-    maxRollingDrawdown: 0.12
-    minWinRate: 0.48
-  alphaLoop:
-    maxCycles: 1
-    sleepSec: 0
-    maxFailures: 1
 
 validation:
   typescript:
@@ -258,10 +198,6 @@ database:
 dashboard:
   port: 5173
   apiPort: 8787
-
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# 🤖 Foundation Models Registry
-# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 constants:
   models:
@@ -327,9 +263,6 @@ models:
       github: https://github.com/microsoft/qlib
       arxiv: https://arxiv.org/abs/2009.11189
 
-# ============================================================
-# Sector Spillover Strategy (US -> Japan)
-# ============================================================
 sector_spillover:
   us_sectors:
     - energy
