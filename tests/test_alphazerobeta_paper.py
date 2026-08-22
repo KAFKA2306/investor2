@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import numpy as np
 import pandas as pd
 import torch
 
@@ -9,6 +10,7 @@ from src.research.alphazerobeta_paper import (
     PAPER_HYPERPARAMETERS,
     REQUIRED_FEATURE_GROUPS,
     TIME_VARYING_INDICES,
+    PaperAlphaZeroBetaEnvironment,
     exact_paper_readiness,
     paper_fold_contract,
 )
@@ -44,6 +46,30 @@ def test_policy_network_matches_disclosed_cnn_gru_head_widths() -> None:
     assert model.policy_head[0].out_features == 512
     assert model.value_head[0].out_features == 512
     assert model.policy_head[-1].__class__ is torch.nn.Tanh
+
+
+def test_paper_reward_state_reapplies_previous_weights_over_rolling_returns() -> None:
+    returns = np.array(
+        [
+            [0.01, -0.01],
+            [0.02, 0.00],
+            [-0.01, 0.03],
+            [0.04, -0.02],
+            [0.01, 0.01],
+            [0.00, -0.01],
+        ],
+        dtype=np.float32,
+    )
+    benchmark = np.array([0.005, 0.004, -0.002, 0.006, 0.001, -0.003], dtype=np.float32)
+    env = PaperAlphaZeroBetaEnvironment(returns, benchmark, start=1, end=5, vol_window=60)
+    env.t = 3
+    env.previous_weights = np.array([0.5, -0.5], dtype=np.float32)
+
+    sigma, corr = env.rolling_state()
+    expected_portfolio = returns[1:3] @ env.previous_weights
+    expected_benchmark = benchmark[1:3]
+    assert np.isclose(sigma, expected_portfolio.std(ddof=0))
+    assert np.isclose(corr, np.corrcoef(expected_portfolio, expected_benchmark)[0, 1])
 
 
 def test_paper_walk_forward_contract_has_22_nonoverlapping_folds() -> None:
