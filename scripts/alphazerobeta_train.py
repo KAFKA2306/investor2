@@ -190,6 +190,13 @@ def deterministic_weights(
     return np.asarray(weights, dtype=np.float32)
 
 
+def next_period_bounds(start: int, end: int) -> tuple[int, int, int, int]:
+    """Align decisions made at t with realized returns at t+1 inside [start, end)."""
+    if end - start < 2:
+        raise ValueError("next-period evaluation requires at least two observations")
+    return start, end - 1, start + 1, end
+
+
 def main() -> None:
     args = parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
@@ -225,6 +232,9 @@ def main() -> None:
     if segment < 2:
         raise AssertionError("training fold is too short")
     max_offset = max(1, train_span - segment + 1)
+    validation_decision_start, validation_decision_end, validation_target_start, validation_target_end = (
+        next_period_bounds(validation_start, validation_end)
+    )
     for iteration in range(args.iterations):
         segment_start = train_start + (iteration * segment) % max_offset
         segment_end = min(segment_start + segment + 1, train_end)
@@ -249,16 +259,16 @@ def main() -> None:
         validation_weights = deterministic_weights(
             model,
             features,
-            validation_start,
-            validation_end,
+            validation_decision_start,
+            validation_decision_end,
             device,
             hidden_size=args.hidden_size,
             agent_window=args.agent_window,
         )
         validation_metrics, _ = evaluate_weight_path(
             validation_weights,
-            returns[validation_start:validation_end],
-            benchmark[validation_start:validation_end],
+            returns[validation_target_start:validation_target_end],
+            benchmark[validation_target_start:validation_target_end],
             transaction_cost_bps_per_side=args.transaction_cost_bps,
             borrow_fee_bps_per_year=args.borrow_fee_bps,
         )
@@ -268,17 +278,20 @@ def main() -> None:
     if best_state is None:
         raise AssertionError("no validation checkpoint selected")
     model.load_state_dict(best_state)
+    test_decision_start, test_decision_end, test_target_start, test_target_end = next_period_bounds(
+        test_start, test_end
+    )
     raw_weights = deterministic_weights(
         model,
         features,
-        test_start,
-        test_end,
+        test_decision_start,
+        test_decision_end,
         device,
         hidden_size=args.hidden_size,
         agent_window=args.agent_window,
     )
-    test_returns = returns[test_start:test_end]
-    test_benchmark = benchmark[test_start:test_end]
+    test_returns = returns[test_target_start:test_target_end]
+    test_benchmark = benchmark[test_target_start:test_target_end]
     metrics, net_returns = evaluate_weight_path(
         raw_weights,
         test_returns,
@@ -290,7 +303,7 @@ def main() -> None:
     weights_path = args.output.with_suffix(".weights.npz")
     np.savez_compressed(
         weights_path,
-        dates=dates[test_start:test_end],
+        dates=dates[test_target_start:test_target_end],
         weights=raw_weights,
         net_returns=net_returns.astype(np.float32),
         benchmark=test_benchmark,
@@ -298,13 +311,17 @@ def main() -> None:
     write_json(
         args.output,
         {
-            "schema_version": "investor2.alphazerobeta-gpu-fold-result.v1",
+            "schema_version": "investor2.alphazerobeta-fold-result.v2",
             "hypothesis_id": "alphazerobeta_market_neutral_v1",
             "dataset": str(args.dataset),
             "device": str(device),
             "cuda_device_name": torch.cuda.get_device_name(0) if device.type == "cuda" else None,
             "seed": args.seed,
             "fold": asdict(fold),
+            "realized_oos_dates": {
+                "start": str(dates[test_target_start]),
+                "end": str(dates[test_target_end - 1]),
+            },
             "training": {
                 "iterations": args.iterations,
                 "horizon": args.horizon,
@@ -322,7 +339,7 @@ def main() -> None:
             },
             "metrics": metrics_to_dict(metrics),
             "weights_artifact": str(weights_path),
-            "claim_boundary": "One bounded fold is a GPU feasibility result, not hypothesis confirmation.",
+            "claim_boundary": "One bounded fold is a feasibility result, not hypothesis confirmation.",
         },
     )
     print(json.dumps({"result": str(args.output), "metrics": metrics_to_dict(metrics)}))

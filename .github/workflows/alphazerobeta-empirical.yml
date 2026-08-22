@@ -1,0 +1,161 @@
+name: AlphaZeroBeta empirical validation
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - research/alphazerobeta-empirical
+    paths:
+      - scripts/alphazerobeta_empirical_run.py
+      - scripts/alphazerobeta_prepare.py
+      - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_evaluate.py
+      - scripts/alphazerobeta_compare.py
+      - src/research/alphazerobeta.py
+      - tests/test_alphazerobeta.py
+      - tests/test_alphazerobeta_timing.py
+      - docs/research/results/alphazerobeta_2024/**
+      - .github/workflows/alphazerobeta-empirical.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/alphazerobeta_empirical_run.py
+      - scripts/alphazerobeta_prepare.py
+      - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_evaluate.py
+      - scripts/alphazerobeta_compare.py
+      - src/research/alphazerobeta.py
+      - tests/test_alphazerobeta.py
+      - tests/test_alphazerobeta_timing.py
+      - docs/research/results/alphazerobeta_2024/**
+      - .github/workflows/alphazerobeta-empirical.yml
+
+permissions:
+  contents: read
+
+concurrency:
+  group: alphazerobeta-evidence-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  empirical-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install bounded verification dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install numpy pandas pytest ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+
+      - name: Verify code quality and timing contracts
+        env:
+          PYTHONPATH: .
+        run: |
+          ruff format --check \
+            scripts/alphazerobeta_empirical_run.py \
+            scripts/alphazerobeta_train.py \
+            tests/test_alphazerobeta_timing.py
+          ruff check \
+            scripts/alphazerobeta_empirical_run.py \
+            scripts/alphazerobeta_train.py \
+            tests/test_alphazerobeta_timing.py
+          python -m pytest -q tests/test_alphazerobeta.py tests/test_alphazerobeta_timing.py
+
+      - name: Recompute frozen weight-path evidence
+        env:
+          PYTHONPATH: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=docs/research/results/alphazerobeta_2024
+          DATASET="$ROOT/etf_panel.npz"
+          for kind in primary ablation; do
+            for fold in 0 1; do
+              python scripts/alphazerobeta_evaluate.py \
+                --dataset "$DATASET" \
+                --weights "$ROOT/${kind}_fold${fold}.weights.npz" \
+                --output "/tmp/${kind}_fold${fold}.audit.json" \
+                --transaction-cost-bps 15 \
+                --borrow-fee-bps 100
+              cmp "/tmp/${kind}_fold${fold}.audit.json" "$ROOT/${kind}_fold${fold}.audit.json"
+            done
+          done
+
+      - name: Recompute aggregate and cost sensitivity
+        env:
+          PYTHONPATH: .
+        shell: bash
+        run: |
+          set -euo pipefail
+          ROOT=docs/research/results/alphazerobeta_2024
+          DATASET="$ROOT/etf_panel.npz"
+          PRIMARY=("$ROOT/primary_fold0.weights.npz" "$ROOT/primary_fold1.weights.npz")
+          ABLATION=("$ROOT/ablation_fold0.weights.npz" "$ROOT/ablation_fold1.weights.npz")
+
+          python scripts/alphazerobeta_compare.py \
+            --dataset "$DATASET" \
+            --primary-weights "${PRIMARY[@]}" \
+            --ablation-weights "${ABLATION[@]}" \
+            --output /tmp/alphazerobeta_comparison.json \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 100
+          cmp /tmp/alphazerobeta_comparison.json "$ROOT/alphazerobeta_comparison.json"
+
+          for trading in 5 15 30; do
+            for borrow in 0 100; do
+              name="comparison_cost_${trading}bps_borrow_${borrow}bps.json"
+              python scripts/alphazerobeta_compare.py \
+                --dataset "$DATASET" \
+                --primary-weights "${PRIMARY[@]}" \
+                --ablation-weights "${ABLATION[@]}" \
+                --output "/tmp/$name" \
+                --transaction-cost-bps "$trading" \
+                --borrow-fee-bps "$borrow"
+              cmp "/tmp/$name" "$ROOT/$name"
+            done
+          done
+
+      - name: Verify hashes, summary, and monetary scaling
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path("docs/research/results/alphazerobeta_2024")
+          summary = json.loads((root / "summary.json").read_text())
+          comparison = json.loads((root / "alphazerobeta_comparison.json").read_text())
+          manifest = json.loads((root / "etf_panel.npz.manifest.json").read_text())
+
+          def sha256(path: Path) -> str:
+              return hashlib.sha256(path.read_bytes()).hexdigest()
+
+          assert sha256(root / "etf_panel.npz") == manifest["dataset_sha256"]
+          assert sha256(root / "raw/prices.csv") == manifest["prices_sha256"]
+          assert sha256(root / "raw/benchmark.csv") == manifest["benchmark_sha256"]
+          assert summary["fold_count"] == comparison["fold_count"] == 2
+          assert summary["verdict"] == comparison["verdict"] == "reject"
+          assert summary["gates"] == comparison["gates"]
+          assert summary["primary_lambda_corr_0_5"] == comparison["primary_lambda_corr_0_5"]
+          assert summary["ablation_lambda_corr_0"] == comparison["ablation_lambda_corr_0"]
+
+          for key, result_key in (
+              ("primary_money_scaling", "primary_lambda_corr_0_5"),
+              ("ablation_money_scaling", "ablation_lambda_corr_0"),
+          ):
+              cumulative = float(comparison[result_key]["cumulative_return"])
+              for row in summary[key]:
+                  initial = float(row["initial_jpy"])
+                  assert abs(float(row["profit_loss_jpy"]) - initial * cumulative) < 1e-6
+                  assert abs(float(row["final_equity_jpy"]) - initial * (1 + cumulative)) < 1e-6
+          print("ALPHAZEROBETA_FROZEN_EVIDENCE=PASS")
+          PY

@@ -1,0 +1,90 @@
+{
+  "ablation_cpu_audits": [
+    "docs/research/results/alphazerobeta_2024/ablation_fold0.audit.json",
+    "docs/research/results/alphazerobeta_2024/ablation_fold1.audit.json"
+  ],
+  "ablation_fold_results": [
+    "docs/research/results/alphazerobeta_2024/ablation_fold0.json",
+    "docs/research/results/alphazerobeta_2024/ablation_fold1.json"
+  ],
+  "ablation_lambda_corr_0": {
+    "annualized_sharpe": -0.2782381469071644,
+    "benchmark_correlation": -0.2263919893270748,
+    "cumulative_return": -0.018187461139838046,
+    "max_drawdown": -0.06367766292863752,
+    "observations": 250
+  },
+  "ablation_money_scaling": [
+    {
+      "final_equity_jpy": 981812.5388601619,
+      "initial_jpy": 1000000.0,
+      "profit_loss_jpy": -18187.461139838048
+    },
+    {
+      "final_equity_jpy": 9818125.38860162,
+      "initial_jpy": 10000000.0,
+      "profit_loss_jpy": -181874.61139838045
+    }
+  ],
+  "compute_contract": {
+    "device": "cpu",
+    "hidden_size": 64,
+    "horizon": 60,
+    "iterations_per_fold": 4,
+    "note": "Bounded compute for independent mechanism validation; not exact paper-scale reproduction.",
+    "ppo_epochs": 10,
+    "seed": 2306
+  },
+  "cost_sensitivity": [
+    "docs/research/results/alphazerobeta_2024/comparison_cost_5bps_borrow_0bps.json",
+    "docs/research/results/alphazerobeta_2024/comparison_cost_5bps_borrow_100bps.json",
+    "docs/research/results/alphazerobeta_2024/comparison_cost_15bps_borrow_0bps.json",
+    "docs/research/results/alphazerobeta_2024/comparison_cost_15bps_borrow_100bps.json",
+    "docs/research/results/alphazerobeta_2024/comparison_cost_30bps_borrow_0bps.json",
+    "docs/research/results/alphazerobeta_2024/comparison_cost_30bps_borrow_100bps.json"
+  ],
+  "dataset_manifest": "docs/research/results/alphazerobeta_2024/etf_panel.npz.manifest.json",
+  "dataset_manifest_sha256": "e137a41b89969b4bb8253bf0542b0e7492c8384b543e53796e188cbf4eb65e31",
+  "fold_count": 2,
+  "gates": {
+    "absolute_correlation_lt_lambda_corr_zero": true,
+    "absolute_correlation_lte_0_15": false,
+    "dollar_neutrality": true,
+    "minimum_confirmatory_folds": true,
+    "sharpe_gt_lambda_corr_zero": false
+  },
+  "generated_at": "2026-08-22T06:27:19.232225+00:00",
+  "primary_cpu_audits": [
+    "docs/research/results/alphazerobeta_2024/primary_fold0.audit.json",
+    "docs/research/results/alphazerobeta_2024/primary_fold1.audit.json"
+  ],
+  "primary_fold_results": [
+    "docs/research/results/alphazerobeta_2024/primary_fold0.json",
+    "docs/research/results/alphazerobeta_2024/primary_fold1.json"
+  ],
+  "primary_lambda_corr_0_5": {
+    "annualized_sharpe": -0.3129549388966378,
+    "benchmark_correlation": -0.19702729679280007,
+    "cumulative_return": -0.018896703395046788,
+    "max_drawdown": -0.05876126026689221,
+    "observations": 250
+  },
+  "primary_money_scaling": [
+    {
+      "final_equity_jpy": 981103.2966049532,
+      "initial_jpy": 1000000.0,
+      "profit_loss_jpy": -18896.70339504679
+    },
+    {
+      "final_equity_jpy": 9811032.966049531,
+      "initial_jpy": 10000000.0,
+      "profit_loss_jpy": -188967.03395046789
+    }
+  ],
+  "result_is_live_trading_promise": false,
+  "schema_version": "investor2.alphazerobeta-empirical-summary.v1",
+  "source_manifest": "docs/research/results/alphazerobeta_2024/source_manifest.json",
+  "source_manifest_sha256": "2a5faad7bf7f60c821b0c8704bb229bd8821d36eae6d4b8beeb694c037fda558",
+  "validation_scope": "bounded fixed-universe independent mechanism validation",
+  "verdict": "reject"
+}

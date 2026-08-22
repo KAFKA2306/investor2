@@ -1,0 +1,52 @@
+{
+  "benchmark_csv": "docs/research/results/alphazerobeta_2024/raw/benchmark.csv",
+  "benchmark_sha256": "ea59fcecff3923df232ef4f2e912283f48bf721a4d8ba5973917e3331f4dea51",
+  "dataset_sha256": "eb157a5859ccfa4ebbf14a1bfbc0ed5808d76fee546bcd7fda8ccafc1b8756b3",
+  "date_end": "2024-12-31",
+  "date_start": "2020-01-03",
+  "feature_names": [
+    "log_return",
+    "log_volume",
+    "ret_mean_5",
+    "ret_std_5",
+    "momentum_5",
+    "vol_mean_5",
+    "vol_std_5",
+    "ret_mean_20",
+    "ret_std_20",
+    "momentum_20",
+    "vol_mean_20",
+    "vol_std_20",
+    "ret_mean_60",
+    "ret_std_60",
+    "momentum_60",
+    "vol_mean_60",
+    "vol_std_60"
+  ],
+  "notes": [
+    "Universe selection uses only data at or before universe_cutoff.",
+    "Features use backward-looking rolling windows and same-day cross-sectional normalization only.",
+    "No backward fill is used."
+  ],
+  "prices_csv": "docs/research/results/alphazerobeta_2024/raw/prices.csv",
+  "prices_sha256": "9195f9602a48b56d3afd4f48d229ffa33e501e4a4733f2bc0dd29edf0b644bb0",
+  "schema_version": "investor2.alphazerobeta-prepared-dataset.v1",
+  "selected_codes": [
+    "DIA",
+    "GLD",
+    "IWM",
+    "QQQ",
+    "TLT",
+    "XLE",
+    "XLF",
+    "XLK"
+  ],
+  "selection_rule": "top mean price*volume on/before cutoff, minimum available-history gate",
+  "shape": {
+    "F": 17,
+    "N": 8,
+    "T": 1257
+  },
+  "trading_days": 1257,
+  "universe_cutoff": "2023-06-30"
+}
