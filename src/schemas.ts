@@ -12,17 +12,6 @@ export interface DatabaseRegistry {
 	[key: string]: Database;
 }
 
-export const VerificationAcceptanceSchema = z.object({
-	minSharpe: z.number().finite(),
-	maxPValue: z.number().finite().min(0).max(1),
-	maxDrawdown: z.number().finite().min(0).max(1),
-	minBacktestDays: z.number().int().positive().optional(),
-});
-
-export type VerificationAcceptance = z.infer<
-	typeof VerificationAcceptanceSchema
->;
-
 export const ConfigSchema = z.object({
 	project: z.object({ name: z.string() }),
 	paths: z
@@ -77,16 +66,6 @@ export const ConfigSchema = z.object({
 				rebalance_frequency: z.string(),
 				transaction_cost_bps: z.number(),
 				data_cache_dir: z.string(),
-			}),
-		})
-		.optional(),
-	pipelineBlueprint: z
-		.object({
-			verificationAcceptance: VerificationAcceptanceSchema,
-			alphaLoop: z.object({
-				maxCycles: z.number(),
-				sleepSec: z.number(),
-				maxFailures: z.number(),
 			}),
 		})
 		.optional(),
