@@ -20,7 +20,9 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output", required=True, type=Path, help="Output .npz path")
     parser.add_argument("--manifest", type=Path, help="Defaults to <output>.manifest.json")
     parser.add_argument("--max-assets", type=int, default=64)
-    parser.add_argument("--universe-cutoff", required=True, help="Only data on/before this date chooses the liquid universe")
+    parser.add_argument(
+        "--universe-cutoff", required=True, help="Only data on/before this date chooses the liquid universe"
+    )
     parser.add_argument("--start", help="Optional inclusive panel start date")
     parser.add_argument("--end", help="Optional inclusive panel end date")
     return parser.parse_args()
@@ -176,9 +178,9 @@ def main() -> None:
             "notes": [
                 "Universe selection uses only data at or before universe_cutoff.",
                 "Features use backward-looking rolling windows and same-day cross-sectional normalization only.",
-                "No backward fill is used."
-            ]
-        }
+                "No backward fill is used.",
+            ],
+        },
     )
     print(json.dumps({"dataset": str(args.output), "manifest": str(manifest), "shape": list(features.shape)}))
 

@@ -3,9 +3,9 @@ from __future__ import annotations
 import hashlib
 import json
 import math
+from collections.abc import Iterable
 from dataclasses import asdict, dataclass
 from pathlib import Path
-from typing import Iterable
 
 import numpy as np
 import pandas as pd
@@ -320,7 +320,9 @@ class PolicyValueNet(nn.Module):
             nn.Linear(head_hidden, num_assets),
             nn.Tanh(),
         )
-        self.value_head = nn.Sequential(nn.Linear(hidden_size, head_hidden), nn.ReLU(inplace=True), nn.Linear(head_hidden, 1))
+        self.value_head = nn.Sequential(
+            nn.Linear(hidden_size, head_hidden), nn.ReLU(inplace=True), nn.Linear(head_hidden, 1)
+        )
 
     def forward(
         self,
@@ -357,5 +359,5 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
     path.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
 
-def metrics_to_dict(metrics: EvaluationMetrics) -> dict[str, object]:
+def metrics_to_dict(metrics: EvaluationMetrics) -> dict[str, float | int]:
     return asdict(metrics)
