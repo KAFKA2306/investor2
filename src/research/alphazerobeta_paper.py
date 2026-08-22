@@ -106,14 +106,18 @@ class PaperAlphaZeroBetaEnvironment:
         return self.t
 
     def rolling_state(self) -> tuple[float, float]:
-        """Recompute [t-W,t) returns using the weights held immediately before t, as in Listing D.4.2."""
+        """Recompute [t-W,t) returns with the weights held immediately before t, per Listing D.4.2."""
         if self.t <= self.start:
             return 1e-8, 0.0
         s = max(self.start, self.t - self.vol_window)
         portfolio = self.asset_returns[s : self.t] @ self.previous_weights
         benchmark = self.benchmark_returns[s : self.t]
         sigma = max(float(portfolio.std(ddof=0)), 1e-8)
-        if portfolio.size < 2 or float(portfolio.std(ddof=0)) <= 1e-12 or float(benchmark.std(ddof=0)) <= 1e-12:
+        if (
+            portfolio.size < 2
+            or float(portfolio.std(ddof=0)) <= 1e-12
+            or float(benchmark.std(ddof=0)) <= 1e-12
+        ):
             corr = 0.0
         else:
             corr = float(np.corrcoef(portfolio, benchmark)[0, 1])
@@ -125,7 +129,9 @@ class PaperAlphaZeroBetaEnvironment:
         rp_t = float(weights @ self.asset_returns[self.t + 1])
         rm_t = float(self.benchmark_returns[self.t + 1])
         turnover = float(np.abs(weights - self.previous_weights).sum())
-        reward = float((rp_t - rm_t) / sigma - self.lambda_corr * corr - self.lambda_turnover * turnover)
+        reward = float(
+            (rp_t - rm_t) / sigma - self.lambda_corr * corr - self.lambda_turnover * turnover
+        )
         self.previous_weights = weights
         self.t += 1
         done = self.t >= self.end - 1
@@ -171,7 +177,9 @@ def exact_paper_readiness(manifest: dict[str, object] | None) -> dict[str, objec
             blockers.append("missing feature groups: " + ", ".join(missing_groups))
 
         membership = manifest.get("index_membership", {})
-        membership_map = membership if isinstance(membership, dict) else {}
+        membership_map: dict[str, object] = (
+            {str(key): value for key, value in membership.items()} if isinstance(membership, dict) else {}
+        )
         bad_membership = [
             index for index in TIME_VARYING_INDICES if str(membership_map.get(index, "")) != "time-varying"
         ]
@@ -179,7 +187,9 @@ def exact_paper_readiness(manifest: dict[str, object] | None) -> dict[str, objec
             blockers.append("missing time-varying constituent history: " + ", ".join(bad_membership))
 
         providers_raw = manifest.get("providers", [])
-        providers = {str(value).lower() for value in providers_raw if isinstance(providers_raw, list)}
+        providers: set[str] = set()
+        if isinstance(providers_raw, list):
+            providers = {str(value).lower() for value in providers_raw}
         if "bloomberg" not in providers:
             blockers.append("paper-result replication requires the licensed Bloomberg/vendor data contract")
 
