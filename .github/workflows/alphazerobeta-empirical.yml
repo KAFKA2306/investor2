@@ -16,13 +16,27 @@ on:
       - tests/test_alphazerobeta_timing.py
       - data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json
       - .github/workflows/alphazerobeta-empirical.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/alphazerobeta_empirical_run.py
+      - scripts/alphazerobeta_prepare.py
+      - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_evaluate.py
+      - scripts/alphazerobeta_compare.py
+      - src/research/alphazerobeta.py
+      - tests/test_alphazerobeta.py
+      - tests/test_alphazerobeta_timing.py
+      - data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json
+      - .github/workflows/alphazerobeta-empirical.yml
 
 permissions:
   contents: write
 
 concurrency:
-  group: alphazerobeta-empirical-${{ github.ref }}
-  cancel-in-progress: false
+  group: alphazerobeta-empirical-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   empirical-validation:
@@ -31,6 +45,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          ref: ${{ github.head_ref || github.ref_name }}
           persist-credentials: true
 
       - uses: actions/setup-python@v5
@@ -60,26 +75,26 @@ jobs:
               "def read_json(path: Path) -> dict[str, Any]:",
           )
           text = text.replace(
-              '    primary_return = float(primary["cumulative_return"])\n'
-              '    ablation_return = float(ablation["cumulative_return"])\n'
+              "    primary_return = float(primary[\"cumulative_return\"])\n"
+              "    ablation_return = float(ablation[\"cumulative_return\"])\n"
               "    summary = {\n",
-              '    primary_return = float(primary["cumulative_return"])\n'
-              '    ablation_return = float(ablation["cumulative_return"])\n'
+              "    primary_return = float(primary[\"cumulative_return\"])\n"
+              "    ablation_return = float(ablation[\"cumulative_return\"])\n"
               "    primary_money_scaling = [money(primary_return, 1_000_000.0), money(primary_return, 10_000_000.0)]\n"
               "    ablation_money_scaling = [money(ablation_return, 1_000_000.0), money(ablation_return, 10_000_000.0)]\n"
               "    summary = {\n",
           )
           text = text.replace(
-              '        "primary_money_scaling": [money(primary_return, 1_000_000.0), money(primary_return, 10_000_000.0)],\n',
-              '        "primary_money_scaling": primary_money_scaling,\n',
+              "        \"primary_money_scaling\": [money(primary_return, 1_000_000.0), money(primary_return, 10_000_000.0)],\n",
+              "        \"primary_money_scaling\": primary_money_scaling,\n",
           )
           text = text.replace(
-              '        "ablation_money_scaling": [money(ablation_return, 1_000_000.0), money(ablation_return, 10_000_000.0)],\n',
-              '        "ablation_money_scaling": ablation_money_scaling,\n',
+              "        \"ablation_money_scaling\": [money(ablation_return, 1_000_000.0), money(ablation_return, 10_000_000.0)],\n",
+              "        \"ablation_money_scaling\": ablation_money_scaling,\n",
           )
           text = text.replace(
-              '    p_money = summary["primary_money_scaling"]\n'
-              '    a_money = summary["ablation_money_scaling"]\n'
+              "    p_money = summary[\"primary_money_scaling\"]\n"
+              "    a_money = summary[\"ablation_money_scaling\"]\n"
               "    assert isinstance(p_money, list) and isinstance(a_money, list)\n",
               "    p_money = primary_money_scaling\n"
               "    a_money = ablation_money_scaling\n",
@@ -110,6 +125,8 @@ jobs:
 
       - name: Persist normalized code and result or failure evidence
         shell: bash
+        env:
+          TARGET_BRANCH: ${{ github.head_ref || github.ref_name }}
         run: |
           set -euo pipefail
           git config user.name "github-actions[bot]"
@@ -123,7 +140,7 @@ jobs:
             echo "No empirical artifact changes to commit"
           else
             git commit -m "research: persist AlphaZeroBeta empirical evidence"
-            git push origin "HEAD:${GITHUB_REF_NAME}"
+            git push origin "HEAD:${TARGET_BRANCH}"
           fi
 
       - name: Require empirical execution success
