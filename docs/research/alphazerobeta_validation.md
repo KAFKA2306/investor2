@@ -58,7 +58,7 @@ PYTHONPATH=. uv run python scripts/alphazerobeta_prepare.py \
   --output cache/alphazerobeta/jp32.npz
 ```
 
-GPU fold (delegated to the bounded OpenClaw worker):
+GPU fold (executed by the OpenClaw autonomous supervisor through the repository worktree):
 
 ```bash
 PYTHONPATH=. uv run python scripts/alphazerobeta_train.py \
@@ -93,8 +93,10 @@ PYTHONPATH=. uv run python scripts/alphazerobeta_compare.py \
 
 ## OpenClaw boundary
 
-The local worker contract in `KAFKA2306/agent-resources/docs/docs/openclaw-local-worker.md` is authoritative for the GPU step. The GPU Issue must already exist; the worker receives that Issue as the task specification. It may edit and execute only inside the approved local repository root, may use CUDA, and must not create commits, push, create/switch branches, or open PRs.
+The authoritative execution contract is `KAFKA2306/agent-resources/docs/docs/openclaw-local-worker.md`. The GPU task is expressed as an open GitHub Issue. The autonomous supervisor selects the Issue, creates an isolated worktree/branch from the current default branch, runs OpenCode against the local llama.cpp provider, executes repository validation, commits and pushes validated changes, opens or updates the canonical PR, verifies CI against the exact PR head SHA, merges with that expected SHA, and removes the merged head branch/worktree.
 
-Therefore the prepared `.npz` must already be inside the local `investor2` repository before dispatch. Existing market caches outside the approved OpenClaw root are not passed directly to the worker. If the prepared dataset is absent, the worker must report the blocker rather than fetching data or bypassing path/network restrictions.
+The coding process itself remains confined to the selected worktree and has no arbitrary external-network access. GitHub credentials and GitHub API read/write belong to the supervisor, not the coding sandbox. Branch protection and repository-specific required checks must not be bypassed.
 
-No command above fetches external data. The GPU worker operates only on already-local frozen inputs.
+The AlphaZeroBeta Issue must therefore fail closed if its required frozen market inputs are unavailable from the worktree-visible local input path defined by the supervisor/repository contract. It must not fetch substitute data from the public network, silently change the universe, weaken the pre-registered gates, or claim paper replication from a different dataset.
+
+Merge and release remain separate states. This research task has no inferred production release: after the evidence PR is merged, the run ends unless the repository already defines a relevant release/deploy contract.
