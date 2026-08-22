@@ -26,7 +26,9 @@ PUBLIC_BORROW_BPS = 30.0
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Execute the disclosed AlphaZeroBeta paper reproduction contract.")
+    parser = argparse.ArgumentParser(
+        description="Execute the disclosed AlphaZeroBeta paper reproduction contract."
+    )
     parser.add_argument("--mode", choices=["exact-paper", "public-surrogate"], required=True)
     parser.add_argument("--dataset", type=Path, default=DEFAULT_DATASET)
     parser.add_argument("--manifest", type=Path)
@@ -140,7 +142,7 @@ def public_surrogate_mode(args: argparse.Namespace) -> int:
         ]
     )
     metrics = read_json(comparison)
-    manifest = {
+    manifest: dict[str, object] = {
         "schema_version": "investor2.alphazerobeta-paper-reproduction.v1",
         "mode": "public-surrogate",
         "paper": "AlphaZeroBeta: Deep Reinforcement Learning for Market-Neutral Portfolios, arXiv:2607.18001v1",
@@ -185,9 +187,48 @@ def public_surrogate_mode(args: argparse.Namespace) -> int:
 
     primary = metrics["primary_lambda_corr_0_5"]
     ablation = metrics["ablation_lambda_corr_0"]
-    markdown = f"""# AlphaZeroBeta paper-reproduction execution\n\n- Mode: **public-surrogate**\n- Execution: **completed**\n- Exact Table-4 reproduction: **no** — licensed paper inputs are absent and exact mode fails closed.\n- Architecture smoke: CNN 32/64/64, kernels 8/4/3, strides 4/2/1, GRU/head 512, 100-step window.\n- Reward state: Appendix D.4.2 previous-weight rolling 60-day sigma/correlation semantics.\n- PPO smoke: 10 epochs, gamma 0.99, GAE 0.95, clip 0.20, learning rate 3e-4.\n- OOS: two frozen 2024 folds, one seed, Appendix-D-style 10 iterations/fold and horizon 200.\n- Costs: 15 bps/side + 30 bps/year borrow for this public surrogate.\n\n## Primary lambda_corr=0.5\n\n- Cumulative after-cost return: {float(primary['cumulative_return']):.4%}\n- Annualized Sharpe: {float(primary['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(primary['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(primary['max_drawdown']):.4%}\n\n## Lambda_corr=0 ablation\n\n- Cumulative after-cost return: {float(ablation['cumulative_return']):.4%}\n- Annualized Sharpe: {float(ablation['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(ablation['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(ablation['max_drawdown']):.4%}\n\n## Claim boundary\n\nThis run verifies the disclosed 512-wide architecture and Appendix-D reward-state semantics end-to-end on the frozen public panel. It is not a reproduction of the paper's reported Table 4 because the licensed historical constituent and feature data are unavailable. See `manifest.json` and `exact_paper_readiness.json`.\n"""
-    (args.output_dir / "SUMMARY.md").write_text(markdown, encoding="utf-8")
-    print(json.dumps({"comparison": str(comparison), "manifest": str(args.output_dir / "manifest.json")}, sort_keys=True))
+    summary_lines = [
+        "# AlphaZeroBeta paper-reproduction execution",
+        "",
+        "- Mode: **public-surrogate**",
+        "- Execution: **completed**",
+        "- Exact Table-4 reproduction: **no** — licensed paper inputs are absent and exact mode fails closed.",
+        "- Architecture smoke: CNN 32/64/64, kernels 8/4/3, strides 4/2/1, GRU/head 512, 100-step window.",
+        "- Reward state: Appendix D.4.2 previous-weight rolling 60-day sigma/correlation semantics.",
+        "- PPO smoke: 10 epochs, gamma 0.99, GAE 0.95, clip 0.20, learning rate 3e-4.",
+        "- OOS: two frozen 2024 folds, one seed, Appendix-D-style 10 iterations/fold and horizon 200.",
+        "- Costs: 15 bps/side + 30 bps/year borrow for this public surrogate.",
+        "",
+        "## Primary lambda_corr=0.5",
+        "",
+        f"- Cumulative after-cost return: {float(primary['cumulative_return']):.4%}",
+        f"- Annualized Sharpe: {float(primary['annualized_sharpe']):.4f}",
+        f"- Benchmark correlation: {float(primary['benchmark_correlation']):.4f}",
+        f"- Maximum drawdown: {float(primary['max_drawdown']):.4%}",
+        "",
+        "## Lambda_corr=0 ablation",
+        "",
+        f"- Cumulative after-cost return: {float(ablation['cumulative_return']):.4%}",
+        f"- Annualized Sharpe: {float(ablation['annualized_sharpe']):.4f}",
+        f"- Benchmark correlation: {float(ablation['benchmark_correlation']):.4f}",
+        f"- Maximum drawdown: {float(ablation['max_drawdown']):.4%}",
+        "",
+        "## Claim boundary",
+        "",
+        "This run verifies the disclosed 512-wide architecture and Appendix-D reward-state semantics end-to-end on the ",
+        "frozen public panel. It is not a reproduction of the paper's reported Table 4 because the licensed historical ",
+        "constituent and feature data are unavailable. See `manifest.json` and `exact_paper_readiness.json`.",
+    ]
+    (args.output_dir / "SUMMARY.md").write_text("\n".join(summary_lines) + "\n", encoding="utf-8")
+    print(
+        json.dumps(
+            {
+                "comparison": str(comparison),
+                "manifest": str(args.output_dir / "manifest.json"),
+            },
+            sort_keys=True,
+        )
+    )
     return 0
 
 
