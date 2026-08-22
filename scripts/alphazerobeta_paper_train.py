@@ -49,10 +49,19 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def configure_reproducible_cpu() -> None:
+    torch.set_num_threads(1)
+    torch.set_num_interop_threads(1)
+    torch.use_deterministic_algorithms(True)
+    torch.backends.mkldnn.enabled = False
+
+
 def main() -> None:
     args = parse_args()
     if args.device == "cuda" and not torch.cuda.is_available():
         raise RuntimeError("CUDA requested but torch.cuda.is_available() is false")
+    if args.device == "cpu":
+        configure_reproducible_cpu()
     seed_all(args.seed)
     data = np.load(args.dataset, allow_pickle=False)
     dates = data["dates"].astype(str)
@@ -166,11 +175,16 @@ def main() -> None:
     write_json(
         args.output,
         {
-            "schema_version": "investor2.alphazerobeta-paper-fold-result.v1",
+            "schema_version": "investor2.alphazerobeta-paper-fold-result.v2",
             "paper": "arXiv:2607.18001v1 Appendix D",
             "dataset": str(args.dataset),
             "device": str(device),
             "seed": args.seed,
+            "determinism": {
+                "torch_deterministic_algorithms": args.device == "cpu",
+                "torch_num_threads": torch.get_num_threads(),
+                "mkldnn_enabled": torch.backends.mkldnn.enabled,
+            },
             "fold": asdict(fold),
             "realized_oos_dates": {
                 "start": str(dates[test_target_start]),
