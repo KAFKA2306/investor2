@@ -66,7 +66,7 @@ def train_fold(dataset: Path, output: Path, fold_index: int, lambda_corr: float)
     run(
         [
             sys.executable,
-            "scripts/alphazerobeta_train.py",
+            "scripts/alphazerobeta_paper_train.py",
             "--dataset",
             str(dataset),
             "--output",
@@ -155,6 +155,12 @@ def public_surrogate_mode(args: argparse.Namespace) -> int:
             "head_hidden": PAPER_HYPERPARAMETERS.head_hidden,
             "agent_window": PAPER_HYPERPARAMETERS.agent_window,
         },
+        "reward_state": {
+            "sigma_corr_window": PAPER_HYPERPARAMETERS.vol_corr_window,
+            "semantics": "Appendix D.4.2: previous weights reapplied to asset returns over [t-W,t)",
+            "lambda_corr": PAPER_HYPERPARAMETERS.lambda_corr,
+            "lambda_turnover": PAPER_HYPERPARAMETERS.lambda_turnover,
+        },
         "ppo": {
             "gamma": PAPER_HYPERPARAMETERS.gamma,
             "gae_lambda": PAPER_HYPERPARAMETERS.gae_lambda,
@@ -179,7 +185,7 @@ def public_surrogate_mode(args: argparse.Namespace) -> int:
 
     primary = metrics["primary_lambda_corr_0_5"]
     ablation = metrics["ablation_lambda_corr_0"]
-    markdown = f"""# AlphaZeroBeta paper-reproduction execution\n\n- Mode: **public-surrogate**\n- Execution: **completed**\n- Exact Table-4 reproduction: **no** — licensed paper inputs are absent and exact mode fails closed.\n- Architecture smoke: CNN 32/64/64, kernels 8/4/3, strides 4/2/1, GRU/head 512, 100-step window.\n- PPO smoke: 10 epochs, gamma 0.99, GAE 0.95, clip 0.20, learning rate 3e-4.\n- OOS: two frozen 2024 folds, one seed, Appendix-D-style 10 iterations/fold and horizon 200.\n- Costs: 15 bps/side + 30 bps/year borrow for this public surrogate.\n\n## Primary lambda_corr=0.5\n\n- Cumulative after-cost return: {float(primary['cumulative_return']):.4%}\n- Annualized Sharpe: {float(primary['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(primary['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(primary['max_drawdown']):.4%}\n\n## Lambda_corr=0 ablation\n\n- Cumulative after-cost return: {float(ablation['cumulative_return']):.4%}\n- Annualized Sharpe: {float(ablation['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(ablation['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(ablation['max_drawdown']):.4%}\n\n## Claim boundary\n\nThis run verifies that the disclosed 512-wide AlphaZeroBeta implementation can be executed end-to-end on the frozen public panel. It is not a reproduction of the paper's reported Table 4 because the licensed historical constituent and feature data are unavailable. See `manifest.json` and `exact_paper_readiness.json`.\n"""
+    markdown = f"""# AlphaZeroBeta paper-reproduction execution\n\n- Mode: **public-surrogate**\n- Execution: **completed**\n- Exact Table-4 reproduction: **no** — licensed paper inputs are absent and exact mode fails closed.\n- Architecture smoke: CNN 32/64/64, kernels 8/4/3, strides 4/2/1, GRU/head 512, 100-step window.\n- Reward state: Appendix D.4.2 previous-weight rolling 60-day sigma/correlation semantics.\n- PPO smoke: 10 epochs, gamma 0.99, GAE 0.95, clip 0.20, learning rate 3e-4.\n- OOS: two frozen 2024 folds, one seed, Appendix-D-style 10 iterations/fold and horizon 200.\n- Costs: 15 bps/side + 30 bps/year borrow for this public surrogate.\n\n## Primary lambda_corr=0.5\n\n- Cumulative after-cost return: {float(primary['cumulative_return']):.4%}\n- Annualized Sharpe: {float(primary['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(primary['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(primary['max_drawdown']):.4%}\n\n## Lambda_corr=0 ablation\n\n- Cumulative after-cost return: {float(ablation['cumulative_return']):.4%}\n- Annualized Sharpe: {float(ablation['annualized_sharpe']):.4f}\n- Benchmark correlation: {float(ablation['benchmark_correlation']):.4f}\n- Maximum drawdown: {float(ablation['max_drawdown']):.4%}\n\n## Claim boundary\n\nThis run verifies the disclosed 512-wide architecture and Appendix-D reward-state semantics end-to-end on the frozen public panel. It is not a reproduction of the paper's reported Table 4 because the licensed historical constituent and feature data are unavailable. See `manifest.json` and `exact_paper_readiness.json`.\n"""
     (args.output_dir / "SUMMARY.md").write_text(markdown, encoding="utf-8")
     print(json.dumps({"comparison": str(comparison), "manifest": str(args.output_dir / "manifest.json")}, sort_keys=True))
     return 0
