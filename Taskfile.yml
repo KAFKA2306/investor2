@@ -64,10 +64,6 @@ tasks:
   test:
     cmds:
       - bun run test
-  pipeline:run:
-    desc: Legacy experimental orchestrator; not the canonical alpha-discovery path
-    cmds:
-      - bun src/commands/pipeline_run.ts
   run:newalphasearch:
     desc: Validate a frozen real-data MCP hypothesis capture and deep-dive candidates
     cmds:

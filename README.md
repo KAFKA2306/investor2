@@ -1,183 +1,75 @@
-# AAARTS — 自律型アルファ研究システム
+# AAARTS — 投資仮説を反証可能にする研究基盤
 
-[![ARK Big Ideas evidence](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/ark-big-ideas-source-health.yml)
-[![Validate and deploy dashboard](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml)
 [![Quality Gates](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/quality.yml)
+[![Validate and deploy dashboard](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/pages.yml)
 [![Verify deployed GitHub Pages](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml/badge.svg)](https://github.com/KAFKA2306/investor2/actions/workflows/live-pages-smoke.yml)
 
-**バックテストで勝った。それだけでは、この研究ではまだ何も証明していない。**
+`investor2` は、投資仮説・point-in-time evidence・OOS検証・判断記録を一つの追跡可能な流れで扱う研究repositoryです。
 
-未来情報が混ざっていないか。都合のいい期間だけを見ていないか。比較対象を変えても残るか。AAARTSは、好成績の仮説を集めるのではなく、**反証条件を先に置き、実データを時点固定し、時系列OOSと再現可能な証拠を通過した仮説だけを残す**ための研究システムです。
+**バックテストの好成績だけでは採用しません。** 仮説と反証条件を先に固定し、その時点で利用可能だったデータ、比較対象、取引コスト、OOS結果、判断理由まで再実行可能な証拠として残します。
 
-**公開ダッシュボード:** https://kafka2306.github.io/investor2/
+公開ダッシュボード: https://kafka2306.github.io/investor2/
 
-AAARTS（Autonomous Agentic Alpha Trade System）は、投資仮説の登録、MCPを含む外部データ取得、候補探索、データ作成、検証、時系列のアウト・オブ・サンプル評価、再現可能な証拠の保存、そして人間の判断時点の固定までを一つの研究サイクルとして管理するプロジェクトです。
-
-単にバックテストの成績が良い候補を探すのではなく、**未来情報の混入を防ぎ、反証可能な条件を先に決め、同じ結果を再実行でき、結果を見た後に判断理由を書き換えられない状態にすること**を重視します。
-
-## Vision
-
-投資家・研究者が「良く見えるバックテスト」に引っ張られず、**自分の仮説がどこで間違うかまで確認してから判断できる研究体験**を作ります。
-
-AAARTSが目指すのは、alpha候補を大量に出すことではありません。候補が生まれた時点の情報、反証条件、比較対象、OOS結果、判断理由を固定し、後から「なぜその時点でそう判断したのか」を検証可能にすることです。
-
-## Design philosophy
-
-- **好成績の発見より反証条件を先に置く。** 仮説は、結果を見る前に失敗条件と比較対象を定義します。
-- **数字を増やすより、判断時点の情報だけを固定する。** point-in-time dataset、revision、source hashを残し、後日改訂値によるlook-aheadを避けます。
-- **モデルの賢さより、元データまで戻れることを優先する。** MCP、ledger、ontology、dashboardは、証拠の出所を追跡するための手段です。
-- **結果を見た後に判断理由を書き換えられないようにする。** Decision Snapshotで判断時点を固定し、結果判明後はDecision Reviewとして別記録にします。
-- **agentの自律性より、人間が最終判断を検証可能であることを優先する。** 自動化は探索・検証・証拠整理を支援しますが、売買許可や将来収益を保証しません。
-
-## Why / 差別化
-
-一般的なalpha探索やbacktest notebookでは、「成績の良い候補を見つけること」自体が中心になりがちです。AAARTSでは、**候補を見つける前後の認知バイアス、未来情報、証拠改変を減らし、判断の根拠を後から反証できること**を中心に置きます。
-
-そのため、MCP、OOS、evidence ledger、ontology、dashboardは差別化そのものではありません。これらは、次のUXを実現するための実装手段です。
-
-1. 仮説を結果より先に定義する。
-2. その時点で利用可能だったデータだけを固定する。
-3. 比較対象・失敗条件・OOSを事前契約として残す。
-4. 結果から一次情報・dataset・run・判断時点まで逆引きする。
-5. 成績が良くても証拠が不足していればpromoteしない。
-
-このリポジトリは、未実証のalpha性能や収益性を差別化として主張しません。価値は、研究結果そのものよりも、**研究結果を疑い、再実行し、反証できる状態を保つこと**にあります。
-
-## 正準の入力→仮説→検証→判断
-
-投資判断へ到達する正準線は1本です。
+## Canonical flow
 
 ```text
-一次情報 / revision固定外部データ
-  → data/input_ledger の採否・監査
-  → data/hypothesis_lab の仮説定義・MCP capture・候補deep-dive
-  → point-in-time dataset / frozen manifest
-  → OOS・比較・ablation
-  → 再現可能な evidence artifact
-  → Evidence & Evolution Dashboard
-  → data/decision_ledger の immutable Decision Snapshot
-  → 人間の投資判断
-  → 結果判明後の Decision Review
+一次情報 / revision固定データ
+  -> input ledger / snapshot
+  -> hypothesis + falsifiers
+  -> point-in-time dataset
+  -> OOS / baseline / ablation / costs
+  -> reproducible evidence
+  -> Decision Snapshot
+  -> 人間の投資判断
+  -> Decision Review
 ```
 
-詳細な責務境界、source of truth、主要KPI（更新成功・鮮度・利用可能な証拠成果）は [Canonical investment flow](docs/architecture/canonical-investment-flow.md) を正準文書とします。
+正準仕様: [Canonical investment flow](docs/architecture/canonical-investment-flow.md)
 
-## 実データから似たアルファを探す
+## Commands
 
-[Hypothesis Lab](docs/research/hypothesis-lab.md) では、自然言語のアイデアをそのまま銘柄候補にせず、次の順で実データへ落とします。
-
-```text
-観察 / 過去の判断
-  → measurable hypothesis + falsifiers
-  → Stage A: 広い定量screen
-  → MCP query + result を時点固定
-  → Stage B: 実体・相対価格・売り手フロー・eventを追加取得
-  → 3 gate
-  → candidate / reject / Decision Snapshot候補
+```bash
+task setup               # locked dependencies + prek
+task check               # canonical non-mutating quality gate
+task run:newalphasearch  # frozen real-data hypothesis validation
+task dashboard:dev       # local evidence dashboard
 ```
 
-2026-08-13の最初の実践では、EDINET DB MCPで `growth_value_dislocation_v1` を実行しました。低PER・成長・ROE・財務安全性・FCFを同時に満たす候補を広く取得したうえで、RION (6823) をdeep-diveし、業績推移、relative TSR、大量保有報告の持分低下、corporate eventを別々の証拠として保存しています。
+実行入口は `Taskfile.yml` を正準とします。別名CLIや並行pipelineは、実際の運用コストを下げる場合を除いて追加しません。
 
-重要なのは、**seller-flowを見つけてもforced liquidationとは呼ばない**ことです。直接観測できない原因は `unknown` のまま残します。
+## Research rules
 
-## 現在取り組んでいること
+- future informationを混ぜない。
+- 結果を見る前に仮説・比較対象・失敗条件を固定する。
+- source revision / query / period / unit / hash を追跡可能にする。
+- OOS、baseline、ablation、取引コストを直接検証する。
+- 良い結果だけでなく、棄却された仮説も結果として保存する。
+- `candidate` やDecision Snapshot eligibilityを売買推奨とみなさない。
 
-- 実データMCPからの仮説候補生成とpoint-in-time capture
-- EDINETの有価証券報告書を用いた企業業績予測
-- 財務数値と開示文章の予測力を分離するアブレーション分析
-- 不正会計検知と利益方向予測の評価
-- 論文公開後の期間だけを使う凍結OOS検証
-- 古典的な投資研究とファクター仮説の再現・失敗条件の記録
-- 仮説、観測値、計算値、予測、判断を区別する証拠オントロジー
-- 人間のentry/add判断を後から反証できるDecision Snapshot / Review
+投資戦略では、該当する場合に after-cost return/P&L、Sharpe、maximum drawdown、beta/correlation、turnover/exposure、benchmark comparison、tested capital scale を直接評価します。
 
-## このリポジトリで分かること
+## Main surfaces
 
-| 目的 | 主な入口 |
+| 目的 | 正準入口 |
 | --- | --- |
-| 研究全体の進捗を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
-| 正準の入力→検証→出力を見る | [Canonical investment flow](docs/architecture/canonical-investment-flow.md) |
-| 実データから似たalphaを探す方法を見る | [Hypothesis Lab](docs/research/hypothesis-lab.md) |
-| 判断時点の固定契約を見る | [Decision ledger](data/decision_ledger/README.md) |
-| 論文構成を確認する | [NeurIPS earnings forecast outline](docs/paper/neurips_earnings_forecast_outline.md) |
-| システム全体の流れを見る | [Simple flowchart](docs/diagrams/simpleflowchart.md) |
-| Alpha探索の手順を見る | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
-| OOS判定ルールを見る | [Time-tested alpha policy](docs/specs/time_tested_alpha_policy.md) |
-| 複数論文の再検証結果を見る | [Multi-paper OOS summary](docs/research/multi_paper_oos_summary.md) |
-| JR西日本「うれしート」の利益・EPS推計基礎を見る | [JR West Ureshito EPS baseline](docs/research/jr_west_ureshito_eps.md) |
-| 運用上の禁止事項・作業規則を見る | [AGENTS.md](AGENTS.md) |
-| 設計判断の履歴を見る | [ADR](docs/adr/) |
+| 研究全体を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
+| 仮説探索 | [Hypothesis Lab](docs/research/hypothesis-lab.md) |
+| 入力→検証→判断 | [Canonical investment flow](docs/architecture/canonical-investment-flow.md) |
+| 判断時点の固定 | [Decision ledger](data/decision_ledger/README.md) |
+| Alpha探索手順 | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |
+| OOS判定 | [Time-tested alpha policy](docs/specs/time_tested_alpha_policy.md) |
+| 外部snapshot | [External snapshot store](docs/specs/external_snapshot_store.md) |
+| repository運用 | [AGENTS.md](AGENTS.md) |
 
-## 研究判定の原則
+## EDINET-Bench
 
-```text
-仮説登録
-  → MCP / external data capture
-  → dataset構築
-  → 時点付き観測
-  → モデル推定・予測
-  → 凍結OOS・比較対象・アブレーション
-  → 再現可能な証拠
-  → candidate / reject / freeze_for_oos / promote / retire
-  → immutable Decision Snapshot
-```
+`industry_prediction` は公式test splitを持たないため、正式評価では固定manifestを使用します。
 
-`promote`は、インサンプル成績、説明のもっともらしさ、単独の好成績だけでは成立しません。時系列OOS、ベースライン比較、アブレーション、頑健性、再現性の証拠が必要です。
+- manifest: `data/benchmarks/industry_prediction_frozen_split.json`
+- source revision / Parquet SHA-256 / row countを固定
+- developmentとfrozen evaluationを決定論的に分離
+- source driftやmanifest不整合ではfail closed
 
-機械可読な定義は[`ontology/project.yaml`](ontology/project.yaml)にあります。
+## Positioning
 
-## EDINET-Benchの凍結評価
-
-`industry_prediction` は公式test splitを持たないため、`train.head(N)`を正式評価には使用しません。
-
-- 正準manifest: `data/benchmarks/industry_prediction_frozen_split.json`
-- ソース固定: Hugging Face revision、Parquet SHA256、行数
-- 分割: `industry`ごとに固定seed付きSHA256順位を計算し、developmentとfrozen evaluationへ決定論的に分離
-- 失敗条件: ソースSHA、行数、doc_id一意性、manifest schemaの不一致
-- 証跡: 評価レポートへmanifest hash、split名、全評価doc_id、その集合hashを保存
-
-正式評価は`src.io.edinet_bench.load_industry_prediction_frozen()`を通し、ソースが改訂された場合は暗黙にsplitを作り直さず停止します。
-
-## セットアップ
-
-```bash
-task setup
-cp .env.example .env
-```
-
-`task setup` は committed lockfile を使って Bun / uv の依存関係を同期し、`prek` hook を導入します。高速なquality gateだけを入れる場合は `task setup:quality` を使います。
-
-## 品質チェック
-
-```bash
-task check
-```
-
-`task check` はworktreeを書き換えません。既存のformat/lint負債は一括改変せず、mainとの差分とローカル変更に対して Biome / Oxlint / Ruff をratchetし、TypeScript strict checkとPyrefly strict checkは全体へ適用します。Pyreflyの既存負債はmigration baselineで固定し、新しい型エラーだけを失敗させます。
-
-## 実行
-
-```bash
-task run:newalphasearch  # frozen MCP captureから実データ仮説探索を検証
-task dashboard:dev       # ダッシュボードとAPIを起動
-```
-
-`pipeline:run` に残る旧experimental orchestratorは正準alpha探索ではありません。
-
-## 現在の位置づけ
-
-このリポジトリは研究・検証基盤です。掲載される仮説や評価は、売買推奨や将来収益の保証ではありません。Hypothesis LabのcandidateやDecision Snapshot eligibilityも自動売買許可ではありません。
-
-**README最終監査:** 2026-08-15
-
-## ARK Big Ideas 2026 cross-theme evidence
-
-ARK各domainの正準JSONを別のauthorityへコピーせず、content-addressed mirrorとして時点固定し、投資判断用のlong-form metricへ横断投影します。
-
-- [Cross-theme index](api/v1/ark-big-ideas/index.json)
-- [Normalized series](api/v1/ark-big-ideas/series.json)
-- [Evidence matrix](api/v1/ark-big-ideas/evidence-matrix.json)
-- [Source readiness catalog](data/ark-big-ideas/source-catalog.json)
-- [Metric feed catalog](data/ark-big-ideas/metric-catalog.json)
-
-`deferred_by_user` と `blocked_external_evidence` は0値へ変換せず、evidence matrixで明示的に除外します。Multiomicsはdomain実装を維持したままactive probingから保留し、Bitcoin networkは同期済みBitcoin Core実観測が揃うまで外部evidence blockerとして扱います。
+このrepositoryは研究・検証基盤です。未実証のalpha性能や将来収益を主張しません。価値は、研究結果を疑い、再実行し、どの証拠からどの判断に至ったかを後から反証できる状態にあります。
