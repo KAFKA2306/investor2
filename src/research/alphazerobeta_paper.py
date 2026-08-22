@@ -3,9 +3,10 @@ from __future__ import annotations
 from dataclasses import asdict, dataclass
 from typing import Literal
 
+import numpy as np
 import pandas as pd
 
-from src.research.alphazerobeta import WalkForwardFold, make_walk_forward_folds
+from src.research.alphazerobeta import WalkForwardFold, make_walk_forward_folds, project_market_neutral
 
 PaperMarket = Literal["us_large_cap", "uk_germany", "hong_kong", "china_proxy"]
 
@@ -67,6 +68,74 @@ REQUIRED_FEATURE_GROUPS = (
 )
 
 TIME_VARYING_INDICES = ("GSPC", "NDX", "FTSE", "GDAXI", "HSI", "DJI")
+
+
+class PaperAlphaZeroBetaEnvironment:
+    """Appendix D.4.2 reward-state semantics on a slice of the global return panel."""
+
+    def __init__(
+        self,
+        asset_returns: np.ndarray,
+        benchmark_returns: np.ndarray,
+        *,
+        start: int,
+        end: int,
+        lambda_corr: float = 0.5,
+        lambda_turnover: float = 0.001,
+        vol_window: int = 60,
+    ) -> None:
+        self.asset_returns = np.asarray(asset_returns, dtype=np.float32)
+        self.benchmark_returns = np.asarray(benchmark_returns, dtype=np.float32)
+        if self.asset_returns.ndim != 2:
+            raise ValueError("asset_returns must be [T, N]")
+        if self.benchmark_returns.shape != (self.asset_returns.shape[0],):
+            raise ValueError("benchmark_returns length mismatch")
+        if start < 0 or end > self.asset_returns.shape[0] - 1 or end <= start:
+            raise ValueError("invalid environment bounds")
+        self.start = start
+        self.end = end
+        self.n_assets = self.asset_returns.shape[1]
+        self.lambda_corr = lambda_corr
+        self.lambda_turnover = lambda_turnover
+        self.vol_window = vol_window
+        self.reset()
+
+    def reset(self) -> int:
+        self.t = self.start
+        self.previous_weights = np.zeros(self.n_assets, dtype=np.float32)
+        return self.t
+
+    def rolling_state(self) -> tuple[float, float]:
+        """Recompute [t-W,t) returns using the weights held immediately before t, as in Listing D.4.2."""
+        if self.t <= self.start:
+            return 1e-8, 0.0
+        s = max(self.start, self.t - self.vol_window)
+        portfolio = self.asset_returns[s : self.t] @ self.previous_weights
+        benchmark = self.benchmark_returns[s : self.t]
+        sigma = max(float(portfolio.std(ddof=0)), 1e-8)
+        if portfolio.size < 2 or float(portfolio.std(ddof=0)) <= 1e-12 or float(benchmark.std(ddof=0)) <= 1e-12:
+            corr = 0.0
+        else:
+            corr = float(np.corrcoef(portfolio, benchmark)[0, 1])
+        return sigma, corr
+
+    def step(self, action: np.ndarray) -> tuple[int, float, bool, dict[str, float]]:
+        weights = project_market_neutral(action)
+        sigma, corr = self.rolling_state()
+        rp_t = float(weights @ self.asset_returns[self.t + 1])
+        rm_t = float(self.benchmark_returns[self.t + 1])
+        turnover = float(np.abs(weights - self.previous_weights).sum())
+        reward = float((rp_t - rm_t) / sigma - self.lambda_corr * corr - self.lambda_turnover * turnover)
+        self.previous_weights = weights
+        self.t += 1
+        done = self.t >= self.end - 1
+        return self.t, reward, done, {
+            "portfolio_return": rp_t,
+            "benchmark_return": rm_t,
+            "turnover": turnover,
+            "rolling_sigma": sigma,
+            "rolling_correlation": corr,
+        }
 
 
 def paper_fold_contract(dates: pd.DatetimeIndex) -> list[WalkForwardFold]:
