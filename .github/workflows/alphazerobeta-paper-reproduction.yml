@@ -9,10 +9,12 @@ on:
       - src/research/alphazerobeta.py
       - src/research/alphazerobeta_paper.py
       - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_paper_train.py
       - scripts/alphazerobeta_compare.py
       - scripts/alphazerobeta_paper_reproduce.py
       - tests/test_alphazerobeta.py
       - tests/test_alphazerobeta_paper.py
+      - tests/test_alphazerobeta_timing.py
       - docs/research/alphazerobeta-paper-reproduction.md
       - .github/workflows/alphazerobeta-paper-reproduction.yml
   pull_request:
@@ -22,10 +24,12 @@ on:
       - src/research/alphazerobeta.py
       - src/research/alphazerobeta_paper.py
       - scripts/alphazerobeta_train.py
+      - scripts/alphazerobeta_paper_train.py
       - scripts/alphazerobeta_compare.py
       - scripts/alphazerobeta_paper_reproduce.py
       - tests/test_alphazerobeta.py
       - tests/test_alphazerobeta_paper.py
+      - tests/test_alphazerobeta_timing.py
       - docs/research/alphazerobeta-paper-reproduction.md
       - .github/workflows/alphazerobeta-paper-reproduction.yml
 
@@ -61,10 +65,12 @@ jobs:
         run: |
           ruff format --check \
             src/research/alphazerobeta_paper.py \
+            scripts/alphazerobeta_paper_train.py \
             scripts/alphazerobeta_paper_reproduce.py \
             tests/test_alphazerobeta_paper.py
           ruff check \
             src/research/alphazerobeta_paper.py \
+            scripts/alphazerobeta_paper_train.py \
             scripts/alphazerobeta_paper_reproduce.py \
             tests/test_alphazerobeta_paper.py
           python -m pytest -q tests/test_alphazerobeta.py tests/test_alphazerobeta_paper.py tests/test_alphazerobeta_timing.py
@@ -114,6 +120,7 @@ jobs:
           comparison = json.loads((root / 'comparison.json').read_text())
           assert manifest['execution_status'] == 'completed'
           assert manifest['exact_paper_result_reproduction'] is False
+          assert manifest['reward_state']['semantics'].startswith('Appendix D.4.2')
           assert comparison['fold_count'] == 2
           for key in ('primary_lambda_corr_0_5', 'ablation_lambda_corr_0'):
               metrics = comparison[key]
