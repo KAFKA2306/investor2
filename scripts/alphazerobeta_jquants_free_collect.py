@@ -18,13 +18,22 @@ import requests
 FREE_HISTORY_YEARS = 2
 FREE_DELAY_DAYS = 84
 REQUEST_INTERVAL_SECONDS = 12.5
+FREE_DATASETS = (
+    "equities_master",
+    "equities_bars_daily",
+    "financial_summary",
+    "earnings_date",
+    "earnings_calendar",
+    "trading_calendar",
+)
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Collect the complete J-Quants Free visible Japan window into ephemeral files."
+        description="Collect J-Quants Free data into ephemeral files without redistributing raw records."
     )
     parser.add_argument("--output-dir", type=Path, required=True)
+    parser.add_argument("--scope", choices=("core", "metadata"), required=True)
     parser.add_argument("--start")
     parser.add_argument("--end")
     return parser.parse_args()
@@ -170,30 +179,54 @@ def collect_by_publication_date(
     return pd.concat(parts, ignore_index=True).drop_duplicates().reset_index(drop=True)
 
 
-def main() -> None:
-    args = parse_args()
-    api_key = os.environ.get("JQUANTS_API_KEY", "").strip()
-    if not api_key:
-        raise RuntimeError("JQUANTS_API_KEY is required")
+def common_manifest(
+    *,
+    scope: str,
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+    client: FreePlanClient,
+    datasets: dict[str, dict[str, object]],
+) -> dict[str, object]:
+    return {
+        "schema_version": "investor2.alphazerobeta-jquants-free-source.v3",
+        "source": "J-Quants API v2 Free",
+        "scope": scope,
+        "plan": {
+            "history": "two years excluding the latest 12 weeks",
+            "rate_limit": "5 calls/minute",
+            "requested_date_start": str(start.date()),
+            "requested_date_end": str(end.date()),
+        },
+        "official_free_datasets": list(FREE_DATASETS),
+        "collected_datasets": sorted(datasets),
+        "http_requests": client.request_count,
+        "retention": "ephemeral raw data; never committed, uploaded, or retained after validation",
+        "datasets": datasets,
+        "generated_at_utc": datetime.now(UTC).isoformat(),
+    }
 
-    requested_start, requested_end = resolve_window(args.start, args.end)
-    root = args.output_dir
-    root.mkdir(parents=True, exist_ok=False)
-    client = FreePlanClient(api_key)
 
-    prices = collect_daily_range(client, requested_start, requested_end)
+def collect_core(
+    client: FreePlanClient,
+    root: Path,
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+) -> dict[str, object]:
+    prices = collect_daily_range(client, start, end)
     actual_start = pd.Timestamp(prices["Date"].min()).normalize()
     actual_end = pd.Timestamp(prices["Date"].max()).normalize()
-    trading_dates = pd.DatetimeIndex(prices["Date"].drop_duplicates().sort_values())
 
     master = client.get_eq_master(date=str(actual_end.date()))
     if master.empty or "Code" not in master.columns:
         raise AssertionError("listed-issue master is empty")
     master = master.sort_values("Code").reset_index(drop=True)
 
-    financials = collect_by_publication_date(client, trading_dates, "financial_summary")
-    earnings_dates = collect_by_publication_date(client, trading_dates, "earnings_date")
-    earnings_calendar = client.get_eq_earnings_cal()
+    trading_calendar = client.get_mkt_calendar(
+        from_yyyymmdd=str(start.date()),
+        to_yyyymmdd=str(end.date()),
+    )
+    if trading_calendar.empty:
+        raise AssertionError("trading calendar is empty")
 
     prices["AssetReturn"] = prices.groupby("Code", observed=True)["AdjClose"].transform(
         lambda values: np.log(values).diff()
@@ -209,35 +242,81 @@ def main() -> None:
     datasets = {
         "equities_bars_daily": write_frame(root / "prices.parquet", prices),
         "equities_master": write_frame(root / "universe.parquet", master),
+        "trading_calendar": write_frame(root / "trading_calendar.parquet", trading_calendar),
+        "benchmark": write_frame(root / "benchmark.parquet", benchmark),
+    }
+    manifest = common_manifest(
+        scope="core",
+        start=start,
+        end=end,
+        client=client,
+        datasets=datasets,
+    )
+    manifest.update(
+        {
+            "actual_date_range": {
+                "start": str(actual_start.date()),
+                "end": str(actual_end.date()),
+            },
+            "ticker_count": int(prices["Code"].nunique()),
+            "price_rows": int(len(prices)),
+            "trading_calendar_rows": int(len(trading_calendar)),
+            "benchmark": "equal-weight mean log return of all cached equities; TOPIX is not in Free",
+        }
+    )
+    return manifest
+
+
+def collect_metadata(
+    client: FreePlanClient,
+    root: Path,
+    start: pd.Timestamp,
+    end: pd.Timestamp,
+) -> dict[str, object]:
+    calendar_dates = pd.date_range(start, end, freq="D")
+    financials = collect_by_publication_date(client, calendar_dates, "financial_summary")
+    earnings_dates = collect_by_publication_date(client, calendar_dates, "earnings_date")
+    earnings_calendar = client.get_eq_earnings_cal()
+
+    datasets = {
         "financial_summary": write_frame(root / "financial_summary.parquet", financials),
         "earnings_date": write_frame(root / "earnings_date.parquet", earnings_dates),
         "earnings_calendar": write_frame(root / "earnings_calendar.parquet", earnings_calendar),
-        "benchmark": write_frame(root / "benchmark.parquet", benchmark),
     }
-    manifest = {
-        "schema_version": "investor2.alphazerobeta-jquants-free-source.v2",
-        "source": "J-Quants API v2 Free",
-        "plan": {
-            "history": "two years excluding the latest 12 weeks",
-            "rate_limit": "5 calls/minute",
-            "requested_date_start": str(requested_start.date()),
-            "requested_date_end": str(requested_end.date()),
-        },
-        "actual_date_range": {
-            "start": str(actual_start.date()),
-            "end": str(actual_end.date()),
-        },
-        "ticker_count": int(prices["Code"].nunique()),
-        "price_rows": int(len(prices)),
-        "financial_summary_rows": int(len(financials)),
-        "earnings_date_rows": int(len(earnings_dates)),
-        "earnings_calendar_rows": int(len(earnings_calendar)),
-        "http_requests": client.request_count,
-        "benchmark": "equal-weight mean log return of all cached equities; TOPIX is not in Free",
-        "retention": "ephemeral raw data; never committed, uploaded, or retained after validation",
-        "datasets": datasets,
-        "generated_at_utc": datetime.now(UTC).isoformat(),
-    }
+    manifest = common_manifest(
+        scope="metadata",
+        start=start,
+        end=end,
+        client=client,
+        datasets=datasets,
+    )
+    manifest.update(
+        {
+            "calendar_days_scanned": int(len(calendar_dates)),
+            "financial_summary_rows": int(len(financials)),
+            "earnings_date_rows": int(len(earnings_dates)),
+            "earnings_calendar_rows": int(len(earnings_calendar)),
+        }
+    )
+    return manifest
+
+
+def main() -> None:
+    args = parse_args()
+    api_key = os.environ.get("JQUANTS_API_KEY", "").strip()
+    if not api_key:
+        raise RuntimeError("JQUANTS_API_KEY is required")
+
+    requested_start, requested_end = resolve_window(args.start, args.end)
+    root = args.output_dir
+    root.mkdir(parents=True, exist_ok=False)
+    client = FreePlanClient(api_key)
+
+    if args.scope == "core":
+        manifest = collect_core(client, root, requested_start, requested_end)
+    else:
+        manifest = collect_metadata(client, root, requested_start, requested_end)
+
     (root / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
