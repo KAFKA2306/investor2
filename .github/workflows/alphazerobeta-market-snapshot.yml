@@ -5,9 +5,14 @@ on:
     branches: [main]
     paths:
       - src/research/market_snapshot.py
+      - src/research/session_state.py
       - scripts/alphazerobeta_build_market_snapshot.py
       - scripts/alphazerobeta_prepare.py
+      - scripts/session_state_baseline.py
       - tests/test_alphazerobeta_market_snapshot.py
+      - tests/test_session_state.py
+      - tests/test_session_state_baseline.py
+      - docs/research/session_state_161_preregistration.md
       - .github/workflows/alphazerobeta-market-snapshot.yml
   workflow_dispatch:
 
@@ -23,23 +28,36 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install focused dependencies
-        run: python -m pip install pandas pyarrow yfinance pytest ruff
+        run: python -m pip install pandas pyarrow yfinance pytest ruff numpy
       - name: Verify source/storage boundary
         env:
           PYTHONPATH: .
         run: |
           ruff format --check \
             src/research/market_snapshot.py \
+            src/research/session_state.py \
             scripts/alphazerobeta_build_market_snapshot.py \
             scripts/alphazerobeta_prepare.py \
-            tests/test_alphazerobeta_market_snapshot.py
+            scripts/session_state_baseline.py \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_session_state.py \
+            tests/test_session_state_baseline.py
           ruff check \
             src/research/market_snapshot.py \
+            src/research/session_state.py \
             scripts/alphazerobeta_build_market_snapshot.py \
             scripts/alphazerobeta_prepare.py \
-            tests/test_alphazerobeta_market_snapshot.py
-          python -m pytest -q tests/test_alphazerobeta_market_snapshot.py
+            scripts/session_state_baseline.py \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_session_state.py \
+            tests/test_session_state_baseline.py
+          python -m pytest -q \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_session_state.py \
+            tests/test_session_state_baseline.py
           ! grep -R -E 'HF_TOKEN|HfApi|upload_folder|create_repo' \
             src/research/market_snapshot.py \
+            src/research/session_state.py \
             scripts/alphazerobeta_build_market_snapshot.py \
-            scripts/alphazerobeta_prepare.py
+            scripts/alphazerobeta_prepare.py \
+            scripts/session_state_baseline.py
