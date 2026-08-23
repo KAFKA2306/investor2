@@ -13,8 +13,11 @@ from typing import Any
 import pandas as pd
 import yfinance as yf
 from yfinance import EquityQuery
+from yfinance.exceptions import YFRateLimitError
 
 DEFAULT_STORAGE_PREFIX = "central/investor2/private/yahoo-market-cache/jp-v1"
+DEFAULT_MAX_REQUEST_ATTEMPTS = 6
+DEFAULT_RETRY_BASE_SECONDS = 5.0
 ALL_REGIONS = (
     "ae",
     "ar",
@@ -88,6 +91,8 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--page-size", type=int, default=250)
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--request-pause", type=float, default=0.25)
+    parser.add_argument("--max-request-attempts", type=int, default=DEFAULT_MAX_REQUEST_ATTEMPTS)
+    parser.add_argument("--retry-base-seconds", type=float, default=DEFAULT_RETRY_BASE_SECONDS)
     parser.add_argument("--output-dir", type=Path, default=Path("cache/alphazerobeta-market-snapshot"))
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
@@ -116,15 +121,65 @@ def _quotes(response: dict[str, Any]) -> list[dict[str, Any]]:
     return [row for row in raw if isinstance(row, dict)]
 
 
-def discover_region(region: str, *, page_size: int, pause: float) -> pd.DataFrame:
+def screen_with_retry(
+    query: EquityQuery,
+    *,
+    region: str,
+    offset: int,
+    page_size: int,
+    max_attempts: int,
+    retry_base_seconds: float,
+) -> dict[str, Any]:
+    if max_attempts < 1:
+        raise ValueError("max_attempts must be >= 1")
+    for attempt in range(1, max_attempts + 1):
+        try:
+            response = yf.screen(query, offset=offset, size=page_size, sortField="ticker", sortAsc=True)
+            if not isinstance(response, dict):
+                raise AssertionError(f"unexpected yfinance screen response for region={region}")
+            return response
+        except YFRateLimitError:
+            if attempt == max_attempts:
+                raise
+            delay = retry_base_seconds * (2 ** (attempt - 1))
+            print(
+                json.dumps(
+                    {
+                        "event": "yahoo_rate_limit_retry",
+                        "region": region,
+                        "offset": offset,
+                        "attempt": attempt,
+                        "max_attempts": max_attempts,
+                        "sleep_seconds": delay,
+                    }
+                ),
+                flush=True,
+            )
+            time.sleep(delay)
+    raise AssertionError("unreachable")
+
+
+def discover_region(
+    region: str,
+    *,
+    page_size: int,
+    pause: float,
+    max_attempts: int = DEFAULT_MAX_REQUEST_ATTEMPTS,
+    retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
+) -> pd.DataFrame:
     rows: list[dict[str, object]] = []
     seen: set[str] = set()
     offset = 0
     query = EquityQuery("eq", ["region", region])
     while True:
-        response = yf.screen(query, offset=offset, size=page_size, sortField="ticker", sortAsc=True)
-        if not isinstance(response, dict):
-            raise AssertionError(f"unexpected yfinance screen response for region={region}")
+        response = screen_with_retry(
+            query,
+            region=region,
+            offset=offset,
+            page_size=page_size,
+            max_attempts=max_attempts,
+            retry_base_seconds=retry_base_seconds,
+        )
         page = _quotes(response)
         new_count = 0
         for quote in page:
@@ -152,10 +207,23 @@ def discover_region(region: str, *, page_size: int, pause: float) -> pd.DataFram
     return pd.DataFrame(rows)
 
 
-def discover_universe(regions: list[str], *, page_size: int, pause: float) -> pd.DataFrame:
+def discover_universe(
+    regions: list[str],
+    *,
+    page_size: int,
+    pause: float,
+    max_attempts: int = DEFAULT_MAX_REQUEST_ATTEMPTS,
+    retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
+) -> pd.DataFrame:
     frames = []
     for region in regions:
-        frame = discover_region(region, page_size=page_size, pause=pause)
+        frame = discover_region(
+            region,
+            page_size=page_size,
+            pause=pause,
+            max_attempts=max_attempts,
+            retry_base_seconds=retry_base_seconds,
+        )
         print(json.dumps({"region": region, "tickers": len(frame)}), flush=True)
         if not frame.empty:
             frames.append(frame)
@@ -277,7 +345,13 @@ def main() -> None:
     root = args.output_dir
     prepare_output(root, overwrite=args.overwrite)
 
-    universe = discover_universe(regions, page_size=args.page_size, pause=args.request_pause)
+    universe = discover_universe(
+        regions,
+        page_size=args.page_size,
+        pause=args.request_pause,
+        max_attempts=args.max_request_attempts,
+        retry_base_seconds=args.retry_base_seconds,
+    )
     universe.to_parquet(root / "universe.parquet", index=False, compression="zstd")
     row_counts = write_region_prices(
         universe,
