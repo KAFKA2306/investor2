@@ -1,0 +1,220 @@
+name: AlphaZeroBeta J-Quants Free validation
+
+on:
+  push:
+    branches:
+      - feat/alphazerobeta-hf-market-cache
+    paths:
+      - scripts/alphazerobeta_build_jquants_free_snapshot.py
+      - scripts/alphazerobeta_japan_free_train.py
+      - .github/workflows/alphazerobeta-jquants-free-validation.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alphazerobeta-jquants-free-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require private credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install acquisition dependencies
+        run: python -m pip install numpy pandas pyarrow requests huggingface-hub
+      - name: Resolve the actually visible Free-plan window
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          from datetime import UTC, datetime, timedelta
+          import pandas as pd
+
+          today = pd.Timestamp(datetime.now(tz=UTC).date())
+          print(f"JQ_START={(today - pd.DateOffset(years=2)).date()}")
+          print(f"JQ_END={(today - timedelta(days=84)).date()}")
+          PY
+      - name: Acquire all Free-plan Japan inputs and upload private HF cache
+        run: |
+          python scripts/alphazerobeta_build_jquants_free_snapshot.py \
+            --repo-id k4fka/alphazerobeta-jquants-free-cache \
+            --start "$JQ_START" \
+            --end "$JQ_END"
+
+  validate:
+    needs: snapshot
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/alphazerobeta-hf-market-cache
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install validation dependencies
+        run: |
+          python -m pip install numpy pandas pyarrow huggingface-hub ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Resolve bounded walk-forward dates from immutable cache manifest
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          from pathlib import Path
+          import pandas as pd
+          from huggingface_hub import hf_hub_download
+
+          path = hf_hub_download(
+              repo_id="k4fka/alphazerobeta-jquants-free-cache",
+              repo_type="dataset",
+              filename="manifest.json",
+          )
+          manifest = json.loads(Path(path).read_text())
+          visible_end = pd.Timestamp(manifest["date_end"])
+          test_end = visible_end + pd.offsets.MonthEnd(0)
+          test_start = (test_end + pd.Timedelta(days=1)) - pd.DateOffset(months=6)
+          train_start = test_start - pd.DateOffset(months=10)
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={train_start.date()}")
+          print(f"SOURCE_START={manifest['date_start']}")
+          print(f"SOURCE_END={manifest['date_end']}")
+          PY
+      - name: Build PIT-safe top-64 liquid Japan panel from HF cache
+        run: |
+          mkdir -p /tmp/alphazerobeta-japan
+          python scripts/alphazerobeta_prepare.py \
+            --hf-repo-id k4fka/alphazerobeta-jquants-free-cache \
+            --hf-regions jp \
+            --output /tmp/alphazerobeta-japan/panel.npz \
+            --max-assets 64 \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+      - name: Execute two OOS folds and matched lambda_corr ablation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for fold in 0 1; do
+            seed=$((2306 + fold))
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/primary-fold${fold}.json" \
+              --test-start "$TEST_START" \
+              --test-end "$TEST_END" \
+              --fold-index "$fold" \
+              --device cpu \
+              --seed "$seed" \
+              --iterations 10 \
+              --horizon 200 \
+              --hidden-size 512 \
+              --agent-window 100 \
+              --transaction-cost-bps 15 \
+              --borrow-fee-bps 30 \
+              --lambda-corr 0.5 \
+              --lambda-turnover 0.001 \
+              --reward-semantics paper
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/ablation-fold${fold}.json" \
+              --test-start "$TEST_START" \
+              --test-end "$TEST_END" \
+              --fold-index "$fold" \
+              --device cpu \
+              --seed "$seed" \
+              --iterations 10 \
+              --horizon 200 \
+              --hidden-size 512 \
+              --agent-window 100 \
+              --transaction-cost-bps 15 \
+              --borrow-fee-bps 30 \
+              --lambda-corr 0 \
+              --lambda-turnover 0.001 \
+              --reward-semantics paper
+          done
+      - name: Compare measured OOS evidence
+        run: |
+          python scripts/alphazerobeta_compare.py \
+            --dataset /tmp/alphazerobeta-japan/panel.npz \
+            --primary-weights \
+              /tmp/alphazerobeta-japan/primary-fold0.weights.npz \
+              /tmp/alphazerobeta-japan/primary-fold1.weights.npz \
+            --ablation-weights \
+              /tmp/alphazerobeta-japan/ablation-fold0.weights.npz \
+              /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
+            --output /tmp/alphazerobeta-japan/comparison.json \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 30
+      - name: Persist measured Japan Free-data evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=docs/research/results/alphazerobeta_jquants_free
+          rm -rf "$target"
+          mkdir -p "$target"
+          cp /tmp/alphazerobeta-japan/panel.npz.manifest.json "$target/dataset-manifest.json"
+          cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
+          cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
+          cp /tmp/alphazerobeta-japan/comparison.json "$target/"
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          root = Path("docs/research/results/alphazerobeta_jquants_free")
+          comparison = json.loads((root / "comparison.json").read_text())
+          dataset = json.loads((root / "dataset-manifest.json").read_text())
+          summary = {
+              "schema_version": "investor2.alphazerobeta-jquants-free-validation.v1",
+              "execution_status": "completed",
+              "source": "private Hugging Face cache built from J-Quants API V2 Free",
+              "source_window": {"start": os.environ["SOURCE_START"], "end": os.environ["SOURCE_END"]},
+              "universe": {
+                  "cached": "all equities returned by J-Quants Free listed-issue master/daily bars",
+                  "trained": dataset["selected_codes"],
+                  "trained_count": len(dataset["selected_codes"]),
+                  "selection": dataset["selection_rule"],
+              },
+              "walk_forward": {
+                  "train_months": 8,
+                  "validation_months": 2,
+                  "test_months": 3,
+                  "test_folds": 2,
+                  "test_start": os.environ["TEST_START"],
+                  "test_end": os.environ["TEST_END"],
+              },
+              "primary_lambda_corr_0_5": comparison["primary_lambda_corr_0_5"],
+              "ablation_lambda_corr_0": comparison["ablation_lambda_corr_0"],
+              "gates": comparison["gates"],
+              "verdict": comparison["verdict"],
+              "claim_boundary": "Bounded Japanese public-data surrogate using paper reward/model semantics; not an exact reproduction of the paper's licensed-data experiment.",
+              "benchmark": "equal-weight market return derived from all cached Japanese equities because TOPIX is not in J-Quants Free",
+              "costs": "15 bps per side plus 30 bps/year borrow; conservative surrogate, not realized broker execution",
+          }
+          (root / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n")
+          print(json.dumps(summary, ensure_ascii=False))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence"
+          git push origin HEAD:feat/alphazerobeta-hf-market-cache
