@@ -3,11 +3,22 @@ from __future__ import annotations
 import json
 import sys
 from pathlib import Path
+from typing import Any
 
 import pandas as pd
 import pytest
+from yfinance import EquityQuery
+from yfinance.exceptions import YFRateLimitError
 
-from scripts.alphazerobeta_build_market_snapshot import DEFAULT_STORAGE_PREFIX, normalize_download, parse_args
+import scripts.alphazerobeta_build_market_snapshot as market_snapshot_builder
+from scripts.alphazerobeta_build_market_snapshot import (
+    DEFAULT_MAX_REQUEST_ATTEMPTS,
+    DEFAULT_RETRY_BASE_SECONDS,
+    DEFAULT_STORAGE_PREFIX,
+    normalize_download,
+    parse_args,
+    screen_with_retry,
+)
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
 from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_manifest, load_prices, load_universe
 
@@ -23,6 +34,36 @@ def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.Monk
     assert args.end == "2025-01-01"
     assert args.storage_prefix == DEFAULT_STORAGE_PREFIX
     assert args.storage_prefix.endswith("/yahoo-market-cache/jp-v1")
+    assert args.max_request_attempts == DEFAULT_MAX_REQUEST_ATTEMPTS
+    assert args.retry_base_seconds == DEFAULT_RETRY_BASE_SECONDS
+
+
+def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
+    calls = 0
+    sleeps: list[float] = []
+
+    def fake_screen(*args: object, **kwargs: object) -> dict[str, Any]:
+        nonlocal calls
+        calls += 1
+        if calls < 3:
+            raise YFRateLimitError()
+        return {"quotes": [{"symbol": "7203.T"}], "total": 1}
+
+    monkeypatch.setattr(market_snapshot_builder.yf, "screen", fake_screen)
+    monkeypatch.setattr(market_snapshot_builder.time, "sleep", sleeps.append)
+
+    result = screen_with_retry(
+        EquityQuery("eq", ["region", "jp"]),
+        region="jp",
+        offset=0,
+        page_size=250,
+        max_attempts=4,
+        retry_base_seconds=2.0,
+    )
+
+    assert result["quotes"][0]["symbol"] == "7203.T"
+    assert calls == 3
+    assert sleeps == [2.0, 4.0]
 
 
 def test_normalize_download_converts_yfinance_multiindex_to_long_rows() -> None:
