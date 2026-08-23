@@ -217,9 +217,7 @@ def materialize_window(
             )
             uploaded_shards += month_uploaded
             existing.update(
-                cache_path(day)
-                for day in month_days
-                if (upload_root / day.strftime("%Y-%m-%d.bin.enc")).is_file()
+                cache_path(day) for day in month_days if (upload_root / day.strftime("%Y-%m-%d.bin.enc")).is_file()
             )
         shutil.rmtree(upload_root)
 
