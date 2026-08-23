@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import pandas as pd
+
 from scripts import alphazerobeta_prepare as prepare
-from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_manifest, load_prices, load_universe
+from src.research.market_snapshot import (
+    MarketSnapshot,
+    load_benchmark,
+    load_manifest,
+    load_prices,
+    load_universe,
+)
 
 COMMON_STOCK_MARKETS = {"0111", "0112", "0113"}
 BENCHMARK_CODE = "13060"
@@ -32,12 +40,10 @@ def load_japan_inputs(args):
     prices = prepare.normalize_price_frame(load_prices(snapshot, regions=regions))
     prices = prices[prices["Code"].isin(allowed)].copy()
     benchmark = prepare.normalize_benchmark_frame(load_benchmark(snapshot))
-    master_dates = []
+    master_dates: list[str] = []
     if "Date" in master.columns:
-        master_dates = sorted(
-            str(value.date())
-            for value in prepare.pd.to_datetime(master["Date"], errors="coerce").dropna().unique()
-        )
+        parsed = pd.to_datetime(master["Date"], errors="coerce").dropna()
+        master_dates = sorted({str(pd.Timestamp(value).date()) for value in parsed})
 
     return (
         prices,
@@ -48,7 +54,9 @@ def load_japan_inputs(args):
             "market_regions": regions,
             "snapshot_fetched_at_utc": manifest.get("fetched_at_utc"),
             "snapshot_ticker_count": manifest.get("ticker_count"),
-            "universe_filter": "J-Quants PIT master Mkt in 0111/0112/0113; benchmark ETF 13060 excluded",
+            "universe_filter": (
+                "J-Quants PIT master Mkt in 0111/0112/0113; benchmark ETF 13060 excluded"
+            ),
             "universe_master_dates": master_dates,
             "universe_master_rows": int(len(master)),
             "allowed_common_stock_codes": int(len(allowed)),
