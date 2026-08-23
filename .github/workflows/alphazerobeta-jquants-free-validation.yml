@@ -14,6 +14,7 @@ concurrency:
   cancel-in-progress: true
 
 # Empirical acquisition is explicitly gated by the [snapshot] commit marker.
+# Acquisition jobs run serially so the Free 5-calls/minute limit is never shared across jobs.
 jobs:
   contract:
     runs-on: ubuntu-latest
