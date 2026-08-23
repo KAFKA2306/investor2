@@ -28,13 +28,14 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Prepare a PIT-safe AlphaZeroBeta panel from local files or HF cache.")
+    parser = argparse.ArgumentParser(
+        description="Prepare a PIT-safe AlphaZeroBeta panel from local files or a materialized central market cache."
+    )
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--prices-csv", type=Path)
-    source.add_argument("--hf-repo-id", help="Immutable Hugging Face dataset snapshot; avoids Yahoo access during runs")
+    source.add_argument("--market-snapshot-dir", type=Path, help="Materialized central HF Storage Bucket snapshot")
     parser.add_argument("--benchmark-csv", type=Path, help="Required with --prices-csv")
-    parser.add_argument("--hf-revision", default="main")
-    parser.add_argument("--hf-regions", default="us", help="Comma-separated cached price regions")
+    parser.add_argument("--market-regions", default="us", help="Comma-separated cached price regions")
     parser.add_argument("--output", required=True, type=Path, help="Output .npz path")
     parser.add_argument("--manifest", type=Path, help="Defaults to <output>.manifest.json")
     parser.add_argument("--max-assets", type=int, default=64)
@@ -112,20 +113,20 @@ def normalize_benchmark(path: Path) -> pd.DataFrame:
 
 
 def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
-    if args.hf_repo_id:
-        regions = [value.strip().lower() for value in args.hf_regions.split(",") if value.strip()]
-        snapshot = MarketSnapshot(args.hf_repo_id, args.hf_revision)
+    if args.market_snapshot_dir:
+        regions = [value.strip().lower() for value in args.market_regions.split(",") if value.strip()]
+        snapshot = MarketSnapshot(args.market_snapshot_dir)
         snapshot_manifest = load_manifest(snapshot)
         return (
             normalize_price_frame(load_prices(snapshot, regions=regions)),
             normalize_benchmark_frame(load_benchmark(snapshot)),
             {
-                "source": "huggingface-market-snapshot",
-                "hf_repo_id": args.hf_repo_id,
-                "hf_revision": args.hf_revision,
-                "hf_regions": regions,
+                "source": "central-hf-storage-bucket-materialization",
+                "market_snapshot_dir": str(args.market_snapshot_dir),
+                "market_regions": regions,
                 "snapshot_fetched_at_utc": snapshot_manifest.get("fetched_at_utc"),
                 "snapshot_ticker_count": snapshot_manifest.get("ticker_count"),
+                "storage_contract": snapshot_manifest.get("storage_contract"),
             },
         )
     if args.prices_csv is None or args.benchmark_csv is None:
@@ -253,7 +254,7 @@ def main() -> None:
                 "Universe selection uses only data at or before universe_cutoff.",
                 "Features use backward-looking rolling windows and same-day cross-sectional normalization only.",
                 "No backward fill is used.",
-                "When source=huggingface-market-snapshot, Yahoo is not accessed during panel preparation.",
+                "Materialized central cache inputs do not access Yahoo during panel preparation.",
             ],
         },
     )
