@@ -1,4 +1,4 @@
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { Hono } from "hono";
 import yaml from "js-yaml";
@@ -51,125 +51,6 @@ function formatBytes(bytes: number): string {
   const sizes = ["B", "KB", "MB", "GB", "TB"];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
   return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
-}
-
-function getFileSize(path: string): number {
-  return statSync(path).size;
-}
-
-function getDirectorySize(dirPath: string): number {
-  const files = readdirSync(dirPath, { recursive: true });
-  let totalSize = 0;
-  for (const file of files) {
-    const filePath = resolve(dirPath, file as string);
-    const stat = statSync(filePath);
-    if (stat.isFile()) {
-      totalSize += stat.size;
-    }
-  }
-  return totalSize;
-}
-
-function _getMarketDataStats(): CacheStatistics["marketData"] {
-  const jquantsDir = config.paths.data;
-  const stockListPath = resolve(jquantsDir, "stock_list.csv");
-  const priceCsvPath = resolve(jquantsDir, "raw_stock_price.csv");
-  const finCsvPath = resolve(jquantsDir, "raw_stock_fin.csv");
-
-  let stocks = 0;
-  let priceRecords = 0;
-  let finRecords = 0;
-  let dateRange: { start: string; end: string } | null = null;
-
-  const listData = readFileSync(stockListPath, "utf-8");
-  stocks = listData.split("\n").length - 2;
-
-  const priceData = readFileSync(priceCsvPath, "utf-8");
-  const lines = priceData.split("\n");
-  priceRecords = Math.max(0, lines.length - 2);
-  if (lines.length > 2) {
-    const firstLine = lines[1]?.split(",")[1] || "";
-    const lastLine = lines[lines.length - 2]?.split(",")[1] || "";
-    if (firstLine && lastLine) {
-      dateRange = { start: firstLine, end: lastLine };
-    }
-  }
-
-  const finData = readFileSync(finCsvPath, "utf-8");
-  finRecords = finData.split("\n").length - 2;
-
-  const sizeGb =
-    getFileSize(priceCsvPath) +
-    getFileSize(finCsvPath) +
-    getFileSize(stockListPath);
-
-  return {
-    stocks,
-    priceRecords,
-    finRecords,
-    dateRange,
-    sizeGb: sizeGb / (1024 * 1024 * 1024),
-  };
-}
-
-function _getEdinetStats(): CacheStatistics["edinet"] {
-  const edinetDir = config.paths.edinet;
-  let companyCount = 0;
-  let documentCount = 0;
-
-  const items = readdirSync(edinetDir);
-  companyCount = items.filter((item) => !item.startsWith(".")).length;
-
-  for (const company of items) {
-    const companyPath = resolve(edinetDir, company);
-    const stat = statSync(companyPath);
-    if (stat.isDirectory()) {
-      const docs = readdirSync(companyPath);
-      documentCount += docs.filter((d) => !d.startsWith(".")).length;
-    }
-  }
-
-  const sizeGb = getDirectorySize(edinetDir) / (1024 * 1024 * 1024);
-
-  return { companyCount, documentCount, sizeGb };
-}
-
-function _getSqliteStats() {
-  const cacheDir = config.paths.cache;
-  const stats: CacheStatistics["sqlite"] = {
-    market: null,
-    edinet: null,
-    yahoocache: null,
-  };
-
-  const sqliteFiles = [
-    { key: "market", path: "market_cache.sqlite" },
-    { key: "edinet", path: "edinet_cache.sqlite" },
-    { key: "yahoocache", path: "yahoo_cache.sqlite" },
-  ] as const;
-
-  for (const { key, path } of sqliteFiles) {
-    const fullPath = resolve(cacheDir, path);
-    const size = getFileSize(fullPath) / (1024 * 1024 * 1024);
-    stats[key] = { sizeGb: size };
-  }
-
-  return stats;
-}
-
-function _getLastUpdated(): string {
-  const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
-
-  let latestTime = 0;
-
-  for (const dir of dirs) {
-    const stat = statSync(dir);
-    if (stat.mtimeMs > latestTime) {
-      latestTime = stat.mtimeMs;
-    }
-  }
-
-  return latestTime > 0 ? new Date(latestTime).toISOString() : "Never updated";
 }
 
 async function getStats(): Promise<CacheStatistics> {
@@ -463,7 +344,7 @@ app.post("/api/refresh", async (c) => {
     const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
       cwd: process.cwd(),
     });
-    const _output = await new Response(proc.stdout).text();
+    await new Response(proc.stdout).text();
     const stats = await getStats();
 
     return c.html(`
