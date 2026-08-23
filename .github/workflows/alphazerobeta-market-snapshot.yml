@@ -1,0 +1,94 @@
+name: AlphaZeroBeta market snapshot
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - src/research/market_snapshot.py
+      - scripts/alphazerobeta_build_market_snapshot.py
+      - scripts/alphazerobeta_prepare.py
+      - tests/test_alphazerobeta_market_snapshot.py
+      - .github/workflows/alphazerobeta-market-snapshot.yml
+  workflow_dispatch:
+    inputs:
+      repo_id:
+        description: Private Hugging Face dataset repo, e.g. user/alphazerobeta-market-cache
+        required: true
+        type: string
+      regions:
+        description: Yahoo regions, comma-separated or all
+        required: true
+        default: all
+        type: string
+      start:
+        description: Inclusive daily-history start
+        required: true
+        default: "2004-01-01"
+        type: string
+      end:
+        description: Exclusive daily-history end
+        required: true
+        default: "2025-01-01"
+        type: string
+      benchmark:
+        description: Benchmark ticker
+        required: true
+        default: SPY
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install focused dependencies
+        run: |
+          python -m pip install pandas pyarrow huggingface-hub yfinance pytest ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify cache contract
+        env:
+          PYTHONPATH: .
+        run: |
+          ruff format --check \
+            src/research/market_snapshot.py \
+            scripts/alphazerobeta_build_market_snapshot.py \
+            scripts/alphazerobeta_prepare.py \
+            tests/test_alphazerobeta_market_snapshot.py
+          ruff check \
+            src/research/market_snapshot.py \
+            scripts/alphazerobeta_build_market_snapshot.py \
+            scripts/alphazerobeta_prepare.py \
+            tests/test_alphazerobeta_market_snapshot.py
+          python -m pytest -q tests/test_alphazerobeta_market_snapshot.py
+
+  snapshot:
+    if: github.event_name == 'workflow_dispatch'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install snapshot dependencies
+        run: python -m pip install pandas pyarrow huggingface-hub yfinance
+      - name: Require Hugging Face authentication
+        run: test -n "$HF_TOKEN"
+      - name: Build and upload immutable private snapshot
+        run: |
+          python scripts/alphazerobeta_build_market_snapshot.py \
+            --repo-id "${{ inputs.repo_id }}" \
+            --regions "${{ inputs.regions }}" \
+            --start "${{ inputs.start }}" \
+            --end "${{ inputs.end }}" \
+            --benchmark "${{ inputs.benchmark }}"
