@@ -1,11 +1,86 @@
 === shared/schema consumers ===
+src/preprocess/screener.ts:4:import { ConfigSchema } from "../shared/schema";
+src/preprocess/text.ts:7:import { ConfigSchema } from "../shared/schema";
+src/tasks/stats.ts:4:import { ConfigSchema } from "../shared/schema";
+src/commands/cache_set.ts:6:import { ConfigSchema } from "../shared/schema";
+src/commands/_config.ts:3:import { ConfigSchema } from "../shared/schema";
+src/commands/cache_get.ts:6:import { ConfigSchema } from "../shared/schema";
+src/commands/data_fetch.ts:6:import { ConfigSchema } from "../shared/schema";
+src/dashboard/server.ts:12:import { ConfigSchema } from "../shared/schema";
 === ConfigSchema consumers ===
-=== config path consumers ===
---- data ---
---- logs ---
---- cache ---
---- edinet ---
---- cacheFundamentalEdinet ---
+src/schemas.ts:14:export const ConfigSchema = z
+src/schemas.ts:28:export type Config = z.infer<typeof ConfigSchema>;
+src/preprocess/edinet.ts:8:ConfigSchema,
+src/preprocess/edinet.ts:12:const config = ConfigSchema.parse(
+src/preprocess/screener.ts:4:import { ConfigSchema } from "../shared/schema";
+src/preprocess/screener.ts:6:const config = ConfigSchema.parse(
+src/preprocess/text.ts:7:import { ConfigSchema } from "../shared/schema";
+src/preprocess/text.ts:9:const config = ConfigSchema.parse(
+src/tasks/stats.ts:4:import { ConfigSchema } from "../shared/schema";
+src/tasks/stats.ts:6:const config = ConfigSchema.parse(
+src/shared/schema.ts:1:export { type Config, ConfigSchema } from "../schemas";
+src/commands/cache_set.ts:6:import { ConfigSchema } from "../shared/schema";
+src/commands/cache_set.ts:8:const config = ConfigSchema.parse(
+src/commands/_config.ts:3:import { ConfigSchema } from "../shared/schema";
+src/commands/_config.ts:5:export const config = ConfigSchema.parse(
+src/commands/cache_get.ts:6:import { ConfigSchema } from "../shared/schema";
+src/commands/cache_get.ts:8:const config = ConfigSchema.parse(
+src/commands/data_fetch.ts:6:import { ConfigSchema } from "../shared/schema";
+src/commands/data_fetch.ts:8:const config = ConfigSchema.parse(
+src/dashboard/server.ts:12:import { ConfigSchema } from "../shared/schema";
+src/dashboard/server.ts:15:const config = ConfigSchema.parse(
+src/io/get.ts:5:import { ConfigSchema, type DatabaseRegistry } from "../schemas";
+src/io/get.ts:12:const config = ConfigSchema.parse(
+src/io/websearch.ts:5:import { ConfigSchema } from "../schemas";
+src/io/websearch.ts:19:const config = ConfigSchema.parse(
+=== data path consumers ===
+src/preprocess/edinet.ts:17:const JQUANTS_DIR = config.paths.data;
+src/preprocess/screener.ts:9:const JQUANTS_DIR = config.paths.data;
+src/tasks/stats.ts:32:const CACHE_ROOT_DIR = resolve(config.paths.data, "..");
+src/tasks/stats.ts:60:const jquantsDir = config.paths.data;
+src/tasks/stats.ts:159:const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
+src/dashboard/server.ts:18:const CACHE_ROOT_DIR = resolve(config.paths.data, "..");
+src/io/sync_jquants.ts:56:await exportJquantsToCsv(db, config.paths.data);
+=== logs path consumers ===
+=== cache path consumers ===
+src/tasks/stats.ts:136:const cacheDir = config.paths.cache;
+src/tasks/stats.ts:159:const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
+src/commands/cache_set.ts:23:const dbPath = cachePaths(config.paths.cache).marketsJquants;
+src/commands/cache_get.ts:18:const dbPath = cachePaths(config.paths.cache).marketsJquants;
+src/commands/data_fetch.ts:23:const dbPath = cachePaths(config.paths.cache).marketsJquants;
+src/io/get.ts:25:const paths = cachePaths(config.paths.cache);
+src/io/websearch.ts:78:const db = await initWebSearchDb(cachePaths(config.paths.cache).webSearch);
+=== edinet path consumers ===
+src/preprocess/edinet.ts:16:const EDINET_DIR = config.paths.edinet;
+src/preprocess/text.ts:14:const OUTPUT_PATH = resolve(config.paths.edinet, "edinet_xbrl_text_map.json");
+src/tasks/stats.ts:102:const edinetDir = config.paths.edinet;
+src/tasks/stats.ts:159:const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
+=== cacheFundamentalEdinet consumers ===
+src/preprocess/text.ts:13:const EDINET_DB_PATH = config.paths.cacheFundamentalEdinet;
+src/tasks/stats.ts:106:const cacheDbPath = config.paths.cacheFundamentalEdinet;
 === stats task consumers ===
+src/tasks/stats.ts:137:const stats: CacheStatistics["sqlite"] = {
+src/tasks/stats.ts:178:const stats: CacheStatistics = {
+src/dashboard/server.ts:83:const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts"], {
+src/dashboard/server.ts:177:console.error("Failed to get stats:", error);
+src/dashboard/server.ts:197:function renderStatsCards(stats: CacheStatistics): string {
+Taskfile.yml:98:bench:edinet:stats:
 === stale refresh names ===
+src/tasks/stats.ts:209:`  ⚠️  最新2年データ:     取得予定中（task jquants:fetch:latest）`,
+src/dashboard/server.ts:339:// API: Refresh cache (trigger task get:all)
+src/dashboard/server.ts:344:const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
+Taskfile.yml:23:get:all:
+Taskfile.yml:26:jquants:fetch:latest:
 === DatabaseRegistry consumers ===
+src/schemas.ts:4:export interface DatabaseRegistry {
+src/io/sync_polymarket.ts:1:import type { DatabaseRegistry } from "../schemas";
+src/io/sync_polymarket.ts:6:export async function syncPolymarket(dbs: DatabaseRegistry) {
+src/io/sync_edinet.ts:1:import type { DatabaseRegistry } from "../schemas";
+src/io/sync_edinet.ts:4:export async function syncEdinet(dbs: DatabaseRegistry) {
+src/io/sync_edinet.ts:21:export async function syncEdinetXbrl(dbs: DatabaseRegistry) {
+src/io/get.ts:5:import { ConfigSchema, type DatabaseRegistry } from "../schemas";
+src/io/get.ts:26:const dbs: DatabaseRegistry = {
+src/io/sync_jquants.ts:4:import type { Config, DatabaseRegistry } from "../schemas";
+src/io/sync_jquants.ts:28:dbs: DatabaseRegistry,
+src/io/sync_macro.ts:1:import type { DatabaseRegistry } from "../schemas";
+src/io/sync_macro.ts:4:export async function syncMacro(dbs: DatabaseRegistry) {
