@@ -60,11 +60,12 @@ jobs:
         run: |
           python -m pip install jquants-api-client numpy pandas pyarrow pydantic
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - name: Acquire complete visible Free dataset scope
+      - name: Acquire full Free equity core
         run: |
-          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
+          rm -rf /tmp/jquants-free-core /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_jquants_free_collect.py \
-            --output-dir /tmp/jquants-free
+            --scope core \
+            --output-dir /tmp/jquants-free-core
       - name: Resolve bounded validation dates
         run: |
           python - <<'PY' >> "$GITHUB_ENV"
@@ -72,7 +73,7 @@ jobs:
           from pathlib import Path
           import pandas as pd
 
-          root = Path('/tmp/jquants-free')
+          root = Path('/tmp/jquants-free-core')
           manifest = json.loads((root / 'manifest.json').read_text())
           actual_end = pd.Timestamp(manifest['actual_date_range']['end'])
           test_end = actual_end
@@ -88,10 +89,10 @@ jobs:
           python - <<'PY'
           import pandas as pd
 
-          pd.read_parquet('/tmp/jquants-free/prices.parquet').to_csv(
+          pd.read_parquet('/tmp/jquants-free-core/prices.parquet').to_csv(
               '/tmp/alphazerobeta-japan/prices.csv', index=False
           )
-          pd.read_parquet('/tmp/jquants-free/benchmark.parquet').to_csv(
+          pd.read_parquet('/tmp/jquants-free-core/benchmark.parquet').to_csv(
               '/tmp/alphazerobeta-japan/benchmark.csv', index=False
           )
           PY
@@ -133,14 +134,14 @@ jobs:
             --ablation-weights /tmp/alphazerobeta-japan/ablation-fold0.weights.npz /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
             --output /tmp/alphazerobeta-japan/comparison.json \
             --transaction-cost-bps 15 --borrow-fee-bps 100
-      - name: Persist derived evidence only
+      - name: Persist core provenance and empirical evidence
         shell: bash
         run: |
           set -euo pipefail
           target=docs/research/results/alphazerobeta_jquants_free
           rm -rf "$target"
           mkdir -p "$target"
-          cp /tmp/jquants-free/manifest.json "$target/source-manifest.json"
+          cp /tmp/jquants-free-core/manifest.json "$target/source-core-manifest.json"
           cp /tmp/alphazerobeta-japan/panel.npz.manifest.json "$target/dataset-manifest.json"
           cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
@@ -150,21 +151,20 @@ jobs:
           from pathlib import Path
 
           root = Path('docs/research/results/alphazerobeta_jquants_free')
-          source = json.loads((root / 'source-manifest.json').read_text())
+          source = json.loads((root / 'source-core-manifest.json').read_text())
           dataset = json.loads((root / 'dataset-manifest.json').read_text())
           comparison = json.loads((root / 'comparison.json').read_text())
           payload = {
-              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v3',
-              'execution_status': 'completed',
-              'source': {
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v4',
+              'execution_status': 'empirical_validation_complete',
+              'free_scope_status': 'core_complete_metadata_pending',
+              'source_core': {
                   'source': source['source'],
                   'plan': source['plan'],
                   'actual_date_range': source['actual_date_range'],
                   'ticker_count': source['ticker_count'],
                   'price_rows': source['price_rows'],
-                  'financial_summary_rows': source['financial_summary_rows'],
-                  'earnings_date_rows': source['earnings_date_rows'],
-                  'earnings_calendar_rows': source['earnings_calendar_rows'],
+                  'trading_calendar_rows': source['trading_calendar_rows'],
                   'http_requests': source['http_requests'],
                   'retention': source['retention'],
               },
@@ -183,7 +183,7 @@ jobs:
               'verdict': comparison['verdict'],
               'benchmark': source['benchmark'],
               'claim_boundary': (
-                  'Complete J-Quants Free equity window used for PIT universe selection; '
+                  'Complete J-Quants Free equity core used for PIT universe selection; '
                   'top-64 liquid panel used for bounded AlphaZeroBeta CPU validation. '
                   'This is not the licensed-data paper experiment.'
               ),
@@ -196,10 +196,97 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$target"
-          if ! git diff --cached --quiet; then
-            git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
-            git push origin HEAD:research/alphazerobeta-jquants-free-validation-v2
-          fi
-      - name: Remove raw J-Quants data
+          git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
+          git push origin HEAD:research/alphazerobeta-jquants-free-validation-v2
+      - name: Remove raw J-Quants core
         if: always()
-        run: rm -rf /tmp/jquants-free
+        run: rm -rf /tmp/jquants-free-core
+
+  free-metadata-audit:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[snapshot]'))
+    needs: snapshot-and-validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: research/alphazerobeta-jquants-free-validation-v2
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require J-Quants credential
+        run: test -n "$JQUANTS_API_KEY"
+      - name: Install acquisition dependencies
+        run: python -m pip install jquants-api-client numpy pandas pyarrow
+      - name: Acquire all remaining Free metadata over every calendar date
+        run: |
+          rm -rf /tmp/jquants-free-metadata
+          python scripts/alphazerobeta_jquants_free_collect.py \
+            --scope metadata \
+            --output-dir /tmp/jquants-free-metadata
+      - name: Prove complete current Free-plan coverage
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=docs/research/results/alphazerobeta_jquants_free
+          cp /tmp/jquants-free-metadata/manifest.json "$target/source-metadata-manifest.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('docs/research/results/alphazerobeta_jquants_free')
+          core = json.loads((root / 'source-core-manifest.json').read_text())
+          metadata = json.loads((root / 'source-metadata-manifest.json').read_text())
+          summary = json.loads((root / 'summary.json').read_text())
+          official = set(core['official_free_datasets'])
+          collected = (
+              set(core['collected_datasets']) | set(metadata['collected_datasets'])
+          ) - {'benchmark'}
+          if collected != official:
+              raise AssertionError(
+                  f"Free-plan coverage mismatch: missing={sorted(official-collected)}, "
+                  f"unexpected={sorted(collected-official)}"
+              )
+          coverage = {
+              'schema_version': 'investor2.jquants-free-coverage.v1',
+              'status': 'complete',
+              'official_free_datasets': sorted(official),
+              'collected_datasets': sorted(collected),
+              'core_http_requests': core['http_requests'],
+              'metadata_http_requests': metadata['http_requests'],
+              'metadata_calendar_days_scanned': metadata['calendar_days_scanned'],
+              'financial_summary_rows': metadata['financial_summary_rows'],
+              'earnings_date_rows': metadata['earnings_date_rows'],
+              'earnings_calendar_rows': metadata['earnings_calendar_rows'],
+              'retention': metadata['retention'],
+          }
+          (root / 'free-scope-summary.json').write_text(
+              json.dumps(coverage, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
+          )
+          summary['free_scope_status'] = 'complete'
+          summary['source_metadata'] = {
+              'calendar_days_scanned': metadata['calendar_days_scanned'],
+              'financial_summary_rows': metadata['financial_summary_rows'],
+              'earnings_date_rows': metadata['earnings_date_rows'],
+              'earnings_calendar_rows': metadata['earnings_calendar_rows'],
+              'http_requests': metadata['http_requests'],
+          }
+          (root / 'summary.json').write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
+          )
+          print(json.dumps(coverage, ensure_ascii=False, sort_keys=True))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          git commit -m "research: persist complete J-Quants Free coverage evidence [evidence]"
+          git push origin HEAD:research/alphazerobeta-jquants-free-validation-v2
+      - name: Remove raw J-Quants metadata
+        if: always()
+        run: rm -rf /tmp/jquants-free-metadata
