@@ -4,10 +4,6 @@ on:
   push:
     branches:
       - research/alphazerobeta-jquants-free-validation
-    paths:
-      - scripts/alphazerobeta_jquants_free_collect.py
-      - scripts/alphazerobeta_japan_free_train.py
-      - .github/workflows/alphazerobeta-jquants-free-validation.yml
   workflow_dispatch:
 
 permissions:
@@ -18,11 +14,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install contract dependencies
+        run: python -m pip install ruff
+      - name: Verify changed Python entry points
+        run: |
+          ruff format --check \
+            scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_japan_free_train.py
+          ruff check \
+            scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_japan_free_train.py
+          python -m py_compile \
+            scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_japan_free_train.py
+
+  snapshot-and-validate:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[snapshot]'))
+    needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
       JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_REPO_ID: k4fka/investor2-jquants-free-cache
       PYTHONPATH: .
     steps:
       - uses: actions/checkout@v7
@@ -32,49 +55,76 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Require J-Quants credential
-        run: test -n "$JQUANTS_API_KEY"
-      - name: Install focused dependencies
+      - name: Require credentials
         run: |
-          python -m pip install jquants-api-client numpy pandas pyarrow pydantic ruff
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub numpy pandas pyarrow pydantic
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - name: Verify code contract
+      - name: Acquire complete visible Free equity window and upload private cache
         run: |
-          ruff format --check scripts/alphazerobeta_jquants_free_collect.py scripts/alphazerobeta_japan_free_train.py
-          ruff check scripts/alphazerobeta_jquants_free_collect.py scripts/alphazerobeta_japan_free_train.py
-          python -m py_compile scripts/alphazerobeta_jquants_free_collect.py scripts/alphazerobeta_japan_free_train.py
-      - name: Resolve current Free-plan visible window
-        shell: bash
+          rm -rf /tmp/jquants-free /tmp/hf-jquants /tmp/alphazerobeta-japan
+          python scripts/alphazerobeta_jquants_free_collect.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_REPO_ID"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/jquants-free/manifest.json').read_text())
+          Path('/tmp/snapshot_id').write_text(manifest['snapshot_id'])
+          print(json.dumps({
+              'snapshot_id': manifest['snapshot_id'],
+              'actual_date_range': manifest['actual_date_range'],
+              'ticker_count': manifest['ticker_count'],
+              'price_rows': manifest['price_rows'],
+              'request_count': manifest['request_count'],
+          }, sort_keys=True))
+          PY
+      - name: Delete acquisition copy and materialize from private Hugging Face cache
         run: |
-          python - <<'PY' >> "$GITHUB_ENV"
-          from datetime import UTC, datetime, timedelta
+          SNAPSHOT_ID="$(cat /tmp/snapshot_id)"
+          rm -rf /tmp/jquants-free
+          python - <<'PY'
+          import os
+          from huggingface_hub import snapshot_download
+          snapshot_id = open('/tmp/snapshot_id').read().strip()
+          snapshot_download(
+              repo_id=os.environ['HF_REPO_ID'],
+              repo_type='dataset',
+              token=os.environ['HF_TOKEN'],
+              local_dir='/tmp/hf-jquants',
+              allow_patterns=[f'snapshots/{snapshot_id}/**'],
+          )
+          PY
+          test -f "/tmp/hf-jquants/snapshots/$SNAPSHOT_ID/manifest.json"
+      - name: Resolve bounded validation dates from cached observations
+        run: |
+          SNAPSHOT_ID="$(cat /tmp/snapshot_id)"
+          ROOT="/tmp/hf-jquants/snapshots/$SNAPSHOT_ID"
+          ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
           import pandas as pd
-
-          today = pd.Timestamp(datetime.now(tz=UTC).date())
-          source_start = today - pd.DateOffset(years=2)
-          source_end = today - timedelta(days=84)
-          test_end = source_end + pd.offsets.MonthEnd(0)
-          test_start = (test_end + pd.Timedelta(days=1)) - pd.DateOffset(months=6)
-          universe_cutoff = test_start - pd.DateOffset(months=10)
-          print(f"SOURCE_START={source_start.date()}")
-          print(f"SOURCE_END={source_end.date()}")
+          root = Path(os.environ['ROOT'])
+          manifest = json.loads((root / 'manifest.json').read_text())
+          actual_end = pd.Timestamp(manifest['actual_date_range']['end'])
+          test_end = actual_end
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          print(f"SNAPSHOT_ROOT={root}")
           print(f"TEST_START={test_start.date()}")
           print(f"TEST_END={test_end.date()}")
           print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
           PY
-      - name: Collect all visible Free-plan Japan data ephemerally
-        run: |
-          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
-          python scripts/alphazerobeta_jquants_free_collect.py \
-            --output-dir /tmp/jquants-free \
-            --start "$SOURCE_START" \
-            --end "$SOURCE_END"
-      - name: Prepare PIT-safe top-64 liquid panel
+      - name: Prepare PIT-safe top-64 liquid panel from HF cache
         run: |
           mkdir -p /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_prepare.py \
-            --prices-csv /tmp/jquants-free/prices.csv \
-            --benchmark-csv /tmp/jquants-free/benchmark.csv \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
             --output /tmp/alphazerobeta-japan/panel.npz \
             --max-assets 64 \
             --universe-cutoff "$UNIVERSE_CUTOFF"
@@ -109,14 +159,14 @@ jobs:
             --ablation-weights /tmp/alphazerobeta-japan/ablation-fold0.weights.npz /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
             --output /tmp/alphazerobeta-japan/comparison.json \
             --transaction-cost-bps 15 --borrow-fee-bps 30
-      - name: Persist non-raw provenance and measured results
+      - name: Persist derived evidence only
         shell: bash
         run: |
           set -euo pipefail
           target=docs/research/results/alphazerobeta_jquants_free
           rm -rf "$target"
           mkdir -p "$target"
-          cp /tmp/jquants-free/manifest.json "$target/source-manifest.json"
+          cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
           cp /tmp/alphazerobeta-japan/panel.npz.manifest.json "$target/dataset-manifest.json"
           cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
@@ -124,35 +174,40 @@ jobs:
           python - <<'PY'
           import json
           from pathlib import Path
-
-          root = Path("docs/research/results/alphazerobeta_jquants_free")
-          source = json.loads((root / "source-manifest.json").read_text())
-          dataset = json.loads((root / "dataset-manifest.json").read_text())
-          comparison = json.loads((root / "comparison.json").read_text())
+          root = Path('docs/research/results/alphazerobeta_jquants_free')
+          source = json.loads((root / 'source-manifest.json').read_text())
+          dataset = json.loads((root / 'dataset-manifest.json').read_text())
+          comparison = json.loads((root / 'comparison.json').read_text())
           payload = {
-              "schema_version": "investor2.alphazerobeta-jquants-free-validation.v1",
-              "execution_status": "completed",
-              "source": source,
-              "trained_asset_count": len(dataset["selected_codes"]),
-              "selected_codes": dataset["selected_codes"],
-              "walk_forward": {"train_months": 8, "validation_months": 2, "test_months": 3, "folds": 2},
-              "primary_lambda_corr_0_5": comparison["primary_lambda_corr_0_5"],
-              "ablation_lambda_corr_0": comparison["ablation_lambda_corr_0"],
-              "gates": comparison["gates"],
-              "verdict": comparison["verdict"],
-              "claim_boundary": "J-Quants Free Japanese surrogate with paper model/reward semantics; not the licensed-data paper experiment.",
-              "raw_retention": "none; raw J-Quants records were deleted after validation and were not committed or uploaded",
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v2',
+              'execution_status': 'completed',
+              'source': {
+                  'source': source['source'],
+                  'plan': source['plan'],
+                  'actual_date_range': source['actual_date_range'],
+                  'ticker_count': source['ticker_count'],
+                  'price_rows': source['price_rows'],
+                  'hf_repo_id': source['hf_repo_id'],
+                  'hf_path': source['hf_path'],
+                  'visibility': 'private',
+              },
+              'trained_asset_count': len(dataset['selected_codes']),
+              'selected_codes': dataset['selected_codes'],
+              'walk_forward': {'train_months': 12, 'validation_months': 3, 'test_months': 3, 'folds': 2},
+              'primary_lambda_corr_0_5': comparison['primary_lambda_corr_0_5'],
+              'ablation_lambda_corr_0': comparison['ablation_lambda_corr_0'],
+              'gates': comparison['gates'],
+              'verdict': comparison['verdict'],
+              'benchmark': '13060 NEXT FUNDS TOPIX ETF proxy; not exact TOPIX',
+              'claim_boundary': 'J-Quants Free Japanese surrogate with paper model/reward semantics; not the licensed-data paper experiment.',
           }
-          (root / "summary.json").write_text(json.dumps(payload, ensure_ascii=False, indent=2) + "\n")
-          print(json.dumps(payload, ensure_ascii=False))
+          (root / 'summary.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
+          print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$target"
           if ! git diff --cached --quiet; then
-            git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence"
+            git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
             git push origin HEAD:research/alphazerobeta-jquants-free-validation
           fi
-      - name: Remove raw J-Quants staging data
-        if: always()
-        run: rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
