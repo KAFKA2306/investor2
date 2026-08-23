@@ -19,7 +19,11 @@ from scripts.alphazerobeta_build_market_snapshot import (
     parse_args,
     screen_with_retry,
 )
-from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
+from scripts.alphazerobeta_prepare import (
+    normalize_benchmark_frame,
+    normalize_price_frame,
+    parse_args as parse_prepare_args,
+)
 from src.research.market_snapshot import (
     MarketSnapshot,
     load_benchmark,
@@ -43,6 +47,26 @@ def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.Monk
     assert args.storage_prefix.endswith("/yahoo-market-cache/jp-v1")
     assert args.max_request_attempts == DEFAULT_MAX_REQUEST_ATTEMPTS
     assert args.retry_base_seconds == DEFAULT_RETRY_BASE_SECONDS
+
+
+def test_prepare_defaults_materialized_cache_to_japan(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "alphazerobeta_prepare.py",
+            "--market-snapshot-dir",
+            "cache/snapshot",
+            "--output",
+            "cache/prepared.npz",
+            "--universe-cutoff",
+            "2023-06-30",
+        ],
+    )
+
+    args = parse_prepare_args()
+
+    assert args.market_regions == "jp"
 
 
 def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
