@@ -14,6 +14,7 @@ import pandas as pd
 import yfinance as yf
 from yfinance import EquityQuery
 
+DEFAULT_STORAGE_PREFIX = "central/investor2/private/yahoo-market-cache/jp-v1"
 ALL_REGIONS = (
     "ae",
     "ar",
@@ -81,8 +82,9 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot locally.")
     parser.add_argument("--start", default="2004-01-01")
     parser.add_argument("--end", default="2025-01-01", help="Exclusive end date")
-    parser.add_argument("--regions", default="all", help="Comma-separated Yahoo regions or 'all'")
-    parser.add_argument("--benchmark", default="SPY")
+    parser.add_argument("--regions", default="jp", help="Comma-separated Yahoo regions or 'all'")
+    parser.add_argument("--benchmark", default="1306.T", help="Broad Japan benchmark proxy; default is TOPIX ETF")
+    parser.add_argument("--storage-prefix", default=DEFAULT_STORAGE_PREFIX)
     parser.add_argument("--page-size", type=int, default=250)
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--request-pause", type=float, default=0.25)
@@ -309,7 +311,7 @@ def main() -> None:
         "storage_contract": {
             "writer_repository": "KAFKA2306/semiconductor-earnings-model",
             "bucket": "k4fka/kafka-data-lake",
-            "prefix": "central/investor2/private/yahoo-market-cache/v1",
+            "prefix": args.storage_prefix,
             "consumer_repository_authentication": False,
         },
     }
