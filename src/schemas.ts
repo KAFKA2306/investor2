@@ -9,84 +9,63 @@ export interface DatabaseRegistry {
   fundamentalEdinet: Database;
   macroEstat: Database;
   macroFred: Database;
-  [key: string]: Database;
 }
 
-export const ConfigSchema = z.object({
-  project: z.object({ name: z.string() }),
-  paths: z
-    .object({
-      data: z.string(),
-      logs: z.string(),
-      verification: z.string(),
-      cache: z.string(),
-      edinet: z.string(),
-      preprocessed: z.string(),
-      cacheWebSearch: z.string().optional(),
-      cacheFundamentalEdinet: z.string(),
-      cacheMarketsPolymarket: z.string(),
-      cacheMarketsJquants: z.string(),
-      cacheMarketsYahoo: z.string(),
-      cacheFundamentalJquants: z.string(),
-      cacheMacroEstat: z.string(),
-      cacheMacroFred: z.string().optional(),
-      macroFred: z.string().optional(),
-      cacheMarketSqlite: z.string().optional(),
-      marketdataPricesCsv: z.string().optional(),
-      marketdataFinCsv: z.string().optional(),
-      marketdataListCsv: z.string().optional(),
-      marketdataLabelsCsv: z.string().optional(),
-      cacheBacktestResults: z.string().optional(),
-    })
-    .passthrough(),
-  polymarket: z.object({ clob_url: z.string() }),
-  providers: z
-    .object({
-      tavily: z.object({ maxResults: z.number() }),
-    })
-    .optional(),
-  sector_spillover: z
-    .object({
-      us_sectors: z.array(z.string()),
-      jp_sectors: z.array(z.string()),
-      pca: z.object({
-        n_components: z.number(),
-        regularization_alpha: z.number(),
-        max_iterations: z.number(),
-      }),
-      signal: z.object({
-        long_threshold: z.number(),
-        short_threshold: z.number(),
-        neutral_threshold: z.number(),
-      }),
-      backtest: z.object({
-        initial_capital: z.number(),
-        long_size: z.number(),
-        short_size: z.number(),
-        rebalance_frequency: z.string(),
-        transaction_cost_bps: z.number(),
-        data_cache_dir: z.string(),
-      }),
-    })
-    .optional(),
-  integrations: z
-    .object({
-      discord: z.object({
-        enabled: z.boolean(),
-        tokenEnv: z.string(),
-        webhookUrlEnv: z.string(),
-        commandPrefix: z.string(),
-        maxMessageLength: z.number(),
-      }),
-      slack: z
-        .object({ enabled: z.boolean(), tokenEnv: z.string() })
-        .optional(),
-      line: z
-        .object({ enabled: z.boolean(), channelAccessTokenEnv: z.string() })
-        .optional(),
-    })
-    .optional(),
-});
+export const ConfigSchema = z
+  .object({
+    paths: z
+      .object({
+        data: z.string(),
+        logs: z.string(),
+        cache: z.string(),
+        edinet: z.string(),
+        cacheFundamentalEdinet: z.string(),
+        cacheBacktestResults: z.string(),
+      })
+      .strict(),
+    sector_spillover: z
+      .object({
+        us_sectors: z.array(z.string()),
+        jp_sectors: z.array(z.string()),
+        pca: z.object({
+          n_components: z.number(),
+          regularization_alpha: z.number(),
+          max_iterations: z.number(),
+        }),
+        signal: z.object({
+          long_threshold: z.number(),
+          short_threshold: z.number(),
+          neutral_threshold: z.number(),
+        }),
+        backtest: z.object({
+          initial_capital: z.number(),
+          long_size: z.number(),
+          short_size: z.number(),
+          rebalance_frequency: z.string(),
+          transaction_cost_bps: z.number(),
+          data_cache_dir: z.string(),
+        }),
+      })
+      .optional(),
+    integrations: z
+      .object({
+        discord: z.object({
+          enabled: z.boolean(),
+          tokenEnv: z.string(),
+          webhookUrlEnv: z.string(),
+          commandPrefix: z.string(),
+          maxMessageLength: z.number(),
+        }),
+        slack: z
+          .object({ enabled: z.boolean(), tokenEnv: z.string() })
+          .optional(),
+        line: z
+          .object({ enabled: z.boolean(), channelAccessTokenEnv: z.string() })
+          .optional(),
+      })
+      .optional(),
+  })
+  .strict();
 
 export type Config = z.infer<typeof ConfigSchema>;
 
