@@ -1,10 +1,11 @@
 import { existsSync, statSync } from "node:fs";
 import { resolve } from "node:path";
+import { cachePaths } from "../io/cache_paths";
 import { config } from "./_config";
 
 interface Check {
-	name: string;
-	status: boolean;
+  name: string;
+  status: boolean;
 }
 
 const checks: Check[] = [];
@@ -12,7 +13,7 @@ const checks: Check[] = [];
 const pathsOk = existsSync(config.paths.data) && existsSync(config.paths.cache);
 checks.push({ name: "PathRegistry", status: pathsOk });
 
-const sqlitePath = config.paths.cacheMarketsJquants;
+const sqlitePath = cachePaths(config.paths.cache).marketsJquants;
 const sqliteOk = existsSync(sqlitePath) && statSync(sqlitePath).size > 0;
 checks.push({ name: "CacheSqlite", status: sqliteOk });
 
