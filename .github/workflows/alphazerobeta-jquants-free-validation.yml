@@ -30,14 +30,20 @@ jobs:
           ruff format --check \
             scripts/alphazerobeta_jquants_free_collect.py \
             scripts/alphazerobeta_jquants_cache_materialize.py \
+            scripts/alphazerobeta_jquants_pit_master.py \
+            scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
           ruff check \
             scripts/alphazerobeta_jquants_free_collect.py \
             scripts/alphazerobeta_jquants_cache_materialize.py \
+            scripts/alphazerobeta_jquants_pit_master.py \
+            scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
           python -m py_compile \
             scripts/alphazerobeta_jquants_free_collect.py \
             scripts/alphazerobeta_jquants_cache_materialize.py \
+            scripts/alphazerobeta_jquants_pit_master.py \
+            scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
 
   snapshot-and-validate:
@@ -74,7 +80,8 @@ jobs:
           rm -rf /tmp/jquants-free /tmp/hf-jquants /tmp/jquants-materialized /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_jquants_free_collect.py \
             --output-dir /tmp/jquants-free \
-            --hf-repo-id "$HF_REPO_ID"
+            --hf-repo-id "$HF_REPO_ID" \
+            --request-interval 15
           python - <<'PY'
           import json
           from pathlib import Path
@@ -112,7 +119,7 @@ jobs:
             --output-dir /tmp/jquants-materialized
           test -f /tmp/jquants-materialized/manifest.json
           test -f /tmp/jquants-materialized/benchmark.parquet
-      - name: Resolve bounded validation dates from cached observations
+      - name: Resolve bounded validation dates and PIT master date
         run: |
           ROOT=/tmp/jquants-materialized
           ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
@@ -126,15 +133,30 @@ jobs:
           test_end = actual_end
           test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
           universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / 'benchmark.parquet')
+          benchmark_dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
+          eligible = benchmark_dates[benchmark_dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit('no benchmark date on/before universe cutoff')
+          universe_master_date = eligible.max()
           print(f"SNAPSHOT_ROOT={root}")
           print(f"TEST_START={test_start.date()}")
           print(f"TEST_END={test_end.date()}")
           print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={universe_master_date.date()}")
           PY
-      - name: Prepare pre-cutoff top-64 liquid panel from materialized cache
+      - name: Materialize cutoff-date J-Quants master from encrypted HF cache
+        run: |
+          SNAPSHOT_ID="$(cat /tmp/snapshot_id)"
+          python scripts/alphazerobeta_jquants_pit_master.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --hf-repo-id "$HF_REPO_ID" \
+            --snapshot-id "$SNAPSHOT_ID" \
+            --output "$SNAPSHOT_ROOT/universe.parquet"
+      - name: Prepare PIT common-stock top-64 panel from materialized cache
         run: |
           mkdir -p /tmp/alphazerobeta-japan
-          python scripts/alphazerobeta_prepare.py \
+          python scripts/alphazerobeta_japan_free_prepare.py \
             --market-snapshot-dir "$SNAPSHOT_ROOT" \
             --market-regions jp \
             --output /tmp/alphazerobeta-japan/panel.npz \
@@ -191,7 +213,7 @@ jobs:
           dataset = json.loads((root / 'dataset-manifest.json').read_text())
           comparison = json.loads((root / 'comparison.json').read_text())
           payload = {
-              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v3',
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v4',
               'execution_status': 'completed',
               'source': {
                   'source': source['source'],
@@ -206,6 +228,13 @@ jobs:
                   'encrypted_at_rest': True,
                   'plaintext_raw_data_on_hf': source['encryption']['plaintext_raw_data_on_hf'],
               },
+              'universe_contract': {
+                  'master_dates': dataset.get('universe_master_dates'),
+                  'filter': dataset.get('universe_filter'),
+                  'master_rows': dataset.get('universe_master_rows'),
+                  'allowed_common_stock_codes': dataset.get('allowed_common_stock_codes'),
+                  'universe_cutoff': dataset['universe_cutoff'],
+              },
               'trained_asset_count': len(dataset['selected_codes']),
               'selected_codes': dataset['selected_codes'],
               'walk_forward': {'train_months': 12, 'validation_months': 3, 'test_months': 3, 'folds': 2},
@@ -213,8 +242,8 @@ jobs:
               'ablation_lambda_corr_0': comparison['ablation_lambda_corr_0'],
               'gates': comparison['gates'],
               'verdict': comparison['verdict'],
-              'benchmark': '13060 NEXT FUNDS TOPIX ETF proxy; not exact TOPIX',
-              'claim_boundary': 'J-Quants Free Japanese surrogate with paper model/reward semantics; not the licensed-data paper experiment.',
+              'benchmark': '13060 NEXT FUNDS TOPIX ETF proxy; not exact TOPIX and excluded from the investable universe',
+              'claim_boundary': 'J-Quants Free Japanese common-stock surrogate with paper model/reward semantics; not the licensed-data paper experiment.',
           }
           (root / 'summary.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
           print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
