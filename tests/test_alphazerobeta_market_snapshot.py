@@ -5,13 +5,14 @@ import sys
 from pathlib import Path
 
 import pandas as pd
+import pytest
 
 from scripts.alphazerobeta_build_market_snapshot import DEFAULT_STORAGE_PREFIX, normalize_download, parse_args
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
 from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_manifest, load_prices, load_universe
 
 
-def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch) -> None:
+def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", ["alphazerobeta_build_market_snapshot.py"])
 
     args = parse_args()
