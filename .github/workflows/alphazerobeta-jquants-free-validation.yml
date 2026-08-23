@@ -13,7 +13,7 @@ permissions:
 
 concurrency:
   group: alphazerobeta-jquants-free-validation-${{ github.event_name }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   contract:
@@ -29,12 +29,15 @@ jobs:
         run: |
           ruff format --check \
             scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_jquants_cache_materialize.py \
             scripts/alphazerobeta_japan_free_train.py
           ruff check \
             scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_jquants_cache_materialize.py \
             scripts/alphazerobeta_japan_free_train.py
           python -m py_compile \
             scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_jquants_cache_materialize.py \
             scripts/alphazerobeta_japan_free_train.py
 
   snapshot-and-validate:
@@ -64,11 +67,11 @@ jobs:
           test -n "$HF_TOKEN"
       - name: Install execution dependencies
         run: |
-          python -m pip install jquants-api-client huggingface-hub numpy pandas pyarrow pydantic
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - name: Acquire complete visible Free equity window and upload private cache
+      - name: Acquire complete visible Free equity window into encrypted private cache
         run: |
-          rm -rf /tmp/jquants-free /tmp/hf-jquants /tmp/alphazerobeta-japan
+          rm -rf /tmp/jquants-free /tmp/hf-jquants /tmp/jquants-materialized /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_jquants_free_collect.py \
             --output-dir /tmp/jquants-free \
             --hf-repo-id "$HF_REPO_ID"
@@ -82,10 +85,13 @@ jobs:
               'actual_date_range': manifest['actual_date_range'],
               'ticker_count': manifest['ticker_count'],
               'price_rows': manifest['price_rows'],
-              'request_count': manifest['request_count'],
+              'request_count_current_run': manifest['request_count_current_run'],
+              'resumed_months': manifest['resumed_months'],
+              'fetched_months': manifest['fetched_months'],
+              'hf_plaintext_raw_data': manifest['encryption']['plaintext_raw_data_on_hf'],
           }, sort_keys=True))
           PY
-      - name: Delete acquisition copy and materialize from private Hugging Face cache
+      - name: Delete acquisition copy and materialize only from encrypted Hugging Face cache
         run: |
           SNAPSHOT_ID="$(cat /tmp/snapshot_id)"
           rm -rf /tmp/jquants-free
@@ -101,11 +107,14 @@ jobs:
               allow_patterns=[f'snapshots/{snapshot_id}/**'],
           )
           PY
-          test -f "/tmp/hf-jquants/snapshots/$SNAPSHOT_ID/manifest.json"
+          python scripts/alphazerobeta_jquants_cache_materialize.py \
+            --source-dir "/tmp/hf-jquants/snapshots/$SNAPSHOT_ID" \
+            --output-dir /tmp/jquants-materialized
+          test -f /tmp/jquants-materialized/manifest.json
+          test -f /tmp/jquants-materialized/benchmark.parquet
       - name: Resolve bounded validation dates from cached observations
         run: |
-          SNAPSHOT_ID="$(cat /tmp/snapshot_id)"
-          ROOT="/tmp/hf-jquants/snapshots/$SNAPSHOT_ID"
+          ROOT=/tmp/jquants-materialized
           ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
           import json
           import os
@@ -122,7 +131,7 @@ jobs:
           print(f"TEST_END={test_end.date()}")
           print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
           PY
-      - name: Prepare PIT-safe top-64 liquid panel from HF cache
+      - name: Prepare pre-cutoff top-64 liquid panel from materialized cache
         run: |
           mkdir -p /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_prepare.py \
@@ -182,7 +191,7 @@ jobs:
           dataset = json.loads((root / 'dataset-manifest.json').read_text())
           comparison = json.loads((root / 'comparison.json').read_text())
           payload = {
-              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v2',
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v3',
               'execution_status': 'completed',
               'source': {
                   'source': source['source'],
@@ -190,9 +199,12 @@ jobs:
                   'actual_date_range': source['actual_date_range'],
                   'ticker_count': source['ticker_count'],
                   'price_rows': source['price_rows'],
+                  'observed_market_days': source['observed_market_days'],
                   'hf_repo_id': source['hf_repo_id'],
                   'hf_path': source['hf_path'],
                   'visibility': 'private',
+                  'encrypted_at_rest': True,
+                  'plaintext_raw_data_on_hf': source['encryption']['plaintext_raw_data_on_hf'],
               },
               'trained_asset_count': len(dataset['selected_codes']),
               'selected_codes': dataset['selected_codes'],
@@ -214,3 +226,4 @@ jobs:
             git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
             git push origin HEAD:research/alphazerobeta-jquants-free-validation
           fi
+          rm -rf /tmp/jquants-materialized /tmp/hf-jquants /tmp/alphazerobeta-japan
