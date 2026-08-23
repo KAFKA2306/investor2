@@ -75,7 +75,9 @@ def _artifact_id(relative_path: str) -> str:
     return hashlib.sha256(relative_path.encode("utf-8")).hexdigest()[:16]
 
 
-def _source_urls(repository: str, revision: str, relative_path: str) -> tuple[str, str]:
+def _source_urls(
+    repository: str, revision: str, relative_path: str
+) -> tuple[str, str]:
     encoded_path = quote(relative_path, safe="/")
     source_url = f"https://github.com/{repository}/blob/{revision}/{encoded_path}"
     raw_url = f"https://raw.githubusercontent.com/{repository}/{revision}/{encoded_path}"
