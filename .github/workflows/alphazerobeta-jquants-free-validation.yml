@@ -46,7 +46,6 @@ jobs:
   snapshot-and-validate:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository && github.actor != 'github-actions[bot]') ||
       (github.event_name == 'push' && github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, '[snapshot]'))
     needs: contract
     runs-on: ubuntu-latest
