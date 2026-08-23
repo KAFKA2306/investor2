@@ -48,7 +48,9 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install focused dependencies
-        run: python -m pip install pandas pyarrow huggingface-hub yfinance pytest ruff
+        run: |
+          python -m pip install pandas pyarrow huggingface-hub yfinance pytest ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
       - name: Verify cache contract
         env:
           PYTHONPATH: .
