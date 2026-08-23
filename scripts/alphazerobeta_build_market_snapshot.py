@@ -3,8 +3,11 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import importlib.metadata
+import importlib.util
 import json
 import shutil
+import sys
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -81,6 +84,44 @@ ALL_REGIONS = (
 )
 
 
+def log_event(event: str, **fields: object) -> None:
+    payload: dict[str, object] = {
+        "ts_utc": datetime.now(UTC).isoformat(),
+        "component": "alphazerobeta_yahoo_market_snapshot",
+        "event": event,
+        **fields,
+    }
+    print(json.dumps(payload, ensure_ascii=False, sort_keys=True, default=str), flush=True)
+
+
+def package_version(name: str) -> str | None:
+    try:
+        return importlib.metadata.version(name)
+    except importlib.metadata.PackageNotFoundError:
+        return None
+
+
+def require_repair_runtime() -> None:
+    scipy_available = importlib.util.find_spec("scipy") is not None
+    log_event(
+        "dependency_preflight",
+        python=sys.version.split()[0],
+        pandas=package_version("pandas"),
+        pyarrow=package_version("pyarrow"),
+        yfinance=package_version("yfinance"),
+        scipy=package_version("scipy"),
+        scipy_available=scipy_available,
+        yfinance_repair=True,
+    )
+    if not scipy_available:
+        log_event(
+            "dependency_preflight_failed",
+            missing_dependency="scipy",
+            reason="yfinance repair=True requires SciPy at runtime",
+        )
+        raise RuntimeError("missing runtime dependency: scipy is required by yfinance download(repair=True)")
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot locally.")
     parser.add_argument("--start", default="2004-01-01")
@@ -133,29 +174,52 @@ def screen_with_retry(
     if max_attempts < 1:
         raise ValueError("max_attempts must be >= 1")
     for attempt in range(1, max_attempts + 1):
+        started = time.monotonic()
         try:
             response = yf.screen(query, offset=offset, size=page_size, sortField="ticker", sortAsc=True)
             if not isinstance(response, dict):
                 raise AssertionError(f"unexpected yfinance screen response for region={region}")
+            log_event(
+                "universe_page_success",
+                region=region,
+                offset=offset,
+                page_size=page_size,
+                attempt=attempt,
+                quote_count=len(_quotes(response)),
+                elapsed_seconds=round(time.monotonic() - started, 3),
+            )
             return response
-        except YFRateLimitError:
+        except YFRateLimitError as exc:
             if attempt == max_attempts:
+                log_event(
+                    "universe_page_failed",
+                    region=region,
+                    offset=offset,
+                    attempt=attempt,
+                    exception_type=type(exc).__name__,
+                    exception=str(exc),
+                )
                 raise
             delay = retry_base_seconds * (2 ** (attempt - 1))
-            print(
-                json.dumps(
-                    {
-                        "event": "yahoo_rate_limit_retry",
-                        "region": region,
-                        "offset": offset,
-                        "attempt": attempt,
-                        "max_attempts": max_attempts,
-                        "sleep_seconds": delay,
-                    }
-                ),
-                flush=True,
+            log_event(
+                "yahoo_rate_limit_retry",
+                region=region,
+                offset=offset,
+                attempt=attempt,
+                max_attempts=max_attempts,
+                sleep_seconds=delay,
             )
             time.sleep(delay)
+        except Exception as exc:
+            log_event(
+                "universe_page_failed",
+                region=region,
+                offset=offset,
+                attempt=attempt,
+                exception_type=type(exc).__name__,
+                exception=str(exc),
+            )
+            raise
     raise AssertionError("unreachable")
 
 
@@ -171,6 +235,7 @@ def discover_region(
     seen: set[str] = set()
     offset = 0
     query = EquityQuery("eq", ["region", region])
+    log_event("universe_region_start", region=region, page_size=page_size)
     while True:
         response = screen_with_retry(
             query,
@@ -204,6 +269,7 @@ def discover_region(
         if not page or new_count == 0 or len(page) < page_size or (isinstance(total, int) and offset >= total):
             break
         time.sleep(pause)
+    log_event("universe_region_complete", region=region, ticker_count=len(rows))
     return pd.DataFrame(rows)
 
 
@@ -224,17 +290,19 @@ def discover_universe(
             max_attempts=max_attempts,
             retry_base_seconds=retry_base_seconds,
         )
-        print(json.dumps({"region": region, "tickers": len(frame)}), flush=True)
+        log_event("universe_region_result", region=region, tickers=len(frame))
         if not frame.empty:
             frames.append(frame)
     if not frames:
         raise AssertionError("yfinance discovery returned no equities")
     universe = pd.concat(frames, ignore_index=True)
-    return (
+    result = (
         universe.drop_duplicates(["Region", "Ticker"], keep="first")
         .sort_values(["Region", "Ticker"])
         .reset_index(drop=True)
     )
+    log_event("universe_complete", regions=regions, ticker_count=len(result))
+    return result
 
 
 def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
@@ -267,22 +335,53 @@ def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
     return result.sort_values(["Ticker", "Date"]).reset_index(drop=True)
 
 
-def download_prices(tickers: list[str], *, start: str, end: str) -> pd.DataFrame:
-    raw = yf.download(
-        tickers,
+def download_prices(tickers: list[str], *, start: str, end: str, context: str) -> pd.DataFrame:
+    started = time.monotonic()
+    log_event(
+        "price_download_start",
+        context=context,
+        ticker_count=len(tickers),
+        ticker_sample=tickers[:5],
         start=start,
         end=end,
-        interval="1d",
-        auto_adjust=False,
-        actions=True,
         repair=True,
-        keepna=False,
-        group_by="ticker",
-        threads=True,
-        progress=False,
-        timeout=30,
     )
-    return pd.DataFrame() if raw is None else normalize_download(raw, tickers)
+    try:
+        raw = yf.download(
+            tickers,
+            start=start,
+            end=end,
+            interval="1d",
+            auto_adjust=False,
+            actions=True,
+            repair=True,
+            keepna=False,
+            group_by="ticker",
+            threads=True,
+            progress=False,
+            timeout=30,
+        )
+        frame = pd.DataFrame() if raw is None else normalize_download(raw, tickers)
+    except Exception as exc:
+        log_event(
+            "price_download_exception",
+            context=context,
+            ticker_count=len(tickers),
+            exception_type=type(exc).__name__,
+            exception=str(exc),
+            elapsed_seconds=round(time.monotonic() - started, 3),
+        )
+        raise
+    returned_tickers = int(frame["Ticker"].nunique()) if not frame.empty and "Ticker" in frame.columns else 0
+    log_event(
+        "price_download_complete" if not frame.empty else "price_download_empty",
+        context=context,
+        requested_tickers=len(tickers),
+        returned_tickers=returned_tickers,
+        rows=len(frame),
+        elapsed_seconds=round(time.monotonic() - started, 3),
+    )
+    return frame
 
 
 def write_region_prices(
@@ -300,20 +399,34 @@ def write_region_prices(
         region_dir = root / "prices" / str(region)
         region_dir.mkdir(parents=True, exist_ok=True)
         rows = 0
+        nonempty_batches = 0
+        log_event("price_region_start", region=str(region), ticker_count=len(tickers), batch_size=batch_size)
         for index in range(0, len(tickers), batch_size):
+            batch_number = index // batch_size
             batch = tickers[index : index + batch_size]
-            frame = download_prices(batch, start=start, end=end)
+            frame = download_prices(batch, start=start, end=end, context=f"region={region},batch={batch_number}")
             if not frame.empty:
-                frame.to_parquet(
-                    region_dir / f"part-{index // batch_size:05d}.parquet", index=False, compression="zstd"
-                )
+                frame.to_parquet(region_dir / f"part-{batch_number:05d}.parquet", index=False, compression="zstd")
                 rows += len(frame)
-            print(
-                json.dumps({"region": region, "batch": index // batch_size, "tickers": len(batch), "rows": len(frame)}),
-                flush=True,
+                nonempty_batches += 1
+            log_event(
+                "price_batch_result",
+                region=str(region),
+                batch=batch_number,
+                requested_tickers=len(batch),
+                returned_tickers=int(frame["Ticker"].nunique()) if not frame.empty else 0,
+                rows=len(frame),
+                cumulative_rows=rows,
             )
             time.sleep(pause)
         counts[str(region)] = rows
+        log_event(
+            "price_region_complete",
+            region=str(region),
+            ticker_count=len(tickers),
+            rows=rows,
+            nonempty_batches=nonempty_batches,
+        )
     return counts
 
 
@@ -343,6 +456,17 @@ def main() -> None:
     if unknown:
         raise ValueError(f"unsupported Yahoo regions: {unknown}")
     root = args.output_dir
+    log_event(
+        "snapshot_start",
+        regions=regions,
+        start=args.start,
+        end=args.end,
+        benchmark=args.benchmark,
+        batch_size=args.batch_size,
+        output_dir=str(root),
+        storage_prefix=args.storage_prefix,
+    )
+    require_repair_runtime()
     prepare_output(root, overwrite=args.overwrite)
 
     universe = discover_universe(
@@ -361,8 +485,10 @@ def main() -> None:
         batch_size=args.batch_size,
         pause=args.request_pause,
     )
-    benchmark = download_prices([args.benchmark], start=args.start, end=args.end)
+    log_event("benchmark_download_start", benchmark=args.benchmark)
+    benchmark = download_prices([args.benchmark], start=args.start, end=args.end, context="benchmark")
     if benchmark.empty:
+        log_event("benchmark_download_failed", benchmark=args.benchmark, reason="empty_frame")
         raise AssertionError(f"benchmark download failed: {args.benchmark}")
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
     files = file_manifest(root)
@@ -392,7 +518,13 @@ def main() -> None:
     (root / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    print(json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(files)}))
+    log_event(
+        "snapshot_complete",
+        output_dir=str(root),
+        ticker_count=manifest["ticker_count"],
+        price_rows_by_region=row_counts,
+        files=len(files),
+    )
 
 
 if __name__ == "__main__":
