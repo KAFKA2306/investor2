@@ -9,8 +9,8 @@ import pandas as pd
 from scripts import alphazerobeta_train as trainer
 from src.research.alphazerobeta import WalkForwardFold, make_walk_forward_folds as canonical_folds
 
-TRAIN_MONTHS = 12
-VALIDATION_MONTHS = 3
+TRAIN_MONTHS = 8
+VALIDATION_MONTHS = 2
 TEST_MONTHS = 3
 
 
@@ -31,8 +31,9 @@ def japan_free_folds(
 
 
 def main() -> None:
-    # Keep the canonical trainer/reward/model implementation unchanged; only the
-    # walk-forward horizon is shortened to fit J-Quants Free's observable window.
+    # Keep the canonical trainer/reward/model implementation unchanged. The
+    # shortened fold leaves enough pre-fold history for 60-day features and the
+    # 100-step observation window inside J-Quants Free's delayed two-year window.
     trainer.make_walk_forward_folds = japan_free_folds
     trainer.main()
 
