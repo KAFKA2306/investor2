@@ -13,10 +13,12 @@ from pathlib import Path
 from typing import Any
 
 import pandas as pd
+import requests
 
 FREE_HISTORY_YEARS = 2
 FREE_DELAY_WEEKS = 12
 REQUEST_INTERVAL_SECONDS = 12.5
+MAX_HTTP_ATTEMPTS = 5
 BENCHMARK_CODE = "13060"
 
 
@@ -35,7 +37,7 @@ def parse_args() -> argparse.Namespace:
 
 
 def resolve_window(as_of: str) -> tuple[pd.Timestamp, pd.Timestamp]:
-    visible_end = pd.Timestamp(as_of).normalize() - pd.Timedelta(weeks=FREE_DELAY_WEEKS)
+    visible_end = pd.Timestamp(as_of).normalize() - pd.Timedelta(days=FREE_DELAY_WEEKS * 7)
     visible_start = visible_end - pd.DateOffset(years=FREE_HISTORY_YEARS)
     return visible_start, visible_end
 
@@ -126,15 +128,70 @@ def make_rate_limited_client(api_key: str, request_interval: float) -> Any:
             params: dict[str, Any] | None = None,
         ):
             with self._request_lock:
-                elapsed = time.monotonic() - self._last_request
-                if elapsed < request_interval:
-                    time.sleep(request_interval - elapsed)
-                response = super()._get(url, params=params)
-                self._last_request = time.monotonic()
-                self.request_count += 1
-                return response
+                for attempt in range(1, MAX_HTTP_ATTEMPTS + 1):
+                    elapsed = time.monotonic() - self._last_request
+                    if elapsed < request_interval:
+                        time.sleep(request_interval - elapsed)
+                    self.request_count += 1
+                    try:
+                        response = super()._get(url, params=params)
+                    except requests.HTTPError as exc:
+                        self._last_request = time.monotonic()
+                        status = exc.response.status_code if exc.response is not None else None
+                        retryable = status == 429 or (status is not None and 500 <= status < 600)
+                        if not retryable or attempt == MAX_HTTP_ATTEMPTS:
+                            raise
+                        continue
+                    self._last_request = time.monotonic()
+                    return response
+            raise AssertionError("unreachable J-Quants request state")
 
     return RateLimitedClientV2(api_key)
+
+
+def ensure_private_hf_repo(repo_id: str, token: str) -> None:
+    from huggingface_hub import HfApi
+
+    api = HfApi(token=token)
+    api.create_repo(
+        repo_id=repo_id,
+        repo_type="dataset",
+        private=True,
+        exist_ok=True,
+    )
+    info = api.repo_info(repo_id=repo_id, repo_type="dataset")
+    if not bool(getattr(info, "private", False)):
+        raise RuntimeError(f"refusing to cache raw J-Quants data in non-private dataset: {repo_id}")
+
+
+def fetch_all_daily_bars(client: Any, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
+    frames: list[pd.DataFrame] = []
+    candidates = pd.bdate_range(start=start, end=end)
+    observed_days = 0
+
+    for index, day in enumerate(candidates, start=1):
+        frame = client.get_eq_bars_daily(date_yyyymmdd=day.strftime("%Y%m%d"))
+        if not frame.empty:
+            frames.append(frame)
+            observed_days += 1
+        if index == 1 or index % 20 == 0 or index == len(candidates):
+            print(
+                json.dumps(
+                    {
+                        "candidate_business_days_done": index,
+                        "candidate_business_days_total": len(candidates),
+                        "observed_market_days": observed_days,
+                        "http_requests": client.request_count,
+                        "last_candidate_date": str(day.date()),
+                    },
+                    sort_keys=True,
+                ),
+                flush=True,
+            )
+
+    if not frames:
+        raise AssertionError("J-Quants Free returned no daily bars in the visible window")
+    return pd.concat(frames, ignore_index=True)
 
 
 def upload_private_snapshot(
@@ -147,16 +204,6 @@ def upload_private_snapshot(
     from huggingface_hub import HfApi
 
     api = HfApi(token=token)
-    api.create_repo(
-        repo_id=repo_id,
-        repo_type="dataset",
-        private=True,
-        exist_ok=True,
-    )
-    info = api.repo_info(repo_id=repo_id, repo_type="dataset")
-    if not bool(getattr(info, "private", False)):
-        raise RuntimeError(f"refusing to upload raw J-Quants data to non-private dataset: {repo_id}")
-
     manifest_path = f"snapshots/{snapshot_id}/manifest.json"
     existing = set(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
     if manifest_path in existing:
@@ -189,14 +236,24 @@ def main() -> None:
         shutil.rmtree(root)
     root.mkdir(parents=True)
 
-    client = make_rate_limited_client(api_key, args.request_interval)
-    raw_prices = client.get_eq_bars_daily(
-        from_yyyymmdd=start.strftime("%Y%m%d"),
-        to_yyyymmdd=end.strftime("%Y%m%d"),
+    ensure_private_hf_repo(args.hf_repo_id, hf_token)
+    print(
+        json.dumps(
+            {
+                "hf_repo_id": args.hf_repo_id,
+                "hf_visibility": "private",
+                "snapshot_id": snapshot_id,
+                "nominal_start": str(start.date()),
+                "nominal_end": str(end.date()),
+            },
+            sort_keys=True,
+        ),
+        flush=True,
     )
+
+    client = make_rate_limited_client(api_key, args.request_interval)
+    raw_prices = fetch_all_daily_bars(client, start, end)
     prices = normalize_prices(raw_prices)
-    if prices.empty:
-        raise AssertionError("J-Quants Free returned no daily bars")
 
     actual_start = pd.Timestamp(prices["Date"].min())
     actual_end = pd.Timestamp(prices["Date"].max())
@@ -210,7 +267,7 @@ def main() -> None:
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
 
     manifest: dict[str, object] = {
-        "schema_version": "investor2.alphazerobeta-jquants-free-source.v2",
+        "schema_version": "investor2.alphazerobeta-jquants-free-source.v3",
         "source": "J-Quants API v2",
         "plan": "Free",
         "as_of": str(pd.Timestamp(args.as_of).date()),
@@ -225,6 +282,7 @@ def main() -> None:
             "start": str(actual_start.date()),
             "end": str(actual_end.date()),
         },
+        "observed_market_days": int(prices["Date"].nunique()),
         "ticker_count": int(prices["Code"].nunique()),
         "price_rows": int(len(prices)),
         "master_rows": int(len(master)),
@@ -236,7 +294,8 @@ def main() -> None:
         },
         "request_count": int(client.request_count),
         "minimum_request_interval_seconds": float(args.request_interval),
-        "raw_scope": ("all equity daily-bar rows returned by J-Quants for the current Free history window"),
+        "acquisition_method": "one all-symbol date query per weekday; empty non-market dates retained only as request evidence",
+        "raw_scope": "all equity daily-bar rows returned by J-Quants for every visible market date in the Free window",
         "snapshot_id": snapshot_id,
         "hf_repo_id": args.hf_repo_id,
         "hf_path": f"snapshots/{snapshot_id}",
