@@ -1,0 +1,67 @@
+name: Capture config consumer audit with Python
+
+on:
+  push:
+    branches:
+      - refactor/prune-dashboard-stats-schema-shim
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/prune-dashboard-stats-schema-shim
+          fetch-depth: 0
+      - name: Capture repository consumers
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          import re
+
+          roots = [Path('src'), Path('scripts'), Path('tests'), Path('Taskfile.yml'), Path('README.md')]
+          files = []
+          for root in roots:
+              if root.is_file():
+                  files.append(root)
+              elif root.exists():
+                  files.extend(p for p in root.rglob('*') if p.is_file())
+
+          patterns = {
+              'shared/schema consumers': re.compile(r'shared/schema'),
+              'ConfigSchema consumers': re.compile(r'ConfigSchema'),
+              'data path consumers': re.compile(r'(?:config\.)?paths\.data\b|config\.paths\.data\b'),
+              'logs path consumers': re.compile(r'(?:config\.)?paths\.logs\b|config\.paths\.logs\b'),
+              'cache path consumers': re.compile(r'(?:config\.)?paths\.cache\b|config\.paths\.cache\b'),
+              'edinet path consumers': re.compile(r'(?:config\.)?paths\.edinet\b|config\.paths\.edinet\b'),
+              'cacheFundamentalEdinet consumers': re.compile(r'(?:config\.)?paths\.cacheFundamentalEdinet\b|config\.paths\.cacheFundamentalEdinet\b'),
+              'stats task consumers': re.compile(r'src/tasks/stats\.ts|task\s+stats|stats:'),
+              'stale refresh names': re.compile(r'get:all|jquants:fetch:latest'),
+              'DatabaseRegistry consumers': re.compile(r'DatabaseRegistry'),
+          }
+          out = []
+          for label, pattern in patterns.items():
+              out.append(f'=== {label} ===')
+              for path in files:
+                  try:
+                      lines = path.read_text(errors='ignore').splitlines()
+                  except Exception:
+                      continue
+                  for i, line in enumerate(lines, 1):
+                      if pattern.search(line):
+                          out.append(f'{path}:{i}:{line.strip()}')
+          Path('tmp').mkdir(exist_ok=True)
+          Path('tmp/config-consumer-audit.txt').write_text('\n'.join(out) + '\n')
+          print('\n'.join(out))
+          PY
+      - name: Commit audit and remove workflow
+        run: |
+          rm .github/workflows/capture-config-consumer-audit-python.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: recapture config consumer audit"
+          git push origin HEAD:refactor/prune-dashboard-stats-schema-shim
