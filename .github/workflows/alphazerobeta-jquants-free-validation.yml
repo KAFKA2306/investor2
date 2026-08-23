@@ -1,6 +1,12 @@
 name: AlphaZeroBeta J-Quants Free validation
 
 on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/alphazerobeta_build_jquants_free_snapshot.py
+      - scripts/alphazerobeta_japan_free_train.py
+      - .github/workflows/alphazerobeta-jquants-free-validation.yml
   push:
     branches:
       - feat/alphazerobeta-hf-market-cache
@@ -14,11 +20,48 @@ permissions:
   contents: write
 
 concurrency:
-  group: alphazerobeta-jquants-free-${{ github.ref }}
+  group: alphazerobeta-jquants-free-${{ github.event_name }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install focused contract dependencies
+        run: |
+          python -m pip install numpy pandas pyarrow requests huggingface-hub ruff
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Verify acquisition and bounded-training code
+        env:
+          PYTHONPATH: .
+        run: |
+          ruff format --check \
+            scripts/alphazerobeta_build_jquants_free_snapshot.py \
+            scripts/alphazerobeta_japan_free_train.py
+          ruff check \
+            scripts/alphazerobeta_build_jquants_free_snapshot.py \
+            scripts/alphazerobeta_japan_free_train.py
+          python -m py_compile \
+            scripts/alphazerobeta_build_jquants_free_snapshot.py \
+            scripts/alphazerobeta_japan_free_train.py
+          python - <<'PY'
+          import pandas as pd
+          from scripts.alphazerobeta_japan_free_train import japan_free_folds
+
+          dates = pd.bdate_range("2024-01-01", "2026-06-30")
+          folds = japan_free_folds(dates, test_start="2025-12-01", test_end="2026-05-31")
+          assert len(folds) == 2
+          assert folds[0].test_end < folds[1].test_start
+          print("JAPAN_FREE_FOLD_CONTRACT=PASS")
+          PY
+
   snapshot:
+    if: github.event_name != 'pull_request'
+    needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 360
     env:
@@ -55,6 +98,7 @@ jobs:
             --end "$JQ_END"
 
   validate:
+    if: github.event_name != 'pull_request'
     needs: snapshot
     runs-on: ubuntu-latest
     timeout-minutes: 360
