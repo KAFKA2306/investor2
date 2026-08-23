@@ -38,12 +38,7 @@ def load_benchmark(snapshot: MarketSnapshot) -> pd.DataFrame:
 def load_prices(snapshot: MarketSnapshot, *, regions: list[str] | None = None) -> pd.DataFrame:
     selected = [region.lower() for region in regions] if regions else ["*"]
     files = sorted(
-        {
-            path
-            for region in selected
-            for path in snapshot.path("prices").glob(f"{region}/*.parquet")
-            if path.is_file()
-        }
+        {path for region in selected for path in snapshot.path("prices").glob(f"{region}/*.parquet") if path.is_file()}
     )
     if not files:
         raise FileNotFoundError(f"no materialized price partitions under {snapshot.root}: {selected}")
