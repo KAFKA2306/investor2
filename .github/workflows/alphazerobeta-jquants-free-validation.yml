@@ -3,7 +3,7 @@ name: AlphaZeroBeta J-Quants Free Japan validation
 on:
   push:
     branches:
-      - research/alphazerobeta-jquants-free-validation
+      - main
   pull_request:
     branches: [main]
   workflow_dispatch:
@@ -29,16 +29,19 @@ jobs:
         run: |
           ruff format --check \
             scripts/alphazerobeta_jquants_free_ephemeral.py \
+            scripts/alphazerobeta_jquants_private_hf_cache.py \
             scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
             scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
           ruff check \
             scripts/alphazerobeta_jquants_free_ephemeral.py \
+            scripts/alphazerobeta_jquants_private_hf_cache.py \
             scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
             scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
           python -m py_compile \
             scripts/alphazerobeta_jquants_free_ephemeral.py \
+            scripts/alphazerobeta_jquants_private_hf_cache.py \
             scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
             scripts/alphazerobeta_japan_free_prepare.py \
             scripts/alphazerobeta_japan_free_train.py
@@ -52,26 +55,31 @@ jobs:
     timeout-minutes: 360
     env:
       JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
       PYTHONPATH: .
     steps:
       - uses: actions/checkout@v7
         with:
-          ref: research/alphazerobeta-jquants-free-validation
           fetch-depth: 0
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Require J-Quants credential
-        run: test -n "$JQUANTS_API_KEY"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
       - name: Install execution dependencies
         run: |
-          python -m pip install jquants-api-client numpy pandas pyarrow pydantic
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
           python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
-      - name: Acquire complete visible Free equity window ephemerally
+      - name: Materialize complete visible Free window from owner-only private cache
         run: |
-          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
-          python scripts/alphazerobeta_jquants_free_ephemeral.py \
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan /tmp/huggingface-personal-cache
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
             --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
             --request-interval 15
       - name: Resolve bounded validation dates and PIT master date
         run: |
@@ -208,6 +216,8 @@ jobs:
             git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
             git push origin HEAD:research/alphazerobeta-jquants-free-validation
           fi
-      - name: Delete all raw J-Quants working data
+      - name: Delete plaintext working copies
         if: always()
-        run: rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
+          rm -rf /tmp/huggingface-personal-cache
