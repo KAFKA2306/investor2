@@ -160,7 +160,11 @@ def discover_universe(regions: list[str], *, page_size: int, pause: float) -> pd
     if not frames:
         raise AssertionError("yfinance discovery returned no equities")
     universe = pd.concat(frames, ignore_index=True)
-    return universe.drop_duplicates(["Region", "Ticker"], keep="first").sort_values(["Region", "Ticker"]).reset_index(drop=True)
+    return (
+        universe.drop_duplicates(["Region", "Ticker"], keep="first")
+        .sort_values(["Region", "Ticker"])
+        .reset_index(drop=True)
+    )
 
 
 def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
@@ -311,7 +315,9 @@ def main() -> None:
     (root / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    print(json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(manifest["files"])}))
+    print(
+        json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(manifest["files"])})
+    )
 
 
 if __name__ == "__main__":
