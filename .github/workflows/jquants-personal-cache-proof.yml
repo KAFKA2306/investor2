@@ -1,4 +1,4 @@
-name: Recover expired J-Quants day from private HF history
+name: Seed and prove J-Quants personal cache
 
 on:
   pull_request:
@@ -10,14 +10,14 @@ permissions:
   contents: read
 
 jobs:
-  recover-expired-day:
+  seed-and-prove:
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 360
     env:
       JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
       HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
-      HF_HOME: /tmp/huggingface-personal-cache-recovery
+      HF_HOME: /tmp/huggingface-personal-cache-proof
       PYTHONPATH: .
     steps:
       - uses: actions/checkout@v7
@@ -28,121 +28,126 @@ jobs:
         run: |
           test -n "$JQUANTS_API_KEY"
           test -n "$HF_TOKEN"
-      - name: Install recovery dependencies
+      - name: Install cache dependencies
         run: |
           python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow requests
-      - name: Recover 2024-05-31 from deleted private-HF history
+      - name: Verify recovered expired 2024-05-31 shard
         run: |
           python - <<'PY'
           import json
           import os
-          from pathlib import Path
-
           import pandas as pd
-          from huggingface_hub import HfApi, hf_hub_download
-
+          from huggingface_hub import HfApi
           from scripts.alphazerobeta_jquants_private_hf_cache import (
               cache_path,
               derive_cache_key,
               download_cached_day,
-              encode_day,
-              encrypt_blob,
-              ensure_private_personal_repo,
           )
 
-          repo_id = os.environ['HF_DATASET_REPO']
+          repo = os.environ['HF_DATASET_REPO']
           token = os.environ['HF_TOKEN']
-          api_key = os.environ['JQUANTS_API_KEY']
-          api = ensure_private_personal_repo(repo_id, token)
-          target_date = pd.Timestamp('2024-05-31')
-          target_path = cache_path(target_date)
-
-          current_files = set(api.list_repo_files(repo_id=repo_id, repo_type='dataset'))
-          if target_path not in current_files:
-              candidates = []
-              for commit in api.list_repo_commits(repo_id=repo_id, repo_type='dataset'):
-                  commit_id = commit.commit_id
-                  files = api.list_repo_files(repo_id=repo_id, repo_type='dataset', revision=commit_id)
-                  for path in files:
-                      if path.endswith('2024-05.parquet'):
-                          candidates.append((commit_id, path))
-
-              recovered = None
-              recovery_source = None
-              for commit_id, path in candidates:
-                  try:
-                      local = hf_hub_download(
-                          repo_id=repo_id,
-                          repo_type='dataset',
-                          filename=path,
-                          revision=commit_id,
-                          token=token,
-                      )
-                      frame = pd.read_parquet(local)
-                  except Exception:
-                      continue
-                  if 'Date' not in frame.columns:
-                      continue
-                  dates = pd.to_datetime(frame['Date'], errors='coerce').dt.tz_localize(None)
-                  day = frame.loc[dates == target_date].copy()
-                  if len(day) == 4357:
-                      recovered = day
-                      recovery_source = {'commit': commit_id, 'path': path}
-                      break
-
-              if recovered is None:
-                  encrypted_candidates = []
-                  for commit in api.list_repo_commits(repo_id=repo_id, repo_type='dataset'):
-                      files = api.list_repo_files(
-                          repo_id=repo_id,
-                          repo_type='dataset',
-                          revision=commit.commit_id,
-                      )
-                      encrypted_candidates.extend(
-                          {'commit': commit.commit_id, 'path': path}
-                          for path in files
-                          if '2024-05' in path and path.endswith('.enc')
-                      )
-                  raise RuntimeError(
-                      'no recoverable plaintext 2024-05-31 snapshot found in private HF history; '
-                      f'plaintext_candidates={len(candidates)} encrypted_candidates={encrypted_candidates[:10]}'
-                  )
-
-              key = derive_cache_key(api_key)
-              encrypted = encrypt_blob(
-                  encode_day(recovered),
-                  key=key,
-                  aad=target_path.encode('utf-8'),
-              )
-              temp = Path('/tmp/2024-05-31.bin.enc')
-              temp.write_bytes(encrypted)
-              api.upload_file(
-                  path_or_fileobj=str(temp),
-                  path_in_repo=target_path,
-                  repo_id=repo_id,
-                  repo_type='dataset',
-                  commit_message='recover expired personal J-Quants day 2024-05-31 from private history',
-              )
-          else:
-              recovery_source = {'commit': 'already-current', 'path': target_path}
-
-          verified = download_cached_day(repo_id, token, target_path, key=derive_cache_key(api_key))
-          assert len(verified) == 4357, len(verified)
-          assert set(pd.to_datetime(verified['Date']).dt.strftime('%Y-%m-%d')) == {'2024-05-31'}
-          info = api.repo_info(repo_id=repo_id, repo_type='dataset')
+          path = cache_path(pd.Timestamp('2024-05-31'))
+          api = HfApi(token=token)
+          info = api.repo_info(repo_id=repo, repo_type='dataset')
           assert info.private is True
+          frame = download_cached_day(
+              repo,
+              token,
+              path,
+              key=derive_cache_key(os.environ['JQUANTS_API_KEY']),
+          )
+          assert len(frame) == 4206, len(frame)
+          assert set(pd.to_datetime(frame['Date']).dt.strftime('%Y-%m-%d')) == {'2024-05-31'}
           print(json.dumps({
-              'status': 'recovered',
+              'status': 'expired-day-recovered',
               'date': '2024-05-31',
-              'rows': len(verified),
-              'target_path': target_path,
-              'recovery_source': recovery_source,
+              'normalized_rows': len(frame),
               'hf_private': bool(info.private),
               'jquants_api_requests': 0,
           }, sort_keys=True))
           PY
-      - name: Delete recovery working copies
+      - name: Seed or resume current JST Free window
+        run: |
+          rm -rf /tmp/jquants-cache-seed /tmp/jquants-cache-old-proof /tmp/jquants-cache-current-proof
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-cache-seed \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-24 \
+            --request-interval 15
+          cp /tmp/jquants-cache-seed/manifest.json /tmp/jquants-cache-seed-manifest.json
+      - name: Delete seed plaintext materialization
+        run: rm -rf /tmp/jquants-cache-seed
+      - name: Prove original 2026-08-23 window with zero J-Quants calls
+        run: |
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-cache-old-proof \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-23 \
+            --request-interval 15 \
+            --require-cache-complete
+      - name: Prove current 2026-08-24 window with zero J-Quants calls
+        run: |
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-cache-current-proof \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-24 \
+            --request-interval 15 \
+            --require-cache-complete
+      - name: Verify old evidence survives and current cache is reusable
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          seed = json.loads(Path('/tmp/jquants-cache-seed-manifest.json').read_text())
+          old = json.loads(Path('/tmp/jquants-cache-old-proof/manifest.json').read_text())
+          current = json.loads(Path('/tmp/jquants-cache-current-proof/manifest.json').read_text())
+
+          assert old['actual_date_range'] == {'start': '2024-05-31', 'end': '2026-05-29'}
+          assert old['price_rows'] == 2_050_816
+          assert old['ticker_count'] == 4_640
+          assert old['observed_market_days'] == 486
+
+          for manifest in (old, current):
+              assert manifest['request_count'] == 0
+              assert manifest['cache']['cache_misses'] == 0
+              assert manifest['cache']['cache_complete_after_run'] is True
+              assert manifest['cache']['visibility'] == 'private'
+              assert manifest['cache']['plaintext_jquants_rows_on_hf'] is False
+              assert manifest['external_distribution'] == 'none; private personal storage only'
+
+          assert seed['actual_date_range'] == current['actual_date_range']
+          assert seed['price_rows'] == current['price_rows']
+          assert seed['ticker_count'] == current['ticker_count']
+          assert seed['observed_market_days'] == current['observed_market_days']
+          assert seed['files'] == current['files']
+
+          print(json.dumps({
+              'status': 'passed',
+              'old_window': {
+                  'actual_date_range': old['actual_date_range'],
+                  'price_rows': old['price_rows'],
+                  'ticker_count': old['ticker_count'],
+                  'observed_market_days': old['observed_market_days'],
+                  'api_requests': old['request_count'],
+              },
+              'current_window': {
+                  'actual_date_range': current['actual_date_range'],
+                  'price_rows': current['price_rows'],
+                  'ticker_count': current['ticker_count'],
+                  'observed_market_days': current['observed_market_days'],
+                  'seed_api_requests': seed['request_count'],
+                  'cache_only_api_requests': current['request_count'],
+                  'cache_hits': current['cache']['cache_hits'],
+                  'cache_misses': current['cache']['cache_misses'],
+              },
+              'visibility': current['cache']['visibility'],
+              'plaintext_jquants_rows_on_hf': current['cache']['plaintext_jquants_rows_on_hf'],
+          }, sort_keys=True))
+          PY
+      - name: Delete plaintext proof copies
         if: always()
         run: |
-          rm -f /tmp/2024-05-31.bin.enc
-          rm -rf /tmp/huggingface-personal-cache-recovery
+          rm -rf /tmp/jquants-cache-seed /tmp/jquants-cache-old-proof /tmp/jquants-cache-current-proof
+          rm -f /tmp/jquants-cache-seed-manifest.json
+          rm -rf /tmp/huggingface-personal-cache-proof
