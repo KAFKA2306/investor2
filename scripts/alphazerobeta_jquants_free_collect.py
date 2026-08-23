@@ -85,9 +85,7 @@ def normalize_prices(frame: pd.DataFrame) -> pd.DataFrame:
         "Vo": "RawVolume",
         "Va": "TradingValue",
     }
-    out = frame.rename(
-        columns={key: value for key, value in aliases.items() if key in frame.columns}
-    ).copy()
+    out = frame.rename(columns={key: value for key, value in aliases.items() if key in frame.columns}).copy()
     if "Volume" not in out.columns and "RawVolume" in out.columns:
         out["Volume"] = out["RawVolume"]
     required = {"Code", "Date", "AdjClose", "Volume"}
@@ -98,9 +96,7 @@ def normalize_prices(frame: pd.DataFrame) -> pd.DataFrame:
     out["Date"] = pd.to_datetime(out["Date"], errors="raise").dt.tz_localize(None)
     out["AdjClose"] = pd.to_numeric(out["AdjClose"], errors="coerce")
     out["Volume"] = pd.to_numeric(out["Volume"], errors="coerce")
-    return out[out["AdjClose"].notna() & out["Volume"].notna()].sort_values(
-        ["Code", "Date"]
-    )
+    return out[out["AdjClose"].notna() & out["Volume"].notna()].sort_values(["Code", "Date"])
 
 
 def write_frame(path: Path, frame: pd.DataFrame) -> dict[str, object]:
@@ -113,9 +109,7 @@ def write_frame(path: Path, frame: pd.DataFrame) -> dict[str, object]:
     }
 
 
-def collect_daily_range(
-    client: FreePlanClient, start: pd.Timestamp, end: pd.Timestamp
-) -> pd.DataFrame:
+def collect_daily_range(client: FreePlanClient, start: pd.Timestamp, end: pd.Timestamp) -> pd.DataFrame:
     parts: list[pd.DataFrame] = []
     for chunk_start, chunk_end in month_chunks(start, end):
         frame = client.get_eq_bars_daily(
@@ -204,9 +198,7 @@ def main() -> None:
     prices["AssetReturn"] = prices.groupby("Code", observed=True)["AdjClose"].transform(
         lambda values: np.log(values).diff()
     )
-    market_return = (
-        prices.groupby("Date", observed=True)["AssetReturn"].mean().dropna().sort_index()
-    )
+    market_return = prices.groupby("Date", observed=True)["AssetReturn"].mean().dropna().sort_index()
     benchmark = pd.DataFrame(
         {
             "Date": market_return.index,
