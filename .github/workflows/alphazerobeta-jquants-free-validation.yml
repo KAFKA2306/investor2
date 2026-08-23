@@ -13,6 +13,7 @@ concurrency:
   group: alphazerobeta-jquants-free-validation-v2
   cancel-in-progress: true
 
+# Empirical acquisition is explicitly gated by the [snapshot] commit marker.
 jobs:
   contract:
     runs-on: ubuntu-latest
