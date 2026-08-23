@@ -78,7 +78,9 @@ ALL_REGIONS = (
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot and upload to HF.")
-    parser.add_argument("--repo-id", required=True, help="Private Hugging Face dataset repo, e.g. user/alphazerobeta-market-cache")
+    parser.add_argument(
+        "--repo-id", required=True, help="Private Hugging Face dataset repo, e.g. user/alphazerobeta-market-cache"
+    )
     parser.add_argument("--start", default="2004-01-01")
     parser.add_argument("--end", default="2025-01-01", help="Exclusive end date")
     parser.add_argument("--regions", default="all", help="Comma-separated Yahoo regions or 'all'")
@@ -227,7 +229,9 @@ def write_region_prices(
             batch = tickers[index : index + batch_size]
             frame = download_prices(batch, start=start, end=end)
             if not frame.empty:
-                frame.to_parquet(region_dir / f"part-{index // batch_size:05d}.parquet", index=False, compression="zstd")
+                frame.to_parquet(
+                    region_dir / f"part-{index // batch_size:05d}.parquet", index=False, compression="zstd"
+                )
                 rows += len(frame)
             print(
                 json.dumps({"region": region, "batch": index // batch_size, "tickers": len(batch), "rows": len(frame)}),
@@ -240,7 +244,11 @@ def write_region_prices(
 
 def main() -> None:
     args = parse_args()
-    regions = list(ALL_REGIONS) if args.regions.lower() == "all" else [x.strip().lower() for x in args.regions.split(",") if x.strip()]
+    regions = (
+        list(ALL_REGIONS)
+        if args.regions.lower() == "all"
+        else [x.strip().lower() for x in args.regions.split(",") if x.strip()]
+    )
     unknown = sorted(set(regions) - set(ALL_REGIONS))
     if unknown:
         raise ValueError(f"unsupported Yahoo regions: {unknown}")
@@ -272,13 +280,17 @@ def main() -> None:
         "end_exclusive": args.end,
         "regions": regions,
         "ticker_count": int(universe["Ticker"].nunique()),
-        "ticker_count_by_region": {str(k): int(v) for k, v in universe.groupby("Region", observed=True)["Ticker"].nunique().items()},
+        "ticker_count_by_region": {
+            str(k): int(v) for k, v in universe.groupby("Region", observed=True)["Ticker"].nunique().items()
+        },
         "price_rows_by_region": row_counts,
         "benchmark": args.benchmark,
         "immutable": True,
         "usage_note": "One-shot private research cache. Normal experiments must read this snapshot rather than Yahoo directly.",
     }
-    (root / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    (root / "manifest.json").write_text(
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
 
     commit = api.upload_folder(
         repo_id=args.repo_id,
@@ -286,7 +298,12 @@ def main() -> None:
         folder_path=root,
         commit_message=f"snapshot: Yahoo equities {args.start}..{args.end}",
     )
-    print(json.dumps({"repo_id": args.repo_id, "commit": str(commit), "ticker_count": manifest["ticker_count"]}, ensure_ascii=False))
+    print(
+        json.dumps(
+            {"repo_id": args.repo_id, "commit": str(commit), "ticker_count": manifest["ticker_count"]},
+            ensure_ascii=False,
+        )
+    )
 
 
 if __name__ == "__main__":
