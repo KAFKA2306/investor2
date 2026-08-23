@@ -5,35 +5,22 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import pandas as pd
-from huggingface_hub import hf_hub_download, snapshot_download
 
 
 @dataclass(frozen=True)
 class MarketSnapshot:
-    repo_id: str
-    revision: str = "main"
+    root: Path
 
-
-def _snapshot_root(snapshot: MarketSnapshot, patterns: list[str]) -> Path:
-    return Path(
-        snapshot_download(
-            repo_id=snapshot.repo_id,
-            repo_type="dataset",
-            revision=snapshot.revision,
-            allow_patterns=patterns,
-        )
-    )
+    def path(self, relative: str) -> Path:
+        candidate = (self.root / relative).resolve()
+        root = self.root.resolve()
+        if candidate != root and root not in candidate.parents:
+            raise AssertionError(f"snapshot path escapes root: {relative}")
+        return candidate
 
 
 def load_manifest(snapshot: MarketSnapshot) -> dict[str, object]:
-    path = Path(
-        hf_hub_download(
-            repo_id=snapshot.repo_id,
-            repo_type="dataset",
-            revision=snapshot.revision,
-            filename="manifest.json",
-        )
-    )
+    path = snapshot.path("manifest.json")
     payload = json.loads(path.read_text(encoding="utf-8"))
     if not isinstance(payload, dict):
         raise AssertionError("market snapshot manifest must be a JSON object")
@@ -41,30 +28,23 @@ def load_manifest(snapshot: MarketSnapshot) -> dict[str, object]:
 
 
 def load_universe(snapshot: MarketSnapshot) -> pd.DataFrame:
-    path = hf_hub_download(
-        repo_id=snapshot.repo_id,
-        repo_type="dataset",
-        revision=snapshot.revision,
-        filename="universe.parquet",
-    )
-    return pd.read_parquet(path)
+    return pd.read_parquet(snapshot.path("universe.parquet"))
 
 
 def load_benchmark(snapshot: MarketSnapshot) -> pd.DataFrame:
-    path = hf_hub_download(
-        repo_id=snapshot.repo_id,
-        repo_type="dataset",
-        revision=snapshot.revision,
-        filename="benchmark.parquet",
-    )
-    return pd.read_parquet(path)
+    return pd.read_parquet(snapshot.path("benchmark.parquet"))
 
 
 def load_prices(snapshot: MarketSnapshot, *, regions: list[str] | None = None) -> pd.DataFrame:
     selected = [region.lower() for region in regions] if regions else ["*"]
-    patterns = [f"prices/{region}/*.parquet" for region in selected]
-    root = _snapshot_root(snapshot, patterns)
-    files = sorted({path for pattern in patterns for path in root.glob(pattern)})
+    files = sorted(
+        {
+            path
+            for region in selected
+            for path in snapshot.path("prices").glob(f"{region}/*.parquet")
+            if path.is_file()
+        }
+    )
     if not files:
-        raise FileNotFoundError(f"no cached price partitions for {snapshot.repo_id}@{snapshot.revision}: {selected}")
+        raise FileNotFoundError(f"no materialized price partitions under {snapshot.root}: {selected}")
     return pd.concat((pd.read_parquet(path) for path in files), ignore_index=True)
