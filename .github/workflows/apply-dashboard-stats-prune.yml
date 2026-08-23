@@ -1,0 +1,159 @@
+name: Apply dashboard stats simplification
+
+on:
+  push:
+    branches:
+      - refactor/prune-dashboard-stats-schema-shim
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/prune-dashboard-stats-schema-shim
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: 1.3.13
+      - name: Install locked dependencies
+        run: bun ci
+      - name: Apply bounded simplification
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          server_path = Path('src/dashboard/server.ts')
+          server = server_path.read_text()
+
+          app_line = 'const app = new Hono();\n'
+          dashboard_marker = '// Dashboard page\n'
+          screener_marker = '// Stock Screener view\n'
+          if server.count(app_line) != 1 or server.count(dashboard_marker) != 1 or server.count(screener_marker) != 1:
+              raise RuntimeError('dashboard boundaries changed')
+
+          # The dashboard no longer needs config parsing once the duplicated stats subsystem is removed.
+          server = server.replace('import yaml from "js-yaml";\n', '', 1)
+          server = server.replace('import { ConfigSchema } from "../shared/schema";\n', '', 1)
+
+          app_end = server.index(app_line) + len(app_line)
+          dashboard_start = server.index(dashboard_marker)
+          server = server[:app_end] + '\n' + server[dashboard_start:]
+
+          dashboard_start = server.index(dashboard_marker)
+          screener_start = server.index(screener_marker)
+          home = '''// Dashboard page
+app.get("/", (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="ja" data-theme="light">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>AAARTS Local Dashboard</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+      <div class="navbar bg-base-100 shadow">
+        <div class="flex-1">
+          <a class="btn btn-ghost text-2xl">📈 AAARTS Dashboard</a>
+        </div>
+        <div class="flex-none gap-2">
+          <a href="/" class="btn btn-sm btn-primary">System Home</a>
+          <a href="/screener" class="btn btn-sm btn-ghost">Screener</a>
+          <a href="/company" class="btn btn-sm btn-ghost">Company Search</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
+        </div>
+      </div>
+
+      <main class="max-w-5xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-2">Local data tools</h1>
+        <p class="text-gray-600 mb-6">Cached market and filing data can be inspected through the focused tools below.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="/screener" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+            <div class="card-body">
+              <h2 class="card-title">Screener</h2>
+              <p>Inspect cached Japanese equity prices and financial metrics.</p>
+            </div>
+          </a>
+          <a href="/company" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+            <div class="card-body">
+              <h2 class="card-title">Company Search</h2>
+              <p>Search EDINET-backed company and filing information.</p>
+            </div>
+          </a>
+          <a href="/links" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
+            <div class="card-body">
+              <h2 class="card-title">Link Directory</h2>
+              <p>Open research, evidence, and repository surfaces.</p>
+            </div>
+          </a>
+        </div>
+      </main>
+    </body>
+    </html>
+  `);
+});
+
+'''
+          server = server[:dashboard_start] + home + server[screener_start:]
+          server_path.write_text(server)
+
+          # Remove the re-export shim by pointing every surviving consumer at the SSOT.
+          for path in [
+              Path('src/preprocess/screener.ts'),
+              Path('src/preprocess/text.ts'),
+              Path('src/commands/cache_set.ts'),
+              Path('src/commands/_config.ts'),
+              Path('src/commands/cache_get.ts'),
+              Path('src/commands/data_fetch.ts'),
+          ]:
+              text = path.read_text()
+              old = '../shared/schema'
+              if text.count(old) != 1:
+                  raise RuntimeError(f'unexpected shared schema import count in {path}: {text.count(old)}')
+              path.write_text(text.replace(old, '../schemas', 1))
+
+          config_path = Path('config/default.yaml')
+          config = config_path.read_text()
+          logs_line = '  logs: /mnt/d/investor_all_cached_data/logs\n'
+          if config.count(logs_line) != 1:
+              raise RuntimeError('logs config contract changed')
+          config_path.write_text(config.replace(logs_line, '', 1))
+
+          schemas_path = Path('src/schemas.ts')
+          schemas = schemas_path.read_text()
+          logs_schema = '        logs: z.string(),\n'
+          if schemas.count(logs_schema) != 1:
+              raise RuntimeError('logs schema contract changed')
+          schemas_path.write_text(schemas.replace(logs_schema, '', 1))
+
+          Path('src/tasks/stats.ts').unlink()
+          Path('src/shared/schema.ts').unlink()
+          Path('tmp/config-consumer-audit.txt').unlink(missing_ok=True)
+          PY
+      - name: Format and lint changed TypeScript
+        run: |
+          bunx biome format --write --config-path=config/biome.json \
+            src/dashboard/server.ts src/schemas.ts \
+            src/preprocess/screener.ts src/preprocess/text.ts \
+            src/commands/cache_set.ts src/commands/_config.ts \
+            src/commands/cache_get.ts src/commands/data_fetch.ts
+          bunx oxlint \
+            src/dashboard/server.ts src/schemas.ts \
+            src/preprocess/screener.ts src/preprocess/text.ts \
+            src/commands/cache_set.ts src/commands/_config.ts \
+            src/commands/cache_get.ts src/commands/data_fetch.ts
+      - name: Remove temporary workflow and commit
+        run: |
+          rm .github/workflows/apply-dashboard-stats-prune.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --exit-code && exit 1 || true
+          git commit -m "refactor: prune dashboard stats and schema shim"
+          git push origin HEAD:refactor/prune-dashboard-stats-schema-shim
