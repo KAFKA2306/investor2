@@ -27,6 +27,7 @@
       "src/**",
       "tests/**/*.ts",
       "scripts/**/*.ts",
+      "pages/**/*.js",
       "!src/dashboard/dist",
       "!src/experiments/foundation_models/.venv",
       "!src/model_registry/.venv"
