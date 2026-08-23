@@ -16,7 +16,6 @@ export const ConfigSchema = z
     paths: z
       .object({
         data: z.string(),
-        logs: z.string(),
         cache: z.string(),
         edinet: z.string(),
         cacheFundamentalEdinet: z.string(),

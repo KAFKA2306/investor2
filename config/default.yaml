@@ -1,6 +1,5 @@
 paths:
   data: /mnt/d/investor_all_cached_data/jquants
-  logs: /mnt/d/investor_all_cached_data/logs
   cache: /mnt/d/investor_all_cached_data/cache
   edinet: /mnt/d/investor_all_cached_data/edinet
   cacheFundamentalEdinet: /mnt/d/investor_all_cached_data/cache/fundamental/edinet.sqlite
