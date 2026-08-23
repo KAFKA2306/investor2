@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import shutil
 import time
 from datetime import UTC, datetime
 from pathlib import Path
@@ -10,7 +12,6 @@ from typing import Any
 
 import pandas as pd
 import yfinance as yf
-from huggingface_hub import HfApi
 from yfinance import EquityQuery
 
 ALL_REGIONS = (
@@ -77,10 +78,7 @@ ALL_REGIONS = (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot and upload to HF.")
-    parser.add_argument(
-        "--repo-id", required=True, help="Private Hugging Face dataset repo, e.g. user/alphazerobeta-market-cache"
-    )
+    parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot locally.")
     parser.add_argument("--start", default="2004-01-01")
     parser.add_argument("--end", default="2025-01-01", help="Exclusive end date")
     parser.add_argument("--regions", default="all", help="Comma-separated Yahoo regions or 'all'")
@@ -90,8 +88,23 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--request-pause", type=float, default=0.25)
     parser.add_argument("--output-dir", type=Path, default=Path("cache/alphazerobeta-market-snapshot"))
     parser.add_argument("--overwrite", action="store_true")
-    parser.add_argument("--public", action="store_true", help="Not recommended for raw Yahoo data; private is default")
     return parser.parse_args()
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def prepare_output(root: Path, *, overwrite: bool) -> None:
+    if (root / "manifest.json").exists() and not overwrite:
+        raise RuntimeError(f"{root}/manifest.json already exists; refusing to overwrite immutable snapshot")
+    if root.exists() and overwrite:
+        shutil.rmtree(root)
+    root.mkdir(parents=True, exist_ok=True)
 
 
 def _quotes(response: dict[str, Any]) -> list[dict[str, Any]]:
@@ -147,7 +160,7 @@ def discover_universe(regions: list[str], *, page_size: int, pause: float) -> pd
     if not frames:
         raise AssertionError("yfinance discovery returned no equities")
     universe = pd.concat(frames, ignore_index=True)
-    return universe.drop_duplicates(["Ticker"], keep="first").sort_values(["Region", "Ticker"]).reset_index(drop=True)
+    return universe.drop_duplicates(["Region", "Ticker"], keep="first").sort_values(["Region", "Ticker"]).reset_index(drop=True)
 
 
 def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
@@ -164,12 +177,9 @@ def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
         if ticker not in available:
             continue
         frame = raw[ticker].reset_index()
-        rename = {
-            "Adj Close": "AdjClose",
-            "Stock Splits": "StockSplits",
-            "Capital Gains": "CapitalGains",
-        }
-        frame = frame.rename(columns=rename)
+        frame = frame.rename(
+            columns={"Adj Close": "AdjClose", "Stock Splits": "StockSplits", "Capital Gains": "CapitalGains"}
+        )
         frame.insert(0, "Ticker", ticker)
         parts.append(frame)
     if not parts:
@@ -198,16 +208,7 @@ def download_prices(tickers: list[str], *, start: str, end: str) -> pd.DataFrame
         progress=False,
         timeout=30,
     )
-    if raw is None:
-        return pd.DataFrame()
-    return normalize_download(raw, tickers)
-
-
-def ensure_empty_repo(api: HfApi, repo_id: str, *, private: bool, overwrite: bool) -> None:
-    api.create_repo(repo_id=repo_id, repo_type="dataset", private=private, exist_ok=True)
-    files = set(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
-    if "manifest.json" in files and not overwrite:
-        raise RuntimeError(f"{repo_id} already contains manifest.json; refusing to overwrite immutable snapshot")
+    return pd.DataFrame() if raw is None else normalize_download(raw, tickers)
 
 
 def write_region_prices(
@@ -242,20 +243,33 @@ def write_region_prices(
     return counts
 
 
+def file_manifest(root: Path) -> list[dict[str, object]]:
+    entries = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.name == "manifest.json":
+            continue
+        entries.append(
+            {
+                "path": path.relative_to(root).as_posix(),
+                "size_bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
+        )
+    return entries
+
+
 def main() -> None:
     args = parse_args()
     regions = (
         list(ALL_REGIONS)
         if args.regions.lower() == "all"
-        else [x.strip().lower() for x in args.regions.split(",") if x.strip()]
+        else [value.strip().lower() for value in args.regions.split(",") if value.strip()]
     )
     unknown = sorted(set(regions) - set(ALL_REGIONS))
     if unknown:
         raise ValueError(f"unsupported Yahoo regions: {unknown}")
     root = args.output_dir
-    root.mkdir(parents=True, exist_ok=True)
-    api = HfApi()
-    ensure_empty_repo(api, args.repo_id, private=not args.public, overwrite=args.overwrite)
+    prepare_output(root, overwrite=args.overwrite)
 
     universe = discover_universe(regions, page_size=args.page_size, pause=args.request_pause)
     universe.to_parquet(root / "universe.parquet", index=False, compression="zstd")
@@ -273,37 +287,31 @@ def main() -> None:
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
 
     manifest: dict[str, object] = {
-        "schema_version": "investor2.market-snapshot.v1",
+        "schema_version": "investor2.market-snapshot.v2",
         "source": "Yahoo Finance via yfinance",
         "fetched_at_utc": datetime.now(UTC).isoformat(),
         "start": args.start,
         "end_exclusive": args.end,
         "regions": regions,
-        "ticker_count": int(universe["Ticker"].nunique()),
+        "ticker_count": int(len(universe)),
         "ticker_count_by_region": {
-            str(k): int(v) for k, v in universe.groupby("Region", observed=True)["Ticker"].nunique().items()
+            str(key): int(value) for key, value in universe.groupby("Region", observed=True)["Ticker"].nunique().items()
         },
         "price_rows_by_region": row_counts,
         "benchmark": args.benchmark,
         "immutable": True,
-        "usage_note": "One-shot private research cache. Normal experiments must read this snapshot rather than Yahoo directly.",
+        "files": file_manifest(root),
+        "storage_contract": {
+            "writer_repository": "KAFKA2306/semiconductor-earnings-model",
+            "bucket": "k4fka/kafka-data-lake",
+            "prefix": "central/investor2/private/yahoo-market-cache/v1",
+            "consumer_repository_authentication": False,
+        },
     }
     (root / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-
-    commit = api.upload_folder(
-        repo_id=args.repo_id,
-        repo_type="dataset",
-        folder_path=root,
-        commit_message=f"snapshot: Yahoo equities {args.start}..{args.end}",
-    )
-    print(
-        json.dumps(
-            {"repo_id": args.repo_id, "commit": str(commit), "ticker_count": manifest["ticker_count"]},
-            ensure_ascii=False,
-        )
-    )
+    print(json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(manifest["files"])}))
 
 
 if __name__ == "__main__":
