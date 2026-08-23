@@ -1,0 +1,121 @@
+name: Apply dashboard stats simplification on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  refactor:
+    if: github.head_ref == 'refactor/prune-dashboard-stats-schema-shim'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/prune-dashboard-stats-schema-shim
+          fetch-depth: 0
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: 1.3.13
+      - run: bun ci
+      - name: Apply simplification
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          p = Path('src/dashboard/server.ts')
+          s = p.read_text()
+          app = 'const app = new Hono();\n'
+          dash = '// Dashboard page\n'
+          screen = '// Stock Screener view\n'
+          if any(s.count(x) != 1 for x in (app, dash, screen)):
+              raise RuntimeError('dashboard boundaries changed')
+          s = s.replace('import yaml from "js-yaml";\n', '', 1)
+          s = s.replace('import { ConfigSchema } from "../shared/schema";\n', '', 1)
+          s = s[:s.index(app) + len(app)] + '\n' + s[s.index(dash):]
+          a, b = s.index(dash), s.index(screen)
+          home = '''// Dashboard page
+app.get("/", (c) => {
+  return c.html(`
+    <!DOCTYPE html>
+    <html lang="ja" data-theme="light">
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>AAARTS Local Dashboard</title>
+      <script src="https://cdn.tailwindcss.com"></script>
+      <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.2/dist/full.min.css" rel="stylesheet" type="text/css" />
+    </head>
+    <body>
+      <div class="navbar bg-base-100 shadow">
+        <div class="flex-1"><a class="btn btn-ghost text-2xl">📈 AAARTS Dashboard</a></div>
+        <div class="flex-none gap-2">
+          <a href="/" class="btn btn-sm btn-primary">System Home</a>
+          <a href="/screener" class="btn btn-sm btn-ghost">Screener</a>
+          <a href="/company" class="btn btn-sm btn-ghost">Company Search</a>
+          <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
+        </div>
+      </div>
+      <main class="max-w-5xl mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-2">Local data tools</h1>
+        <p class="text-gray-600 mb-6">Cached market and filing data can be inspected through the focused tools below.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <a href="/screener" class="card bg-base-100 shadow"><div class="card-body"><h2 class="card-title">Screener</h2><p>Inspect cached Japanese equity prices and financial metrics.</p></div></a>
+          <a href="/company" class="card bg-base-100 shadow"><div class="card-body"><h2 class="card-title">Company Search</h2><p>Search EDINET-backed company and filing information.</p></div></a>
+          <a href="/links" class="card bg-base-100 shadow"><div class="card-body"><h2 class="card-title">Link Directory</h2><p>Open research, evidence, and repository surfaces.</p></div></a>
+        </div>
+      </main>
+    </body>
+    </html>
+  `);
+});
+
+'''
+          p.write_text(s[:a] + home + s[b:])
+
+          for path in map(Path, [
+              'src/preprocess/screener.ts', 'src/preprocess/text.ts',
+              'src/commands/cache_set.ts', 'src/commands/_config.ts',
+              'src/commands/cache_get.ts', 'src/commands/data_fetch.ts',
+          ]):
+              t = path.read_text()
+              if t.count('../shared/schema') != 1:
+                  raise RuntimeError(f'unexpected shim import in {path}')
+              path.write_text(t.replace('../shared/schema', '../schemas', 1))
+
+          p = Path('config/default.yaml')
+          t = p.read_text()
+          old = '  logs: /mnt/d/investor_all_cached_data/logs\n'
+          if t.count(old) != 1:
+              raise RuntimeError('logs config changed')
+          p.write_text(t.replace(old, '', 1))
+
+          p = Path('src/schemas.ts')
+          t = p.read_text()
+          old = '        logs: z.string(),\n'
+          if t.count(old) != 1:
+              raise RuntimeError('logs schema changed')
+          p.write_text(t.replace(old, '', 1))
+
+          Path('src/tasks/stats.ts').unlink()
+          Path('src/shared/schema.ts').unlink()
+          Path('tmp/config-consumer-audit.txt').unlink(missing_ok=True)
+          PY
+      - name: Format result
+        run: |
+          bunx biome format --write --config-path=config/biome.json \
+            src/dashboard/server.ts src/schemas.ts src/preprocess/screener.ts \
+            src/preprocess/text.ts src/commands/cache_set.ts src/commands/_config.ts \
+            src/commands/cache_get.ts src/commands/data_fetch.ts
+      - name: Commit result without scaffolding
+        run: |
+          rm -f .github/workflows/apply-dashboard-stats-prune.yml
+          rm -f .github/workflows/apply-dashboard-stats-prune-pr.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "refactor: prune dashboard stats and schema shim"
+          git push origin HEAD:refactor/prune-dashboard-stats-schema-shim
