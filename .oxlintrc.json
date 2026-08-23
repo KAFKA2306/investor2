@@ -12,13 +12,5 @@
         "caughtErrorsIgnorePattern": "^_"
       }
     ]
-  },
-  "overrides": [
-    {
-      "files": ["src/preprocess/sector_spillover.ts"],
-      "rules": {
-        "unicorn/no-new-array": "off"
-      }
-    }
-  ]
+  }
 }
