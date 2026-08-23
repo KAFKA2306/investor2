@@ -5,27 +5,39 @@ import argparse
 import hashlib
 import json
 import os
+import shutil
+import threading
 import time
-from datetime import UTC, datetime, timedelta
+from datetime import UTC, datetime
 from pathlib import Path
+from typing import Any
 
-import jquantsapi
-import numpy as np
 import pandas as pd
 
 FREE_HISTORY_YEARS = 2
-FREE_DELAY_DAYS = 84
+FREE_DELAY_WEEKS = 12
 REQUEST_INTERVAL_SECONDS = 12.5
+BENCHMARK_CODE = "13060"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Collect the J-Quants Free visible Japan window into ephemeral files."
+        description=(
+            "Collect all Japanese equity daily bars visible on the current J-Quants Free plan "
+            "and persist an immutable private Hugging Face snapshot."
+        )
     )
     parser.add_argument("--output-dir", type=Path, required=True)
-    parser.add_argument("--start")
-    parser.add_argument("--end")
+    parser.add_argument("--hf-repo-id", required=True)
+    parser.add_argument("--as-of", default=datetime.now(UTC).date().isoformat())
+    parser.add_argument("--request-interval", type=float, default=REQUEST_INTERVAL_SECONDS)
     return parser.parse_args()
+
+
+def resolve_window(as_of: str) -> tuple[pd.Timestamp, pd.Timestamp]:
+    visible_end = pd.Timestamp(as_of).normalize() - pd.Timedelta(weeks=FREE_DELAY_WEEKS)
+    visible_start = visible_end - pd.DateOffset(years=FREE_HISTORY_YEARS)
+    return visible_start, visible_end
 
 
 def sha256_file(path: Path) -> str:
@@ -36,177 +48,224 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def resolve_window(start: str | None, end: str | None) -> tuple[pd.Timestamp, pd.Timestamp]:
-    today = pd.Timestamp(datetime.now(tz=UTC).date())
-    start_ts = (
-        pd.Timestamp(start)
-        if start
-        else today - pd.DateOffset(years=FREE_HISTORY_YEARS)
-    )
-    end_ts = pd.Timestamp(end) if end else today - timedelta(days=FREE_DELAY_DAYS)
-    if start_ts > end_ts:
-        raise ValueError("start must not be after end")
-    return start_ts.normalize(), end_ts.normalize()
+def file_manifest(root: Path) -> list[dict[str, object]]:
+    rows: list[dict[str, object]] = []
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.name == "manifest.json":
+            continue
+        rows.append(
+            {
+                "path": path.relative_to(root).as_posix(),
+                "size_bytes": path.stat().st_size,
+                "sha256": sha256_file(path),
+            }
+        )
+    return rows
 
 
 def normalize_prices(frame: pd.DataFrame) -> pd.DataFrame:
-    aliases = {
-        "AdjC": "AdjClose",
-        "AdjVo": "Volume",
-        "C": "Close",
-        "Vo": "RawVolume",
-        "Va": "TradingValue",
-    }
-    out = frame.rename(
-        columns={key: value for key, value in aliases.items() if key in frame.columns}
-    ).copy()
-    if "Volume" not in out.columns and "RawVolume" in out.columns:
-        out["Volume"] = out["RawVolume"]
-    required = {"Code", "Date", "AdjClose", "Volume"}
-    missing = sorted(required - set(out.columns))
+    required = {"Code", "Date", "AdjC", "AdjVo"}
+    missing = sorted(required - set(frame.columns))
     if missing:
         raise AssertionError(f"daily bars missing columns: {missing}")
+
+    out = frame.copy()
     out["Code"] = out["Code"].astype(str)
-    out["Date"] = pd.to_datetime(out["Date"], errors="raise")
-    out["AdjClose"] = pd.to_numeric(out["AdjClose"], errors="coerce")
-    out["Volume"] = pd.to_numeric(out["Volume"], errors="coerce")
-    out = out[out["AdjClose"].notna() & out["Volume"].notna()]
+    out["Ticker"] = out["Code"]
+    out["Date"] = pd.to_datetime(out["Date"], errors="raise").dt.tz_localize(None)
+    out["AdjClose"] = pd.to_numeric(out["AdjC"], errors="coerce")
+    out["Volume"] = pd.to_numeric(out["AdjVo"], errors="coerce")
+    out = out.dropna(subset=["Code", "Date", "AdjClose", "Volume"])
     return out.sort_values(["Code", "Date"]).reset_index(drop=True)
 
 
-def call_with_spacing(last_call: float, fn, /, *args, **kwargs):
-    elapsed = time.monotonic() - last_call
-    if elapsed < REQUEST_INTERVAL_SECONDS:
-        time.sleep(REQUEST_INTERVAL_SECONDS - elapsed)
-    for attempt in range(4):
-        try:
-            value = fn(*args, **kwargs)
-            return value, time.monotonic()
-        except Exception as exc:
-            if "429" not in str(exc) or attempt == 3:
-                raise
-            time.sleep(65)
-    raise AssertionError("unreachable")
+def normalize_master(frame: pd.DataFrame) -> pd.DataFrame:
+    if "Code" not in frame.columns:
+        raise AssertionError("listed-issue master is missing Code")
+    out = frame.copy()
+    out["Code"] = out["Code"].astype(str)
+    out["Ticker"] = out["Code"]
+    out["Region"] = "jp"
+    if "Date" in out.columns:
+        out["Date"] = pd.to_datetime(out["Date"], errors="coerce").dt.tz_localize(None)
+    return out.sort_values("Code").reset_index(drop=True)
+
+
+def benchmark_from_prices(prices: pd.DataFrame) -> pd.DataFrame:
+    benchmark = prices[prices["Code"] == BENCHMARK_CODE].copy()
+    if benchmark.empty:
+        raise AssertionError(
+            f"TOPIX ETF proxy {BENCHMARK_CODE} is absent from the cached J-Quants window"
+        )
+    return benchmark.sort_values("Date").reset_index(drop=True)
+
+
+def write_price_partitions(prices: pd.DataFrame, root: Path) -> None:
+    price_root = root / "prices" / "jp"
+    price_root.mkdir(parents=True, exist_ok=True)
+    years = prices["Date"].dt.year
+    for year, group in prices.groupby(years, observed=True):
+        group.to_parquet(
+            price_root / f"part-{int(year)}.parquet",
+            index=False,
+            compression="zstd",
+        )
+
+
+def make_rate_limited_client(api_key: str, request_interval: float) -> Any:
+    import jquantsapi
+
+    class RateLimitedClientV2(jquantsapi.ClientV2):
+        def __init__(self, key: str) -> None:
+            super().__init__(api_key=key)
+            self._request_lock = threading.Lock()
+            self._last_request = 0.0
+            self.request_count = 0
+
+        def _get(
+            self,
+            url: str,
+            params: dict[str, Any] | None = None,
+        ):
+            with self._request_lock:
+                elapsed = time.monotonic() - self._last_request
+                if elapsed < request_interval:
+                    time.sleep(request_interval - elapsed)
+                response = super()._get(url, params=params)
+                self._last_request = time.monotonic()
+                self.request_count += 1
+                return response
+
+    return RateLimitedClientV2(api_key)
+
+
+def upload_private_snapshot(
+    root: Path,
+    *,
+    repo_id: str,
+    snapshot_id: str,
+    token: str,
+) -> None:
+    from huggingface_hub import HfApi
+
+    api = HfApi(token=token)
+    api.create_repo(
+        repo_id=repo_id,
+        repo_type="dataset",
+        private=True,
+        exist_ok=True,
+    )
+    info = api.repo_info(repo_id=repo_id, repo_type="dataset")
+    if not bool(getattr(info, "private", False)):
+        raise RuntimeError(
+            f"refusing to upload raw J-Quants data to non-private dataset: {repo_id}"
+        )
+
+    manifest_path = f"snapshots/{snapshot_id}/manifest.json"
+    existing = set(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
+    if manifest_path in existing:
+        raise RuntimeError(f"immutable snapshot already exists: {manifest_path}")
+
+    api.upload_folder(
+        repo_id=repo_id,
+        repo_type="dataset",
+        folder_path=str(root),
+        path_in_repo=f"snapshots/{snapshot_id}",
+        commit_message=f"cache J-Quants Free snapshot {snapshot_id}",
+    )
 
 
 def main() -> None:
     args = parse_args()
     api_key = os.environ.get("JQUANTS_API_KEY", "").strip()
+    hf_token = os.environ.get("HF_TOKEN", "").strip()
     if not api_key:
         raise RuntimeError("JQUANTS_API_KEY is required")
-    start, end = resolve_window(args.start, args.end)
+    if not hf_token:
+        raise RuntimeError("HF_TOKEN is required")
+    if args.request_interval < REQUEST_INTERVAL_SECONDS:
+        raise ValueError(
+            f"request interval must be >= {REQUEST_INTERVAL_SECONDS}s for the Free-plan limit"
+        )
+
+    start, end = resolve_window(args.as_of)
+    snapshot_id = f"asof-{pd.Timestamp(args.as_of).date()}"
     root = args.output_dir
-    root.mkdir(parents=True, exist_ok=False)
-    client = jquantsapi.ClientV2(api_key=api_key)
-    last_call = 0.0
-    api_calls = 0
+    if root.exists():
+        shutil.rmtree(root)
+    root.mkdir(parents=True)
 
-    master, last_call = call_with_spacing(
-        last_call,
-        client.get_eq_master,
-        date=end.date().isoformat(),
+    client = make_rate_limited_client(api_key, args.request_interval)
+    raw_prices = client.get_eq_bars_daily(
+        from_yyyymmdd=start.strftime("%Y%m%d"),
+        to_yyyymmdd=end.strftime("%Y%m%d"),
     )
-    api_calls += 1
-    if master.empty or "Code" not in master.columns:
-        raise AssertionError("listed-issue master is empty")
-    master = master.sort_values("Code").reset_index(drop=True)
-    master.to_parquet(root / "universe.parquet", index=False, compression="zstd")
-
-    price_parts: list[pd.DataFrame] = []
-    fin_parts: list[pd.DataFrame] = []
-    for day in pd.date_range(start, end, freq="B"):
-        date_text = day.date().isoformat()
-        bars, last_call = call_with_spacing(
-            last_call,
-            client.get_eq_bars_daily,
-            date_yyyymmdd=date_text,
-        )
-        api_calls += 1
-        if not bars.empty:
-            price_parts.append(normalize_prices(bars))
-
-        cursor = ""
-        while True:
-            result, last_call = call_with_spacing(
-                last_call,
-                client.get_fin_summary_cursor,
-                date_yyyymmdd=date_text,
-                cursor=cursor,
-            )
-            api_calls += 1
-            financials, next_cursor = result
-            if not financials.empty:
-                fin_parts.append(financials)
-            if not next_cursor:
-                break
-            cursor = str(next_cursor)
-
-        print(
-            json.dumps(
-                {"date": date_text, "bars": int(len(bars)), "api_calls": api_calls}
-            ),
-            flush=True,
-        )
-
-    if not price_parts:
+    prices = normalize_prices(raw_prices)
+    if prices.empty:
         raise AssertionError("J-Quants Free returned no daily bars")
-    prices = pd.concat(price_parts, ignore_index=True).drop_duplicates(
-        ["Code", "Date"], keep="last"
-    )
-    prices = prices.sort_values(["Code", "Date"]).reset_index(drop=True)
-    prices.to_csv(root / "prices.csv", index=False)
 
-    prices["AssetReturn"] = prices.groupby("Code", observed=True)[
-        "AdjClose"
-    ].transform(lambda x: np.log(x).diff())
-    market_return = (
-        prices.groupby("Date", observed=True)["AssetReturn"]
-        .mean()
-        .dropna()
-        .sort_index()
+    actual_start = pd.Timestamp(prices["Date"].min())
+    actual_end = pd.Timestamp(prices["Date"].max())
+    master = normalize_master(
+        client.get_eq_master(date=actual_end.strftime("%Y%m%d"))
     )
-    benchmark = pd.DataFrame(
-        {
-            "Date": market_return.index,
-            "Close": 100.0 * np.exp(market_return.cumsum()).to_numpy(),
-        }
-    )
-    benchmark.to_csv(root / "benchmark.csv", index=False)
+    if master.empty:
+        raise AssertionError("listed-issue master is empty")
 
-    financials = pd.concat(fin_parts, ignore_index=True) if fin_parts else pd.DataFrame()
-    financials.to_parquet(
-        root / "financial_summary.parquet", index=False, compression="zstd"
-    )
+    master.to_parquet(root / "universe.parquet", index=False, compression="zstd")
+    write_price_partitions(prices, root)
+    benchmark = benchmark_from_prices(prices)
+    benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
 
-    files = [
-        root / "prices.csv",
-        root / "benchmark.csv",
-        root / "universe.parquet",
-        root / "financial_summary.parquet",
-    ]
-    manifest = {
-        "schema_version": "investor2.alphazerobeta-jquants-free-source.v1",
-        "source": "J-Quants API v2 Free",
-        "date_start": str(start.date()),
-        "date_end": str(end.date()),
+    manifest: dict[str, object] = {
+        "schema_version": "investor2.alphazerobeta-jquants-free-source.v2",
+        "source": "J-Quants API v2",
+        "plan": "Free",
+        "as_of": str(pd.Timestamp(args.as_of).date()),
+        "fetched_at_utc": datetime.now(UTC).isoformat(),
+        "nominal_free_window": {
+            "start": str(start.date()),
+            "end": str(end.date()),
+            "history_years": FREE_HISTORY_YEARS,
+            "delay_weeks": FREE_DELAY_WEEKS,
+        },
+        "actual_date_range": {
+            "start": str(actual_start.date()),
+            "end": str(actual_end.date()),
+        },
         "ticker_count": int(prices["Code"].nunique()),
         "price_rows": int(len(prices)),
-        "financial_summary_rows": int(len(financials)),
-        "api_calls": api_calls,
-        "benchmark": (
-            "equal-weight mean log return of all cached equities; "
-            "TOPIX is unavailable on Free"
+        "master_rows": int(len(master)),
+        "benchmark": {
+            "code": BENCHMARK_CODE,
+            "label": "NEXT FUNDS TOPIX ETF proxy",
+            "exact_topix": False,
+            "rows": int(len(benchmark)),
+        },
+        "request_count": int(client.request_count),
+        "minimum_request_interval_seconds": float(args.request_interval),
+        "raw_scope": (
+            "all equity daily-bar rows returned by J-Quants for the current Free history window"
         ),
-        "retention": (
-            "ephemeral raw data; deleted after validation and never committed/uploaded"
-        ),
-        "files": {path.name: sha256_file(path) for path in files},
+        "snapshot_id": snapshot_id,
+        "hf_repo_id": args.hf_repo_id,
+        "hf_path": f"snapshots/{snapshot_id}",
+        "visibility_required": "private",
+        "immutable": True,
     }
+    manifest["files"] = file_manifest(root)
     (root / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2) + "\n",
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(json.dumps(manifest, ensure_ascii=False), flush=True)
+
+    upload_private_snapshot(
+        root,
+        repo_id=args.hf_repo_id,
+        snapshot_id=snapshot_id,
+        token=hf_token,
+    )
+    print(json.dumps(manifest, ensure_ascii=False, sort_keys=True), flush=True)
 
 
 if __name__ == "__main__":
