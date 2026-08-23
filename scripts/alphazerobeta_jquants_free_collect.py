@@ -9,6 +9,7 @@ import shutil
 import threading
 import time
 from datetime import UTC, datetime, timedelta
+from io import BytesIO
 from pathlib import Path
 from typing import Any
 
@@ -23,13 +24,16 @@ MIN_REQUEST_INTERVAL_SECONDS = 15.0
 RATE_LIMIT_COOLDOWN_SECONDS = 70.0
 MAX_HTTP_ATTEMPTS = 6
 BENCHMARK_CODE = "13060"
+CACHE_MAGIC = b"JQHF1"
+CACHE_NONCE_BYTES = 12
+CACHE_KEY_DOMAIN = b"investor2-jquants-hf-cache-v1\x00"
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Collect all Japanese equity daily bars visible on the current J-Quants Free plan "
-            "and persist an immutable private Hugging Face snapshot."
+            "Collect all Japanese equity daily bars visible on the current J-Quants Free plan, "
+            "encrypt them client-side, and persist a private Hugging Face snapshot."
         )
     )
     parser.add_argument("--output-dir", type=Path, required=True)
@@ -43,6 +47,34 @@ def resolve_window(as_of: str) -> tuple[pd.Timestamp, pd.Timestamp]:
     visible_end = pd.Timestamp(as_of).normalize() - timedelta(weeks=FREE_DELAY_WEEKS)
     visible_start = visible_end - pd.DateOffset(years=FREE_HISTORY_YEARS)
     return visible_start, visible_end
+
+
+def derive_cache_key(api_key: str) -> bytes:
+    return hashlib.sha256(CACHE_KEY_DOMAIN + api_key.encode("utf-8")).digest()
+
+
+def encrypt_blob(plaintext: bytes, *, key: bytes, aad: bytes) -> bytes:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    nonce = os.urandom(CACHE_NONCE_BYTES)
+    return CACHE_MAGIC + nonce + AESGCM(key).encrypt(nonce, plaintext, aad)
+
+
+def decrypt_blob(payload: bytes, *, key: bytes, aad: bytes) -> bytes:
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
+    if not payload.startswith(CACHE_MAGIC):
+        raise ValueError("invalid encrypted J-Quants cache blob")
+    nonce_start = len(CACHE_MAGIC)
+    nonce_end = nonce_start + CACHE_NONCE_BYTES
+    nonce = payload[nonce_start:nonce_end]
+    return AESGCM(key).decrypt(nonce, payload[nonce_end:], aad)
+
+
+def parquet_bytes(frame: pd.DataFrame) -> bytes:
+    buffer = BytesIO()
+    frame.to_parquet(buffer, index=False, compression="zstd")
+    return buffer.getvalue()
 
 
 def sha256_file(path: Path) -> str:
@@ -187,15 +219,10 @@ def ensure_private_hf_repo(repo_id: str, token: str) -> Any:
     from huggingface_hub import HfApi
 
     api = HfApi(token=token)
-    api.create_repo(
-        repo_id=repo_id,
-        repo_type="dataset",
-        private=True,
-        exist_ok=True,
-    )
+    api.create_repo(repo_id=repo_id, repo_type="dataset", private=True, exist_ok=True)
     info = api.repo_info(repo_id=repo_id, repo_type="dataset")
     if not bool(getattr(info, "private", False)):
-        raise RuntimeError(f"refusing to cache raw J-Quants data in non-private dataset: {repo_id}")
+        raise RuntimeError(f"refusing to cache J-Quants data in non-private dataset: {repo_id}")
     return api
 
 
@@ -247,6 +274,7 @@ def fetch_all_daily_bars_resumable(
     repo_id: str,
     token: str,
     snapshot_id: str,
+    cache_key: bytes,
     scratch_dir: Path,
 ) -> tuple[pd.DataFrame, list[str], list[str]]:
     from huggingface_hub import hf_hub_download
@@ -258,31 +286,48 @@ def fetch_all_daily_bars_resumable(
     scratch_dir.mkdir(parents=True, exist_ok=True)
 
     for month, month_start, month_end in month_windows(start, end):
-        stage_path = f"staging/{snapshot_id}/prices/{month}.parquet"
-        if stage_path in existing:
+        stage_raw_path = f"staging/{snapshot_id}/prices/{month}.parquet"
+        stage_encrypted_path = f"{stage_raw_path}.enc"
+        if stage_encrypted_path in existing:
             cached_path = hf_hub_download(
                 repo_id=repo_id,
                 repo_type="dataset",
-                filename=stage_path,
+                filename=stage_encrypted_path,
                 token=token,
             )
-            month_frame = pd.read_parquet(cached_path)
+            plaintext = decrypt_blob(
+                Path(cached_path).read_bytes(),
+                key=cache_key,
+                aad=stage_raw_path.encode("utf-8"),
+            )
+            month_frame = pd.read_parquet(BytesIO(plaintext))
             resumed_months.append(month)
-            print(json.dumps({"event": "resume_month", "month": month, "rows": len(month_frame)}), flush=True)
+            print(
+                json.dumps({"event": "resume_encrypted_month", "month": month, "rows": len(month_frame)}),
+                flush=True,
+            )
         else:
             month_frame = fetch_month(client, month_start, month_end)
-            local_stage = scratch_dir / f"{month}.parquet"
-            month_frame.to_parquet(local_stage, index=False, compression="zstd")
+            ciphertext = encrypt_blob(
+                parquet_bytes(month_frame),
+                key=cache_key,
+                aad=stage_raw_path.encode("utf-8"),
+            )
+            local_stage = scratch_dir / f"{month}.parquet.enc"
+            local_stage.write_bytes(ciphertext)
             hf_api.upload_file(
                 repo_id=repo_id,
                 repo_type="dataset",
                 path_or_fileobj=str(local_stage),
-                path_in_repo=stage_path,
-                commit_message=f"stage J-Quants Free {snapshot_id} {month}",
+                path_in_repo=stage_encrypted_path,
+                commit_message=f"stage encrypted J-Quants Free {snapshot_id} {month}",
             )
             local_stage.unlink()
             fetched_months.append(month)
-            print(json.dumps({"event": "cache_month", "month": month, "rows": len(month_frame)}), flush=True)
+            print(
+                json.dumps({"event": "cache_encrypted_month", "month": month, "rows": len(month_frame)}),
+                flush=True,
+            )
         if not month_frame.empty:
             frames.append(month_frame)
 
@@ -291,8 +336,28 @@ def fetch_all_daily_bars_resumable(
     return pd.concat(frames, ignore_index=True), resumed_months, fetched_months
 
 
+def build_encrypted_snapshot(root: Path, encrypted_root: Path, *, key: bytes) -> None:
+    if encrypted_root.exists():
+        shutil.rmtree(encrypted_root)
+    encrypted_root.mkdir(parents=True)
+    for path in sorted(root.rglob("*")):
+        if not path.is_file() or path.name == "manifest.json":
+            continue
+        relative = path.relative_to(root)
+        destination = encrypted_root / f"{relative.as_posix()}.enc"
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        destination.write_bytes(
+            encrypt_blob(
+                path.read_bytes(),
+                key=key,
+                aad=relative.as_posix().encode("utf-8"),
+            )
+        )
+    shutil.copy2(root / "manifest.json", encrypted_root / "manifest.json")
+
+
 def upload_private_snapshot(
-    root: Path,
+    encrypted_root: Path,
     *,
     repo_id: str,
     snapshot_id: str,
@@ -302,13 +367,12 @@ def upload_private_snapshot(
     existing = set(hf_api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
     if manifest_path in existing:
         raise RuntimeError(f"immutable snapshot already exists: {manifest_path}")
-
     hf_api.upload_folder(
         repo_id=repo_id,
         repo_type="dataset",
-        folder_path=str(root),
+        folder_path=str(encrypted_root),
         path_in_repo=f"snapshots/{snapshot_id}",
-        commit_message=f"cache J-Quants Free snapshot {snapshot_id}",
+        commit_message=f"cache encrypted J-Quants Free snapshot {snapshot_id}",
     )
 
 
@@ -323,7 +387,7 @@ def main() -> None:
     if args.request_interval < MIN_REQUEST_INTERVAL_SECONDS:
         raise ValueError(
             f"request interval must be >= {MIN_REQUEST_INTERVAL_SECONDS}s; "
-            "the default intentionally leaves headroom below the nominal Free-plan limit"
+            "the default intentionally leaves headroom for the unpublished rate threshold"
         )
 
     start, end = resolve_window(args.as_of)
@@ -332,6 +396,8 @@ def main() -> None:
     if root.exists():
         shutil.rmtree(root)
     root.mkdir(parents=True)
+    encrypted_root = root.parent / f"{root.name}-encrypted"
+    cache_key = derive_cache_key(api_key)
 
     hf_api = ensure_private_hf_repo(args.hf_repo_id, hf_token)
     print(
@@ -339,6 +405,7 @@ def main() -> None:
             {
                 "hf_repo_id": args.hf_repo_id,
                 "hf_visibility": "private",
+                "hf_plaintext_raw_data": False,
                 "snapshot_id": snapshot_id,
                 "nominal_start": str(start.date()),
                 "nominal_end": str(end.date()),
@@ -358,6 +425,7 @@ def main() -> None:
         repo_id=args.hf_repo_id,
         token=hf_token,
         snapshot_id=snapshot_id,
+        cache_key=cache_key,
         scratch_dir=root / ".staging",
     )
     shutil.rmtree(root / ".staging", ignore_errors=True)
@@ -375,7 +443,7 @@ def main() -> None:
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
 
     manifest: dict[str, object] = {
-        "schema_version": "investor2.alphazerobeta-jquants-free-source.v4",
+        "schema_version": "investor2.alphazerobeta-jquants-free-source.v5",
         "source": "J-Quants API v2",
         "plan": "Free",
         "as_of": str(pd.Timestamp(args.as_of).date()),
@@ -402,11 +470,12 @@ def main() -> None:
         },
         "request_count_current_run": int(client.request_count),
         "minimum_request_interval_seconds": float(args.request_interval),
+        "rate_limit_threshold": "unpublished by current J-Quants FAQ; adaptive 429 cooldown enforced",
         "rate_limit_cooldown_seconds": RATE_LIMIT_COOLDOWN_SECONDS,
         "resumed_months": resumed_months,
         "fetched_months": fetched_months,
         "acquisition_method": (
-            "one all-symbol date query per weekday with private monthly Hugging Face checkpoints; "
+            "one all-symbol date query per weekday with encrypted private monthly Hugging Face checkpoints; "
             "empty non-market dates create no price rows"
         ),
         "raw_scope": "all equity daily-bar rows returned by J-Quants for every visible market date in the Free window",
@@ -415,6 +484,13 @@ def main() -> None:
         "hf_path": f"snapshots/{snapshot_id}",
         "visibility_required": "private",
         "immutable": True,
+        "encryption": {
+            "algorithm": "AES-256-GCM",
+            "key_derivation": "SHA-256 domain-separated JQUANTS_API_KEY",
+            "key_id": hashlib.sha256(cache_key).hexdigest()[:16],
+            "plaintext_raw_data_on_hf": False,
+            "encrypted_suffix": ".enc",
+        },
     }
     manifest["files"] = file_manifest(root)
     (root / "manifest.json").write_text(
@@ -422,12 +498,14 @@ def main() -> None:
         encoding="utf-8",
     )
 
+    build_encrypted_snapshot(root, encrypted_root, key=cache_key)
     upload_private_snapshot(
-        root,
+        encrypted_root,
         repo_id=args.hf_repo_id,
         snapshot_id=snapshot_id,
         hf_api=hf_api,
     )
+    shutil.rmtree(encrypted_root, ignore_errors=True)
     print(json.dumps(manifest, ensure_ascii=False, sort_keys=True), flush=True)
 
 
