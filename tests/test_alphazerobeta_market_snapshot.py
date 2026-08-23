@@ -20,7 +20,14 @@ from scripts.alphazerobeta_build_market_snapshot import (
     screen_with_retry,
 )
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
-from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_manifest, load_prices, load_universe
+from src.research.market_snapshot import (
+    MarketSnapshot,
+    load_benchmark,
+    load_manifest,
+    load_prices,
+    load_prices_from_snapshots,
+    load_universe,
+)
 
 
 def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -119,27 +126,54 @@ def test_cached_benchmark_normalization_prefers_adjusted_close() -> None:
     assert result["BenchmarkReturn"].iloc[1] > 0
 
 
-def test_materialized_snapshot_reads_without_hugging_face_credentials(tmp_path: Path) -> None:
-    snapshot_root = tmp_path / "snapshot"
-    price_root = snapshot_root / "prices" / "us"
+def _write_snapshot(root: Path, *, date: str, close: float) -> MarketSnapshot:
+    price_root = root / "prices" / "us"
     price_root.mkdir(parents=True)
     universe = pd.DataFrame({"Ticker": ["AAA"], "Region": ["us"]})
     prices = pd.DataFrame(
-        {"Ticker": ["AAA"], "Date": ["2024-01-02"], "AdjClose": [10.0], "Close": [10.0], "Volume": [100.0]}
+        {
+            "Ticker": ["AAA"],
+            "Date": [date],
+            "Open": [close],
+            "AdjClose": [close],
+            "Close": [close],
+            "Volume": [100.0],
+        }
     )
     benchmark = pd.DataFrame(
-        {"Ticker": ["SPY"], "Date": ["2024-01-02"], "AdjClose": [100.0], "Close": [100.0], "Volume": [1000.0]}
+        {"Ticker": ["SPY"], "Date": [date], "AdjClose": [100.0], "Close": [100.0], "Volume": [1000.0]}
     )
-    universe.to_parquet(snapshot_root / "universe.parquet", index=False)
+    universe.to_parquet(root / "universe.parquet", index=False)
     prices.to_parquet(price_root / "part-00000.parquet", index=False)
-    benchmark.to_parquet(snapshot_root / "benchmark.parquet", index=False)
-    (snapshot_root / "manifest.json").write_text(
+    benchmark.to_parquet(root / "benchmark.parquet", index=False)
+    (root / "manifest.json").write_text(
         json.dumps({"schema_version": "investor2.market-snapshot.v2", "ticker_count": 1}), encoding="utf-8"
     )
+    return MarketSnapshot(root)
 
-    snapshot = MarketSnapshot(snapshot_root)
+
+def test_materialized_snapshot_reads_without_hugging_face_credentials(tmp_path: Path) -> None:
+    snapshot = _write_snapshot(tmp_path / "snapshot", date="2024-01-02", close=10.0)
 
     assert load_manifest(snapshot)["ticker_count"] == 1
     assert load_universe(snapshot)["Ticker"].tolist() == ["AAA"]
     assert load_prices(snapshot, regions=["us"])["Ticker"].tolist() == ["AAA"]
     assert load_benchmark(snapshot)["Ticker"].tolist() == ["SPY"]
+
+
+def test_composed_snapshots_append_non_overlapping_years(tmp_path: Path) -> None:
+    base = _write_snapshot(tmp_path / "base", date="2024-12-31", close=10.0)
+    extension = _write_snapshot(tmp_path / "extension", date="2025-01-02", close=11.0)
+
+    result = load_prices_from_snapshots([base, extension], regions=["us"])
+
+    assert result["Date"].dt.strftime("%Y-%m-%d").tolist() == ["2024-12-31", "2025-01-02"]
+    assert result["Close"].tolist() == [10.0, 11.0]
+
+
+def test_composed_snapshots_reject_overlap(tmp_path: Path) -> None:
+    left = _write_snapshot(tmp_path / "left", date="2025-01-02", close=10.0)
+    right = _write_snapshot(tmp_path / "right", date="2025-01-02", close=11.0)
+
+    with pytest.raises(AssertionError, match="duplicate Ticker/Date"):
+        load_prices_from_snapshots([left, right], regions=["us"])
