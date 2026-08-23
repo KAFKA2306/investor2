@@ -1,0 +1,68 @@
+{
+  "claim_boundary": "Paper-semantics implementation smoke on surrogate inputs; not a Table-4 reproduction.",
+  "cuda_device_name": null,
+  "dataset": "/tmp/alphazerobeta-japan/panel.npz",
+  "determinism": {
+    "mkldnn_enabled": false,
+    "torch_deterministic_algorithms": true,
+    "torch_num_threads": 1
+  },
+  "device": "cpu",
+  "evaluation_cost_assumptions": {
+    "borrow_fee_bps_per_year": 30.0,
+    "classification": "public-surrogate execution assumption",
+    "transaction_cost_bps_per_side": 15.0
+  },
+  "fold": {
+    "index": 0,
+    "test_end": "2026-02-27",
+    "test_indices": [
+      366,
+      425
+    ],
+    "test_start": "2025-12-01",
+    "train_end": "2025-08-29",
+    "train_indices": [
+      62,
+      306
+    ],
+    "train_start": "2024-08-30",
+    "validation_end": "2025-11-28",
+    "validation_indices": [
+      306,
+      366
+    ],
+    "validation_start": "2025-09-01"
+  },
+  "hypothesis_id": "alphazerobeta_market_neutral_v1",
+  "metrics": {
+    "annualized_sharpe": -4.258358335225892,
+    "benchmark_correlation": 0.0938557119046271,
+    "cumulative_return": -0.06055041426376939,
+    "max_abs_net_exposure": 8.905772119760513e-09,
+    "max_drawdown": -0.07000923277528959,
+    "mean_gross_exposure": 1.0000000005724172,
+    "mean_turnover": 0.02867388102057358,
+    "observations": 58
+  },
+  "paper": "arXiv:2607.18001v1 Appendix D",
+  "realized_oos_dates": {
+    "end": "2026-02-27",
+    "start": "2025-12-02"
+  },
+  "reward_semantics": "paper",
+  "schema_version": "investor2.alphazerobeta-fold-result.v3",
+  "seed": 2306,
+  "training": {
+    "agent_window": 100,
+    "best_validation_sharpe": 2.6763652408791603,
+    "final_loss": 36864602112.0,
+    "hidden_size": 512,
+    "horizon": 200,
+    "iterations": 10,
+    "lambda_corr": 0.5,
+    "lambda_turnover": 0.001,
+    "reward_history_semantics": "Appendix D.4.2: previous weights reapplied over [t-W,t)"
+  },
+  "weights_artifact": "/tmp/alphazerobeta-japan/primary-fold0.weights.npz"
+}

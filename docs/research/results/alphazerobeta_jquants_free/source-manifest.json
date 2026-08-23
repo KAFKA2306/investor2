@@ -1,0 +1,78 @@
+{
+  "acquisition_method": "one all-symbol date query per weekday; full raw rows remain only on the ephemeral runner",
+  "actual_date_range": {
+    "end": "2026-05-29",
+    "start": "2024-05-31"
+  },
+  "as_of": "2026-08-23",
+  "benchmark": {
+    "code": "13060",
+    "exact_topix": false,
+    "label": "NEXT FUNDS TOPIX ETF proxy",
+    "rows": 486
+  },
+  "external_distribution": "blocked; no raw J-Quants upload, artifact, or repository commit",
+  "fetched_at_utc": "2026-08-23T11:09:19.329387+00:00",
+  "files": [
+    {
+      "path": "benchmark.parquet",
+      "sha256": "5ca7c0d5786ddfa00afe5f24ebaab26604047d48a50a745aee5ad72b4db4e4dd",
+      "size_bytes": 38869
+    },
+    {
+      "path": "prices/jp/part-2024.parquet",
+      "sha256": "3b08aaedb1e726e69443c95adc94380ae74bffff4a12f5d2d060d12914ae70b4",
+      "size_bytes": 19710774
+    },
+    {
+      "path": "prices/jp/part-2025.parquet",
+      "sha256": "ada32c29e48a5a40eee6d6c07a45ee7e8fc3f034084aa62007330446579a1173",
+      "size_bytes": 32492927
+    },
+    {
+      "path": "prices/jp/part-2026.parquet",
+      "sha256": "827cee8ff073920aa15248c8b7d4d7f9902f5244f19362d03d211e6cb593ffd9",
+      "size_bytes": 13736411
+    }
+  ],
+  "minimum_request_interval_seconds": 15.0,
+  "nominal_free_window": {
+    "delay_weeks": 12,
+    "end": "2026-05-31",
+    "history_years": 2,
+    "start": "2024-05-31"
+  },
+  "observed_market_days": 486,
+  "plan": "Free",
+  "price_columns": [
+    "Date",
+    "Code",
+    "O",
+    "H",
+    "L",
+    "C",
+    "UL",
+    "LL",
+    "Vo",
+    "Va",
+    "AdjFactor",
+    "AdjO",
+    "AdjH",
+    "AdjL",
+    "AdjC",
+    "AdjVo",
+    "MktCap",
+    "ExRT",
+    "Ticker",
+    "AdjClose",
+    "Volume"
+  ],
+  "price_rows": 2050816,
+  "rate_limit_cooldown_seconds": 70.0,
+  "raw_retention": "ephemeral GitHub Actions runner only; always-step deletes working data",
+  "raw_scope": "all equity daily-bar rows returned by J-Quants for every visible market date in the Free window",
+  "request_count": 521,
+  "schema_version": "investor2.alphazerobeta-jquants-free-ephemeral.v1",
+  "source": "J-Quants API v2",
+  "ticker_count": 4640
+}
