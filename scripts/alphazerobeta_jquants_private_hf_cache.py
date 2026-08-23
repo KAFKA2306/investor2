@@ -6,6 +6,7 @@ shared distribution surface. J-Quants rows are encrypted client-side before
 upload. Plaintext materialization exists only in the current runner working
 directory and is deleted by the calling workflow.
 """
+
 from __future__ import annotations
 
 import argparse
@@ -215,7 +216,11 @@ def materialize_window(
                 commit_message=f"cache encrypted personal J-Quants weekdays {month}",
             )
             uploaded_shards += month_uploaded
-            existing.update(cache_path(day) for day in month_days if (upload_root / day.strftime("%Y-%m-%d.bin.enc")).is_file())
+            existing.update(
+                cache_path(day)
+                for day in month_days
+                if (upload_root / day.strftime("%Y-%m-%d.bin.enc")).is_file()
+            )
         shutil.rmtree(upload_root)
 
         print(
