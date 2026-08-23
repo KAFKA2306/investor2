@@ -23,30 +23,6 @@ export const ConfigSchema = z
         cacheBacktestResults: z.string(),
       })
       .strict(),
-    sector_spillover: z
-      .object({
-        us_sectors: z.array(z.string()),
-        jp_sectors: z.array(z.string()),
-        pca: z.object({
-          n_components: z.number(),
-          regularization_alpha: z.number(),
-          max_iterations: z.number(),
-        }),
-        signal: z.object({
-          long_threshold: z.number(),
-          short_threshold: z.number(),
-          neutral_threshold: z.number(),
-        }),
-        backtest: z.object({
-          initial_capital: z.number(),
-          long_size: z.number(),
-          short_size: z.number(),
-          rebalance_frequency: z.string(),
-          transaction_cost_bps: z.number(),
-          data_cache_dir: z.string(),
-        }),
-      })
-      .optional(),
   })
   .strict();
 
@@ -157,76 +133,6 @@ export const PipelineResultsReportSchema = z.object({
 });
 
 export type PipelineResultsReport = z.infer<typeof PipelineResultsReportSchema>;
-
-export const US11SectorsSchema = z.union([
-  z.literal("energy"),
-  z.literal("materials"),
-  z.literal("industrials"),
-  z.literal("consumer_discretionary"),
-  z.literal("consumer_staples"),
-  z.literal("healthcare"),
-  z.literal("financials"),
-  z.literal("it"),
-  z.literal("communication"),
-  z.literal("utilities"),
-  z.literal("real_estate"),
-]);
-
-export type US11Sectors = z.infer<typeof US11SectorsSchema>;
-
-export const JP17SectorsSchema = z.union([
-  z.literal("1000"),
-  z.literal("2000"),
-  z.literal("3000"),
-  z.literal("4000"),
-  z.literal("5000"),
-  z.literal("6000"),
-  z.literal("7000"),
-  z.literal("8000"),
-  z.literal("9000"),
-  z.literal("10000"),
-  z.literal("11000"),
-  z.literal("12000"),
-  z.literal("13000"),
-  z.literal("14000"),
-  z.literal("15000"),
-  z.literal("16000"),
-  z.literal("17000"),
-]);
-
-export type JP17Sectors = z.infer<typeof JP17SectorsSchema>;
-
-export const SectorReturnsSchema = z.object({
-  date: z.string(),
-  sector: z.union([US11SectorsSchema, JP17SectorsSchema]),
-  return_pct: z.number(),
-});
-
-export type SectorReturns = z.infer<typeof SectorReturnsSchema>;
-
-export const RegularizedPCAResultSchema = z.object({
-  date: z.string(),
-  components: z.array(z.number()),
-  variance_explained: z.array(z.number()),
-  cumulative_variance: z.number(),
-});
-
-export type RegularizedPCAResult = z.infer<typeof RegularizedPCAResultSchema>;
-
-export const SectorSpilloverSignalSchema = z.object({
-  date: z.string(),
-  jp_sector: JP17SectorsSchema,
-  signal_score: z.number(),
-  signal_type: z.union([
-    z.literal("long"),
-    z.literal("neutral"),
-    z.literal("short"),
-  ]),
-  confidence: z.number(),
-  us_factor_contributions: z.record(z.string(), z.number()),
-});
-
-export type SectorSpilloverSignal = z.infer<typeof SectorSpilloverSignalSchema>;
 
 export const SpilloverBacktestResultSchema = z.object({
   backtest_id: z.string(),
