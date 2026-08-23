@@ -52,17 +52,3 @@ sector_spillover:
     rebalance_frequency: "daily"
     transaction_cost_bps: 50
     data_cache_dir: "cache/sector_spillover"
-
-integrations:
-  discord:
-    enabled: true
-    tokenEnv: DISCORD_TOKEN
-    webhookUrlEnv: DISCORD_WEBHOOK_URL
-    commandPrefix: "!"
-    maxMessageLength: 2000
-  slack:
-    enabled: false
-    tokenEnv: SLACK_BOT_TOKEN
-  line:
-    enabled: false
-    channelAccessTokenEnv: LINE_CHANNEL_ACCESS_TOKEN
