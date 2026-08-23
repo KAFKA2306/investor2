@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Bounded 12/3/3 AlphaZeroBeta schedule for the J-Quants Free cache validation."""
+
 from __future__ import annotations
 
 from collections.abc import Iterable
