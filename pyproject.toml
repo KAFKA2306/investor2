@@ -20,6 +20,7 @@ dependencies = [
     "polars",
     "protobuf",
     "pydantic",
+    "pyarrow",
     "pyqlib",
     "python-dotenv",
     "pyyaml",
@@ -39,6 +40,7 @@ dependencies = [
     "japanize-matplotlib",
     "matplotlib-fontja",
     "scikit-learn",
+    "yfinance",
 ]
 
 [dependency-groups]
