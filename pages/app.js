@@ -38,12 +38,13 @@ function applyFilters() {
   const moduleName = $("module-filter").value;
   const viewer = $("viewer-filter").value;
 
-  state.filtered = state.artifacts.filter((item) => (
-    (!query || artifactSearchText(item).includes(query))
-    && (!category || item.category === category)
-    && (!moduleName || item.module === moduleName)
-    && (!viewer || item.viewer === viewer)
-  ));
+  state.filtered = state.artifacts.filter(
+    (item) =>
+      (!query || artifactSearchText(item).includes(query)) &&
+      (!category || item.category === category) &&
+      (!moduleName || item.module === moduleName) &&
+      (!viewer || item.viewer === viewer),
+  );
   renderCatalog();
 }
 
@@ -57,7 +58,10 @@ function renderCatalog() {
     button.type = "button";
     button.className = "artifact-card";
     button.setAttribute("role", "listitem");
-    button.setAttribute("aria-current", String(item.path === state.selectedPath));
+    button.setAttribute(
+      "aria-current",
+      String(item.path === state.selectedPath),
+    );
     button.addEventListener("click", () => selectArtifact(item.path));
 
     const path = document.createElement("span");
@@ -66,7 +70,11 @@ function renderCatalog() {
 
     const sub = document.createElement("span");
     sub.className = "artifact-sub";
-    for (const text of [item.viewer, formatBytes(item.size_bytes), item.local_url ? "mirrored" : "source-only"]) {
+    for (const text of [
+      item.viewer,
+      formatBytes(item.size_bytes),
+      item.local_url ? "mirrored" : "source-only",
+    ]) {
       const badge = document.createElement("span");
       badge.className = "badge";
       badge.textContent = text;
@@ -152,7 +160,10 @@ function renderTable(rows, target) {
 
   wrap.append(table);
   target.append(wrap);
-  if (rows.length > maxRows || rows.some((values) => values.length > maxColumns)) {
+  if (
+    rows.length > maxRows ||
+    rows.some((values) => values.length > maxColumns)
+  ) {
     const note = document.createElement("p");
     note.className = "notice";
     note.textContent = `Preview limited to ${maxRows} rows × ${maxColumns} columns. Use Raw for the complete file.`;
@@ -193,7 +204,8 @@ async function renderArtifact(item) {
   }
 
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`HTTP ${response.status} while loading ${item.path}`);
+  if (!response.ok)
+    throw new Error(`HTTP ${response.status} while loading ${item.path}`);
   const text = await response.text();
 
   if (item.viewer === "json") {
@@ -208,7 +220,10 @@ async function renderArtifact(item) {
   }
 
   if (item.viewer === "table") {
-    renderTable(parseDelimited(text, item.extension === ".tsv" ? "\t" : ","), target);
+    renderTable(
+      parseDelimited(text, item.extension === ".tsv" ? "\t" : ","),
+      target,
+    );
     return;
   }
 
@@ -225,16 +240,24 @@ async function selectArtifact(path) {
 
   $("viewer-empty").hidden = true;
   $("viewer-content").hidden = false;
-  $("artifact-module").textContent = `${item.category} · ${item.module} · ${item.viewer}`;
+  $("artifact-module").textContent =
+    `${item.category} · ${item.module} · ${item.viewer}`;
   $("artifact-title").textContent = item.path;
-  $("artifact-meta").textContent = `${item.media_type} · ${formatBytes(item.size_bytes)} · ${item.local_url ? "mirrored" : "source-only"}`;
+  $("artifact-meta").textContent =
+    `${item.media_type} · ${formatBytes(item.size_bytes)} · ${item.local_url ? "mirrored" : "source-only"}`;
   $("source-link").href = item.source_url;
   $("raw-link").href = item.local_url || item.raw_url;
-  $("raw-link").textContent = item.local_url ? "Open mirrored file" : "Raw source";
+  $("raw-link").textContent = item.local_url
+    ? "Open mirrored file"
+    : "Raw source";
 
   const params = new URLSearchParams(window.location.search);
   params.set("path", item.path);
-  history.replaceState(null, "", `${window.location.pathname}?${params.toString()}`);
+  history.replaceState(
+    null,
+    "",
+    `${window.location.pathname}?${params.toString()}`,
+  );
 
   try {
     await renderArtifact(item);
@@ -243,7 +266,8 @@ async function selectArtifact(path) {
     target.replaceChildren();
     const message = document.createElement("p");
     message.className = "notice error";
-    message.textContent = error instanceof Error ? error.message : String(error);
+    message.textContent =
+      error instanceof Error ? error.message : String(error);
     target.append(message);
   }
 }
@@ -253,31 +277,52 @@ async function init() {
   if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
   const manifest = await response.json();
   state.manifest = manifest;
-  state.artifacts = [...manifest.artifacts].sort((a, b) => a.path.localeCompare(b));
+  state.artifacts = [...manifest.artifacts].sort((a, b) =>
+    a.path.localeCompare(b),
+  );
   state.filtered = state.artifacts;
 
   $("artifact-count").textContent = manifest.totals.artifacts.toLocaleString();
   $("local-count").textContent = manifest.totals.local_files.toLocaleString();
-  $("source-count").textContent = manifest.totals.source_only_files.toLocaleString();
+  $("source-count").textContent =
+    manifest.totals.source_only_files.toLocaleString();
   $("total-size").textContent = formatBytes(manifest.totals.bytes);
   $("roots").textContent = `Roots: ${manifest.content_roots.join(", ")}`;
 
   const revision = manifest.revision;
   $("revision-link").textContent = revision.slice(0, 12);
-  $("revision-link").href = `https://github.com/${manifest.repository}/commit/${revision}`;
+  $("revision-link").href =
+    `https://github.com/${manifest.repository}/commit/${revision}`;
 
-  fillSelect($("category-filter"), new Set(state.artifacts.map((item) => item.category)));
-  fillSelect($("module-filter"), new Set(state.artifacts.map((item) => item.module)));
-  fillSelect($("viewer-filter"), new Set(state.artifacts.map((item) => item.viewer)));
+  fillSelect(
+    $("category-filter"),
+    new Set(state.artifacts.map((item) => item.category)),
+  );
+  fillSelect(
+    $("module-filter"),
+    new Set(state.artifacts.map((item) => item.module)),
+  );
+  fillSelect(
+    $("viewer-filter"),
+    new Set(state.artifacts.map((item) => item.viewer)),
+  );
 
-  for (const id of ["search", "category-filter", "module-filter", "viewer-filter"]) {
+  for (const id of [
+    "search",
+    "category-filter",
+    "module-filter",
+    "viewer-filter",
+  ]) {
     $(id).addEventListener("input", applyFilters);
     $(id).addEventListener("change", applyFilters);
   }
 
   renderCatalog();
   const requestedPath = new URLSearchParams(window.location.search).get("path");
-  if (requestedPath && state.artifacts.some((item) => item.path === requestedPath)) {
+  if (
+    requestedPath &&
+    state.artifacts.some((item) => item.path === requestedPath)
+  ) {
     await selectArtifact(requestedPath);
   }
 }
