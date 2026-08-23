@@ -1,0 +1,37 @@
+name: AlphaZeroBeta J-Quants one-shot autofix
+
+on:
+  push:
+    branches:
+      - research/alphazerobeta-jquants-free-validation
+    paths:
+      - .github/workflows/alphazerobeta-jquants-autofix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format-and-remove-self:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: research/alphazerobeta-jquants-free-validation
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - run: python -m pip install ruff
+      - name: Apply canonical Ruff formatting and lint fixes
+        run: |
+          ruff format \
+            scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_japan_free_train.py
+          ruff check --fix \
+            scripts/alphazerobeta_jquants_free_collect.py \
+            scripts/alphazerobeta_japan_free_train.py
+          git rm .github/workflows/alphazerobeta-jquants-autofix.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/alphazerobeta_jquants_free_collect.py scripts/alphazerobeta_japan_free_train.py
+          git commit -m "style: normalize J-Quants AlphaZeroBeta entry points"
+          git push origin HEAD:research/alphazerobeta-jquants-free-validation
