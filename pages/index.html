@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>investor2 Evidence Browser</title>
+  <meta name="description" content="Mechanically discovered research, data, generated artifacts, and public API outputs from investor2.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">KAFKA2306 / investor2</p>
+      <h1>Evidence Browser</h1>
+      <p class="lede">Repository results and evidence are discovered at build time. New files under canonical content roots appear without page-specific registration.</p>
+    </div>
+    <a id="revision-link" class="revision" href="#" rel="noreferrer">revision …</a>
+  </header>
+
+  <section class="stats" aria-label="Artifact summary">
+    <div><strong id="artifact-count">—</strong><span>artifacts</span></div>
+    <div><strong id="local-count">—</strong><span>mirrored</span></div>
+    <div><strong id="source-count">—</strong><span>source-only</span></div>
+    <div><strong id="total-size">—</strong><span>source bytes</span></div>
+  </section>
+
+  <main class="workspace">
+    <section class="catalog" aria-label="Artifact catalog">
+      <div class="controls">
+        <label>
+          <span>Search</span>
+          <input id="search" type="search" placeholder="path, module, type" autocomplete="off">
+        </label>
+        <label>
+          <span>Category</span>
+          <select id="category-filter"><option value="">All</option></select>
+        </label>
+        <label>
+          <span>Module</span>
+          <select id="module-filter"><option value="">All</option></select>
+        </label>
+        <label>
+          <span>Viewer</span>
+          <select id="viewer-filter"><option value="">All</option></select>
+        </label>
+      </div>
+      <div class="catalog-meta"><span id="visible-count">—</span> visible</div>
+      <div id="artifact-list" class="artifact-list" role="list"></div>
+    </section>
+
+    <section class="viewer" aria-live="polite">
+      <div id="viewer-empty" class="empty-state">
+        <h2>Select an artifact</h2>
+        <p>JSON, CSV/TSV, text, images, HTML, and PDF use generic viewers. Large or binary files remain linked to their exact GitHub revision.</p>
+      </div>
+      <div id="viewer-content" hidden>
+        <div class="viewer-heading">
+          <div>
+            <p id="artifact-module" class="eyebrow"></p>
+            <h2 id="artifact-title"></h2>
+            <p id="artifact-meta" class="artifact-meta"></p>
+          </div>
+          <div class="viewer-links">
+            <a id="source-link" href="#" rel="noreferrer">GitHub source</a>
+            <a id="raw-link" href="#" rel="noreferrer">Raw</a>
+          </div>
+        </div>
+        <div id="render-target" class="render-target"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span id="roots"></span>
+    <span>Manifest is derived; repository files remain canonical.</span>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>

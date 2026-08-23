@@ -1,28 +1,37 @@
-# GitHub Pages検証境界
+# GitHub Pages 検証境界
 
-このリポジトリでは、Pull Requestの候補成果物と、mainへデプロイされた本番成果物を別の検証対象として扱う。
+GitHub Pages は研究結果を生成する場所ではなく、repository に存在する evidence を機械的に閲覧する projection とする。正準データは `docs/`、`data/`、`generated/`、`api/` の repository file であり、Pages manifest は deploy 時に再生成する派生物である。
 
-## Pull Request候補
+## Build contract
 
-`Validate and deploy AAARTS evidence dashboard` workflowが、そのcommitから `_site` を生成する。候補サイトをローカルHTTPサーバーで配信し、同じworkflow内でHTMLとmanifestを取得する。
+`scripts/build_pages_site.py` は canonical content roots を再帰走査し、`manifest.json` を生成する。テーマ名や個別研究を登録する allowlist は持たない。
 
-検証内容は固定件数ではなく、次の意味契約である。
+各 entry には path、category、module、media type、size、viewer、exact revision の GitHub source/raw URL を記録する。5 MB 以下の file は Pages artifact に mirror し、それを超える file は source-only として exact revision へリンクする。
 
-- `summary.tested_hypotheses` と実レコード数が一致する
-- 判定別集計がレコード集合から再計算した値と一致する
-- 仮説ID、外部主張ID、証拠参照が空でなく重複しない
-- buildのcommit SHAとrun IDが存在する
-- `CONFIRMED` は必須の時系列OOS、統計、安定性、コスト、Point-in-Time、売買可能性ゲートがすべてPASSである
-- HTMLに主要landmark、結果表、manifest取得処理が存在する
+viewer は file type から決定する。
 
-検証ログと取得済みHTML・manifestは `pages-candidate-validation-<commit SHA>` artifactへ保存する。Pull Requestでは公開中の本番URLを合否判定に使わない。
+- JSON: formatted JSON
+- CSV / TSV: generic table preview
+- Markdown / text / log / YAML / TOML / XML / SQL: text
+- image: image preview
+- HTML / PDF: embedded preview
+- その他または mirror threshold 超過: source/download link
 
-## mainデプロイ後の本番
+## Pull Request candidate
 
-`Verify deployed GitHub Pages` workflowは、Pages build/deploy workflowがmainで成功した後にだけ `workflow_run` から起動する。公開URLを上限20回、6秒間隔でpollingし、manifest内の `build.code_sha` がデプロイ対象commitと一致するまで待つ。
+`Build and deploy modular evidence browser` workflow は変更 commit から `_site` を生成し、次を検証する。
 
-上限内に一致しない場合は、期待commit、各試行、取得済みファイルを残して失敗する。固定sleepだけで成功扱いにはしない。本番検証ログは `pages-production-validation-<commit SHA>` artifactへ保存する。
+- synthetic test で、新しい module/file が UI や workflow の個別変更なしに manifest へ追加される
+- manifest revision が candidate commit と一致する
+- manifest path が重複しない
+- manifest に記録した mirrored file がすべて実在する
+- `docs` / `data` / `generated` / `api` の各 canonical root が discovery 対象になっている
+- HTTP 経由で index、manifest、revision、JS、CSS、代表 artifact を取得できる
 
-## 変更時の原則
+検証証拠は `pages-candidate-validation-<commit SHA>` artifact に保存する。Pull Request の合否には production URL を使わない。
 
-仮説数や判定数そのものは恒久契約ではない。正当な追加・削除・判定変更は、レコード、集計、証拠ゲート、来歴が相互整合していれば受け入れる。集計値だけの変更、重複ID、根拠不足の強判定、候補HTMLの破損はCIで拒否する。
+## main deployment
+
+main の Pages deploy 成功後、`Verify deployed GitHub Pages` workflow が production を polling する。`revision.json` と `manifest.json` の revision が deploy 対象 commit と一致し、generic frontend と代表 mirrored artifact が実際に取得できた場合だけ release verification を成功とする。
+
+検証証拠は `pages-production-validation-<commit SHA>` artifact に保存する。merge と release は別状態として扱う。
