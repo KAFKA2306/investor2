@@ -9,14 +9,19 @@ import numpy as np
 import pandas as pd
 
 from src.research.alphazerobeta import sha256_file, write_json
+from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_manifest, load_prices
 
 ROLLING_WINDOWS = (5, 20, 60)
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Prepare a PIT-safe AlphaZeroBeta panel from local market CSVs.")
-    parser.add_argument("--prices-csv", required=True, type=Path)
-    parser.add_argument("--benchmark-csv", required=True, type=Path)
+    parser = argparse.ArgumentParser(description="Prepare a PIT-safe AlphaZeroBeta panel from local files or HF cache.")
+    source = parser.add_mutually_exclusive_group(required=True)
+    source.add_argument("--prices-csv", type=Path)
+    source.add_argument("--hf-repo-id", help="Immutable Hugging Face dataset snapshot; avoids Yahoo access during runs")
+    parser.add_argument("--benchmark-csv", type=Path, help="Required with --prices-csv")
+    parser.add_argument("--hf-revision", default="main")
+    parser.add_argument("--hf-regions", default="us", help="Comma-separated cached price regions")
     parser.add_argument("--output", required=True, type=Path, help="Output .npz path")
     parser.add_argument("--manifest", type=Path, help="Defaults to <output>.manifest.json")
     parser.add_argument("--max-assets", type=int, default=64)
@@ -28,17 +33,30 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def normalize_prices(path: Path) -> pd.DataFrame:
-    frame = pd.read_csv(path)
-    aliases = {"AdjustmentClose": "Close", "AdjustmentVolume": "Volume", "code": "Code", "date": "Date"}
-    frame = frame.rename(columns={k: v for k, v in aliases.items() if k in frame.columns and v not in frame.columns})
+def normalize_price_frame(frame: pd.DataFrame) -> pd.DataFrame:
+    aliases = {
+        "AdjustmentClose": "Close",
+        "AdjustmentVolume": "Volume",
+        "Ticker": "Code",
+        "code": "Code",
+        "date": "Date",
+    }
+    normalized = frame.rename(
+        columns={key: value for key, value in aliases.items() if key in frame.columns and value not in frame.columns}
+    ).copy()
+    if "AdjClose" in normalized.columns:
+        adjusted = pd.to_numeric(normalized["AdjClose"], errors="coerce")
+        if "Close" in normalized.columns:
+            normalized["Close"] = adjusted.fillna(pd.to_numeric(normalized["Close"], errors="coerce"))
+        else:
+            normalized["Close"] = adjusted
     required = {"Code", "Date", "Close", "Volume"}
-    missing = sorted(required - set(frame.columns))
+    missing = sorted(required - set(normalized.columns))
     if missing:
-        raise AssertionError(f"prices CSV missing columns: {missing}")
-    out = frame[["Code", "Date", "Close", "Volume"]].copy()
+        raise AssertionError(f"prices input missing columns: {missing}")
+    out = normalized[["Code", "Date", "Close", "Volume"]].copy()
     out["Code"] = out["Code"].astype(str)
-    out["Date"] = pd.to_datetime(out["Date"], errors="raise")
+    out["Date"] = pd.to_datetime(out["Date"], errors="raise").dt.tz_localize(None)
     out["Close"] = pd.to_numeric(out["Close"], errors="raise")
     out["Volume"] = pd.to_numeric(out["Volume"], errors="raise")
     out = out[(out["Close"] > 0) & (out["Volume"] >= 0)].sort_values(["Code", "Date"])
@@ -47,22 +65,69 @@ def normalize_prices(path: Path) -> pd.DataFrame:
     return out
 
 
-def normalize_benchmark(path: Path) -> pd.DataFrame:
-    frame = pd.read_csv(path)
+def normalize_prices(path: Path) -> pd.DataFrame:
+    return normalize_price_frame(pd.read_csv(path))
+
+
+def normalize_benchmark_frame(frame: pd.DataFrame) -> pd.DataFrame:
     aliases = {"AdjustmentClose": "Close", "date": "Date"}
-    frame = frame.rename(columns={k: v for k, v in aliases.items() if k in frame.columns and v not in frame.columns})
+    normalized = frame.rename(
+        columns={key: value for key, value in aliases.items() if key in frame.columns and value not in frame.columns}
+    ).copy()
+    if "AdjClose" in normalized.columns:
+        adjusted = pd.to_numeric(normalized["AdjClose"], errors="coerce")
+        if "Close" in normalized.columns:
+            normalized["Close"] = adjusted.fillna(pd.to_numeric(normalized["Close"], errors="coerce"))
+        else:
+            normalized["Close"] = adjusted
     required = {"Date", "Close"}
-    missing = sorted(required - set(frame.columns))
+    missing = sorted(required - set(normalized.columns))
     if missing:
-        raise AssertionError(f"benchmark CSV missing columns: {missing}")
-    out = frame[["Date", "Close"]].copy()
-    out["Date"] = pd.to_datetime(out["Date"], errors="raise")
+        raise AssertionError(f"benchmark input missing columns: {missing}")
+    out = normalized[["Date", "Close"]].copy()
+    out["Date"] = pd.to_datetime(out["Date"], errors="raise").dt.tz_localize(None)
     out["Close"] = pd.to_numeric(out["Close"], errors="raise")
     out = out[out["Close"] > 0].sort_values("Date")
     if out["Date"].duplicated().any():
         raise AssertionError("duplicate benchmark dates")
     out["BenchmarkReturn"] = np.log(out["Close"]).diff()
     return out
+
+
+def normalize_benchmark(path: Path) -> pd.DataFrame:
+    return normalize_benchmark_frame(pd.read_csv(path))
+
+
+def load_inputs(args: argparse.Namespace) -> tuple[pd.DataFrame, pd.DataFrame, dict[str, object]]:
+    if args.hf_repo_id:
+        regions = [value.strip().lower() for value in args.hf_regions.split(",") if value.strip()]
+        snapshot = MarketSnapshot(args.hf_repo_id, args.hf_revision)
+        snapshot_manifest = load_manifest(snapshot)
+        return (
+            normalize_price_frame(load_prices(snapshot, regions=regions)),
+            normalize_benchmark_frame(load_benchmark(snapshot)),
+            {
+                "source": "huggingface-market-snapshot",
+                "hf_repo_id": args.hf_repo_id,
+                "hf_revision": args.hf_revision,
+                "hf_regions": regions,
+                "snapshot_fetched_at_utc": snapshot_manifest.get("fetched_at_utc"),
+                "snapshot_ticker_count": snapshot_manifest.get("ticker_count"),
+            },
+        )
+    if args.prices_csv is None or args.benchmark_csv is None:
+        raise ValueError("--benchmark-csv is required with --prices-csv")
+    return (
+        normalize_prices(args.prices_csv),
+        normalize_benchmark(args.benchmark_csv),
+        {
+            "source": "local-csv",
+            "prices_csv": str(args.prices_csv),
+            "prices_sha256": sha256_file(args.prices_csv),
+            "benchmark_csv": str(args.benchmark_csv),
+            "benchmark_sha256": sha256_file(args.benchmark_csv),
+        },
+    )
 
 
 def choose_universe(prices: pd.DataFrame, cutoff: pd.Timestamp, max_assets: int) -> list[str]:
@@ -102,29 +167,28 @@ def cross_sectional_zscore(panel: pd.DataFrame, feature_columns: list[str]) -> p
     for column in feature_columns:
         grouped = result.groupby("Date", observed=True)[column]
         mean = grouped.transform("mean")
-        std = grouped.transform(lambda x: x.std(ddof=0)).replace(0.0, np.nan)
+        std = grouped.transform(lambda values: values.std(ddof=0)).replace(0.0, np.nan)
         result[column] = ((result[column] - mean) / std).fillna(0.0)
     return result
 
 
 def main() -> None:
     args = parse_args()
-    prices = normalize_prices(args.prices_csv)
-    benchmark = normalize_benchmark(args.benchmark_csv)
+    prices, benchmark, source_metadata = load_inputs(args)
     cutoff = pd.Timestamp(args.universe_cutoff)
     codes = choose_universe(prices, cutoff, args.max_assets)
     selected = prices[prices["Code"].isin(codes)].copy()
     pieces = []
     for code, group in selected.groupby("Code", observed=True):
-        f = build_asset_features(group).reset_index()
-        f["Code"] = str(code)
-        pieces.append(f)
+        feature_frame = build_asset_features(group).reset_index()
+        feature_frame["Code"] = str(code)
+        pieces.append(feature_frame)
     panel = pd.concat(pieces, ignore_index=True)
     if args.start:
         panel = panel[panel["Date"] >= pd.Timestamp(args.start)]
     if args.end:
         panel = panel[panel["Date"] <= pd.Timestamp(args.end)]
-    feature_columns = [c for c in panel.columns if c not in {"Date", "Code", "asset_return"}]
+    feature_columns = [column for column in panel.columns if column not in {"Date", "Code", "asset_return"}]
     panel = cross_sectional_zscore(panel, feature_columns)
     counts = panel.groupby("Date", observed=True)["Code"].nunique()
     common_dates = counts[counts == len(codes)].index.sort_values()
@@ -161,11 +225,8 @@ def main() -> None:
     write_json(
         manifest,
         {
-            "schema_version": "investor2.alphazerobeta-prepared-dataset.v1",
-            "prices_csv": str(args.prices_csv),
-            "prices_sha256": sha256_file(args.prices_csv),
-            "benchmark_csv": str(args.benchmark_csv),
-            "benchmark_sha256": sha256_file(args.benchmark_csv),
+            "schema_version": "investor2.alphazerobeta-prepared-dataset.v2",
+            **source_metadata,
             "universe_cutoff": str(cutoff.date()),
             "selection_rule": "top mean price*volume on/before cutoff, minimum available-history gate",
             "selected_codes": code_order,
@@ -179,6 +240,7 @@ def main() -> None:
                 "Universe selection uses only data at or before universe_cutoff.",
                 "Features use backward-looking rolling windows and same-day cross-sectional normalization only.",
                 "No backward fill is used.",
+                "When source=huggingface-market-snapshot, Yahoo is not accessed during panel preparation.",
             ],
         },
     )
