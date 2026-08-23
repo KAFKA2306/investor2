@@ -4,14 +4,16 @@ on:
   push:
     branches:
       - research/alphazerobeta-jquants-free-validation
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: write
 
 concurrency:
-  group: alphazerobeta-jquants-free-validation
-  cancel-in-progress: true
+  group: alphazerobeta-jquants-free-validation-${{ github.event_name }}
+  cancel-in-progress: false
 
 jobs:
   contract:
@@ -38,7 +40,8 @@ jobs:
   snapshot-and-validate:
     if: >-
       github.event_name == 'workflow_dispatch' ||
-      (github.event_name == 'push' && contains(github.event.head_commit.message, '[snapshot]'))
+      (github.event_name == 'pull_request' && github.actor != 'github-actions[bot]') ||
+      (github.event_name == 'push' && github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, '[snapshot]'))
     needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 360
