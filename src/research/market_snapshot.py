@@ -43,3 +43,25 @@ def load_prices(snapshot: MarketSnapshot, *, regions: list[str] | None = None) -
     if not files:
         raise FileNotFoundError(f"no materialized price partitions under {snapshot.root}: {selected}")
     return pd.concat((pd.read_parquet(path) for path in files), ignore_index=True)
+
+
+def load_prices_from_snapshots(
+    snapshots: list[MarketSnapshot],
+    *,
+    regions: list[str] | None = None,
+) -> pd.DataFrame:
+    """Compose non-overlapping immutable price shards without silent precedence rules."""
+    if not snapshots:
+        raise ValueError("at least one market snapshot is required")
+    data = pd.concat((load_prices(snapshot, regions=regions) for snapshot in snapshots), ignore_index=True)
+    required = {"Ticker", "Date"}
+    missing = sorted(required - set(data.columns))
+    if missing:
+        raise AssertionError(f"market snapshot prices missing identity columns: {missing}")
+    data["Ticker"] = data["Ticker"].astype(str)
+    data["Date"] = pd.to_datetime(data["Date"], errors="raise").dt.tz_localize(None)
+    duplicate = data.duplicated(["Ticker", "Date"], keep=False)
+    if duplicate.any():
+        sample = data.loc[duplicate, ["Ticker", "Date"]].head(5).to_dict(orient="records")
+        raise AssertionError(f"overlapping market snapshot shards contain duplicate Ticker/Date rows: {sample}")
+    return data.sort_values(["Ticker", "Date"]).reset_index(drop=True)
