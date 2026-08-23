@@ -3,40 +3,40 @@ import { resolve } from "node:path";
 import { Hono } from "hono";
 import yaml from "js-yaml";
 import {
-	getCompanyCount,
-	getCompanyDetail,
-	getCompanyList,
-	searchCompanies,
+  getCompanyCount,
+  getCompanyDetail,
+  getCompanyList,
+  searchCompanies,
 } from "../preprocess/edinet";
 import { getScreenerData } from "../preprocess/screener";
 import { ConfigSchema } from "../shared/schema";
 
 const app = new Hono();
 const config = ConfigSchema.parse(
-	yaml.load(readFileSync("config/default.yaml", "utf-8")),
+  yaml.load(readFileSync("config/default.yaml", "utf-8")),
 );
 const CACHE_ROOT_DIR = resolve(config.paths.data, "..");
 
 interface CacheStatistics {
-	marketData: {
-		stocks: number;
-		priceRecords: number;
-		finRecords: number;
-		dateRange: { start: string; end: string } | null;
-		sizeGb: number;
-	};
-	edinet: {
-		companyCount: number;
-		documentCount: number;
-		sizeGb: number;
-	};
-	sqlite: {
-		market: { sizeGb: number } | null;
-		edinet: { sizeGb: number } | null;
-		yahoocache: { sizeGb: number } | null;
-	};
-	lastUpdated: string;
-	totalSizeGb: number;
+  marketData: {
+    stocks: number;
+    priceRecords: number;
+    finRecords: number;
+    dateRange: { start: string; end: string } | null;
+    sizeGb: number;
+  };
+  edinet: {
+    companyCount: number;
+    documentCount: number;
+    sizeGb: number;
+  };
+  sqlite: {
+    market: { sizeGb: number } | null;
+    edinet: { sizeGb: number } | null;
+    yahoocache: { sizeGb: number } | null;
+  };
+  lastUpdated: string;
+  totalSizeGb: number;
 }
 
 let cachedStats: CacheStatistics | null = null;
@@ -46,287 +46,287 @@ const JSON_CACHE_TTL = 3_600_000;
 const JSON_CACHE_PATH = "/tmp/investor_stats_cache.json";
 
 function formatBytes(bytes: number): string {
-	if (bytes === 0) return "0 B";
-	const k = 1024;
-	const sizes = ["B", "KB", "MB", "GB", "TB"];
-	const i = Math.floor(Math.log(bytes) / Math.log(k));
-	return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
+  if (bytes === 0) return "0 B";
+  const k = 1024;
+  const sizes = ["B", "KB", "MB", "GB", "TB"];
+  const i = Math.floor(Math.log(bytes) / Math.log(k));
+  return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
 function getFileSize(path: string): number {
-	return statSync(path).size;
+  return statSync(path).size;
 }
 
 function getDirectorySize(dirPath: string): number {
-	const files = readdirSync(dirPath, { recursive: true });
-	let totalSize = 0;
-	for (const file of files) {
-		const filePath = resolve(dirPath, file as string);
-		const stat = statSync(filePath);
-		if (stat.isFile()) {
-			totalSize += stat.size;
-		}
-	}
-	return totalSize;
+  const files = readdirSync(dirPath, { recursive: true });
+  let totalSize = 0;
+  for (const file of files) {
+    const filePath = resolve(dirPath, file as string);
+    const stat = statSync(filePath);
+    if (stat.isFile()) {
+      totalSize += stat.size;
+    }
+  }
+  return totalSize;
 }
 
 function _getMarketDataStats(): CacheStatistics["marketData"] {
-	const jquantsDir = config.paths.data;
-	const stockListPath = resolve(jquantsDir, "stock_list.csv");
-	const priceCsvPath = resolve(jquantsDir, "raw_stock_price.csv");
-	const finCsvPath = resolve(jquantsDir, "raw_stock_fin.csv");
+  const jquantsDir = config.paths.data;
+  const stockListPath = resolve(jquantsDir, "stock_list.csv");
+  const priceCsvPath = resolve(jquantsDir, "raw_stock_price.csv");
+  const finCsvPath = resolve(jquantsDir, "raw_stock_fin.csv");
 
-	let stocks = 0;
-	let priceRecords = 0;
-	let finRecords = 0;
-	let dateRange: { start: string; end: string } | null = null;
+  let stocks = 0;
+  let priceRecords = 0;
+  let finRecords = 0;
+  let dateRange: { start: string; end: string } | null = null;
 
-	const listData = readFileSync(stockListPath, "utf-8");
-	stocks = listData.split("\n").length - 2;
+  const listData = readFileSync(stockListPath, "utf-8");
+  stocks = listData.split("\n").length - 2;
 
-	const priceData = readFileSync(priceCsvPath, "utf-8");
-	const lines = priceData.split("\n");
-	priceRecords = Math.max(0, lines.length - 2);
-	if (lines.length > 2) {
-		const firstLine = lines[1]?.split(",")[1] || "";
-		const lastLine = lines[lines.length - 2]?.split(",")[1] || "";
-		if (firstLine && lastLine) {
-			dateRange = { start: firstLine, end: lastLine };
-		}
-	}
+  const priceData = readFileSync(priceCsvPath, "utf-8");
+  const lines = priceData.split("\n");
+  priceRecords = Math.max(0, lines.length - 2);
+  if (lines.length > 2) {
+    const firstLine = lines[1]?.split(",")[1] || "";
+    const lastLine = lines[lines.length - 2]?.split(",")[1] || "";
+    if (firstLine && lastLine) {
+      dateRange = { start: firstLine, end: lastLine };
+    }
+  }
 
-	const finData = readFileSync(finCsvPath, "utf-8");
-	finRecords = finData.split("\n").length - 2;
+  const finData = readFileSync(finCsvPath, "utf-8");
+  finRecords = finData.split("\n").length - 2;
 
-	const sizeGb =
-		getFileSize(priceCsvPath) +
-		getFileSize(finCsvPath) +
-		getFileSize(stockListPath);
+  const sizeGb =
+    getFileSize(priceCsvPath) +
+    getFileSize(finCsvPath) +
+    getFileSize(stockListPath);
 
-	return {
-		stocks,
-		priceRecords,
-		finRecords,
-		dateRange,
-		sizeGb: sizeGb / (1024 * 1024 * 1024),
-	};
+  return {
+    stocks,
+    priceRecords,
+    finRecords,
+    dateRange,
+    sizeGb: sizeGb / (1024 * 1024 * 1024),
+  };
 }
 
 function _getEdinetStats(): CacheStatistics["edinet"] {
-	const edinetDir = config.paths.edinet;
-	let companyCount = 0;
-	let documentCount = 0;
+  const edinetDir = config.paths.edinet;
+  let companyCount = 0;
+  let documentCount = 0;
 
-	const items = readdirSync(edinetDir);
-	companyCount = items.filter((item) => !item.startsWith(".")).length;
+  const items = readdirSync(edinetDir);
+  companyCount = items.filter((item) => !item.startsWith(".")).length;
 
-	for (const company of items) {
-		const companyPath = resolve(edinetDir, company);
-		const stat = statSync(companyPath);
-		if (stat.isDirectory()) {
-			const docs = readdirSync(companyPath);
-			documentCount += docs.filter((d) => !d.startsWith(".")).length;
-		}
-	}
+  for (const company of items) {
+    const companyPath = resolve(edinetDir, company);
+    const stat = statSync(companyPath);
+    if (stat.isDirectory()) {
+      const docs = readdirSync(companyPath);
+      documentCount += docs.filter((d) => !d.startsWith(".")).length;
+    }
+  }
 
-	const sizeGb = getDirectorySize(edinetDir) / (1024 * 1024 * 1024);
+  const sizeGb = getDirectorySize(edinetDir) / (1024 * 1024 * 1024);
 
-	return { companyCount, documentCount, sizeGb };
+  return { companyCount, documentCount, sizeGb };
 }
 
 function _getSqliteStats() {
-	const cacheDir = config.paths.cache;
-	const stats: CacheStatistics["sqlite"] = {
-		market: null,
-		edinet: null,
-		yahoocache: null,
-	};
+  const cacheDir = config.paths.cache;
+  const stats: CacheStatistics["sqlite"] = {
+    market: null,
+    edinet: null,
+    yahoocache: null,
+  };
 
-	const sqliteFiles = [
-		{ key: "market", path: "market_cache.sqlite" },
-		{ key: "edinet", path: "edinet_cache.sqlite" },
-		{ key: "yahoocache", path: "yahoo_cache.sqlite" },
-	] as const;
+  const sqliteFiles = [
+    { key: "market", path: "market_cache.sqlite" },
+    { key: "edinet", path: "edinet_cache.sqlite" },
+    { key: "yahoocache", path: "yahoo_cache.sqlite" },
+  ] as const;
 
-	for (const { key, path } of sqliteFiles) {
-		const fullPath = resolve(cacheDir, path);
-		const size = getFileSize(fullPath) / (1024 * 1024 * 1024);
-		stats[key] = { sizeGb: size };
-	}
+  for (const { key, path } of sqliteFiles) {
+    const fullPath = resolve(cacheDir, path);
+    const size = getFileSize(fullPath) / (1024 * 1024 * 1024);
+    stats[key] = { sizeGb: size };
+  }
 
-	return stats;
+  return stats;
 }
 
 function _getLastUpdated(): string {
-	const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
+  const dirs = [config.paths.cache, config.paths.data, config.paths.edinet];
 
-	let latestTime = 0;
+  let latestTime = 0;
 
-	for (const dir of dirs) {
-		const stat = statSync(dir);
-		if (stat.mtimeMs > latestTime) {
-			latestTime = stat.mtimeMs;
-		}
-	}
+  for (const dir of dirs) {
+    const stat = statSync(dir);
+    if (stat.mtimeMs > latestTime) {
+      latestTime = stat.mtimeMs;
+    }
+  }
 
-	return latestTime > 0 ? new Date(latestTime).toISOString() : "Never updated";
+  return latestTime > 0 ? new Date(latestTime).toISOString() : "Never updated";
 }
 
 async function getStats(): Promise<CacheStatistics> {
-	const now = Date.now();
+  const now = Date.now();
 
-	// L1: in-memory cache (30s TTL)
-	if (cachedStats && now - lastStatsUpdate < STATS_CACHE_TTL) {
-		return cachedStats;
-	}
+  // L1: in-memory cache (30s TTL)
+  if (cachedStats && now - lastStatsUpdate < STATS_CACHE_TTL) {
+    return cachedStats;
+  }
 
-	// L2: pre-computed JSON file (1h TTL)
-	if (existsSync(JSON_CACHE_PATH)) {
-		try {
-			const fileData = JSON.parse(
-				readFileSync(JSON_CACHE_PATH, "utf-8"),
-			) as CacheStatistics & { generatedAt?: number };
-			const fileAge = now - (fileData.generatedAt || 0);
-			if (fileAge < JSON_CACHE_TTL) {
-				cachedStats = fileData;
-				lastStatsUpdate = now;
-				return cachedStats;
-			}
-		} catch {
-			// JSON file corrupted or unreadable, fall through to subprocess
-		}
-	}
+  // L2: pre-computed JSON file (1h TTL)
+  if (existsSync(JSON_CACHE_PATH)) {
+    try {
+      const fileData = JSON.parse(
+        readFileSync(JSON_CACHE_PATH, "utf-8"),
+      ) as CacheStatistics & { generatedAt?: number };
+      const fileAge = now - (fileData.generatedAt || 0);
+      if (fileAge < JSON_CACHE_TTL) {
+        cachedStats = fileData;
+        lastStatsUpdate = now;
+        return cachedStats;
+      }
+    } catch {
+      // JSON file corrupted or unreadable, fall through to subprocess
+    }
+  }
 
-	// L3: subprocess fallback (current behavior, ~5s)
-	try {
-		const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts"], {
-			cwd: process.cwd(),
-			stdio: ["inherit", "pipe", "inherit"],
-		});
+  // L3: subprocess fallback (current behavior, ~5s)
+  try {
+    const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts"], {
+      cwd: process.cwd(),
+      stdio: ["inherit", "pipe", "inherit"],
+    });
 
-		const output = await new Response(proc.stdout).text();
+    const output = await new Response(proc.stdout).text();
 
-		const parseNumber = (text: string, pattern: RegExp): number => {
-			const match = text.match(pattern);
-			const match1 = match?.[1];
-			return match1 ? parseInt(match1.replace(/,/g, ""), 10) : 0;
-		};
+    const parseNumber = (text: string, pattern: RegExp): number => {
+      const match = text.match(pattern);
+      const match1 = match?.[1];
+      return match1 ? parseInt(match1.replace(/,/g, ""), 10) : 0;
+    };
 
-		const parseFloat_ = (text: string, pattern: RegExp): number => {
-			const match = text.match(pattern);
-			const match1 = match?.[1];
-			return match1 ? parseFloat(match1) : 0;
-		};
+    const parseFloat_ = (text: string, pattern: RegExp): number => {
+      const match = text.match(pattern);
+      const match1 = match?.[1];
+      return match1 ? parseFloat(match1) : 0;
+    };
 
-		const parseDate = (
-			text: string,
-			pattern: RegExp,
-		): { start: string; end: string } | null => {
-			const match = text.match(pattern);
-			const match1 = match?.[1];
-			if (!match1) return null;
-			const [start, end] = match1.split(" ～ ");
-			return { start: start.trim(), end: (end || "").trim() };
-		};
+    const parseDate = (
+      text: string,
+      pattern: RegExp,
+    ): { start: string; end: string } | null => {
+      const match = text.match(pattern);
+      const match1 = match?.[1];
+      if (!match1) return null;
+      const [start, end] = match1.split(" ～ ");
+      return { start: start.trim(), end: (end || "").trim() };
+    };
 
-		cachedStats = {
-			marketData: {
-				stocks: parseNumber(output, /📈 カバー銘柄:\s+([\d,]+)/),
-				priceRecords: parseNumber(output, /📊 価格データ:\s+([\d.]+)k/),
-				finRecords: parseNumber(output, /💼 財務データ:\s+([\d.]+)k/),
-				dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/u),
-				sizeGb:
-					parseFloat_(
-						output,
-						/マーケットデータ[^容量]*容量:\s+([\d.]+)\s*[KMGT]B/,
-					) || 0,
-			},
-			edinet: {
-				companyCount: parseNumber(output, /🏛️\s+カバー企業:\s+([\d,]+)/),
-				documentCount: parseNumber(output, /📄 企業文書:\s+([\d,]+)/),
-				sizeGb:
-					parseFloat_(
-						output,
-						/企業情報 \([^)]*\)[^容量]*容量:\s+([\d.]+)\s*([KMGT]B)/,
-					) || 0,
-			},
-			sqlite: {
-				market: parseFloat_(
-					output,
-					/📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-				)
-					? {
-							sizeGb:
-								parseFloat_(
-									output,
-									/📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-								) / 1024,
-						}
-					: null,
-				edinet: parseFloat_(
-					output,
-					/🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-				)
-					? {
-							sizeGb:
-								parseFloat_(
-									output,
-									/🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-								) / 1024,
-						}
-					: null,
-				yahoocache: parseFloat_(
-					output,
-					/🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-				)
-					? {
-							sizeGb:
-								parseFloat_(
-									output,
-									/🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-								) / 1024,
-						}
-					: null,
-			},
-			lastUpdated: new Date().toISOString(),
-			totalSizeGb: parseFloat_(output, /🎯 総容量:\s+([\d.]+)\s*GB/),
-		};
-		lastStatsUpdate = now;
-	} catch (error) {
-		console.error("Failed to get stats:", error);
-		cachedStats = {
-			marketData: {
-				stocks: 0,
-				priceRecords: 0,
-				finRecords: 0,
-				dateRange: null,
-				sizeGb: 0,
-			},
-			edinet: { companyCount: 0, documentCount: 0, sizeGb: 0 },
-			sqlite: { market: null, edinet: null, yahoocache: null },
-			lastUpdated: "Error",
-			totalSizeGb: 0,
-		};
-	}
+    cachedStats = {
+      marketData: {
+        stocks: parseNumber(output, /📈 カバー銘柄:\s+([\d,]+)/),
+        priceRecords: parseNumber(output, /📊 価格データ:\s+([\d.]+)k/),
+        finRecords: parseNumber(output, /💼 財務データ:\s+([\d.]+)k/),
+        dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/u),
+        sizeGb:
+          parseFloat_(
+            output,
+            /マーケットデータ[^容量]*容量:\s+([\d.]+)\s*[KMGT]B/,
+          ) || 0,
+      },
+      edinet: {
+        companyCount: parseNumber(output, /🏛️\s+カバー企業:\s+([\d,]+)/),
+        documentCount: parseNumber(output, /📄 企業文書:\s+([\d,]+)/),
+        sizeGb:
+          parseFloat_(
+            output,
+            /企業情報 \([^)]*\)[^容量]*容量:\s+([\d.]+)\s*([KMGT]B)/,
+          ) || 0,
+      },
+      sqlite: {
+        market: parseFloat_(
+          output,
+          /📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+        )
+          ? {
+              sizeGb:
+                parseFloat_(
+                  output,
+                  /📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+                ) / 1024,
+            }
+          : null,
+        edinet: parseFloat_(
+          output,
+          /🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+        )
+          ? {
+              sizeGb:
+                parseFloat_(
+                  output,
+                  /🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+                ) / 1024,
+            }
+          : null,
+        yahoocache: parseFloat_(
+          output,
+          /🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+        )
+          ? {
+              sizeGb:
+                parseFloat_(
+                  output,
+                  /🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
+                ) / 1024,
+            }
+          : null,
+      },
+      lastUpdated: new Date().toISOString(),
+      totalSizeGb: parseFloat_(output, /🎯 総容量:\s+([\d.]+)\s*GB/),
+    };
+    lastStatsUpdate = now;
+  } catch (error) {
+    console.error("Failed to get stats:", error);
+    cachedStats = {
+      marketData: {
+        stocks: 0,
+        priceRecords: 0,
+        finRecords: 0,
+        dateRange: null,
+        sizeGb: 0,
+      },
+      edinet: { companyCount: 0, documentCount: 0, sizeGb: 0 },
+      sqlite: { market: null, edinet: null, yahoocache: null },
+      lastUpdated: "Error",
+      totalSizeGb: 0,
+    };
+  }
 
-	return cachedStats;
+  return cachedStats;
 }
 
 // Render stats as HTML
 function renderStatsCards(stats: CacheStatistics): string {
-	const stats_total =
-		stats.marketData.sizeGb +
-		stats.edinet.sizeGb +
-		(stats.sqlite.market?.sizeGb || 0) +
-		(stats.sqlite.edinet?.sizeGb || 0) +
-		(stats.sqlite.yahoocache?.sizeGb || 0);
+  const stats_total =
+    stats.marketData.sizeGb +
+    stats.edinet.sizeGb +
+    (stats.sqlite.market?.sizeGb || 0) +
+    (stats.sqlite.edinet?.sizeGb || 0) +
+    (stats.sqlite.yahoocache?.sizeGb || 0);
 
-	const marketReady =
-		stats.marketData.stocks > 0 && stats.marketData.priceRecords > 0;
-	const edinetReady = stats.edinet.companyCount > 0;
-	const cacheReady = Object.values(stats.sqlite).some((v) => v !== null);
+  const marketReady =
+    stats.marketData.stocks > 0 && stats.marketData.priceRecords > 0;
+  const edinetReady = stats.edinet.companyCount > 0;
+  const cacheReady = Object.values(stats.sqlite).some((v) => v !== null);
 
-	return `
+  return `
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
       <div class="bg-white rounded-lg shadow p-6 border-l-4 border-blue-500">
         <div class="text-sm font-medium text-gray-600">📈 カバー銘柄</div>
@@ -359,10 +359,10 @@ function renderStatsCards(stats: CacheStatistics): string {
           <div>📊 ${(stats.marketData.priceRecords / 1000).toFixed(1)}k 行</div>
           <div>💼 ${(stats.marketData.finRecords / 1000).toFixed(1)}k 行</div>
           ${
-						stats.marketData.dateRange
-							? `<div>📅 ${stats.marketData.dateRange.start} ~ ${stats.marketData.dateRange.end}</div>`
-							: ""
-					}
+            stats.marketData.dateRange
+              ? `<div>📅 ${stats.marketData.dateRange.start} ~ ${stats.marketData.dateRange.end}</div>`
+              : ""
+          }
         </div>
       </div>
 
@@ -388,15 +388,15 @@ function renderStatsCards(stats: CacheStatistics): string {
         </div>
         <div class="mt-3 space-y-2 text-sm text-gray-600">
           ${
-						stats.sqlite.market
-							? `<div>📊 ${formatBytes(stats.sqlite.market.sizeGb * 1024 * 1024 * 1024)}</div>`
-							: "<div>未生成</div>"
-					}
+            stats.sqlite.market
+              ? `<div>📊 ${formatBytes(stats.sqlite.market.sizeGb * 1024 * 1024 * 1024)}</div>`
+              : "<div>未生成</div>"
+          }
           ${
-						stats.sqlite.edinet
-							? `<div>🏢 ${formatBytes(stats.sqlite.edinet.sizeGb * 1024 * 1024 * 1024)}</div>`
-							: ""
-					}
+            stats.sqlite.edinet
+              ? `<div>🏢 ${formatBytes(stats.sqlite.edinet.sizeGb * 1024 * 1024 * 1024)}</div>`
+              : ""
+          }
         </div>
       </div>
     </div>
@@ -410,8 +410,8 @@ function renderStatsCards(stats: CacheStatistics): string {
 
 // Dashboard page
 app.get("/", async (c) => {
-	const stats = await getStats();
-	return c.html(`
+  const stats = await getStats();
+  return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
     <head>
@@ -451,46 +451,46 @@ app.get("/", async (c) => {
 
 // API: Get stats
 app.get("/api/stats", async (c) => {
-	const stats = await getStats();
-	return c.html(renderStatsCards(stats));
+  const stats = await getStats();
+  return c.html(renderStatsCards(stats));
 });
 
 // API: Refresh cache (trigger task get:all)
 app.post("/api/refresh", async (c) => {
-	try {
-		cachedStats = null;
-		lastStatsUpdate = 0;
-		const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
-			cwd: process.cwd(),
-		});
-		const _output = await new Response(proc.stdout).text();
-		const stats = await getStats();
+  try {
+    cachedStats = null;
+    lastStatsUpdate = 0;
+    const proc = Bun.spawn(["bun", "run", "task", "get:all"], {
+      cwd: process.cwd(),
+    });
+    const _output = await new Response(proc.stdout).text();
+    const stats = await getStats();
 
-		return c.html(`
+    return c.html(`
       <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
         <div class="text-green-700 font-medium">✅ キャッシュ更新開始</div>
         <div class="text-sm text-green-600 mt-1">バックグラウンドで実行中...</div>
       </div>
       ${renderStatsCards(stats)}
     `);
-	} catch (error) {
-		return c.html(`
+  } catch (error) {
+    return c.html(`
       <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6">
         <div class="text-red-700 font-medium">❌ エラー</div>
         <div class="text-sm text-red-600 mt-1">${error instanceof Error ? error.message : "不明なエラー"}</div>
       </div>
     `);
-	}
+  }
 });
 
 // Stock Screener view
 app.get("/screener", async (c) => {
-	const data = await getScreenerData();
-	const pageSize = 50;
-	const pageData = data.slice(0, pageSize);
-	const totalPages = Math.ceil(data.length / pageSize);
+  const data = await getScreenerData();
+  const pageSize = 50;
+  const pageData = data.slice(0, pageSize);
+  const totalPages = Math.ceil(data.length / pageSize);
 
-	const resultsHtml = `
+  const resultsHtml = `
     <div class="card bg-white shadow">
       <div class="card-body">
         <h2 class="card-title">検索結果: ${data.length} 件（1/${totalPages}ページ）</h2>
@@ -513,8 +513,8 @@ app.get("/screener", async (c) => {
             </thead>
             <tbody>
               ${pageData
-								.map(
-									(stock) => `
+                .map(
+                  (stock) => `
                 <tr class="hover">
                   <td><code class="text-sm">${stock.code}</code></td>
                   <td><strong class="text-sm">${stock.name}</strong></td>
@@ -531,8 +531,8 @@ app.get("/screener", async (c) => {
                   <td>${Number.isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
                 </tr>
               `,
-								)
-								.join("")}
+                )
+                .join("")}
             </tbody>
           </table>
         </div>
@@ -541,7 +541,7 @@ app.get("/screener", async (c) => {
     </div>
   `;
 
-	return c.html(`
+  return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
     <head>
@@ -674,9 +674,9 @@ app.get("/screener", async (c) => {
 
 // Company Finder view
 app.get("/company", async (c) => {
-	const companyCount = await getCompanyCount();
+  const companyCount = await getCompanyCount();
 
-	return c.html(`
+  return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
     <head>
@@ -745,39 +745,39 @@ app.get("/company", async (c) => {
 
 // API: Stock Screener results
 app.get("/api/screener", async (c) => {
-	const data = await getScreenerData();
-	const q = c.req.query("search-input") || "";
-	const sector = c.req.query("sector-select") || "";
-	const market = c.req.query("market-select") || "";
+  const data = await getScreenerData();
+  const q = c.req.query("search-input") || "";
+  const sector = c.req.query("sector-select") || "";
+  const market = c.req.query("market-select") || "";
 
-	let filtered = data;
+  let filtered = data;
 
-	if (q) {
-		const lower = q.toLowerCase();
-		filtered = filtered.filter(
-			(s) =>
-				s.code.includes(q) ||
-				s.name.toLowerCase().includes(lower) ||
-				s.sectorName.toLowerCase().includes(lower),
-		);
-	}
+  if (q) {
+    const lower = q.toLowerCase();
+    filtered = filtered.filter(
+      (s) =>
+        s.code.includes(q) ||
+        s.name.toLowerCase().includes(lower) ||
+        s.sectorName.toLowerCase().includes(lower),
+    );
+  }
 
-	if (sector) {
-		filtered = filtered.filter((s) => s.sectorCode === sector);
-	}
+  if (sector) {
+    filtered = filtered.filter((s) => s.sectorCode === sector);
+  }
 
-	if (market) {
-		filtered = filtered.filter((s) => s.market === market);
-	}
+  if (market) {
+    filtered = filtered.filter((s) => s.market === market);
+  }
 
-	const pageSize = 50;
-	const page = parseInt(c.req.query("page") || "1", 10);
-	const start = (page - 1) * pageSize;
-	const end = start + pageSize;
-	const pageData = filtered.slice(start, end);
-	const totalPages = Math.ceil(filtered.length / pageSize);
+  const pageSize = 50;
+  const page = parseInt(c.req.query("page") || "1", 10);
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const pageData = filtered.slice(start, end);
+  const totalPages = Math.ceil(filtered.length / pageSize);
 
-	return c.html(`
+  return c.html(`
     <div class="card bg-white shadow">
       <div class="card-body">
         <h2 class="card-title">検索結果: ${filtered.length} 件（${page}/${totalPages}ページ）</h2>
@@ -800,8 +800,8 @@ app.get("/api/screener", async (c) => {
             </thead>
             <tbody>
               ${pageData
-								.map(
-									(stock) => `
+                .map(
+                  (stock) => `
                 <tr class="hover">
                   <td><code class="text-sm">${stock.code}</code></td>
                   <td><strong class="text-sm">${stock.name}</strong></td>
@@ -818,8 +818,8 @@ app.get("/api/screener", async (c) => {
                   <td>${Number.isNaN(stock.operatingMargin) ? "N/A" : stock.operatingMargin.toFixed(1)}%</td>
                 </tr>
               `,
-								)
-								.join("")}
+                )
+                .join("")}
             </tbody>
           </table>
         </div>
@@ -831,74 +831,74 @@ app.get("/api/screener", async (c) => {
 });
 
 function renderPagination(page: number, totalPages: number): string {
-	const buttons = [];
-	const hxAttrs =
-		'hx-include="#search-input,#sector-select,#market-select" hx-swap="innerHTML"';
-	if (page > 1) {
-		buttons.push(
-			`<button hx-get="/api/screener?page=${page - 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">← 前</button>`,
-		);
-	}
+  const buttons = [];
+  const hxAttrs =
+    'hx-include="#search-input,#sector-select,#market-select" hx-swap="innerHTML"';
+  if (page > 1) {
+    buttons.push(
+      `<button hx-get="/api/screener?page=${page - 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">← 前</button>`,
+    );
+  }
 
-	for (
-		let i = Math.max(1, page - 2);
-		i <= Math.min(totalPages, page + 2);
-		i++
-	) {
-		buttons.push(
-			`<button hx-get="/api/screener?page=${i}" hx-target="#results" ${hxAttrs} class="btn btn-sm ${i === page ? "btn-primary" : ""}">${i}</button>`,
-		);
-	}
+  for (
+    let i = Math.max(1, page - 2);
+    i <= Math.min(totalPages, page + 2);
+    i++
+  ) {
+    buttons.push(
+      `<button hx-get="/api/screener?page=${i}" hx-target="#results" ${hxAttrs} class="btn btn-sm ${i === page ? "btn-primary" : ""}">${i}</button>`,
+    );
+  }
 
-	if (page < totalPages) {
-		buttons.push(
-			`<button hx-get="/api/screener?page=${page + 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">次 →</button>`,
-		);
-	}
+  if (page < totalPages) {
+    buttons.push(
+      `<button hx-get="/api/screener?page=${page + 1}" hx-target="#results" ${hxAttrs} class="btn btn-sm">次 →</button>`,
+    );
+  }
 
-	return `<div class="flex justify-center gap-2 mt-4">${buttons.join("")}</div>`;
+  return `<div class="flex justify-center gap-2 mt-4">${buttons.join("")}</div>`;
 }
 
 // API: Get all sectors
 app.get("/api/screener/sectors", async (c) => {
-	const data = await getScreenerData();
-	const sectorsMap = new Map<string, string>(); // sectorCode -> sectorName
+  const data = await getScreenerData();
+  const sectorsMap = new Map<string, string>(); // sectorCode -> sectorName
 
-	for (const stock of data) {
-		if (!sectorsMap.has(stock.sectorCode)) {
-			sectorsMap.set(stock.sectorCode, stock.sectorName);
-		}
-	}
+  for (const stock of data) {
+    if (!sectorsMap.has(stock.sectorCode)) {
+      sectorsMap.set(stock.sectorCode, stock.sectorName);
+    }
+  }
 
-	const sectors = Array.from(sectorsMap.entries())
-		.map(([code, name]) => ({ code, name }))
-		.sort((a, b) => a.name.localeCompare(b.name));
+  const sectors = Array.from(sectorsMap.entries())
+    .map(([code, name]) => ({ code, name }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 
-	return c.json(sectors);
+  return c.json(sectors);
 });
 
 // API: Company search
 // API: Company list
 app.get("/api/company/list", async (c) => {
-	const page = parseInt(c.req.query("page") || "0", 10);
-	const limit = 20;
-	const offset = page * limit;
+  const page = parseInt(c.req.query("page") || "0", 10);
+  const limit = 20;
+  const offset = page * limit;
 
-	const companies = await getCompanyList(limit, offset);
+  const companies = await getCompanyList(limit, offset);
 
-	if (companies.length === 0) {
-		return c.html(`
+  if (companies.length === 0) {
+    return c.html(`
       <div class="alert alert-warning">
         <span>該当する企業がありません</span>
       </div>
     `);
-	}
+  }
 
-	return c.html(`
+  return c.html(`
     <div class="grid gap-4">
       ${companies
-				.map(
-					(comp) => `
+        .map(
+          (comp) => `
         <div class="card bg-white shadow">
           <div class="card-body">
             <h3 class="card-title">${comp.name}</h3>
@@ -910,30 +910,30 @@ app.get("/api/company/list", async (c) => {
           </div>
         </div>
       `,
-				)
-				.join("")}
+        )
+        .join("")}
     </div>
   `);
 });
 
 // API: Company search
 app.get("/api/company/search", async (c) => {
-	const q = c.req.query("q") || "";
-	const companies = await searchCompanies(q);
+  const q = c.req.query("q") || "";
+  const companies = await searchCompanies(q);
 
-	if (companies.length === 0) {
-		return c.html(`
+  if (companies.length === 0) {
+    return c.html(`
       <div class="alert alert-warning">
         <span>「${q}」に該当する企業がありません</span>
       </div>
     `);
-	}
+  }
 
-	return c.html(`
+  return c.html(`
     <div class="grid gap-4">
       ${companies
-				.map(
-					(comp) => `
+        .map(
+          (comp) => `
         <div class="card bg-white shadow">
           <div class="card-body">
             <h3 class="card-title">${comp.name}</h3>
@@ -945,26 +945,26 @@ app.get("/api/company/search", async (c) => {
           </div>
         </div>
       `,
-				)
-				.join("")}
+        )
+        .join("")}
     </div>
   `);
 });
 
 // Page: Company detail
 app.get("/edinet/:code", async (c) => {
-	const code = c.req.param("code");
-	const company = await getCompanyDetail(code, true);
+  const code = c.req.param("code");
+  const company = await getCompanyDetail(code, true);
 
-	if (!company) {
-		return c.html(`
+  if (!company) {
+    return c.html(`
       <div class="alert alert-error">
         <span>企業が見つかりません: ${code}</span>
       </div>
     `);
-	}
+  }
 
-	return c.html(`
+  return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
     <head>
@@ -1020,152 +1020,152 @@ app.get("/edinet/:code", async (c) => {
 
         <!-- Overview Section (XBRL Text) -->
         ${
-					company.overview
-						? `
+          company.overview
+            ? `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
               <h2 class="card-title">企業概要（テキスト情報）</h2>
               <div class="space-y-4">
                 ${
-									company.overview.businessDescription
-										? `
+                  company.overview.businessDescription
+                    ? `
                 <div>
                   <h3 class="font-semibold text-gray-800 mb-2">事業内容</h3>
                   <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.businessDescription).slice(0, 500)}</p>
                 </div>
                 `
-										: ""
-								}
+                    : ""
+                }
                 ${
-									company.overview.risks
-										? `
+                  company.overview.risks
+                    ? `
                 <div>
                   <h3 class="font-semibold text-gray-800 mb-2">リスク要因</h3>
                   <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.risks).slice(0, 500)}</p>
                 </div>
                 `
-										: ""
-								}
+                    : ""
+                }
                 ${
-									company.overview.products
-										? `
+                  company.overview.products
+                    ? `
                 <div>
                   <h3 class="font-semibold text-gray-800 mb-2">事業セグメント</h3>
                   <p class="text-sm text-gray-700 whitespace-pre-wrap">${String(company.overview.products).slice(0, 500)}</p>
                 </div>
                 `
-										: ""
-								}
+                    : ""
+                }
               </div>
             </div>
           </div>
         `
-						: ""
-				}
+            : ""
+        }
 
         <!-- Governance Section -->
         ${
-					company.governance
-						? `
+          company.governance
+            ? `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
               <h2 class="card-title">ガバナンス</h2>
               <div class="grid grid-cols-1 gap-4">
                 ${Object.entries(company.governance)
-									.slice(0, 5)
-									.map(([key, value]) => {
-										const displayKey = key.replace(/([A-Z])/g, " $1").trim();
-										return `<div>
+                  .slice(0, 5)
+                  .map(([key, value]) => {
+                    const displayKey = key.replace(/([A-Z])/g, " $1").trim();
+                    return `<div>
                   <p class="text-sm text-gray-600">${displayKey}</p>
                   <p class="font-semibold">${String(value).slice(0, 100)}</p>
                 </div>`;
-									})
-									.join("")}
+                  })
+                  .join("")}
               </div>
             </div>
           </div>
         `
-						: ""
-				}
+            : ""
+        }
 
         <!-- Financial Section -->
         ${
-					company.financial
-						? (
-								() => {
-									const latestFin = Array.isArray(company.financial)
-										? company.financial[company.financial.length - 1]
-										: company.financial;
-									if (!latestFin) return "";
-									return `
+          company.financial
+            ? (
+                () => {
+                  const latestFin = Array.isArray(company.financial)
+                    ? company.financial[company.financial.length - 1]
+                    : company.financial;
+                  if (!latestFin) return "";
+                  return `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
               <h2 class="card-title">財務概要</h2>
               <p class="text-sm text-gray-600 mb-4">期末: ${latestFin.periodEnd || "不明"}</p>
               <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 ${
-									latestFin.eps !== null && latestFin.eps !== undefined
-										? `<div>
+                  latestFin.eps !== null && latestFin.eps !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">EPS</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.eps === "number" ? latestFin.eps.toFixed(2) : "N/A"}</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
                 ${
-									latestFin.bps !== null && latestFin.bps !== undefined
-										? `<div>
+                  latestFin.bps !== null && latestFin.bps !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">BPS</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.bps === "number" ? latestFin.bps.toFixed(2) : "N/A"}</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
                 ${
-									latestFin.netSales !== null &&
-									latestFin.netSales !== undefined
-										? `<div>
+                  latestFin.netSales !== null &&
+                  latestFin.netSales !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">売上高</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.netSales === "number" ? latestFin.netSales.toFixed(1) : "N/A"}億</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
                 ${
-									latestFin.profit !== null && latestFin.profit !== undefined
-										? `<div>
+                  latestFin.profit !== null && latestFin.profit !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">純利益</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.profit === "number" ? latestFin.profit.toFixed(1) : "N/A"}億</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
                 ${
-									latestFin.equity !== null && latestFin.equity !== undefined
-										? `<div>
+                  latestFin.equity !== null && latestFin.equity !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">自己資本</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.equity === "number" ? latestFin.equity.toFixed(1) : "N/A"}億</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
                 ${
-									latestFin.totalAssets !== null &&
-									latestFin.totalAssets !== undefined
-										? `<div>
+                  latestFin.totalAssets !== null &&
+                  latestFin.totalAssets !== undefined
+                    ? `<div>
                   <p class="text-xs text-gray-600">総資産</p>
                   <p class="text-lg font-bold">¥${typeof latestFin.totalAssets === "number" ? latestFin.totalAssets.toFixed(1) : "N/A"}億</p>
                 </div>`
-										: ""
-								}
+                    : ""
+                }
               </div>
             </div>
           </div>
         `;
-								}
-							)()
-						: ""
-				}
+                }
+              )()
+            : ""
+        }
 
         <!-- Financial Chart Section -->
         ${
-					company.financial && Array.isArray(company.financial)
-						? `
+          company.financial && Array.isArray(company.financial)
+            ? `
           <div class="card bg-white shadow mb-6">
             <div class="card-body">
               <h2 class="card-title">財務指標の推移</h2>
@@ -1249,13 +1249,13 @@ app.get("/edinet/:code", async (c) => {
             </div>
           </div>
         `
-						: ""
-				}
+            : ""
+        }
 
         <!-- Documents Section -->
         ${
-					company.documentCount && company.documentCount > 0
-						? `
+          company.documentCount && company.documentCount > 0
+            ? `
           <div class="card bg-white shadow">
             <div class="card-body">
               <h2 class="card-title">提出文書</h2>
@@ -1266,8 +1266,8 @@ app.get("/edinet/:code", async (c) => {
             </div>
           </div>
         `
-						: ""
-				}
+            : ""
+        }
 
       </div>
     </body>
@@ -1276,146 +1276,146 @@ app.get("/edinet/:code", async (c) => {
 });
 
 interface ReferenceLink {
-	title: string;
-	url: string;
-	category: string;
-	description: string;
-	features: string[];
-	tags: string[];
-	badge?: string;
+  title: string;
+  url: string;
+  category: string;
+  description: string;
+  features: string[];
+  tags: string[];
+  badge?: string;
 }
 
 const referenceLinks: ReferenceLink[] = [
-	{
-		title: "The社史",
-		url: "https://the-shashi.com/",
-		category: "企業史・歴史",
-		description:
-			"日本企業の歴史、創業時からの沿革や社史を集約したデータベース。過去の経営判断の変遷や長期的な企業の歩みを深掘りするために最適です。",
-		features: [
-			"全国各地の様々な企業の社史・記念誌を横断検索可能",
-			"企業のルーツや過去のイノベーションの軌跡を追跡",
-			"長期的な産業史・企業経営の文脈を理解するための一次史料",
-		],
-		tags: ["社史", "沿革", "企業歴史"],
-		badge: "歴史データベース",
-	},
-	{
-		title: "ザイマニ | 財務分析マニュアル",
-		url: "https://zaimani.com/",
-		category: "日本企業 財務・IR",
-		description:
-			"日系企業の財務データを非常に視覚的で分かりやすく可視化・分析できるポータル。財務分析の初心者からプロまで直感的に学べる解説も豊富です。",
-		features: [
-			"企業の財務諸表を直感的で美しいグラフに自動変換",
-			"主要な財務指標（安全性、収益性、効率性）の自動計算とスコアリング",
-			"業界平均やライバル企業との比較機能",
-		],
-		tags: ["財務分析", "グラフ可視化", "財務マニュアル"],
-		badge: "直感ビジュアル",
-	},
-	{
-		title: "有報キャッチャー",
-		url: "https://ufocatch.com/",
-		category: "日本企業 財務・IR",
-		description:
-			"日本の有価証券報告書や適時開示情報を素早くキャッチし、全文検索や閲覧を可能にするサービス。最新の開示情報の収集に不可欠なツールです。",
-		features: [
-			"EDINETおよびTDnetの開示データをリアルタイムで追跡",
-			"PDFやXBRLデータの高速ダウンロードと全文検索機能",
-			"RSSや通知機能によるお気に入り企業の開示ウォッチ",
-		],
-		tags: ["有価証券報告書", "適時開示", "XBRL"],
-		badge: "開示速報",
-	},
-	{
-		title: "IR気象台",
-		url: "https://irweather.jp/",
-		category: "日本企業 財務・IR",
-		description:
-			"企業の決算発表やIR情報の質、ネガティブ/ポジティブの度合いを、天気に例えて分かりやすく可視化する独自性の高いIR分析ツールです。",
-		features: [
-			"開示情報のトーンや市場の反応を「天気」マークで直感表示",
-			"決算のサプライズ度やリスク要因の増減をすばやく把握",
-			"企業のIRへの熱量や透明性の変化を可視化",
-		],
-		tags: ["IRトーン分析", "決算サプライズ", "天気マーク"],
-		badge: "感情・トーン分析",
-	},
-	{
-		title: "KabuBerry",
-		url: "https://kabuberry.com/",
-		category: "日本企業 財務・IR",
-		description:
-			"個人投資家が集まり、企業のIR説明会や決算分析を行う国内最大級 of IRコミュニティ・イベントプラットフォーム。一次情報を生の声で学べます。",
-		features: [
-			"企業の経営陣を招いたIR説明会の定期開催とレポート公開",
-			"投資家目線でのリアルな質疑応答や企業へのフィードバック",
-			"多様なセクターの個人投資家による決算・業績分析ディスカッション",
-		],
-		tags: ["IR説明会", "投資家コミュニティ", "一次情報"],
-		badge: "投資家対話",
-	},
-	{
-		title: "IR Searcher",
-		url: "https://ir-searcher.com/",
-		category: "日本企業 財務・IR",
-		description:
-			"大量の決算説明会資料や適時開示書類から、特定のキーワードやセグメント情報を横断的に一瞬で検索できる高機能IRデータベースです。",
-		features: [
-			"決算説明会スクリプトや補足資料のテキスト全文を検索対象に指定可能",
-			"新事業分野や注目技術キーワードの企業露出度を定量的・定性的に比較",
-			"複数のPDF書類をまとめてブラウザ上で素早く確認可能",
-		],
-		tags: ["IR検索", "説明会資料", "全文検索"],
-		badge: "キーワード横断",
-	},
-	{
-		title: "SEC EDGAR Advanced Search",
-		url: "https://www.sec.gov/edgar/search/",
-		category: "米国企業・一次情報",
-		description:
-			"米国証券取引委員会（SEC）の公式提出資料検索システム。米国の全上場企業の10-K、10-Q、インサイダー取引報告など、すべての一次情報源へ直接アクセスできます。",
-		features: [
-			"高度なクエリ構文を使用した提出書類内の全文テキスト検索",
-			"提出日、企業、フォームタイプ（例：10-K, 8-K）による強力なフィルタリング",
-			"企業間の財務報告書の比較とデータのCSV/XBRL形式での取得",
-		],
-		tags: ["SEC", "10-K/10-Q", "Edgar", "米国株"],
-		badge: "米国公式一次情報",
-	},
-	{
-		title: "OpenInsider",
-		url: "http://openinsider.com/",
-		category: "米国企業・一次情報",
-		description:
-			"米国企業の役員や大株主（インサイダー）による株式の売買取引（Form 4）情報をリアルタイムに収集・集計し、検索・フィルタリングできる極めて強力なサイトです。",
-		features: [
-			"CEOやCFOによる自社株買い（Insider Purchase）のリアルタイム追跡",
-			"売買の規模、企業規模、取引の種類による高度なスクリーニング",
-			"インサイダー取引のクラスタリング（複数役員が同時購入している企業）の検出",
-		],
-		tags: ["インサイダー取引", "自社株買い", "Form 4", "スマートマネー"],
-		badge: "スマートマネー追跡",
-	},
-	{
-		title: "BeatAndRaise",
-		url: "https://www.beatandraise.com/",
-		category: "米国企業・一次情報",
-		description:
-			"米国上場企業の決算発表結果（EPSや売上高が市場予想を上回ったか：Beat、または下回ったか：Miss）と業績見通し（Guidance：Raise）を素早く整理して表示する決算特化サイトです。",
-		features: [
-			"決算サプライズ（EPS/売上高対コンセンサス予想）の瞬時判定表示",
-			"将来のガイダンス情報の上方修正・下方修正の分かりやすいビジュアル表示",
-			"決算期カレンダーと重要指標のリアルタイム更新",
-		],
-		tags: ["決算サプライズ", "EPS/売上高", "業績見通し", "米国株決算"],
-		badge: "決算サプライズ",
-	},
+  {
+    title: "The社史",
+    url: "https://the-shashi.com/",
+    category: "企業史・歴史",
+    description:
+      "日本企業の歴史、創業時からの沿革や社史を集約したデータベース。過去の経営判断の変遷や長期的な企業の歩みを深掘りするために最適です。",
+    features: [
+      "全国各地の様々な企業の社史・記念誌を横断検索可能",
+      "企業のルーツや過去のイノベーションの軌跡を追跡",
+      "長期的な産業史・企業経営の文脈を理解するための一次史料",
+    ],
+    tags: ["社史", "沿革", "企業歴史"],
+    badge: "歴史データベース",
+  },
+  {
+    title: "ザイマニ | 財務分析マニュアル",
+    url: "https://zaimani.com/",
+    category: "日本企業 財務・IR",
+    description:
+      "日系企業の財務データを非常に視覚的で分かりやすく可視化・分析できるポータル。財務分析の初心者からプロまで直感的に学べる解説も豊富です。",
+    features: [
+      "企業の財務諸表を直感的で美しいグラフに自動変換",
+      "主要な財務指標（安全性、収益性、効率性）の自動計算とスコアリング",
+      "業界平均やライバル企業との比較機能",
+    ],
+    tags: ["財務分析", "グラフ可視化", "財務マニュアル"],
+    badge: "直感ビジュアル",
+  },
+  {
+    title: "有報キャッチャー",
+    url: "https://ufocatch.com/",
+    category: "日本企業 財務・IR",
+    description:
+      "日本の有価証券報告書や適時開示情報を素早くキャッチし、全文検索や閲覧を可能にするサービス。最新の開示情報の収集に不可欠なツールです。",
+    features: [
+      "EDINETおよびTDnetの開示データをリアルタイムで追跡",
+      "PDFやXBRLデータの高速ダウンロードと全文検索機能",
+      "RSSや通知機能によるお気に入り企業の開示ウォッチ",
+    ],
+    tags: ["有価証券報告書", "適時開示", "XBRL"],
+    badge: "開示速報",
+  },
+  {
+    title: "IR気象台",
+    url: "https://irweather.jp/",
+    category: "日本企業 財務・IR",
+    description:
+      "企業の決算発表やIR情報の質、ネガティブ/ポジティブの度合いを、天気に例えて分かりやすく可視化する独自性の高いIR分析ツールです。",
+    features: [
+      "開示情報のトーンや市場の反応を「天気」マークで直感表示",
+      "決算のサプライズ度やリスク要因の増減をすばやく把握",
+      "企業のIRへの熱量や透明性の変化を可視化",
+    ],
+    tags: ["IRトーン分析", "決算サプライズ", "天気マーク"],
+    badge: "感情・トーン分析",
+  },
+  {
+    title: "KabuBerry",
+    url: "https://kabuberry.com/",
+    category: "日本企業 財務・IR",
+    description:
+      "個人投資家が集まり、企業のIR説明会や決算分析を行う国内最大級 of IRコミュニティ・イベントプラットフォーム。一次情報を生の声で学べます。",
+    features: [
+      "企業の経営陣を招いたIR説明会の定期開催とレポート公開",
+      "投資家目線でのリアルな質疑応答や企業へのフィードバック",
+      "多様なセクターの個人投資家による決算・業績分析ディスカッション",
+    ],
+    tags: ["IR説明会", "投資家コミュニティ", "一次情報"],
+    badge: "投資家対話",
+  },
+  {
+    title: "IR Searcher",
+    url: "https://ir-searcher.com/",
+    category: "日本企業 財務・IR",
+    description:
+      "大量の決算説明会資料や適時開示書類から、特定のキーワードやセグメント情報を横断的に一瞬で検索できる高機能IRデータベースです。",
+    features: [
+      "決算説明会スクリプトや補足資料のテキスト全文を検索対象に指定可能",
+      "新事業分野や注目技術キーワードの企業露出度を定量的・定性的に比較",
+      "複数のPDF書類をまとめてブラウザ上で素早く確認可能",
+    ],
+    tags: ["IR検索", "説明会資料", "全文検索"],
+    badge: "キーワード横断",
+  },
+  {
+    title: "SEC EDGAR Advanced Search",
+    url: "https://www.sec.gov/edgar/search/",
+    category: "米国企業・一次情報",
+    description:
+      "米国証券取引委員会（SEC）の公式提出資料検索システム。米国の全上場企業の10-K、10-Q、インサイダー取引報告など、すべての一次情報源へ直接アクセスできます。",
+    features: [
+      "高度なクエリ構文を使用した提出書類内の全文テキスト検索",
+      "提出日、企業、フォームタイプ（例：10-K, 8-K）による強力なフィルタリング",
+      "企業間の財務報告書の比較とデータのCSV/XBRL形式での取得",
+    ],
+    tags: ["SEC", "10-K/10-Q", "Edgar", "米国株"],
+    badge: "米国公式一次情報",
+  },
+  {
+    title: "OpenInsider",
+    url: "http://openinsider.com/",
+    category: "米国企業・一次情報",
+    description:
+      "米国企業の役員や大株主（インサイダー）による株式の売買取引（Form 4）情報をリアルタイムに収集・集計し、検索・フィルタリングできる極めて強力なサイトです。",
+    features: [
+      "CEOやCFOによる自社株買い（Insider Purchase）のリアルタイム追跡",
+      "売買の規模、企業規模、取引の種類による高度なスクリーニング",
+      "インサイダー取引のクラスタリング（複数役員が同時購入している企業）の検出",
+    ],
+    tags: ["インサイダー取引", "自社株買い", "Form 4", "スマートマネー"],
+    badge: "スマートマネー追跡",
+  },
+  {
+    title: "BeatAndRaise",
+    url: "https://www.beatandraise.com/",
+    category: "米国企業・一次情報",
+    description:
+      "米国上場企業の決算発表結果（EPSや売上高が市場予想を上回ったか：Beat、または下回ったか：Miss）と業績見通し（Guidance：Raise）を素早く整理して表示する決算特化サイトです。",
+    features: [
+      "決算サプライズ（EPS/売上高対コンセンサス予想）の瞬時判定表示",
+      "将来のガイダンス情報の上方修正・下方修正の分かりやすいビジュアル表示",
+      "決算期カレンダーと重要指標のリアルタイム更新",
+    ],
+    tags: ["決算サプライズ", "EPS/売上高", "業績見通し", "米国株決算"],
+    badge: "決算サプライズ",
+  },
 ];
 
 app.get("/links", async (c) => {
-	return c.html(`
+  return c.html(`
 <!DOCTYPE html>
 <html lang="ja" data-theme="dark">
 <head>
@@ -1698,18 +1698,18 @@ app.get("/links", async (c) => {
 });
 
 app.get("/assets/directory_banner.png", async (c) => {
-	const imagePath = resolve("src/dashboard/directory_banner.png");
-	if (existsSync(imagePath)) {
-		const fileBytes = readFileSync(imagePath);
-		return c.body(fileBytes, 200, {
-			"Content-Type": "image/png",
-		});
-	}
-	return c.text("Image not found", 404);
+  const imagePath = resolve("src/dashboard/directory_banner.png");
+  if (existsSync(imagePath)) {
+    const fileBytes = readFileSync(imagePath);
+    return c.body(fileBytes, 200, {
+      "Content-Type": "image/png",
+    });
+  }
+  return c.text("Image not found", 404);
 });
 
 export default {
-	fetch: app.fetch,
-	port: Number(process.env.PORT) || 3000,
-	idleTimeout: 120,
+  fetch: app.fetch,
+  port: Number(process.env.PORT) || 3000,
+  idleTimeout: 120,
 };
