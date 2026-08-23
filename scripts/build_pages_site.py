@@ -75,9 +75,7 @@ def _artifact_id(relative_path: str) -> str:
     return hashlib.sha256(relative_path.encode("utf-8")).hexdigest()[:16]
 
 
-def _source_urls(
-    repository: str, revision: str, relative_path: str
-) -> tuple[str, str]:
+def _source_urls(repository: str, revision: str, relative_path: str) -> tuple[str, str]:
     encoded_path = quote(relative_path, safe="/")
     source_url = f"https://github.com/{repository}/blob/{revision}/{encoded_path}"
     raw_url = f"https://raw.githubusercontent.com/{repository}/{revision}/{encoded_path}"
@@ -115,9 +113,7 @@ def discover_artifacts(
                 destination.parent.mkdir(parents=True, exist_ok=True)
                 shutil.copy2(path, destination)
                 local_url = quote(
-                    (
-                        PurePosixPath("artifacts") / PurePosixPath(relative_posix)
-                    ).as_posix(),
+                    (PurePosixPath("artifacts") / PurePosixPath(relative_posix)).as_posix(),
                     safe="/",
                 )
 
@@ -131,9 +127,7 @@ def discover_artifacts(
                     "module": _module_for(PurePosixPath(relative_posix)),
                     "extension": path.suffix.lower(),
                     "media_type": _media_type(path),
-                    "viewer": _viewer_for(
-                        path, browser_renderable=local_url is not None
-                    ),
+                    "viewer": _viewer_for(path, browser_renderable=local_url is not None),
                     "size_bytes": size,
                     "local_url": local_url,
                     "source_url": source_url,
@@ -181,9 +175,7 @@ def build_manifest(
     }
 
 
-def validate_manifest(
-    manifest: dict[str, Any], *, output_root: Path, expected_revision: str
-) -> None:
+def validate_manifest(manifest: dict[str, Any], *, output_root: Path, expected_revision: str) -> None:
     if manifest.get("schema_version") != 1:
         raise ValueError("unsupported manifest schema")
     if manifest.get("revision") != expected_revision:
@@ -210,9 +202,7 @@ def validate_manifest(
                 raise ValueError(f"invalid local_url for {path}")
             local_path = output_root / local_url
             if not local_path.is_file():
-                raise FileNotFoundError(
-                    f"manifest local artifact is missing: {local_url}"
-                )
+                raise FileNotFoundError(f"manifest local artifact is missing: {local_url}")
 
     totals = manifest.get("totals")
     if not isinstance(totals, dict) or totals.get("artifacts") != len(artifacts):
