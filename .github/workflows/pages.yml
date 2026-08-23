@@ -1,60 +1,29 @@
-name: Validate and deploy AAARTS evidence dashboard
+name: Build and deploy modular evidence browser
 
 on:
   pull_request:
     paths:
-      - "docs/aaarts-dashboard/**"
-      - "docs/research/**"
-      - "docs/specs/paper_reproduction_store.md"
-      - "api/v1/ark-big-ideas/forecast-comparison.json"
-      - "api/v1/ark-big-ideas/forecast-comparison.csv"
-      - "data/ark-big-ideas/forecast-catalog.json"
-      - "scripts/build_ark_forecast_comparison.py"
-      - "scripts/build_research_verification_manifest.py"
-      - "scripts/build_public_research_manifest.py"
-      - "scripts/validate_research_dashboard.py"
-      - "scripts/verify_paper_factor_suite.py"
-      - "scripts/verify_2021_arxiv_methods.py"
-      - "scripts/daily_trump_chart.py"
-      - "scripts/kioxia_quarterly_chart.py"
-      - "tests/test_ark_forecast_catalog.py"
-      - "tests/test_ark_forecast_comparison.py"
-      - "tests/test_research_verification_manifest.py"
-      - "tests/test_public_research_manifest.py"
-      - "tests/test_research_dashboard_validation.py"
-      - "tests/test_2021_arxiv_methods.py"
-      - "tests/test_daily_trump_chart.py"
-      - "tests/test_kioxia_quarterly_chart.py"
+      - "pages/**"
+      - "docs/**"
+      - "data/**"
+      - "generated/**"
+      - "api/**"
+      - "scripts/build_pages_site.py"
+      - "tests/test_build_pages_site.py"
       - ".github/workflows/pages.yml"
-      - ".github/workflows/daily-trump-chart.yml"
+      - ".github/workflows/live-pages-smoke.yml"
   push:
     branches: [main]
     paths:
-      - "docs/aaarts-dashboard/**"
-      - "docs/research/**"
-      - "docs/specs/paper_reproduction_store.md"
-      - "api/v1/ark-big-ideas/forecast-comparison.json"
-      - "api/v1/ark-big-ideas/forecast-comparison.csv"
-      - "data/ark-big-ideas/forecast-catalog.json"
-      - "scripts/build_ark_forecast_comparison.py"
-      - "scripts/build_research_verification_manifest.py"
-      - "scripts/build_public_research_manifest.py"
-      - "scripts/validate_research_dashboard.py"
-      - "scripts/verify_paper_factor_suite.py"
-      - "scripts/verify_2021_arxiv_methods.py"
-      - "scripts/daily_trump_chart.py"
-      - "scripts/kioxia_quarterly_chart.py"
-      - "tests/test_ark_forecast_catalog.py"
-      - "tests/test_ark_forecast_comparison.py"
-      - "tests/test_research_verification_manifest.py"
-      - "tests/test_public_research_manifest.py"
-      - "tests/test_research_dashboard_validation.py"
-      - "tests/test_2021_arxiv_methods.py"
-      - "tests/test_daily_trump_chart.py"
-      - "tests/test_kioxia_quarterly_chart.py"
+      - "pages/**"
+      - "docs/**"
+      - "data/**"
+      - "generated/**"
+      - "api/**"
+      - "scripts/build_pages_site.py"
+      - "tests/test_build_pages_site.py"
       - ".github/workflows/pages.yml"
-      - ".github/workflows/daily-trump-chart.yml"
-      - "generated/trump-daily-chart/**"
+      - ".github/workflows/live-pages-smoke.yml"
   workflow_dispatch:
 
 permissions:
@@ -67,8 +36,8 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  validate-candidate:
-    name: Validate candidate artifact
+  build-and-validate:
+    name: Build and validate candidate site
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -83,54 +52,57 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Install test/runtime dependencies
-        run: python -m pip install --disable-pip-version-check pytest matplotlib
+      - name: Install focused test dependency
+        run: python -m pip install --disable-pip-version-check pytest
 
-      - name: Validate research contracts and regression checks
-        run: |
-          set -euo pipefail
-          python -m pytest -q \
-            tests/test_2021_arxiv_methods.py \
-            tests/test_repeated_paper_validation.py \
-            tests/test_ark_forecast_catalog.py \
-            tests/test_ark_forecast_comparison.py \
-            tests/test_research_verification_manifest.py \
-            tests/test_public_research_manifest.py \
-            tests/test_research_dashboard_validation.py \
-            tests/test_daily_trump_chart.py \
-            tests/test_kioxia_quarterly_chart.py
+      - name: Prove automatic discovery contract
+        run: python -m pytest -q tests/test_build_pages_site.py
 
-      - name: Assemble candidate site
+      - name: Build candidate site
         run: |
           set -euo pipefail
           rm -rf _site validation-report
-          mkdir -p _site/data _site/trump-daily-chart _site/kioxia-quarterly _site/ark-forecast-comparison validation-report
-          python scripts/build_research_verification_manifest.py \
-            --output validation-report/internal-research-manifest.json
-          python scripts/build_public_research_manifest.py \
-            --output _site/data/research_public_manifest.json \
-            --expected-revision "${GITHUB_SHA}"
-          python scripts/build_ark_forecast_comparison.py \
-            --json-output _site/data/ark-forecast-comparison.json \
-            --csv-output _site/data/ark-forecast-comparison.csv
-          python scripts/daily_trump_chart.py --output-dir _site/trump-daily-chart
-          python scripts/kioxia_quarterly_chart.py \
-            --input docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
-            --output-dir _site/kioxia-quarterly
-          cp docs/research/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
-            _site/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json
-          cp docs/aaarts-dashboard/index.html _site/index.html
-          cp docs/aaarts-dashboard/ark-forecast-comparison.html _site/ark-forecast-comparison/index.html
-          touch _site/.nojekyll
+          python scripts/build_pages_site.py \
+            --output _site \
+            --repository "${GITHUB_REPOSITORY}" \
+            --revision "${GITHUB_SHA}"
 
-      - name: Serve and validate candidate site
+      - name: Inspect candidate structure
+        run: |
+          set -euo pipefail
+          mkdir -p validation-report
+          python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+
+          expected_revision = os.environ["GITHUB_SHA"]
+          manifest = json.loads(Path("_site/manifest.json").read_text(encoding="utf-8"))
+          revision = json.loads(Path("_site/revision.json").read_text(encoding="utf-8"))
+          assert manifest["revision"] == expected_revision
+          assert revision["revision"] == expected_revision
+          assert revision["artifact_count"] == manifest["totals"]["artifacts"]
+          assert revision["artifact_count"] == len(manifest["artifacts"])
+          assert manifest["content_roots"] == ["docs", "data", "generated", "api"]
+          assert all(manifest["totals"]["categories"].get(root, 0) > 0 for root in manifest["content_roots"])
+          assert len({item["path"] for item in manifest["artifacts"]}) == len(manifest["artifacts"])
+          for item in manifest["artifacts"]:
+              if item["local_url"]:
+                  assert (Path("_site") / item["local_url"]).is_file(), item["path"]
+          Path("validation-report/artifact-count.txt").write_text(
+              f"{revision['artifact_count']}\n", encoding="utf-8"
+          )
+          PY
+
+      - name: Serve and smoke-test candidate site
         run: |
           set -euo pipefail
           python -m http.server 4173 --directory _site >validation-report/http-server.log 2>&1 &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           for attempt in $(seq 1 15); do
-            if curl --fail --silent --show-error http://127.0.0.1:4173/ -o validation-report/candidate-index.html; then
+            if curl --fail --silent --show-error http://127.0.0.1:4173/ \
+                -o validation-report/index.html; then
               break
             fi
             if [ "$attempt" -eq 15 ]; then
@@ -139,83 +111,26 @@ jobs:
             fi
             sleep 1
           done
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/data/research_public_manifest.json \
-            -o validation-report/candidate-public-manifest.json
-          python - <<'PY'
-          import importlib.util
-          import json
-          import os
-          import sys
-          from pathlib import Path
-
-          path = Path('scripts/build_public_research_manifest.py')
-          spec = importlib.util.spec_from_file_location('public_manifest_candidate_validator', path)
-          assert spec and spec.loader
-          module = importlib.util.module_from_spec(spec)
-          sys.modules[spec.name] = module
-          spec.loader.exec_module(module)
-          data = json.loads(Path('validation-report/candidate-public-manifest.json').read_text(encoding='utf-8'))
-          module.validate_public_manifest(data, expected_revision=os.environ['GITHUB_SHA'])
-          PY
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/data/ark-forecast-comparison.json \
-            -o validation-report/ark-forecast-comparison.json
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/data/ark-forecast-comparison.csv \
-            -o validation-report/ark-forecast-comparison.csv
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/ark-forecast-comparison/ \
-            -o validation-report/ark-forecast-comparison.html
-          python - <<'PY'
+          curl --fail --silent --show-error http://127.0.0.1:4173/manifest.json \
+            -o validation-report/manifest.json
+          curl --fail --silent --show-error http://127.0.0.1:4173/revision.json \
+            -o validation-report/revision.json
+          curl --fail --silent --show-error http://127.0.0.1:4173/app.js \
+            -o validation-report/app.js
+          curl --fail --silent --show-error http://127.0.0.1:4173/styles.css \
+            -o validation-report/styles.css
+          first_local_url="$(python - <<'PY'
           import json
           from pathlib import Path
-          payload = json.loads(Path('validation-report/ark-forecast-comparison.json').read_text(encoding='utf-8'))
-          assert len(payload['themes']) == 13
-          assert sum(row['forecast_count'] for row in payload['themes']) >= 2
-          page = Path('validation-report/ark-forecast-comparison.html').read_text(encoding='utf-8')
-          assert 'ARK Big Ideas 2026 Forecast Comparison' in page
-          assert 'definition, unit, scope, geography and period' in page
+          manifest = json.loads(Path('_site/manifest.json').read_text(encoding='utf-8'))
+          print(next(item['local_url'] for item in manifest['artifacts'] if item['local_url']))
           PY
+          )"
           curl --fail --silent --show-error \
-            http://127.0.0.1:4173/data/kioxia_semiconductor_universe_50_5y_quarterly_2026-08-12.json \
-            -o validation-report/kioxia-semiconductor-universe.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          data = json.loads(Path('validation-report/kioxia-semiconductor-universe.json').read_text(encoding='utf-8'))
-          assert data['company_count'] == 50
-          assert data['requested_years'] == 5
-          assert data['period'] == 'quarterly_standalone'
-          assert data['counts']['fetched_quarter_rows'] > 0
-          PY
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/kioxia-quarterly/ \
-            -o validation-report/kioxia-quarterly-index.html
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/kioxia-quarterly/summary.json \
-            -o validation-report/kioxia-quarterly-summary.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          summary = json.loads(Path('validation-report/kioxia-quarterly-summary.json').read_text(encoding='utf-8'))
-          assert summary['edinet_code'] == 'E35948'
-          assert summary['point_count'] == 8
-          assert summary['first_period'] == 'FY2025 Q1'
-          assert summary['last_period'] == 'FY2026 Q4'
-          assert summary['excluded_periods'][0]['period'] == 'FY2027 Q1'
-          PY
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/trump-daily-chart/ \
-            -o validation-report/trump-daily-chart-index.html
-          curl --fail --silent --show-error \
-            http://127.0.0.1:4173/trump-daily-chart/summary.json \
-            -o validation-report/trump-daily-chart-summary.json
-          python scripts/validate_research_dashboard.py \
-            --manifest validation-report/internal-research-manifest.json \
-            --html validation-report/candidate-index.html \
-            --expected-revision "${GITHUB_SHA}" \
-            --report validation-report/candidate-validation.json
+            "http://127.0.0.1:4173/${first_local_url}" \
+            -o validation-report/first-artifact
+          grep -Fq 'investor2 Evidence Browser' validation-report/index.html
+          grep -Fq 'manifest.json' validation-report/app.js
 
       - name: Upload candidate validation evidence
         uses: actions/upload-artifact@v4
@@ -238,7 +153,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: validate-candidate
+    needs: build-and-validate
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
