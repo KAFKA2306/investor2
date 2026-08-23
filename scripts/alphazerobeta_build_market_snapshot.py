@@ -248,7 +248,7 @@ def write_region_prices(
 
 
 def file_manifest(root: Path) -> list[dict[str, object]]:
-    entries = []
+    entries: list[dict[str, object]] = []
     for path in sorted(root.rglob("*")):
         if not path.is_file() or path.name == "manifest.json":
             continue
@@ -289,6 +289,7 @@ def main() -> None:
     if benchmark.empty:
         raise AssertionError(f"benchmark download failed: {args.benchmark}")
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
+    files = file_manifest(root)
 
     manifest: dict[str, object] = {
         "schema_version": "investor2.market-snapshot.v2",
@@ -304,7 +305,7 @@ def main() -> None:
         "price_rows_by_region": row_counts,
         "benchmark": args.benchmark,
         "immutable": True,
-        "files": file_manifest(root),
+        "files": files,
         "storage_contract": {
             "writer_repository": "KAFKA2306/semiconductor-earnings-model",
             "bucket": "k4fka/kafka-data-lake",
@@ -315,9 +316,7 @@ def main() -> None:
     (root / "manifest.json").write_text(
         json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
     )
-    print(
-        json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(manifest["files"])})
-    )
+    print(json.dumps({"output_dir": str(root), "ticker_count": manifest["ticker_count"], "files": len(files)}))
 
 
 if __name__ == "__main__":
