@@ -1,0 +1,11 @@
+=== shared/schema consumers ===
+=== ConfigSchema consumers ===
+=== config path consumers ===
+--- data ---
+--- logs ---
+--- cache ---
+--- edinet ---
+--- cacheFundamentalEdinet ---
+=== stats task consumers ===
+=== stale refresh names ===
+=== DatabaseRegistry consumers ===
