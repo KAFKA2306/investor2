@@ -42,7 +42,7 @@ const checks: Check[] = [
     checkPython,
     "Ruff format",
     "uv",
-    ["run", "--no-sync", "ruff", "format", "--diff"],
+    ["run", "--no-sync", "ruff", "format", "--check"],
     pyFiles,
   ],
   [
