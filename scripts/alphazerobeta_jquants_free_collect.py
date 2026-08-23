@@ -94,9 +94,7 @@ def normalize_master(frame: pd.DataFrame) -> pd.DataFrame:
 def benchmark_from_prices(prices: pd.DataFrame) -> pd.DataFrame:
     benchmark = prices[prices["Code"] == BENCHMARK_CODE].copy()
     if benchmark.empty:
-        raise AssertionError(
-            f"TOPIX ETF proxy {BENCHMARK_CODE} is absent from the cached J-Quants window"
-        )
+        raise AssertionError(f"TOPIX ETF proxy {BENCHMARK_CODE} is absent from the cached J-Quants window")
     return benchmark.sort_values("Date").reset_index(drop=True)
 
 
@@ -157,9 +155,7 @@ def upload_private_snapshot(
     )
     info = api.repo_info(repo_id=repo_id, repo_type="dataset")
     if not bool(getattr(info, "private", False)):
-        raise RuntimeError(
-            f"refusing to upload raw J-Quants data to non-private dataset: {repo_id}"
-        )
+        raise RuntimeError(f"refusing to upload raw J-Quants data to non-private dataset: {repo_id}")
 
     manifest_path = f"snapshots/{snapshot_id}/manifest.json"
     existing = set(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
@@ -184,9 +180,7 @@ def main() -> None:
     if not hf_token:
         raise RuntimeError("HF_TOKEN is required")
     if args.request_interval < REQUEST_INTERVAL_SECONDS:
-        raise ValueError(
-            f"request interval must be >= {REQUEST_INTERVAL_SECONDS}s for the Free-plan limit"
-        )
+        raise ValueError(f"request interval must be >= {REQUEST_INTERVAL_SECONDS}s for the Free-plan limit")
 
     start, end = resolve_window(args.as_of)
     snapshot_id = f"asof-{pd.Timestamp(args.as_of).date()}"
@@ -206,9 +200,7 @@ def main() -> None:
 
     actual_start = pd.Timestamp(prices["Date"].min())
     actual_end = pd.Timestamp(prices["Date"].max())
-    master = normalize_master(
-        client.get_eq_master(date=actual_end.strftime("%Y%m%d"))
-    )
+    master = normalize_master(client.get_eq_master(date=actual_end.strftime("%Y%m%d")))
     if master.empty:
         raise AssertionError("listed-issue master is empty")
 
@@ -244,9 +236,7 @@ def main() -> None:
         },
         "request_count": int(client.request_count),
         "minimum_request_interval_seconds": float(args.request_interval),
-        "raw_scope": (
-            "all equity daily-bar rows returned by J-Quants for the current Free history window"
-        ),
+        "raw_scope": ("all equity daily-bar rows returned by J-Quants for the current Free history window"),
         "snapshot_id": snapshot_id,
         "hf_repo_id": args.hf_repo_id,
         "hf_path": f"snapshots/{snapshot_id}",
