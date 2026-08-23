@@ -76,9 +76,7 @@ def test_new_module_appears_without_frontend_or_workflow_changes(tmp_path: Path)
         "docs/research/existing.json"
     }
 
-    _write(
-        tmp_path / "generated/brand-new-study/summary.json", '{"sharpe": 1.2}'
-    )
+    _write(tmp_path / "generated/brand-new-study/summary.json", '{"sharpe": 1.2}')
     second = build_site(
         source_root=tmp_path,
         frontend_root=tmp_path / "pages",
