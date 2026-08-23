@@ -4,4 +4,3 @@ paths:
   cache: /mnt/d/investor_all_cached_data/cache
   edinet: /mnt/d/investor_all_cached_data/edinet
   cacheFundamentalEdinet: /mnt/d/investor_all_cached_data/cache/fundamental/edinet.sqlite
-  cacheBacktestResults: /mnt/d/investor_all_cached_data/cache/backtest/results.sqlite
