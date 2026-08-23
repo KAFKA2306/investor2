@@ -1,0 +1,43 @@
+name: Audit config consumers
+
+on:
+  push:
+    branches:
+      - refactor/prune-dashboard-stats-schema-shim
+
+permissions:
+  contents: write
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refactor/prune-dashboard-stats-schema-shim
+          fetch-depth: 0
+      - name: Audit schema and path consumers
+        run: |
+          echo '=== shared/schema consumers ==='
+          rg -n 'shared/schema' . --glob '!node_modules/**' --glob '!.git/**' || true
+          echo '=== ConfigSchema consumers ==='
+          rg -n 'ConfigSchema' src scripts tests --glob '*.ts' --glob '*.tsx' || true
+          echo '=== config path consumers ==='
+          for key in data logs cache edinet cacheFundamentalEdinet; do
+            echo "--- $key ---"
+            rg -n "config\.paths\.${key}\b|paths\.${key}\b|['\"]${key}['\"]" src scripts tests Taskfile.yml || true
+          done
+          echo '=== stats task consumers ==='
+          rg -n 'src/tasks/stats\.ts|task stats|stats:' . --glob '!node_modules/**' --glob '!.git/**' || true
+          echo '=== stale refresh task names ==='
+          rg -n 'get:all|jquants:fetch:latest' . --glob '!node_modules/**' --glob '!.git/**' || true
+          echo '=== DatabaseRegistry consumers ==='
+          rg -n 'DatabaseRegistry' src scripts tests || true
+      - name: Remove temporary audit workflow
+        run: |
+          rm .github/workflows/audit-config-consumers.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: remove config audit scaffolding"
+          git push origin HEAD:refactor/prune-dashboard-stats-schema-shim
