@@ -1,6 +1,9 @@
 name: J-Quants owner-only private HF cache
 
 on:
+  push:
+    branches:
+      - ops/jquants-personal-cache-seed
   pull_request:
     branches: [main]
     paths:
@@ -30,7 +33,9 @@ jobs:
           python -m py_compile scripts/alphazerobeta_jquants_private_hf_cache.py
 
   seed-and-prove-cache-only:
-    if: github.event_name == 'workflow_dispatch'
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && contains(github.event.head_commit.message, '[cache-seed]'))
     needs: contract
     runs-on: ubuntu-latest
     timeout-minutes: 360
