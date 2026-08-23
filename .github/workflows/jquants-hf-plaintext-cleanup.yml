@@ -1,4 +1,4 @@
-name: J-Quants HF plaintext cleanup
+name: J-Quants HF cache audit
 
 on:
   push:
@@ -12,11 +12,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: jquants-hf-plaintext-cleanup
+  group: jquants-hf-cache-audit
   cancel-in-progress: true
 
 jobs:
-  cleanup:
+  audit:
     runs-on: ubuntu-latest
     env:
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -27,7 +27,7 @@ jobs:
           python-version: "3.12"
       - name: Require Hugging Face credential
         run: test -n "$HF_TOKEN"
-      - name: Remove legacy plaintext J-Quants cache objects
+      - name: Audit encrypted checkpoint progress and plaintext absence
         run: |
           python -m pip install huggingface-hub
           python - <<'PY'
@@ -37,34 +37,26 @@ jobs:
 
           api = HfApi(token=os.environ["HF_TOKEN"])
           repo_id = os.environ["HF_REPO_ID"]
+          files = sorted(api.list_repo_files(repo_id=repo_id, repo_type="dataset"))
           raw_suffixes = (".parquet", ".csv", ".feather", ".arrow", ".jsonl", ".ndjson", ".npz")
-
-          def is_plaintext_raw(path: str) -> bool:
-              lower = path.lower()
-              if lower.endswith(".enc"):
-                  return False
-              if not lower.endswith(raw_suffixes):
-                  return False
-              return (
-                  path.startswith("staging/")
-                  or "/.staging/" in path
-                  or path.startswith("snapshots/")
-              )
-
-          before = api.list_repo_files(repo_id=repo_id, repo_type="dataset")
-          candidates = sorted(path for path in before if is_plaintext_raw(path))
-          print(json.dumps({"plaintext_candidates": candidates}, sort_keys=True))
-          for path in candidates:
-              api.delete_file(
-                  path_in_repo=path,
-                  repo_id=repo_id,
-                  repo_type="dataset",
-                  commit_message=f"remove legacy plaintext J-Quants cache object {path}",
-              )
-
-          after = api.list_repo_files(repo_id=repo_id, repo_type="dataset")
-          remaining = sorted(path for path in after if is_plaintext_raw(path))
-          print(json.dumps({"deleted_count": len(candidates), "remaining_plaintext": remaining}, sort_keys=True))
-          if remaining:
-              raise SystemExit(f"plaintext raw J-Quants cache objects remain: {remaining}")
+          plaintext = [
+              path for path in files
+              if not path.lower().endswith(".enc")
+              and path.lower().endswith(raw_suffixes)
+              and (path.startswith("staging/") or "/.staging/" in path or path.startswith("snapshots/"))
+          ]
+          encrypted_months = [
+              path for path in files
+              if path.startswith("staging/asof-2026-08-23/prices/") and path.endswith(".parquet.enc")
+          ]
+          snapshot_files = [path for path in files if path.startswith("snapshots/asof-2026-08-23/")]
+          print(json.dumps({
+              "plaintext_raw": plaintext,
+              "encrypted_month_checkpoint_count": len(encrypted_months),
+              "encrypted_month_checkpoints": encrypted_months,
+              "final_snapshot_file_count": len(snapshot_files),
+              "final_snapshot_manifest_present": "snapshots/asof-2026-08-23/manifest.json" in files,
+          }, sort_keys=True))
+          if plaintext:
+              raise SystemExit(f"plaintext raw cache objects present: {plaintext}")
           PY
