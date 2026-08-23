@@ -1,0 +1,112 @@
+name: J-Quants owner-only private HF cache
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/alphazerobeta_jquants_private_hf_cache.py
+      - scripts/alphazerobeta_jquants_free_ephemeral.py
+      - .github/workflows/jquants-personal-hf-cache.yml
+      - docs/specs/jquants-personal-hf-cache.md
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install contract dependencies
+        run: python -m pip install ruff
+      - name: Verify personal-cache entry point
+        run: |
+          ruff format --check scripts/alphazerobeta_jquants_private_hf_cache.py
+          ruff check scripts/alphazerobeta_jquants_private_hf_cache.py
+          python -m py_compile scripts/alphazerobeta_jquants_private_hf_cache.py
+
+  seed-and-prove-cache-only:
+    if: github.event_name == 'workflow_dispatch'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow requests
+      - name: Seed or increment owner-only encrypted private cache
+        run: |
+          rm -rf /tmp/jquants-personal-cache /tmp/jquants-personal-cache-proof
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-personal-cache \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15
+          cp /tmp/jquants-personal-cache/manifest.json /tmp/seed-manifest.json
+      - name: Prove same window materializes from HF with zero J-Quants calls
+        run: |
+          rm -rf /tmp/jquants-personal-cache-proof
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-personal-cache-proof \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15 \
+            --require-cache-complete
+          cp /tmp/jquants-personal-cache-proof/manifest.json /tmp/cache-only-manifest.json
+      - name: Verify cache round trip and zero-API reuse
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          seed = json.loads(Path('/tmp/seed-manifest.json').read_text())
+          cached = json.loads(Path('/tmp/cache-only-manifest.json').read_text())
+
+          for key in ('actual_date_range', 'observed_market_days', 'ticker_count', 'price_rows'):
+              assert seed[key] == cached[key], (key, seed[key], cached[key])
+          assert seed['files'] == cached['files']
+          assert cached['request_count'] == 0
+          assert cached['cache']['cache_misses'] == 0
+          assert cached['cache']['cache_complete_after_run'] is True
+          assert cached['cache']['plaintext_jquants_rows_on_hf'] is False
+          assert cached['cache']['visibility'] == 'private'
+
+          evidence = {
+              'status': 'passed',
+              'hf_repo_id': cached['cache']['repo_id'],
+              'visibility': cached['cache']['visibility'],
+              'plaintext_jquants_rows_on_hf': cached['cache']['plaintext_jquants_rows_on_hf'],
+              'actual_date_range': cached['actual_date_range'],
+              'price_rows': cached['price_rows'],
+              'ticker_count': cached['ticker_count'],
+              'observed_market_days': cached['observed_market_days'],
+              'seed_api_requests': seed['request_count'],
+              'cache_only_api_requests': cached['request_count'],
+              'cache_hits': cached['cache']['cache_hits'],
+              'cache_misses': cached['cache']['cache_misses'],
+              'files': cached['files'],
+          }
+          print(json.dumps(evidence, ensure_ascii=False, sort_keys=True))
+          PY
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-personal-cache /tmp/jquants-personal-cache-proof
+          rm -f /tmp/seed-manifest.json /tmp/cache-only-manifest.json
+          rm -rf /tmp/huggingface-personal-cache
