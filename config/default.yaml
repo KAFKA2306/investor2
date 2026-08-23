@@ -1,66 +1,10 @@
-project:
-  name: investor-ts
-
 paths:
   data: /mnt/d/investor_all_cached_data/jquants
   logs: /mnt/d/investor_all_cached_data/logs
-  verification: /mnt/d/investor_all_cached_data/outputs
   cache: /mnt/d/investor_all_cached_data/cache
   edinet: /mnt/d/investor_all_cached_data/edinet
-  preprocessed: /mnt/d/investor_all_cached_data/preprocessed
-  websearch: /mnt/d/investor_all_cached_data/websearch
-
-  marketdataRoot: /mnt/d/investor_all_cached_data/jquants
-  marketdataPricesGz: /mnt/d/investor_all_cached_data/jquants/raw_stock_price.csv.gz
-  marketdataPricesCsv: /mnt/d/investor_all_cached_data/jquants/raw_stock_price.csv
-  marketdataFinGz: /mnt/d/investor_all_cached_data/jquants/raw_stock_fin.csv.gz
-  marketdataFinCsv: /mnt/d/investor_all_cached_data/jquants/raw_stock_fin.csv
-  marketdataListGz: /mnt/d/investor_all_cached_data/jquants/stock_list.csv.gz
-  marketdataListCsv: /mnt/d/investor_all_cached_data/jquants/stock_list.csv
-  marketdataLabelsGz: /mnt/d/investor_all_cached_data/jquants/stock_labels.csv.gz
-  marketdataLabelsCsv: /mnt/d/investor_all_cached_data/jquants/stock_labels.csv
-  marketdataStatementsDir: /mnt/d/investor_all_cached_data/jquants/raw_statements
-
-  outputsRoot: /mnt/d/investor_all_cached_data/outputs
-  outputsVerificationJson: /mnt/d/investor_all_cached_data/outputs/standard_verification_data.json
-  outputsVerificationPlotDir: /mnt/d/investor_all_cached_data/outputs
-  outputsPlaybook: /mnt/d/investor_all_cached_data/outputs/playbook.yaml
-
-  cacheDir: /mnt/d/investor_all_cached_data/cache
-  cacheMarketSqlite: /mnt/d/investor_all_cached_data/cache/market_cache.sqlite
-  cacheMarketdataSqlite: /mnt/d/investor_all_cached_data/cache/marketdata.sqlite
-  cacheHttpSqlite: /mnt/d/investor_all_cached_data/cache/http_cache.sqlite
-  cacheYahooSqlite: /mnt/d/investor_all_cached_data/cache/yahoo_finance_cache.sqlite
-  cacheJquantsPeadSqlite: /mnt/d/investor_all_cached_data/cache/jquants_pead_cache.sqlite
-  cacheEdinetSqlite: /mnt/d/investor_all_cached_data/cache/edinet_cache.sqlite
-  cacheUqtlSqlite: /mnt/d/investor_all_cached_data/cache/uqtl.sqlite
-
-  cacheMarketsPolymarket: /mnt/d/investor_all_cached_data/cache/markets/polymarket.sqlite
-  cacheMarketsJquants: /mnt/d/investor_all_cached_data/cache/markets/jquants.sqlite
-  cacheMarketsYahoo: /mnt/d/investor_all_cached_data/cache/markets/yahoo.sqlite
-  cacheFundamentalJquants: /mnt/d/investor_all_cached_data/cache/fundamental/jquants_fin.sqlite
   cacheFundamentalEdinet: /mnt/d/investor_all_cached_data/cache/fundamental/edinet.sqlite
-  cacheMacroEstat: /mnt/d/investor_all_cached_data/cache/macro/estat.sqlite
-  cacheMacroFred: /mnt/d/investor_all_cached_data/cache/macro/fred.sqlite
   cacheBacktestResults: /mnt/d/investor_all_cached_data/cache/backtest/results.sqlite
-  cacheWebSearch: /mnt/d/investor_all_cached_data/cache/websearch/tavily.sqlite
-
-  edinetDocsDir: /mnt/d/investor_all_cached_data/edinet/docs
-  edinetSearchSqlite: /mnt/d/investor_all_cached_data/edinet/search.sqlite
-  logsUnifiedDir: /mnt/d/investor_all_cached_data/logs/unified
-
-  docsRoot: ./docs
-  docsDiagramsDir: ./docs/diagrams
-  docsPaperDir: ./docs/paper
-  docsNikkiDir: ./docs/nikki
-  workflowsDir: /mnt/d/investor_all_cached_data/logs/workflows
-
-polymarket:
-  clob_url: "https://clob.polymarket.com"
-
-providers:
-  tavily:
-    maxResults: 5
 
 sector_spillover:
   us_sectors:
