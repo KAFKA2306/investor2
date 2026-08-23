@@ -28,21 +28,17 @@ jobs:
 
           server_path = Path('src/dashboard/server.ts')
           server = server_path.read_text()
-
           app_line = 'const app = new Hono();\n'
           dashboard_marker = '// Dashboard page\n'
           screener_marker = '// Stock Screener view\n'
           if server.count(app_line) != 1 or server.count(dashboard_marker) != 1 or server.count(screener_marker) != 1:
               raise RuntimeError('dashboard boundaries changed')
 
-          # The dashboard no longer needs config parsing once the duplicated stats subsystem is removed.
           server = server.replace('import yaml from "js-yaml";\n', '', 1)
           server = server.replace('import { ConfigSchema } from "../shared/schema";\n', '', 1)
-
           app_end = server.index(app_line) + len(app_line)
           dashboard_start = server.index(dashboard_marker)
           server = server[:app_end] + '\n' + server[dashboard_start:]
-
           dashboard_start = server.index(dashboard_marker)
           screener_start = server.index(screener_marker)
           home = '''// Dashboard page
@@ -69,29 +65,13 @@ app.get("/", (c) => {
           <a href="/links" class="btn btn-sm btn-ghost">Link Directory</a>
         </div>
       </div>
-
       <main class="max-w-5xl mx-auto p-6">
         <h1 class="text-3xl font-bold mb-2">Local data tools</h1>
         <p class="text-gray-600 mb-6">Cached market and filing data can be inspected through the focused tools below.</p>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <a href="/screener" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
-            <div class="card-body">
-              <h2 class="card-title">Screener</h2>
-              <p>Inspect cached Japanese equity prices and financial metrics.</p>
-            </div>
-          </a>
-          <a href="/company" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
-            <div class="card-body">
-              <h2 class="card-title">Company Search</h2>
-              <p>Search EDINET-backed company and filing information.</p>
-            </div>
-          </a>
-          <a href="/links" class="card bg-base-100 shadow hover:shadow-md transition-shadow">
-            <div class="card-body">
-              <h2 class="card-title">Link Directory</h2>
-              <p>Open research, evidence, and repository surfaces.</p>
-            </div>
-          </a>
+          <a href="/screener" class="card bg-base-100 shadow hover:shadow-md transition-shadow"><div class="card-body"><h2 class="card-title">Screener</h2><p>Inspect cached Japanese equity prices and financial metrics.</p></div></a>
+          <a href="/company" class="card bg-base-100 shadow hover:shadow-md transition-shadow"><div class="card-body"><h2 class="card-title">Company Search</h2><p>Search EDINET-backed company and filing information.</p></div></a>
+          <a href="/links" class="card bg-base-100 shadow hover:shadow-md transition-shadow"><div class="card-body"><h2 class="card-title">Link Directory</h2><p>Open research, evidence, and repository surfaces.</p></div></a>
         </div>
       </main>
     </body>
@@ -103,14 +83,10 @@ app.get("/", (c) => {
           server = server[:dashboard_start] + home + server[screener_start:]
           server_path.write_text(server)
 
-          # Remove the re-export shim by pointing every surviving consumer at the SSOT.
           for path in [
-              Path('src/preprocess/screener.ts'),
-              Path('src/preprocess/text.ts'),
-              Path('src/commands/cache_set.ts'),
-              Path('src/commands/_config.ts'),
-              Path('src/commands/cache_get.ts'),
-              Path('src/commands/data_fetch.ts'),
+              Path('src/preprocess/screener.ts'), Path('src/preprocess/text.ts'),
+              Path('src/commands/cache_set.ts'), Path('src/commands/_config.ts'),
+              Path('src/commands/cache_get.ts'), Path('src/commands/data_fetch.ts'),
           ]:
               text = path.read_text()
               old = '../shared/schema'
@@ -136,14 +112,9 @@ app.get("/", (c) => {
           Path('src/shared/schema.ts').unlink()
           Path('tmp/config-consumer-audit.txt').unlink(missing_ok=True)
           PY
-      - name: Format and lint changed TypeScript
+      - name: Apply canonical formatting
         run: |
           bunx biome format --write --config-path=config/biome.json \
-            src/dashboard/server.ts src/schemas.ts \
-            src/preprocess/screener.ts src/preprocess/text.ts \
-            src/commands/cache_set.ts src/commands/_config.ts \
-            src/commands/cache_get.ts src/commands/data_fetch.ts
-          bunx oxlint \
             src/dashboard/server.ts src/schemas.ts \
             src/preprocess/screener.ts src/preprocess/text.ts \
             src/commands/cache_set.ts src/commands/_config.ts \
