@@ -20,7 +20,6 @@ export const ConfigSchema = z
         cache: z.string(),
         edinet: z.string(),
         cacheFundamentalEdinet: z.string(),
-        cacheBacktestResults: z.string(),
       })
       .strict(),
   })
@@ -85,83 +84,3 @@ export const AlphaCandidateSchema = z.object({
 });
 
 export type AlphaCandidate = z.infer<typeof AlphaCandidateSchema>;
-
-export const StandardOutcomeSchema = z.object({
-  sharpe: z.number().finite(),
-  ic: z.number().finite(),
-  max_drawdown: z.number().finite().min(0).max(1),
-  p_value: z.number().finite().min(0).max(1),
-  factor_id: z.string().min(1),
-  backtest_days: z.number().int().positive(),
-});
-
-export type StandardOutcome = z.infer<typeof StandardOutcomeSchema>;
-
-export const VerificationResultSchema = z.object({
-  verdict: z.union([z.literal("GO"), z.literal("HOLD"), z.literal("PIVOT")]),
-  confidence: z.number(),
-  reasons: z.array(z.string()),
-  outcome: StandardOutcomeSchema,
-});
-
-export type VerificationResult = z.infer<typeof VerificationResultSchema>;
-
-export const CycleSummarySchema = z.object({
-  cycle: z.number(),
-  candidates_generated: z.number(),
-  go_count: z.number(),
-  hold_count: z.number(),
-  pivot_count: z.number(),
-  elapsed_ms: z.number(),
-});
-
-export type CycleSummary = z.infer<typeof CycleSummarySchema>;
-
-export const PipelineResultsReportSchema = z.object({
-  execution_id: z.string(),
-  execution_timestamp: z.string(),
-  total_cycles: z.number(),
-  elapsed_seconds: z.number(),
-  cycle_summaries: z.array(CycleSummarySchema),
-  verdicts: z.array(VerificationResultSchema),
-  config_thresholds: z.object({
-    minSharpe: z.number(),
-    maxPValue: z.number(),
-    maxDrawdown: z.number(),
-    minBacktestDays: z.number().int().positive(),
-  }),
-});
-
-export type PipelineResultsReport = z.infer<typeof PipelineResultsReportSchema>;
-
-export const SpilloverBacktestResultSchema = z.object({
-  backtest_id: z.string(),
-  start_date: z.string(),
-  end_date: z.string(),
-  total_returns_pct: z.number(),
-  sharpe_ratio: z.number(),
-  max_drawdown_pct: z.number(),
-  win_rate: z.number(),
-  num_trades: z.number(),
-  strategy_name: z.string(),
-  hypothesis_id: z.string().optional(),
-  net_returns_pct: z.number().optional(),
-  tax_paid_pct: z.number().optional(),
-  num_winning_trades: z.number().optional(),
-  num_losing_trades: z.number().optional(),
-  sector_performance: z
-    .array(
-      z.object({
-        jp_sector: z.string(),
-        avg_return: z.number(),
-        volatility: z.number(),
-        sharpe: z.number(),
-        win_rate: z.number(),
-      }),
-    )
-    .optional(),
-});
-
-export type SpilloverBacktestResult = z.infer<
-  typeof SpilloverBacktestResultSchema
->;
