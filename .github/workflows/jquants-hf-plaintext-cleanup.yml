@@ -4,10 +4,16 @@ on:
   push:
     branches:
       - ops/jquants-hf-plaintext-cleanup
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+
+concurrency:
+  group: jquants-hf-plaintext-cleanup
+  cancel-in-progress: true
 
 jobs:
   cleanup:
