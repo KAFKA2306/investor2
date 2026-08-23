@@ -3,7 +3,7 @@ name: Verify deployed GitHub Pages
 on:
   workflow_run:
     workflows:
-      - Validate and deploy AAARTS evidence dashboard
+      - Build and deploy modular evidence browser
     types:
       - completed
   workflow_dispatch:
@@ -35,16 +35,6 @@ jobs:
             echo "sha=${WORKFLOW_HEAD_SHA}" >> "$GITHUB_OUTPUT"
           fi
 
-      - name: Checkout deployed revision
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ steps.revision.outputs.sha }}
-
-      - name: Set up Python
-        uses: actions/setup-python@v6
-        with:
-          python-version: "3.12"
-
       - name: Inspect GitHub Pages configuration
         env:
           GH_TOKEN: ${{ github.token }}
@@ -72,37 +62,44 @@ jobs:
                 "$base/?smoke=$cache_bust" \
                 -o production-validation/index.html \
               && curl --fail --silent --show-error --location \
-                "$base/data/research_public_manifest.json?smoke=$cache_bust" \
-                -o production-validation/research-public-manifest.json \
+                "$base/manifest.json?smoke=$cache_bust" \
+                -o production-validation/manifest.json \
               && curl --fail --silent --show-error --location \
-                "$base/data/research_2019_public_manifest.json?smoke=$cache_bust" \
-                -o production-validation/research-2019-public-manifest.json \
+                "$base/revision.json?smoke=$cache_bust" \
+                -o production-validation/revision.json \
+              && curl --fail --silent --show-error --location \
+                "$base/app.js?smoke=$cache_bust" \
+                -o production-validation/app.js \
+              && curl --fail --silent --show-error --location \
+                "$base/styles.css?smoke=$cache_bust" \
+                -o production-validation/styles.css \
               && python - <<'PY'
-          import importlib.util
           import json
           import os
-          import sys
           from pathlib import Path
 
-          module_path = Path("scripts/build_public_research_manifest.py")
-          spec = importlib.util.spec_from_file_location("public_manifest_production_validator", module_path)
-          assert spec and spec.loader
-          module = importlib.util.module_from_spec(spec)
-          sys.modules[spec.name] = module
-          spec.loader.exec_module(module)
           expected = os.environ["EXPECTED_REVISION"]
-          public = json.loads(Path("production-validation/research-public-manifest.json").read_text(encoding="utf-8"))
-          public_2019 = json.loads(Path("production-validation/research-2019-public-manifest.json").read_text(encoding="utf-8"))
-          module.validate_public_manifest(public, expected_revision=expected)
-          module.validate_public_2019_manifest(public_2019, expected_revision=expected)
+          manifest = json.loads(Path("production-validation/manifest.json").read_text(encoding="utf-8"))
+          revision = json.loads(Path("production-validation/revision.json").read_text(encoding="utf-8"))
           html = Path("production-validation/index.html").read_text(encoding="utf-8")
-          for required in ("research_public_manifest.json", "research_2019_public_manifest.json"):
-              if required not in html:
-                  raise ValueError(f"production HTML does not reference {required}")
+          app = Path("production-validation/app.js").read_text(encoding="utf-8")
+          assert manifest["revision"] == expected
+          assert revision["revision"] == expected
+          assert revision["artifact_count"] == len(manifest["artifacts"])
+          assert manifest["content_roots"] == ["docs", "data", "generated", "api"]
+          assert "investor2 Evidence Browser" in html
+          assert "manifest.json" in app
+          local = next(item["local_url"] for item in manifest["artifacts"] if item["local_url"])
+          Path("production-validation/first-local-url.txt").write_text(local + "\n", encoding="utf-8")
           PY
             then
-              success=1
-              break
+              first_local_url="$(cat production-validation/first-local-url.txt)"
+              if curl --fail --silent --show-error --location \
+                  "$base/${first_local_url}?smoke=$cache_bust" \
+                  -o production-validation/first-artifact; then
+                success=1
+                break
+              fi
             fi
             echo "attempt ${attempt}/20: deployed revision is not visible yet" | tee -a production-validation/poll.log
             sleep 6
