@@ -1,0 +1,77 @@
+name: Prove J-Quants personal cache is complete
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/jquants-personal-cache-proof.yml
+
+permissions:
+  contents: read
+
+jobs:
+  prove-cache-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache-proof
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install cache-only dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow requests
+      - name: Materialize entirely from owner-only private HF cache
+        run: |
+          rm -rf /tmp/jquants-cache-proof
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-cache-proof \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-23 \
+            --request-interval 15 \
+            --require-cache-complete
+      - name: Verify original full-window evidence and zero API calls
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('/tmp/jquants-cache-proof/manifest.json').read_text())
+          assert manifest['actual_date_range'] == {'start': '2024-05-31', 'end': '2026-05-29'}
+          assert manifest['price_rows'] == 2_050_816
+          assert manifest['ticker_count'] == 4_640
+          assert manifest['observed_market_days'] == 486
+          assert manifest['request_count'] == 0
+          assert manifest['cache']['cache_misses'] == 0
+          assert manifest['cache']['cache_complete_after_run'] is True
+          assert manifest['cache']['visibility'] == 'private'
+          assert manifest['cache']['plaintext_jquants_rows_on_hf'] is False
+          assert manifest['external_distribution'] == 'none; private personal storage only'
+          print(json.dumps({
+              'status': 'passed',
+              'actual_date_range': manifest['actual_date_range'],
+              'price_rows': manifest['price_rows'],
+              'ticker_count': manifest['ticker_count'],
+              'observed_market_days': manifest['observed_market_days'],
+              'request_count': manifest['request_count'],
+              'cache_hits': manifest['cache']['cache_hits'],
+              'cache_misses': manifest['cache']['cache_misses'],
+              'visibility': manifest['cache']['visibility'],
+              'plaintext_jquants_rows_on_hf': manifest['cache']['plaintext_jquants_rows_on_hf'],
+          }, sort_keys=True))
+          PY
+      - name: Delete plaintext proof copy
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-cache-proof
+          rm -rf /tmp/huggingface-personal-cache-proof
