@@ -18,6 +18,7 @@ from datetime import UTC, datetime
 from io import BytesIO
 from pathlib import Path
 from typing import Any
+from zoneinfo import ZoneInfo
 
 import pandas as pd
 
@@ -43,6 +44,7 @@ CACHE_NONCE_BYTES = 12
 CACHE_KEY_DOMAIN = b"investor2-jquants-personal-hf-cache-v1\x00"
 EMPTY_MARKER = b"E"
 PARQUET_MARKER = b"P"
+JST = ZoneInfo("Asia/Tokyo")
 
 
 def parse_args() -> argparse.Namespace:
@@ -54,7 +56,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--hf-repo-id", required=True)
-    parser.add_argument("--as-of", default=datetime.now(UTC).date().isoformat())
+    parser.add_argument("--as-of", default=datetime.now(JST).date().isoformat())
     parser.add_argument("--request-interval", type=float, default=DEFAULT_REQUEST_INTERVAL_SECONDS)
     parser.add_argument(
         "--require-cache-complete",
