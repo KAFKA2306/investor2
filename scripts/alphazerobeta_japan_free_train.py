@@ -7,10 +7,13 @@ import numpy as np
 import pandas as pd
 
 from scripts import alphazerobeta_train as trainer
-from src.research.alphazerobeta import WalkForwardFold, make_walk_forward_folds as canonical_folds
+from src.research.alphazerobeta import (
+    WalkForwardFold,
+    make_walk_forward_folds as canonical_folds,
+)
 
-TRAIN_MONTHS = 8
-VALIDATION_MONTHS = 2
+TRAIN_MONTHS = 12
+VALIDATION_MONTHS = 3
 TEST_MONTHS = 3
 
 
