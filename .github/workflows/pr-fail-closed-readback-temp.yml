@@ -1,0 +1,54 @@
+name: Temporary fail-closed read-back
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: "1.3.13"
+      - name: Install locked JavaScript dependencies
+        run: bun ci
+      - name: Verify dashboard unavailable state at runtime
+        run: |
+          bun -e '
+            const server = (await import("./src/dashboard/server.ts")).default;
+            const response = await server.fetch(new Request("http://localhost/api/stats"));
+            const body = await response.text();
+            if (response.status !== 503) throw new Error(`expected 503, got ${response.status}`);
+            if (!body.includes("統計情報を取得できません")) throw new Error("missing unavailable-state message");
+            if (!body.includes("未取得値を 0 として表示しません")) throw new Error("missing no-synthetic-zero message");
+            console.log(JSON.stringify({status: response.status, unavailable: true}));
+          '
+      - name: Verify merged Pages revision in production
+        env:
+          EXPECTED_REVISION: ed5e3bfcc57320b79c7c4f11010503897b77e909
+        run: |
+          set -euo pipefail
+          base="https://kafka2306.github.io/investor2"
+          for attempt in $(seq 1 10); do
+            if curl --fail --silent --show-error --location \
+              "$base/revision.json?verify=${EXPECTED_REVISION}-${attempt}" \
+              -o /tmp/revision.json \
+              && python - <<'PY'
+          import json
+          import os
+          from pathlib import Path
+          payload = json.loads(Path('/tmp/revision.json').read_text(encoding='utf-8'))
+          assert payload['revision'] == os.environ['EXPECTED_REVISION'], payload
+          print(json.dumps({'revision': payload['revision'], 'artifact_count': payload['artifact_count']}))
+          PY
+            then
+              exit 0
+            fi
+            sleep 3
+          done
+          echo "production Pages does not expose expected revision ${EXPECTED_REVISION}" >&2
+          exit 1
