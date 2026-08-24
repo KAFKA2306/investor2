@@ -283,18 +283,23 @@ def evaluate_weights(
     if w.shape != r.shape:
         raise ValueError("weights and asset_returns must match")
     first = max(start, 0)
-    last = min(end, w.shape[0] - 1)
-    path = w[first:last]
-    realized = r[first + 1 : last + 1]
-    benchmark = b[first + 1 : last + 1]
+    last = min(end, w.shape[0])
+    if last - first < 2:
+        path = np.empty((0, w.shape[1]), dtype=np.float64)
+        realized = np.empty((0, r.shape[1]), dtype=np.float64)
+        benchmark = np.empty((0,), dtype=np.float64)
+    else:
+        path = w[first : last - 1]
+        realized = r[first + 1 : last]
+        benchmark = b[first + 1 : last]
     if path.shape != realized.shape:
         raise ValueError("misaligned realization path")
-    previous = np.vstack([np.zeros((1, path.shape[1])), path[:-1]])
-    turnover = np.abs(path - previous).sum(axis=1)
-    short_gross = np.abs(np.minimum(path, 0.0)).sum(axis=1)
-    gross = np.abs(path).sum(axis=1)
-    net = path.sum(axis=1)
-    gross_return = np.einsum("tn,tn->t", path, realized)
+    previous = np.vstack([np.zeros((1, path.shape[1])), path[:-1]]) if path.size else path.copy()
+    turnover = np.abs(path - previous).sum(axis=1) if path.size else np.empty((0,), dtype=np.float64)
+    short_gross = np.abs(np.minimum(path, 0.0)).sum(axis=1) if path.size else np.empty((0,), dtype=np.float64)
+    gross = np.abs(path).sum(axis=1) if path.size else np.empty((0,), dtype=np.float64)
+    net = path.sum(axis=1) if path.size else np.empty((0,), dtype=np.float64)
+    gross_return = np.einsum("tn,tn->t", path, realized) if path.size else np.empty((0,), dtype=np.float64)
     cost = turnover * transaction_cost_bps_per_side * 1e-4
     borrow = short_gross * borrow_fee_bps_per_year * 1e-4 / 252.0
     net_return = gross_return - cost - borrow
