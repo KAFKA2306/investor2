@@ -14,7 +14,7 @@ on:
       - tests/test_alphazerobeta.py
       - tests/test_alphazerobeta_paper.py
       - tests/test_alphazerobeta_timing.py
-      - docs/research/alphazerobeta-paper-reproduction.md
+      - docs/research/results/alphazerobeta-paper-reproduction.md
       - .github/workflows/alphazerobeta-paper-reproduction.yml
 
 permissions:
