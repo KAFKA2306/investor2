@@ -103,15 +103,10 @@ jobs:
               raise SystemExit("root stats route pattern not found")
           text = text.replace(old_root, new_root, 1)
 
-          old_root_body = '''          <div id="stats" hx-trigger="load" hx-get="/api/stats" hx-swap="innerHTML">
-                    ${renderStatsCards(stats)}
-                  </div>'''
-          new_root_body = '''          <div id="stats" hx-trigger="load" hx-get="/api/stats" hx-swap="innerHTML">
-                    ${statsHtml}
-                  </div>'''
-          if old_root_body not in text:
-              raise SystemExit("root stats body pattern not found")
-          text = text.replace(old_root_body, new_root_body, 1)
+          root_render = "${renderStatsCards(stats)}"
+          if root_render not in text:
+              raise SystemExit("root stats render expression not found")
+          text = text.replace(root_render, "${statsHtml}", 1)
 
           old_api = '''app.get("/api/stats", async (c) => {
             const stats = await getStats();
