@@ -50,11 +50,13 @@ function artifactSearchText(item) {
 
 function refreshModuleFilter() {
   const section = $("section-filter").value;
-  const modules = [...new Set(
-    state.artifacts
-      .filter((item) => !section || item.section === section)
-      .map((item) => item.module),
-  )].sort((a, b) => a.localeCompare(b));
+  const modules = [
+    ...new Set(
+      state.artifacts
+        .filter((item) => !section || item.section === section)
+        .map((item) => item.module),
+    ),
+  ].sort((a, b) => a.localeCompare(b));
   resetSelect($("module-filter"), modules);
 }
 
@@ -165,7 +167,8 @@ function parseDelimited(text, delimiter) {
       cell += char;
     }
   }
-  if (quoted) throw new Error("unterminated quoted field in delimited artifact");
+  if (quoted)
+    throw new Error("unterminated quoted field in delimited artifact");
   if (cell.length || row.length) {
     row.push(cell.replace(/\r$/, ""));
     rows.push(row);
@@ -338,7 +341,9 @@ async function init() {
 
   resetSelect(
     $("section-filter"),
-    manifest.section_order.filter((section) => manifest.totals.sections?.[section] > 0),
+    manifest.section_order.filter(
+      (section) => manifest.totals.sections?.[section] > 0,
+    ),
     (section) => SECTION_LABELS[section] || section,
   );
   if (manifest.totals.sections?.results > 0) {
@@ -347,7 +352,9 @@ async function init() {
   refreshModuleFilter();
   resetSelect(
     $("viewer-filter"),
-    [...new Set(state.artifacts.map((item) => item.viewer))].sort((a, b) => a.localeCompare(b)),
+    [...new Set(state.artifacts.map((item) => item.viewer))].sort((a, b) =>
+      a.localeCompare(b),
+    ),
   );
 
   $("search").addEventListener("input", applyFilters);
@@ -364,7 +371,9 @@ async function init() {
     requestedPath &&
     state.artifacts.some((item) => item.path === requestedPath)
   ) {
-    const requested = state.artifacts.find((item) => item.path === requestedPath);
+    const requested = state.artifacts.find(
+      (item) => item.path === requestedPath,
+    );
     $("section-filter").value = requested.section;
     refreshModuleFilter();
     applyFilters();
