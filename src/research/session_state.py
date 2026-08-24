@@ -98,16 +98,24 @@ def add_session_tilt(
     pieces: list[pd.DataFrame] = []
     for _, group in out.groupby("Ticker", observed=True, sort=False):
         item = group.copy()
-        item[spread_col] = item["session_spread"].ewm(
-            halflife=half_life,
-            adjust=False,
-            min_periods=min_periods,
-        ).mean()
-        item[vol_col] = item["log_r_close_to_close"].ewm(
-            halflife=half_life,
-            adjust=False,
-            min_periods=min_periods,
-        ).std(bias=False)
+        item[spread_col] = (
+            item["session_spread"]
+            .ewm(
+                halflife=half_life,
+                adjust=False,
+                min_periods=min_periods,
+            )
+            .mean()
+        )
+        item[vol_col] = (
+            item["log_r_close_to_close"]
+            .ewm(
+                halflife=half_life,
+                adjust=False,
+                min_periods=min_periods,
+            )
+            .std(bias=False)
+        )
         item[tilt_col] = item[spread_col] / item[vol_col].replace(0.0, np.nan)
         pieces.append(item)
     return pd.concat(pieces, ignore_index=True)
