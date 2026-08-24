@@ -11,13 +11,7 @@ from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
 import scripts.alphazerobeta_build_market_snapshot as market_snapshot_builder
-from scripts.alphazerobeta_build_market_snapshot import (
-    DEFAULT_MAX_REQUEST_ATTEMPTS,
-    DEFAULT_RETRY_BASE_SECONDS,
-    normalize_download,
-    parse_args,
-    screen_with_retry,
-)
+from scripts.alphazerobeta_build_market_snapshot import normalize_download, parse_args, screen_with_retry
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
 from src.research.market_snapshot import (
     MarketSnapshot,
@@ -35,7 +29,9 @@ def test_market_snapshot_requires_explicit_market_contract(monkeypatch: pytest.M
         parse_args()
 
 
-def test_market_snapshot_accepts_arbitrary_market_contract(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+def test_market_snapshot_accepts_arbitrary_market_and_collection_contract(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
     monkeypatch.setattr(
         sys,
         "argv",
@@ -55,6 +51,18 @@ def test_market_snapshot_accepts_arbitrary_market_contract(monkeypatch: pytest.M
             "custom-bucket",
             "--writer-repository",
             "example/writer",
+            "--page-size",
+            "17",
+            "--batch-size",
+            "13",
+            "--request-pause",
+            "0.07",
+            "--max-request-attempts",
+            "3",
+            "--retry-base-seconds",
+            "1.25",
+            "--download-timeout",
+            "11",
             "--output-dir",
             str(tmp_path / "snapshot"),
         ],
@@ -69,9 +77,13 @@ def test_market_snapshot_accepts_arbitrary_market_contract(monkeypatch: pytest.M
     assert args.storage_prefix == "custom/cache/v9"
     assert args.storage_bucket == "custom-bucket"
     assert args.writer_repository == "example/writer"
+    assert args.page_size == 17
+    assert args.batch_size == 13
+    assert args.request_pause == pytest.approx(0.07)
+    assert args.max_request_attempts == 3
+    assert args.retry_base_seconds == pytest.approx(1.25)
+    assert args.download_timeout == pytest.approx(11.0)
     assert args.output_dir == tmp_path / "snapshot"
-    assert args.max_request_attempts == DEFAULT_MAX_REQUEST_ATTEMPTS
-    assert args.retry_base_seconds == DEFAULT_RETRY_BASE_SECONDS
 
 
 def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -92,7 +104,7 @@ def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyP
         EquityQuery("eq", ["region", "jp"]),
         region="jp",
         offset=0,
-        page_size=250,
+        page_size=19,
         max_attempts=4,
         retry_base_seconds=2.0,
     )
