@@ -42,7 +42,15 @@ tasks:
       - bun --hot src/dashboard/server.ts
   check:
     desc: Non-mutating reliability gate used locally and in PR CI
-    deps: [quality:changed, typecheck, test, data:snapshots:audit]
+    deps: [quality:changed, typecheck, test, data:snapshots:audit, research:frontier:check]
+  research:frontier:check:
+    desc: Validate paper-family identities and the generated README frontier matrix
+    cmds:
+      - python3 scripts/frontier_readme.py --check
+  research:frontier:write:
+    desc: Regenerate the README frontier matrix from canonical results
+    cmds:
+      - python3 scripts/frontier_readme.py --write
   quality:changed:
     desc: Format/lint ratchet for files changed from main plus local changes
     cmds:
