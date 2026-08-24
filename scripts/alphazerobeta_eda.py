@@ -278,18 +278,7 @@ def main() -> None:
         },
     }
     write_json(args.output_dir / "summary.json", payload)
-    print(
-        json.dumps(
-            {
-                "status": "completed",
-                "market_rows": market["normalized_market"]["rows"],
-                "market_tickers": market["normalized_market"]["tickers"],
-                "panel_shape": panel["shape"],
-                "output_dir": str(args.output_dir),
-            },
-            sort_keys=True,
-        )
-    )
+    print(json.dumps({"status": "completed", "output_dir": str(args.output_dir)}, sort_keys=True))
 
 
 if __name__ == "__main__":
