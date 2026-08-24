@@ -10,28 +10,32 @@ import pandas as pd
 
 from src.research.market_snapshot import MarketSnapshot, load_manifest, load_prices_from_snapshots
 from src.research.session_state import (
+    ADJUSTMENT_MODES,
     add_session_tilt,
     annualized_session_summary,
     decompose_daily_sessions,
 )
 
-DEFAULT_TICKERS = ("SPY", "QQQ", "IWM", "DIA", "MU", "COST")
-
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build the preregistered pre-23/5 session-state baseline.")
+    parser = argparse.ArgumentParser(
+        description="Build a session-state baseline from explicitly supplied research parameters."
+    )
     parser.add_argument(
         "--market-snapshot-dir",
         required=True,
         type=Path,
         action="append",
-        help="Materialized immutable snapshot root. Repeat for yearly extension shards.",
+        help="Materialized immutable snapshot root. Repeat to compose shards.",
     )
-    parser.add_argument("--market-regions", default="us")
-    parser.add_argument("--tickers", default=",".join(DEFAULT_TICKERS))
-    parser.add_argument("--start", default="2021-01-01")
-    parser.add_argument("--end", default="2025-12-31")
-    parser.add_argument("--half-life", type=int, default=126)
+    parser.add_argument("--market-regions", required=True, help="Comma-separated snapshot regions to load")
+    parser.add_argument("--tickers", required=True, help="Comma-separated symbols to evaluate")
+    parser.add_argument("--start", required=True, help="Inclusive analysis start date")
+    parser.add_argument("--end", required=True, help="Inclusive analysis end date")
+    parser.add_argument("--half-life", required=True, type=int)
+    parser.add_argument("--min-periods", required=True, type=int)
+    parser.add_argument("--trading-days", required=True, type=int)
+    parser.add_argument("--adjustment", required=True, choices=sorted(ADJUSTMENT_MODES))
     parser.add_argument("--output", required=True, type=Path)
     return parser.parse_args()
 
@@ -87,8 +91,11 @@ def select_prices(
     tickers: list[str],
     start: str,
     end: str,
+    adjustment: str,
 ) -> pd.DataFrame:
-    required = {"Ticker", "Date", "Open", "Close", "AdjClose"}
+    required = {"Ticker", "Date", "Open", "Close"}
+    if adjustment == "adjusted":
+        required.add("AdjClose")
     missing = sorted(required - set(frame.columns))
     if missing:
         raise AssertionError(f"materialized market snapshot missing session-state columns: {missing}")
@@ -111,12 +118,21 @@ def build_baseline(
     tickers: list[str],
     start: str,
     end: str,
-    half_life: int = 126,
+    half_life: int,
+    min_periods: int,
+    trading_days: int,
+    adjustment: str,
 ) -> dict[str, Any]:
-    selected = select_prices(frame, tickers=tickers, start=start, end=end)
-    returns = decompose_daily_sessions(selected)
-    featured = add_session_tilt(returns, half_life=half_life)
-    summary = annualized_session_summary(returns)
+    selected = select_prices(
+        frame,
+        tickers=tickers,
+        start=start,
+        end=end,
+        adjustment=adjustment,
+    )
+    returns = decompose_daily_sessions(selected, adjustment=adjustment)
+    featured = add_session_tilt(returns, half_life=half_life, min_periods=min_periods)
+    summary = annualized_session_summary(returns, trading_days=trading_days)
 
     results: list[dict[str, Any]] = []
     tilt_column = f"session_tilt_{half_life}"
@@ -135,17 +151,22 @@ def build_baseline(
         )
 
     return {
-        "schema_version": "investor2.session-state-baseline.v2",
+        "schema_version": "investor2.session-state-baseline.v3",
         "specification": {
             "tickers": tickers,
             "start": start,
             "end": end,
-            "trading_days_per_year": 252,
+            "trading_days_per_year": trading_days,
             "session_tilt_half_life": half_life,
-            "session_tilt_min_periods": half_life,
-            "adjustment": "AdjustedOpen = Open * (AdjClose / Close); AdjustedClose = AdjClose",
-            "annualization_primary": "arithmetic mean daily component * 252",
-            "annualization_sensitivity": "exp(mean log component * 252) - 1",
+            "session_tilt_min_periods": min_periods,
+            "adjustment": adjustment,
+            "adjustment_formula": (
+                "AdjustedOpen = Open * (AdjClose / Close); AdjustedClose = AdjClose"
+                if adjustment == "adjusted"
+                else "AdjustedOpen = Open; AdjustedClose = Close"
+            ),
+            "annualization_primary": "arithmetic mean daily component * trading_days_per_year",
+            "annualization_sensitivity": "exp(mean log component * trading_days_per_year) - 1",
         },
         "results": results,
     }
@@ -165,6 +186,9 @@ def main() -> None:
         start=args.start,
         end=args.end,
         half_life=args.half_life,
+        min_periods=args.min_periods,
+        trading_days=args.trading_days,
+        adjustment=args.adjustment,
     )
     payload["source_snapshots"] = [
         {
