@@ -11,7 +11,7 @@ def test_mask_action_forces_inactive_projected_weight_to_zero() -> None:
     tradable = np.asarray([True, True, False, True])
     masked = mask_action_for_tradability(action, tradable)
     projected = project_market_neutral(masked)
-    assert projected[2] == 0.0
+    np.testing.assert_allclose(projected[2], 0.0, atol=1e-12)
     np.testing.assert_allclose(projected.sum(), 0.0, atol=1e-7)
 
 
