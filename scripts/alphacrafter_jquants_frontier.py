@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+from dataclasses import dataclass
 from pathlib import Path
 
 import numpy as np
@@ -18,7 +20,83 @@ from src.research.alphacrafter_frontier import (
     paper_strategy_gate,
     screen_factors,
 )
-from src.research.alphazerobeta import make_walk_forward_folds, sha256_file
+
+
+@dataclass(frozen=True)
+class WalkForwardFold:
+    index: int
+    train_start: str
+    train_end: str
+    validation_start: str
+    validation_end: str
+    test_start: str
+    test_end: str
+    train_indices: tuple[int, int]
+    validation_indices: tuple[int, int]
+    test_indices: tuple[int, int]
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def _index_bounds(
+    dates: pd.DatetimeIndex, start: pd.Timestamp, end_exclusive: pd.Timestamp
+) -> tuple[int, int]:
+    left = int(dates.searchsorted(start, side="left"))
+    right = int(dates.searchsorted(end_exclusive, side="left"))
+    if right <= left:
+        raise ValueError(f"empty interval: {start.date()} to {end_exclusive.date()}")
+    return left, right
+
+
+def make_walk_forward_folds(
+    dates: np.ndarray,
+    *,
+    test_start: str,
+    test_end: str,
+    train_months: int,
+    validation_months: int,
+    test_months: int,
+) -> list[WalkForwardFold]:
+    idx = pd.DatetimeIndex(pd.to_datetime(dates.tolist())).sort_values()
+    test_cursor = pd.Timestamp(test_start)
+    final_exclusive = pd.Timestamp(test_end) + pd.Timedelta(days=1)
+    folds: list[WalkForwardFold] = []
+    fold_index = 0
+    while test_cursor < final_exclusive:
+        test_exclusive = min(test_cursor + pd.DateOffset(months=test_months), final_exclusive)
+        validation_start = test_cursor - pd.DateOffset(months=validation_months)
+        train_start = validation_start - pd.DateOffset(months=train_months)
+        if train_start < idx[0]:
+            raise ValueError(
+                f"insufficient history for fold {fold_index}: need {train_start.date()}, have {idx[0].date()}"
+            )
+        train = _index_bounds(idx, train_start, validation_start)
+        validation = _index_bounds(idx, validation_start, test_cursor)
+        test = _index_bounds(idx, test_cursor, test_exclusive)
+        folds.append(
+            WalkForwardFold(
+                index=fold_index,
+                train_start=str(idx[train[0]].date()),
+                train_end=str(idx[train[1] - 1].date()),
+                validation_start=str(idx[validation[0]].date()),
+                validation_end=str(idx[validation[1] - 1].date()),
+                test_start=str(idx[test[0]].date()),
+                test_end=str(idx[test[1] - 1].date()),
+                train_indices=train,
+                validation_indices=validation,
+                test_indices=test,
+            )
+        )
+        fold_index += 1
+        test_cursor = test_exclusive
+    return folds
+
 
 UPSTREAM_COMMIT = "c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d"
 PAPER_URL = "https://arxiv.org/abs/2605.05580v2"
@@ -58,7 +136,7 @@ def main() -> None:
         raise AssertionError(f"frontier contract requires exactly 256 assets, got {features.shape[1]}")
 
     manifest = json.loads(args.dataset_manifest.read_text(encoding="utf-8"))
-    folds = make_walk_forward_folds(
+    generated_folds = make_walk_forward_folds(
         dates,
         test_start=args.test_start,
         test_end=args.test_end,
@@ -66,8 +144,9 @@ def main() -> None:
         validation_months=3,
         test_months=3,
     )
-    if len(folds) != 2:
-        raise AssertionError(f"frontier contract requires two OOS folds, got {len(folds)}")
+    if len(generated_folds) < 2:
+        raise AssertionError(f"frontier contract requires at least two OOS folds, got {len(generated_folds)}")
+    folds = generated_folds[:2]
 
     global_test_weights = np.zeros_like(returns, dtype=np.float64)
     fold_payloads: list[dict[str, object]] = []
@@ -93,7 +172,9 @@ def main() -> None:
             if one_day.passed and five_day.passed:
                 oriented_factors[feature_name] = oriented
 
-        selected = screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
+        selected = (
+            screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
+        )
         scores = composite_scores(oriented_factors, selected) if selected else np.zeros_like(returns, dtype=np.float64)
 
         trial_results: list[dict[str, object]] = []
@@ -116,7 +197,11 @@ def main() -> None:
                 borrow_fee_bps_per_year=args.borrow_fee_bps,
             )
             passed = bool(selected) and paper_strategy_gate(validation_metrics)
-            trial = {**policy, "validation_metrics": as_dict(validation_metrics), "paper_strategy_gate": passed}
+            trial = {
+                **policy,
+                "validation_metrics": as_dict(validation_metrics),
+                "paper_strategy_gate": passed,
+            }
             trial_results.append(trial)
             if passed:
                 viable_trials.append((validation_metrics.annualized_sharpe, trial, weights))
@@ -165,7 +250,11 @@ def main() -> None:
                     "validation": validation_details,
                 },
                 "screener": {"selected_factors": selected},
-                "trader": {"trials": trial_results, "selected_trial": selected_trial, "execution_state": execution_state},
+                "trader": {
+                    "trials": trial_results,
+                    "selected_trial": selected_trial,
+                    "execution_state": execution_state,
+                },
                 "oos_metrics": as_dict(test_metrics),
             }
         )
@@ -205,6 +294,7 @@ def main() -> None:
             "Coarse feature-name semantic groups substitute for LLM semantic-similarity filtering.",
             "Three preregistered long/short policies substitute for regime-conditioned LLM hyperparameter proposals.",
             "Factor ensemble is frozen before untouched OOS; no OOS re-mining or re-screening is allowed.",
+            "Only generated fold indices 0 and 1 are evaluated to match the repository's existing AlphaZeroBeta two-fold execution; any calendar-split tail is reported but not silently added.",
             "Rank turnover is computed on percentile ranks to make the upstream <0.4 threshold dimensionally interpretable.",
         ],
         "shared_contract": {
@@ -216,7 +306,15 @@ def main() -> None:
             "date_end": str(pd.Timestamp(dates[-1]).date()),
             "universe_cutoff": manifest.get("universe_cutoff"),
             "selected_codes": manifest.get("selected_codes"),
-            "walk_forward": {"train_months": 12, "validation_months": 3, "test_months": 3, "folds": 2},
+            "walk_forward": {
+                "train_months": 12,
+                "validation_months": 3,
+                "test_months": 3,
+                "generated_fold_count": len(generated_folds),
+                "used_fold_indices": [0, 1],
+                "effective_test_end": folds[-1].test_end,
+                "source_window_test_end": args.test_end,
+            },
             "benchmark": "13060 NEXT FUNDS TOPIX ETF proxy",
             "transaction_cost_bps_per_side": args.transaction_cost_bps,
             "borrow_fee_bps_per_year": args.borrow_fee_bps,
