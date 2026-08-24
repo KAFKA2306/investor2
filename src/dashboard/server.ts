@@ -9,6 +9,10 @@ import {
   searchCompanies,
 } from "../preprocess/edinet";
 import { getScreenerData } from "../preprocess/screener";
+import {
+  type CacheStatistics,
+  parseCacheStatisticsProcessResult,
+} from "../shared/cache_statistics";
 import { ConfigSchema } from "../shared/schema";
 
 const app = new Hono();
@@ -17,33 +21,9 @@ const config = ConfigSchema.parse(
 );
 const CACHE_ROOT_DIR = resolve(config.paths.data, "..");
 
-interface CacheStatistics {
-  marketData: {
-    stocks: number;
-    priceRecords: number;
-    finRecords: number;
-    dateRange: { start: string; end: string } | null;
-    sizeGb: number;
-  };
-  edinet: {
-    companyCount: number;
-    documentCount: number;
-    sizeGb: number;
-  };
-  sqlite: {
-    market: { sizeGb: number } | null;
-    edinet: { sizeGb: number } | null;
-    yahoocache: { sizeGb: number } | null;
-  };
-  lastUpdated: string;
-  totalSizeGb: number;
-}
-
 let cachedStats: CacheStatistics | null = null;
 let lastStatsUpdate = 0;
-const STATS_CACHE_TTL = 30000;
-const JSON_CACHE_TTL = 3_600_000;
-const JSON_CACHE_PATH = "/tmp/investor_stats_cache.json";
+const STATS_CACHE_TTL = 30_000;
 
 function formatBytes(bytes: number): string {
   if (bytes === 0) return "0 B";
@@ -53,144 +33,40 @@ function formatBytes(bytes: number): string {
   return `${parseFloat((bytes / k ** i).toFixed(2))} ${sizes[i]}`;
 }
 
+function renderStatsUnavailable(): string {
+  return `
+    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-6" role="alert">
+      <div class="text-red-700 font-medium">統計情報を取得できません</div>
+      <div class="text-sm text-red-600 mt-1">データソースまたは統計処理を確認してください。未取得値を 0 として表示しません。</div>
+    </div>
+  `;
+}
+
 async function getStats(): Promise<CacheStatistics> {
   const now = Date.now();
-
-  // L1: in-memory cache (30s TTL)
   if (cachedStats && now - lastStatsUpdate < STATS_CACHE_TTL) {
     return cachedStats;
   }
 
-  // L2: pre-computed JSON file (1h TTL)
-  if (existsSync(JSON_CACHE_PATH)) {
-    try {
-      const fileData = JSON.parse(
-        readFileSync(JSON_CACHE_PATH, "utf-8"),
-      ) as CacheStatistics & { generatedAt?: number };
-      const fileAge = now - (fileData.generatedAt || 0);
-      if (fileAge < JSON_CACHE_TTL) {
-        cachedStats = fileData;
-        lastStatsUpdate = now;
-        return cachedStats;
-      }
-    } catch {
-      // JSON file corrupted or unreadable, fall through to subprocess
-    }
+  const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts", "--json"], {
+    cwd: process.cwd(),
+    stdin: "ignore",
+    stdout: "pipe",
+    stderr: "pipe",
+  });
+  const [output, stderr, exitCode] = await Promise.all([
+    new Response(proc.stdout).text(),
+    new Response(proc.stderr).text(),
+    proc.exited,
+  ]);
+  if (stderr.trim()) {
+    console.error(stderr.trim());
   }
 
-  // L3: subprocess fallback (current behavior, ~5s)
-  try {
-    const proc = Bun.spawn(["bun", "run", "src/tasks/stats.ts"], {
-      cwd: process.cwd(),
-      stdio: ["inherit", "pipe", "inherit"],
-    });
-
-    const output = await new Response(proc.stdout).text();
-
-    const parseNumber = (text: string, pattern: RegExp): number => {
-      const match = text.match(pattern);
-      const match1 = match?.[1];
-      return match1 ? parseInt(match1.replace(/,/g, ""), 10) : 0;
-    };
-
-    const parseFloat_ = (text: string, pattern: RegExp): number => {
-      const match = text.match(pattern);
-      const match1 = match?.[1];
-      return match1 ? parseFloat(match1) : 0;
-    };
-
-    const parseDate = (
-      text: string,
-      pattern: RegExp,
-    ): { start: string; end: string } | null => {
-      const match = text.match(pattern);
-      const match1 = match?.[1];
-      if (!match1) return null;
-      const [start, end] = match1.split(" ～ ");
-      return { start: start.trim(), end: (end || "").trim() };
-    };
-
-    cachedStats = {
-      marketData: {
-        stocks: parseNumber(output, /📈 カバー銘柄:\s+([\d,]+)/),
-        priceRecords: parseNumber(output, /📊 価格データ:\s+([\d.]+)k/),
-        finRecords: parseNumber(output, /💼 財務データ:\s+([\d.]+)k/),
-        dateRange: parseDate(output, /📅 カバー期間:\s+([^💾]+)/u),
-        sizeGb:
-          parseFloat_(
-            output,
-            /マーケットデータ[^容量]*容量:\s+([\d.]+)\s*[KMGT]B/,
-          ) || 0,
-      },
-      edinet: {
-        companyCount: parseNumber(output, /🏛️\s+カバー企業:\s+([\d,]+)/),
-        documentCount: parseNumber(output, /📄 企業文書:\s+([\d,]+)/),
-        sizeGb:
-          parseFloat_(
-            output,
-            /企業情報 \([^)]*\)[^容量]*容量:\s+([\d.]+)\s*([KMGT]B)/,
-          ) || 0,
-      },
-      sqlite: {
-        market: parseFloat_(
-          output,
-          /📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-        )
-          ? {
-              sizeGb:
-                parseFloat_(
-                  output,
-                  /📊 マーケットキャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-                ) / 1024,
-            }
-          : null,
-        edinet: parseFloat_(
-          output,
-          /🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-        )
-          ? {
-              sizeGb:
-                parseFloat_(
-                  output,
-                  /🏢 EDINET キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-                ) / 1024,
-            }
-          : null,
-        yahoocache: parseFloat_(
-          output,
-          /🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-        )
-          ? {
-              sizeGb:
-                parseFloat_(
-                  output,
-                  /🌐 Yahoo! キャッシュ:\s+([\d.]+)\s*([KMGT]B)/,
-                ) / 1024,
-            }
-          : null,
-      },
-      lastUpdated: new Date().toISOString(),
-      totalSizeGb: parseFloat_(output, /🎯 総容量:\s+([\d.]+)\s*GB/),
-    };
-    lastStatsUpdate = now;
-  } catch (error) {
-    console.error("Failed to get stats:", error);
-    cachedStats = {
-      marketData: {
-        stocks: 0,
-        priceRecords: 0,
-        finRecords: 0,
-        dateRange: null,
-        sizeGb: 0,
-      },
-      edinet: { companyCount: 0, documentCount: 0, sizeGb: 0 },
-      sqlite: { market: null, edinet: null, yahoocache: null },
-      lastUpdated: "Error",
-      totalSizeGb: 0,
-    };
-  }
-
-  return cachedStats;
+  const stats = parseCacheStatisticsProcessResult(output, exitCode);
+  cachedStats = stats;
+  lastStatsUpdate = now;
+  return stats;
 }
 
 // Render stats as HTML
@@ -291,7 +167,13 @@ function renderStatsCards(stats: CacheStatistics): string {
 
 // Dashboard page
 app.get("/", async (c) => {
-  const stats = await getStats();
+  let statsHtml: string;
+  try {
+    statsHtml = renderStatsCards(await getStats());
+  } catch (error) {
+    console.error("Failed to get stats:", error);
+    statsHtml = renderStatsUnavailable();
+  }
   return c.html(`
     <!DOCTYPE html>
     <html lang="ja" data-theme="light">
@@ -321,7 +203,7 @@ app.get("/", async (c) => {
         <!-- Main Content -->
         <div class="max-w-7xl mx-auto p-6">
           <div id="stats" hx-trigger="load" hx-get="/api/stats" hx-swap="innerHTML">
-            ${renderStatsCards(stats)}
+            ${statsHtml}
           </div>
         </div>
       </div>
@@ -332,8 +214,12 @@ app.get("/", async (c) => {
 
 // API: Get stats
 app.get("/api/stats", async (c) => {
-  const stats = await getStats();
-  return c.html(renderStatsCards(stats));
+  try {
+    return c.html(renderStatsCards(await getStats()));
+  } catch (error) {
+    console.error("Failed to get stats:", error);
+    return c.html(renderStatsUnavailable(), 503);
+  }
 });
 
 // API: Refresh cache (trigger task get:all)
