@@ -349,9 +349,9 @@ def render_markdown(report: dict[str, object]) -> str:
             "",
             "```bash",
             "python scripts/verify_paper_factor_suite.py \\",
-            "  --registry docs/research/paper_factor_registry.json \\",
+            "  --registry docs/research/frontier/paper_factor_registry.json \\",
             "  --json-output docs/research/multi_paper_oos_results.json \\",
-            "  --markdown-output docs/research/multi_paper_oos_summary.md",
+            "  --markdown-output docs/research/results/multi_paper_oos_summary.md",
             "",
             "python -m pytest -q tests/test_paper_factor_suite.py",
             "```",
@@ -377,7 +377,7 @@ def main() -> None:
     parser.add_argument(
         "--registry",
         type=Path,
-        default=Path("docs/research/paper_factor_registry.json"),
+        default=Path("docs/research/frontier/paper_factor_registry.json"),
     )
     parser.add_argument("--json-output", type=Path)
     parser.add_argument("--markdown-output", type=Path)

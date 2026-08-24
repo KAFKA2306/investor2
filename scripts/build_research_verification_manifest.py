@@ -174,11 +174,11 @@ def build_manifest() -> dict[str, Any]:
         "schema_version": 2,
         "build": {"code_sha": revision, "run_id": run_id(revision)},
         "generated_from": {
-            "momentum_result": "docs/research/post_publication_momentum_oos.json",
-            "factor_registry": "docs/research/paper_factor_registry.json",
+            "momentum_result": "docs/research/results/post_publication_momentum_oos.json",
+            "factor_registry": "docs/research/frontier/paper_factor_registry.json",
             "factor_verifier": "scripts/verify_paper_factor_suite.py",
-            "repeated_2010s_result": "docs/research/2010s_paper_validation_repeated.json",
-            "paper_2021_registry": "docs/research/2021_arxiv_finance_registry.json",
+            "repeated_2010s_result": "docs/research/results/2010s_paper_validation_repeated.json",
+            "paper_2021_registry": "docs/research/catalogs/2021_arxiv_finance_registry.json",
             "paper_2021_verifier": "scripts/verify_2021_arxiv_methods.py",
         },
         "summary": {

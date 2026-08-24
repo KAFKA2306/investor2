@@ -46,8 +46,8 @@ def test_method_contract() -> None:
 
 def test_upstream_contracts() -> None:
     protocol = json.loads((ROOT / "docs/research/protocols/zhang_1911_10107_v1_dqn_table2.json").read_text())
-    data = json.loads((ROOT / "docs/research/arxiv_qfin_2019_data_requirements.json").read_text())
-    split = json.loads((ROOT / "docs/research/arxiv_qfin_2019_split_contracts.json").read_text())
+    data = json.loads((ROOT / "docs/research/catalogs/arxiv_qfin_2019_data_requirements.json").read_text())
+    split = json.loads((ROOT / "docs/research/contracts/arxiv_qfin_2019_split_contracts.json").read_text())
     result = mod.validate_upstream(protocol, data, split)
     assert result["status"] == "PASS", result
     assert len(mod.expected_tickers(result["data_contract"])) == 50
@@ -70,7 +70,7 @@ def test_access_evidence_is_explicit_and_fail_closed() -> None:
 
 
 def test_missing_data_is_access_required_not_env_placeholder() -> None:
-    data = json.loads((ROOT / "docs/research/arxiv_qfin_2019_data_requirements.json").read_text())
+    data = json.loads((ROOT / "docs/research/catalogs/arxiv_qfin_2019_data_requirements.json").read_text())
     record = mod.find_record(data, "1911.10107")
     old = os.environ.pop("PINNACLE_CLC_DATA_DIR", None)
     try:
@@ -87,7 +87,7 @@ def test_missing_data_is_access_required_not_env_placeholder() -> None:
 
 
 def test_substitute_dataset_never_passes() -> None:
-    data = json.loads((ROOT / "docs/research/arxiv_qfin_2019_data_requirements.json").read_text())
+    data = json.loads((ROOT / "docs/research/catalogs/arxiv_qfin_2019_data_requirements.json").read_text())
     record = mod.find_record(data, "1911.10107")
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)

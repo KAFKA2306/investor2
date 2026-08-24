@@ -94,12 +94,12 @@ Run the checked-in post-publication momentum verification:
 ```bash
 python scripts/verify_post_publication_momentum.py \
   --input docs/research/data/ff_momentum_1994_2017.csv \
-  --output docs/research/post_publication_momentum_oos.json
+  --output docs/research/results/post_publication_momentum_oos.json
 
 python -m pytest -q tests/test_post_publication_momentum.py
 ```
 
-The report is at `docs/research/post_publication_momentum_oos.md`.
+The report is at `docs/research/results/post_publication_momentum_oos.md`.
 
 ## Exception handling
 

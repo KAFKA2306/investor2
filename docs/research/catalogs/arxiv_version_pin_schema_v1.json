@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://github.com/KAFKA2306/investor2/docs/research/arxiv_version_pin_schema_v1.json",
+  "$id": "https://github.com/KAFKA2306/investor2/docs/research/catalogs/arxiv_version_pin_schema_v1.json",
   "title": "investor2 arXiv version pin manifest v1",
   "type": "object",
   "required": [

@@ -13,7 +13,7 @@ SPEC.loader.exec_module(MODULE)
 
 def test_2010s_verdicts_are_repeated_and_stable() -> None:
     report = MODULE.build_repeat_report(
-        ROOT / "docs/research/paper_factor_registry.json",
+        ROOT / "docs/research/frontier/paper_factor_registry.json",
         repetitions=3,
         seed_start=2306,
     )

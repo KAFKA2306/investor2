@@ -105,7 +105,7 @@ def build_report(path: Path) -> dict[str, Any]:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--registry", type=Path, default=ROOT / "docs/research/2019_arxiv_finance_registry.json")
+    parser.add_argument("--registry", type=Path, default=ROOT / "docs/research/catalogs/2019_arxiv_finance_registry.json")
     args = parser.parse_args()
     path = args.registry if args.registry.is_absolute() else ROOT / args.registry
     report = build_report(path)

@@ -17,11 +17,11 @@
   "arxiv_id": "1911.10107",
   "canonical_inputs": {
     "data_contracts": {
-      "path": "docs/research/arxiv_qfin_2019_data_requirements.json",
+      "path": "docs/research/catalogs/arxiv_qfin_2019_data_requirements.json",
       "sha256": "59aa0b03796d77cfd8c4f5ca989fd343015b842f5f4e273d3d4719978d774bc7"
     },
     "split_contracts": {
-      "path": "docs/research/arxiv_qfin_2019_split_contracts.json",
+      "path": "docs/research/contracts/arxiv_qfin_2019_split_contracts.json",
       "sha256": "1bfb04f43814e3eed82a35d9588c5fb131384c36ecda240527d942cc62cb3bb8"
     }
   },

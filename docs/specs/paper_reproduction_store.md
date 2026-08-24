@@ -44,7 +44,7 @@ Bucket は mutable / non-versioned なので、**bucket path 単独では証拠�
 
 ## 2021 正準索引
 
-- `docs/research/2021_arxiv_finance_registry.json`
+- `docs/research/catalogs/2021_arxiv_finance_registry.json`
 
 この registry は bibliography と storage contract の双方を持つ。`materialized_artifacts` は空配列から開始し、artifact を永続化した時だけ append する。
 

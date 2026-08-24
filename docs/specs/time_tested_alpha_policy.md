@@ -93,8 +93,8 @@ Novelty is metadata only. It receives no positive score.
 
 The repository includes a frozen post-publication momentum test:
 
-- Report: `docs/research/post_publication_momentum_oos.md`
-- Result: `docs/research/post_publication_momentum_oos.json`
+- Report: `docs/research/results/post_publication_momentum_oos.md`
+- Result: `docs/research/results/post_publication_momentum_oos.json`
 - Script: `scripts/verify_post_publication_momentum.py`
 - Test: `tests/test_post_publication_momentum.py`
 

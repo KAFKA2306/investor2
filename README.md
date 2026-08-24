@@ -100,7 +100,7 @@ task dashboard:dev       # local evidence dashboard
 | 目的 | 正準入口 |
 | --- | --- |
 | 研究全体を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
-| 仮説探索 | [Hypothesis Lab](docs/research/hypothesis-lab.md) |
+| 仮説探索 | [Hypothesis Lab](docs/research/studies/hypothesis-lab.md) |
 | 入力→検証→判断 | [Canonical investment flow](docs/architecture/canonical-investment-flow.md) |
 | 判断時点の固定 | [Decision ledger](data/decision_ledger/README.md) |
 | Alpha探索手順 | [Alpha discovery runbook](docs/specs/alpha_discovery_runbook.md) |

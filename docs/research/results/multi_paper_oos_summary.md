@@ -42,7 +42,7 @@ The gate remains: Newey-West t >= 1.96, positive lower bound of the moving-block
 
 ```bash
 python scripts/verify_paper_factor_suite.py \
-  --registry docs/research/paper_factor_registry.json \
+  --registry docs/research/frontier/paper_factor_registry.json \
   --json-output /tmp/official-current-paper-factor-suite.json
 ```
 

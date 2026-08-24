@@ -15,7 +15,7 @@ SPEC.loader.exec_module(MODULE)
 
 
 def test_2021_registry_separates_method_contract_from_empirical_run() -> None:
-    report = MODULE.build_report(ROOT / "docs/research/2021_arxiv_finance_registry.json")
+    report = MODULE.build_report(ROOT / "docs/research/catalogs/2021_arxiv_finance_registry.json")
 
     assert report["discovery_universe"] == {
         "dataset_id": "arxiv_qfin_2021_metadata",

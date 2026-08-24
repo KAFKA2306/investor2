@@ -3,7 +3,7 @@
     "bucket_env": "HF_RESEARCH_BUCKET",
     "bucket_prefix": "investor2/research/papers/2021",
     "content_addressed_uri_template": "hf://buckets/{bucket}/investor2/research/papers/2021/{arxiv_id}/{sha256}/{filename}",
-    "github_index": "docs/research/2021_arxiv_finance_registry.json",
+    "github_index": "docs/research/catalogs/2021_arxiv_finance_registry.json",
     "github_role": "Versioned discovery universe reference, curated bibliographic metadata, artifact hashes, provenance, implementation state, and verification verdicts.",
     "huggingface_role": "Large or frequently changing public source snapshots, normalized inputs, derived datasets, checkpoints, and evaluation artifacts.",
     "promotion_rule": "An HF artifact is reusable evidence only after its exact SHA-256 and provenance are committed to this GitHub registry. A mutable bucket path alone is never canonical evidence."
@@ -154,7 +154,7 @@
       "empirical_reproduction_state": "EMPIRICALLY_RUN",
       "empirical_verdict": "REPRODUCED",
       "empirical_verdict_scope": "SECTION_3_2_TABLE_1_BETA_2_LEGACY_PRIMARY_MANIFEST_ONLY",
-      "experiment_matrix": "docs/research/warin_2101_02044_v4_experiment_matrix.json",
+      "experiment_matrix": "docs/research/contracts/warin_2101_02044_v4_experiment_matrix.json",
       "paper_wide_reproduction_state": "PARTIAL",
       "paper_wide_empirical_verdict": "NOT_CLAIMED",
       "table1_direct_point_verdicts": {

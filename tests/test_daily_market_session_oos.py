@@ -5,7 +5,7 @@ import pandas as pd
 import pytest
 
 from scripts.build_explicit_market_snapshot import explicit_universe, parse_tickers
-from scripts.session_state_oos import evaluate
+from scripts.daily_market_session_oos import evaluate
 
 
 def test_explicit_universe_is_exact_and_deduplicated() -> None:

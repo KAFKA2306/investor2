@@ -244,7 +244,7 @@ def empirical_studies(
         "ff3_1992_2020": (ff3_header, ff3_data),
         "ff5_2015_2020": (ff5_header, ff5_data),
     }
-    current = suite.build_report(ROOT / "docs/research/paper_factor_registry.json")
+    current = suite.build_report(ROOT / "docs/research/frontier/paper_factor_registry.json")
     studies: dict[str, Any] = {}
     for study in registry["studies"]:
         archive_header, archive_data = archive_by_dataset[study["dataset"]]
@@ -312,7 +312,7 @@ def build_report() -> dict[str, Any]:
         "factor_suite_for_vintage_audit",
     )
     registry = json.loads(
-        (ROOT / "docs/research/paper_factor_registry.json").read_text(encoding="utf-8")
+        (ROOT / "docs/research/frontier/paper_factor_registry.json").read_text(encoding="utf-8")
     )
 
     downloaded: dict[str, dict[str, Any]] = {}
