@@ -6,13 +6,13 @@ on:
       - research/2019-version-pins
     paths:
       - "scripts/pin_arxiv_versions_by_cutoff.py"
-      - "docs/research/arxiv_qfin_2019_selection_manifest.json"
+      - "docs/research/catalogs/arxiv_qfin_2019_selection_manifest.json"
       - ".github/workflows/arxiv-version-pins-2019.yml"
   pull_request:
     paths:
       - "scripts/pin_arxiv_versions_by_cutoff.py"
-      - "docs/research/arxiv_qfin_2019_selection_manifest.json"
-      - "docs/research/arxiv_qfin_2019_version_pins.json"
+      - "docs/research/catalogs/arxiv_qfin_2019_selection_manifest.json"
+      - "docs/research/catalogs/arxiv_qfin_2019_version_pins.json"
       - ".github/workflows/arxiv-version-pins-2019.yml"
 
 permissions:
@@ -41,7 +41,7 @@ jobs:
           mkdir -p artifacts
           inspected_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           python scripts/pin_arxiv_versions_by_cutoff.py \
-            --selection docs/research/arxiv_qfin_2019_selection_manifest.json \
+            --selection docs/research/catalogs/arxiv_qfin_2019_selection_manifest.json \
             --output artifacts/arxiv_qfin_2019_version_pins.json \
             --cutoff 2019-12-31T23:59:59Z \
             --inspected-at "$inspected_at"
@@ -74,10 +74,10 @@ jobs:
       - name: Commit canonical pins on materialization branch
         if: github.event_name == 'push'
         run: |
-          cp artifacts/arxiv_qfin_2019_version_pins.json docs/research/arxiv_qfin_2019_version_pins.json
+          cp artifacts/arxiv_qfin_2019_version_pins.json docs/research/catalogs/arxiv_qfin_2019_version_pins.json
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add -f docs/research/arxiv_qfin_2019_version_pins.json
+          git add -f docs/research/catalogs/arxiv_qfin_2019_version_pins.json
           if git diff --cached --quiet; then
             echo "No pin changes to commit."
           else
