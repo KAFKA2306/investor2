@@ -1,9 +1,9 @@
 import { describe, expect, test } from "bun:test";
 import {
   CacheStatisticsSchema,
-  parseStatsJson,
-  parseStatsProcessResult,
-} from "../src/dashboard/stats_contract";
+  parseCacheStatisticsJson,
+  parseCacheStatisticsProcessResult,
+} from "../src/shared/cache_statistics";
 
 const zeroStats = {
   marketData: {
@@ -30,7 +30,9 @@ const zeroStats = {
 describe("dashboard stats contract", () => {
   test("accepts legitimate zero observations", () => {
     expect(CacheStatisticsSchema.parse(zeroStats)).toEqual(zeroStats);
-    expect(parseStatsJson(JSON.stringify(zeroStats))).toEqual(zeroStats);
+    expect(parseCacheStatisticsJson(JSON.stringify(zeroStats))).toEqual(
+      zeroStats,
+    );
   });
 
   test("rejects missing required observations instead of filling zero", () => {
@@ -38,18 +40,18 @@ describe("dashboard stats contract", () => {
     const marketData = malformed.marketData as Record<string, unknown>;
     delete marketData.stocks;
 
-    expect(() => parseStatsJson(JSON.stringify(malformed))).toThrow();
+    expect(() => parseCacheStatisticsJson(JSON.stringify(malformed))).toThrow();
   });
 
   test("rejects non-JSON stats output", () => {
-    expect(() => parseStatsJson("not-json")).toThrow(
+    expect(() => parseCacheStatisticsJson("not-json")).toThrow(
       "stats output is not valid JSON",
     );
   });
 
   test("propagates a failed stats subprocess", () => {
-    expect(() => parseStatsProcessResult(JSON.stringify(zeroStats), 1)).toThrow(
-      "stats task failed with exit code 1",
-    );
+    expect(() =>
+      parseCacheStatisticsProcessResult(JSON.stringify(zeroStats), 1),
+    ).toThrow("stats task failed with exit code 1");
   });
 });
