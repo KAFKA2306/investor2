@@ -39,25 +39,21 @@ export const CacheStatisticsSchema = z
   })
   .strict();
 
-const CachedStatisticsSchema = CacheStatisticsSchema.extend({
-  generatedAt: z.number().finite().nonnegative(),
-}).strict();
-
 export type CacheStatistics = z.infer<typeof CacheStatisticsSchema>;
 
-function decodeJson(text: string, source: string): unknown {
+function decodeJson(text: string): unknown {
   if (!text.trim()) {
-    throw new Error(`${source} is empty`);
+    throw new Error("stats output is empty");
   }
   try {
     return JSON.parse(text);
   } catch (error) {
-    throw new Error(`${source} is not valid JSON`, { cause: error });
+    throw new Error("stats output is not valid JSON", { cause: error });
   }
 }
 
 export function parseStatsJson(text: string): CacheStatistics {
-  return CacheStatisticsSchema.parse(decodeJson(text, "stats output"));
+  return CacheStatisticsSchema.parse(decodeJson(text));
 }
 
 export function parseStatsProcessResult(
@@ -68,24 +64,4 @@ export function parseStatsProcessResult(
     throw new Error(`stats task failed with exit code ${exitCode}`);
   }
   return parseStatsJson(output);
-}
-
-export function parseFreshStatsCache(
-  text: string,
-  nowMs: number,
-  ttlMs: number,
-): CacheStatistics | null {
-  const payload = CachedStatisticsSchema.parse(
-    decodeJson(text, "stats cache"),
-  );
-  const ageMs = nowMs - payload.generatedAt;
-  if (ageMs < 0) {
-    throw new Error("stats cache generatedAt is in the future");
-  }
-  if (ageMs >= ttlMs) {
-    return null;
-  }
-
-  const { generatedAt: _generatedAt, ...stats } = payload;
-  return CacheStatisticsSchema.parse(stats);
 }
