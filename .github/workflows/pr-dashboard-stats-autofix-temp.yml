@@ -26,10 +26,6 @@ jobs:
           path = Path("src/dashboard/server.ts")
           text = path.read_text(encoding="utf-8")
           text = text.replace(
-              'import { existsSync, readFileSync } from "node:fs";',
-              'import { readFileSync } from "node:fs";',
-          )
-          text = text.replace(
               'import { ConfigSchema } from "../shared/schema";',
               'import {\n  parseCacheStatisticsProcessResult,\n  type CacheStatistics,\n} from "../shared/cache_statistics";\nimport { ConfigSchema } from "../shared/schema";',
           )
