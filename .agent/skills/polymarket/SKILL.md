@@ -1,26 +1,26 @@
 ---
 name: polymarket
-description: Execute prediction market trades on Polymarket CLOB with Kelly-criterion position sizing and event-driven strategies. Use when deploying prediction market trading algorithms, executing trades with optimal position sizing, managing exposure to event-driven alpha signals, or backtesting trading strategies on implied probability curves.
-origin: local-git-analysis
+description: Acquire and validate Polymarket Gamma/CLOB market data for reproducible research. Use for market discovery, quote/history snapshots, source-health checks, normalization, provenance, and prediction-market hypothesis evaluation.
+origin: local
 ---
 
-# Polymarket Trading Bot Skill
+# Polymarket
 
-Expert knowledge for efficiently trading prediction markets in coordination with Polymarket's CLOB (Central Limit Order Book).
+Use the repository's existing Polymarket provider, snapshot script, input ledger, and live source-health workflow. Do not create a second market-data path or claim trade execution when the current workline only establishes evidence acquisition.
 
-## When to Use
-Use when working with Polymarket-related tasks in this project.
+## Contract
 
-## Core Concepts
-- **CLOB API characteristics**: adherence to rate limits, generation of signed orders, gasless order management.
-- **Betting strategies**: capital management based on the Kelly criterion, detection of odds distortions, event-driven position unwinding.
-- **Data structures**: Validation of Polymarket-specific messaging using Zod schemas.
+- Treat Gamma metadata and CLOB quotes/history as external observations with retrieval time and source identity.
+- Normalize market identity, outcomes, token IDs, prices, liquidity, and timestamps before research use.
+- Reject incomplete identity or outcome/token cardinality mismatches rather than guessing values.
+- Distinguish unavailable CLOB quotes from valid zero values.
+- Preserve the exact query scope and observation time in persisted snapshots.
+- Define liquidity, spread, horizon, and anomaly thresholds in the specific research protocol; do not hard-code universal promotion thresholds in this skill.
+- Evaluate prediction-market signals with frozen OOS, costs, liquidity, and reproducibility rules before making an alpha claim.
 
-## Code Examples
-1. **Market Discovery**: Extraction of ongoing events and high-liquidity markets.
-2. **Backtesting**: Procedures for validating historical data using `backtest_core.ts`.
-3. **Execution**: Opening positions, updating limit orders, and setting stop-losses.
+## Current surfaces
 
-## Best Practices
-- Before opening a position, always validate data integrity with `polymarket_schemas.ts`.
-- Telemetry logs should be recorded via `telemetry_logger.ts`, automating anomaly detection.
+- `src/io/providers/polymarket.py` — Gamma/CLOB provider and normalization.
+- `scripts/polymarket_snapshot.py` — snapshot and health entry point.
+- `data/input_ledger/source_registry.d/polymarket_market_data.json` — registered source.
+- `.github/workflows/polymarket-live.yml` — live source-health verification.
