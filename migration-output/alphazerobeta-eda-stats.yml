@@ -1,0 +1,142 @@
+name: AlphaZeroBeta derived EDA statistics
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/alphazerobeta_eda.py
+      - .github/workflows/alphazerobeta-eda-stats.yml
+
+permissions:
+  contents: write
+
+jobs:
+  eda:
+    if: github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-alphazerobeta-eda
+      PYTHONPATH: .
+      TARGET: docs/research/results/alphazerobeta_jquants_free/eda
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - id: existing
+        name: Detect completed evidence
+        run: |
+          if test -f "$TARGET/summary.json"; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-python@v6
+        if: steps.existing.outputs.ready != 'true'
+        with:
+          python-version: "3.12"
+      - name: Require owner credentials
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install dependencies and normalize script style
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          python -m pip install ruff jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+          ruff format scripts/alphazerobeta_eda.py
+          ruff check --fix scripts/alphazerobeta_eda.py
+          python -m py_compile scripts/alphazerobeta_eda.py
+      - name: Materialize frozen daily-bar window entirely from Private HF
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          rm -rf /tmp/jquants-eda /tmp/alphazerobeta-eda
+          python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-eda \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-23 \
+            --request-interval 15 \
+            --require-cache-complete
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/jquants-eda/manifest.json').read_text())
+          assert manifest['actual_date_range'] == {'start': '2024-05-31', 'end': '2026-05-29'}
+          assert manifest['price_rows'] == 2_050_816
+          assert manifest['ticker_count'] == 4_640
+          assert manifest['observed_market_days'] == 486
+          assert manifest['request_count'] == 0
+          assert manifest['cache']['cache_hits'] == 521
+          assert manifest['cache']['cache_misses'] == 0
+          assert manifest['cache']['visibility'] == 'private'
+          assert manifest['cache']['plaintext_jquants_rows_on_hf'] is False
+          print(json.dumps({'cache_status': 'passed', 'daily_bar_api_requests': 0, 'rows': 2050816, 'tickers': 4640, 'market_days': 486}, sort_keys=True))
+          PY
+      - name: Fetch PIT master used by canonical validation
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          python scripts/jquants_pit_master_ephemeral.py \
+            --date 2025-08-29 \
+            --output /tmp/jquants-eda/universe.parquet \
+            --request-interval 15
+      - name: Rebuild canonical top-64 panel
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          mkdir -p /tmp/alphazerobeta-eda
+          python scripts/jquants_japan_panel.py \
+            --market-snapshot-dir /tmp/jquants-eda \
+            --market-regions jp \
+            --output /tmp/alphazerobeta-eda/panel.npz \
+            --max-assets 64 \
+            --universe-cutoff 2025-08-30
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/alphazerobeta-eda/panel.npz.manifest.json').read_text())
+          assert manifest['shape'] == {'T': 485, 'N': 64, 'F': 17}
+          assert len(manifest['selected_codes']) == 64
+          print(json.dumps({'panel_status': 'passed', 'shape': manifest['shape']}, sort_keys=True))
+          PY
+      - name: Compute derived EDA statistics
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          rm -rf "$TARGET"
+          python scripts/alphazerobeta_eda.py \
+            --market-snapshot-dir /tmp/jquants-eda \
+            --panel /tmp/alphazerobeta-eda/panel.npz \
+            --output-dir "$TARGET"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          root = Path('docs/research/results/alphazerobeta_jquants_free/eda')
+          summary = json.loads((root / 'summary.json').read_text())
+          market = summary['full_market']['normalized_market']
+          panel = summary['prepared_panel']
+          assert market['rows'] == 2_050_816
+          assert market['tickers'] == 4_640
+          assert market['market_days'] == 486
+          assert panel['shape'] == {'T': 485, 'N': 64, 'F': 17}
+          assert panel['feature_missing_total'] == 0
+          assert panel['return_missing_total'] == 0
+          for name in ('raw_column_quality.csv', 'per_ticker_stats.csv', 'panel_feature_stats.csv', 'panel_asset_return_stats.csv'):
+              assert (root / name).is_file(), name
+          print(json.dumps({'eda_status': 'passed', 'market': market, 'panel_shape': panel['shape']}, sort_keys=True))
+          PY
+      - name: Persist derived evidence to PR branch
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/alphazerobeta_eda.py "$TARGET"
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist AlphaZeroBeta EDA statistics [evidence]"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-eda /tmp/alphazerobeta-eda /tmp/huggingface-alphazerobeta-eda

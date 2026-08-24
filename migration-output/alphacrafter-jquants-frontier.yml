@@ -1,0 +1,173 @@
+name: AlphaCrafter 256 J-Quants frontier
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alphacrafter-jquants-frontier-${{ github.event_name }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install contract dependencies
+        run: python -m pip install numpy pytest
+      - name: Verify frontier implementation
+        run: |
+          python -m py_compile src/research/alphacrafter_frontier.py scripts/alphacrafter_jquants_frontier.py
+          pytest -q tests/test_alphacrafter_frontier.py
+
+  execute:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' &&
+       github.actor != 'github-actions[bot]' &&
+       contains(github.event.head_commit.message, '[alphacrafter]'))
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+      - name: Materialize frozen Free window from owner-only cache
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphacrafter-japan /tmp/huggingface-personal-cache
+          python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-24 \
+            --request-interval 15 \
+            --require-cache-complete
+      - name: Freeze shared dates and PIT master date
+        run: |
+          ROOT=/tmp/jquants-free
+          ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
+
+          import pandas as pd
+
+          root = Path(os.environ["ROOT"])
+          manifest = json.loads((root / "manifest.json").read_text())
+          expected = {"start": "2024-05-31", "end": "2026-05-29"}
+          if manifest["actual_date_range"] != expected:
+              raise SystemExit(
+                  f"frozen J-Quants source window drifted: {manifest['actual_date_range']} != {expected}"
+              )
+          actual_end = pd.Timestamp(manifest["actual_date_range"]["end"])
+          test_end = actual_end
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / "benchmark.parquet")
+          benchmark_dates = pd.to_datetime(benchmark["Date"], errors="raise").dt.tz_localize(None)
+          eligible = benchmark_dates[benchmark_dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit("no benchmark date on/before universe cutoff")
+          master_date = eligible.max()
+          print(f"SNAPSHOT_ROOT={root}")
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
+          PY
+      - name: Materialize the frozen PIT universe master
+        run: |
+          python scripts/jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output "$SNAPSHOT_ROOT/universe.parquet" \
+            --request-interval 15
+      - name: Prepare shared top-256 J-Quants panel
+        run: |
+          mkdir -p /tmp/alphacrafter-japan
+          python scripts/jquants_japan_panel.py \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
+            --output /tmp/alphacrafter-japan/panel.npz \
+            --max-assets 256 \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+      - name: Execute frozen AlphaCrafter representative
+        run: |
+          python scripts/alphacrafter_jquants_frontier.py \
+            --dataset /tmp/alphacrafter-japan/panel.npz \
+            --dataset-manifest /tmp/alphacrafter-japan/panel.npz.manifest.json \
+            --output /tmp/alphacrafter-japan/result.json \
+            --test-start "$TEST_START" \
+            --test-end "$TEST_END" \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 30
+      - name: Persist derived evidence on review branch
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=docs/research/results/alphacrafter_jquants_256
+          rm -rf "$target"
+          mkdir -p "$target"
+          cp /tmp/alphacrafter-japan/result.json "$target/result.json"
+          cp /tmp/alphacrafter-japan/panel.npz.manifest.json "$target/dataset-manifest.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          result = json.loads(Path("docs/research/results/alphacrafter_jquants_256/result.json").read_text())
+          metrics = result["aggregate_oos_metrics"]
+          summary = {
+              "research_date": result["research_date"],
+              "family": result["family"],
+              "reproduction_state": result["reproduction_state"],
+              "frontier_verdict": result["frontier_verdict"],
+              "asset_count": result["shared_contract"]["asset_count"],
+              "cumulative_return": metrics["cumulative_return"],
+              "annualized_sharpe": metrics["annualized_sharpe"],
+              "max_drawdown": metrics["max_drawdown"],
+              "benchmark_correlation": metrics["benchmark_correlation"],
+              "mean_turnover": metrics["mean_turnover"],
+              "max_abs_net_exposure": metrics["max_abs_net_exposure"],
+              "mean_gross_exposure": metrics["mean_gross_exposure"],
+              "blockers": result["blockers"],
+          }
+          Path("docs/research/results/alphacrafter_jquants_256/summary.json").write_text(
+              json.dumps(summary, ensure_ascii=False, indent=2, sort_keys=True) + "\n"
+          )
+          print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          if git diff --cached --quiet; then
+            echo "No evidence changes"
+          else
+            git commit -m "research: persist AlphaCrafter 256 frontier evidence"
+            git push --force-with-lease origin HEAD:research/alphacrafter-jquants-frontier
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphacrafter-japan /tmp/huggingface-personal-cache

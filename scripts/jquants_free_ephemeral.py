@@ -254,7 +254,7 @@ def main() -> None:
     shutil.rmtree(staging)
 
     manifest: dict[str, object] = {
-        "schema_version": "investor2.alphazerobeta-jquants-free-ephemeral.v1",
+        "schema_version": "investor2.jquants-free-ephemeral.v1",
         "source": "J-Quants API v2",
         "plan": "Free",
         "as_of": str(pd.Timestamp(args.as_of).date()),

@@ -1,0 +1,294 @@
+name: AlphaZeroBeta J-Quants Free Japan validation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      max_assets:
+        description: PIT common-stock universe size
+        required: true
+        default: "256"
+        type: choice
+        options:
+          - "64"
+          - "256"
+
+permissions:
+  contents: write
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install contract dependencies
+        run: python -m pip install ruff numpy pytest
+      - name: Verify J-Quants validation entry points
+        run: |
+          ruff format --check \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
+            scripts/alphazerobeta_japan_free_train.py
+          ruff check \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
+            scripts/alphazerobeta_japan_free_train.py
+          python -m py_compile \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
+            scripts/alphazerobeta_japan_free_train.py \
+
+  snapshot-and-validate:
+    concurrency:
+      group: alphazerobeta-jquants-free-snapshot
+      cancel-in-progress: true
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, '[snapshot]'))
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+      MAX_ASSETS: ${{ inputs.max_assets || '256' }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+          case "$MAX_ASSETS" in
+            64|256) ;;
+            *) echo "unsupported MAX_ASSETS=$MAX_ASSETS" >&2; exit 2 ;;
+          esac
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Materialize complete visible Free window from owner-only private cache
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan /tmp/huggingface-personal-cache
+          python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15
+      - name: Resolve bounded validation dates and PIT master date
+        run: |
+          ROOT=/tmp/jquants-free
+          ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path(os.environ['ROOT'])
+          manifest = json.loads((root / 'manifest.json').read_text())
+          actual_end = pd.Timestamp(manifest['actual_date_range']['end'])
+          test_end = actual_end
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / 'benchmark.parquet')
+          benchmark_dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
+          eligible = benchmark_dates[benchmark_dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit('no benchmark date on/before universe cutoff')
+          master_date = eligible.max()
+          print(f"SNAPSHOT_ROOT={root}")
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
+          PY
+      - name: Replace end-date master with cutoff-date PIT master
+        run: |
+          sleep 15
+          python scripts/jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output "$SNAPSHOT_ROOT/universe.parquet" \
+            --request-interval 15
+      - name: Prepare PIT common-stock panel
+        run: |
+          mkdir -p /tmp/alphazerobeta-japan
+          python scripts/jquants_japan_panel.py \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
+            --output /tmp/alphazerobeta-japan/panel.npz \
+            --max-assets "$MAX_ASSETS" \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+      - name: Execute two OOS folds and matched correlation-penalty ablation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for fold in 0 1; do
+            seed=$((2306 + fold))
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/primary-fold${fold}.json" \
+              --test-start "$TEST_START" --test-end "$TEST_END" --fold-index "$fold" \
+              --device cpu --seed "$seed" --iterations 10 --horizon 200 \
+              --hidden-size 512 --agent-window 100 \
+              --transaction-cost-bps 15 --borrow-fee-bps 30 \
+              --lambda-corr 0.5 --lambda-turnover 0.001 --reward-semantics paper
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/ablation-fold${fold}.json" \
+              --test-start "$TEST_START" --test-end "$TEST_END" --fold-index "$fold" \
+              --device cpu --seed "$seed" --iterations 10 --horizon 200 \
+              --hidden-size 512 --agent-window 100 \
+              --transaction-cost-bps 15 --borrow-fee-bps 30 \
+              --lambda-corr 0 --lambda-turnover 0.001 --reward-semantics paper
+          done
+      - name: Compare OOS evidence
+        run: |
+          python scripts/alphazerobeta_compare.py \
+            --dataset /tmp/alphazerobeta-japan/panel.npz \
+            --primary-weights /tmp/alphazerobeta-japan/primary-fold0.weights.npz /tmp/alphazerobeta-japan/primary-fold1.weights.npz \
+            --ablation-weights /tmp/alphazerobeta-japan/ablation-fold0.weights.npz /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
+            --output /tmp/alphazerobeta-japan/comparison.json \
+            --transaction-cost-bps 15 --borrow-fee-bps 30
+      - name: Persist derived evidence only
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "$MAX_ASSETS" = "64" ]; then
+            target=docs/research/results/alphazerobeta_jquants_free
+          else
+            target="docs/research/results/alphazerobeta_jquants_free_${MAX_ASSETS}"
+          fi
+          rm -rf "$target"
+          mkdir -p "$target"
+          cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
+          cp /tmp/alphazerobeta-japan/panel.npz.manifest.json "$target/dataset-manifest.json"
+          cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
+          cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
+          cp /tmp/alphazerobeta-japan/comparison.json "$target/"
+          TARGET="$target" MAX_ASSETS="$MAX_ASSETS" python - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+
+          def sha256_file(path: Path) -> str:
+              digest = hashlib.sha256()
+              with path.open('rb') as handle:
+                  for chunk in iter(lambda: handle.read(1024 * 1024), b''):
+                      digest.update(chunk)
+              return digest.hexdigest()
+
+          root = Path(os.environ['TARGET'])
+          max_assets = int(os.environ['MAX_ASSETS'])
+          source = json.loads((root / 'source-manifest.json').read_text())
+          dataset = json.loads((root / 'dataset-manifest.json').read_text())
+          comparison = json.loads((root / 'comparison.json').read_text())
+          payload = {
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v6',
+              'execution_status': 'completed',
+              'requested_asset_count': max_assets,
+              'source': {
+                  'source': source['source'],
+                  'plan': source['plan'],
+                  'actual_date_range': source['actual_date_range'],
+                  'ticker_count': source['ticker_count'],
+                  'price_rows': source['price_rows'],
+                  'observed_market_days': source['observed_market_days'],
+                  'raw_retention': source['raw_retention'],
+                  'external_distribution': source['external_distribution'],
+              },
+              'universe_contract': {
+                  'master_dates': dataset.get('universe_master_dates'),
+                  'filter': dataset.get('universe_filter'),
+                  'history_gate': dataset.get('liquidity_history_gate'),
+                  'master_rows': dataset.get('universe_master_rows'),
+                  'allowed_common_stock_codes': dataset.get('allowed_common_stock_codes'),
+                  'universe_cutoff': dataset['universe_cutoff'],
+              },
+              'trained_asset_count': len(dataset['selected_codes']),
+              'selected_codes': dataset['selected_codes'],
+              'walk_forward': {'train_months': 12, 'validation_months': 3, 'test_months': 3, 'folds': 2},
+              'cost_assumptions': comparison['cost_assumptions'],
+              'primary_lambda_corr_0_5': comparison['primary_lambda_corr_0_5'],
+              'ablation_lambda_corr_0': comparison['ablation_lambda_corr_0'],
+              'neutrality': comparison['neutrality'],
+              'gates': comparison['gates'],
+              'verdict': comparison['verdict'],
+              'benchmark': '13060 NEXT FUNDS TOPIX ETF proxy; not exact TOPIX and excluded from the investable universe',
+              'claim_boundary': 'J-Quants Free Japanese common-stock surrogate with paper model/reward semantics; not the licensed-data paper experiment.',
+          }
+          if payload['trained_asset_count'] != max_assets:
+              raise AssertionError(
+                  f"trained asset count {payload['trained_asset_count']} != requested {max_assets}"
+              )
+          (root / 'summary.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
+
+          if max_assets == 256:
+              baseline_root = Path('docs/research/results/alphazerobeta_jquants_free')
+              baseline = json.loads((baseline_root / 'summary.json').read_text())
+              baseline_comparison = json.loads((baseline_root / 'comparison.json').read_text())
+              contract_checks = {
+                  'source_actual_date_range': baseline['source']['actual_date_range'] == payload['source']['actual_date_range'],
+                  'universe_cutoff': baseline['universe_contract']['universe_cutoff'] == payload['universe_contract']['universe_cutoff'],
+                  'walk_forward': baseline['walk_forward'] == payload['walk_forward'],
+                  'cost_assumptions': baseline_comparison['cost_assumptions'] == payload['cost_assumptions'],
+                  'benchmark': baseline['benchmark'] == payload['benchmark'],
+              }
+              if not all(contract_checks.values()):
+                  raise AssertionError(f"64/256 comparison contract mismatch: {contract_checks}")
+              p64 = baseline['primary_lambda_corr_0_5']
+              p256 = payload['primary_lambda_corr_0_5']
+              direct = {
+                  'schema_version': 'investor2.alphazerobeta-64-vs-256.v1',
+                  'contract_checks': contract_checks,
+                  'directly_comparable': True,
+                  'baseline_asset_count': baseline['trained_asset_count'],
+                  'candidate_asset_count': payload['trained_asset_count'],
+                  'baseline_64': p64,
+                  'candidate_256': p256,
+                  'delta_256_minus_64': {
+                      'cumulative_return': p256['cumulative_return'] - p64['cumulative_return'],
+                      'annualized_sharpe': p256['annualized_sharpe'] - p64['annualized_sharpe'],
+                      'benchmark_correlation': p256['benchmark_correlation'] - p64['benchmark_correlation'],
+                      'absolute_benchmark_correlation': abs(p256['benchmark_correlation']) - abs(p64['benchmark_correlation']),
+                      'max_drawdown': p256['max_drawdown'] - p64['max_drawdown'],
+                  },
+                  'neutrality_64': baseline_comparison['neutrality'],
+                  'neutrality_256': payload['neutrality'],
+                  'interpretation': 'Descriptive universe-size sensitivity only; improvement is not a paper-family BEAT verdict.',
+              }
+              (root / 'comparison-vs-64.json').write_text(json.dumps(direct, ensure_ascii=False, indent=2) + '\n')
+
+          print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
+          PY
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist J-Quants Free ${MAX_ASSETS}-asset frontier evidence [evidence]"
+            git push origin HEAD:research/alphazerobeta-jquants-free-validation
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan
+          rm -rf /tmp/huggingface-personal-cache

@@ -29,7 +29,7 @@ def write_json(path: Path, payload: dict[str, object]) -> None:
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Prepare a PIT-safe AlphaZeroBeta panel from local files or a materialized central market cache."
+        description="Prepare a PIT-safe research panel from local files or a materialized market snapshot."
     )
     source = parser.add_mutually_exclusive_group(required=True)
     source.add_argument("--prices-csv", type=Path)
@@ -239,7 +239,7 @@ def main() -> None:
     write_json(
         manifest,
         {
-            "schema_version": "investor2.alphazerobeta-prepared-dataset.v2",
+            "schema_version": "investor2.jquants-prepared-panel.v1",
             **source_metadata,
             "universe_cutoff": str(cutoff.date()),
             "selection_rule": "top mean price*volume on/before cutoff, minimum available-history gate",
