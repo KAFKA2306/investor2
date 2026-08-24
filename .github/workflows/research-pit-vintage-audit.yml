@@ -6,11 +6,11 @@ on:
       - "scripts/audit_french_factor_vintages.py"
       - "scripts/compare_french_factor_revisions.py"
       - "scripts/verify_paper_factor_suite.py"
-      - "docs/research/paper_factor_registry.json"
-      - "docs/research/kenneth_french_factor_vintage_contract.json"
-      - "docs/research/kenneth_french_current_snapshot_2026-06.json"
-      - "docs/research/multi_paper_oos_summary.md"
-      - "docs/research/official_current_paper_factor_suite.json"
+      - "docs/research/frontier/paper_factor_registry.json"
+      - "docs/research/contracts/kenneth_french_factor_vintage_contract.json"
+      - "docs/research/data/kenneth_french_current_snapshot_2026-06.json"
+      - "docs/research/results/multi_paper_oos_summary.md"
+      - "docs/research/frontier/official_current_paper_factor_suite.json"
       - "docs/research/data/ff3_1992_2026-06.csv"
       - "docs/research/data/ff5_2015_2026-06.csv"
       - "docs/research/data/kenneth_french_factor_revision_comparison_2026-08-17.json"
@@ -44,14 +44,14 @@ jobs:
         run: |
           mkdir -p artifacts
           python scripts/verify_paper_factor_suite.py \
-            --registry docs/research/paper_factor_registry.json \
+            --registry docs/research/frontier/paper_factor_registry.json \
             --json-output artifacts/official-current-paper-factor-suite.json
           python - <<'PY'
           import json
           from pathlib import Path
 
           report = json.loads(Path("artifacts/official-current-paper-factor-suite.json").read_text())
-          snapshot = json.loads(Path("docs/research/kenneth_french_current_snapshot_2026-06.json").read_text())
+          snapshot = json.loads(Path("docs/research/data/kenneth_french_current_snapshot_2026-06.json").read_text())
           datasets = report["datasets"]
           studies = report["studies"]
 
