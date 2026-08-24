@@ -1,105 +1,65 @@
 ---
 name: alpha-mining
-description: MANDATORY TRIGGER: Invoke for alpha factor discovery, formula generation, and backtesting within Qlib. Use when mining novel alpha factors, validating factor authenticity via AAARTS quality gates, optimizing factor performance, or preparing alpha candidates for production deployment. Essential for Ralph Loop workflows.
+description: Use for alpha-factor hypothesis implementation and empirical validation under the repository's preregistered PIT/OOS research contract.
 origin: local-git-analysis
 ---
 
-# Alpha Mining & Qlib Optimization Skill
+# Alpha Mining
 
-Expertise in generating, validating, and optimizing alpha formulas in Qlib format.
+Use this skill to turn an auditable alpha hypothesis into reproducible evidence. The objective is not to maximize formula count, novelty, or in-sample performance. The objective is to reject weak hypotheses before promotion.
 
-## When to Use
-Use for alpha mining related tasks in this project.
+## Canonical contract
 
-## Core Concepts
-- **Qlib Operator**: basic operators such as `$close`, `$open`, `Ref($close, 1)`, `Mean($close, 5)`, `Std($close, 10)`, etc.
-- **Alpha Expression Syntax Requirements**: avoid invalid operations (e.g., division by zero); proper placement of normalization (Rank, CS_ZScore).
-- **Performance Metrics**: interpretation of IC (Information Coefficient), IR (Information Ratio), drawdown, and Sharpe Ratio.
+Before reading untouched OOS results, freeze:
 
-## AAARTS (Alpha Authenticity & Reality-Truth System)
-A three-stage validation pipeline to ensure the reliability of alpha factors.
+- source and economic mechanism;
+- exact signal definition and data lags;
+- universe and exclusions;
+- point-in-time availability rules;
+- train / validation / chronological OOS periods;
+- baseline and ablation plan;
+- transaction-cost, borrow, liquidity, and capacity assumptions where applicable;
+- primary metric and rejection criterion;
+- allowed parameter variants, seeds, and compute budget.
 
-### Phase 1: Description-AST Consistency
-- **Logic**: Validate consistency between the natural language description and the implemented code (AST).
-- **Action**: If variables and functions mentioned in the description do not match those used in the AST, reject immediately.
-- **Principle**: Prevent the introduction of alpha factors whose description and content diverge.
+If any of these choices changes after observing results, create a new hypothesis/protocol version. Do not silently rewrite the existing contract.
 
-### Phase 2: Calculation Execution & NaN Propagation
-- **Logic**: Do not fill missing data (e.g., undefined `macro_cpi`) with zeros; treat as NaN.
-- **Action**: If NaN appears in the calculation, the final performance metric will be NaN and will be excluded in Phase 3.
-- **Principle**: Do not tolerate false alphas caused by incomplete data; prioritize computation integrity.
+## Validation order
 
-### Phase 3: Strict Backtest Validation
-- **Logic**: Final assessment using fixed or regime-adaptive thresholds.
-- **Thresholds**: (See the Quality Gate section for details)
-- **Error Behavior**: If a metric is NaN, or if any threshold is not met, reject immediately.
+1. Implement a deterministic baseline.
+2. Verify source/data provenance and PIT integrity.
+3. Reproduce the intended signal calculation.
+4. Run chronological untouched OOS.
+5. Run post-publication and cross-market/regime checks when applicable.
+6. Measure after-cost return/P&L, Sharpe, drawdown, turnover/exposure, benchmark dependence, and tested scale when applicable.
+7. Inspect nearby-parameter stability and known-factor/industry exposure.
+8. Add any LLM-derived extraction/filter only as a matched ablation against the same frozen OOS contract.
+9. Persist both positive and negative results as machine-readable evidence.
 
-## Quality Gate Review Criteria
-The generated alpha formula is evaluated using a weighted average of four metrics (all normalized to [0, 1]) to yield a Fitness Score.
+## LLM boundary
 
-### 1. Correlation Score
-- **Logic**: The average of the absolute Pearson correlation between factor values and returns.
-- **Normalization**: avg_corr / 0.3 (cap at 1.0). A correlation of 0.3 or higher earns full marks.
+LLMs may assist with extraction, normalization, code generation, and hypothesis extension. The resulting implementation must be reproducible without conversational memory. An LLM-generated narrative, novelty score, or plausible mechanism is not evidence of alpha.
 
-### 2. Constraint Score
-- **Thresholds**: 
-    - Sharpe Ratio >= 1.5
-    - Information Coefficient (IC) >= 0.04
-    - Max Drawdown <= 0.10
-- **Normalization**: number of constraints satisfied / total number of constraints.
+## Fail-closed rules
 
-### 3. Orthogonality Score (Novelty)
-- **Logic**: Jaccard distance with the existing Playbook (ts-agent/data/playbook.json).
-- **Formula**: Jaccard = 1 - (intersection / union) (calculated on the set of operators and columns).
-- **Goal**: Avoid overlap with existing methods and explore unseen alpha spaces.
+- No future references or survivorship leakage.
+- No zero-filling or invented values for missing required inputs.
+- No substitution of in-sample results when OOS data is unavailable.
+- No threshold relaxation, metric changes, split changes, or representative changes after results are observed.
+- No best-seed-only reporting for stochastic methods.
+- No promotion from syntax/unit-test/CI success to empirical success.
+- Rejected and unresolved candidates remain visible evidence.
 
-### 4. Backtest Score
-- **Normalization**: 
-    - Sharpe scaled from [1.5, 2.0] to [0, 1]
-    - IC scaled from [0.04, 0.08] to [0, 1]
-- **Final**: Average of both.
+If repeated exploration saturates a domain, move to a genuinely different mechanism under a newly frozen protocol. Do not relabel minor parameter changes as new hypotheses.
 
-## Regime-Adaptive Verification
-Market environment adaptation to different regimes (RISK_ON / NEUTRAL / RISK_OFF) with dynamic thresholds.
+## Required output
 
-### 1. Multiplier-Based Adaptation
-Apply regime-specific multipliers to the baseline thresholds to compute execution thresholds.
-- **RISK_ON**: Sharpe × 1.1, IC × 1.0 (stricter in bullish markets)
-- **NEUTRAL**: Sharpe × 0.9, IC × 0.8
-- **RISK_OFF**: Sharpe × 0.35, IC × 0.25 (lenient in bearish markets to capture actionable signals)
+Every material run should persist enough information to reproduce and audit the verdict, including input identifiers/hashes, split dates, observation counts, signal/portfolio definition, configuration, seeds, direct metrics, cost assumptions, uncertainty, failure reasons, code revision, and verdict.
 
-### 2. Fixed Risk Limits
-Regardless of regime, the MaxDrawdown 0.1 (10%) constraint is always fixed. Risk management should be an absolute standard independent of market sentiment.
+## Canonical references
 
-## Alpha Formula (DSL) Specifications and Limitations
-- **Allowed Operators**: `rank(), scale(), abs(), sign(), log(), max(), min(), Mean(), Std(), Ref()`
-- **Allowed Columns**: `$close $open $high $low $volume $vwap $macro_iip $macro_cpi $macro_leverage_trend $segment_sentiment $ai_exposure $kg_centrality`
-- **Validation**:
-    - Must be a single line starting with `alpha = `
-    - Undefined columns or operators cause immediate rejection (auto-repair is attempted but no fallback if it fails)
-
-## Council of Quants Review Criteria
-- **Risk Manager Review**: Is the maximum drawdown within acceptable bounds? Does the Sharpe Ratio meet the minimum standard?
-- **Alpha Hunter Review**: Does the P-Value satisfy the significance level (typically below 0.05)?
-- **Regime Specialist Review**: Do the current market regime (Bull/Bear/Uncertain) and the alpha logic align?
-
-## Code Examples
-1. **Formula Generation**: Proposing new alpha formulas with an LLM.
-2. **Validation**: Syntax check via `dsl_validator.ts` and past-data verification via `backtest_scorer.ts`.
-3. **Strategic Reasoning**: Multidimensional quality evaluation via the Quality Gate and Council of Quants.
-4. **Refinement**: Improving underperforming formulas by combining with orthogonal operators.
-
-## Ralph Loop Domain Pivot
-If exploration repeatedly fails, autonomously switch to a new market domain (sector, time frame, factor type).
-- **Trigger**: Consecutive failures count (`consecutiveFailures`) reaches 2 or more.
-- **Action**:
-  1. Record the recently failed domain as a Forbidden Zone with a TTL.
-  2. Evaluate the current market regime (Volatility/Momentum).
-  3. Select the farthest domain from the Forbidden Zone (Euclidean/Cosine distance).
-  4. Temporarily relax the Fitness Threshold (e.g., 0.5 → 0.4 for 3 cycles) to bootstrap exploration.
-- **Logging**: Record the pivot reason in REASON_DESC.md based on Novelty/Orthogonality, Metric Thresholds, and Hypothesis Validity.
-
-## Best Practices
-- Alphas should always be normalized cross-sectionally using Rank(Formula) or CS_ZScore(Formula).
-- Strictly check for future references such as Ref($close, -1).
-- Generated formulas are typed in alpha_quality_optimizer_schema.ts to ensure consistency.
+- `docs/specs/alpha_discovery_runbook.md`
+- `docs/specs/time_tested_alpha_policy.md`
+- `docs/architecture/canonical-investment-flow.md`
+- `docs/specs/external_snapshot_store.md`
+- `AGENTS.md`
