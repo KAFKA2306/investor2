@@ -1,26 +1,26 @@
 # Research evidence
 
-This directory stores reproducible empirical evidence and explicit non-reproduction states for research papers tracked by `investor2`.
+`docs/research/` stores durable research evidence. Chat history, agent reasoning, and temporary implementation notes are not repository state.
 
-## Warin arXiv:2101.02044 v4
+## Directory contract
 
-Primary source:
+- `catalogs/` — paper registries, selection manifests, schemas, and version pins used to define research scope.
+- `contracts/` — frozen experiment, data, split, and decision contracts fixed before evaluation.
+- `data/` — small versioned research inputs and source snapshots that belong with the research evidence surface.
+- `data_access/` — data-access documentation and acquisition boundaries.
+- `frontier/` — canonical machine-readable paper/factor frontier registries used to generate public comparison views.
+- `protocols/` — preregistered research protocols and evaluation procedures.
+- `results/` — canonical summaries and validated result artifacts; detailed result bundles may use subdirectories.
+- `runs/` — immutable run-level evidence bundles.
+- `studies/` — standalone company, macro, and hypothesis studies that are neither contracts nor canonical result registries.
+- `assets/` — figures and other supporting assets referenced by research documents.
 
-- https://arxiv.org/abs/2101.02044v4
-- https://arxiv.org/pdf/2101.02044v4
+The root of `docs/research/` contains only this `README.md`. New evidence must be placed by responsibility rather than dropped into the root.
 
-Canonical machine-readable scope is `warin_2101_02044_v4_experiment_matrix.json`.
+## State discipline
 
-The current evidence is intentionally **partial**, not a paper-wide reproduction:
+A path should reveal the role of an artifact without opening it. File names must identify the subject or contract explicitly; generic names such as `final`, `latest`, `result`, `analysis`, or ambiguous domain names are not canonical identities.
 
-- Section 3.2 Table 1, dimension 4, direct point-by-point formulation:
-  - beta=0.05: `FAILED`
-  - beta=0.2: `FAILED`
-  - beta=2.0: `REPRODUCED`
-- Section 4.3.1 selected constrained comparison, Tables 9-10, dimension 4, beta=0.959, Models 1 and 4: `REPRODUCED`
-- Tables 11-14 and other sufficiently specified dimension-4 families remain `NOT_RUN` until separately executed.
-- Higher-dimensional cases whose exact random correlation/parameter realization is not published remain `BLOCKED`; they are not recreated with invented parameters and labeled exact reproductions.
+Machine-readable artifacts are authoritative where a workflow declares them canonical. Markdown summaries and public views must point to those artifacts rather than becoming independent state stores.
 
-Table 9/10 evidence is stored under `runs/warin_2101_02044_v4_table9_beta0959_seed2306/`. Every generated report, training trace, and model state is SHA-256 bound within its own evidence bundle. CI re-executes the four predeclared seeds for each selected model and verifies the seed-level pass/fail and constraint-regime distribution, selected restart, selected numerical outcome, runtime/training contract, artifact structure, and model-level empirical verdict.
-
-The trained parameter arrays and intermediate optimization metrics are retained as immutable evidence for each individual run, but cross-run parameter equality is not the reproduction criterion. The hosted CPU reruns demonstrated that a failed local restart can converge to a materially different parameter state while the predeclared seed-level verdict distribution and selected scientific outcome remain stable. CI therefore requires exact per-bundle hash integrity and evidence structure, then evaluates cross-run reproduction at the predeclared scientific outcome boundary rather than asserting bitwise-identical optimizer trajectories.
+When a workline cannot finish, durable continuation belongs in the existing Issue/PR and versioned evidence artifacts. Do not depend on chat memory to reconstruct research state.
