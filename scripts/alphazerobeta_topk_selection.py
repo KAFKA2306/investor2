@@ -238,7 +238,7 @@ def main() -> None:
         baseline_check = canonical_check(dense, args.canonical_comparison, args.baseline_tolerance)
 
     best = results[str(best_k)]
-    payload = {
+    payload: dict[str, object] = {
         "schema_version": "investor2.alphazerobeta-topk-selection.v1",
         "hypothesis": "AlphaZeroBeta rank information may become more investable when restricted to Top-K longs and Bottom-K shorts.",
         "selection_rule": "Each OOS day rank the 64 raw policy scores; long Top-K and short Bottom-K at equal weight, +0.5 gross long and -0.5 gross short.",
