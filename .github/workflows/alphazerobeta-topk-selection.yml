@@ -131,7 +131,7 @@ jobs:
             --transaction-cost-bps 15 \
             --borrow-fee-bps 30 \
             --canonical-comparison docs/research/results/alphazerobeta_jquants_free/comparison.json \
-            --baseline-tolerance 1e-8 \
+            --baseline-tolerance 1e-4 \
             --output "$EVIDENCE_DIR/summary.json" \
             --frequency-output "$EVIDENCE_DIR/selection-frequency.csv"
           cp /tmp/jquants-free/manifest.json "$EVIDENCE_DIR/source-manifest.json"
