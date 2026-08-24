@@ -1,0 +1,72 @@
+name: AI economics source health
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - data/ark-big-ideas/ai-economics-source.json
+      - scripts/build_ai_economics_source_health.py
+      - tests/test_ai_economics_source_health.py
+      - .github/workflows/ai-economics-source-health.yml
+  pull_request:
+    paths:
+      - data/ark-big-ideas/ai-economics-source.json
+      - scripts/build_ai_economics_source_health.py
+      - tests/test_ai_economics_source_health.py
+      - .github/workflows/ai-economics-source-health.yml
+  schedule:
+    - cron: '37 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ai-economics-source-health-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PYTHONDONTWRITEBYTECODE: '1'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: '3.12'
+      - name: Compile and test locator contract
+        run: |
+          python -m py_compile scripts/build_ai_economics_source_health.py tests/test_ai_economics_source_health.py
+          python -m unittest tests.test_ai_economics_source_health -v
+      - name: Verify live finAnalist canonical authority
+        run: |
+          python scripts/build_ai_economics_source_health.py \
+            --output /tmp/ai-economics-source-health.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          row=json.loads(Path('/tmp/ai-economics-source-health.json').read_text())
+          assert row['live_check']=='ok'
+          assert row['repository']=='KAFKA2306/finAnalist'
+          assert row['observation_count']>=36
+          assert len(row['index_sha256'])==64
+          assert len(row['manifest_sha256'])==64
+          assert len(row['content_digest'])==64
+          assert 'observations' not in row
+          PY
+      - name: Publish locator health only when hash changes
+        if: github.event_name != 'pull_request'
+        run: |
+          mkdir -p api/v1/ark-big-ideas
+          cp /tmp/ai-economics-source-health.json api/v1/ark-big-ideas/ai-economics-source-health.json
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add api/v1/ark-big-ideas/ai-economics-source-health.json
+          if git diff --cached --quiet; then
+            echo 'No AI economics source health change.'
+            exit 0
+          fi
+          git commit -m 'data: update AI economics source health'
+          git push
