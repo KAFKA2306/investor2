@@ -27,6 +27,7 @@ TRADER_TRIALS = (
     {"name": "long_tilt_24x8", "n_long": 24, "n_short": 8, "beta": 0.8, "gamma": 0.5},
     {"name": "short_tilt_8x24", "n_long": 8, "n_short": 24, "beta": 0.8, "gamma": -0.5},
 )
+TrialResult = dict[str, bool | dict[str, object] | float | int | str]
 
 
 def parse_args() -> argparse.Namespace:
@@ -93,11 +94,15 @@ def main() -> None:
             if one_day.passed and five_day.passed:
                 oriented_factors[feature_name] = oriented
 
-        selected = screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
+        selected: list[dict[str, float | str]] = (
+            screen_factors(oriented_factors, returns, validation_start, validation_end)
+            if oriented_factors
+            else []
+        )
         scores = composite_scores(oriented_factors, selected) if selected else np.zeros_like(returns, dtype=np.float64)
 
-        trial_results: list[dict[str, object]] = []
-        viable_trials: list[tuple[float, dict[str, object], np.ndarray]] = []
+        trial_results: list[TrialResult] = []
+        viable_trials: list[tuple[float, TrialResult, np.ndarray]] = []
         for policy in TRADER_TRIALS:
             weights = make_weight_path(
                 scores,
@@ -116,7 +121,11 @@ def main() -> None:
                 borrow_fee_bps_per_year=args.borrow_fee_bps,
             )
             passed = bool(selected) and paper_strategy_gate(validation_metrics)
-            trial = {**policy, "validation_metrics": as_dict(validation_metrics), "paper_strategy_gate": passed}
+            trial: TrialResult = {
+                **policy,
+                "validation_metrics": as_dict(validation_metrics),
+                "paper_strategy_gate": passed,
+            }
             trial_results.append(trial)
             if passed:
                 viable_trials.append((validation_metrics.annualized_sharpe, trial, weights))
