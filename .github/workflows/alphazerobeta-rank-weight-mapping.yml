@@ -1,0 +1,154 @@
+name: AlphaZeroBeta rank-weight mapping validation
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alphazerobeta-rank-weight-mapping-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+      EVIDENCE_DIR: docs/research/results/alphazerobeta_jquants_free/weight-mapping
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Detect completed evidence
+        id: detect
+        run: |
+          if [ -f "$EVIDENCE_DIR/summary.json" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: actions/setup-python@v6
+        if: steps.detect.outputs.exists != 'true'
+        with:
+          python-version: "3.12"
+
+      - name: Require credentials
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+
+      - name: Install dependencies
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          python -m pip install ruff jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          ruff format --check scripts/alphazerobeta_rank_weight_mapping.py
+          ruff check scripts/alphazerobeta_rank_weight_mapping.py
+
+      - name: Materialize frozen daily bars from Private HF with zero J-Quants daily-bar calls
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-weight-mapping /tmp/huggingface-personal-cache
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-23 \
+            --require-cache-complete \
+            --request-interval 15
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/jquants-free/manifest.json').read_text())
+          assert manifest['price_rows'] == 2050816, manifest['price_rows']
+          assert manifest['ticker_count'] == 4640, manifest['ticker_count']
+          assert manifest['observed_market_days'] == 486, manifest['observed_market_days']
+          assert manifest['request_count'] == 0, manifest['request_count']
+          assert manifest['cache']['cache_misses'] == 0, manifest['cache']
+          assert manifest['cache']['cache_hits'] == 521, manifest['cache']
+          PY
+
+      - name: Restore canonical PIT master
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          python scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
+            --date 2025-08-29 \
+            --output /tmp/jquants-free/universe.parquet \
+            --request-interval 15
+
+      - name: Rebuild canonical 64-stock panel
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          mkdir -p /tmp/alphazerobeta-weight-mapping
+          python scripts/alphazerobeta_japan_free_prepare.py \
+            --market-snapshot-dir /tmp/jquants-free \
+            --market-regions jp \
+            --output /tmp/alphazerobeta-weight-mapping/panel.npz \
+            --max-assets 64 \
+            --universe-cutoff 2025-08-30
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/alphazerobeta-weight-mapping/panel.npz.manifest.json').read_text())
+          assert manifest['shape'] == {'T': 485, 'N': 64, 'F': 17}, manifest['shape']
+          PY
+
+      - name: Reproduce primary AlphaZeroBeta OOS weights
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          set -euo pipefail
+          for fold in 0 1; do
+            seed=$((2306 + fold))
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-weight-mapping/panel.npz \
+              --output "/tmp/alphazerobeta-weight-mapping/primary-fold${fold}.json" \
+              --test-start 2025-11-30 --test-end 2026-05-29 --fold-index "$fold" \
+              --device cpu --seed "$seed" --iterations 10 --horizon 200 \
+              --hidden-size 512 --agent-window 100 \
+              --transaction-cost-bps 15 --borrow-fee-bps 30 \
+              --lambda-corr 0.5 --lambda-turnover 0.001 --reward-semantics paper
+          done
+
+      - name: Evaluate all-asset rank and shrinkage mappings
+        if: steps.detect.outputs.exists != 'true'
+        run: |
+          mkdir -p "$EVIDENCE_DIR"
+          python scripts/alphazerobeta_rank_weight_mapping.py \
+            --dataset /tmp/alphazerobeta-weight-mapping/panel.npz \
+            --weights /tmp/alphazerobeta-weight-mapping/primary-fold0.weights.npz /tmp/alphazerobeta-weight-mapping/primary-fold1.weights.npz \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 30 \
+            --canonical-comparison docs/research/results/alphazerobeta_jquants_free/comparison.json \
+            --topk-summary docs/research/results/alphazerobeta_jquants_free/topk-selection/summary.json \
+            --baseline-tolerance 1e-4 \
+            --output "$EVIDENCE_DIR/summary.json"
+          cp /tmp/jquants-free/manifest.json "$EVIDENCE_DIR/source-manifest.json"
+          cp /tmp/alphazerobeta-weight-mapping/panel.npz.manifest.json "$EVIDENCE_DIR/dataset-manifest.json"
+
+      - name: Persist derived evidence to branch
+        if: steps.detect.outputs.exists != 'true' && github.event_name == 'pull_request'
+        run: |
+          git config user.name github-actions[bot]
+          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git add "$EVIDENCE_DIR"
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "research: record AlphaZeroBeta rank-weight mapping evidence"
+          git push origin "HEAD:${{ github.head_ref }}"
+
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-weight-mapping /tmp/huggingface-personal-cache
