@@ -18,7 +18,7 @@
             "nuclear-capacity",
             "robotics-deployments"
           ],
-          "evidence_row_count": 127
+          "evidence_row_count": 52
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -26,7 +26,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 127,
+      "evidence_row_count": 52,
       "measurement_variables": [
         "capital_expenditures",
         "labor_productivity",
@@ -60,68 +60,14 @@
         "observation": {
           "comparisons": [
             {
-              "entity": "AMD",
-              "first": 142000000,
-              "increased": true,
-              "last": 222000000
-            },
-            {
-              "entity": "AMZN",
-              "first": 871000000,
-              "increased": true,
-              "last": 2006000000
-            },
-            {
-              "entity": "AVGO",
-              "first": 122000000,
-              "increased": true,
-              "last": 237000000
-            },
-            {
-              "entity": "GOOGL",
-              "first": 12012000000,
-              "increased": true,
-              "last": 27851000000
-            },
-            {
-              "entity": "INTC",
-              "first": 5970000000,
-              "increased": false,
-              "last": 3488000000
-            },
-            {
-              "entity": "META",
-              "first": 6400000000,
-              "increased": true,
-              "last": 21383000000
-            },
-            {
               "entity": "MSFT",
-              "first": 14923000000,
+              "first": 31900000000,
               "increased": true,
-              "last": 35802000000
-            },
-            {
-              "entity": "MU",
-              "first": 1796000000,
-              "increased": true,
-              "last": 5658000000
-            },
-            {
-              "entity": "NVDA",
-              "first": 31195000,
-              "increased": true,
-              "last": 45182000
-            },
-            {
-              "entity": "ORCL",
-              "first": 2303000000,
-              "increased": true,
-              "last": 16493000000
+              "last": 41000000000
             }
           ],
-          "entities_compared": 10,
-          "share_increasing": 0.9
+          "entities_compared": 1,
+          "share_increasing": 1.0
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -129,7 +75,7 @@
           "thesis_state": "strengthening"
         }
       },
-      "evidence_row_count": 77,
+      "evidence_row_count": 2,
       "measurement_variables": [
         "capital_expenditures"
       ],
@@ -160,8 +106,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2024-10-28",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-overviews-search-october-2024/",
               "unit": "users",
@@ -177,8 +123,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2024-12-27",
               "source_url": "https://about.fb.com/news/2024/12/our-year-in-review-metas-2024-highlights/",
               "unit": "users",
@@ -194,8 +140,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2025-03-19",
               "source_url": "https://about.fb.com/news/2025/03/europe-meet-your-newest-assistant-meta-ai/",
               "unit": "users",
@@ -211,8 +157,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2025-04-24",
               "source_url": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q1-2025/",
               "unit": "users",
@@ -228,8 +174,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2025-10-01",
               "source_url": "https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/",
               "unit": "users",
@@ -245,8 +191,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "consumer_subscribers",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2026-02-27",
               "source_url": "https://openai.com/index/scaling-ai-for-everyone/",
               "unit": "subscribers",
@@ -262,8 +208,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2026-05-19",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/",
               "unit": "users",
@@ -279,8 +225,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "0368df1a889246092a734487971357dbef9283fd593277ccc6d6b28c6d0abf4b",
-              "mirror_snapshot_id": "cf1d64a1c321cb3b7d0a",
+              "mirror_sha256": "554fbe2caef8964da5487223ed8d6ec3e31767564c04575e928bc89be5d89ccd",
+              "mirror_snapshot_id": "f68bf779c13d839eeec7",
               "period": "2026-06-03",
               "source_url": "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
               "unit": "users",
@@ -328,8 +274,8 @@
             "feed_id": "ai-productivity",
             "logical_repo": "economic-releases",
             "metric_id": "labor_productivity",
-            "mirror_sha256": "ca7cf8810c9c1f9f17b5fbe4b1c1ada9660b127071dffac8c4b130bdb60c2569",
-            "mirror_snapshot_id": "87fd1d63938fe3e12934",
+            "mirror_sha256": "340c5b14734eee8873f2c9a4ed6fc3b87a74f30ccfcaa499fe4d3296ac837b2a",
+            "mirror_snapshot_id": "50c84ef5745d1dfab3ad",
             "period": "2026-Q2",
             "source_url": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
             "unit": "percent_change_qoq_annualized",
@@ -363,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 355,
+          "derivatives_metric_rows": 358,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -406,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 364,
+      "evidence_row_count": 367,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -486,23 +432,23 @@
       "claim_paraphrase": "Crypto-native financial applications are scaling in activity and could become institution-like platforms with meaningful application-layer economics.",
       "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
       "deviation": {
-        "classification": "mixed",
+        "classification": "directionally_supporting",
         "kind": "directional_evidence_gap",
         "measurement_gap": "Protocol event counts measure activity, not asset scale, efficiency, revenue parity with incumbents, or institutional user composition.",
         "observation": {
           "early_mean": 2162.714285714286,
           "first_period": "2026-05-18",
-          "latest_period": "2026-08-18",
-          "recent_mean": 1220.0,
+          "latest_period": "2026-08-22",
+          "recent_mean": 2355.5714285714284,
           "window": 7
         },
         "research_implication": {
           "prescriptive_action": null,
-          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
-          "thesis_state": "mixed"
+          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
+          "thesis_state": "strengthening"
         }
       },
-      "evidence_row_count": 279,
+      "evidence_row_count": 291,
       "measurement_variables": [
         "aave_event_count",
         "aave_liquidation_count",
@@ -644,7 +590,7 @@
           "early_mean": 13.0,
           "first_period": "2024-01",
           "latest_period": "2026-08",
-          "recent_mean": 14.166666666666666,
+          "recent_mean": 14.5,
           "window": 6
         },
         "research_implication": {
@@ -868,8 +814,8 @@
               "feed_id": "autonomous-vehicles-summary",
               "logical_repo": "autonomous-vehicles",
               "metric_id": "autonomous_testing_miles",
-              "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
-              "mirror_snapshot_id": "39c510d77aa56a5d7970",
+              "mirror_sha256": "ad9d20f8959d2c8eb8c04c96c53bf9f9203eed0baf573b0fbb6250dca5526bb1",
+              "mirror_snapshot_id": "bd9aedf9affd40d9602d",
               "period": "2024-11-30",
               "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
               "unit": "miles",
@@ -881,8 +827,8 @@
               "feed_id": "autonomous-vehicles-summary",
               "logical_repo": "autonomous-vehicles",
               "metric_id": "permitted_company_groups",
-              "mirror_sha256": "3dac0733403d98f31ae542b9ad0eddcba945eb7396f1f9e3d0397c8e5e3c9221",
-              "mirror_snapshot_id": "39c510d77aa56a5d7970",
+              "mirror_sha256": "ad9d20f8959d2c8eb8c04c96c53bf9f9203eed0baf573b0fbb6250dca5526bb1",
+              "mirror_snapshot_id": "bd9aedf9affd40d9602d",
               "period": "2024-11-30",
               "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
               "unit": "company_groups",
@@ -918,8 +864,8 @@
         "kind": "directional_evidence_gap",
         "measurement_gap": "Primary-source operating events confirm deployments but do not provide a common cost-per-delivery or global revenue scale series.",
         "observation": {
-          "commercial_marked_events": 4,
-          "operation_events": 6
+          "commercial_marked_events": 15,
+          "operation_events": 19
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -927,7 +873,7 @@
           "thesis_state": "strengthening"
         }
       },
-      "evidence_row_count": 6,
+      "evidence_row_count": 19,
       "measurement_variables": [
         "operation_evidence_event"
       ],

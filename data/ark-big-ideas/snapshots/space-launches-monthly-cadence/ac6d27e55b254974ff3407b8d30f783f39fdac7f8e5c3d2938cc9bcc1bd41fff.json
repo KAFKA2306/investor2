@@ -1,0 +1,133 @@
+{
+  "records": [
+    {
+      "launch_count": 11,
+      "month": "2024-01"
+    },
+    {
+      "launch_count": 10,
+      "month": "2024-02"
+    },
+    {
+      "launch_count": 15,
+      "month": "2024-03"
+    },
+    {
+      "launch_count": 13,
+      "month": "2024-04"
+    },
+    {
+      "launch_count": 16,
+      "month": "2024-05"
+    },
+    {
+      "launch_count": 13,
+      "month": "2024-06"
+    },
+    {
+      "launch_count": 6,
+      "month": "2024-07"
+    },
+    {
+      "launch_count": 15,
+      "month": "2024-08"
+    },
+    {
+      "launch_count": 10,
+      "month": "2024-09"
+    },
+    {
+      "launch_count": 13,
+      "month": "2024-10"
+    },
+    {
+      "launch_count": 21,
+      "month": "2024-11"
+    },
+    {
+      "launch_count": 14,
+      "month": "2024-12"
+    },
+    {
+      "launch_count": 15,
+      "month": "2025-01"
+    },
+    {
+      "launch_count": 16,
+      "month": "2025-02"
+    },
+    {
+      "launch_count": 16,
+      "month": "2025-03"
+    },
+    {
+      "launch_count": 14,
+      "month": "2025-04"
+    },
+    {
+      "launch_count": 19,
+      "month": "2025-05"
+    },
+    {
+      "launch_count": 20,
+      "month": "2025-06"
+    },
+    {
+      "launch_count": 13,
+      "month": "2025-07"
+    },
+    {
+      "launch_count": 18,
+      "month": "2025-08"
+    },
+    {
+      "launch_count": 17,
+      "month": "2025-09"
+    },
+    {
+      "launch_count": 18,
+      "month": "2025-10"
+    },
+    {
+      "launch_count": 17,
+      "month": "2025-11"
+    },
+    {
+      "launch_count": 17,
+      "month": "2025-12"
+    },
+    {
+      "launch_count": 16,
+      "month": "2026-01"
+    },
+    {
+      "launch_count": 12,
+      "month": "2026-02"
+    },
+    {
+      "launch_count": 18,
+      "month": "2026-03"
+    },
+    {
+      "launch_count": 14,
+      "month": "2026-04"
+    },
+    {
+      "launch_count": 13,
+      "month": "2026-05"
+    },
+    {
+      "launch_count": 16,
+      "month": "2026-06"
+    },
+    {
+      "launch_count": 14,
+      "month": "2026-07"
+    },
+    {
+      "launch_count": 12,
+      "month": "2026-08"
+    }
+  ],
+  "schema_version": 1
+}

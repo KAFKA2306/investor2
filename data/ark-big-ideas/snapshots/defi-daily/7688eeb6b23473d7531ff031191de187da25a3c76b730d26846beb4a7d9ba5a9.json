@@ -1,0 +1,587 @@
+{
+  "records": [
+    {
+      "aave_event_count": 5514,
+      "aave_liquidation_count": 12,
+      "date": "2026-05-18",
+      "uniswap_swap_count": 324
+    },
+    {
+      "aave_event_count": 4572,
+      "aave_liquidation_count": 58,
+      "date": "2026-05-19",
+      "uniswap_swap_count": 258
+    },
+    {
+      "aave_event_count": 4401,
+      "aave_liquidation_count": 0,
+      "date": "2026-05-20",
+      "uniswap_swap_count": 262
+    },
+    {
+      "aave_event_count": 3748,
+      "aave_liquidation_count": 16,
+      "date": "2026-05-21",
+      "uniswap_swap_count": 418
+    },
+    {
+      "aave_event_count": 3986,
+      "aave_liquidation_count": 15,
+      "date": "2026-05-22",
+      "uniswap_swap_count": 293
+    },
+    {
+      "aave_event_count": 4350,
+      "aave_liquidation_count": 35,
+      "date": "2026-05-23",
+      "uniswap_swap_count": 289
+    },
+    {
+      "aave_event_count": 2726,
+      "aave_liquidation_count": 1,
+      "date": "2026-05-24",
+      "uniswap_swap_count": 208
+    },
+    {
+      "aave_event_count": 3383,
+      "aave_liquidation_count": 0,
+      "date": "2026-05-25",
+      "uniswap_swap_count": 237
+    },
+    {
+      "aave_event_count": 3844,
+      "aave_liquidation_count": 6,
+      "date": "2026-05-26",
+      "uniswap_swap_count": 419
+    },
+    {
+      "aave_event_count": 5544,
+      "aave_liquidation_count": 12,
+      "date": "2026-05-27",
+      "uniswap_swap_count": 453
+    },
+    {
+      "aave_event_count": 5287,
+      "aave_liquidation_count": 58,
+      "date": "2026-05-28",
+      "uniswap_swap_count": 381
+    },
+    {
+      "aave_event_count": 4333,
+      "aave_liquidation_count": 8,
+      "date": "2026-05-29",
+      "uniswap_swap_count": 347
+    },
+    {
+      "aave_event_count": 2959,
+      "aave_liquidation_count": 5,
+      "date": "2026-05-30",
+      "uniswap_swap_count": 237
+    },
+    {
+      "aave_event_count": 3069,
+      "aave_liquidation_count": 14,
+      "date": "2026-05-31",
+      "uniswap_swap_count": 251
+    },
+    {
+      "aave_event_count": 4604,
+      "aave_liquidation_count": 32,
+      "date": "2026-06-01",
+      "uniswap_swap_count": 384
+    },
+    {
+      "aave_event_count": 7659,
+      "aave_liquidation_count": 166,
+      "date": "2026-06-02",
+      "uniswap_swap_count": 731
+    },
+    {
+      "aave_event_count": 7574,
+      "aave_liquidation_count": 115,
+      "date": "2026-06-03",
+      "uniswap_swap_count": 656
+    },
+    {
+      "aave_event_count": 8885,
+      "aave_liquidation_count": 252,
+      "date": "2026-06-04",
+      "uniswap_swap_count": 869
+    },
+    {
+      "aave_event_count": 14030,
+      "aave_liquidation_count": 1114,
+      "date": "2026-06-05",
+      "uniswap_swap_count": 1465
+    },
+    {
+      "aave_event_count": 6339,
+      "aave_liquidation_count": 202,
+      "date": "2026-06-06",
+      "uniswap_swap_count": 1975
+    },
+    {
+      "aave_event_count": 4698,
+      "aave_liquidation_count": 14,
+      "date": "2026-06-07",
+      "uniswap_swap_count": 1461
+    },
+    {
+      "aave_event_count": 4887,
+      "aave_liquidation_count": 2,
+      "date": "2026-06-08",
+      "uniswap_swap_count": 1342
+    },
+    {
+      "aave_event_count": 4625,
+      "aave_liquidation_count": 5,
+      "date": "2026-06-09",
+      "uniswap_swap_count": 928
+    },
+    {
+      "aave_event_count": 4575,
+      "aave_liquidation_count": 12,
+      "date": "2026-06-10",
+      "uniswap_swap_count": 768
+    },
+    {
+      "aave_event_count": 3907,
+      "aave_liquidation_count": 4,
+      "date": "2026-06-11",
+      "uniswap_swap_count": 627
+    },
+    {
+      "aave_event_count": 3521,
+      "aave_liquidation_count": 4,
+      "date": "2026-06-12",
+      "uniswap_swap_count": 770
+    },
+    {
+      "aave_event_count": 2774,
+      "aave_liquidation_count": 1,
+      "date": "2026-06-13",
+      "uniswap_swap_count": 549
+    },
+    {
+      "aave_event_count": 2974,
+      "aave_liquidation_count": 5,
+      "date": "2026-06-14",
+      "uniswap_swap_count": 414
+    },
+    {
+      "aave_event_count": 5698,
+      "aave_liquidation_count": 3,
+      "date": "2026-06-15",
+      "uniswap_swap_count": 619
+    },
+    {
+      "aave_event_count": 3932,
+      "aave_liquidation_count": 8,
+      "date": "2026-06-16",
+      "uniswap_swap_count": 850
+    },
+    {
+      "aave_event_count": 3946,
+      "aave_liquidation_count": 6,
+      "date": "2026-06-17",
+      "uniswap_swap_count": 686
+    },
+    {
+      "aave_event_count": 4967,
+      "aave_liquidation_count": 9,
+      "date": "2026-06-18",
+      "uniswap_swap_count": 681
+    },
+    {
+      "aave_event_count": 3858,
+      "aave_liquidation_count": 4,
+      "date": "2026-06-19",
+      "uniswap_swap_count": 476
+    },
+    {
+      "aave_event_count": 2911,
+      "aave_liquidation_count": 1,
+      "date": "2026-06-20",
+      "uniswap_swap_count": 589
+    },
+    {
+      "aave_event_count": 3024,
+      "aave_liquidation_count": 2,
+      "date": "2026-06-21",
+      "uniswap_swap_count": 408
+    },
+    {
+      "aave_event_count": 4020,
+      "aave_liquidation_count": 9,
+      "date": "2026-06-22",
+      "uniswap_swap_count": 622
+    },
+    {
+      "aave_event_count": 4260,
+      "aave_liquidation_count": 6,
+      "date": "2026-06-23",
+      "uniswap_swap_count": 880
+    },
+    {
+      "aave_event_count": 6528,
+      "aave_liquidation_count": 50,
+      "date": "2026-06-24",
+      "uniswap_swap_count": 1132
+    },
+    {
+      "aave_event_count": 6320,
+      "aave_liquidation_count": 56,
+      "date": "2026-06-25",
+      "uniswap_swap_count": 1157
+    },
+    {
+      "aave_event_count": 5529,
+      "aave_liquidation_count": 29,
+      "date": "2026-06-26",
+      "uniswap_swap_count": 912
+    },
+    {
+      "aave_event_count": 3303,
+      "aave_liquidation_count": 2,
+      "date": "2026-06-27",
+      "uniswap_swap_count": 344
+    },
+    {
+      "aave_event_count": 3323,
+      "aave_liquidation_count": 17,
+      "date": "2026-06-28",
+      "uniswap_swap_count": 472
+    },
+    {
+      "aave_event_count": 4414,
+      "aave_liquidation_count": 56,
+      "date": "2026-06-29",
+      "uniswap_swap_count": 940
+    },
+    {
+      "aave_event_count": 5399,
+      "aave_liquidation_count": 11,
+      "date": "2026-06-30",
+      "uniswap_swap_count": 663
+    },
+    {
+      "aave_event_count": 5392,
+      "aave_liquidation_count": 21,
+      "date": "2026-07-01",
+      "uniswap_swap_count": 771
+    },
+    {
+      "aave_event_count": 5218,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-02",
+      "uniswap_swap_count": 626
+    },
+    {
+      "aave_event_count": 4454,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-03",
+      "uniswap_swap_count": 437
+    },
+    {
+      "aave_event_count": 3218,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-04",
+      "uniswap_swap_count": 335
+    },
+    {
+      "aave_event_count": 2814,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-05",
+      "uniswap_swap_count": 350
+    },
+    {
+      "aave_event_count": 4180,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-06",
+      "uniswap_swap_count": 618
+    },
+    {
+      "aave_event_count": 3696,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-07",
+      "uniswap_swap_count": 671
+    },
+    {
+      "aave_event_count": 4095,
+      "aave_liquidation_count": 5,
+      "date": "2026-07-08",
+      "uniswap_swap_count": 534
+    },
+    {
+      "aave_event_count": 4057,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-09",
+      "uniswap_swap_count": 389
+    },
+    {
+      "aave_event_count": 4164,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-10",
+      "uniswap_swap_count": 416
+    },
+    {
+      "aave_event_count": 3168,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-11",
+      "uniswap_swap_count": 198
+    },
+    {
+      "aave_event_count": 3802,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-12",
+      "uniswap_swap_count": 237
+    },
+    {
+      "aave_event_count": 4439,
+      "aave_liquidation_count": 3,
+      "date": "2026-07-13",
+      "uniswap_swap_count": 605
+    },
+    {
+      "aave_event_count": 4366,
+      "aave_liquidation_count": 5,
+      "date": "2026-07-14",
+      "uniswap_swap_count": 432
+    },
+    {
+      "aave_event_count": 4619,
+      "aave_liquidation_count": 3,
+      "date": "2026-07-15",
+      "uniswap_swap_count": 385
+    },
+    {
+      "aave_event_count": 4045,
+      "aave_liquidation_count": 3,
+      "date": "2026-07-16",
+      "uniswap_swap_count": 324
+    },
+    {
+      "aave_event_count": 3961,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-17",
+      "uniswap_swap_count": 469
+    },
+    {
+      "aave_event_count": 3088,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-18",
+      "uniswap_swap_count": 81
+    },
+    {
+      "aave_event_count": 2690,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-19",
+      "uniswap_swap_count": 140
+    },
+    {
+      "aave_event_count": 3630,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-20",
+      "uniswap_swap_count": 458
+    },
+    {
+      "aave_event_count": 5332,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-21",
+      "uniswap_swap_count": 243
+    },
+    {
+      "aave_event_count": 3678,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-22",
+      "uniswap_swap_count": 415
+    },
+    {
+      "aave_event_count": 4002,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-23",
+      "uniswap_swap_count": 339
+    },
+    {
+      "aave_event_count": 3476,
+      "aave_liquidation_count": 4,
+      "date": "2026-07-24",
+      "uniswap_swap_count": 340
+    },
+    {
+      "aave_event_count": 2429,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-25",
+      "uniswap_swap_count": 179
+    },
+    {
+      "aave_event_count": 2860,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-26",
+      "uniswap_swap_count": 445
+    },
+    {
+      "aave_event_count": 4247,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-27",
+      "uniswap_swap_count": 610
+    },
+    {
+      "aave_event_count": 3725,
+      "aave_liquidation_count": 2,
+      "date": "2026-07-28",
+      "uniswap_swap_count": 586
+    },
+    {
+      "aave_event_count": 3457,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-29",
+      "uniswap_swap_count": 579
+    },
+    {
+      "aave_event_count": 3497,
+      "aave_liquidation_count": 1,
+      "date": "2026-07-30",
+      "uniswap_swap_count": 1744
+    },
+    {
+      "aave_event_count": 4172,
+      "aave_liquidation_count": 0,
+      "date": "2026-07-31",
+      "uniswap_swap_count": 805
+    },
+    {
+      "aave_event_count": 3550,
+      "aave_liquidation_count": 7,
+      "date": "2026-08-01",
+      "uniswap_swap_count": 432
+    },
+    {
+      "aave_event_count": 3272,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-02",
+      "uniswap_swap_count": 357
+    },
+    {
+      "aave_event_count": 3641,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-03",
+      "uniswap_swap_count": 664
+    },
+    {
+      "aave_event_count": 3613,
+      "aave_liquidation_count": 0,
+      "date": "2026-08-04",
+      "uniswap_swap_count": 471
+    },
+    {
+      "aave_event_count": 3903,
+      "aave_liquidation_count": 2,
+      "date": "2026-08-05",
+      "uniswap_swap_count": 417
+    },
+    {
+      "aave_event_count": 3547,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-06",
+      "uniswap_swap_count": 372
+    },
+    {
+      "aave_event_count": 3589,
+      "aave_liquidation_count": 0,
+      "date": "2026-08-07",
+      "uniswap_swap_count": 354
+    },
+    {
+      "aave_event_count": 3187,
+      "aave_liquidation_count": 0,
+      "date": "2026-08-08",
+      "uniswap_swap_count": 180
+    },
+    {
+      "aave_event_count": 3075,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-09",
+      "uniswap_swap_count": 232
+    },
+    {
+      "aave_event_count": 4009,
+      "aave_liquidation_count": 4,
+      "date": "2026-08-10",
+      "uniswap_swap_count": 381
+    },
+    {
+      "aave_event_count": 4222,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-11",
+      "uniswap_swap_count": 352
+    },
+    {
+      "aave_event_count": 4053,
+      "aave_liquidation_count": 3,
+      "date": "2026-08-12",
+      "uniswap_swap_count": 286
+    },
+    {
+      "aave_event_count": 3864,
+      "aave_liquidation_count": 0,
+      "date": "2026-08-13",
+      "uniswap_swap_count": 291
+    },
+    {
+      "aave_event_count": 3979,
+      "aave_liquidation_count": 2,
+      "date": "2026-08-14",
+      "uniswap_swap_count": 218
+    },
+    {
+      "aave_event_count": 3075,
+      "aave_liquidation_count": 5,
+      "date": "2026-08-15",
+      "uniswap_swap_count": 107
+    },
+    {
+      "aave_event_count": 3196,
+      "aave_liquidation_count": 1,
+      "date": "2026-08-16",
+      "uniswap_swap_count": 181
+    },
+    {
+      "aave_event_count": 4129,
+      "aave_liquidation_count": 2,
+      "date": "2026-08-17",
+      "uniswap_swap_count": 207
+    },
+    {
+      "aave_event_count": 3692,
+      "aave_liquidation_count": 3,
+      "date": "2026-08-18",
+      "uniswap_swap_count": 326
+    },
+    {
+      "aave_event_count": 6941,
+      "aave_liquidation_count": 32,
+      "date": "2026-08-19",
+      "uniswap_swap_count": 471
+    },
+    {
+      "aave_event_count": 8391,
+      "aave_liquidation_count": 9,
+      "date": "2026-08-20",
+      "uniswap_swap_count": 684
+    },
+    {
+      "aave_event_count": 8594,
+      "aave_liquidation_count": 20,
+      "date": "2026-08-21",
+      "uniswap_swap_count": 851
+    },
+    {
+      "aave_event_count": 5611,
+      "aave_liquidation_count": 6,
+      "date": "2026-08-22",
+      "uniswap_swap_count": 723
+    }
+  ],
+  "schema_version": 1
+}

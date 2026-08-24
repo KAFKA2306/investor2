@@ -1,8 +1,8 @@
 {
   "claim_count": 13,
   "classification_counts": {
-    "directionally_supporting": 4,
-    "mixed": 9
+    "directionally_supporting": 5,
+    "mixed": 8
   },
   "rules": [
     "Do not invent a numeric ARK target when the official theme description is directional. Evaluate observed direction and measurement gaps separately.",
