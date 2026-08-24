@@ -1,3 +1,5 @@
+"""Make repository-local modules importable when pytest is invoked directly."""
+
 from __future__ import annotations
 
 import sys
