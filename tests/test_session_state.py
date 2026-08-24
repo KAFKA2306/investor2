@@ -37,14 +37,14 @@ def test_decomposition_matches_definitions_and_log_identity() -> None:
             "AdjClose": [100.0, 120.0],
         }
     )
-    result = decompose_daily_sessions(frame)
+    result = decompose_daily_sessions(frame, adjustment="adjusted")
     second = result.iloc[1]
     assert second["r_overnight"] == pytest.approx(0.10)
     assert second["r_intraday"] == pytest.approx(120.0 / 110.0 - 1.0)
     assert second["log_r_overnight"] + second["log_r_intraday"] == pytest.approx(second["log_r_close_to_close"])
 
 
-def test_adjustment_factor_removes_split_discontinuity() -> None:
+def test_adjusted_mode_removes_split_discontinuity() -> None:
     frame = pd.DataFrame(
         {
             "Ticker": ["AAA", "AAA"],
@@ -54,12 +54,25 @@ def test_adjustment_factor_removes_split_discontinuity() -> None:
             "AdjClose": [50.0, 50.0],
         }
     )
-    result = decompose_daily_sessions(frame)
+    result = decompose_daily_sessions(frame, adjustment="adjusted")
     assert result.iloc[1]["r_overnight"] == pytest.approx(0.0)
     assert result.iloc[1]["r_close_to_close"] == pytest.approx(0.0)
 
 
-def test_primary_spec_requires_adjusted_close() -> None:
+def test_raw_mode_preserves_raw_split_discontinuity() -> None:
+    frame = pd.DataFrame(
+        {
+            "Ticker": ["AAA", "AAA"],
+            "Date": ["2026-01-02", "2026-01-05"],
+            "Open": [100.0, 50.0],
+            "Close": [100.0, 50.0],
+        }
+    )
+    result = decompose_daily_sessions(frame, adjustment="raw")
+    assert result.iloc[1]["r_overnight"] == pytest.approx(-0.5)
+
+
+def test_adjusted_mode_requires_adjusted_close() -> None:
     frame = pd.DataFrame(
         {
             "Ticker": ["AAA"],
@@ -69,19 +82,27 @@ def test_primary_spec_requires_adjusted_close() -> None:
         }
     )
     with pytest.raises(AssertionError, match="AdjClose"):
-        normalize_daily_ohlc(frame)
+        normalize_daily_ohlc(frame, adjustment="adjusted")
 
 
 def test_session_tilt_has_no_future_lookahead() -> None:
     frame = _frame()
-    base = add_session_tilt(decompose_daily_sessions(frame), half_life=20, min_periods=20)
+    base = add_session_tilt(
+        decompose_daily_sessions(frame, adjustment="adjusted"),
+        half_life=20,
+        min_periods=17,
+    )
     altered_frame = frame.copy()
     altered_frame.loc[altered_frame.index[-1], ["Open", "Close", "AdjClose"]] = [
         500.0,
         600.0,
         600.0,
     ]
-    altered = add_session_tilt(decompose_daily_sessions(altered_frame), half_life=20, min_periods=20)
+    altered = add_session_tilt(
+        decompose_daily_sessions(altered_frame, adjustment="adjusted"),
+        half_life=20,
+        min_periods=17,
+    )
     column = "session_tilt_20"
     pd.testing.assert_series_equal(
         base.iloc[:-1][column].reset_index(drop=True),
@@ -90,14 +111,19 @@ def test_session_tilt_has_no_future_lookahead() -> None:
     )
 
 
-def test_default_session_tilt_needs_126_valid_returns() -> None:
-    result = add_session_tilt(decompose_daily_sessions(_frame(160)))
-    assert pd.isna(result["session_tilt_126"].iloc[125])
-    assert np.isfinite(result["session_tilt_126"].iloc[-1])
+def test_session_tilt_uses_explicit_half_life_and_warmup() -> None:
+    result = add_session_tilt(
+        decompose_daily_sessions(_frame(80), adjustment="adjusted"),
+        half_life=37,
+        min_periods=23,
+    )
+    assert "session_tilt_37" in result.columns
+    assert pd.isna(result["session_tilt_37"].iloc[22])
+    assert np.isfinite(result["session_tilt_37"].iloc[-1])
 
 
-def test_annualized_summary_uses_252_day_arithmetic_primary() -> None:
-    returns = decompose_daily_sessions(_frame(20))
-    summary = annualized_session_summary(returns)
-    expected = returns["r_overnight"].dropna().mean() * 252
+def test_annualized_summary_uses_explicit_trading_days() -> None:
+    returns = decompose_daily_sessions(_frame(20), adjustment="adjusted")
+    summary = annualized_session_summary(returns, trading_days=365)
+    expected = returns["r_overnight"].dropna().mean() * 365
     assert summary.iloc[0]["overnight_ann_arithmetic"] == pytest.approx(expected)
