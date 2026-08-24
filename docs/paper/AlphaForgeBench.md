@@ -1,5 +1,7 @@
 # AlphaForgeBench — LLMをTraderではなくQuant Researcherとして評価する
 
+**調査日**: 2026-08-24
+
 **タイトル**: AlphaForgeBench: Benchmarking End-to-End Trading Strategy Design with Large Language Models  
 **公開**: arXiv, 2026-02  
 **お仕事の目的**: LLMの金融推論を、曖昧な売買アクションではなく、再現可能な定量戦略設計能力として評価する。  

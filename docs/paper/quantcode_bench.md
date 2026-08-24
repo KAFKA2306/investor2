@@ -1,5 +1,7 @@
 # QuantCode-Bench — 生成した売買コードを本当に実行して評価する
 
+**調査日**: 2026-08-24
+
 **タイトル**: QuantCode-Bench: A Benchmark for Evaluating the Ability of Large Language Models to Generate Executable Algorithmic Trading Strategies  
 **公開**: arXiv, 2026-04  
 **お仕事の目的**: LLMが自然言語のstrategy specificationから、実際に実行・バックテストできるalgorithmic trading codeを生成できるか測る。  

@@ -1,5 +1,7 @@
 # FinanceHarness — 金融Deep ResearchをPITで評価する
 
+**調査日**: 2026-08-24
+
 **タイトル**: FinanceHarness: Autonomous Financial Deep Research Framework  
 **公開**: arXiv, 2026-07（v2: 2026-08）  
 **お仕事の目的**: 汎用LLMへ金融向けtool、workflow、reward、PIT benchmarkを与え、金融調査能力そのものを再現可能に改善・評価する。  

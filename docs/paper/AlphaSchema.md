@@ -1,5 +1,7 @@
 # AlphaSchema — 数式ではなく売買仮説の意味空間を探索する
 
+**調査日**: 2026-08-24
+
 **タイトル**: AlphaSchema: Exploring the Space of Trading Semantics for LLM-Based Alpha Mining  
 **公開**: arXiv, 2026-07  
 **お仕事の目的**: LLM alpha miningの探索対象を、表面的な数式やprompt variationから、構造化されたtrading semanticsへ移す。  

@@ -1,5 +1,7 @@
 # AlphaAgentEvo — アルファ探索を継続進化へ変える
 
+**調査日**: 2026-08-24
+
 **タイトル**: AlphaAgentEvo: Evolution-Oriented Alpha Mining via Self-Evolving Agentic Reinforcement Learning  
 **発表**: ICLR 2026  
 **お仕事の目的**: LLMによるアルファ探索を、毎回ゼロからやり直す試行から、過去の探索結果を受け継いで継続的に改善する進化プロセスへ変える。  

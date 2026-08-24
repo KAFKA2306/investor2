@@ -1,5 +1,7 @@
 # TiMi — 戦略設計と分足実行を分離する
 
+**調査日**: 2026-08-24
+
 **タイトル**: Trade in Minutes! Rationality-Driven Agentic System for Quantitative Financial Trading  
 **発表**: ICLR 2026  
 **お仕事の目的**: LLMの高水準な市場分析能力を、分足レベルの定量売買へ接続する。  

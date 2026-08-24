@@ -1,5 +1,7 @@
 # FinDeepForecast — 金融予測Agentを継続live評価する
 
+**調査日**: 2026-08-24
+
 **タイトル**: FinDeepForecast: A Live Multi-Agent System for Benchmarking Deep Research Agents in Financial Forecasting  
 **公開**: arXiv, 2026-01  
 **お仕事の目的**: Deep Research agentの金融予測能力を、静的QAではなく、未来が順次確定するlive forecasting taskとして継続評価する。  

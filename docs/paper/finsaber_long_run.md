@@ -1,5 +1,7 @@
 # FINSABER — LLM投資戦略は長期でも市場に勝てるのか
 
+**調査日**: 2026-08-24
+
 **タイトル**: Can LLM-based Financial Investing Strategies Outperform the Market in Long Run?  
 **発表**: KDD 2026  
 **お仕事の目的**: LLM投資戦略の優位性が、短い評価期間や限定銘柄だけでなく長期・広範な市場でも持続するか検証する。  
