@@ -119,16 +119,18 @@ def ticker_stats(prices: pd.DataFrame) -> pd.DataFrame:
         return_std=("log_return", lambda values: float(values.std(ddof=0))),
         return_skew=("log_return", "skew"),
     )
-    kurt = grouped["log_return"].apply(
-        lambda values: float(values.kurt()) if values.count() >= 4 else np.nan
-    ).rename("return_kurtosis_excess")
+    kurt = (
+        grouped["log_return"]
+        .apply(lambda values: float(values.kurt()) if values.count() >= 4 else np.nan)
+        .rename("return_kurtosis_excess")
+    )
     quantiles = grouped["log_return"].quantile([0.01, 0.05, 0.50, 0.95, 0.99]).unstack()
     quantiles.columns = ["return_p01", "return_p05", "return_median", "return_p95", "return_p99"]
-    abs10 = grouped["log_return"].apply(
-        lambda values: float((values.dropna().abs() > np.log(1.10)).mean())
-        if values.notna().any()
-        else np.nan
-    ).rename("abs_return_gt_10pct_rate")
+    abs10 = (
+        grouped["log_return"]
+        .apply(lambda values: float((values.dropna().abs() > np.log(1.10)).mean()) if values.notna().any() else np.nan)
+        .rename("abs_return_gt_10pct_rate")
+    )
     result = base.join(kurt).join(quantiles).join(abs10).reset_index()
     result["date_start"] = pd.to_datetime(result["date_start"]).dt.strftime("%Y-%m-%d")
     result["date_end"] = pd.to_datetime(result["date_end"]).dt.strftime("%Y-%m-%d")
