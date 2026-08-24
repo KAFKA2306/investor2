@@ -120,7 +120,9 @@ def write_outputs(
         "caveat": "Count of rows in derived parser output for disclosed OGE Form 278-T transactions; not an OGE-published aggregate and does not prove the filer personally placed each order.",
         "daily": rows,
     }
-    (output_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (output_dir / "summary.json").write_text(
+        json.dumps(summary, ensure_ascii=False, separators=(",", ":")) + "\n", encoding="utf-8"
+    )
     return summary
 
 
