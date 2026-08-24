@@ -16,7 +16,7 @@ on:
       - "scripts/verify_2019_arxiv_empirical.py"
       - "tests/test_lim_1904_04912_empirical.py"
       - "docs/research/protocols/lim_1904_04912_v2_exhibit8.json"
-      - "docs/research/2019_arxiv_finance_registry.json"
+      - "docs/research/catalogs/2019_arxiv_finance_registry.json"
       - "docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/**"
       - ".github/workflows/lim-1904-04912-reproduction.yml"
 
@@ -56,8 +56,8 @@ jobs:
         run: |
           python scripts/run_lim_1904_04912_empirical.py \
             --protocol docs/research/protocols/lim_1904_04912_v2_exhibit8.json \
-            --data-contracts docs/research/arxiv_qfin_2019_data_requirements.json \
-            --split-contracts docs/research/arxiv_qfin_2019_split_contracts.json \
+            --data-contracts docs/research/catalogs/arxiv_qfin_2019_data_requirements.json \
+            --split-contracts docs/research/contracts/arxiv_qfin_2019_split_contracts.json \
             --source-pdf /tmp/1904.04912v2.pdf \
             --output-dir docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306
 
@@ -108,7 +108,7 @@ jobs:
                   'evidence_manifest_sha256': manifest_sha,
               }]
           }
-          path = root / 'docs/research/2019_arxiv_finance_registry.json'
+          path = root / 'docs/research/catalogs/2019_arxiv_finance_registry.json'
           path.write_text(json.dumps(registry, ensure_ascii=False, indent=2, sort_keys=True) + '\n', encoding='utf-8')
           print(json.dumps({'manifest_sha256': manifest_sha, 'verdict': 'BLOCKED', 'reason_codes': report['reason_codes']}, sort_keys=True))
           PY
@@ -120,7 +120,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f \
-            docs/research/2019_arxiv_finance_registry.json \
+            docs/research/catalogs/2019_arxiv_finance_registry.json \
             docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/manifest.json \
             docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/report.json \
             docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306/trace.json
@@ -132,5 +132,5 @@ jobs:
         run: |
           python scripts/verify_2019_arxiv_empirical.py
           git diff --exit-code -- \
-            docs/research/2019_arxiv_finance_registry.json \
+            docs/research/catalogs/2019_arxiv_finance_registry.json \
             docs/research/runs/lim_1904_04912_v2_exhibit8_seed2306
