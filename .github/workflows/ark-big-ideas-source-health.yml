@@ -168,19 +168,22 @@ jobs:
               --live \
               --evidence-matrix build/ark-api/evidence-matrix.json \
               --claim-evidence build/ark-api/claim-evidence.json \
-              --data-output build/repository-coverage.json \
+              --data-output build/ark-api/repository-coverage.json \
               --api-output build/ark-api/repository-coverage.json \
               --csv-output build/ark-api/repository-coverage.csv \
               --markdown-output build/repository-coverage.md
           else
-            python -m scripts.build_ark_repository_coverage --live
+            python -m scripts.build_ark_repository_coverage \
+              --live \
+              --data-output api/v1/ark-big-ideas/repository-coverage.json \
+              --api-output api/v1/ark-big-ideas/repository-coverage.json
           fi
       - name: Audit repository coverage boundaries
         run: |
           python - <<'PY'
           import json
           from pathlib import Path
-          path = Path('build/repository-coverage.json') if '${{ github.event_name }}' == 'pull_request' else Path('data/ark-big-ideas/repository-coverage.json')
+          path = Path('build/ark-api/repository-coverage.json') if '${{ github.event_name }}' == 'pull_request' else Path('api/v1/ark-big-ideas/repository-coverage.json')
           data = json.loads(path.read_text())
           assert data['theme_count'] == 13
           assert data['live_github_checks'] is True
@@ -212,7 +215,6 @@ jobs:
           path: |
             build/source-health.json
             build/ark-api
-            build/repository-coverage.json
             build/repository-coverage.md
           retention-days: 30
       - name: Publish evidence on main
@@ -225,7 +227,6 @@ jobs:
           git add -f \
             api/v1/ark-big-ideas \
             data/ark-big-ideas/snapshots \
-            data/ark-big-ideas/repository-coverage.json \
             data/input_ledger/snapshot_catalog.ndjson \
             docs/ark-big-ideas/repository-coverage.md
           if git diff --cached --quiet; then
