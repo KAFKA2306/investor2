@@ -15,6 +15,7 @@ SOURCE_URL = "https://raw.githubusercontent.com/tbrown034/open-cabinet/main/data
 OGE_GUIDE_URL = "https://www.oge.gov/web/278eGuide.nsf/Form_278-T"
 OGE_DEFINITIONS_URL = "https://www.oge.gov/web/278eGuide.nsf/Definitions"
 EXPECTED_TYPES = {"Purchase", "Sale"}
+LEGACY_OUTPUTS = ("index.html", "trump_daily_transactions.csv")
 
 
 def load_source(source_url: str = SOURCE_URL, source_file: Path | None = None) -> tuple[dict[str, Any], bytes]:
@@ -75,10 +76,13 @@ def write_outputs(
 ) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     source_hash = hashlib.sha256(raw).hexdigest()
+    fetched_at = stable_fetched_at(output_dir, source_hash)
+    for name in LEGACY_OUTPUTS:
+        (output_dir / name).unlink(missing_ok=True)
+
     purchases = [int(row["Purchase"]) for row in rows]
     sales = [int(row["Sale"]) for row in rows]
     dates = [str(row["date"]) for row in rows]
-
     figure, axis = plt.subplots(figsize=(14, 7))
     axis.bar(dates, purchases, label="Purchase")
     axis.bar(dates, sales, bottom=purchases, label="Sale")
@@ -104,7 +108,7 @@ def write_outputs(
         "source_url": source_url,
         "source_type": "derived_parser_output",
         "primary_evidence": [OGE_GUIDE_URL, OGE_DEFINITIONS_URL],
-        "fetched_at": stable_fetched_at(output_dir, source_hash),
+        "fetched_at": fetched_at,
         "source_sha256": source_hash,
         "row_count": sum(int(row["Total"]) for row in rows),
         "purchase_rows": sum(purchases),
