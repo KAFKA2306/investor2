@@ -1,0 +1,97 @@
+name: Repository footprint count once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/repo-footprint-count-once.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  count:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Count baseline and current repository footprint
+        env:
+          BASELINE: 6cf3454e63685a077d11f871611b1f387188c8c8
+        run: |
+          python - <<'PY'
+          import collections
+          import json
+          import os
+          import subprocess
+
+          baseline = os.environ["BASELINE"]
+          # Exclude this one-shot workflow creation commit itself.
+          current = subprocess.check_output(["git", "rev-parse", "HEAD^"], text=True).strip()
+
+          def entries(ref):
+              raw = subprocess.check_output(["git", "ls-tree", "-r", "-t", ref], text=True)
+              out = []
+              for line in raw.splitlines():
+                  meta, path = line.split("\t", 1)
+                  mode, kind, sha = meta.split()
+                  out.append((mode, kind, sha, path))
+              return out
+
+          def line_count(ref, blobs):
+              total = 0
+              text_files = 0
+              binary_files = 0
+              for _, _, _, path in blobs:
+                  data = subprocess.check_output(["git", "show", f"{ref}:{path}"])
+                  if b"\0" in data:
+                      binary_files += 1
+                      continue
+                  try:
+                      text = data.decode("utf-8")
+                  except UnicodeDecodeError:
+                      binary_files += 1
+                      continue
+                  text_files += 1
+                  total += len(text.splitlines())
+              return total, text_files, binary_files
+
+          def measure(ref):
+              all_entries = entries(ref)
+              blobs = [e for e in all_entries if e[1] == "blob"]
+              trees = [e for e in all_entries if e[1] == "tree"]
+              loc, text_files, binary_files = line_count(ref, blobs)
+              by_sha = collections.defaultdict(list)
+              for _, _, sha, path in blobs:
+                  by_sha[sha].append(path)
+              duplicate_groups = [paths for paths in by_sha.values() if len(paths) > 1]
+              duplicate_extra_files = sum(len(paths) - 1 for paths in duplicate_groups)
+              top = collections.Counter(path.split("/", 1)[0] for _, _, _, path in blobs)
+              return {
+                  "ref": ref,
+                  "files": len(blobs),
+                  "folders": len(trees),
+                  "utf8_text_files": text_files,
+                  "binary_or_non_utf8_files": binary_files,
+                  "utf8_lines": loc,
+                  "identical_content_groups": len(duplicate_groups),
+                  "identical_content_extra_files": duplicate_extra_files,
+                  "top_level_file_counts": dict(sorted(top.items(), key=lambda kv: (-kv[1], kv[0]))),
+                  "identical_content_examples": sorted(duplicate_groups, key=lambda x: (-len(x), x))[:20],
+              }
+
+          before = measure(baseline)
+          after = measure(current)
+          result = {
+              "baseline": before,
+              "current": after,
+              "delta": {
+                  "files": after["files"] - before["files"],
+                  "folders": after["folders"] - before["folders"],
+                  "utf8_lines": after["utf8_lines"] - before["utf8_lines"],
+                  "identical_content_extra_files": after["identical_content_extra_files"] - before["identical_content_extra_files"],
+              },
+          }
+          print("FOOTPRINT_JSON=" + json.dumps(result, ensure_ascii=False, sort_keys=True))
+          PY
