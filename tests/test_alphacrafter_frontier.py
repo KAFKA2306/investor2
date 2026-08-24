@@ -72,6 +72,25 @@ def test_after_cost_evaluation_charges_turnover_and_borrow() -> None:
     assert costly.mean_gross_exposure > 0
 
 
+def test_evaluation_respects_exclusive_fold_end() -> None:
+    weights = np.ones((8, 2), dtype=np.float64) * 0.25
+    returns = np.zeros((8, 2), dtype=np.float64)
+    benchmark = np.zeros(8, dtype=np.float64)
+    returns[5] = 100.0
+    metrics, realized = evaluate_weights(
+        weights,
+        returns,
+        benchmark,
+        1,
+        5,
+        transaction_cost_bps_per_side=0.0,
+        borrow_fee_bps_per_year=0.0,
+    )
+    assert metrics.observations == 3
+    assert realized.shape == (3,)
+    np.testing.assert_allclose(realized, 0.0)
+
+
 def test_paper_strategy_gate_is_strict() -> None:
     factor, returns = synthetic_signal()
     weights = make_weight_path(factor, n_long=8, n_short=8, beta=0.8, gamma=0.0)
