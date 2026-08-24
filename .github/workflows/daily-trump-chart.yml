@@ -9,6 +9,12 @@ on:
       - "scripts/daily_trump_chart.py"
       - "tests/test_daily_trump_chart.py"
       - ".github/workflows/daily-trump-chart.yml"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/daily_trump_chart.py"
+      - "tests/test_daily_trump_chart.py"
+      - ".github/workflows/daily-trump-chart.yml"
 
 permissions:
   contents: write
