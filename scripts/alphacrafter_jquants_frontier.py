@@ -31,7 +31,9 @@ TrialResult = dict[str, bool | dict[str, object] | float | int | str]
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the frozen AlphaCrafter representative on a prepared J-Quants panel.")
+    parser = argparse.ArgumentParser(
+        description="Run the frozen AlphaCrafter representative on a prepared J-Quants panel."
+    )
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--dataset-manifest", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
@@ -95,9 +97,7 @@ def main() -> None:
                 oriented_factors[feature_name] = oriented
 
         selected: list[dict[str, float | str]] = (
-            screen_factors(oriented_factors, returns, validation_start, validation_end)
-            if oriented_factors
-            else []
+            screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
         )
         scores = composite_scores(oriented_factors, selected) if selected else np.zeros_like(returns, dtype=np.float64)
 
@@ -174,7 +174,11 @@ def main() -> None:
                     "validation": validation_details,
                 },
                 "screener": {"selected_factors": selected},
-                "trader": {"trials": trial_results, "selected_trial": selected_trial, "execution_state": execution_state},
+                "trader": {
+                    "trials": trial_results,
+                    "selected_trial": selected_trial,
+                    "execution_state": execution_state,
+                },
                 "oos_metrics": as_dict(test_metrics),
             }
         )

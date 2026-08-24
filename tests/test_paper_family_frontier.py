@@ -51,12 +51,8 @@ class PaperFamilyFrontierTest(unittest.TestCase):
         (root / "docs/paper/b.md").write_text("arXiv 2602.14670", encoding="utf-8")
         registry = self.registry(
             [
-                self.family(
-                    "a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670"
-                ),
-                self.family(
-                    "b", "docs/paper/b.md", "https://arxiv.org/abs/2602.14670"
-                ),
+                self.family("a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670"),
+                self.family("b", "docs/paper/b.md", "https://arxiv.org/abs/2602.14670"),
             ]
         )
         with self.assertRaisesRegex(AssertionError, "duplicate paper identity"):
@@ -65,25 +61,15 @@ class PaperFamilyFrontierTest(unittest.TestCase):
     def test_filename_content_identity_mismatch_fails(self) -> None:
         root = self.make_root()
         (root / "docs/paper/a.md").write_text("arXiv 9999.99999", encoding="utf-8")
-        registry = self.registry(
-            [
-                self.family(
-                    "a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670"
-                )
-            ]
-        )
-        with self.assertRaisesRegex(
-            AssertionError, "filename/content identity mismatch"
-        ):
+        registry = self.registry([self.family("a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670")])
+        with self.assertRaisesRegex(AssertionError, "filename/content identity mismatch"):
             validate(root, registry)
 
     def test_superseded_alias_fails_if_it_returns(self) -> None:
         root = self.make_root()
         (root / "docs/paper/a.md").write_text("arXiv 2602.14670", encoding="utf-8")
         (root / "docs/paper/old.md").write_text("duplicate", encoding="utf-8")
-        family = self.family(
-            "a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670"
-        )
+        family = self.family("a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670")
         family["historical_aliases"] = ["docs/paper/old.md"]
         with self.assertRaisesRegex(AssertionError, "superseded paper alias"):
             validate(root, self.registry([family]))
@@ -92,13 +78,7 @@ class PaperFamilyFrontierTest(unittest.TestCase):
         root = self.make_root()
         (root / "docs/paper/a.md").write_text("arXiv 2602.14670", encoding="utf-8")
         (root / "docs/paper/unmapped.md").write_text("unmapped", encoding="utf-8")
-        registry = self.registry(
-            [
-                self.family(
-                    "a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670"
-                )
-            ]
-        )
+        registry = self.registry([self.family("a", "docs/paper/a.md", "https://arxiv.org/abs/2602.14670")])
         with self.assertRaisesRegex(AssertionError, "unmapped docs/paper markdown"):
             validate(root, registry)
 
@@ -115,25 +95,13 @@ class PaperFamilyFrontierTest(unittest.TestCase):
     def test_readme_shows_loss_and_blocks_unmeasured_family(self) -> None:
         root = self.make_root()
         (root / "docs/paper/a.md").write_text("paper", encoding="utf-8")
-        hypothesis_path = (
-            root
-            / "data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json"
-        )
+        hypothesis_path = root / "data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json"
         hypothesis_path.parent.mkdir(parents=True)
         hypothesis_path.write_text(
-            json.dumps(
-                {
-                    "replication_boundary": {
-                        "reason": "licensed Bloomberg-dependent data"
-                    }
-                }
-            ),
+            json.dumps({"replication_boundary": {"reason": "licensed Bloomberg-dependent data"}}),
             encoding="utf-8",
         )
-        result_path = (
-            root
-            / "docs/research/results/alphazerobeta_jquants_free/summary.json"
-        )
+        result_path = root / "docs/research/results/alphazerobeta_jquants_free/summary.json"
         result_path.parent.mkdir(parents=True)
         result_path.write_text(
             json.dumps(

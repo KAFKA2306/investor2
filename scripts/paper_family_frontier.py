@@ -13,15 +13,9 @@ VERDICT_ORDER = {"LOSE": 0, "TIE": 1, "BEAT": 2, "BLOCKED": 3}
 ARXIV_ID = re.compile(r"arxiv\.org/abs/([^/?#]+)", re.IGNORECASE)
 README_START = "<!-- paper-family-frontier:start -->"
 README_END = "<!-- paper-family-frontier:end -->"
-ALPHAZERO_HYPOTHESIS = Path(
-    "data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json"
-)
-ALPHAZERO_RESULT_64 = Path(
-    "docs/research/results/alphazerobeta_jquants_free/summary.json"
-)
-ALPHAZERO_RESULT_256 = Path(
-    "docs/research/results/alphazerobeta_jquants_free_256/summary.json"
-)
+ALPHAZERO_HYPOTHESIS = Path("data/hypothesis_lab/hypotheses/alphazerobeta_market_neutral_v1.json")
+ALPHAZERO_RESULT_64 = Path("docs/research/results/alphazerobeta_jquants_free/summary.json")
+ALPHAZERO_RESULT_256 = Path("docs/research/results/alphazerobeta_jquants_free_256/summary.json")
 
 
 def load_registry(path: Path) -> dict[str, Any]:
@@ -47,9 +41,7 @@ def identity_is_in_page(url: str, text: str) -> bool:
 
 def validate(root: Path, registry: dict[str, Any]) -> None:
     paper_dir = root / "docs" / "paper"
-    active_markdown = {
-        path.relative_to(root).as_posix() for path in paper_dir.glob("*.md")
-    }
+    active_markdown = {path.relative_to(root).as_posix() for path in paper_dir.glob("*.md")}
     families = registry["families"]
     material = registry["repository_material"]
 
@@ -78,16 +70,10 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
             token = identity_token(primary_url)
             previous = identities.get(token)
             if previous is not None:
-                raise AssertionError(
-                    f"duplicate paper identity {token}: {previous} and {family_id}"
-                )
+                raise AssertionError(f"duplicate paper identity {token}: {previous} and {family_id}")
             identities[token] = family_id
-            if not identity_is_in_page(
-                primary_url, page_path.read_text(encoding="utf-8")
-            ):
-                raise AssertionError(
-                    f"filename/content identity mismatch: {page} does not contain {token}"
-                )
+            if not identity_is_in_page(primary_url, page_path.read_text(encoding="utf-8")):
+                raise AssertionError(f"filename/content identity mismatch: {page} does not contain {token}")
 
         verdict = family.get("verdict")
         if verdict is not None and verdict not in VERDICTS:
@@ -100,9 +86,7 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
     for item in material:
         path = item["path"]
         if path in mapped:
-            raise AssertionError(
-                f"path mapped as both family and repository material: {path}"
-            )
+            raise AssertionError(f"path mapped as both family and repository material: {path}")
         mapped.add(path)
         if not (root / path).is_file():
             raise AssertionError(f"missing repository material: {path}")
@@ -112,15 +96,11 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
     if missing:
         raise AssertionError(f"unmapped docs/paper markdown: {missing}")
     if stale:
-        raise AssertionError(
-            f"registry references inactive docs/paper markdown: {stale}"
-        )
+        raise AssertionError(f"registry references inactive docs/paper markdown: {stale}")
 
 
 def render(registry: dict[str, Any]) -> str:
-    families = sorted(
-        registry["families"], key=lambda item: item["canonical_name"].casefold()
-    )
+    families = sorted(registry["families"], key=lambda item: item["canonical_name"].casefold())
     beat_count = sum(family.get("verdict") == "BEAT" for family in families)
     unresolved = len(families) - beat_count
     lines = [
@@ -168,11 +148,7 @@ def _escape(value: object) -> str:
 
 def _alphazerobeta_row(root: Path) -> dict[str, str]:
     hypothesis = json.loads((root / ALPHAZERO_HYPOTHESIS).read_text(encoding="utf-8"))
-    result_path = (
-        ALPHAZERO_RESULT_256
-        if (root / ALPHAZERO_RESULT_256).is_file()
-        else ALPHAZERO_RESULT_64
-    )
+    result_path = ALPHAZERO_RESULT_256 if (root / ALPHAZERO_RESULT_256).is_file() else ALPHAZERO_RESULT_64
     result = json.loads((root / result_path).read_text(encoding="utf-8"))
     trained_assets = int(result["trained_asset_count"])
     folds = int(result["walk_forward"]["folds"])
@@ -228,10 +204,7 @@ def render_readme_block(root: Path, registry: dict[str, Any]) -> str:
         README_START,
         "## Empirical frontier",
         "",
-        (
-            f"**BEAT {counts['BEAT']} / TIE {counts['TIE']} / "
-            f"LOSE {counts['LOSE']} / BLOCKED {counts['BLOCKED']}**"
-        ),
+        (f"**BEAT {counts['BEAT']} / TIE {counts['TIE']} / LOSE {counts['LOSE']} / BLOCKED {counts['BLOCKED']}**"),
         "",
         "この表はcanonical family registryとrepository実測結果から生成します。`BLOCKED`、CI成功、実装完了は勝利ではありません。論文側とrepository側の結果は分離して表示します。",
         "",
@@ -284,13 +257,9 @@ def merge_readme(readme: str, block: str) -> str:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Validate and render the canonical paper-family frontier."
-    )
+    parser = argparse.ArgumentParser(description="Validate and render the canonical paper-family frontier.")
     parser.add_argument("command", choices=("validate", "render", "readme"))
-    parser.add_argument(
-        "--root", type=Path, default=Path(__file__).resolve().parents[1]
-    )
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--registry", type=Path)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--write", action="store_true")
@@ -301,9 +270,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     root = args.root.resolve()
-    registry_path = (
-        args.registry or root / "docs" / "research" / "paper_family_frontier.json"
-    )
+    registry_path = args.registry or root / "docs" / "research" / "paper_family_frontier.json"
     registry = load_registry(registry_path)
     validate(root, registry)
     if args.command == "validate":
@@ -320,9 +287,7 @@ def main() -> None:
         current = output_path.read_text(encoding="utf-8")
         expected = merge_readme(current, render_readme_block(root, registry))
         if args.check and current != expected:
-            raise AssertionError(
-                f"generated README frontier is stale: run {Path(__file__).name} readme --write"
-            )
+            raise AssertionError(f"generated README frontier is stale: run {Path(__file__).name} readme --write")
         if args.write:
             output_path.write_text(expected, encoding="utf-8")
         if not args.check and not args.write:
@@ -334,9 +299,7 @@ def main() -> None:
     if args.check:
         current = output_path.read_text(encoding="utf-8")
         if current != rendered:
-            raise AssertionError(
-                f"generated frontier is stale: run {Path(__file__).name} render --write"
-            )
+            raise AssertionError(f"generated frontier is stale: run {Path(__file__).name} render --write")
     if args.write:
         output_path.write_text(rendered, encoding="utf-8")
     if not args.check and not args.write:
