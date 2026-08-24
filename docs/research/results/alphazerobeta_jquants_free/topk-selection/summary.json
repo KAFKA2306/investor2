@@ -1,0 +1,103 @@
+{
+  "asset_count": 64,
+  "best_topk_by_sharpe": {
+    "k": 32,
+    "metrics": {
+      "annualized_sharpe": -0.4645382636999206,
+      "benchmark_correlation": 0.08790838484962417,
+      "cumulative_return": -0.012389285455102872,
+      "max_abs_net_exposure": 0.0,
+      "max_drawdown": -0.07117370000643397,
+      "mean_gross_exposure": 1.0,
+      "mean_turnover": 0.021739130434782608,
+      "observations": 115
+    }
+  },
+  "canonical_baseline_reproduction": {
+    "delta_actual_minus_canonical": {
+      "annualized_sharpe": 4.0490078098365245e-05,
+      "benchmark_correlation": -3.5255987797105925e-06,
+      "cumulative_return": 4.83964321840169e-07,
+      "max_drawdown": 3.330911140242421e-07,
+      "observations": 0.0
+    },
+    "passed": true,
+    "tolerance": 0.0001
+  },
+  "claim_boundary": "Post-hoc execution ablation on the frozen J-Quants Free surrogate; not paper-faithful AlphaZeroBeta and not an exact licensed-data reproduction.",
+  "cost_assumptions": {
+    "borrow_fee_bps_per_year": 30.0,
+    "transaction_cost_bps_per_side": 15.0
+  },
+  "delta_best_minus_dense": {
+    "annualized_sharpe": 1.6639697476601207,
+    "benchmark_correlation": 0.03507200579314015,
+    "cumulative_return": 0.04485058860166091,
+    "max_drawdown": 0.009586718033896546,
+    "mean_turnover": -0.0018671505423971321
+  },
+  "dense_baseline": {
+    "annualized_sharpe": -2.1285080113600414,
+    "benchmark_correlation": 0.05283637905648402,
+    "cumulative_return": -0.057239874056763784,
+    "max_abs_net_exposure": 7.945345714688301e-09,
+    "max_drawdown": -0.08076041804033052,
+    "mean_gross_exposure": 1.0000000004898617,
+    "mean_turnover": 0.02360628097717974,
+    "observations": 115
+  },
+  "fold_count": 2,
+  "hypothesis": "AlphaZeroBeta rank information may become more investable when restricted to Top-K longs and Bottom-K shorts.",
+  "ks": [
+    5,
+    10,
+    20,
+    32
+  ],
+  "schema_version": "investor2.alphazerobeta-topk-selection.v1",
+  "selection_rule": "Each OOS day rank the 64 raw policy scores; long Top-K and short Bottom-K at equal weight, +0.5 gross long and -0.5 gross short.",
+  "sizing": "equal weight within each selected side; selection is isolated from model sizing",
+  "topk": {
+    "10": {
+      "annualized_sharpe": -2.9351148572323265,
+      "benchmark_correlation": 0.11010862203154465,
+      "cumulative_return": -0.10862617795807772,
+      "max_abs_net_exposure": 0.0,
+      "max_drawdown": -0.11458829352951905,
+      "mean_gross_exposure": 1.0000000149011612,
+      "mean_turnover": 0.024347826449767403,
+      "observations": 115
+    },
+    "20": {
+      "annualized_sharpe": -2.278856306724367,
+      "benchmark_correlation": 0.09143021235204836,
+      "cumulative_return": -0.06583159650591341,
+      "max_abs_net_exposure": 0.0,
+      "max_drawdown": -0.09387779371655736,
+      "mean_gross_exposure": 1.0000000149011612,
+      "mean_turnover": 0.030434783062209255,
+      "observations": 115
+    },
+    "32": {
+      "annualized_sharpe": -0.4645382636999206,
+      "benchmark_correlation": 0.08790838484962417,
+      "cumulative_return": -0.012389285455102872,
+      "max_abs_net_exposure": 0.0,
+      "max_drawdown": -0.07117370000643397,
+      "mean_gross_exposure": 1.0,
+      "mean_turnover": 0.021739130434782608,
+      "observations": 115
+    },
+    "5": {
+      "annualized_sharpe": -3.9872412414332272,
+      "benchmark_correlation": -0.23793564631818998,
+      "cumulative_return": -0.2122320424830929,
+      "max_abs_net_exposure": 0.0,
+      "max_drawdown": -0.22063309607089976,
+      "mean_gross_exposure": 1.0000000149011612,
+      "mean_turnover": 0.033043478753255764,
+      "observations": 115
+    }
+  },
+  "verdict": "TOPK_IMPROVES_SHARPE_AND_RETURN"
+}
