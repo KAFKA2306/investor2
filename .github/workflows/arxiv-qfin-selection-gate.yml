@@ -6,8 +6,8 @@ on:
       - "scripts/select_arxiv_qfin_papers.py"
       - "scripts/select_arxiv_qfin_year.py"
       - "tests/test_arxiv_qfin_selection.py"
-      - "docs/research/arxiv_qfin_selector_rules_v1.json"
-      - "docs/research/arxiv_qfin_*_selection_manifest.json"
+      - "docs/research/catalogs/arxiv_qfin_selector_rules_v1.json"
+      - "docs/research/catalogs/arxiv_qfin_*_selection_manifest.json"
       - "docs/specs/arxiv_qfin_selection_gate.md"
       - ".github/workflows/arxiv-qfin-selection-gate.yml"
   push:
@@ -18,7 +18,7 @@ on:
       - "scripts/select_arxiv_qfin_papers.py"
       - "scripts/select_arxiv_qfin_year.py"
       - "tests/test_arxiv_qfin_selection.py"
-      - "docs/research/arxiv_qfin_selector_rules_v1.json"
+      - "docs/research/catalogs/arxiv_qfin_selector_rules_v1.json"
       - "docs/specs/arxiv_qfin_selection_gate.md"
       - ".github/workflows/arxiv-qfin-selection-gate.yml"
   workflow_dispatch:
@@ -63,7 +63,7 @@ jobs:
             exit 1
           fi
           echo "YEAR=$year" >> "$GITHUB_ENV"
-          echo "SELECTION_PATH=docs/research/arxiv_qfin_${year}_selection_manifest.json" >> "$GITHUB_ENV"
+          echo "SELECTION_PATH=docs/research/catalogs/arxiv_qfin_${year}_selection_manifest.json" >> "$GITHUB_ENV"
 
       - name: Selector regression contracts
         run: python tests/test_arxiv_qfin_selection.py
@@ -77,12 +77,12 @@ jobs:
           if [[ "$YEAR" == "2021" ]]; then
             python scripts/select_arxiv_qfin_papers.py \
               --reuse-key arxiv/q-fin/2021/metadata \
-              --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+              --rules docs/research/catalogs/arxiv_qfin_selector_rules_v1.json \
               --output "$SELECTION_PATH"
           else
             python scripts/select_arxiv_qfin_year.py \
               --year "$YEAR" \
-              --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+              --rules docs/research/catalogs/arxiv_qfin_selector_rules_v1.json \
               --output "$SELECTION_PATH"
           fi
 
@@ -93,12 +93,12 @@ jobs:
           if [[ "$YEAR" == "2021" ]]; then
             python scripts/select_arxiv_qfin_papers.py \
               --reuse-key arxiv/q-fin/2021/metadata \
-              --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+              --rules docs/research/catalogs/arxiv_qfin_selector_rules_v1.json \
               --output "$SELECTION_PATH"
           else
             python scripts/select_arxiv_qfin_year.py \
               --year "$YEAR" \
-              --rules docs/research/arxiv_qfin_selector_rules_v1.json \
+              --rules docs/research/catalogs/arxiv_qfin_selector_rules_v1.json \
               --output "$SELECTION_PATH"
           fi
           cmp /tmp/selection-first.json "$SELECTION_PATH"
