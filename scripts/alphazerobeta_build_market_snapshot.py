@@ -18,68 +18,11 @@ import yfinance as yf
 from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
-DEFAULT_MAX_REQUEST_ATTEMPTS = 6
-DEFAULT_RETRY_BASE_SECONDS = 5.0
 ALL_REGIONS = (
-    "ae",
-    "ar",
-    "at",
-    "au",
-    "be",
-    "br",
-    "ca",
-    "ch",
-    "cl",
-    "cn",
-    "co",
-    "cz",
-    "de",
-    "dk",
-    "ee",
-    "eg",
-    "es",
-    "fi",
-    "fr",
-    "gb",
-    "gr",
-    "hk",
-    "hu",
-    "id",
-    "ie",
-    "il",
-    "in",
-    "is",
-    "it",
-    "jp",
-    "kr",
-    "kw",
-    "lk",
-    "lt",
-    "lv",
-    "mx",
-    "my",
-    "nl",
-    "no",
-    "nz",
-    "pe",
-    "ph",
-    "pk",
-    "pl",
-    "pt",
-    "qa",
-    "ro",
-    "ru",
-    "sa",
-    "se",
-    "sg",
-    "sr",
-    "th",
-    "tr",
-    "tw",
-    "us",
-    "ve",
-    "vn",
-    "za",
+    "ae", "ar", "at", "au", "be", "br", "ca", "ch", "cl", "cn", "co", "cz", "de", "dk", "ee", "eg",
+    "es", "fi", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "is", "it", "jp", "kr", "kw",
+    "lk", "lt", "lv", "mx", "my", "nl", "no", "nz", "pe", "ph", "pk", "pl", "pt", "qa", "ro", "ru",
+    "sa", "se", "sg", "sr", "th", "tr", "tw", "us", "ve", "vn", "za",
 )
 
 
@@ -113,11 +56,6 @@ def require_repair_runtime() -> None:
         yfinance_repair=True,
     )
     if not scipy_available:
-        log_event(
-            "dependency_preflight_failed",
-            missing_dependency="scipy",
-            reason="yfinance repair=True requires SciPy at runtime",
-        )
         raise RuntimeError("missing runtime dependency: scipy is required by yfinance download(repair=True)")
 
 
@@ -132,11 +70,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--storage-prefix", required=True)
     parser.add_argument("--storage-bucket", required=True)
     parser.add_argument("--writer-repository", required=True)
-    parser.add_argument("--page-size", type=int, default=250)
-    parser.add_argument("--batch-size", type=int, default=100)
-    parser.add_argument("--request-pause", type=float, default=0.25)
-    parser.add_argument("--max-request-attempts", type=int, default=DEFAULT_MAX_REQUEST_ATTEMPTS)
-    parser.add_argument("--retry-base-seconds", type=float, default=DEFAULT_RETRY_BASE_SECONDS)
+    parser.add_argument("--page-size", type=int, required=True)
+    parser.add_argument("--batch-size", type=int, required=True)
+    parser.add_argument("--request-pause", type=float, required=True)
+    parser.add_argument("--max-request-attempts", type=int, required=True)
+    parser.add_argument("--retry-base-seconds", type=float, required=True)
+    parser.add_argument("--download-timeout", type=float, required=True)
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
@@ -174,8 +113,12 @@ def screen_with_retry(
     max_attempts: int,
     retry_base_seconds: float,
 ) -> dict[str, Any]:
+    if page_size < 1:
+        raise ValueError("page_size must be >= 1")
     if max_attempts < 1:
         raise ValueError("max_attempts must be >= 1")
+    if retry_base_seconds < 0:
+        raise ValueError("retry_base_seconds must be >= 0")
     for attempt in range(1, max_attempts + 1):
         started = time.monotonic()
         try:
@@ -194,14 +137,6 @@ def screen_with_retry(
             return response
         except YFRateLimitError as exc:
             if attempt == max_attempts:
-                log_event(
-                    "universe_page_failed",
-                    region=region,
-                    offset=offset,
-                    attempt=attempt,
-                    exception_type=type(exc).__name__,
-                    exception=str(exc),
-                )
                 raise
             delay = retry_base_seconds * (2 ** (attempt - 1))
             log_event(
@@ -211,6 +146,7 @@ def screen_with_retry(
                 attempt=attempt,
                 max_attempts=max_attempts,
                 sleep_seconds=delay,
+                exception_type=type(exc).__name__,
             )
             time.sleep(delay)
         except Exception as exc:
@@ -231,9 +167,11 @@ def discover_region(
     *,
     page_size: int,
     pause: float,
-    max_attempts: int = DEFAULT_MAX_REQUEST_ATTEMPTS,
-    retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
+    max_attempts: int,
+    retry_base_seconds: float,
 ) -> pd.DataFrame:
+    if pause < 0:
+        raise ValueError("pause must be >= 0")
     rows: list[dict[str, object]] = []
     seen: set[str] = set()
     offset = 0
@@ -281,8 +219,8 @@ def discover_universe(
     *,
     page_size: int,
     pause: float,
-    max_attempts: int = DEFAULT_MAX_REQUEST_ATTEMPTS,
-    retry_base_seconds: float = DEFAULT_RETRY_BASE_SECONDS,
+    max_attempts: int,
+    retry_base_seconds: float,
 ) -> pd.DataFrame:
     frames = []
     for region in regions:
@@ -293,19 +231,16 @@ def discover_universe(
             max_attempts=max_attempts,
             retry_base_seconds=retry_base_seconds,
         )
-        log_event("universe_region_result", region=region, tickers=len(frame))
         if not frame.empty:
             frames.append(frame)
     if not frames:
         raise AssertionError("yfinance discovery returned no equities")
     universe = pd.concat(frames, ignore_index=True)
-    result = (
+    return (
         universe.drop_duplicates(["Region", "Ticker"], keep="first")
         .sort_values(["Region", "Ticker"])
         .reset_index(drop=True)
     )
-    log_event("universe_complete", regions=regions, ticker_count=len(result))
-    return result
 
 
 def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
@@ -338,7 +273,16 @@ def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
     return result.sort_values(["Ticker", "Date"]).reset_index(drop=True)
 
 
-def download_prices(tickers: list[str], *, start: str, end: str, context: str) -> pd.DataFrame:
+def download_prices(
+    tickers: list[str],
+    *,
+    start: str,
+    end: str,
+    context: str,
+    timeout: float,
+) -> pd.DataFrame:
+    if timeout <= 0:
+        raise ValueError("timeout must be positive")
     started = time.monotonic()
     log_event(
         "price_download_start",
@@ -347,6 +291,7 @@ def download_prices(tickers: list[str], *, start: str, end: str, context: str) -
         ticker_sample=tickers[:5],
         start=start,
         end=end,
+        timeout=timeout,
         repair=True,
     )
     try:
@@ -362,7 +307,7 @@ def download_prices(tickers: list[str], *, start: str, end: str, context: str) -
             group_by="ticker",
             threads=True,
             progress=False,
-            timeout=30,
+            timeout=timeout,
         )
         frame = pd.DataFrame() if raw is None else normalize_download(raw, tickers)
     except Exception as exc:
@@ -375,12 +320,11 @@ def download_prices(tickers: list[str], *, start: str, end: str, context: str) -
             elapsed_seconds=round(time.monotonic() - started, 3),
         )
         raise
-    returned_tickers = int(frame["Ticker"].nunique()) if not frame.empty and "Ticker" in frame.columns else 0
     log_event(
         "price_download_complete" if not frame.empty else "price_download_empty",
         context=context,
         requested_tickers=len(tickers),
-        returned_tickers=returned_tickers,
+        returned_tickers=int(frame["Ticker"].nunique()) if not frame.empty else 0,
         rows=len(frame),
         elapsed_seconds=round(time.monotonic() - started, 3),
     )
@@ -395,41 +339,33 @@ def write_region_prices(
     end: str,
     batch_size: int,
     pause: float,
+    timeout: float,
 ) -> dict[str, int]:
+    if batch_size < 1:
+        raise ValueError("batch_size must be >= 1")
+    if pause < 0:
+        raise ValueError("pause must be >= 0")
     counts: dict[str, int] = {}
     for region, group in universe.groupby("Region", observed=True):
         tickers = group["Ticker"].astype(str).tolist()
         region_dir = root / "prices" / str(region)
         region_dir.mkdir(parents=True, exist_ok=True)
         rows = 0
-        nonempty_batches = 0
-        log_event("price_region_start", region=str(region), ticker_count=len(tickers), batch_size=batch_size)
         for index in range(0, len(tickers), batch_size):
             batch_number = index // batch_size
             batch = tickers[index : index + batch_size]
-            frame = download_prices(batch, start=start, end=end, context=f"region={region},batch={batch_number}")
+            frame = download_prices(
+                batch,
+                start=start,
+                end=end,
+                context=f"region={region},batch={batch_number}",
+                timeout=timeout,
+            )
             if not frame.empty:
                 frame.to_parquet(region_dir / f"part-{batch_number:05d}.parquet", index=False, compression="zstd")
                 rows += len(frame)
-                nonempty_batches += 1
-            log_event(
-                "price_batch_result",
-                region=str(region),
-                batch=batch_number,
-                requested_tickers=len(batch),
-                returned_tickers=int(frame["Ticker"].nunique()) if not frame.empty else 0,
-                rows=len(frame),
-                cumulative_rows=rows,
-            )
             time.sleep(pause)
         counts[str(region)] = rows
-        log_event(
-            "price_region_complete",
-            region=str(region),
-            ticker_count=len(tickers),
-            rows=rows,
-            nonempty_batches=nonempty_batches,
-        )
     return counts
 
 
@@ -455,25 +391,15 @@ def main() -> None:
         if args.regions.lower() == "all"
         else [value.strip().lower() for value in args.regions.split(",") if value.strip()]
     )
+    if not regions:
+        raise ValueError("at least one Yahoo region is required")
     unknown = sorted(set(regions) - set(ALL_REGIONS))
     if unknown:
         raise ValueError(f"unsupported Yahoo regions: {unknown}")
+
     root = args.output_dir
-    log_event(
-        "snapshot_start",
-        regions=regions,
-        start=args.start,
-        end=args.end,
-        benchmark=args.benchmark,
-        batch_size=args.batch_size,
-        output_dir=str(root),
-        storage_prefix=args.storage_prefix,
-        storage_bucket=args.storage_bucket,
-        writer_repository=args.writer_repository,
-    )
     require_repair_runtime()
     prepare_output(root, overwrite=args.overwrite)
-
     universe = discover_universe(
         regions,
         page_size=args.page_size,
@@ -489,11 +415,16 @@ def main() -> None:
         end=args.end,
         batch_size=args.batch_size,
         pause=args.request_pause,
+        timeout=args.download_timeout,
     )
-    log_event("benchmark_download_start", benchmark=args.benchmark)
-    benchmark = download_prices([args.benchmark], start=args.start, end=args.end, context="benchmark")
+    benchmark = download_prices(
+        [args.benchmark],
+        start=args.start,
+        end=args.end,
+        context="benchmark",
+        timeout=args.download_timeout,
+    )
     if benchmark.empty:
-        log_event("benchmark_download_failed", benchmark=args.benchmark, reason="empty_frame")
         raise AssertionError(f"benchmark download failed: {args.benchmark}")
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
     files = file_manifest(root)
@@ -511,6 +442,18 @@ def main() -> None:
         },
         "price_rows_by_region": row_counts,
         "benchmark": args.benchmark,
+        "collection_contract": {
+            "page_size": args.page_size,
+            "batch_size": args.batch_size,
+            "request_pause_seconds": args.request_pause,
+            "max_request_attempts": args.max_request_attempts,
+            "retry_base_seconds": args.retry_base_seconds,
+            "download_timeout_seconds": args.download_timeout,
+            "interval": "1d",
+            "auto_adjust": False,
+            "actions": True,
+            "repair": True,
+        },
         "immutable": True,
         "files": files,
         "storage_contract": {
@@ -521,7 +464,8 @@ def main() -> None:
         },
     }
     (root / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        json.dumps(manifest, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
     )
     log_event(
         "snapshot_complete",
