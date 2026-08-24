@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 import argparse
-import csv
 import hashlib
-import html
 import json
 import urllib.request
 from collections import Counter, defaultdict
@@ -34,23 +32,20 @@ def load_source(source_url: str = SOURCE_URL, source_file: Path | None = None) -
 
 def aggregate_transactions(payload: dict[str, Any]) -> list[dict[str, int | str]]:
     transactions = payload.get("transactions")
-    if not isinstance(transactions, list):
-        raise ValueError("transactions must be a list")
-    if any(not isinstance(row, dict) for row in transactions):
-        raise ValueError("each transaction must be an object")
+    if not isinstance(transactions, list) or any(not isinstance(row, dict) for row in transactions):
+        raise ValueError("transactions must be a list of objects")
 
-    unknown_types = sorted({str(row.get("type")) for row in transactions if row.get("type") not in EXPECTED_TYPES})
-    if unknown_types:
-        raise ValueError(f"unexpected transaction types: {unknown_types}")
+    unknown = sorted({str(row.get("type")) for row in transactions if row.get("type") not in EXPECTED_TYPES})
+    if unknown:
+        raise ValueError(f"unexpected transaction types: {unknown}")
 
     daily: dict[str, Counter[str]] = defaultdict(Counter)
     for row in transactions:
         date = row.get("date")
-        tx_type = row.get("type")
         if not isinstance(date, str) or not date:
             raise ValueError("transaction date must be a non-empty string")
         datetime.strptime(date, "%Y-%m-%d")
-        daily[date][str(tx_type)] += 1
+        daily[date][str(row["type"])] += 1
 
     return [
         {
@@ -64,10 +59,10 @@ def aggregate_transactions(payload: dict[str, Any]) -> list[dict[str, int | str]
 
 
 def stable_fetched_at(output_dir: Path, source_hash: str) -> str:
-    summary_path = output_dir / "summary.json"
-    if summary_path.is_file():
+    path = output_dir / "summary.json"
+    if path.is_file():
         try:
-            previous = json.loads(summary_path.read_text(encoding="utf-8"))
+            previous = json.loads(path.read_text(encoding="utf-8"))
             if previous.get("source_sha256") == source_hash and isinstance(previous.get("fetched_at"), str):
                 return previous["fetched_at"]
         except (OSError, json.JSONDecodeError):
@@ -80,22 +75,14 @@ def write_outputs(
 ) -> dict[str, Any]:
     output_dir.mkdir(parents=True, exist_ok=True)
     source_hash = hashlib.sha256(raw).hexdigest()
-    fetched_at = stable_fetched_at(output_dir, source_hash)
-
-    with (output_dir / "trump_daily_transactions.csv").open("w", encoding="utf-8", newline="") as handle:
-        writer = csv.DictWriter(handle, fieldnames=["date", "Purchase", "Sale", "Total"])
-        writer.writeheader()
-        writer.writerows(rows)
-
-    dates = [str(row["date"]) for row in rows]
     purchases = [int(row["Purchase"]) for row in rows]
     sales = [int(row["Sale"]) for row in rows]
+    dates = [str(row["date"]) for row in rows]
+
     figure, axis = plt.subplots(figsize=(14, 7))
     axis.bar(dates, purchases, label="Purchase")
     axis.bar(dates, sales, bottom=purchases, label="Sale")
-    axis.set_title("Donald J. Trump — disclosed OGE 278-T transaction rows by transaction date")
-    axis.set_xlabel("Transaction date")
-    axis.set_ylabel("Number of disclosed transaction rows")
+    axis.set(title="Donald J. Trump — disclosed OGE 278-T transaction rows by transaction date", xlabel="Transaction date", ylabel="Number of disclosed transaction rows")
     axis.legend()
     if dates:
         step = max(1, len(dates) // 12)
@@ -107,10 +94,9 @@ def write_outputs(
     figure.savefig(output_dir / "trump_daily_transactions.png", dpi=150, metadata={"Software": "investor2"})
     plt.close(figure)
 
-    row_count = sum(int(row["Total"]) for row in rows)
     max_row = max(rows, key=lambda row: int(row["Total"])) if rows else None
     summary = {
-        "schema_version": "investor2.trump-daily-278t-chart.v1",
+        "schema_version": "investor2.trump-daily-278t-chart.v2",
         "name": payload.get("name"),
         "filingType": payload.get("filingType"),
         "mostRecentFilingDate": payload.get("mostRecentFilingDate"),
@@ -118,31 +104,19 @@ def write_outputs(
         "source_url": source_url,
         "source_type": "derived_parser_output",
         "primary_evidence": [OGE_GUIDE_URL, OGE_DEFINITIONS_URL],
-        "fetched_at": fetched_at,
+        "fetched_at": stable_fetched_at(output_dir, source_hash),
         "source_sha256": source_hash,
-        "row_count": row_count,
+        "row_count": sum(int(row["Total"]) for row in rows),
         "purchase_rows": sum(purchases),
         "sale_rows": sum(sales),
         "daily_points": len(rows),
         "max_daily_total": int(max_row["Total"]) if max_row else 0,
         "max_daily_total_date": max_row["date"] if max_row else None,
-        "unexpected_transaction_types": [],
         "unit": "number of disclosed transaction rows",
-        "caveat": "This is a count of rows in derived parser output for disclosed OGE Form 278-T transactions; it is not an OGE-published aggregate and does not prove the filer personally placed each order.",
+        "caveat": "Count of rows in derived parser output for disclosed OGE Form 278-T transactions; not an OGE-published aggregate and does not prove the filer personally placed each order.",
+        "daily": rows,
     }
     (output_dir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-    index = f"""<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Trump OGE 278-T daily disclosed transaction rows</title></head><body>
-<main><h1>Trump OGE 278-T daily disclosed transaction rows</h1>
-<p>This chart counts disclosed transaction rows by transaction date from Open Cabinet's derived parser output. It is not an OGE-published aggregate and does not establish who personally placed an order.</p>
-<img src="trump_daily_transactions.png" alt="Stacked bar chart of Purchase and Sale disclosed transaction rows by date" style="max-width:100%;height:auto">
-<p><a href="trump_daily_transactions.csv">Download CSV</a> · <a href="summary.json">Summary / provenance</a></p>
-<p>Derived source: <a href="{html.escape(source_url)}">Open Cabinet static JSON</a></p>
-<p>Primary definition: <a href="{OGE_GUIDE_URL}">U.S. Office of Government Ethics — OGE Form 278-T</a> · <a href="{OGE_DEFINITIONS_URL}">Definitions</a></p>
-</main></body></html>\n"""
-    (output_dir / "index.html").write_text(index, encoding="utf-8")
     return summary
 
 
@@ -153,8 +127,7 @@ def main() -> None:
     parser.add_argument("--output-dir", type=Path, default=Path("generated/trump-daily-chart"))
     args = parser.parse_args()
     payload, raw = load_source(args.source_url, args.source_file)
-    rows = aggregate_transactions(payload)
-    summary = write_outputs(payload, raw, rows, args.output_dir, args.source_url)
+    summary = write_outputs(payload, raw, aggregate_transactions(payload), args.output_dir, args.source_url)
     print(json.dumps({key: summary[key] for key in ("row_count", "purchase_rows", "sale_rows", "daily_points", "source_sha256")}))
 
 
