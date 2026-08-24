@@ -1,40 +1,41 @@
 ---
 name: fred-economic-data
-description: >
-  MANDATORY TRIGGER: Invoke for any request involving FRED macro data, including
-  GDP, CPI, unemployment, rates, yield curve, PCE, economic calendars, regime
-  detection, or macro features for quant models. If the user asks for FRED
-  series IDs, macro time-series pulls, or historical/current macro comparisons,
-  this skill must be used before any data fetch.
+description: Use for FRED-backed macro data already supported by this repository, including policy rates, Treasury yields, CPI, unemployment, and inflation expectations.
 origin: local-git-analysis
 ---
 
-# FRED Economic Data Access Skill
+# FRED Economic Data
 
-This skill enables rapid access to over 800,000 economic time-series data points (GDP, unemployment, inflation, etc.) from FRED for comprehensive macro analysis.
+Use the repository's existing macro ingestion path. Do not invent a separate FRED client, generic query layer, or economic-calendar subsystem.
 
-## When to Use
-- When fetching the latest macro-economic indicators (e.g., GDP, CPI, interest rates).
-- When analyzing market regimes by comparing historical economic data.
-- When monitoring economic release schedules to time trading strategies.
+## Current implementation
 
-## Code Examples
+`src/io/sync_macro.ts` reads `FRED_API_KEY` and fetches these FRED series through the shared HTTP cache:
 
-### Economic Data Retrieval
-- Input: Series ID, observation period, and transformation method.
-- Procedure: 
-    1. Ensure `FRED_API_KEY` is set in the environment because missing credentials will cause the data fetch to fail.
-    2. Use the `FREDQuery` class to query the desired series because centralized access logic ensures consistent error handling and rate limit compliance.
-    3. Perform frequency aggregation as required because macro indicators must be aligned with equity market timeframes (e.g., daily) for correlation analysis.
-- Output: Structured time-series data containing date-value pairs.
+- `FEDFUNDS`
+- `DGS10`
+- `CPIAUCSL`
+- `UNRATE`
+- `T10YIE`
 
-## Core Concepts
+`src/io/get.ts` invokes `syncMacro()` as part of the repository data-acquisition flow.
 
-1.  API Key Management: NEVER hardcode the API key; access it via environment variables because source code is shared and security must be preserved.
-2.  Rate Limit Compliance: Do not exceed FRED API request limits because being blacklisted from FRED will disable the entire macro research pipeline.
-3.  Data Validation: Proactively handle missing or malformed data because FRED datasets often contain "placeholder" characters like "." that crash standard numerical parsers.
+This is the currently implemented surface. There is no repository `FREDQuery` class and no generic arbitrary-series API wrapper documented as canonical.
 
-## Best Practices
-- Regime Switch Detection: Capture shifts in inflation or interest rates because global macro regimes are the primary driver of market-wide risk.
-- Visualization: Use descriptive plotting to visualize macro trends because human-in-the-loop verification is required for high-stakes investment decisions.
-- Data Fidelity: Prefer PIT (Point-In-Time) data for realistic backtesting because revised economic data (e.g., GDP revisions) creates look-ahead bias if used carelessly.
+## Contract
+
+- Never hard-code credentials; read `FRED_API_KEY` from the environment.
+- Reuse the repository HTTP cache and snapshot/provenance contract rather than bypassing it with ad-hoc requests.
+- Preserve observation dates and retrieval metadata.
+- Treat missing or malformed observations as explicit data-quality states; do not invent or interpolate values unless a frozen research protocol defines that transformation.
+- For historical backtests, distinguish currently published revised values from genuinely point-in-time vintage data. Do not call revised series PIT-clean without vintage evidence.
+- Do not claim support for arbitrary FRED series, release calendars, or ALFRED vintages unless the corresponding implementation is added and verified.
+- If a requested macro series is outside the implemented set, report the gap or add a new explicit source path under the repository's provenance contract before using it as evidence.
+
+## Canonical references
+
+- `src/io/sync_macro.ts`
+- `src/io/get.ts`
+- `.agent/skills/cache/SKILL.md`
+- `docs/specs/external_snapshot_store.md`
+- `AGENTS.md`
