@@ -11,7 +11,7 @@ import pandas as pd
 
 from scripts.session_state_baseline import select_prices, validate_snapshot_coverage
 from src.research.market_snapshot import MarketSnapshot, load_manifest, load_prices_from_snapshots
-from src.research.session_state import add_session_tilt, annualized_session_summary, decompose_daily_sessions
+from src.research.session_state import add_session_tilt, decompose_daily_sessions
 
 
 def _csv(raw: str) -> list[str]:
@@ -77,8 +77,8 @@ def _performance(returns: pd.Series, benchmark: pd.Series, *, trading_days: int)
         "annualized_compound_return": float(equity.iloc[-1] ** (trading_days / len(strategy)) - 1.0),
         "sharpe": sharpe,
         "max_drawdown": float(drawdown.min()),
-        "beta_to_spy_close_to_close": beta,
-        "correlation_to_spy_close_to_close": corr,
+        "beta_to_benchmark_close_to_close": beta,
+        "correlation_to_benchmark_close_to_close": corr,
     }
 
 
@@ -91,7 +91,7 @@ def prepare_rows(
     adjustment: str,
     half_life: int,
     min_periods: int,
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+) -> pd.DataFrame:
     selected = select_prices(prices, tickers=tickers, start=start, end=end, adjustment=adjustment)
     returns = decompose_daily_sessions(selected, adjustment=adjustment)
     featured = add_session_tilt(returns, half_life=half_life, min_periods=min_periods)
@@ -105,14 +105,14 @@ def prepare_rows(
         item["feature_session_tilt"] = item[tilt]
         item["feature_lag_session_spread"] = item["session_spread"]
         pieces.append(item)
-    rows = pd.concat(pieces, ignore_index=True)
-    return rows, returns
+    return pd.concat(pieces, ignore_index=True)
 
 
 def evaluate(
     prices: pd.DataFrame,
     *,
     tickers: list[str],
+    benchmark_ticker: str,
     start: str,
     end: str,
     train_start: str,
@@ -123,10 +123,28 @@ def evaluate(
     trading_days: int,
     costs_bps_per_side: list[float],
     primary_cost_bps_per_side: float,
+    stress_cost_bps_per_side: float,
+    one_way_turnover_per_asset_day: float,
+    minimum_ic: float,
+    minimum_mse_improvement: float,
+    minimum_positive_ic_tickers: int,
+    minimum_primary_ann_return: float,
+    minimum_primary_sharpe: float,
+    minimum_stress_ann_return: float,
+    minimum_stress_sharpe: float,
 ) -> dict[str, Any]:
+    if benchmark_ticker not in tickers:
+        raise ValueError("benchmark_ticker must be included in tickers")
     if primary_cost_bps_per_side not in costs_bps_per_side:
         raise ValueError("primary cost must be included in cost sensitivity list")
-    rows, returns = prepare_rows(
+    if stress_cost_bps_per_side not in costs_bps_per_side:
+        raise ValueError("stress cost must be included in cost sensitivity list")
+    if one_way_turnover_per_asset_day < 0:
+        raise ValueError("one_way_turnover_per_asset_day must be non-negative")
+    if minimum_positive_ic_tickers < 0 or minimum_positive_ic_tickers > len(tickers):
+        raise ValueError("minimum_positive_ic_tickers must be within the ticker universe size")
+
+    rows = prepare_rows(
         prices,
         tickers=tickers,
         start=start,
@@ -160,6 +178,8 @@ def evaluate(
     mse_intercept = _mse(test["target_session_spread"], pred_intercept)
     mse_tilt = _mse(test["target_session_spread"], pred_tilt)
     mse_lag = _mse(test["target_session_spread"], pred_lag)
+    improvement_intercept = 1.0 - mse_tilt / mse_intercept
+    improvement_lag = 1.0 - mse_tilt / mse_lag
     ic = _corr(test["feature_session_tilt"], test["target_session_spread"])
 
     per_ticker: list[dict[str, Any]] = []
@@ -176,13 +196,16 @@ def evaluate(
             }
         )
 
-    spy = test.loc[test["Ticker"] == "SPY", ["target_date", "target_close_to_close"]].drop_duplicates("target_date")
-    if spy.empty:
-        raise AssertionError("SPY is required as the benchmark for the preregistered U.S. evaluation")
+    benchmark = test.loc[
+        test["Ticker"] == benchmark_ticker,
+        ["target_date", "target_close_to_close"],
+    ].drop_duplicates("target_date")
+    if benchmark.empty:
+        raise AssertionError(f"benchmark ticker absent from OOS rows: {benchmark_ticker}")
 
     strategies: list[dict[str, Any]] = []
     for cost_bps in costs_bps_per_side:
-        cost = 4.0 * cost_bps / 10_000.0
+        cost = one_way_turnover_per_asset_day * cost_bps / 10_000.0
         work = test.copy()
         signal = np.sign(work["feature_session_tilt"].to_numpy(dtype=float))
         lag_signal = np.sign(work["feature_lag_session_spread"].to_numpy(dtype=float))
@@ -191,55 +214,61 @@ def evaluate(
         portfolio = (
             work.groupby("target_date", observed=True)[["session_tilt_net", "lag_spread_net"]].mean().reset_index()
         )
-        portfolio = portfolio.merge(spy, on="target_date", how="left", validate="one_to_one")
+        portfolio = portfolio.merge(benchmark, on="target_date", how="left", validate="one_to_one")
         strategies.append(
             {
                 "cost_bps_per_side": cost_bps,
-                "cost_model": "conservative 4 one-way notional changes per active asset-day",
+                "cost_model": "fixed one-way turnover per active asset-day",
                 "session_tilt": _performance(
                     portfolio["session_tilt_net"], portfolio["target_close_to_close"], trading_days=trading_days
                 ),
                 "lag_session_spread_baseline": _performance(
                     portfolio["lag_spread_net"], portfolio["target_close_to_close"], trading_days=trading_days
                 ),
-                "mean_one_way_turnover_per_asset_day": 4.0,
+                "one_way_turnover_per_asset_day": one_way_turnover_per_asset_day,
             }
         )
 
     positive_ic_tickers = sum(
-        1 for row in per_ticker if row["information_coefficient"] is not None and row["information_coefficient"] > 0
+        1
+        for row in per_ticker
+        if row["information_coefficient"] is not None and row["information_coefficient"] > minimum_ic
     )
     primary = next(row for row in strategies if row["cost_bps_per_side"] == primary_cost_bps_per_side)
-    five = next((row for row in strategies if row["cost_bps_per_side"] == 5.0), None)
-    predictive_pass = bool(ic is not None and ic > 0 and mse_tilt < mse_intercept and mse_tilt < mse_lag)
-    breadth_pass = positive_ic_tickers >= 4
+    stress = next(row for row in strategies if row["cost_bps_per_side"] == stress_cost_bps_per_side)
+    predictive_pass = bool(
+        ic is not None
+        and ic > minimum_ic
+        and improvement_intercept > minimum_mse_improvement
+        and improvement_lag > minimum_mse_improvement
+    )
+    breadth_pass = positive_ic_tickers >= minimum_positive_ic_tickers
     primary_perf = primary["session_tilt"]
     primary_economic_pass = bool(
-        primary_perf["annualized_arithmetic_return"] > 0
+        primary_perf["annualized_arithmetic_return"] > minimum_primary_ann_return
         and primary_perf["sharpe"] is not None
-        and primary_perf["sharpe"] > 0
+        and primary_perf["sharpe"] > minimum_primary_sharpe
     )
-    five_bps_pass = bool(
-        five is not None
-        and five["session_tilt"]["annualized_arithmetic_return"] > 0
-        and five["session_tilt"]["sharpe"] is not None
-        and five["session_tilt"]["sharpe"] > 0
+    stress_perf = stress["session_tilt"]
+    stress_economic_pass = bool(
+        stress_perf["annualized_arithmetic_return"] > minimum_stress_ann_return
+        and stress_perf["sharpe"] is not None
+        and stress_perf["sharpe"] > minimum_stress_sharpe
     )
-    if predictive_pass and breadth_pass and primary_economic_pass and five_bps_pass:
+    if predictive_pass and breadth_pass and primary_economic_pass and stress_economic_pass:
         decision = "USE"
-    elif predictive_pass or (ic is not None and ic > 0 and primary_economic_pass):
+    elif predictive_pass or (ic is not None and ic > minimum_ic and primary_economic_pass):
         decision = "CONDITION"
     else:
         decision = "REJECT"
 
-    descriptive = annualized_session_summary(returns, trading_days=trading_days)
-    descriptive_by_ticker = {str(row["Ticker"]): row for row in descriptive.to_dict(orient="records")}
     return {
-        "schema_version": "investor2.session-state-oos.v1",
+        "schema_version": "investor2.session-state-oos.v2",
         "decision": decision,
-        "decision_scope": "prelaunch daily-bar SessionTilt only; not the future 23/5 intervention",
+        "decision_scope": "daily-bar SessionTilt under the supplied historical contract",
         "specification": {
             "tickers": tickers,
+            "benchmark_ticker": benchmark_ticker,
             "start": start,
             "end": end,
             "train_start": train_start,
@@ -251,6 +280,15 @@ def evaluate(
             "trading_days": trading_days,
             "costs_bps_per_side": costs_bps_per_side,
             "primary_cost_bps_per_side": primary_cost_bps_per_side,
+            "stress_cost_bps_per_side": stress_cost_bps_per_side,
+            "one_way_turnover_per_asset_day": one_way_turnover_per_asset_day,
+            "minimum_ic": minimum_ic,
+            "minimum_mse_improvement": minimum_mse_improvement,
+            "minimum_positive_ic_tickers": minimum_positive_ic_tickers,
+            "minimum_primary_ann_return": minimum_primary_ann_return,
+            "minimum_primary_sharpe": minimum_primary_sharpe,
+            "minimum_stress_ann_return": minimum_stress_ann_return,
+            "minimum_stress_sharpe": minimum_stress_sharpe,
             "forecast_target": "next trading day's r_overnight - r_intraday",
             "feature_availability": "SessionTilt through close(t) predicts sessions on t+1",
             "capacity_status": "NOT_TESTED_DAILY_BARS",
@@ -263,8 +301,8 @@ def evaluate(
             "mse_intercept": mse_intercept,
             "mse_session_tilt": mse_tilt,
             "mse_lag_session_spread": mse_lag,
-            "mse_improvement_vs_intercept": 1.0 - mse_tilt / mse_intercept,
-            "mse_improvement_vs_lag_session_spread": 1.0 - mse_tilt / mse_lag,
+            "mse_improvement_vs_intercept": improvement_intercept,
+            "mse_improvement_vs_lag_session_spread": improvement_lag,
             "positive_ic_tickers": positive_ic_tickers,
             "ticker_count": len(per_ticker),
         },
@@ -272,33 +310,19 @@ def evaluate(
         "strategies": strategies,
         "decision_tests": {
             "predictive_pass": predictive_pass,
-            "breadth_pass_at_least_4_of_6_positive_ic": breadth_pass,
-            "primary_cost_positive_return_and_sharpe": primary_economic_pass,
-            "five_bps_positive_return_and_sharpe": five_bps_pass,
-        },
-        "article_claim_audit": {
-            "us_representative_10_stock_medians": "NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC",
-            "mu_since_2000": {
-                "status": "NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC",
-                "yahoo_adjusted_analog": descriptive_by_ticker.get("MU"),
-            },
-            "cost_since_2000": {
-                "status": "NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC",
-                "yahoo_adjusted_analog": descriptive_by_ticker.get("COST"),
-            },
-            "japan_pair_correlation": "NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC",
-            "us_japan_lead_lag": "NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC",
+            "breadth_pass": breadth_pass,
+            "primary_cost_economic_pass": primary_economic_pass,
+            "stress_cost_economic_pass": stress_economic_pass,
         },
     }
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Evaluate preregistered SessionTilt with a strict historical OOS split."
-    )
+    parser = argparse.ArgumentParser(description="Evaluate SessionTilt under an explicit historical OOS contract.")
     parser.add_argument("--market-snapshot-dir", required=True, type=Path, action="append")
     parser.add_argument("--market-regions", required=True)
     parser.add_argument("--tickers", required=True)
+    parser.add_argument("--benchmark-ticker", required=True)
     parser.add_argument("--start", required=True)
     parser.add_argument("--end", required=True)
     parser.add_argument("--train-start", required=True)
@@ -309,6 +333,15 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--trading-days", required=True, type=int)
     parser.add_argument("--costs-bps-per-side", required=True)
     parser.add_argument("--primary-cost-bps-per-side", required=True, type=float)
+    parser.add_argument("--stress-cost-bps-per-side", required=True, type=float)
+    parser.add_argument("--one-way-turnover-per-asset-day", required=True, type=float)
+    parser.add_argument("--minimum-ic", required=True, type=float)
+    parser.add_argument("--minimum-mse-improvement", required=True, type=float)
+    parser.add_argument("--minimum-positive-ic-tickers", required=True, type=int)
+    parser.add_argument("--minimum-primary-ann-return", required=True, type=float)
+    parser.add_argument("--minimum-primary-sharpe", required=True, type=float)
+    parser.add_argument("--minimum-stress-ann-return", required=True, type=float)
+    parser.add_argument("--minimum-stress-sharpe", required=True, type=float)
     parser.add_argument("--output", required=True, type=Path)
     return parser.parse_args()
 
@@ -324,6 +357,7 @@ def main() -> None:
     payload = evaluate(
         prices,
         tickers=tickers,
+        benchmark_ticker=args.benchmark_ticker,
         start=args.start,
         end=args.end,
         train_start=args.train_start,
@@ -334,6 +368,15 @@ def main() -> None:
         trading_days=args.trading_days,
         costs_bps_per_side=_costs(args.costs_bps_per_side),
         primary_cost_bps_per_side=args.primary_cost_bps_per_side,
+        stress_cost_bps_per_side=args.stress_cost_bps_per_side,
+        one_way_turnover_per_asset_day=args.one_way_turnover_per_asset_day,
+        minimum_ic=args.minimum_ic,
+        minimum_mse_improvement=args.minimum_mse_improvement,
+        minimum_positive_ic_tickers=args.minimum_positive_ic_tickers,
+        minimum_primary_ann_return=args.minimum_primary_ann_return,
+        minimum_primary_sharpe=args.minimum_primary_sharpe,
+        minimum_stress_ann_return=args.minimum_stress_ann_return,
+        minimum_stress_sharpe=args.minimum_stress_sharpe,
     )
     payload["source_snapshots"] = manifests
     args.output.parent.mkdir(parents=True, exist_ok=True)
@@ -341,15 +384,7 @@ def main() -> None:
         json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n",
         encoding="utf-8",
     )
-    print(
-        json.dumps(
-            {
-                "output": str(args.output),
-                "decision": payload["decision"],
-                **payload["predictive"],
-            }
-        )
-    )
+    print(json.dumps({"output": str(args.output), "decision": payload["decision"], **payload["predictive"]}))
 
 
 if __name__ == "__main__":
