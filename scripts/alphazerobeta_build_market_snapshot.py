@@ -18,13 +18,6 @@ import yfinance as yf
 from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
-ALL_REGIONS = (
-    "ae", "ar", "at", "au", "be", "br", "ca", "ch", "cl", "cn", "co", "cz", "de", "dk", "ee", "eg",
-    "es", "fi", "fr", "gb", "gr", "hk", "hu", "id", "ie", "il", "in", "is", "it", "jp", "kr", "kw",
-    "lk", "lt", "lv", "mx", "my", "nl", "no", "nz", "pe", "ph", "pk", "pl", "pt", "qa", "ro", "ru",
-    "sa", "se", "sg", "sr", "th", "tr", "tw", "us", "ve", "vn", "za",
-)
-
 
 def log_event(event: str, **fields: object) -> None:
     payload: dict[str, object] = {
@@ -56,6 +49,11 @@ def require_repair_runtime() -> None:
         yfinance_repair=True,
     )
     if not scipy_available:
+        log_event(
+            "dependency_preflight_failed",
+            missing_dependency="scipy",
+            reason="yfinance repair=True requires SciPy at runtime",
+        )
         raise RuntimeError("missing runtime dependency: scipy is required by yfinance download(repair=True)")
 
 
@@ -65,7 +63,7 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--start", required=True)
     parser.add_argument("--end", required=True, help="Exclusive end date")
-    parser.add_argument("--regions", required=True, help="Comma-separated Yahoo regions or 'all'")
+    parser.add_argument("--regions", required=True, help="Explicit comma-separated Yahoo region codes")
     parser.add_argument("--benchmark", required=True)
     parser.add_argument("--storage-prefix", required=True)
     parser.add_argument("--storage-bucket", required=True)
@@ -79,6 +77,17 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
+
+
+def parse_regions(raw: str) -> list[str]:
+    regions = [value.strip().lower() for value in raw.split(",") if value.strip()]
+    if not regions:
+        raise ValueError("at least one Yahoo region is required")
+    if "all" in regions:
+        raise ValueError("region aliases are not expanded; enumerate region codes explicitly")
+    if len(regions) != len(set(regions)):
+        raise ValueError("duplicate Yahoo regions are not allowed")
+    return regions
 
 
 def sha256_file(path: Path) -> str:
@@ -119,6 +128,7 @@ def screen_with_retry(
         raise ValueError("max_attempts must be >= 1")
     if retry_base_seconds < 0:
         raise ValueError("retry_base_seconds must be >= 0")
+
     for attempt in range(1, max_attempts + 1):
         started = time.monotonic()
         try:
@@ -137,6 +147,14 @@ def screen_with_retry(
             return response
         except YFRateLimitError as exc:
             if attempt == max_attempts:
+                log_event(
+                    "universe_page_failed",
+                    region=region,
+                    offset=offset,
+                    attempt=attempt,
+                    exception_type=type(exc).__name__,
+                    exception=str(exc),
+                )
                 raise
             delay = retry_base_seconds * (2 ** (attempt - 1))
             log_event(
@@ -146,7 +164,6 @@ def screen_with_retry(
                 attempt=attempt,
                 max_attempts=max_attempts,
                 sleep_seconds=delay,
-                exception_type=type(exc).__name__,
             )
             time.sleep(delay)
         except Exception as exc:
@@ -172,11 +189,13 @@ def discover_region(
 ) -> pd.DataFrame:
     if pause < 0:
         raise ValueError("pause must be >= 0")
+
     rows: list[dict[str, object]] = []
     seen: set[str] = set()
     offset = 0
     query = EquityQuery("eq", ["region", region])
     log_event("universe_region_start", region=region, page_size=page_size)
+
     while True:
         response = screen_with_retry(
             query,
@@ -205,11 +224,13 @@ def discover_region(
                     "Currency": str(quote.get("currency", "")),
                 }
             )
+
         total = response.get("total")
         offset += len(page)
         if not page or new_count == 0 or len(page) < page_size or (isinstance(total, int) and offset >= total):
             break
         time.sleep(pause)
+
     log_event("universe_region_complete", region=region, ticker_count=len(rows))
     return pd.DataFrame(rows)
 
@@ -222,7 +243,7 @@ def discover_universe(
     max_attempts: int,
     retry_base_seconds: float,
 ) -> pd.DataFrame:
-    frames = []
+    frames: list[pd.DataFrame] = []
     for region in regions:
         frame = discover_region(
             region,
@@ -231,16 +252,21 @@ def discover_universe(
             max_attempts=max_attempts,
             retry_base_seconds=retry_base_seconds,
         )
+        log_event("universe_region_result", region=region, tickers=len(frame))
         if not frame.empty:
             frames.append(frame)
+
     if not frames:
         raise AssertionError("yfinance discovery returned no equities")
+
     universe = pd.concat(frames, ignore_index=True)
-    return (
+    result = (
         universe.drop_duplicates(["Region", "Ticker"], keep="first")
         .sort_values(["Region", "Ticker"])
         .reset_index(drop=True)
     )
+    log_event("universe_complete", regions=regions, ticker_count=len(result))
+    return result
 
 
 def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
@@ -251,8 +277,9 @@ def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
             raise AssertionError("expected MultiIndex columns for multi-ticker download")
         raw = raw.copy()
         raw.columns = pd.MultiIndex.from_product([tickers, raw.columns])
+
     available = set(map(str, raw.columns.get_level_values(0)))
-    parts = []
+    parts: list[pd.DataFrame] = []
     for ticker in tickers:
         if ticker not in available:
             continue
@@ -262,8 +289,10 @@ def normalize_download(raw: pd.DataFrame, tickers: list[str]) -> pd.DataFrame:
         )
         frame.insert(0, "Ticker", ticker)
         parts.append(frame)
+
     if not parts:
         return pd.DataFrame()
+
     result = pd.concat(parts, ignore_index=True)
     date_column = "Date" if "Date" in result.columns else "Datetime"
     if date_column not in result.columns:
@@ -283,6 +312,7 @@ def download_prices(
 ) -> pd.DataFrame:
     if timeout <= 0:
         raise ValueError("timeout must be positive")
+
     started = time.monotonic()
     log_event(
         "price_download_start",
@@ -320,6 +350,7 @@ def download_prices(
             elapsed_seconds=round(time.monotonic() - started, 3),
         )
         raise
+
     log_event(
         "price_download_complete" if not frame.empty else "price_download_empty",
         context=context,
@@ -345,12 +376,16 @@ def write_region_prices(
         raise ValueError("batch_size must be >= 1")
     if pause < 0:
         raise ValueError("pause must be >= 0")
+
     counts: dict[str, int] = {}
     for region, group in universe.groupby("Region", observed=True):
         tickers = group["Ticker"].astype(str).tolist()
         region_dir = root / "prices" / str(region)
         region_dir.mkdir(parents=True, exist_ok=True)
         rows = 0
+        nonempty_batches = 0
+        log_event("price_region_start", region=str(region), ticker_count=len(tickers), batch_size=batch_size)
+
         for index in range(0, len(tickers), batch_size):
             batch_number = index // batch_size
             batch = tickers[index : index + batch_size]
@@ -364,8 +399,26 @@ def write_region_prices(
             if not frame.empty:
                 frame.to_parquet(region_dir / f"part-{batch_number:05d}.parquet", index=False, compression="zstd")
                 rows += len(frame)
+                nonempty_batches += 1
+            log_event(
+                "price_batch_result",
+                region=str(region),
+                batch=batch_number,
+                requested_tickers=len(batch),
+                returned_tickers=int(frame["Ticker"].nunique()) if not frame.empty else 0,
+                rows=len(frame),
+                cumulative_rows=rows,
+            )
             time.sleep(pause)
+
         counts[str(region)] = rows
+        log_event(
+            "price_region_complete",
+            region=str(region),
+            ticker_count=len(tickers),
+            rows=rows,
+            nonempty_batches=nonempty_batches,
+        )
     return counts
 
 
@@ -386,18 +439,9 @@ def file_manifest(root: Path) -> list[dict[str, object]]:
 
 def main() -> None:
     args = parse_args()
-    regions = (
-        list(ALL_REGIONS)
-        if args.regions.lower() == "all"
-        else [value.strip().lower() for value in args.regions.split(",") if value.strip()]
-    )
-    if not regions:
-        raise ValueError("at least one Yahoo region is required")
-    unknown = sorted(set(regions) - set(ALL_REGIONS))
-    if unknown:
-        raise ValueError(f"unsupported Yahoo regions: {unknown}")
-
+    regions = parse_regions(args.regions)
     root = args.output_dir
+
     require_repair_runtime()
     prepare_output(root, overwrite=args.overwrite)
     universe = discover_universe(
@@ -408,6 +452,7 @@ def main() -> None:
         retry_base_seconds=args.retry_base_seconds,
     )
     universe.to_parquet(root / "universe.parquet", index=False, compression="zstd")
+
     row_counts = write_region_prices(
         universe,
         root,
@@ -427,8 +472,8 @@ def main() -> None:
     if benchmark.empty:
         raise AssertionError(f"benchmark download failed: {args.benchmark}")
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
-    files = file_manifest(root)
 
+    files = file_manifest(root)
     manifest: dict[str, object] = {
         "schema_version": "investor2.market-snapshot.v2",
         "source": "Yahoo Finance via yfinance",
