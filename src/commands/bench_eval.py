@@ -47,7 +47,9 @@ def system_predict(row, task: str, model: str):
     )
 
     if task == "industry_prediction":
-        prompt_instruction = "Identify the company's industry from the following options: " + ", ".join(INDUSTRY_LABELS) + "."
+        prompt_instruction = (
+            "Identify the company's industry from the following options: " + ", ".join(INDUSTRY_LABELS) + "."
+        )
         response_type = "string (one of the options above)"
         prob_desc = "Confidence score (0.0 to 1.0)"
     else:
