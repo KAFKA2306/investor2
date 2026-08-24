@@ -1,0 +1,80 @@
+{
+  "schema_version": "investor2.paper-frontier-contract.v1",
+  "family_id": "alphacrafter",
+  "research_date": "2026-08-24",
+  "paper": {
+    "title": "AlphaCrafter: Harnessing Multi-Agent Workflows for Cross-Sectional Quantitative Trading",
+    "url": "https://arxiv.org/abs/2605.05580v2",
+    "version": "arXiv v2",
+    "upstream_repository": "https://github.com/NJU-LINK/AlphaCrafter",
+    "upstream_commit": "c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d"
+  },
+  "track": "Japanese-equity alpha/trading",
+  "claimed_capability": "adaptive multi-agent factor mining, screening, and cross-sectional execution",
+  "reproduction_scope": "deterministic public-policy representative",
+  "reproduction_state": "PARTIAL",
+  "dataset": {
+    "source": "J-Quants Free owner-only private cache",
+    "actual_source_window": ["2024-05-31", "2026-05-29"],
+    "universe": "PIT Prime/Standard/Growth common stocks, top 256 by pre-cutoff mean adjusted price*volume after history gate",
+    "universe_master_date": "2025-08-29",
+    "universe_cutoff": "2025-08-30",
+    "benchmark": "13060 NEXT FUNDS TOPIX ETF proxy",
+    "max_assets": 256
+  },
+  "walk_forward": {
+    "train_months": 12,
+    "validation_months": 3,
+    "test_months": 3,
+    "folds": 2
+  },
+  "costs": {
+    "transaction_cost_bps_per_side": 15,
+    "borrow_fee_bps_per_year": 30
+  },
+  "miner": {
+    "horizons_days": [1, 5],
+    "one_day": {"ic_gt": 0.015, "rank_ic_gt": 0.015, "icir_gt": 0.2, "rank_icir_gt": 0.2},
+    "five_day": {"ic_gt": 0.025, "rank_ic_gt": 0.025, "icir_gt": 0.25, "rank_icir_gt": 0.25},
+    "hit_ratio_distance_from_half_gt": 0.1,
+    "coverage_gt": 0.9,
+    "turnover_lt": 0.4
+  },
+  "screener": {
+    "recent_rank_ic_days": 10,
+    "min_abs_rank_ic": 0.02,
+    "semantic_diversity_substitute": "one strongest validated feature per coarse feature-name semantic group"
+  },
+  "trader": {
+    "max_trials": 3,
+    "trials": [
+      {"name": "balanced_16x16", "n_long": 16, "n_short": 16, "beta": 0.8, "gamma": 0.0},
+      {"name": "long_tilt_24x8", "n_long": 24, "n_short": 8, "beta": 0.8, "gamma": 0.5},
+      {"name": "short_tilt_8x24", "n_long": 8, "n_short": 24, "beta": 0.8, "gamma": -0.5}
+    ],
+    "acceptance": {"cumulative_return_gt": 0.08, "sharpe_gt": 0.6, "max_drawdown_gt": -0.08}
+  },
+  "primary_metric": "after-cost OOS Sharpe",
+  "secondary_metrics": [
+    "after-cost OOS cumulative return",
+    "maximum drawdown",
+    "benchmark correlation",
+    "turnover",
+    "net exposure",
+    "gross exposure"
+  ],
+  "hard_gates": [
+    "PIT integrity",
+    "explicit costs",
+    "positive after-cost return",
+    "positive after-cost Sharpe",
+    "no tuning on OOS"
+  ],
+  "known_substitutions": [
+    "Prepared J-Quants price/volume features replace LLM-generated factor scripts.",
+    "Coarse semantic groups replace LLM semantic-similarity judgment.",
+    "Three preregistered trader policies replace LLM regime-conditioned hyperparameter proposals.",
+    "OOS factor ensemble is frozen before test."
+  ],
+  "verdict_policy": "No BEAT/TIE/LOSE claim until a matched AAARTS 256-asset result exists; full-family reproduction remains PARTIAL."
+}
