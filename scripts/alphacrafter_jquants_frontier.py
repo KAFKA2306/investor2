@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -44,9 +45,7 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
-def _index_bounds(
-    dates: pd.DatetimeIndex, start: pd.Timestamp, end_exclusive: pd.Timestamp
-) -> tuple[int, int]:
+def _index_bounds(dates: pd.DatetimeIndex, start: pd.Timestamp, end_exclusive: pd.Timestamp) -> tuple[int, int]:
     left = int(dates.searchsorted(start, side="left"))
     right = int(dates.searchsorted(end_exclusive, side="left"))
     if right <= left:
@@ -119,6 +118,42 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def _aggregate_fold_metrics(
+    metrics: list[object],
+    net_returns: list[np.ndarray],
+    benchmarks: list[np.ndarray],
+) -> dict[str, float | int]:
+    if not metrics or len(metrics) != len(net_returns) or len(metrics) != len(benchmarks):
+        raise AssertionError("fold metric/return/benchmark collections must be non-empty and aligned")
+    returns = np.concatenate(net_returns).astype(np.float64)
+    benchmark = np.concatenate(benchmarks).astype(np.float64)
+    if returns.shape != benchmark.shape:
+        raise AssertionError("aggregate return and benchmark arrays must match")
+    observations = int(returns.size)
+    if observations != sum(int(item.observations) for item in metrics):
+        raise AssertionError("aggregate observations differ from the sum of independent folds")
+    std = float(returns.std(ddof=1)) if observations >= 2 else 0.0
+    sharpe = float(math.sqrt(252.0) * returns.mean() / std) if std > 1e-12 else 0.0
+    equity = np.cumprod(1.0 + returns)
+    peaks = np.maximum.accumulate(equity) if equity.size else equity
+    max_drawdown = float((equity / peaks - 1.0).min()) if equity.size else 0.0
+    if observations >= 2 and float(returns.std(ddof=0)) > 1e-12 and float(benchmark.std(ddof=0)) > 1e-12:
+        correlation = float(np.corrcoef(returns, benchmark)[0, 1])
+    else:
+        correlation = 0.0
+    weights = np.asarray([int(item.observations) for item in metrics], dtype=np.float64)
+    return {
+        "observations": observations,
+        "cumulative_return": float(np.prod(1.0 + returns) - 1.0),
+        "annualized_sharpe": sharpe,
+        "max_drawdown": max_drawdown,
+        "benchmark_correlation": correlation,
+        "mean_turnover": float(np.average([float(item.mean_turnover) for item in metrics], weights=weights)),
+        "max_abs_net_exposure": max(float(item.max_abs_net_exposure) for item in metrics),
+        "mean_gross_exposure": float(np.average([float(item.mean_gross_exposure) for item in metrics], weights=weights)),
+    }
+
+
 def main() -> None:
     args = parse_args()
     with np.load(args.dataset, allow_pickle=False) as data:
@@ -148,8 +183,10 @@ def main() -> None:
         raise AssertionError(f"frontier contract requires at least two OOS folds, got {len(generated_folds)}")
     folds = generated_folds[:2]
 
-    global_test_weights = np.zeros_like(returns, dtype=np.float64)
     fold_payloads: list[dict[str, object]] = []
+    fold_metric_objects: list[object] = []
+    fold_net_returns: list[np.ndarray] = []
+    fold_benchmarks: list[np.ndarray] = []
 
     for fold in folds:
         train_start, train_end = fold.train_indices
@@ -172,9 +209,7 @@ def main() -> None:
             if one_day.passed and five_day.passed:
                 oriented_factors[feature_name] = oriented
 
-        selected = (
-            screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
-        )
+        selected = screen_factors(oriented_factors, returns, validation_start, validation_end) if oriented_factors else []
         scores = composite_scores(oriented_factors, selected) if selected else np.zeros_like(returns, dtype=np.float64)
 
         trial_results: list[dict[str, object]] = []
@@ -208,8 +243,7 @@ def main() -> None:
 
         if viable_trials:
             _, selected_trial, selected_weights = max(viable_trials, key=lambda item: item[0])
-            global_test_weights[test_start:test_end] = selected_weights[test_start:test_end]
-            test_metrics, _ = evaluate_weights(
+            test_metrics, test_net_returns = evaluate_weights(
                 selected_weights,
                 returns,
                 benchmark,
@@ -222,7 +256,7 @@ def main() -> None:
         else:
             selected_trial = None
             zero_weights = np.zeros_like(returns, dtype=np.float64)
-            test_metrics, _ = evaluate_weights(
+            test_metrics, test_net_returns = evaluate_weights(
                 zero_weights,
                 returns,
                 benchmark,
@@ -233,6 +267,9 @@ def main() -> None:
             )
             execution_state = "NO_VIABLE_STRATEGY"
 
+        fold_metric_objects.append(test_metrics)
+        fold_net_returns.append(test_net_returns)
+        fold_benchmarks.append(benchmark[test_start + 1 : test_end])
         fold_payloads.append(
             {
                 "fold": {
@@ -259,20 +296,10 @@ def main() -> None:
             }
         )
 
-    aggregate_start = folds[0].test_indices[0]
-    aggregate_end = folds[-1].test_indices[1]
-    aggregate_metrics, _ = evaluate_weights(
-        global_test_weights,
-        returns,
-        benchmark,
-        aggregate_start,
-        aggregate_end,
-        transaction_cost_bps_per_side=args.transaction_cost_bps,
-        borrow_fee_bps_per_year=args.borrow_fee_bps,
-    )
-    economic_gate = aggregate_metrics.cumulative_return > 0.0 and aggregate_metrics.annualized_sharpe > 0.0
+    aggregate_metrics = _aggregate_fold_metrics(fold_metric_objects, fold_net_returns, fold_benchmarks)
+    economic_gate = float(aggregate_metrics["cumulative_return"]) > 0.0 and float(aggregate_metrics["annualized_sharpe"]) > 0.0
     payload = {
-        "schema_version": "investor2.alphacrafter-jquants-frontier.v1",
+        "schema_version": "investor2.alphacrafter-jquants-frontier.v2",
         "research_date": "2026-08-24",
         "execution_status": "completed",
         "family": "AlphaCrafter",
@@ -295,6 +322,7 @@ def main() -> None:
             "Three preregistered long/short policies substitute for regime-conditioned LLM hyperparameter proposals.",
             "Factor ensemble is frozen before untouched OOS; no OOS re-mining or re-screening is allowed.",
             "Only generated fold indices 0 and 1 are evaluated to match the repository's existing AlphaZeroBeta two-fold execution; any calendar-split tail is reported but not silently added.",
+            "Each fold is evaluated independently and only then concatenated, matching the repository's AlphaZeroBeta fold-boundary semantics.",
             "Rank turnover is computed on percentile ranks to make the upstream <0.4 threshold dimensionally interpretable.",
         ],
         "shared_contract": {
@@ -328,7 +356,7 @@ def main() -> None:
             "trials": list(TRADER_TRIALS),
         },
         "folds": fold_payloads,
-        "aggregate_oos_metrics": as_dict(aggregate_metrics),
+        "aggregate_oos_metrics": aggregate_metrics,
         "hard_gates": {
             "pit_contract": True,
             "explicit_costs": True,
