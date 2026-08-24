@@ -3,11 +3,14 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-TRADING_DAYS_PER_YEAR = 252
+ADJUSTMENT_MODES = {"adjusted", "raw"}
 
 
-def normalize_daily_ohlc(frame: pd.DataFrame, *, require_adjusted_close: bool = True) -> pd.DataFrame:
-    """Normalize daily OHLC and create corporate-action-adjusted open/close prices."""
+def normalize_daily_ohlc(frame: pd.DataFrame, *, adjustment: str) -> pd.DataFrame:
+    """Normalize daily OHLC using an explicitly selected corporate-action convention."""
+    if adjustment not in ADJUSTMENT_MODES:
+        raise ValueError(f"unsupported adjustment mode: {adjustment}")
+
     aliases = {"Code": "Ticker", "date": "Date", "Adj Close": "AdjClose"}
     data = frame.rename(
         columns={key: value for key, value in aliases.items() if key in frame.columns and value not in frame.columns}
@@ -16,8 +19,8 @@ def normalize_daily_ohlc(frame: pd.DataFrame, *, require_adjusted_close: bool = 
     missing = sorted(required - set(data.columns))
     if missing:
         raise AssertionError(f"daily OHLC input missing columns: {missing}")
-    if require_adjusted_close and "AdjClose" not in data.columns:
-        raise AssertionError("AdjClose is required for the primary corporate-action-adjusted specification")
+    if adjustment == "adjusted" and "AdjClose" not in data.columns:
+        raise AssertionError("AdjClose is required when adjustment='adjusted'")
 
     data["Ticker"] = data["Ticker"].astype(str)
     data["Date"] = pd.to_datetime(data["Date"], errors="raise").dt.tz_localize(None)
@@ -31,7 +34,7 @@ def normalize_daily_ohlc(frame: pd.DataFrame, *, require_adjusted_close: bool = 
     if (data[["Open", "Close"]] <= 0).any().any():
         raise AssertionError("Open and Close must be strictly positive")
 
-    if "AdjClose" in data.columns:
+    if adjustment == "adjusted":
         if (data["AdjClose"] <= 0).any():
             raise AssertionError("AdjClose must be strictly positive")
         factor = data["AdjClose"] / data["Close"]
@@ -44,9 +47,9 @@ def normalize_daily_ohlc(frame: pd.DataFrame, *, require_adjusted_close: bool = 
     return data.sort_values(["Ticker", "Date"]).reset_index(drop=True)
 
 
-def decompose_daily_sessions(frame: pd.DataFrame, *, require_adjusted_close: bool = True) -> pd.DataFrame:
+def decompose_daily_sessions(frame: pd.DataFrame, *, adjustment: str) -> pd.DataFrame:
     """Compute close->open, open->close, and close->close returns by ticker."""
-    data = normalize_daily_ohlc(frame, require_adjusted_close=require_adjusted_close)
+    data = normalize_daily_ohlc(frame, adjustment=adjustment)
     previous_close = data.groupby("Ticker", observed=True)["AdjustedClose"].shift(1)
     out = data[["Ticker", "Date", "AdjustedOpen", "AdjustedClose", "AdjustmentFactor"]].copy()
     out["r_overnight"] = out["AdjustedOpen"] / previous_close - 1.0
@@ -67,12 +70,14 @@ def decompose_daily_sessions(frame: pd.DataFrame, *, require_adjusted_close: boo
 def add_session_tilt(
     returns: pd.DataFrame,
     *,
-    half_life: int = 126,
-    min_periods: int | None = None,
+    half_life: int,
+    min_periods: int,
 ) -> pd.DataFrame:
-    """Add the preregistered point-in-time SessionTilt feature."""
+    """Add a point-in-time SessionTilt feature using explicitly supplied estimator parameters."""
     if half_life <= 0:
         raise ValueError("half_life must be positive")
+    if min_periods <= 1:
+        raise ValueError("min_periods must be greater than 1")
     required = {
         "Ticker",
         "Date",
@@ -83,9 +88,6 @@ def add_session_tilt(
     missing = sorted(required - set(returns.columns))
     if missing:
         raise AssertionError(f"session return input missing columns: {missing}")
-    minimum = half_life if min_periods is None else min_periods
-    if minimum <= 1:
-        raise ValueError("min_periods must be greater than 1")
 
     out = returns.sort_values(["Ticker", "Date"]).copy()
     out["session_spread"] = out["r_overnight"] - out["r_intraday"]
@@ -96,9 +98,23 @@ def add_session_tilt(
     pieces: list[pd.DataFrame] = []
     for _, group in out.groupby("Ticker", observed=True, sort=False):
         item = group.copy()
-        item[spread_col] = item["session_spread"].ewm(halflife=half_life, adjust=False, min_periods=minimum).mean()
+        item[spread_col] = (
+            item["session_spread"]
+            .ewm(
+                halflife=half_life,
+                adjust=False,
+                min_periods=min_periods,
+            )
+            .mean()
+        )
         item[vol_col] = (
-            item["log_r_close_to_close"].ewm(halflife=half_life, adjust=False, min_periods=minimum).std(bias=False)
+            item["log_r_close_to_close"]
+            .ewm(
+                halflife=half_life,
+                adjust=False,
+                min_periods=min_periods,
+            )
+            .std(bias=False)
         )
         item[tilt_col] = item[spread_col] / item[vol_col].replace(0.0, np.nan)
         pieces.append(item)
@@ -108,9 +124,9 @@ def add_session_tilt(
 def annualized_session_summary(
     returns: pd.DataFrame,
     *,
-    trading_days: int = TRADING_DAYS_PER_YEAR,
+    trading_days: int,
 ) -> pd.DataFrame:
-    """Summarize annualized overnight/intraday components under frozen conventions."""
+    """Summarize annualized overnight/intraday components using an explicit annualization factor."""
     if trading_days <= 0:
         raise ValueError("trading_days must be positive")
     required = {

@@ -11,14 +11,7 @@ from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
 import scripts.alphazerobeta_build_market_snapshot as market_snapshot_builder
-from scripts.alphazerobeta_build_market_snapshot import (
-    DEFAULT_MAX_REQUEST_ATTEMPTS,
-    DEFAULT_RETRY_BASE_SECONDS,
-    DEFAULT_STORAGE_PREFIX,
-    normalize_download,
-    parse_args,
-    screen_with_retry,
-)
+from scripts.alphazerobeta_build_market_snapshot import normalize_download, parse_args, parse_regions, screen_with_retry
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
 from src.research.market_snapshot import (
     MarketSnapshot,
@@ -30,19 +23,75 @@ from src.research.market_snapshot import (
 )
 
 
-def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_market_snapshot_requires_explicit_market_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", ["alphazerobeta_build_market_snapshot.py"])
+    with pytest.raises(SystemExit):
+        parse_args()
+
+
+def test_market_snapshot_accepts_arbitrary_market_and_collection_contract(
+    monkeypatch: pytest.MonkeyPatch, tmp_path: Path
+) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "alphazerobeta_build_market_snapshot.py",
+            "--start",
+            "2012-03-04",
+            "--end",
+            "2024-08-09",
+            "--regions",
+            "xx,yy",
+            "--benchmark",
+            "BENCH",
+            "--storage-prefix",
+            "custom/cache/v9",
+            "--storage-bucket",
+            "custom-bucket",
+            "--writer-repository",
+            "example/writer",
+            "--page-size",
+            "17",
+            "--batch-size",
+            "13",
+            "--request-pause",
+            "0.07",
+            "--max-request-attempts",
+            "3",
+            "--retry-base-seconds",
+            "1.25",
+            "--download-timeout",
+            "11",
+            "--output-dir",
+            str(tmp_path / "snapshot"),
+        ],
+    )
 
     args = parse_args()
 
-    assert args.regions == "jp"
-    assert args.benchmark == "1306.T"
-    assert args.start == "2004-01-01"
-    assert args.end == "2025-01-01"
-    assert args.storage_prefix == DEFAULT_STORAGE_PREFIX
-    assert args.storage_prefix.endswith("/yahoo-market-cache/jp-v1")
-    assert args.max_request_attempts == DEFAULT_MAX_REQUEST_ATTEMPTS
-    assert args.retry_base_seconds == DEFAULT_RETRY_BASE_SECONDS
+    assert args.regions == "xx,yy"
+    assert args.benchmark == "BENCH"
+    assert args.start == "2012-03-04"
+    assert args.end == "2024-08-09"
+    assert args.storage_prefix == "custom/cache/v9"
+    assert args.storage_bucket == "custom-bucket"
+    assert args.writer_repository == "example/writer"
+    assert args.page_size == 17
+    assert args.batch_size == 13
+    assert args.request_pause == pytest.approx(0.07)
+    assert args.max_request_attempts == 3
+    assert args.retry_base_seconds == pytest.approx(1.25)
+    assert args.download_timeout == pytest.approx(11.0)
+    assert args.output_dir == tmp_path / "snapshot"
+
+
+def test_parse_regions_has_no_embedded_region_allowlist_or_all_alias() -> None:
+    assert parse_regions("XX,yy") == ["xx", "yy"]
+    with pytest.raises(ValueError, match="enumerate"):
+        parse_regions("all")
+    with pytest.raises(ValueError, match="duplicate"):
+        parse_regions("xx,XX")
 
 
 def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
@@ -54,7 +103,7 @@ def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyP
         calls += 1
         if calls < 3:
             raise YFRateLimitError()
-        return {"quotes": [{"symbol": "7203.T"}], "total": 1}
+        return {"quotes": [{"symbol": "ABC"}], "total": 1}
 
     monkeypatch.setattr(market_snapshot_builder.yf, "screen", fake_screen)
     monkeypatch.setattr(market_snapshot_builder.time, "sleep", sleeps.append)
@@ -63,12 +112,12 @@ def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyP
         EquityQuery("eq", ["region", "jp"]),
         region="jp",
         offset=0,
-        page_size=250,
+        page_size=19,
         max_attempts=4,
         retry_base_seconds=2.0,
     )
 
-    assert result["quotes"][0]["symbol"] == "7203.T"
+    assert result["quotes"][0]["symbol"] == "ABC"
     assert calls == 3
     assert sleeps == [2.0, 4.0]
 
