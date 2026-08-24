@@ -1,0 +1,48 @@
+name: Prune unused Bun dependencies once
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/prune-unused-bun-deps-once.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: oven-sh/setup-bun@v2.2.0
+        with:
+          bun-version: "1.3.13"
+      - name: Remove verified-unused direct dependencies
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          path = Path("package.json")
+          package = json.loads(path.read_text())
+          deps = package["dependencies"]
+          for name in ("@google/genai", "@polymarket/clob-client", "discord.js", "ethers", "rxjs"):
+              if name not in deps:
+                  raise SystemExit(f"expected direct dependency missing: {name}")
+              del deps[name]
+          path.write_text(json.dumps(package, indent=2) + "\n")
+          PY
+          bun install --lockfile-only --ignore-scripts
+      - name: Verify locked install and TypeScript tests
+        run: |
+          bun ci
+          bun run typecheck
+          bun test tests/*.test.ts
+      - name: Commit package and lock together
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package.json bun.lock
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: prune unused Bun dependencies"
+          git push
