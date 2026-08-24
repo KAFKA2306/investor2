@@ -89,7 +89,9 @@ def orient_factor_on_train(
     factor: np.ndarray, asset_returns: np.ndarray, train_start: int, train_end: int
 ) -> tuple[np.ndarray, int]:
     ranks = daily_rank_ic(factor, asset_returns, 1)
-    score = float(np.nanmean(ranks[train_start:train_end]))
+    effective_end = max(train_start, train_end - 1)
+    observed = ranks[train_start:effective_end]
+    score = float(np.nanmean(observed)) if observed.size else 0.0
     direction = 1 if score >= 0 else -1
     return np.asarray(factor, dtype=np.float64) * direction, direction
 
@@ -108,7 +110,7 @@ def factor_metrics(
     rank_series: list[float] = []
     coverage_series: list[float] = []
     rank_paths: list[np.ndarray] = []
-    effective_end = min(end, values.shape[0] - horizon)
+    effective_end = min(max(start, end - horizon), values.shape[0] - horizon)
     for t in range(start, effective_end):
         mask = np.isfinite(values[t]) & np.isfinite(future[t])
         coverage_series.append(float(mask.mean()))
@@ -180,7 +182,8 @@ def screen_factors(
     candidates: list[dict[str, float | str]] = []
     for name, values in factors.items():
         ranks = daily_rank_ic(values, asset_returns, 1)
-        observed = ranks[validation_start:validation_end]
+        effective_end = max(validation_start, validation_end - 1)
+        observed = ranks[validation_start:effective_end]
         observed = observed[np.isfinite(observed)]
         recent = observed[-10:]
         suitability = float(recent.mean()) if recent.size else 0.0
@@ -289,6 +292,8 @@ def evaluate_weights(
         realized = np.empty((0, r.shape[1]), dtype=np.float64)
         benchmark = np.empty((0,), dtype=np.float64)
     else:
+        # A weight formed at t realizes on t+1. The fold end is exclusive, so
+        # never consume the first return outside the requested interval.
         path = w[first : last - 1]
         realized = r[first + 1 : last]
         benchmark = b[first + 1 : last]
