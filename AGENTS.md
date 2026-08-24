@@ -61,6 +61,10 @@ For investment-strategy validation, report the direct decision metrics that appl
 - Prefer the smallest structure that satisfies the goal.
 - Remove dead entry points, duplicate configuration, obsolete instructions, and superseded paths when they are directly verified as unused or invalid.
 - Do not hide failures with fallback values or broad exception handling. Handle recoverable external-boundary failures only when the recovery policy is explicit and testable.
+- Prefer an explicit partial implementation over a misleadingly complete path. If a required capability is not implemented or cannot be verified, leave it unavailable and report `UNIMPLEMENTED` or `BLOCKED` rather than inserting a permissive fallback.
+- Do not let stubs, mocks, dummy responses, synthetic substitutes, cached example outputs, or placeholder values enter production/runtime paths or acceptance-critical evaluation. Test doubles belong only in isolated tests unless the task explicitly defines synthetic data as the subject of evaluation.
+- A fallback is permitted only when it is an intentional product/research behavior with a documented trigger, observable state, bounded effect, and deterministic test. It must not silently change the data source, model, metric, universe, benchmark, or evidence standard.
+- If an acceptance-critical run touches a fallback, stub, placeholder, unverifiable substitute, or degraded mode, the run is not evidence of the requested outcome. Classify it as invalid, blocked, or partial and preserve only the verified sub-results.
 - TypeScript: Biome for formatting/import organization, Oxlint for lint, `tsc --noEmit` for types.
 - Python: Ruff for format/lint, Pyrefly for types.
 - Use Zod/Pydantic at genuine untrusted/runtime boundaries; do not duplicate trusted internal types solely to add validation ceremony.
@@ -99,5 +103,7 @@ A workline is complete only when the requested outcome itself has been inspected
 - reusable dataset -> persisted artifact plus canonical registration/read-back;
 - research claim -> versioned inputs/code plus direct OOS/result metrics;
 - publication/deployment -> live surface read-back tied to the merged revision.
+
+Partial completion is acceptable when the verified boundary is explicit. Do not fill the remaining gap with temporary behavior merely to make the path appear complete.
 
 Distinguish claims as verified, observed, inferred, or unverified. Never upgrade an inference or activity log into a verified result.
