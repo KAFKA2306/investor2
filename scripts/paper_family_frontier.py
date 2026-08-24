@@ -114,7 +114,7 @@ def render(registry: dict[str, Any]) -> str:
         "|---|---|---|---|---|---|---|",
     ]
     for family in families:
-        verdict = family.get("verdict") or "—"
+        verdict = family.get("verdict") or "BLOCKED"
         page = family["canonical_page"]
         label = family["canonical_name"].replace("|", "\\|")
         strength = family["claimed_capability"].replace("|", "\\|")
@@ -131,7 +131,7 @@ def render(registry: dict[str, Any]) -> str:
             "## 判定契約",
             "",
             "- `BEAT` はfamily固有の事前固定primary capabilityで直接比較に勝ち、PIT/OOS/cost/risk hard gateも満たした場合だけ付与する。",
-            "- `TIE` / `LOSE` はそのまま残す。`BLOCKED` は勝利として扱わない。未実証familyにはverdictを付けない。",
+            "- `TIE` / `LOSE` はそのまま残す。未実証またはcontract未凍結のfamilyは公開surfaceで `BLOCKED` とし、勝利として扱わない。",
             "- 全familyが `BEAT` になるまで、AAARTSが全frontierを上回ったとは記載しない。",
             "- 比較契約は Issue #51、inspection queueは #55、日本株の共通PIT benchmarkは #184を再利用し、別authorityを作らない。",
             "",
