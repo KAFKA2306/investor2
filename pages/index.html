@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>investor2 Evidence Browser</title>
-  <meta name="description" content="Mechanically discovered research, data, generated artifacts, and public API outputs from investor2.">
+  <meta name="description" content="Results-first browser for canonical investor2 evidence, research, contracts, data, generated artifacts, and API outputs.">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -12,7 +12,7 @@
     <div>
       <p class="eyebrow">KAFKA2306 / investor2</p>
       <h1>Evidence Browser</h1>
-      <p class="lede">Repository results and evidence are discovered at build time. New files under canonical content roots appear without page-specific registration.</p>
+      <p class="lede">Results are the default view. Supporting research, contracts, data, generated artifacts, and API outputs use one stable repository-derived taxonomy instead of page-specific navigation.</p>
     </div>
     <a id="revision-link" class="revision" href="#" rel="noreferrer">revision …</a>
   </header>
@@ -29,18 +29,18 @@
       <div class="controls">
         <label>
           <span>Search</span>
-          <input id="search" type="search" placeholder="path, module, type" autocomplete="off">
+          <input id="search" type="search" placeholder="path, module, section, type" autocomplete="off">
         </label>
         <label>
-          <span>Category</span>
-          <select id="category-filter"><option value="">All</option></select>
+          <span>Section</span>
+          <select id="section-filter"><option value="">All</option></select>
         </label>
         <label>
           <span>Module</span>
           <select id="module-filter"><option value="">All</option></select>
         </label>
         <label>
-          <span>Viewer</span>
+          <span>Format</span>
           <select id="viewer-filter"><option value="">All</option></select>
         </label>
       </div>
@@ -51,7 +51,7 @@
     <section class="viewer" aria-live="polite">
       <div id="viewer-empty" class="empty-state">
         <h2>Select an artifact</h2>
-        <p>JSON, CSV/TSV, text, images, HTML, and PDF use generic viewers. Large or binary files remain linked to their exact GitHub revision.</p>
+        <p>Each module is presented with the same artifact viewer. JSON, CSV/TSV, text, images, HTML, and PDF render generically; large or binary files remain linked to their exact GitHub revision.</p>
       </div>
       <div id="viewer-content" hidden>
         <div class="viewer-heading">

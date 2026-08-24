@@ -8,6 +8,7 @@ on:
       - "docs/architecture/**"
       - "docs/research/hypothesis-lab.md"
       - "tests/test_repository_ratchet.py"
+      - "tests/test_bench_contract.py"
       - ".github/workflows/**"
       - "data/input_ledger/**"
       - "data/hypothesis_lab/**"
@@ -15,6 +16,9 @@ on:
       - "data/benchmarks/**"
       - "src/research/**"
       - "src/decision/**"
+      - "src/commands/bench_contract.py"
+      - "src/commands/bench_eval.py"
+      - "src/commands/bench_ablation.py"
       - "ontology/project.yaml"
   push:
     branches: [main]
@@ -24,6 +28,7 @@ on:
       - "docs/architecture/**"
       - "docs/research/hypothesis-lab.md"
       - "tests/test_repository_ratchet.py"
+      - "tests/test_bench_contract.py"
       - ".github/workflows/**"
       - "data/input_ledger/**"
       - "data/hypothesis_lab/**"
@@ -31,6 +36,9 @@ on:
       - "data/benchmarks/**"
       - "src/research/**"
       - "src/decision/**"
+      - "src/commands/bench_contract.py"
+      - "src/commands/bench_eval.py"
+      - "src/commands/bench_ablation.py"
       - "ontology/project.yaml"
   workflow_dispatch:
 
@@ -47,6 +55,8 @@ jobs:
           python-version: "3.12"
       - name: Verify canonical repository flow
         run: python tests/test_repository_ratchet.py
+      - name: Verify benchmark fail-closed contract
+        run: python -m unittest tests.test_bench_contract
       - name: Verify clean checkout
         shell: bash
         run: |

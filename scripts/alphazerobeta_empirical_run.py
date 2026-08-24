@@ -12,7 +12,6 @@ import traceback
 import urllib.parse
 import urllib.request
 from datetime import UTC, datetime
-from io import BytesIO
 from pathlib import Path
 from typing import Any
 
@@ -22,6 +21,7 @@ from src.research.alphazerobeta import write_json
 
 CANDIDATE_ETFS = ("QQQ", "IWM", "DIA", "TLT", "GLD", "XLF", "XLK", "XLE", "XLV", "XLI", "XLP", "XLY")
 BENCHMARK = "SPY"
+MARKET_DATA_PROVIDER = "yahoo_chart"
 SOURCE_START = "2020-01-01"
 SOURCE_END = "2024-12-31"
 UNIVERSE_CUTOFF = "2023-06-30"
@@ -70,36 +70,7 @@ def fetch_bytes(url: str) -> bytes:
     return payload
 
 
-def stooq_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
-    stooq_symbol = f"{symbol.lower()}.us"
-    query = urllib.parse.urlencode(
-        {"s": stooq_symbol, "i": "d", "d1": SOURCE_START.replace("-", ""), "d2": SOURCE_END.replace("-", "")}
-    )
-    url = f"https://stooq.com/q/d/l/?{query}"
-    payload = fetch_bytes(url)
-    frame = pd.read_csv(BytesIO(payload))
-    required = {"Date", "Close", "Volume"}
-    if not required.issubset(frame.columns):
-        raise RuntimeError(f"Stooq response for {symbol} missing {sorted(required - set(frame.columns))}")
-    frame = frame[["Date", "Close", "Volume"]].copy()
-    frame["Date"] = pd.to_datetime(frame["Date"], errors="raise")
-    frame["Close"] = pd.to_numeric(frame["Close"], errors="raise")
-    frame["Volume"] = pd.to_numeric(frame["Volume"], errors="raise")
-    frame = frame[(frame["Date"] >= SOURCE_START) & (frame["Date"] <= SOURCE_END)].dropna()
-    if len(frame) < 1000:
-        raise RuntimeError(f"Stooq returned only {len(frame)} daily rows for {symbol}")
-    return frame.sort_values("Date").reset_index(drop=True), {
-        "symbol": symbol,
-        "provider": "stooq",
-        "url": url,
-        "raw_sha256": sha256_bytes(payload),
-        "row_count": int(len(frame)),
-        "date_start": str(frame["Date"].iloc[0].date()),
-        "date_end": str(frame["Date"].iloc[-1].date()),
-    }
-
-
-def yahoo_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
+def download_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
     start_epoch = int(pd.Timestamp(SOURCE_START, tz="UTC").timestamp())
     end_epoch = int((pd.Timestamp(SOURCE_END, tz="UTC") + pd.Timedelta(days=1)).timestamp())
     query = urllib.parse.urlencode(
@@ -135,7 +106,7 @@ def yahoo_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
         raise RuntimeError(f"Yahoo returned only {len(frame)} daily rows for {symbol}")
     return frame.sort_values("Date").reset_index(drop=True), {
         "symbol": symbol,
-        "provider": "yahoo_chart",
+        "provider": MARKET_DATA_PROVIDER,
         "url": url,
         "raw_sha256": sha256_bytes(payload),
         "row_count": int(len(frame)),
@@ -143,16 +114,6 @@ def yahoo_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
         "date_end": str(frame["Date"].iloc[-1].date()),
         "price_field": "adjusted_close_when_available",
     }
-
-
-def download_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
-    errors: list[str] = []
-    for loader in (stooq_daily, yahoo_daily):
-        try:
-            return loader(symbol)
-        except Exception as exc:  # noqa: BLE001 - provider fallback is intentional and recorded
-            errors.append(f"{loader.__name__}: {type(exc).__name__}: {exc}")
-    raise RuntimeError(f"all providers failed for {symbol}: {' | '.join(errors)}")
 
 
 def run(command: list[str]) -> None:
@@ -191,6 +152,7 @@ def build_market_inputs(output_dir: Path) -> tuple[Path, Path, Path]:
         {
             "schema_version": "investor2.alphazerobeta-market-source-snapshot.v1",
             "retrieved_at": datetime.now(UTC).isoformat(),
+            "provider_contract": MARKET_DATA_PROVIDER,
             "candidate_universe": list(CANDIDATE_ETFS),
             "candidate_universe_contract": (
                 "Fixed broad/sector ETF candidate set declared before OOS outcomes are observed; all instruments predate the "
@@ -369,6 +331,7 @@ def execute(output_dir: Path) -> None:
         output_dir / "run_contract.json",
         {
             "schema_version": "investor2.alphazerobeta-empirical-run-contract.v1",
+            "market_data_provider": MARKET_DATA_PROVIDER,
             "candidate_etfs": list(CANDIDATE_ETFS),
             "benchmark": BENCHMARK,
             "source_start": SOURCE_START,

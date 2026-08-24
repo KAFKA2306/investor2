@@ -1,3 +1,12 @@
+const SECTION_LABELS = {
+  results: "Results",
+  research: "Research",
+  contracts: "Contracts",
+  data: "Data",
+  generated: "Generated",
+  api: "API",
+};
+
 const state = {
   manifest: null,
   artifacts: [],
@@ -19,33 +28,81 @@ function formatBytes(bytes) {
   return `${value >= 10 || unit === "B" ? value.toFixed(0) : value.toFixed(1)} ${unit}`;
 }
 
-function fillSelect(select, values) {
-  for (const value of [...values].sort((a, b) => a.localeCompare(b))) {
+function resetSelect(select, values, labelFor = (value) => value) {
+  const previous = select.value;
+  select.replaceChildren();
+  const all = document.createElement("option");
+  all.value = "";
+  all.textContent = "All";
+  select.append(all);
+  for (const value of values) {
     const option = document.createElement("option");
     option.value = value;
-    option.textContent = value;
+    option.textContent = labelFor(value);
     select.append(option);
   }
+  if (values.includes(previous)) select.value = previous;
 }
 
 function artifactSearchText(item) {
-  return `${item.path} ${item.module} ${item.category} ${item.viewer} ${item.media_type}`.toLowerCase();
+  return `${item.path} ${item.module} ${item.section} ${item.category} ${item.viewer} ${item.media_type}`.toLowerCase();
+}
+
+function refreshModuleFilter() {
+  const section = $("section-filter").value;
+  const modules = [
+    ...new Set(
+      state.artifacts
+        .filter((item) => !section || item.section === section)
+        .map((item) => item.module),
+    ),
+  ].sort((a, b) => a.localeCompare(b));
+  resetSelect($("module-filter"), modules);
 }
 
 function applyFilters() {
   const query = $("search").value.trim().toLowerCase();
-  const category = $("category-filter").value;
+  const section = $("section-filter").value;
   const moduleName = $("module-filter").value;
   const viewer = $("viewer-filter").value;
 
   state.filtered = state.artifacts.filter(
     (item) =>
       (!query || artifactSearchText(item).includes(query)) &&
-      (!category || item.category === category) &&
+      (!section || item.section === section) &&
       (!moduleName || item.module === moduleName) &&
       (!viewer || item.viewer === viewer),
   );
   renderCatalog();
+}
+
+function createArtifactCard(item) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "artifact-card";
+  button.setAttribute("role", "listitem");
+  button.setAttribute("aria-current", String(item.path === state.selectedPath));
+  button.addEventListener("click", () => selectArtifact(item.path));
+
+  const path = document.createElement("span");
+  path.className = "artifact-path";
+  path.textContent = item.path;
+
+  const sub = document.createElement("span");
+  sub.className = "artifact-sub";
+  for (const text of [
+    item.viewer,
+    formatBytes(item.size_bytes),
+    item.local_url ? "mirrored" : "source-only",
+  ]) {
+    const badge = document.createElement("span");
+    badge.className = "badge";
+    badge.textContent = text;
+    sub.append(badge);
+  }
+
+  button.append(path, sub);
+  return button;
 }
 
 function renderCatalog() {
@@ -53,36 +110,27 @@ function renderCatalog() {
   list.replaceChildren();
   $("visible-count").textContent = state.filtered.length.toLocaleString();
 
+  let currentGroup = null;
+  let groupBody = null;
   for (const item of state.filtered) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "artifact-card";
-    button.setAttribute("role", "listitem");
-    button.setAttribute(
-      "aria-current",
-      String(item.path === state.selectedPath),
-    );
-    button.addEventListener("click", () => selectArtifact(item.path));
-
-    const path = document.createElement("span");
-    path.className = "artifact-path";
-    path.textContent = item.path;
-
-    const sub = document.createElement("span");
-    sub.className = "artifact-sub";
-    for (const text of [
-      item.viewer,
-      formatBytes(item.size_bytes),
-      item.local_url ? "mirrored" : "source-only",
-    ]) {
-      const badge = document.createElement("span");
-      badge.className = "badge";
-      badge.textContent = text;
-      sub.append(badge);
+    const groupKey = `${item.section}\u0000${item.module}`;
+    if (groupKey !== currentGroup) {
+      currentGroup = groupKey;
+      const group = document.createElement("section");
+      group.className = "artifact-group";
+      const heading = document.createElement("div");
+      heading.className = "artifact-group-heading";
+      const sectionLabel = document.createElement("span");
+      sectionLabel.className = "artifact-group-section";
+      sectionLabel.textContent = SECTION_LABELS[item.section] || item.section;
+      const moduleLabel = document.createElement("strong");
+      moduleLabel.textContent = item.module;
+      heading.append(sectionLabel, moduleLabel);
+      groupBody = document.createElement("div");
+      group.append(heading, groupBody);
+      list.append(group);
     }
-
-    button.append(path, sub);
-    list.append(button);
+    groupBody.append(createArtifactCard(item));
   }
 }
 
@@ -119,6 +167,8 @@ function parseDelimited(text, delimiter) {
       cell += char;
     }
   }
+  if (quoted)
+    throw new Error("unterminated quoted field in delimited artifact");
   if (cell.length || row.length) {
     row.push(cell.replace(/\r$/, ""));
     rows.push(row);
@@ -198,7 +248,7 @@ async function renderArtifact(item) {
     notice.className = "notice";
     notice.textContent = item.local_url
       ? "No inline renderer is defined for this file type. Open the mirrored file or exact GitHub source."
-      : "This file is intentionally source-only because it exceeds the Pages mirror threshold or is not browser-renderable. Open the exact GitHub revision.";
+      : "This file is source-only because it exceeds the Pages mirror threshold or is not browser-renderable. Open the exact GitHub revision.";
     target.append(notice);
     return;
   }
@@ -210,11 +260,7 @@ async function renderArtifact(item) {
 
   if (item.viewer === "json") {
     const pre = document.createElement("pre");
-    try {
-      pre.textContent = JSON.stringify(JSON.parse(text), null, 2);
-    } catch {
-      pre.textContent = text;
-    }
+    pre.textContent = JSON.stringify(JSON.parse(text), null, 2);
     target.append(pre);
     return;
   }
@@ -241,7 +287,7 @@ async function selectArtifact(path) {
   $("viewer-empty").hidden = true;
   $("viewer-content").hidden = false;
   $("artifact-module").textContent =
-    `${item.category} · ${item.module} · ${item.viewer}`;
+    `${SECTION_LABELS[item.section] || item.section} · ${item.module} · ${item.viewer}`;
   $("artifact-title").textContent = item.path;
   $("artifact-meta").textContent =
     `${item.media_type} · ${formatBytes(item.size_bytes)} · ${item.local_url ? "mirrored" : "source-only"}`;
@@ -276,11 +322,10 @@ async function init() {
   const response = await fetch("manifest.json", { cache: "no-store" });
   if (!response.ok) throw new Error(`manifest HTTP ${response.status}`);
   const manifest = await response.json();
+  if (!Array.isArray(manifest.section_order))
+    throw new Error("manifest is missing canonical section_order");
   state.manifest = manifest;
-  state.artifacts = [...manifest.artifacts].sort((a, b) =>
-    a.path.localeCompare(b),
-  );
-  state.filtered = state.artifacts;
+  state.artifacts = [...manifest.artifacts];
 
   $("artifact-count").textContent = manifest.totals.artifacts.toLocaleString();
   $("local-count").textContent = manifest.totals.local_files.toLocaleString();
@@ -294,35 +339,44 @@ async function init() {
   $("revision-link").href =
     `https://github.com/${manifest.repository}/commit/${revision}`;
 
-  fillSelect(
-    $("category-filter"),
-    new Set(state.artifacts.map((item) => item.category)),
+  resetSelect(
+    $("section-filter"),
+    manifest.section_order.filter(
+      (section) => manifest.totals.sections?.[section] > 0,
+    ),
+    (section) => SECTION_LABELS[section] || section,
   );
-  fillSelect(
-    $("module-filter"),
-    new Set(state.artifacts.map((item) => item.module)),
-  );
-  fillSelect(
-    $("viewer-filter"),
-    new Set(state.artifacts.map((item) => item.viewer)),
-  );
-
-  for (const id of [
-    "search",
-    "category-filter",
-    "module-filter",
-    "viewer-filter",
-  ]) {
-    $(id).addEventListener("input", applyFilters);
-    $(id).addEventListener("change", applyFilters);
+  if (manifest.totals.sections?.results > 0) {
+    $("section-filter").value = "results";
   }
+  refreshModuleFilter();
+  resetSelect(
+    $("viewer-filter"),
+    [...new Set(state.artifacts.map((item) => item.viewer))].sort((a, b) =>
+      a.localeCompare(b),
+    ),
+  );
 
-  renderCatalog();
+  $("search").addEventListener("input", applyFilters);
+  $("module-filter").addEventListener("change", applyFilters);
+  $("viewer-filter").addEventListener("change", applyFilters);
+  $("section-filter").addEventListener("change", () => {
+    refreshModuleFilter();
+    applyFilters();
+  });
+
+  applyFilters();
   const requestedPath = new URLSearchParams(window.location.search).get("path");
   if (
     requestedPath &&
     state.artifacts.some((item) => item.path === requestedPath)
   ) {
+    const requested = state.artifacts.find(
+      (item) => item.path === requestedPath,
+    );
+    $("section-filter").value = requested.section;
+    refreshModuleFilter();
+    applyFilters();
     await selectArtifact(requestedPath);
   }
 }

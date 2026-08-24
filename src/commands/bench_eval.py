@@ -6,9 +6,21 @@ from typing import Any
 import backoff
 import dotenv
 import openai
-from sklearn.metrics import accuracy_score, f1_score, matthews_corrcoef, precision_score, recall_score, roc_auc_score
+from sklearn.metrics import (
+    accuracy_score,
+    f1_score,
+    matthews_corrcoef,
+    precision_score,
+    recall_score,
+    roc_auc_score,
+)
 from tqdm import tqdm
 
+from src.commands.bench_contract import (
+    INDUSTRY_LABELS,
+    parse_benchmark_prediction,
+    require_benchmark_model,
+)
 from src.io.edinet_bench import (
     load_earnings_forecast,
     load_fraud_detection,
@@ -22,8 +34,12 @@ dotenv.load_dotenv()
 # Focuses on probability outputs and Japanese-market-specific contexts (PBR reforms, etc.).
 
 
-@backoff.on_exception(backoff.expo, (openai.RateLimitError, openai.APITimeoutError, openai.APIError), max_tries=5)
-def system_predict(row, task):
+@backoff.on_exception(
+    backoff.expo,
+    (openai.RateLimitError, openai.APITimeoutError, openai.APIError),
+    max_tries=5,
+)
+def system_predict(row, task: str, model: str):
     client = openai.OpenAI(
         api_key=os.environ["OPENAI_API_KEY"],
         base_url=os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1"),
@@ -32,10 +48,7 @@ def system_predict(row, task):
 
     if task == "industry_prediction":
         prompt_instruction = (
-            "Identify the company's industry from the following options: 銀行, 電機・精密, "
-            "自動車・輸送機, 運輸・物流, 電気・ガス・エネルギー資源, 不動産, 機械, "
-            "鉄鋼・非鉄, 素材・化学, 金融(除く銀行), 食品, 建設・資材, 商社・卸売, "
-            "情報通信・サービスその他, 医薬品, 小売."
+            "Identify the company's industry from the following options: " + ", ".join(INDUSTRY_LABELS) + "."
         )
         response_type = "string (one of the options above)"
         prob_desc = "Confidence score (0.0 to 1.0)"
@@ -67,7 +80,7 @@ Return your answer in the following JSON format:
 """
 
     response = client.chat.completions.create(
-        model=os.getenv("OPENAI_MODEL", "gpt-4o"),
+        model=model,
         messages=[
             {
                 "role": "system",
@@ -82,16 +95,9 @@ Return your answer in the following JSON format:
     )
 
     content = response.choices[0].message.content
-    try:
-        result = json.loads(content)
-        pred = result["prediction"]
-        prob = float(result.get("probability", 0.5))
-        if task != "industry_prediction":
-            pred = int(pred)
-        return {"prediction": pred, "probability": prob, "reasoning": result["reasoning"]}
-    except Exception as exc:
-        print(f"Failed to parse LLM response: {content}")
-        raise exc
+    if content is None:
+        raise ValueError("benchmark model returned no message content")
+    return parse_benchmark_prediction(content, task)
 
 
 def load_evaluation_frame(task_name: str, num_samples: int):
@@ -122,6 +128,11 @@ def load_evaluation_frame(task_name: str, num_samples: int):
         raise ValueError(f"Unknown task: {task_name}")
 
     selected = frame.head(num_samples).copy()
+    if len(selected) != num_samples:
+        raise ValueError(
+            f"requested {num_samples} benchmark rows but frozen split contains only {len(selected)}; "
+            "partial evaluation is not accepted implicitly"
+        )
     evidence.update(
         {
             "available_count": len(frame),
@@ -135,8 +146,11 @@ def load_evaluation_frame(task_name: str, num_samples: int):
 
 
 def run_benchmark(task_name: str, num_samples: int = 50):
-    print(f"\nRunning Enhanced Quantitative Benchmark: {task_name} (Samples: {num_samples})")
+    model = require_benchmark_model()
+    print(f"\nRunning Enhanced Quantitative Benchmark: {task_name} (Samples: {num_samples}, Model: {model})")
     frame, label_col, evaluation = load_evaluation_frame(task_name, num_samples)
+    evaluation["model"] = model
+    evaluation["base_url"] = os.getenv("OPENAI_BASE_URL", "https://api.openai.com/v1")
 
     y_true = []
     y_pred = []
@@ -144,7 +158,7 @@ def run_benchmark(task_name: str, num_samples: int = 50):
     results = []
 
     for _, row in tqdm(frame.iterrows(), total=len(frame)):
-        prediction_obj = system_predict(row, task_name)
+        prediction_obj = system_predict(row, task_name, model)
 
         actual = row[label_col]
         predicted = prediction_obj["prediction"]
@@ -180,6 +194,7 @@ def run_benchmark(task_name: str, num_samples: int = 50):
 
     print(f"\nQuantitative Results for {task_name}")
     print(f"  - Evaluation split: {evaluation['split_name']}")
+    print(f"  - Model: {evaluation['model']}")
     print(f"  - Accuracy:  {metrics['accuracy']:.2%}")
     if "precision" in metrics:
         print(f"  - Precision: {metrics['precision']:.2%}")
