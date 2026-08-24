@@ -6,9 +6,9 @@ on:
       - "scripts/pin_arxiv_versions.py"
       - "scripts/build_arxiv_stage_b_inputs.py"
       - "tests/test_arxiv_version_pins.py"
-      - "docs/research/arxiv_version_pin_schema_v1.json"
-      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
-      - "docs/research/arxiv_qfin_2021_version_pins.json"
+      - "docs/research/catalogs/arxiv_version_pin_schema_v1.json"
+      - "docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/research/catalogs/arxiv_qfin_2021_version_pins.json"
       - ".github/workflows/arxiv-version-pins.yml"
   push:
     branches: [main]
@@ -16,9 +16,9 @@ on:
       - "scripts/pin_arxiv_versions.py"
       - "scripts/build_arxiv_stage_b_inputs.py"
       - "tests/test_arxiv_version_pins.py"
-      - "docs/research/arxiv_version_pin_schema_v1.json"
-      - "docs/research/arxiv_qfin_2021_selection_manifest.json"
-      - "docs/research/arxiv_qfin_2021_version_pins.json"
+      - "docs/research/catalogs/arxiv_version_pin_schema_v1.json"
+      - "docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json"
+      - "docs/research/catalogs/arxiv_qfin_2021_version_pins.json"
       - ".github/workflows/arxiv-version-pins.yml"
   workflow_dispatch:
 
@@ -48,10 +48,10 @@ jobs:
       - name: Validate committed canonical pins before live refresh
         run: |
           set -euo pipefail
-          test -f docs/research/arxiv_qfin_2021_version_pins.json
+          test -f docs/research/catalogs/arxiv_qfin_2021_version_pins.json
           python scripts/build_arxiv_stage_b_inputs.py \
-            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
-            --pins docs/research/arxiv_qfin_2021_version_pins.json \
+            --selection docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json \
+            --pins docs/research/catalogs/arxiv_qfin_2021_version_pins.json \
             --output /tmp/committed-stage-b-inputs.json
           python - <<'PY'
           import json
@@ -66,7 +66,7 @@ jobs:
           mkdir -p artifacts
           inspected_at="$(date -u +'%Y-%m-%dT%H:%M:%SZ')"
           python scripts/pin_arxiv_versions.py \
-            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
+            --selection docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json \
             --output artifacts/arxiv_qfin_2021_version_pins.json \
             --inspected-at "$inspected_at"
 
@@ -84,7 +84,7 @@ jobs:
           print(json.dumps(summary, ensure_ascii=False, sort_keys=True))
           PY
           python scripts/build_arxiv_stage_b_inputs.py \
-            --selection docs/research/arxiv_qfin_2021_selection_manifest.json \
+            --selection docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json \
             --pins artifacts/arxiv_qfin_2021_version_pins.json \
             --output artifacts/arxiv_qfin_2021_stage_b_inputs.json
           python - <<'PY'
