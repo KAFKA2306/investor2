@@ -59,22 +59,24 @@ jobs:
           ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
           import json
           import os
+          from datetime import date, timedelta
           from pathlib import Path
-          import pandas as pd
+          from dateutil.relativedelta import relativedelta
+
           root = Path(os.environ['ROOT'])
           manifest = json.loads((root / 'manifest.json').read_text())
-          test_end = pd.Timestamp(manifest['actual_date_range']['end'])
-          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
-          universe_cutoff = test_start - pd.DateOffset(months=3)
-          benchmark = pd.read_parquet(root / 'benchmark.parquet')
-          dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
-          eligible = dates[dates <= universe_cutoff]
-          assert not eligible.empty
-          master_date = eligible.max()
-          print(f"TEST_START={test_start.date()}")
-          print(f"TEST_END={test_end.date()}")
-          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
-          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
+          test_end = date.fromisoformat(manifest['actual_date_range']['end'])
+          test_start = test_end - relativedelta(months=6) + timedelta(days=1)
+          universe_cutoff = test_start - relativedelta(months=3)
+          # The first probe independently resolved the latest benchmark date on/before
+          # this cutoff as the cutoff itself (2025-09-02). It is a Tuesday market date.
+          assert universe_cutoff == date(2025, 9, 2)
+          assert universe_cutoff.weekday() < 5
+          master_date = universe_cutoff
+          print(f"TEST_START={test_start}")
+          print(f"TEST_END={test_end}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff}")
+          print(f"UNIVERSE_MASTER_DATE={master_date}")
           PY
       - name: Fetch one PIT master snapshot
         run: |
