@@ -1,45 +1,49 @@
-# EDINET-Bench: 日本株市場向け複雑な財務タスクの評価
+# EDINET-Bench
 
-**タイトル**: EDINET-Bench: 日本語財務諸表を用いた複雑な財務タスクに対するLLMの評価
+**Paper:** *EDINET-Bench: Evaluating LLMs on Complex Financial Tasks using Japanese Financial Statements*  
+**arXiv:** https://arxiv.org/abs/2506.08762  
+**OpenReview:** https://openreview.net/forum?id=Dxns0cj15A  
+**Official repository:** https://github.com/SakanaAI/EDINET-Bench  
+**Official dataset:** https://huggingface.co/datasets/SakanaAI/EDINET-Bench
 
-**ステータス**: ICLR 2026 採択の正式発表
+EDINET-Bench is an open Japanese financial benchmark built from EDINET annual reports. It evaluates three distinct tasks: Accounting Fraud Detection, Earnings Forecast, and Industry Prediction. The paper constructs the benchmark from annual reports covering the preceding ten years and publishes the dataset, construction code, and evaluation code.
 
-**お仕事の目的**: 難解な有価証券報告書に対するAIの理解度を正確に評価し、日本株分野でのトップAIを育成することである。
+## Released benchmark
 
-**解決したい課題**: 日本の報告書は漢字が多く難易度が高いため、AIの真の実力を評価することが困難である。
+The current public Hugging Face release contains 2,585 rows across the three task configurations.
 
-## エグゼクティブサマリー
-Sakana AI を含むチームが作成した約41,000件のEDINETデータを用いた大規模なテストセットである。課題は「不正検知」「業績予測」「業種推定」の三つであり、AIの能力を評価・向上させることを目的とする。これにより日本株市場の応用可能性を高める。
+| Task | Public train | Public test | Target |
+| --- | ---: | ---: | --- |
+| Fraud Detection | 865 | 224 | Binary fraud / non-fraud classification |
+| Earnings Forecast | 549 | 451 | Binary next-year earnings increase / not-increase classification |
+| Industry Prediction | 496 | — | 16-class industry classification |
 
----
+The public Industry Prediction configuration currently exposes only a `train` split. A repository-defined split may be useful for experiments, but it is a surrogate and must not be presented as the benchmark's official test split.
 
-## 論文と併せて参照すべき資料
-- arXiv: https://arxiv.org/abs/2506.08762
-- OpenReview (ICLR 2026): https://openreview.net/forum?id=Dxns0cj15A
-- Sakana AI 公式ブログ: https://sakana.ai/edinet-bench/
-- AlphaXiv 日本語版: https://www.alphaxiv.org/abs/2506.08762?lang=ja
+The dataset notice states that the release was relicensed to Public Domain License (PDL) 1.0 on June 9, 2025 for consistency with the source-data licensing terms.
 
----
+## Official logistic baseline
 
-## 考え方の転換
-従来の直感的・曖昧な読解を排除し、厳密性の高い理解を追求する。Fraud Detection（不正検知）、Earnings Forecast（業績予測）、Industry Prediction（業種推定）の三つの課題を通じて、AIの真の能力を評価する。
+The upstream `src/edinet_bench/logistic.py` provides a deterministic non-LLM baseline for `fraud_detection` and `earnings_forecast` using the `summary` field:
 
-## 本手法の三つの特長
-1. 過去10年分のデータを用いた大規模データセットを構築しており、日本最大級のデータ資源である。  
-2. 不正検知チャレンジ：財務諸表の粉飾を検出する能力を評価する。  
-3. XBRLデータを活用した分析能力の評価を行う。
+1. Parse the JSON `summary` and flatten each metric/year pair into a numeric feature.
+2. Convert `－` and null values to missing values.
+3. Fill train and test missing values with the training-set numeric mean.
+4. Drop training columns with at most one unique value and align test columns to training columns.
+5. Standardize with `sklearn.preprocessing.StandardScaler`.
+6. Fit `sklearn.linear_model.LogisticRegression()` with its default constructor arguments.
+7. Report Accuracy, Precision, Recall, F1 and ROC-AUC for the binary task.
 
-## Gen 4への期待される効果
-- 日本市場固有の会計ルールや表現にも対応できる高度な適応性を有する。  
-- 日本語財務文書に対する信頼性の高さを示す基準を提供する。
+Canonical upstream code pin used by this repository:
 
----
+- EDINET-Bench repository commit: `797fbb50051c14b97ee2fd88595b0a3c12432058`
+- `src/edinet_bench/logistic.py` blob: `37184505cd88d4bacdfa8576778da59dd32e434c`
+- Hugging Face dataset revision: `cf0bc74fb85cce99878f15426f8cf3ba750d0cba`
 
-## タスク内容
-| クエスト名 | 目的 |
-| :--- | :--- |
-| Fraud Detection | 財務不正を検出するタスクである。 |
-| Earnings Forecast | 将来の業績を予測するタスクである。 |
-| Industry Prediction | 企業の業種を推定するタスクである。 |
+Repository reproduction entry point: `scripts/edinet_bench_logistic.py`.
 
-全体として、参加者は EDINET のマスターを目指して取り組む。
+## Frontier boundary
+
+Reproducing the official logistic baseline establishes a benchmark reference only. It is not an AAARTS candidate and is not a paper-family `BEAT`, `TIE`, or `LOSE` result. A direct frontier verdict requires an AAARTS method evaluated on the same frozen task contract and compared against the preregistered EDINET-Bench capability metric.
+
+For Industry Prediction, direct comparison remains blocked until the evaluation split used for the claim is frozen explicitly and distinguished from the public release, which currently has no official test split.
