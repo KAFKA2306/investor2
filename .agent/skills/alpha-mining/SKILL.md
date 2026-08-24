@@ -8,6 +8,8 @@ origin: local-git-analysis
 
 Use this skill to turn an auditable alpha hypothesis into reproducible evidence. The objective is not to maximize formula count, novelty, or in-sample performance. The objective is to reject weak hypotheses before promotion.
 
+Repository-wide execution and completion rules come from `AGENTS.md`. This skill only adds alpha-research-specific constraints; it must not weaken or duplicate the repository contract.
+
 ## Canonical contract
 
 Before reading untouched OOS results, freeze:
@@ -48,6 +50,9 @@ LLMs may assist with extraction, normalization, code generation, and hypothesis 
 - No threshold relaxation, metric changes, split changes, or representative changes after results are observed.
 - No best-seed-only reporting for stochastic methods.
 - No promotion from syntax/unit-test/CI success to empirical success.
+- Do not evaluate or rank an alpha candidate on fallback data, stubbed providers/models, dummy responses, cached demo outputs, or placeholder portfolio results.
+- If any required real-data, model, execution, or benchmark path is unavailable, mark the run `BLOCKED`, `UNIMPLEMENTED`, or otherwise invalid under the owning result schema. Keep the verified partial artifacts; do not fabricate a complete run.
+- Mocks and synthetic fixtures are valid for isolated tests of mechanics, but their passing metrics are never empirical alpha evidence unless the frozen experiment explicitly evaluates synthetic data.
 - Rejected and unresolved candidates remain visible evidence.
 
 If repeated exploration saturates a domain, move to a genuinely different mechanism under a newly frozen protocol. Do not relabel minor parameter changes as new hypotheses.
@@ -56,10 +61,12 @@ If repeated exploration saturates a domain, move to a genuinely different mechan
 
 Every material run should persist enough information to reproduce and audit the verdict, including input identifiers/hashes, split dates, observation counts, signal/portfolio definition, configuration, seeds, direct metrics, cost assumptions, uncertainty, failure reasons, code revision, and verdict.
 
+When only part of the pipeline is valid, persist exactly that verified boundary and the missing requirement. A partial run is preferable to a numerically complete run produced by degraded or substitute behavior.
+
 ## Canonical references
 
+- `AGENTS.md`
 - `docs/specs/alpha_discovery_runbook.md`
 - `docs/specs/time_tested_alpha_policy.md`
 - `docs/architecture/canonical-investment-flow.md`
 - `docs/specs/external_snapshot_store.md`
-- `AGENTS.md`
