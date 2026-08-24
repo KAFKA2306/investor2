@@ -18,7 +18,6 @@ import yfinance as yf
 from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
-DEFAULT_STORAGE_PREFIX = "central/investor2/private/yahoo-market-cache/jp-v1"
 DEFAULT_MAX_REQUEST_ATTEMPTS = 6
 DEFAULT_RETRY_BASE_SECONDS = 5.0
 ALL_REGIONS = (
@@ -123,18 +122,22 @@ def require_repair_runtime() -> None:
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Build one immutable Yahoo/yfinance equity snapshot locally.")
-    parser.add_argument("--start", default="2004-01-01")
-    parser.add_argument("--end", default="2025-01-01", help="Exclusive end date")
-    parser.add_argument("--regions", default="jp", help="Comma-separated Yahoo regions or 'all'")
-    parser.add_argument("--benchmark", default="1306.T", help="Broad Japan benchmark proxy; default is TOPIX ETF")
-    parser.add_argument("--storage-prefix", default=DEFAULT_STORAGE_PREFIX)
+    parser = argparse.ArgumentParser(
+        description="Build one immutable Yahoo/yfinance equity snapshot from an explicit market-data contract."
+    )
+    parser.add_argument("--start", required=True)
+    parser.add_argument("--end", required=True, help="Exclusive end date")
+    parser.add_argument("--regions", required=True, help="Comma-separated Yahoo regions or 'all'")
+    parser.add_argument("--benchmark", required=True)
+    parser.add_argument("--storage-prefix", required=True)
+    parser.add_argument("--storage-bucket", required=True)
+    parser.add_argument("--writer-repository", required=True)
     parser.add_argument("--page-size", type=int, default=250)
     parser.add_argument("--batch-size", type=int, default=100)
     parser.add_argument("--request-pause", type=float, default=0.25)
     parser.add_argument("--max-request-attempts", type=int, default=DEFAULT_MAX_REQUEST_ATTEMPTS)
     parser.add_argument("--retry-base-seconds", type=float, default=DEFAULT_RETRY_BASE_SECONDS)
-    parser.add_argument("--output-dir", type=Path, default=Path("cache/alphazerobeta-market-snapshot"))
+    parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--overwrite", action="store_true")
     return parser.parse_args()
 
@@ -465,6 +468,8 @@ def main() -> None:
         batch_size=args.batch_size,
         output_dir=str(root),
         storage_prefix=args.storage_prefix,
+        storage_bucket=args.storage_bucket,
+        writer_repository=args.writer_repository,
     )
     require_repair_runtime()
     prepare_output(root, overwrite=args.overwrite)
@@ -509,8 +514,8 @@ def main() -> None:
         "immutable": True,
         "files": files,
         "storage_contract": {
-            "writer_repository": "KAFKA2306/semiconductor-earnings-model",
-            "bucket": "k4fka/kafka-data-lake",
+            "writer_repository": args.writer_repository,
+            "bucket": args.storage_bucket,
             "prefix": args.storage_prefix,
             "consumer_repository_authentication": False,
         },
