@@ -302,8 +302,8 @@ def main() -> None:
             "dataset_manifest_sha256": sha256_file(args.dataset_manifest),
             "asset_count": int(features.shape[1]),
             "feature_count": int(features.shape[2]),
-            "date_start": str(pd.Timestamp(dates[0]).date()),
-            "date_end": str(pd.Timestamp(dates[-1]).date()),
+            "date_start": str(pd.Timestamp(str(dates[0])).date()),
+            "date_end": str(pd.Timestamp(str(dates[-1])).date()),
             "universe_cutoff": manifest.get("universe_cutoff"),
             "selected_codes": manifest.get("selected_codes"),
             "walk_forward": {
