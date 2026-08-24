@@ -10,8 +10,8 @@ import {
 } from "../preprocess/edinet";
 import { getScreenerData } from "../preprocess/screener";
 import {
-  parseCacheStatisticsProcessResult,
   type CacheStatistics,
+  parseCacheStatisticsProcessResult,
 } from "../shared/cache_statistics";
 import { ConfigSchema } from "../shared/schema";
 

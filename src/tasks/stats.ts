@@ -2,8 +2,8 @@ import { existsSync, readdirSync, readFileSync, statSync } from "node:fs";
 import { resolve } from "node:path";
 import yaml from "js-yaml";
 import {
-  CacheStatisticsSchema,
   type CacheStatistics,
+  CacheStatisticsSchema,
 } from "../shared/cache_statistics";
 import { ConfigSchema } from "../shared/schema";
 
