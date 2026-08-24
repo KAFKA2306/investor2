@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from scripts.session_state_baseline import build_baseline, parse_args, select_prices, validate_snapshot_coverage
+from scripts.daily_market_session_baseline import build_baseline, parse_args, select_prices, validate_snapshot_coverage
 
 
 def _prices(rows: int = 160) -> pd.DataFrame:

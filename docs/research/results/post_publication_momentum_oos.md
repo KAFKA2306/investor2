@@ -65,12 +65,12 @@ This is the intended behavior of the research gate: an old and economically plau
 ```bash
 python scripts/verify_post_publication_momentum.py \
   --input docs/research/data/ff_momentum_1994_2017.csv \
-  --output docs/research/post_publication_momentum_oos.json
+  --output docs/research/results/post_publication_momentum_oos.json
 
 python -m pytest -q tests/test_post_publication_momentum.py
 ```
 
-The machine-readable output is committed at `docs/research/post_publication_momentum_oos.json`.
+The machine-readable output is committed at `docs/research/results/post_publication_momentum_oos.json`.
 
 ## Data provenance
 

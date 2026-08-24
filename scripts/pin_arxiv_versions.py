@@ -24,7 +24,7 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SELECTION = ROOT / "docs/research/arxiv_qfin_2021_selection_manifest.json"
+DEFAULT_SELECTION = ROOT / "docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json"
 SCHEMA_VERSION = "investor2.arxiv-version-pins.v1"
 EXPECTED_SOURCE_SNAPSHOT_SHA256 = (
     "a1ebbbd25ae65b5bce391ccb8ded1a27fa7c013102581251cc1f6ee4e73a948c"

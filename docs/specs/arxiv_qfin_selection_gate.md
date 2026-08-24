@@ -15,7 +15,7 @@ The selector resolves this input through `scripts/snapshot_store.py` and verifie
 
 ## Relationship to the reproduction registry
 
-The repository also contains the curated reproduction registry at `docs/research/2021_arxiv_finance_registry.json` and its storage/state-machine contract in `docs/specs/paper_reproduction_store.md`.
+The repository also contains the curated reproduction registry at `docs/research/catalogs/2021_arxiv_finance_registry.json` and its storage/state-machine contract in `docs/specs/paper_reproduction_store.md`.
 
 These artifacts have different roles:
 
@@ -56,7 +56,7 @@ Current citation counts, later journal outcomes, and post-2021 strategy performa
 The selector consumes only:
 
 1. the accepted snapshot resolved by reuse key;
-2. `docs/research/arxiv_qfin_selector_rules_v1.json`;
+2. `docs/research/catalogs/arxiv_qfin_selector_rules_v1.json`;
 3. the deterministic selector implementation.
 
 The rules file fixes required fields, phrase lists, thresholds, weights, forbidden decision inputs, selector version, and tie-breaking. Matching is case-folded and phrase-boundary aware; for example, the term `data` does not match the substring in `metadata`.
@@ -67,7 +67,7 @@ No network request, citation API, LLM call, randomness, current clock, generated
 
 The canonical manifest is:
 
-`docs/research/arxiv_qfin_2021_selection_manifest.json`
+`docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json`
 
 Every candidate records:
 
@@ -94,8 +94,8 @@ The repository's existing validation and reproduction policies remain authoritat
 ```bash
 python scripts/select_arxiv_qfin_papers.py \
   --reuse-key arxiv/q-fin/2021/metadata \
-  --rules docs/research/arxiv_qfin_selector_rules_v1.json \
-  --output docs/research/arxiv_qfin_2021_selection_manifest.json
+  --rules docs/research/catalogs/arxiv_qfin_selector_rules_v1.json \
+  --output docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json
 
 python tests/test_arxiv_qfin_selection.py
 python scripts/snapshot_store.py audit

@@ -1,4 +1,4 @@
-# Issue #161 — session-state research protocol
+# Issue #161 — daily market session research protocol
 
 Status: pre-launch protocol recorded before inspection of post-23/5 U.S. exchange outcomes.
 
@@ -42,7 +42,7 @@ Changing any of these values creates a different experiment specification and mu
 
 ## Data contract
 
-Research code consumes materialized immutable snapshots and does not fetch a provider inside the analysis path. Snapshot provider, region, date coverage, storage prefix, and provenance come from the snapshot manifest rather than from assumptions in the session-state code.
+Research code consumes materialized immutable snapshots and does not fetch a provider inside the analysis path. Snapshot provider, region, date coverage, storage prefix, and provenance come from the snapshot manifest rather than from assumptions in the daily-market-session code.
 
 Repeated `--market-snapshot-dir` inputs may compose multiple immutable shards. Requested coverage must be gap-free; duplicate `Ticker/Date` rows fail closed rather than selecting an implicit winner.
 
@@ -177,4 +177,4 @@ A session feature is not accepted because it is descriptively large. Later phase
 
 ## Capability delta
 
-One generic session-state implementation can evaluate different regions, symbols, horizons, adjustment modes, warm-ups, and annualization conventions without source changes. Experiment-specific choices remain explicit evidence, not hidden defaults.
+One generic daily-market-session implementation can evaluate different regions, symbols, horizons, adjustment modes, warm-ups, and annualization conventions without source changes. Experiment-specific choices remain explicit evidence, not hidden defaults.

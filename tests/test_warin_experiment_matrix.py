@@ -6,8 +6,8 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-MATRIX = ROOT / "docs/research/warin_2101_02044_v4_experiment_matrix.json"
-REGISTRY = ROOT / "docs/research/2021_arxiv_finance_registry.json"
+MATRIX = ROOT / "docs/research/contracts/warin_2101_02044_v4_experiment_matrix.json"
+REGISTRY = ROOT / "docs/research/catalogs/2021_arxiv_finance_registry.json"
 
 
 def load(path: Path):

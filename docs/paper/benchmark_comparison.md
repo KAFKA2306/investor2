@@ -1,6 +1,6 @@
 # Paper-family frontier
 
-この表は `docs/research/paper_family_frontier.json` から生成する比較surfaceです。論文記載値とrepository実測値を混ぜず、直接head-to-headが完了するまで優越を主張しません。
+この表は `docs/research/frontier/paper_family_frontier.json` から生成する比較surfaceです。論文記載値とrepository実測値を混ぜず、直接head-to-headが完了するまで優越を主張しません。
 
 **Global superiority:** UNPROVEN — 0/34 families are BEAT; 34 remain unresolved.
 

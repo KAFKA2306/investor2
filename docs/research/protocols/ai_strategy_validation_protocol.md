@@ -60,10 +60,10 @@ machine-readable artifact. Missing evidence fails closed.
 
 The public dashboard regenerates its manifest from:
 
-- `docs/research/post_publication_momentum_oos.json`
-- `docs/research/paper_factor_registry.json`
+- `docs/research/results/post_publication_momentum_oos.json`
+- `docs/research/frontier/paper_factor_registry.json`
 - `scripts/verify_paper_factor_suite.py`
-- `docs/research/2010s_paper_validation_repeated.json`
+- `docs/research/results/2010s_paper_validation_repeated.json`
 
 The current manifest contains eight hypotheses: one momentum test and seven
 paper–factor tests. None is promoted. The latest factor data ends in February

@@ -9,9 +9,13 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from scripts.session_state_baseline import select_prices, validate_snapshot_coverage
+from scripts.daily_market_session_baseline import select_prices, validate_snapshot_coverage
+from src.research.daily_market_session_features import (
+    add_session_tilt,
+    annualized_session_summary,
+    decompose_daily_sessions,
+)
 from src.research.market_snapshot import MarketSnapshot, load_manifest, load_prices_from_snapshots
-from src.research.session_state import add_session_tilt, annualized_session_summary, decompose_daily_sessions
 
 
 def _csv(raw: str) -> list[str]:
@@ -235,7 +239,7 @@ def evaluate(
     descriptive = annualized_session_summary(returns, trading_days=trading_days)
     descriptive_by_ticker = {str(row["Ticker"]): row for row in descriptive.to_dict(orient="records")}
     return {
-        "schema_version": "investor2.session-state-oos.v1",
+        "schema_version": "investor2.daily-market-session-oos.v1",
         "decision": decision,
         "decision_scope": "prelaunch daily-bar SessionTilt only; not the future 23/5 intervention",
         "specification": {

@@ -4,7 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from src.research.session_state import (
+from src.research.daily_market_session_features import (
     add_session_tilt,
     annualized_session_summary,
     decompose_daily_sessions,

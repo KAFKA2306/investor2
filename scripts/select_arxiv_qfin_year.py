@@ -101,7 +101,7 @@ def main() -> None:
     parser.add_argument(
         "--rules",
         type=Path,
-        default=ROOT / "docs/research/arxiv_qfin_selector_rules_v1.json",
+        default=ROOT / "docs/research/catalogs/arxiv_qfin_selector_rules_v1.json",
     )
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()

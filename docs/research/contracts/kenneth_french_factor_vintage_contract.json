@@ -3,10 +3,10 @@
   "as_of": "2026-08-16",
   "decision": "Select a reproducible factor-data authority for post-publication factor persistence tests without silently mixing CRSP FIZ and CIZ histories.",
   "current_repository_state": {
-    "registry": "docs/research/paper_factor_registry.json",
+    "registry": "docs/research/frontier/paper_factor_registry.json",
     "current_datasets": ["ff3_1992_2020", "ff5_2015_2020"],
     "current_authority": "official_primary_pinned_snapshot",
-    "snapshot_manifest": "docs/research/kenneth_french_current_snapshot_2026-06.json",
+    "snapshot_manifest": "docs/research/data/kenneth_french_current_snapshot_2026-06.json",
     "current_terminal_month": "2026-06",
     "current_verified_factor_month_records": 542,
     "legacy_third_party_mirror_disposition": "removed_from_current_use; historical provenance remains in git history"

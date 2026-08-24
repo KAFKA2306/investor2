@@ -96,7 +96,7 @@ def build_repeat_report(
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument(
-        "--registry", type=Path, default=Path("docs/research/paper_factor_registry.json")
+        "--registry", type=Path, default=Path("docs/research/frontier/paper_factor_registry.json")
     )
     parser.add_argument("--publication-start", default="2010-01")
     parser.add_argument("--publication-end", default="2019-12")

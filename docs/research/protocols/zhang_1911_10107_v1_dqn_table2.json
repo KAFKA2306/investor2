@@ -39,9 +39,9 @@
     }
   },
   "canonical_inputs": {
-    "version_pins": "docs/research/arxiv_qfin_2019_version_pins.json",
-    "data_contracts": "docs/research/arxiv_qfin_2019_data_requirements.json",
-    "split_contracts": "docs/research/arxiv_qfin_2019_split_contracts.json"
+    "version_pins": "docs/research/catalogs/arxiv_qfin_2019_version_pins.json",
+    "data_contracts": "docs/research/catalogs/arxiv_qfin_2019_data_requirements.json",
+    "split_contracts": "docs/research/contracts/arxiv_qfin_2019_split_contracts.json"
   },
   "data_gate": {
     "required_vendor": "Pinnacle Data Corp",

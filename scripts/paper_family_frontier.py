@@ -153,7 +153,7 @@ def render(registry: dict[str, Any]) -> str:
     lines = [
         "# Paper-family frontier",
         "",
-        "この表は `docs/research/paper_family_frontier.json` から生成する比較surfaceです。論文記載値とrepository実測値を混ぜず、直接head-to-headが完了するまで優越を主張しません。",
+        "この表は `docs/research/frontier/paper_family_frontier.json` から生成する比較surfaceです。論文記載値とrepository実測値を混ぜず、直接head-to-headが完了するまで優越を主張しません。",
         "",
         f"**Global superiority:** {global_state} — {beat_count}/{len(families)} families are BEAT; {unresolved} remain unresolved.",
         "",
@@ -259,7 +259,7 @@ def parse_args() -> argparse.Namespace:
 def main() -> None:
     args = parse_args()
     root = args.root.resolve()
-    registry_path = args.registry or root / "docs" / "research" / "paper_family_frontier.json"
+    registry_path = args.registry or root / "docs" / "research" / "frontier" / "paper_family_frontier.json"
     registry = load_registry(registry_path)
     validate(root, registry)
 

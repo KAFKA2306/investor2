@@ -13,7 +13,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_RUN_DIR = ROOT / "docs/research/runs/warin_2101_02044_v4_beta2_seed2306"
-DEFAULT_REGISTRY = ROOT / "docs/research/2021_arxiv_finance_registry.json"
+DEFAULT_REGISTRY = ROOT / "docs/research/catalogs/2021_arxiv_finance_registry.json"
 
 
 def load_materializer() -> Any:

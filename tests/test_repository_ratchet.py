@@ -25,7 +25,7 @@ class RepositoryRatchetTest(unittest.TestCase):
     def test_readme_links_canonical_flow_and_hypothesis_lab(self) -> None:
         readme = (ROOT / "README.md").read_text(encoding="utf-8")
         self.assertIn("docs/architecture/canonical-investment-flow.md", readme)
-        self.assertIn("docs/research/hypothesis-lab.md", readme)
+        self.assertIn("docs/research/studies/hypothesis-lab.md", readme)
         self.assertIn("data/decision_ledger/README.md", readme)
 
     def test_canonical_paths_exist(self) -> None:

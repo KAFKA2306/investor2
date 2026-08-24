@@ -9,12 +9,12 @@ from pathlib import Path
 from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_SELECTION = ROOT / "docs/research/arxiv_qfin_2021_selection_manifest.json"
-DEFAULT_PINS = ROOT / "docs/research/arxiv_qfin_2021_version_pins.json"
+DEFAULT_SELECTION = ROOT / "docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json"
+DEFAULT_PINS = ROOT / "docs/research/catalogs/arxiv_qfin_2021_version_pins.json"
 SCHEMA_VERSION = "investor2.arxiv-stage-b-inputs.v2"
 PIN_SCHEMA_VERSION = "investor2.arxiv-version-pins.v1"
 UNKNOWN = "NOT_SPECIFIED"
-DATA_REQUIREMENT_SCHEMA = "docs/research/arxiv_data_requirement_schema_v1.json"
+DATA_REQUIREMENT_SCHEMA = "docs/research/catalogs/arxiv_data_requirement_schema_v1.json"
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()

@@ -12,8 +12,8 @@ from typing import Any
 from snapshot_store import ROOT, latest_snapshot, resolve_artifact, sha256_file
 
 DEFAULT_REUSE_KEY = "arxiv/q-fin/2021/metadata"
-DEFAULT_RULES = ROOT / "docs/research/arxiv_qfin_selector_rules_v1.json"
-DEFAULT_OUTPUT = ROOT / "docs/research/arxiv_qfin_2021_selection_manifest.json"
+DEFAULT_RULES = ROOT / "docs/research/catalogs/arxiv_qfin_selector_rules_v1.json"
+DEFAULT_OUTPUT = ROOT / "docs/research/catalogs/arxiv_qfin_2021_selection_manifest.json"
 MANIFEST_SCHEMA_VERSION = "investor2.arxiv-qfin-selection-manifest.v1"
 DECISION_RANK = {"SELECT": 0, "REVIEW": 1, "REJECT": 2}
 
