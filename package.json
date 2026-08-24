@@ -20,7 +20,6 @@
     "@biomejs/biome": "^2.4.4",
     "@playwright/test": "^1.58.2",
     "@types/adm-zip": "^0.5.7",
-    "@types/better-sqlite3": "^7.6.13",
     "@types/bun": "latest",
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^25.3.2",
@@ -31,8 +30,6 @@
   },
   "dependencies": {
     "adm-zip": "^0.5.16",
-    "apache-arrow": "^21.1.0",
-    "better-sqlite3": "^12.8.0",
     "hono": "^4.12.8",
     "js-yaml": "^4.1.1",
     "pg": "^8.19.0",
