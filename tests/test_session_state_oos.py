@@ -4,18 +4,18 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from scripts.build_explicit_market_snapshot import explicit_universe, parse_tickers
-from scripts.session_state_oos import evaluate
+import scripts.build_explicit_market_snapshot as explicit_snapshot
+import scripts.session_state_oos as session_oos
 
 
 TICKERS = ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"]
 
 
 def test_explicit_universe_is_exact_and_deduplicated() -> None:
-    assert parse_tickers("aaa, BBB,ccc") == ["AAA", "BBB", "CCC"]
+    assert explicit_snapshot.parse_tickers("aaa, BBB,ccc") == ["AAA", "BBB", "CCC"]
     with pytest.raises(ValueError, match="duplicate"):
-        parse_tickers("AAA,aaa")
-    universe = explicit_universe(region="XX", tickers=["AAA", "CCC"])
+        explicit_snapshot.parse_tickers("AAA,aaa")
+    universe = explicit_snapshot.explicit_universe(region="XX", tickers=["AAA", "CCC"])
     assert universe.to_dict(orient="records") == [
         {"Ticker": "AAA", "Region": "xx", "UniverseSource": "explicit"},
         {"Ticker": "CCC", "Region": "xx", "UniverseSource": "explicit"},
@@ -72,7 +72,7 @@ def _evaluate(**overrides: object) -> dict[str, object]:
         "minimum_stress_sharpe": -10.0,
     }
     kwargs.update(overrides)
-    return evaluate(_synthetic_prices(), **kwargs)  # type: ignore[arg-type]
+    return session_oos.evaluate(_synthetic_prices(), **kwargs)  # type: ignore[arg-type]
 
 
 def test_oos_evaluation_uses_explicit_benchmark_cost_and_acceptance_contract() -> None:
