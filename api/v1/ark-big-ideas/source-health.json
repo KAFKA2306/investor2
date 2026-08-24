@@ -96,7 +96,7 @@
       "live_check": "ok",
       "logical_repo": "nuclear-power",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/status-events-2026.json",
-      "sha256": "414b4cf9e3b8bf3379d2baeea8739352f901e4b6c7e6ae8c4f2c32defdd152fa",
+      "sha256": "e67241aa1502000f23f20f09f928b3ff275af56031e48d4f03ab71d192dd162c",
       "status": "ready",
       "theme": "Distributed Energy / Nuclear",
       "top_level_keys": [

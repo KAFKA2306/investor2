@@ -4,7 +4,7 @@
 
 - ARK official source: https://www.ark-invest.com/big-ideas-2026
 - canonical mapping: https://github.com/KAFKA2306/investor2/issues/111
-- checked_at: `2026-08-24T15:21:46+00:00`
+- checked_at: `2026-08-24T17:47:45+00:00`
 
 | Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
@@ -18,7 +18,7 @@
 | Multiomics | [KAFKA2306/multiomics](https://github.com/KAFKA2306/multiomics) | yes | yes | no | yes | no | no | yes |
 | Reusable Rockets | [KAFKA2306/trahist](https://github.com/KAFKA2306/trahist) | yes | yes | yes | yes | yes | no | yes |
 | Robotics | [KAFKA2306/factory](https://github.com/KAFKA2306/factory) | yes | yes | yes | yes | yes | no | yes |
-| Distributed Energy | [KAFKA2306/oil](https://github.com/KAFKA2306/oil)<br>[KAFKA2306/uranium](https://github.com/KAFKA2306/uranium) | yes | yes | no | yes | no | no | yes |
+| Distributed Energy | [KAFKA2306/oil](https://github.com/KAFKA2306/oil)<br>[KAFKA2306/uranium](https://github.com/KAFKA2306/uranium) | yes | yes | no | yes | yes | no | yes |
 | Autonomous Vehicles | [KAFKA2306/autonomous-vehicles](https://github.com/KAFKA2306/autonomous-vehicles) | yes | yes | no | yes | no | no | yes |
 | Autonomous Logistics | [KAFKA2306/autonomous-logistics](https://github.com/KAFKA2306/autonomous-logistics) | yes | yes | yes | yes | yes | no | yes |
 

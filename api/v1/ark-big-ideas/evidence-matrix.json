@@ -72,10 +72,10 @@
       "logical_repo": "nuclear-power",
       "projection": {
         "adapter": "nuclear_capacity",
-        "artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d.json",
         "feed_id": "nuclear-capacity",
-        "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
-        "mirror_snapshot_id": "49763485fde147d0bae4",
+        "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
+        "mirror_snapshot_id": "407fa63c735978dc17ab",
         "row_count": 8
       },
       "status": "ready",

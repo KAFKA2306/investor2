@@ -1,6 +1,6 @@
 {
   "ark_source_url": "https://www.ark-invest.com/big-ideas-2026",
-  "checked_at": "2026-08-24T15:21:46+00:00",
+  "checked_at": "2026-08-24T17:47:45+00:00",
   "coverage_rule": "Theme booleans are true only when every required component is verified; repository or Issue existence alone is insufficient.",
   "live_github_checks": true,
   "mapping_source_url": "https://github.com/KAFKA2306/investor2/issues/111",
@@ -643,11 +643,11 @@
           "derived_output_exists": true,
           "implementation_issue_url": "https://github.com/KAFKA2306/uranium/issues/5",
           "investor2_integration_exists": true,
-          "latest_evidence_commit": "0db350800aa170cccbd96ee999e72d370da0cc87",
-          "latest_workflow_passed": false,
+          "latest_evidence_commit": "1aa20db1236677ce2a731ef83fbb8c97f441fcfc",
+          "latest_workflow_passed": true,
           "logical_repo": "nuclear-power",
-          "mirror_artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a.json",
-          "mirror_sha256": "e9f9f474e9fbf6a21f29fc76c907869f66f321b52282e7e22ad9133035b37e8a",
+          "mirror_artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d.json",
+          "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
           "primary_source_provenance_exists": true,
           "public_view_exists": false,
           "raw_evidence_exists": true,
@@ -673,9 +673,9 @@
       "investor2_integration_exists": true,
       "latest_evidence_commit": [
         "be2f0e21b292b952f1e12878143ffe54660ddfd4",
-        "0db350800aa170cccbd96ee999e72d370da0cc87"
+        "1aa20db1236677ce2a731ef83fbb8c97f441fcfc"
       ],
-      "latest_workflow_passed": false,
+      "latest_workflow_passed": true,
       "primary_source_provenance_exists": true,
       "public_view_exists": false,
       "raw_evidence_exists": false,
