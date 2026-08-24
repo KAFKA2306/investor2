@@ -7,6 +7,15 @@ on:
   pull_request:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      max_assets:
+        description: PIT common-stock universe size
+        required: true
+        default: "256"
+        type: choice
+        options:
+          - "64"
+          - "256"
 
 permissions:
   contents: write
@@ -59,6 +68,7 @@ jobs:
       HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
       HF_HOME: /tmp/huggingface-personal-cache
       PYTHONPATH: .
+      MAX_ASSETS: ${{ inputs.max_assets || '256' }}
     steps:
       - uses: actions/checkout@v7
         with:
@@ -70,6 +80,10 @@ jobs:
         run: |
           test -n "$JQUANTS_API_KEY"
           test -n "$HF_TOKEN"
+          case "$MAX_ASSETS" in
+            64|256) ;;
+            *) echo "unsupported MAX_ASSETS=$MAX_ASSETS" >&2; exit 2 ;;
+          esac
       - name: Install execution dependencies
         run: |
           python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
@@ -115,14 +129,14 @@ jobs:
             --date "$UNIVERSE_MASTER_DATE" \
             --output "$SNAPSHOT_ROOT/universe.parquet" \
             --request-interval 15
-      - name: Prepare PIT common-stock top-64 panel
+      - name: Prepare PIT common-stock panel
         run: |
           mkdir -p /tmp/alphazerobeta-japan
           python scripts/alphazerobeta_japan_free_prepare.py \
             --market-snapshot-dir "$SNAPSHOT_ROOT" \
             --market-regions jp \
             --output /tmp/alphazerobeta-japan/panel.npz \
-            --max-assets 64 \
+            --max-assets "$MAX_ASSETS" \
             --universe-cutoff "$UNIVERSE_CUTOFF"
       - name: Execute two OOS folds and matched correlation-penalty ablation
         shell: bash
@@ -159,7 +173,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          target=docs/research/results/alphazerobeta_jquants_free
+          if [ "$MAX_ASSETS" = "64" ]; then
+            target=docs/research/results/alphazerobeta_jquants_free
+          else
+            target="docs/research/results/alphazerobeta_jquants_free_${MAX_ASSETS}"
+          fi
           rm -rf "$target"
           mkdir -p "$target"
           cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
@@ -167,17 +185,20 @@ jobs:
           cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/comparison.json "$target/"
-          python - <<'PY'
+          TARGET="$target" MAX_ASSETS="$MAX_ASSETS" python - <<'PY'
           import json
+          import os
           from pathlib import Path
 
-          root = Path('docs/research/results/alphazerobeta_jquants_free')
+          root = Path(os.environ['TARGET'])
+          max_assets = int(os.environ['MAX_ASSETS'])
           source = json.loads((root / 'source-manifest.json').read_text())
           dataset = json.loads((root / 'dataset-manifest.json').read_text())
           comparison = json.loads((root / 'comparison.json').read_text())
           payload = {
-              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v5',
+              'schema_version': 'investor2.alphazerobeta-jquants-free-validation.v6',
               'execution_status': 'completed',
+              'requested_asset_count': max_assets,
               'source': {
                   'source': source['source'],
                   'plan': source['plan'],
@@ -199,21 +220,63 @@ jobs:
               'trained_asset_count': len(dataset['selected_codes']),
               'selected_codes': dataset['selected_codes'],
               'walk_forward': {'train_months': 12, 'validation_months': 3, 'test_months': 3, 'folds': 2},
+              'cost_assumptions': comparison['cost_assumptions'],
               'primary_lambda_corr_0_5': comparison['primary_lambda_corr_0_5'],
               'ablation_lambda_corr_0': comparison['ablation_lambda_corr_0'],
+              'neutrality': comparison['neutrality'],
               'gates': comparison['gates'],
               'verdict': comparison['verdict'],
               'benchmark': '13060 NEXT FUNDS TOPIX ETF proxy; not exact TOPIX and excluded from the investable universe',
               'claim_boundary': 'J-Quants Free Japanese common-stock surrogate with paper model/reward semantics; not the licensed-data paper experiment.',
           }
+          if payload['trained_asset_count'] != max_assets:
+              raise AssertionError(
+                  f"trained asset count {payload['trained_asset_count']} != requested {max_assets}"
+              )
           (root / 'summary.json').write_text(json.dumps(payload, ensure_ascii=False, indent=2) + '\n')
+
+          if max_assets == 256:
+              baseline_root = Path('docs/research/results/alphazerobeta_jquants_free')
+              baseline = json.loads((baseline_root / 'summary.json').read_text())
+              baseline_comparison = json.loads((baseline_root / 'comparison.json').read_text())
+              contract_checks = {
+                  'source_actual_date_range': baseline['source']['actual_date_range'] == payload['source']['actual_date_range'],
+                  'universe_cutoff': baseline['universe_contract']['universe_cutoff'] == payload['universe_contract']['universe_cutoff'],
+                  'walk_forward': baseline['walk_forward'] == payload['walk_forward'],
+                  'cost_assumptions': baseline_comparison['cost_assumptions'] == payload['cost_assumptions'],
+                  'benchmark': baseline['benchmark'] == payload['benchmark'],
+              }
+              if not all(contract_checks.values()):
+                  raise AssertionError(f"64/256 comparison contract mismatch: {contract_checks}")
+              p64 = baseline['primary_lambda_corr_0_5']
+              p256 = payload['primary_lambda_corr_0_5']
+              direct = {
+                  'schema_version': 'investor2.alphazerobeta-64-vs-256.v1',
+                  'contract_checks': contract_checks,
+                  'directly_comparable': True,
+                  'baseline_asset_count': baseline['trained_asset_count'],
+                  'candidate_asset_count': payload['trained_asset_count'],
+                  'baseline_64': p64,
+                  'candidate_256': p256,
+                  'delta_256_minus_64': {
+                      'cumulative_return': p256['cumulative_return'] - p64['cumulative_return'],
+                      'annualized_sharpe': p256['annualized_sharpe'] - p64['annualized_sharpe'],
+                      'benchmark_correlation': p256['benchmark_correlation'] - p64['benchmark_correlation'],
+                      'absolute_benchmark_correlation': abs(p256['benchmark_correlation']) - abs(p64['benchmark_correlation']),
+                      'max_drawdown': p256['max_drawdown'] - p64['max_drawdown'],
+                  },
+                  'neutrality_64': baseline_comparison['neutrality'],
+                  'neutrality_256': payload['neutrality'],
+                  'interpretation': 'Descriptive universe-size sensitivity only; improvement is not a paper-family BEAT verdict.',
+              }
+              (root / 'comparison-vs-64.json').write_text(json.dumps(direct, ensure_ascii=False, indent=2) + '\n')
           print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$target"
           if ! git diff --cached --quiet; then
-            git commit -m "research: persist J-Quants Free AlphaZeroBeta evidence [evidence]"
+            git commit -m "research: persist J-Quants Free AlphaZeroBeta ${MAX_ASSETS}-asset evidence [evidence]"
             git push origin HEAD:research/alphazerobeta-jquants-free-validation
           fi
       - name: Delete plaintext working copies
