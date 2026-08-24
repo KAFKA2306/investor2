@@ -48,9 +48,7 @@ def preprocess_data(data_list: list[dict[str, Any]]) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def fill_and_align_data(
-    x_train: pd.DataFrame, x_test: pd.DataFrame
-) -> tuple[pd.DataFrame, pd.DataFrame]:
+def fill_and_align_data(x_train: pd.DataFrame, x_test: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
     """Mirror the official train-mean fill, constant-drop, and column alignment."""
     train = x_train.copy()
     test = x_test.copy()
