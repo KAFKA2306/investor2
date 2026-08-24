@@ -8,7 +8,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from scripts.alphazerobeta_jquants_free_ephemeral import (
+from scripts.jquants_free_ephemeral import (
     MIN_REQUEST_INTERVAL_SECONDS,
     make_rate_limited_client,
 )

@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+"""Shared PIT Japanese-equity panel adapter for J-Quants frontier families."""
+
 from __future__ import annotations
 
 import argparse

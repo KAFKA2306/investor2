@@ -12,7 +12,7 @@ Canonical Dataset:
 
 Canonical implementation:
 
-- `scripts/alphazerobeta_jquants_private_hf_cache.py`
+- `scripts/jquants_private_hf_cache.py`
 - `.github/workflows/jquants-personal-hf-cache.yml`
 
 ## J-Quants usage boundary

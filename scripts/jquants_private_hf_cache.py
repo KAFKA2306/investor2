@@ -22,7 +22,7 @@ from zoneinfo import ZoneInfo
 
 import pandas as pd
 
-from scripts.alphazerobeta_jquants_free_ephemeral import (
+from scripts.jquants_free_ephemeral import (
     BENCHMARK_CODE,
     DEFAULT_REQUEST_INTERVAL_SECONDS,
     FREE_DELAY_WEEKS,
@@ -299,7 +299,7 @@ def main() -> None:
     benchmark.to_parquet(root / "benchmark.parquet", index=False, compression="zstd")
 
     manifest: dict[str, object] = {
-        "schema_version": "investor2.alphazerobeta-jquants-personal-hf-cache.v1",
+        "schema_version": "investor2.jquants-personal-hf-cache.v1",
         "source": "J-Quants API v2 with owner-only encrypted private HF cache",
         "plan": "Free",
         "as_of": str(pd.Timestamp(args.as_of).date()),
