@@ -109,8 +109,8 @@ def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyP
     monkeypatch.setattr(market_snapshot_builder.time, "sleep", sleeps.append)
 
     result = screen_with_retry(
-        EquityQuery("eq", ["region", "xx"]),
-        region="xx",
+        EquityQuery("eq", ["region", "jp"]),
+        region="jp",
         offset=0,
         page_size=19,
         max_attempts=4,
