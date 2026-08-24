@@ -41,7 +41,7 @@ verify*
 debug*
 # Data and models
 **/data/
-cache/benchmarks/
+cache/
 docs/bench/
 edinet2dataset/edinet_corpus/
 llm/*/models/
