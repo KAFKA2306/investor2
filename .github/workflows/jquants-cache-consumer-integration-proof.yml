@@ -1,0 +1,122 @@
+name: Prove AlphaZeroBeta consumes owner-only J-Quants cache
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/jquants-cache-consumer-integration-proof.yml
+
+permissions:
+  contents: read
+
+jobs:
+  cache-to-trainer-proof:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-cache-consumer-proof
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install integration dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Materialize daily bars entirely from Private HF
+        run: |
+          rm -rf /tmp/jquants-cache-consumer /tmp/alphazerobeta-cache-consumer
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-cache-consumer \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-24 \
+            --request-interval 15 \
+            --require-cache-complete
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest = json.loads(Path('/tmp/jquants-cache-consumer/manifest.json').read_text())
+          assert manifest['request_count'] == 0
+          assert manifest['cache']['cache_hits'] == 521
+          assert manifest['cache']['cache_misses'] == 0
+          assert manifest['cache']['cache_complete_after_run'] is True
+          assert manifest['cache']['visibility'] == 'private'
+          assert manifest['cache']['plaintext_jquants_rows_on_hf'] is False
+          print(json.dumps({'cache_status': 'passed', 'rows': manifest['price_rows'], 'tickers': manifest['ticker_count'], 'market_days': manifest['observed_market_days'], 'daily_bar_api_requests': manifest['request_count']}, sort_keys=True))
+          PY
+      - name: Resolve PIT cutoff
+        run: |
+          ROOT=/tmp/jquants-cache-consumer
+          ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
+          import pandas as pd
+          root = Path(os.environ['ROOT'])
+          manifest = json.loads((root / 'manifest.json').read_text())
+          test_end = pd.Timestamp(manifest['actual_date_range']['end'])
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / 'benchmark.parquet')
+          dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
+          eligible = dates[dates <= universe_cutoff]
+          assert not eligible.empty
+          master_date = eligible.max()
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
+          PY
+      - name: Fetch one PIT master snapshot
+        run: |
+          python scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output /tmp/jquants-cache-consumer/universe.parquet \
+            --request-interval 15
+      - name: Prepare top-64 panel from cached daily bars
+        run: |
+          mkdir -p /tmp/alphazerobeta-cache-consumer
+          python scripts/alphazerobeta_japan_free_prepare.py \
+            --market-snapshot-dir /tmp/jquants-cache-consumer \
+            --market-regions jp \
+            --output /tmp/alphazerobeta-cache-consumer/panel.npz \
+            --max-assets 64 \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m = json.loads(Path('/tmp/alphazerobeta-cache-consumer/panel.npz.manifest.json').read_text())
+          assert len(m['selected_codes']) == 64
+          print(json.dumps({'prepare_status': 'passed', 'selected_codes': len(m['selected_codes']), 'universe_cutoff': m['universe_cutoff']}, sort_keys=True))
+          PY
+      - name: Execute one-iteration trainer integration probe
+        run: |
+          python scripts/alphazerobeta_japan_free_train.py \
+            --dataset /tmp/alphazerobeta-cache-consumer/panel.npz \
+            --output /tmp/alphazerobeta-cache-consumer/trainer-probe.json \
+            --test-start "$TEST_START" --test-end "$TEST_END" --fold-index 0 \
+            --device cpu --seed 2306 --iterations 1 --horizon 32 \
+            --hidden-size 512 --agent-window 100 \
+            --transaction-cost-bps 15 --borrow-fee-bps 30 \
+            --lambda-corr 0.5 --lambda-turnover 0.001 --reward-semantics paper
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('/tmp/alphazerobeta-cache-consumer/trainer-probe.json')
+          assert p.is_file()
+          result = json.loads(p.read_text())
+          print(json.dumps({'trainer_status': 'passed', 'output_keys': sorted(result.keys())}, sort_keys=True))
+          PY
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-cache-consumer /tmp/alphazerobeta-cache-consumer /tmp/huggingface-cache-consumer-proof
