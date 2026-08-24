@@ -9,11 +9,31 @@ from typing import Any
 
 VERDICTS = {"BEAT", "TIE", "LOSE", "BLOCKED"}
 ARXIV_ID = re.compile(r"arxiv\.org/abs/([^/?#]+)", re.IGNORECASE)
+REQUIRED_FAMILY_FIELDS = {
+    "family_id",
+    "canonical_name",
+    "canonical_page",
+    "primary_url",
+    "historical_aliases",
+    "task_class",
+    "claimed_capability",
+    "representative",
+    "market_dataset_universe",
+    "original_sample_dates",
+    "native_benchmark",
+    "primary_metric",
+    "required_data_license_state",
+    "reproduction_state",
+    "head_to_head",
+    "canonical_reproduction",
+    "superseded_files",
+    "verdict",
+}
 
 
 def load_registry(path: Path) -> dict[str, Any]:
     payload = json.loads(path.read_text(encoding="utf-8"))
-    if payload.get("schema_version") != "investor2.paper-family-frontier.v1":
+    if payload.get("schema_version") != "investor2.paper-family-frontier.v2":
         raise AssertionError("unsupported paper-family frontier schema")
     return payload
 
@@ -44,6 +64,10 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
     mapped: set[str] = set()
 
     for family in families:
+        missing_fields = sorted(REQUIRED_FAMILY_FIELDS - set(family))
+        if missing_fields:
+            raise AssertionError(f"family missing required fields: {family.get('family_id')}: {missing_fields}")
+
         family_id = family["family_id"]
         if family_id in family_ids:
             raise AssertionError(f"duplicate family_id: {family_id}")
@@ -59,22 +83,33 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
             raise AssertionError(f"missing canonical page: {page}")
 
         primary_url = family.get("primary_url")
-        if primary_url:
-            token = identity_token(primary_url)
-            previous = identities.get(token)
-            if previous is not None:
-                raise AssertionError(f"duplicate paper identity {token}: {previous} and {family_id}")
-            identities[token] = family_id
-            if not identity_is_in_page(primary_url, page_path.read_text(encoding="utf-8")):
-                raise AssertionError(f"filename/content identity mismatch: {page} does not contain {token}")
+        if not primary_url:
+            raise AssertionError(f"missing canonical primary URL: {family_id}")
+        token = identity_token(primary_url)
+        previous = identities.get(token)
+        if previous is not None:
+            raise AssertionError(f"duplicate paper identity {token}: {previous} and {family_id}")
+        identities[token] = family_id
+        if not identity_is_in_page(primary_url, page_path.read_text(encoding="utf-8")):
+            raise AssertionError(f"filename/content identity mismatch: {page} does not contain {token}")
+
+        if family["historical_aliases"] != family["superseded_files"]:
+            raise AssertionError(f"alias/superseded mismatch: {family_id}")
+        for alias in family["superseded_files"]:
+            if (root / alias).exists():
+                raise AssertionError(f"superseded paper alias is still active: {alias}")
+
+        reproduction = family["canonical_reproduction"]
+        if reproduction.get("benchmark_contract_issue") != 51:
+            raise AssertionError(f"family does not reuse #51 benchmark authority: {family_id}")
+        if reproduction.get("inspection_queue_issue") != 55:
+            raise AssertionError(f"family does not reuse #55 inspection authority: {family_id}")
 
         verdict = family.get("verdict")
         if verdict is not None and verdict not in VERDICTS:
             raise AssertionError(f"invalid verdict for {family_id}: {verdict}")
-
-        for alias in family.get("historical_aliases", []):
-            if (root / alias).exists():
-                raise AssertionError(f"superseded paper alias is still active: {alias}")
+        if verdict is not None and family["head_to_head"] == "NOT_RUN":
+            raise AssertionError(f"verdict without head-to-head evidence: {family_id}")
 
     for item in material:
         path = item["path"]
@@ -96,15 +131,16 @@ def render(registry: dict[str, Any]) -> str:
     families = sorted(registry["families"], key=lambda item: item["canonical_name"].casefold())
     beat_count = sum(family.get("verdict") == "BEAT" for family in families)
     unresolved = len(families) - beat_count
+    global_state = "PROVEN" if families and unresolved == 0 else "UNPROVEN"
     lines = [
         "# Paper-family frontier",
         "",
         "この表は `docs/research/paper_family_frontier.json` から生成する比較surfaceです。論文記載値とrepository実測値を混ぜず、直接head-to-headが完了するまで優越を主張しません。",
         "",
-        f"**Global superiority:** UNPROVEN — {beat_count}/{len(families)} families are BEAT; {unresolved} remain unresolved.",
+        f"**Global superiority:** {global_state} — {beat_count}/{len(families)} families are BEAT; {unresolved} remain unresolved.",
         "",
-        "| Family | Claimed strength | Representative | Reproduction state | Primary metric | Verdict | Evidence |",
-        "|---|---|---|---|---|---|---|",
+        "| Family | Claimed strength | Representative | Reproduction state | AAARTS head-to-head | Primary metric | Verdict | Evidence |",
+        "|---|---|---|---|---|---|---|---|",
     ]
     for family in families:
         verdict = family.get("verdict") or "—"
@@ -113,10 +149,11 @@ def render(registry: dict[str, Any]) -> str:
         strength = family["claimed_capability"].replace("|", "\\|")
         representative = family["representative"].replace("|", "\\|")
         state = family["reproduction_state"].replace("|", "\\|")
+        head_to_head = family["head_to_head"].replace("|", "\\|")
         metric = family["primary_metric"].replace("|", "\\|")
         relative = page.removeprefix("docs/paper/")
         lines.append(
-            f"| {label} | {strength} | {representative} | {state} | {metric} | {verdict} | [{relative}](./{relative}) |"
+            f"| {label} | {strength} | {representative} | {state} | {head_to_head} | {metric} | {verdict} | [{relative}](./{relative}) |"
         )
     lines.extend(
         [
