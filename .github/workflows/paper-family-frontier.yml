@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -27,3 +27,48 @@ jobs:
         run: python -m unittest discover -s tests -p 'test_paper_family_frontier.py'
       - name: Compile validator
         run: python -m py_compile scripts/paper_family_frontier.py tests/test_paper_family_frontier.py
+
+  # research-layout-migration:start
+  migrate-layout:
+    if: github.head_ref == 'issue-194-research-layout-final'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: issue-194-research-layout-final
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Apply responsibility and identity migration
+        run: python scripts/migrate_research_layout_once.py
+      - name: Verify canonical frontier and layout
+        run: |
+          python scripts/paper_family_frontier.py validate
+          python scripts/paper_family_frontier.py render --write
+          python scripts/paper_family_frontier.py readme --write
+          python scripts/paper_family_frontier.py render --check
+          python scripts/paper_family_frontier.py readme --check
+          python -m unittest discover -s tests -p 'test_paper_family_frontier.py'
+          python -m unittest discover -s tests -p 'test_research_layout.py'
+      - name: Verify renamed daily-session implementation
+        run: |
+          python -m pip install pandas numpy pyarrow yfinance pytest ruff
+          ruff format src/research/daily_market_session_features.py scripts/daily_market_session_baseline.py scripts/daily_market_session_oos.py tests/test_daily_market_session_features.py tests/test_daily_market_session_baseline.py tests/test_daily_market_session_oos.py tests/test_research_layout.py
+          ruff check --fix src/research/daily_market_session_features.py scripts/daily_market_session_baseline.py scripts/daily_market_session_oos.py tests/test_daily_market_session_features.py tests/test_daily_market_session_baseline.py tests/test_daily_market_session_oos.py tests/test_research_layout.py
+          PYTHONPATH=. python -m pytest -q \
+            tests/test_daily_market_session_features.py \
+            tests/test_daily_market_session_baseline.py \
+            tests/test_daily_market_session_oos.py \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_build_explicit_market_snapshot.py
+          python -m unittest discover -s tests -p 'test_research_layout.py'
+      - name: Commit verified migration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --cached --check
+          git commit -m "refactor: make research layout explicit"
+          git push origin HEAD:issue-194-research-layout-final
+  # research-layout-migration:end
