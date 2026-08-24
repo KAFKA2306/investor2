@@ -4,7 +4,7 @@ on:
   pull_request:
     paths:
       - "docs/research/protocols/warin_2101_02044_v4_table9_beta0959.json"
-      - "docs/research/warin_2101_02044_v4_experiment_matrix.json"
+      - "docs/research/contracts/warin_2101_02044_v4_experiment_matrix.json"
       - "scripts/run_warin_2101_02044_table9_constraints.py"
       - "scripts/run_warin_2101_02044_table9_single.py"
       - "scripts/aggregate_warin_2101_02044_table9.py"
