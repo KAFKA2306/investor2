@@ -11,7 +11,7 @@ from yfinance import EquityQuery
 from yfinance.exceptions import YFRateLimitError
 
 import scripts.alphazerobeta_build_market_snapshot as market_snapshot_builder
-from scripts.alphazerobeta_build_market_snapshot import normalize_download, parse_args, screen_with_retry
+from scripts.alphazerobeta_build_market_snapshot import normalize_download, parse_args, parse_regions, screen_with_retry
 from scripts.alphazerobeta_prepare import normalize_benchmark_frame, normalize_price_frame
 from src.research.market_snapshot import (
     MarketSnapshot,
@@ -42,7 +42,7 @@ def test_market_snapshot_accepts_arbitrary_market_and_collection_contract(
             "--end",
             "2024-08-09",
             "--regions",
-            "us,ca",
+            "xx,yy",
             "--benchmark",
             "BENCH",
             "--storage-prefix",
@@ -70,7 +70,7 @@ def test_market_snapshot_accepts_arbitrary_market_and_collection_contract(
 
     args = parse_args()
 
-    assert args.regions == "us,ca"
+    assert args.regions == "xx,yy"
     assert args.benchmark == "BENCH"
     assert args.start == "2012-03-04"
     assert args.end == "2024-08-09"
@@ -86,6 +86,14 @@ def test_market_snapshot_accepts_arbitrary_market_and_collection_contract(
     assert args.output_dir == tmp_path / "snapshot"
 
 
+def test_parse_regions_has_no_embedded_region_allowlist_or_all_alias() -> None:
+    assert parse_regions("XX,yy") == ["xx", "yy"]
+    with pytest.raises(ValueError, match="enumerate"):
+        parse_regions("all")
+    with pytest.raises(ValueError, match="duplicate"):
+        parse_regions("xx,XX")
+
+
 def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyPatch) -> None:
     calls = 0
     sleeps: list[float] = []
@@ -95,21 +103,21 @@ def test_screen_with_retry_recovers_after_rate_limit(monkeypatch: pytest.MonkeyP
         calls += 1
         if calls < 3:
             raise YFRateLimitError()
-        return {"quotes": [{"symbol": "7203.T"}], "total": 1}
+        return {"quotes": [{"symbol": "ABC"}], "total": 1}
 
     monkeypatch.setattr(market_snapshot_builder.yf, "screen", fake_screen)
     monkeypatch.setattr(market_snapshot_builder.time, "sleep", sleeps.append)
 
     result = screen_with_retry(
-        EquityQuery("eq", ["region", "jp"]),
-        region="jp",
+        EquityQuery("eq", ["region", "xx"]),
+        region="xx",
         offset=0,
         page_size=19,
         max_attempts=4,
         retry_base_seconds=2.0,
     )
 
-    assert result["quotes"][0]["symbol"] == "7203.T"
+    assert result["quotes"][0]["symbol"] == "ABC"
     assert calls == 3
     assert sleeps == [2.0, 4.0]
 
