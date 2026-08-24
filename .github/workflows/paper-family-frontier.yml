@@ -21,5 +21,7 @@ jobs:
         run: python scripts/paper_family_frontier.py validate
       - name: Verify generated comparison surface
         run: python scripts/paper_family_frontier.py render --check
+      - name: Prove duplicate, mismatch, alias, and coverage gates
+        run: python -m unittest discover -s tests -p 'test_paper_family_frontier.py'
       - name: Compile validator
-        run: python -m py_compile scripts/paper_family_frontier.py
+        run: python -m py_compile scripts/paper_family_frontier.py tests/test_paper_family_frontier.py
