@@ -42,6 +42,19 @@ Canonical upstream code pin used by this repository:
 
 Repository reproduction entry point: `scripts/edinet_bench_logistic.py`.
 
+## Reproduced result
+
+The pinned reproduction completed against the public benchmark with the official summary-only preprocessing and default logistic model.
+
+| Task | Accuracy | F1 | ROC-AUC | Features after preprocessing |
+| --- | ---: | ---: | ---: | ---: |
+| Fraud Detection | 0.5848 | 0.5939 | 0.6761 | 110 |
+| Earnings Forecast | 0.5676 | 0.6678 | 0.5612 | 105 |
+
+Canonical evidence: `docs/research/results/edinet_bench_logistic/summary.json`.
+
+These values are the repository's reproduction of the official logistic reference under the pinned code/data/environment contract. They are not AAARTS performance.
+
 ## Frontier boundary
 
 Reproducing the official logistic baseline establishes a benchmark reference only. It is not an AAARTS candidate and is not a paper-family `BEAT`, `TIE`, or `LOSE` result. A direct frontier verdict requires an AAARTS method evaluated on the same frozen task contract and compared against the preregistered EDINET-Bench capability metric.
