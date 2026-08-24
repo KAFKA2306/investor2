@@ -34,6 +34,7 @@ jobs:
           test -n "$JQUANTS_API_KEY"
           test -n "$HF_TOKEN"
           python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests pytest
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
           python -m py_compile src/research/tradability.py scripts/alphazerobeta_japan_tradable_prepare.py scripts/alphacrafter_jquants_tradable_frontier.py
           pytest -q tests/test_tradability.py tests/test_alphacrafter_frontier.py
       - name: Materialize exact frozen source
