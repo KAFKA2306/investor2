@@ -74,9 +74,9 @@ jobs:
             tests/test_alphazerobeta_market_snapshot.py \
             tests/test_build_explicit_market_snapshot.py
           python -m unittest discover -s tests -p 'test_research_layout.py'
-      - name: Commit verified migration
+      - name: Commit verified non-workflow migration
         run: |
-          python -c "from pathlib import Path; p=Path('.github/workflows/paper-family-frontier.yml'); p.write_text(p.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')"
+          git restore --source=HEAD --worktree .github/workflows
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
