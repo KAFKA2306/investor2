@@ -1,12 +1,14 @@
 from __future__ import annotations
 
+import importlib
+from typing import Any
+
 import numpy as np
 import pandas as pd
 import pytest
 
-import scripts.build_explicit_market_snapshot as explicit_snapshot
-import scripts.session_state_oos as session_oos
-
+explicit_snapshot = importlib.import_module("scripts.build_explicit_market_snapshot")
+session_oos = importlib.import_module("scripts.session_state_oos")
 
 TICKERS = ["AAA", "BBB", "CCC", "DDD", "EEE", "FFF"]
 
@@ -47,7 +49,7 @@ def _synthetic_prices() -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
-def _evaluate(**overrides: object) -> dict[str, object]:
+def _evaluate(**overrides: object) -> dict[str, Any]:
     kwargs: dict[str, object] = {
         "tickers": TICKERS,
         "benchmark_ticker": "CCC",
@@ -72,7 +74,7 @@ def _evaluate(**overrides: object) -> dict[str, object]:
         "minimum_stress_sharpe": -10.0,
     }
     kwargs.update(overrides)
-    return session_oos.evaluate(_synthetic_prices(), **kwargs)  # type: ignore[arg-type]
+    return session_oos.evaluate(_synthetic_prices(), **kwargs)
 
 
 def test_oos_evaluation_uses_explicit_benchmark_cost_and_acceptance_contract() -> None:
