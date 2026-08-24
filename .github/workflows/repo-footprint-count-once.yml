@@ -7,7 +7,7 @@ on:
       - ".github/workflows/repo-footprint-count-once.yml"
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   count:
@@ -16,34 +16,34 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: Count baseline and current repository footprint
+      - name: Count baseline and cleaned repository footprint
         env:
           BASELINE: 6cf3454e63685a077d11f871611b1f387188c8c8
+          TARGET: 836cc273a7dbb23b627624d34eeda2f6e66d5095
         run: |
           python - <<'PY'
           import collections
           import json
           import os
           import subprocess
-
-          baseline = os.environ["BASELINE"]
-          # Exclude this one-shot workflow creation commit itself.
-          current = subprocess.check_output(["git", "rev-parse", "HEAD^"], text=True).strip()
+          from pathlib import Path
 
           def entries(ref):
               raw = subprocess.check_output(["git", "ls-tree", "-r", "-t", ref], text=True)
-              out = []
-              for line in raw.splitlines():
-                  meta, path = line.split("\t", 1)
-                  mode, kind, sha = meta.split()
-                  out.append((mode, kind, sha, path))
-              return out
+              return [((*line.split("\t", 1)[0].split(),), line.split("\t", 1)[1]) for line in raw.splitlines()]
 
-          def line_count(ref, blobs):
-              total = 0
+          def measure(ref):
+              all_entries = entries(ref)
+              blobs = [(meta, path) for meta, path in all_entries if meta[1] == "blob"]
+              trees = [(meta, path) for meta, path in all_entries if meta[1] == "tree"]
+              lines = 0
               text_files = 0
               binary_files = 0
-              for _, _, _, path in blobs:
+              by_sha = collections.defaultdict(list)
+              top = collections.Counter()
+              for meta, path in blobs:
+                  by_sha[meta[2]].append(path)
+                  top[path.split("/", 1)[0]] += 1
                   data = subprocess.check_output(["git", "show", f"{ref}:{path}"])
                   if b"\0" in data:
                       binary_files += 1
@@ -54,35 +54,23 @@ jobs:
                       binary_files += 1
                       continue
                   text_files += 1
-                  total += len(text.splitlines())
-              return total, text_files, binary_files
-
-          def measure(ref):
-              all_entries = entries(ref)
-              blobs = [e for e in all_entries if e[1] == "blob"]
-              trees = [e for e in all_entries if e[1] == "tree"]
-              loc, text_files, binary_files = line_count(ref, blobs)
-              by_sha = collections.defaultdict(list)
-              for _, _, sha, path in blobs:
-                  by_sha[sha].append(path)
+                  lines += len(text.splitlines())
               duplicate_groups = [paths for paths in by_sha.values() if len(paths) > 1]
-              duplicate_extra_files = sum(len(paths) - 1 for paths in duplicate_groups)
-              top = collections.Counter(path.split("/", 1)[0] for _, _, _, path in blobs)
               return {
                   "ref": ref,
                   "files": len(blobs),
                   "folders": len(trees),
                   "utf8_text_files": text_files,
                   "binary_or_non_utf8_files": binary_files,
-                  "utf8_lines": loc,
+                  "utf8_lines": lines,
                   "identical_content_groups": len(duplicate_groups),
-                  "identical_content_extra_files": duplicate_extra_files,
+                  "identical_content_extra_files": sum(len(paths) - 1 for paths in duplicate_groups),
                   "top_level_file_counts": dict(sorted(top.items(), key=lambda kv: (-kv[1], kv[0]))),
-                  "identical_content_examples": sorted(duplicate_groups, key=lambda x: (-len(x), x))[:20],
+                  "identical_content_examples": sorted(duplicate_groups, key=lambda paths: (-len(paths), paths))[:30],
               }
 
-          before = measure(baseline)
-          after = measure(current)
+          before = measure(os.environ["BASELINE"])
+          after = measure(os.environ["TARGET"])
           result = {
               "baseline": before,
               "current": after,
@@ -93,5 +81,14 @@ jobs:
                   "identical_content_extra_files": after["identical_content_extra_files"] - before["identical_content_extra_files"],
               },
           }
-          print("FOOTPRINT_JSON=" + json.dumps(result, ensure_ascii=False, sort_keys=True))
+          Path(".repo-footprint-count.json").write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n")
+          print(json.dumps(result, ensure_ascii=False, sort_keys=True))
           PY
+      - name: Commit temporary measurement result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add .repo-footprint-count.json
+          git commit -m "chore: record temporary repository footprint"
+          git pull --rebase origin main
+          git push origin HEAD:main
