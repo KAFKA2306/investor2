@@ -14,7 +14,6 @@ import scripts.alphazerobeta_build_market_snapshot as market_snapshot_builder
 from scripts.alphazerobeta_build_market_snapshot import (
     DEFAULT_MAX_REQUEST_ATTEMPTS,
     DEFAULT_RETRY_BASE_SECONDS,
-    DEFAULT_STORAGE_PREFIX,
     normalize_download,
     parse_args,
     screen_with_retry,
@@ -30,17 +29,47 @@ from src.research.market_snapshot import (
 )
 
 
-def test_market_snapshot_defaults_to_japan_all_equities(monkeypatch: pytest.MonkeyPatch) -> None:
+def test_market_snapshot_requires_explicit_market_contract(monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.setattr(sys, "argv", ["alphazerobeta_build_market_snapshot.py"])
+    with pytest.raises(SystemExit):
+        parse_args()
+
+
+def test_market_snapshot_accepts_arbitrary_market_contract(monkeypatch: pytest.MonkeyPatch, tmp_path: Path) -> None:
+    monkeypatch.setattr(
+        sys,
+        "argv",
+        [
+            "alphazerobeta_build_market_snapshot.py",
+            "--start",
+            "2012-03-04",
+            "--end",
+            "2024-08-09",
+            "--regions",
+            "us,ca",
+            "--benchmark",
+            "BENCH",
+            "--storage-prefix",
+            "custom/cache/v9",
+            "--storage-bucket",
+            "custom-bucket",
+            "--writer-repository",
+            "example/writer",
+            "--output-dir",
+            str(tmp_path / "snapshot"),
+        ],
+    )
 
     args = parse_args()
 
-    assert args.regions == "jp"
-    assert args.benchmark == "1306.T"
-    assert args.start == "2004-01-01"
-    assert args.end == "2025-01-01"
-    assert args.storage_prefix == DEFAULT_STORAGE_PREFIX
-    assert args.storage_prefix.endswith("/yahoo-market-cache/jp-v1")
+    assert args.regions == "us,ca"
+    assert args.benchmark == "BENCH"
+    assert args.start == "2012-03-04"
+    assert args.end == "2024-08-09"
+    assert args.storage_prefix == "custom/cache/v9"
+    assert args.storage_bucket == "custom-bucket"
+    assert args.writer_repository == "example/writer"
+    assert args.output_dir == tmp_path / "snapshot"
     assert args.max_request_attempts == DEFAULT_MAX_REQUEST_ATTEMPTS
     assert args.retry_base_seconds == DEFAULT_RETRY_BASE_SECONDS
 
