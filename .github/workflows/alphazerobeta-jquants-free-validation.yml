@@ -33,26 +33,23 @@ jobs:
       - name: Verify J-Quants validation entry points
         run: |
           ruff format --check \
-            scripts/alphazerobeta_jquants_free_ephemeral.py \
-            scripts/alphazerobeta_jquants_private_hf_cache.py \
-            scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
-            scripts/alphazerobeta_japan_free_prepare.py \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
             scripts/alphazerobeta_japan_free_train.py
           ruff check \
-            scripts/alphazerobeta_jquants_free_ephemeral.py \
-            scripts/alphazerobeta_jquants_private_hf_cache.py \
-            scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
-            scripts/alphazerobeta_japan_free_prepare.py \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
             scripts/alphazerobeta_japan_free_train.py
           python -m py_compile \
-            scripts/alphazerobeta_jquants_free_ephemeral.py \
-            scripts/alphazerobeta_jquants_private_hf_cache.py \
-            scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
-            scripts/alphazerobeta_japan_free_prepare.py \
+            scripts/jquants_free_ephemeral.py \
+            scripts/jquants_private_hf_cache.py \
+            scripts/jquants_pit_master_ephemeral.py \
+            scripts/jquants_japan_panel.py \
             scripts/alphazerobeta_japan_free_train.py \
-            src/research/alphacrafter_frontier.py \
-            scripts/alphacrafter_jquants_frontier.py
-          pytest -q tests/test_alphacrafter_frontier.py
 
   snapshot-and-validate:
     concurrency:
@@ -93,7 +90,7 @@ jobs:
       - name: Materialize complete visible Free window from owner-only private cache
         run: |
           rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan /tmp/huggingface-personal-cache
-          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+          python scripts/jquants_private_hf_cache.py \
             --output-dir /tmp/jquants-free \
             --hf-repo-id "$HF_DATASET_REPO" \
             --request-interval 15
@@ -127,14 +124,14 @@ jobs:
       - name: Replace end-date master with cutoff-date PIT master
         run: |
           sleep 15
-          python scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
+          python scripts/jquants_pit_master_ephemeral.py \
             --date "$UNIVERSE_MASTER_DATE" \
             --output "$SNAPSHOT_ROOT/universe.parquet" \
             --request-interval 15
       - name: Prepare PIT common-stock panel
         run: |
           mkdir -p /tmp/alphazerobeta-japan
-          python scripts/alphazerobeta_japan_free_prepare.py \
+          python scripts/jquants_japan_panel.py \
             --market-snapshot-dir "$SNAPSHOT_ROOT" \
             --market-regions jp \
             --output /tmp/alphazerobeta-japan/panel.npz \
@@ -171,27 +168,14 @@ jobs:
             --ablation-weights /tmp/alphazerobeta-japan/ablation-fold0.weights.npz /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
             --output /tmp/alphazerobeta-japan/comparison.json \
             --transaction-cost-bps 15 --borrow-fee-bps 30
-      - name: Execute matched AlphaCrafter representative
-        if: env.MAX_ASSETS == '256'
-        run: |
-          python scripts/alphacrafter_jquants_frontier.py \
-            --dataset /tmp/alphazerobeta-japan/panel.npz \
-            --dataset-manifest /tmp/alphazerobeta-japan/panel.npz.manifest.json \
-            --output /tmp/alphazerobeta-japan/alphacrafter-result.json \
-            --test-start "$TEST_START" \
-            --test-end "$TEST_END" \
-            --transaction-cost-bps 15 \
-            --borrow-fee-bps 30
       - name: Persist derived evidence only
         shell: bash
         run: |
           set -euo pipefail
-          alpha_target=""
           if [ "$MAX_ASSETS" = "64" ]; then
             target=docs/research/results/alphazerobeta_jquants_free
           else
             target="docs/research/results/alphazerobeta_jquants_free_${MAX_ASSETS}"
-            alpha_target=docs/research/results/alphacrafter_jquants_256
           fi
           rm -rf "$target"
           mkdir -p "$target"
@@ -200,13 +184,7 @@ jobs:
           cp /tmp/alphazerobeta-japan/primary-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/ablation-fold*.json "$target/"
           cp /tmp/alphazerobeta-japan/comparison.json "$target/"
-          if [ "$MAX_ASSETS" = "256" ]; then
-            rm -rf "$alpha_target"
-            mkdir -p "$alpha_target"
-            cp /tmp/alphazerobeta-japan/alphacrafter-result.json "$alpha_target/result.json"
-            cp /tmp/alphazerobeta-japan/panel.npz.manifest.json "$alpha_target/dataset-manifest.json"
-          fi
-          TARGET="$target" MAX_ASSETS="$MAX_ASSETS" ALPHA_TARGET="$alpha_target" python - <<'PY'
+          TARGET="$target" MAX_ASSETS="$MAX_ASSETS" python - <<'PY'
           import hashlib
           import json
           import os
@@ -300,64 +278,11 @@ jobs:
               }
               (root / 'comparison-vs-64.json').write_text(json.dumps(direct, ensure_ascii=False, indent=2) + '\n')
 
-              alpha_root = Path(os.environ['ALPHA_TARGET'])
-              alpha = json.loads((alpha_root / 'result.json').read_text())
-              alpha_metrics = alpha['aggregate_oos_metrics']
-              alpha_costs = alpha['shared_contract']
-              alpha_checks = {
-                  'asset_count_256': alpha['shared_contract']['asset_count'] == payload['trained_asset_count'] == 256,
-                  'selected_codes': alpha['shared_contract']['selected_codes'] == payload['selected_codes'],
-                  'universe_cutoff': alpha['shared_contract']['universe_cutoff'] == payload['universe_contract']['universe_cutoff'],
-                  'dataset_sha256': alpha['shared_contract']['dataset_sha256'] == dataset['dataset_sha256'],
-                  'dataset_manifest_sha256': alpha['shared_contract']['dataset_manifest_sha256'] == sha256_file(alpha_root / 'dataset-manifest.json'),
-                  'transaction_cost_bps_per_side': alpha_costs['transaction_cost_bps_per_side'] == comparison['cost_assumptions']['transaction_cost_bps_per_side'],
-                  'borrow_fee_bps_per_year': alpha_costs['borrow_fee_bps_per_year'] == comparison['cost_assumptions']['borrow_fee_bps_per_year'],
-                  'used_fold_indices': alpha['shared_contract']['walk_forward']['used_fold_indices'] == [0, 1],
-                  'oos_observations': alpha_metrics['observations'] == p256['observations'],
-              }
-              if not all(alpha_checks.values()):
-                  raise AssertionError(f"AlphaCrafter/AlphaZeroBeta 256 contract mismatch: {alpha_checks}")
-              alpha_comparison = {
-                  'schema_version': 'investor2.alphacrafter-vs-alphazerobeta-256.v1',
-                  'research_date': '2026-08-24',
-                  'contract_checks': alpha_checks,
-                  'directly_comparable_on_shared_jquants_surrogate': True,
-                  'alphacrafter_partial_representative': alpha_metrics,
-                  'alphazerobeta_256_reference': p256,
-                  'delta_alphacrafter_minus_alphazerobeta': {
-                      'cumulative_return': alpha_metrics['cumulative_return'] - p256['cumulative_return'],
-                      'annualized_sharpe': alpha_metrics['annualized_sharpe'] - p256['annualized_sharpe'],
-                      'benchmark_correlation': alpha_metrics['benchmark_correlation'] - p256['benchmark_correlation'],
-                      'max_drawdown': alpha_metrics['max_drawdown'] - p256['max_drawdown'],
-                  },
-                  'frontier_verdict': 'BLOCKED',
-                  'reason': 'AlphaCrafter reproduction is PARTIAL and a matched AAARTS 256 result is not yet available; this matched repository reference is not a BEAT/TIE/LOSE verdict.',
-              }
-              (alpha_root / 'comparison.json').write_text(
-                  json.dumps(alpha_comparison, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
-              )
-              alpha_summary = {
-                  'research_date': alpha['research_date'],
-                  'family': alpha['family'],
-                  'reproduction_state': alpha['reproduction_state'],
-                  'frontier_verdict': alpha['frontier_verdict'],
-                  'asset_count': alpha['shared_contract']['asset_count'],
-                  **alpha_metrics,
-                  'contract_checks': alpha_checks,
-                  'blockers': alpha['blockers'],
-              }
-              (alpha_root / 'summary.json').write_text(
-                  json.dumps(alpha_summary, ensure_ascii=False, indent=2, sort_keys=True) + '\n'
-              )
           print(json.dumps(payload, ensure_ascii=False, sort_keys=True))
           PY
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ "$MAX_ASSETS" = "256" ]; then
-            git add "$target" "$alpha_target"
-          else
-            git add "$target"
-          fi
+          git add "$target"
           if ! git diff --cached --quiet; then
             git commit -m "research: persist J-Quants Free ${MAX_ASSETS}-asset frontier evidence [evidence]"
             git push origin HEAD:research/alphazerobeta-jquants-free-validation

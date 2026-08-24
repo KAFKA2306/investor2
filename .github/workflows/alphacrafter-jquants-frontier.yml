@@ -59,7 +59,7 @@ jobs:
       - name: Materialize frozen Free window from owner-only cache
         run: |
           rm -rf /tmp/jquants-free /tmp/alphacrafter-japan /tmp/huggingface-personal-cache
-          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+          python scripts/jquants_private_hf_cache.py \
             --output-dir /tmp/jquants-free \
             --hf-repo-id "$HF_DATASET_REPO" \
             --as-of 2026-08-24 \
@@ -100,14 +100,14 @@ jobs:
           PY
       - name: Materialize the frozen PIT universe master
         run: |
-          python scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
+          python scripts/jquants_pit_master_ephemeral.py \
             --date "$UNIVERSE_MASTER_DATE" \
             --output "$SNAPSHOT_ROOT/universe.parquet" \
             --request-interval 15
       - name: Prepare shared top-256 J-Quants panel
         run: |
           mkdir -p /tmp/alphacrafter-japan
-          python scripts/alphazerobeta_japan_free_prepare.py \
+          python scripts/jquants_japan_panel.py \
             --market-snapshot-dir "$SNAPSHOT_ROOT" \
             --market-regions jp \
             --output /tmp/alphacrafter-japan/panel.npz \
