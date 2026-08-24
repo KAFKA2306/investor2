@@ -76,6 +76,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_research_layout.py'
       - name: Commit verified non-workflow migration
         run: |
+          rm -f .github/workflows/market-snapshot-daily-session.yml
           git restore --source=HEAD --worktree .github/workflows
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
