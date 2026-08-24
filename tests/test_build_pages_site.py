@@ -3,7 +3,9 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from scripts.build_pages_site import build_site, validate_manifest
+import pytest
+
+from scripts.build_pages_site import SECTION_ORDER, build_site, validate_manifest
 
 
 def _write(path: Path, content: str) -> None:
@@ -11,13 +13,15 @@ def _write(path: Path, content: str) -> None:
     path.write_text(content, encoding="utf-8")
 
 
-def test_build_site_discovers_canonical_content_without_theme_registration(
+def test_build_site_discovers_canonical_content_with_stable_sections(
     tmp_path: Path,
 ) -> None:
     _write(tmp_path / "pages/index.html", "<script src='app.js'></script>")
     _write(tmp_path / "pages/app.js", "console.log('ok')")
     _write(tmp_path / "pages/styles.css", "body{}")
-    _write(tmp_path / "docs/research/alpha/report.md", "# result")
+    _write(tmp_path / "docs/research/results/alpha/report.md", "# result")
+    _write(tmp_path / "docs/research/hypothesis-lab.md", "# research")
+    _write(tmp_path / "docs/specs/evidence.md", "# contract")
     _write(tmp_path / "data/new-domain/metrics.csv", "name,value\nalpha,1\n")
     _write(tmp_path / "generated/new-domain/chart.svg", "<svg></svg>")
     _write(tmp_path / "api/v1/new-domain/result.json", '{"ok": true}')
@@ -38,20 +42,42 @@ def test_build_site_discovers_canonical_content_without_theme_registration(
         "api/v1/new-domain/result.json",
         "data/new-domain/large.json",
         "data/new-domain/metrics.csv",
-        "docs/research/alpha/report.md",
+        "docs/research/hypothesis-lab.md",
+        "docs/research/results/alpha/report.md",
+        "docs/specs/evidence.md",
         "generated/new-domain/chart.svg",
     }
+    assert manifest["section_order"] == list(SECTION_ORDER)
+    assert paths["docs/research/results/alpha/report.md"]["section"] == "results"
+    assert paths["docs/research/results/alpha/report.md"]["module"] == "alpha"
+    assert paths["docs/research/hypothesis-lab.md"]["section"] == "research"
+    assert paths["docs/research/hypothesis-lab.md"]["module"] == "research"
+    assert paths["docs/specs/evidence.md"]["section"] == "contracts"
+    assert paths["docs/specs/evidence.md"]["module"] == "specs"
+    assert paths["data/new-domain/metrics.csv"]["section"] == "data"
+    assert paths["data/new-domain/metrics.csv"]["module"] == "new-domain"
+    assert paths["generated/new-domain/chart.svg"]["section"] == "generated"
+    assert paths["generated/new-domain/chart.svg"]["module"] == "new-domain"
+    assert paths["api/v1/new-domain/result.json"]["section"] == "api"
     assert paths["api/v1/new-domain/result.json"]["module"] == "api/v1/new-domain"
     assert paths["data/new-domain/metrics.csv"]["viewer"] == "table"
     assert paths["generated/new-domain/chart.svg"]["viewer"] == "image"
-    assert paths["docs/research/alpha/report.md"]["viewer"] == "text"
+    assert paths["docs/research/results/alpha/report.md"]["viewer"] == "text"
     assert paths["data/new-domain/large.json"]["viewer"] == "download"
     assert paths["data/new-domain/large.json"]["local_url"] is None
     assert manifest["totals"]["categories"] == {
         "api": 1,
         "data": 2,
-        "docs": 1,
+        "docs": 3,
         "generated": 1,
+    }
+    assert manifest["totals"]["sections"] == {
+        "results": 1,
+        "research": 1,
+        "contracts": 1,
+        "data": 2,
+        "generated": 1,
+        "api": 1,
     }
 
     payload = json.loads((output / "manifest.json").read_text(encoding="utf-8"))
@@ -86,3 +112,22 @@ def test_new_module_appears_without_frontend_or_workflow_changes(tmp_path: Path)
         "docs/research/existing.json",
         "generated/brand-new-study/summary.json",
     }
+    generated = next(item for item in second["artifacts"] if item["path"].startswith("generated/"))
+    assert generated["section"] == "generated"
+    assert generated["module"] == "brand-new-study"
+
+
+def test_unclassified_docs_path_fails_closed(tmp_path: Path) -> None:
+    _write(tmp_path / "pages/index.html", "index")
+    _write(tmp_path / "pages/app.js", "app")
+    _write(tmp_path / "pages/styles.css", "css")
+    _write(tmp_path / "docs/misc/topic.md", "# ambiguous")
+
+    with pytest.raises(ValueError, match="unclassified docs artifact"):
+        build_site(
+            source_root=tmp_path,
+            frontend_root=tmp_path / "pages",
+            output_root=tmp_path / "_site",
+            repository="KAFKA2306/investor2",
+            revision="r1",
+        )
