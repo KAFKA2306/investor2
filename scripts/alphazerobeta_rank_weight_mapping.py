@@ -111,7 +111,10 @@ def shrink_weights(sign_weights: np.ndarray, dense_weights: np.ndarray, alpha: f
     if sign_weights.shape != dense_weights.shape:
         raise ValueError("shrinkage inputs must have identical shape")
     return np.stack(
-        [normalize_full_gross((1.0 - alpha) * sign_row + alpha * dense_row) for sign_row, dense_row in zip(sign_weights, dense_weights, strict=True)],
+        [
+            normalize_full_gross((1.0 - alpha) * sign_row + alpha * dense_row)
+            for sign_row, dense_row in zip(sign_weights, dense_weights, strict=True)
+        ],
         axis=0,
     )
 
@@ -142,7 +145,14 @@ def canonical_check(dense: dict[str, float | int], path: Path, tolerance: float)
 
 
 def compare_metrics(actual: dict[str, float | int], expected: dict[str, object], tolerance: float) -> dict[str, object]:
-    keys = ["observations", "annualized_sharpe", "benchmark_correlation", "max_drawdown", "cumulative_return", "mean_turnover"]
+    keys = [
+        "observations",
+        "annualized_sharpe",
+        "benchmark_correlation",
+        "max_drawdown",
+        "cumulative_return",
+        "mean_turnover",
+    ]
     deltas: dict[str, float] = {}
     for key in keys:
         delta = float(actual[key]) - float(expected[key])
@@ -227,10 +237,9 @@ def main() -> None:
         ),
     )
     best = results[best_name]
-    improves_both = (
-        float(best["annualized_sharpe"]) > float(dense_result["annualized_sharpe"])
-        and float(best["cumulative_return"]) > float(dense_result["cumulative_return"])
-    )
+    improves_both = float(best["annualized_sharpe"]) > float(dense_result["annualized_sharpe"]) and float(
+        best["cumulative_return"]
+    ) > float(dense_result["cumulative_return"])
     positive_oos = float(best["annualized_sharpe"]) > 0.0 and float(best["cumulative_return"]) > 0.0
     if positive_oos:
         verdict = "MAPPING_FOUND_POSITIVE_OOS"
