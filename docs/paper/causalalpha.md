@@ -1,31 +1,24 @@
-# 超進化系の QuantaAlpha による最強アルファの探索
+# CAMEF / CausalAlpha — 因果拡張マルチモーダル金融予測
 
-**代表的な論文**: *QuantaAlpha: An Evolutionary Framework for LLM-Driven Alpha Mining*  
-**公開年**: 2026年  
-**課題の解決**: 本提案は、個別のアイデアが分散した状態では力を発揮できないという課題を解消し、協働によって最適なアルファを創出することを目的とする。
+**タイトル**: CAMEF: Causal-Augmented Multi-Modality Event-Driven Financial Forecasting  
+**公開**: 2025  
+**目的**: ニュースと市場情報から因果構造を明示し、イベント駆動の金融予測を改善する。  
 
 ## エグゼクティブサマリー
-QuantaAlpha は、LLM（大規模言語モデル）が協調して最強のチームを形成し、アルファの「成長の軌跡（きろく）」をパズルのように再構成する高度な進化型システムである。エントリーとエグジットの最適化を図り、厳しい市場環境の試験を乗り越えることで、本番環境に耐え得る堅牢なアルファを継続的に生み出すことを目的とする。
 
----
+CAMEFは、相関だけに依存する金融予測ではなく、イベントと価格変動の間にある因果的な経路を扱うためのフレームワークである。LLMを用いた反実仮想データ拡張と因果学習を組み合わせ、ニュース・イベント・市場状態をより説明可能な形で予測へ接続する。
 
-## 詳細情報
-- **arXiv**: [https://arxiv.org/abs/2602.07085](https://arxiv.org/abs/2602.07085)  
-- **alphaXiv (JA)**: [https://www.alphaxiv.org/abs/2602.07085?lang=ja](https://www.alphaxiv.org/abs/2602.07085?lang=ja)
+## 一次情報
 
-（注：最新の研究結果を示す）
+- arXiv: https://arxiv.org/abs/2502.04592
+- alphaXiv: https://www.alphaxiv.org/abs/2502.04592?lang=ja
 
----
+## 比較で見る能力
 
-## 発想の転換
-本研究は、アルファの生成から成長までの「ストーリー（軌跡）」を重視するものである。過去の良好な事例を適切に統合し、最適な結末（利益）を目指す。
+1. **Causal learning**: イベントと市場反応の因果的な関係を学習する。
+2. **Counterfactual augmentation**: 重要イベントが存在しなかった場合などの反実仮想を生成し、予測学習へ利用する。
+3. **Evidence-grounded forecasting**: 予測だけでなく、根拠となるイベント経路を扱う。
 
-## 本研究の要点
+## investor2での比較契約
 
-1. **軌跡の再結合 (Trajectory recombination)**: エントリーとエグジットの双方の利点を組み合わせ、最適な軌跡を構築する。  
-2. **マルチエージェント連携 (Multi-agent coordination)**: 戦略設計者、技術者、チェッカーといった役割を持つエージェントが協調してアルファを磨く。  
-3. **レジームロバストネス (Regime robustness)**: 仮想市場を用いた広範な検証を通じ、さまざまな状況下での堅牢性を確保する。
-
-## Gen 4 への効果
-- **堅牢性の向上**: 多様な評価基準による厳密な検証を経て、本番環境での性能安定性を確保する。  
-- **協働による新規性の創出**: 単独では得られない高度な組み合わせのアルファを発見する可能性が高まる。
+単純なJ-Quants trading P&Lへ変換して比較しない。論文のforecasting task、split、horizon、primary metricをIssue #51のcontractとして固定し、同一入力・同一評価条件でCAMEF系representativeとAAARTSを直接比較する。直接再現が完了するまでは優越判定を付けない。
