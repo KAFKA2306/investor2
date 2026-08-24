@@ -6,7 +6,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
-from scripts.session_state_baseline import build_baseline, parse_args, select_prices, validate_snapshot_coverage
+from scripts.daily_market_session_baseline import build_baseline, parse_args, select_prices, validate_snapshot_coverage
 
 
 def _prices(rows: int = 160) -> pd.DataFrame:
@@ -33,7 +33,7 @@ def _prices(rows: int = 160) -> pd.DataFrame:
 
 
 def test_cli_has_no_research_defaults(monkeypatch: pytest.MonkeyPatch) -> None:
-    monkeypatch.setattr(sys, "argv", ["session_state_baseline.py"])
+    monkeypatch.setattr(sys, "argv", ["daily_market_session_baseline.py"])
     with pytest.raises(SystemExit):
         parse_args()
 
@@ -109,7 +109,7 @@ def test_build_baseline_records_exact_runtime_specification() -> None:
         trading_days=365,
         adjustment="raw",
     )
-    assert payload["schema_version"] == "investor2.session-state-baseline.v3"
+    assert payload["schema_version"] == "investor2.daily-market-session-baseline.v1"
     assert payload["specification"]["session_tilt_half_life"] == 37
     assert payload["specification"]["session_tilt_min_periods"] == 23
     assert payload["specification"]["trading_days_per_year"] == 365

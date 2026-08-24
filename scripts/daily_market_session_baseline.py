@@ -8,18 +8,18 @@ from typing import Any
 
 import pandas as pd
 
-from src.research.market_snapshot import MarketSnapshot, load_manifest, load_prices_from_snapshots
-from src.research.session_state import (
+from src.research.daily_market_session_features import (
     ADJUSTMENT_MODES,
     add_session_tilt,
     annualized_session_summary,
     decompose_daily_sessions,
 )
+from src.research.market_snapshot import MarketSnapshot, load_manifest, load_prices_from_snapshots
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Build a session-state baseline from explicitly supplied research parameters."
+        description="Build a daily-market-session baseline from explicitly supplied research parameters."
     )
     parser.add_argument(
         "--market-snapshot-dir",
@@ -98,7 +98,7 @@ def select_prices(
         required.add("AdjClose")
     missing = sorted(required - set(frame.columns))
     if missing:
-        raise AssertionError(f"materialized market snapshot missing session-state columns: {missing}")
+        raise AssertionError(f"materialized market snapshot missing daily-session columns: {missing}")
     data = frame.copy()
     data["Ticker"] = data["Ticker"].astype(str)
     data["Date"] = pd.to_datetime(data["Date"], errors="raise").dt.tz_localize(None)
@@ -151,7 +151,7 @@ def build_baseline(
         )
 
     return {
-        "schema_version": "investor2.session-state-baseline.v3",
+        "schema_version": "investor2.daily-market-session-baseline.v1",
         "specification": {
             "tickers": tickers,
             "start": start,
