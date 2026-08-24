@@ -10,7 +10,7 @@ permissions:
 
 concurrency:
   group: alphacrafter-jquants-frontier-${{ github.event_name }}
-  cancel-in-progress: false
+  cancel-in-progress: true
 
 jobs:
   contract:
@@ -73,6 +73,8 @@ jobs:
           import os
           from pathlib import Path
 
+          import pandas as pd
+
           root = Path(os.environ["ROOT"])
           manifest = json.loads((root / "manifest.json").read_text())
           expected = {"start": "2024-05-31", "end": "2026-05-29"}
@@ -80,11 +82,21 @@ jobs:
               raise SystemExit(
                   f"frozen J-Quants source window drifted: {manifest['actual_date_range']} != {expected}"
               )
+          actual_end = pd.Timestamp(manifest["actual_date_range"]["end"])
+          test_end = actual_end
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / "benchmark.parquet")
+          benchmark_dates = pd.to_datetime(benchmark["Date"], errors="raise").dt.tz_localize(None)
+          eligible = benchmark_dates[benchmark_dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit("no benchmark date on/before universe cutoff")
+          master_date = eligible.max()
           print(f"SNAPSHOT_ROOT={root}")
-          print("TEST_START=2025-12-01")
-          print("TEST_END=2026-05-29")
-          print("UNIVERSE_CUTOFF=2025-08-30")
-          print("UNIVERSE_MASTER_DATE=2025-08-29")
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
           PY
       - name: Materialize the frozen PIT universe master
         run: |
