@@ -1,0 +1,27 @@
+name: Paper family frontier contract
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Validate canonical family registry
+        run: python scripts/paper_family_frontier.py validate
+      - name: Verify generated comparison surface
+        run: python scripts/paper_family_frontier.py render --check
+      - name: Prove duplicate, mismatch, alias, and coverage gates
+        run: python -m unittest discover -s tests -p 'test_paper_family_frontier.py'
+      - name: Compile validator
+        run: python -m py_compile scripts/paper_family_frontier.py tests/test_paper_family_frontier.py
