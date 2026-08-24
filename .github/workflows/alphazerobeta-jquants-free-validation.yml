@@ -20,10 +20,6 @@ on:
 permissions:
   contents: write
 
-concurrency:
-  group: alphazerobeta-jquants-free-validation-${{ github.event_name }}
-  cancel-in-progress: true
-
 jobs:
   contract:
     runs-on: ubuntu-latest
@@ -59,6 +55,9 @@ jobs:
           pytest -q tests/test_alphacrafter_frontier.py
 
   snapshot-and-validate:
+    concurrency:
+      group: alphazerobeta-jquants-free-snapshot
+      cancel-in-progress: true
     if: >-
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'push' && github.actor != 'github-actions[bot]' && contains(github.event.head_commit.message, '[snapshot]'))
