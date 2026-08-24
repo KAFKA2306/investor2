@@ -6,8 +6,8 @@ import json
 import numpy as np
 import pandas as pd
 
-from scripts import alphazerobeta_japan_free_prepare as japan
 from scripts import alphazerobeta_prepare as base
+from scripts import jquants_japan_panel as japan
 from src.research.tradability import tradability_summary
 
 
