@@ -41,7 +41,18 @@ jobs:
         with:
           python-version: "3.12"
       - name: Apply responsibility and identity migration
-        run: python scripts/migrate_research_layout_once.py
+        run: |
+          python scripts/migrate_research_layout_once.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/paper_family_frontier.py')
+          text = path.read_text(encoding='utf-8')
+          old = 'root / "docs" / "research" / "paper_family_frontier.json"'
+          new = 'root / "docs" / "research" / "frontier" / "paper_family_frontier.json"'
+          if old not in text:
+              raise SystemExit('paper-family default registry expression not found')
+          path.write_text(text.replace(old, new), encoding='utf-8')
+          PY
       - name: Verify canonical frontier and layout
         run: |
           python scripts/paper_family_frontier.py validate
