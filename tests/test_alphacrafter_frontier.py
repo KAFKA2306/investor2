@@ -105,3 +105,26 @@ def test_paper_strategy_gate_is_strict() -> None:
         borrow_fee_bps_per_year=0.0,
     )
     assert isinstance(paper_strategy_gate(metrics), bool)
+
+
+def test_research_gates_do_not_consume_returns_after_period_end() -> None:
+    rng = np.random.default_rng(77)
+    factor = rng.normal(size=(90, 32))
+    returns = rng.normal(scale=0.01, size=(90, 32))
+    mutated = returns.copy()
+    mutated[60:] = rng.normal(loc=1_000.0, scale=100.0, size=mutated[60:].shape)
+
+    oriented_a, direction_a = orient_factor_on_train(factor, returns, 10, 60)
+    oriented_b, direction_b = orient_factor_on_train(factor, mutated, 10, 60)
+    assert direction_a == direction_b
+    np.testing.assert_allclose(oriented_a, oriented_b)
+
+    assert factor_metrics(oriented_a, returns, 20, 60, horizon=1) == factor_metrics(
+        oriented_b, mutated, 20, 60, horizon=1
+    )
+    assert factor_metrics(oriented_a, returns, 20, 60, horizon=5) == factor_metrics(
+        oriented_b, mutated, 20, 60, horizon=5
+    )
+    assert screen_factors({"momentum_20": oriented_a}, returns, 20, 60) == screen_factors(
+        {"momentum_20": oriented_b}, mutated, 20, 60
+    )
