@@ -9,6 +9,7 @@ import numpy as np
 import torch
 
 from scripts import alphazerobeta_train as trainer
+from scripts.alphazerobeta_japan_free_train import japan_free_folds
 from src.research.tradability import mask_action_for_tradability, resolve_tradable, tradability_summary
 
 
@@ -97,6 +98,7 @@ def deterministic_weights(
 def main() -> None:
     trainer.collect_trajectory = collect_trajectory
     trainer.deterministic_weights = deterministic_weights
+    trainer.make_walk_forward_folds = japan_free_folds
     trainer.main()
 
     payload = json.loads(OUTPUT_PATH.read_text(encoding="utf-8"))
@@ -106,6 +108,7 @@ def main() -> None:
             "At each decision date, inactive raw action components are set to the active-action mean before "
             "market-neutral projection; this makes every inactive projected weight exactly zero without using future availability."
         ),
+        "walk_forward_adapter": "same bounded J-Quants Free 12m train / 3m validation / 3m test schedule as alphazerobeta_japan_free_train.py",
         "legacy_compatibility": "datasets without a tradable array are treated as fully tradable",
     }
     OUTPUT_PATH.write_text(json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True) + "\n", encoding="utf-8")
