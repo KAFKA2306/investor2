@@ -5,6 +5,7 @@ import argparse
 import json
 import math
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 
@@ -144,7 +145,11 @@ def canonical_check(dense: dict[str, float | int], path: Path, tolerance: float)
     return {"passed": True, "tolerance": tolerance, "delta_actual_minus_canonical": deltas}
 
 
-def compare_metrics(actual: dict[str, float | int], expected: dict[str, object], tolerance: float) -> dict[str, object]:
+def compare_metrics(
+    actual: dict[str, float | int],
+    expected: dict[str, float | int],
+    tolerance: float,
+) -> dict[str, object]:
     keys = [
         "observations",
         "annualized_sharpe",
@@ -226,7 +231,8 @@ def main() -> None:
     baseline_reproduction = canonical_check(dense_result, args.canonical_comparison, args.baseline_tolerance)
 
     topk = json.loads(args.topk_summary.read_text(encoding="utf-8"))
-    sign_reproduction = compare_metrics(results["rank_power_0_sign"], topk["topk"]["32"], 1e-10)
+    topk32 = cast(dict[str, float | int], topk["topk"]["32"])
+    sign_reproduction = compare_metrics(results["rank_power_0_sign"], topk32, 1e-10)
 
     candidates = [name for name in results if name != "dense_score"]
     best_name = max(
