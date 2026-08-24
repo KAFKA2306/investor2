@@ -4,11 +4,15 @@ from __future__ import annotations
 import argparse
 import json
 import re
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
 VERDICTS = {"BEAT", "TIE", "LOSE", "BLOCKED"}
+VERDICT_ORDER = {"LOSE": 0, "TIE": 1, "BEAT": 2, "BLOCKED": 3}
 ARXIV_ID = re.compile(r"arxiv\.org/abs/([^/?#]+)", re.IGNORECASE)
+README_START = "<!-- paper-family-frontier:start -->"
+README_END = "<!-- paper-family-frontier:end -->"
 
 
 def load_registry(path: Path) -> dict[str, Any]:
@@ -30,6 +34,11 @@ def identity_is_in_page(url: str, text: str) -> bool:
     if match:
         return match.group(1).lower() in text.lower()
     return url.rstrip("/").lower() in text.lower()
+
+
+def public_verdict(family: dict[str, Any]) -> str:
+    verdict = family.get("verdict")
+    return verdict if verdict is not None else "BLOCKED"
 
 
 def validate(root: Path, registry: dict[str, Any]) -> None:
@@ -94,7 +103,7 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
 
 def render(registry: dict[str, Any]) -> str:
     families = sorted(registry["families"], key=lambda item: item["canonical_name"].casefold())
-    beat_count = sum(family.get("verdict") == "BEAT" for family in families)
+    beat_count = sum(public_verdict(family) == "BEAT" for family in families)
     unresolved = len(families) - beat_count
     lines = [
         "# Paper-family frontier",
@@ -107,7 +116,7 @@ def render(registry: dict[str, Any]) -> str:
         "|---|---|---|---|---|---|---|",
     ]
     for family in families:
-        verdict = family.get("verdict") or "—"
+        verdict = public_verdict(family)
         page = family["canonical_page"]
         label = family["canonical_name"].replace("|", "\\|")
         strength = family["claimed_capability"].replace("|", "\\|")
@@ -124,7 +133,7 @@ def render(registry: dict[str, Any]) -> str:
             "## 判定契約",
             "",
             "- `BEAT` はfamily固有の事前固定primary capabilityで直接比較に勝ち、PIT/OOS/cost/risk hard gateも満たした場合だけ付与する。",
-            "- `TIE` / `LOSE` はそのまま残す。`BLOCKED` は勝利として扱わない。未実証familyにはverdictを付けない。",
+            "- `TIE` / `LOSE` はそのまま残す。直接比較が未完了のfamilyは公開surfaceでは `BLOCKED` とする。",
             "- 全familyが `BEAT` になるまで、AAARTSが全frontierを上回ったとは記載しない。",
             "- 比較契約は Issue #51、inspection queueは #55、日本株の共通PIT benchmarkは #184を再利用し、別authorityを作らない。",
             "",
@@ -135,9 +144,58 @@ def render(registry: dict[str, Any]) -> str:
     return "\n".join(lines)
 
 
+def render_readme_block(registry: dict[str, Any]) -> str:
+    families = sorted(
+        registry["families"],
+        key=lambda family: (VERDICT_ORDER[public_verdict(family)], family["canonical_name"].casefold()),
+    )
+    counts = Counter(public_verdict(family) for family in families)
+    lines = [
+        README_START,
+        "## Paper-family frontier",
+        "",
+        f"**BEAT {counts['BEAT']} / TIE {counts['TIE']} / LOSE {counts['LOSE']} / BLOCKED {counts['BLOCKED']}**",
+        "",
+        "全familyを同じcanonical registryから表示します。個別family専用のREADMEロジックは持ちません。直接head-to-headが未完了なら `BLOCKED` であり、CI成功や実装完了は勝利ではありません。",
+        "",
+        "| Family | 強み | Benchmark | Representative | Head-to-head state | Verdict | Evidence |",
+        "| --- | --- | --- | --- | --- | --- | --- |",
+    ]
+    for family in families:
+        page = family["canonical_page"]
+        name = family["canonical_name"].replace("|", "\\|")
+        strength = family["claimed_capability"].replace("|", "\\|")
+        metric = family["primary_metric"].replace("|", "\\|")
+        representative = family["representative"].replace("|", "\\|")
+        state = family["reproduction_state"].replace("|", "\\|")
+        verdict = public_verdict(family)
+        lines.append(
+            f"| [{name}]({page}) | {strength} | {metric} | {representative} | {state} | **{verdict}** | [evidence]({page}) |"
+        )
+    lines.extend(["", README_END])
+    return "\n".join(lines)
+
+
+def merge_readme(readme: str, block: str) -> str:
+    if README_START in readme or README_END in readme:
+        if readme.count(README_START) != 1 or readme.count(README_END) != 1:
+            raise AssertionError("README frontier markers are malformed")
+        start = readme.index(README_START)
+        end = readme.index(README_END, start) + len(README_END)
+        return readme[:start] + block + readme[end:]
+
+    lines = readme.splitlines()
+    insert_at = 1
+    for index, line in enumerate(lines[1:], start=1):
+        if line.startswith("[!["):
+            insert_at = index + 1
+    lines[insert_at:insert_at] = ["", block, ""]
+    return "\n".join(lines).rstrip() + "\n"
+
+
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description="Validate and render the canonical paper-family frontier.")
-    parser.add_argument("command", choices=("validate", "render"))
+    parser.add_argument("command", choices=("validate", "render", "readme"))
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
     parser.add_argument("--registry", type=Path)
     parser.add_argument("--output", type=Path)
@@ -150,13 +208,26 @@ def main() -> None:
     args = parse_args()
     root = args.root.resolve()
     registry_path = args.registry or root / "docs" / "research" / "paper_family_frontier.json"
-    output_path = args.output or root / "docs" / "paper" / "benchmark_comparison.md"
     registry = load_registry(registry_path)
     validate(root, registry)
+
     if args.command == "validate":
         print(json.dumps({"families": len(registry["families"]), "status": "ok"}, sort_keys=True))
         return
 
+    if args.command == "readme":
+        output_path = args.output or root / "README.md"
+        current = output_path.read_text(encoding="utf-8")
+        expected = merge_readme(current, render_readme_block(registry))
+        if args.check and current != expected:
+            raise AssertionError(f"generated README frontier is stale: run {Path(__file__).name} readme --write")
+        if args.write:
+            output_path.write_text(expected, encoding="utf-8")
+        if not args.check and not args.write:
+            print(render_readme_block(registry), end="\n")
+        return
+
+    output_path = args.output or root / "docs" / "paper" / "benchmark_comparison.md"
     rendered = render(registry)
     if args.check:
         current = output_path.read_text(encoding="utf-8")

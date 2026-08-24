@@ -4,7 +4,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from scripts.paper_family_frontier import render, validate
+from scripts.paper_family_frontier import merge_readme, render, render_readme_block, validate
 
 
 class PaperFamilyFrontierTest(unittest.TestCase):
@@ -85,6 +85,25 @@ class PaperFamilyFrontierTest(unittest.TestCase):
         )
         self.assertIn("Global superiority:** UNPROVEN", render(unresolved))
         self.assertIn("1/2 families are BEAT", render(unresolved))
+
+    def test_readme_uses_only_registry_families(self) -> None:
+        registry = self.registry(
+            [
+                self.family("winner", "docs/paper/winner.md", None, "BEAT"),
+                self.family("unknown", "docs/paper/unknown.md", None, None),
+            ]
+        )
+        block = render_readme_block(registry)
+        self.assertIn("BEAT 1 / TIE 0 / LOSE 0 / BLOCKED 1", block)
+        self.assertIn("[winner](docs/paper/winner.md)", block)
+        self.assertIn("[unknown](docs/paper/unknown.md)", block)
+        self.assertNotIn("AlphaZeroBeta", block)
+
+    def test_readme_block_replaces_itself(self) -> None:
+        registry = self.registry([self.family("a", "docs/paper/a.md", None)])
+        first = merge_readme("# Repo\n\ntext\n", render_readme_block(registry))
+        second = merge_readme(first, render_readme_block(registry))
+        self.assertEqual(first, second)
 
 
 if __name__ == "__main__":
