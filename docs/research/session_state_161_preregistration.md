@@ -48,6 +48,8 @@ Repeated `--market-snapshot-dir` inputs may compose multiple immutable shards. R
 
 A cache collected from one region or provider must not be silently substituted for another. Historical point-in-time index membership must not be inferred from a present-day collected universe.
 
+For the pre-launch U.S. block, the immutable source window is `2000-01-01..2026-08-22` exclusive and the universe is the exact six-symbol list above. The explicit-universe builder must fail if any requested symbol is absent. This avoids silently replacing the preregistered universe with whatever a provider screener happens to return later.
+
 ## Corporate-action modes
 
 ### adjusted
@@ -103,6 +105,40 @@ Both numerator and denominator use only data available through `t`.
 
 The denominator is an investor2 operationalization. The source article writes `sigma(r_CC)` without fully fixing its estimator, so exact article replication is not claimed from this formula alone.
 
+## Frozen historical OOS test
+
+The primary daily-bar predictive task is fixed before the U.S. snapshot is materialized:
+
+```text
+feature available: close(t)
+target:            r_ON(t+1) - r_ID(t+1)
+training window:   2021-01-01 through 2024-12-31
+strict test:       2025-01-01 through 2026-08-21
+primary feature:   adjusted SessionTilt_126
+simple baselines:  training-mean/intercept and lagged session spread
+```
+
+No 2025–2026 target is used to fit the linear predictive coefficients. The fixed sign strategy uses `sign(SessionTilt_t)` for the next overnight leg and the opposite sign for the following regular-session leg.
+
+Execution-cost reporting uses a conservative four one-way notional changes per active asset-day. Primary cost is 1 bp per side; 0 bp and 5 bp per side are mandatory sensitivity points. Capacity is `NOT_TESTED_DAILY_BARS`; therefore these results cannot by themselves support a capacity or institutional-tradability claim.
+
+### Frozen pre-launch decision rule
+
+For the primary adjusted 126-day test:
+
+- `predictive_pass`: OOS SessionTilt information coefficient is positive and SessionTilt OLS MSE is lower than both the intercept-only and lagged-session-spread baselines;
+- `breadth_pass`: at least 4 of 6 tickers have positive OOS SessionTilt information coefficient;
+- `primary_cost_pass`: equal-weight sign-strategy annualized arithmetic return and Sharpe are both positive after 1 bp/side costs;
+- `five_bps_pass`: the same two metrics remain positive after 5 bp/side costs.
+
+Decision:
+
+- `USE` only if all four tests pass;
+- `CONDITION` if predictive evidence passes, or if positive IC coexists with positive 1 bp economics, but the full robustness contract does not pass;
+- `REJECT` otherwise.
+
+This decision is explicitly scoped to the **pre-launch daily-bar SessionTilt representation**. It is not the final 23/5 intervention verdict because post-2026-12-06 treatment data do not yet exist.
+
 ## Annualization
 
 For explicitly supplied annualization factor `D`:
@@ -118,6 +154,8 @@ No descriptive component is interpreted as a tradable strategy without explicit 
 
 Article-reported numbers are targets to independently reproduce, not repository facts. A claim is `REPRODUCED` only when symbol set, dates, data convention, and estimator are sufficiently specified and the independent result matches within the published precision. Otherwise use `NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC` rather than guessing missing choices.
 
+The U.S. 10-stock median, Japan pair-correlation, and U.S.-Japan lead-lag examples remain `NOT_REPRODUCIBLE_FROM_PUBLISHED_SPEC` unless their missing universe/provider/estimator contracts become available. MU and COST receive a separately labelled Yahoo-adjusted analog from the materialized six-symbol snapshot, but that analog does not upgrade the article claim to `REPRODUCED`.
+
 ## Evidence tests
 
 Before predictive use, establish:
@@ -130,11 +168,12 @@ Before predictive use, establish:
 6. missing required columns, symbols, partitions, or date coverage fail closed;
 7. composed immutable shards are gap-free and non-overlapping;
 8. the output records every runtime parameter and source manifest;
-9. numerical results come from materialized evidence, not a live fetch inside analysis.
+9. numerical results come from materialized evidence, not a live fetch inside analysis;
+10. strict-test targets are one trading day after the feature timestamp and are never used to fit the predictive coefficients.
 
 ## Acceptance criteria for predictive use
 
-A session feature is not accepted because it is descriptively large. Later phases compare it with simpler momentum, volatility, and session baselines under walk-forward OOS evaluation. Any traded strategy reports after-cost return/P&L, Sharpe, maximum drawdown, beta/correlation, turnover/exposure, benchmark comparison, and tested capital scale.
+A session feature is not accepted because it is descriptively large. Later phases compare it with simpler momentum, volatility, and session baselines under walk-forward/OOS evaluation. Any traded strategy reports after-cost return/P&L, Sharpe, maximum drawdown, beta/correlation, turnover/exposure, benchmark comparison, and tested capital scale.
 
 ## Capability delta
 
