@@ -1,0 +1,80 @@
+name: Market snapshot and daily-session feature contract
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - src/research/market_snapshot.py
+      - src/research/daily_market_session_features.py
+      - scripts/alphazerobeta_build_market_snapshot.py
+      - scripts/build_explicit_market_snapshot.py
+      - scripts/alphazerobeta_prepare.py
+      - scripts/daily_market_session_baseline.py
+      - scripts/daily_market_session_oos.py
+      - tests/test_alphazerobeta_market_snapshot.py
+      - tests/test_build_explicit_market_snapshot.py
+      - tests/test_daily_market_session_features.py
+      - tests/test_daily_market_session_baseline.py
+      - tests/test_daily_market_session_oos.py
+      - docs/research/protocols/daily_market_session_161_preregistration.md
+      - docs/research/protocols/daily_market_session_161_evidence_plan.md
+      - .github/workflows/market-snapshot-daily-session.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install focused dependencies
+        run: python -m pip install pandas pyarrow yfinance pytest ruff numpy
+      - name: Verify source/storage boundary
+        env:
+          PYTHONPATH: .
+        run: |
+          ruff format --check \
+            src/research/market_snapshot.py \
+            src/research/daily_market_session_features.py \
+            scripts/alphazerobeta_build_market_snapshot.py \
+            scripts/build_explicit_market_snapshot.py \
+            scripts/alphazerobeta_prepare.py \
+            scripts/daily_market_session_baseline.py \
+            scripts/daily_market_session_oos.py \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_build_explicit_market_snapshot.py \
+            tests/test_daily_market_session_features.py \
+            tests/test_daily_market_session_baseline.py \
+            tests/test_daily_market_session_oos.py
+          ruff check \
+            src/research/market_snapshot.py \
+            src/research/daily_market_session_features.py \
+            scripts/alphazerobeta_build_market_snapshot.py \
+            scripts/build_explicit_market_snapshot.py \
+            scripts/alphazerobeta_prepare.py \
+            scripts/daily_market_session_baseline.py \
+            scripts/daily_market_session_oos.py \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_build_explicit_market_snapshot.py \
+            tests/test_daily_market_session_features.py \
+            tests/test_daily_market_session_baseline.py \
+            tests/test_daily_market_session_oos.py
+          python -m pytest -q \
+            tests/test_alphazerobeta_market_snapshot.py \
+            tests/test_build_explicit_market_snapshot.py \
+            tests/test_daily_market_session_features.py \
+            tests/test_daily_market_session_baseline.py \
+            tests/test_daily_market_session_oos.py
+          ! grep -R -E 'HF_TOKEN|HfApi|upload_folder|create_repo' \
+            src/research/market_snapshot.py \
+            src/research/daily_market_session_features.py \
+            scripts/alphazerobeta_build_market_snapshot.py \
+            scripts/build_explicit_market_snapshot.py \
+            scripts/alphazerobeta_prepare.py \
+            scripts/daily_market_session_baseline.py \
+            scripts/daily_market_session_oos.py
