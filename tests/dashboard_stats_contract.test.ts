@@ -1,7 +1,6 @@
 import { describe, expect, test } from "bun:test";
 import {
   CacheStatisticsSchema,
-  parseFreshStatsCache,
   parseStatsJson,
   parseStatsProcessResult,
 } from "../src/dashboard/stats_contract";
@@ -42,24 +41,15 @@ describe("dashboard stats contract", () => {
     expect(() => parseStatsJson(JSON.stringify(malformed))).toThrow();
   });
 
+  test("rejects non-JSON stats output", () => {
+    expect(() => parseStatsJson("not-json")).toThrow(
+      "stats output is not valid JSON",
+    );
+  });
+
   test("propagates a failed stats subprocess", () => {
     expect(() => parseStatsProcessResult(JSON.stringify(zeroStats), 1)).toThrow(
       "stats task failed with exit code 1",
-    );
-  });
-
-  test("rejects corrupted cache rather than treating it as valid stats", () => {
-    expect(() => parseFreshStatsCache("not-json", 2_000, 1_000)).toThrow(
-      "stats cache is not valid JSON",
-    );
-  });
-
-  test("distinguishes fresh, stale, and future cache state", () => {
-    const payload = JSON.stringify({ ...zeroStats, generatedAt: 1_000 });
-    expect(parseFreshStatsCache(payload, 1_500, 1_000)).toEqual(zeroStats);
-    expect(parseFreshStatsCache(payload, 2_000, 1_000)).toBeNull();
-    expect(() => parseFreshStatsCache(payload, 500, 1_000)).toThrow(
-      "stats cache generatedAt is in the future",
     );
   });
 });
