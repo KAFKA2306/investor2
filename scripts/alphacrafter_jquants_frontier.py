@@ -108,7 +108,9 @@ TRADER_TRIALS = (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Run the frozen AlphaCrafter representative on a prepared J-Quants panel.")
+    parser = argparse.ArgumentParser(
+        description="Run the frozen AlphaCrafter representative on a prepared J-Quants panel."
+    )
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--dataset-manifest", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
@@ -151,7 +153,9 @@ def _aggregate_fold_metrics(
         "benchmark_correlation": correlation,
         "mean_turnover": float(np.average([float(item.mean_turnover) for item in metrics], weights=weights)),
         "max_abs_net_exposure": max(float(item.max_abs_net_exposure) for item in metrics),
-        "mean_gross_exposure": float(np.average([float(item.mean_gross_exposure) for item in metrics], weights=weights)),
+        "mean_gross_exposure": float(
+            np.average([float(item.mean_gross_exposure) for item in metrics], weights=weights)
+        ),
     }
 
 
@@ -298,7 +302,9 @@ def main() -> None:
         )
 
     aggregate_metrics = _aggregate_fold_metrics(fold_metric_objects, fold_net_returns, fold_benchmarks)
-    economic_gate = float(aggregate_metrics["cumulative_return"]) > 0.0 and float(aggregate_metrics["annualized_sharpe"]) > 0.0
+    economic_gate = (
+        float(aggregate_metrics["cumulative_return"]) > 0.0 and float(aggregate_metrics["annualized_sharpe"]) > 0.0
+    )
     payload = {
         "schema_version": "investor2.alphacrafter-jquants-frontier.v2",
         "research_date": "2026-08-24",
