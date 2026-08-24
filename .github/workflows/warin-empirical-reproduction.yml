@@ -5,7 +5,7 @@ on:
     paths:
       - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
       - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
-      - "docs/research/2021_arxiv_finance_registry.json"
+      - "docs/research/catalogs/2021_arxiv_finance_registry.json"
       - "scripts/run_warin_2101_02044_empirical.py"
       - "scripts/materialize_warin_2101_02044_evidence.py"
       - "scripts/validate_warin_2101_02044_evidence.py"
@@ -18,7 +18,7 @@ on:
     paths:
       - "docs/research/protocols/warin_2101_02044_v4_beta2.json"
       - "docs/research/runs/warin_2101_02044_v4_beta2_seed2306/**"
-      - "docs/research/2021_arxiv_finance_registry.json"
+      - "docs/research/catalogs/2021_arxiv_finance_registry.json"
       - "scripts/run_warin_2101_02044_empirical.py"
       - "scripts/materialize_warin_2101_02044_evidence.py"
       - "scripts/validate_warin_2101_02044_evidence.py"
