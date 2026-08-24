@@ -76,6 +76,7 @@ jobs:
           python -m unittest discover -s tests -p 'test_research_layout.py'
       - name: Commit verified migration
         run: |
+          python -c "from pathlib import Path; p=Path('.github/workflows/paper-family-frontier.yml'); p.write_text(p.read_text(encoding='utf-8').rstrip() + '\n', encoding='utf-8')"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -A
