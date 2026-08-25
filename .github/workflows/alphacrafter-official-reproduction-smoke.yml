@@ -1,0 +1,84 @@
+name: AlphaCrafter official reproduction smoke
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  upstream-unmodified-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout investor2
+        uses: actions/checkout@v4
+      - name: Checkout pinned official AlphaCrafter
+        uses: actions/checkout@v4
+        with:
+          repository: NJU-LINK/AlphaCrafter
+          ref: c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d
+          path: upstream
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+      - name: Install upstream-declared runtime dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install openai python-dotenv pydantic requests pyyaml pandas numpy scikit-learn matplotlib seaborn tqdm
+      - name: Run pinned upstream without modifications
+        env:
+          OPENAI_API_KEY: dummy-not-used-before-config-validation
+          OPENAI_API_URL: https://api.openai.com/v1
+        run: |
+          set -euo pipefail
+          cd upstream/alphacrafter
+          rm -rf sandbox/gpt-5.3-backtest-csi300
+          cp -a sandbox/template_a sandbox/gpt-5.3-backtest-csi300
+          set +e
+          python main.py --session_id gpt-5.3-backtest-csi300 > /tmp/alphacrafter-upstream-smoke.log 2>&1
+          exit_code=$?
+          set -e
+          cat /tmp/alphacrafter-upstream-smoke.log
+          test "$exit_code" -ne 0
+          grep -F "Model 'gpt-5.3-codex' not found in config" /tmp/alphacrafter-upstream-smoke.log
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          evidence = {
+              'schema_version': 'investor2.alphacrafter.official-smoke.v1',
+              'upstream_repository': 'NJU-LINK/AlphaCrafter',
+              'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
+              'mode': 'unmodified_upstream',
+              'status': 'BLOCKED_BEFORE_LLM_CALL',
+              'blocker': "config.yaml requests gpt-5.3-codex but template models.json defines only gpt-5 and gpt-5.2",
+              'frontier_evidence': False,
+              'next_step': 'Apply only a documented session-local model-registry compatibility patch, then continue official pipeline startup; do not alter Miner/Screener/Trader semantics.'
+          }
+          Path('/tmp/alphacrafter-official-smoke.json').write_text(json.dumps(evidence, indent=2) + '\n')
+          PY
+      - name: Record whether required OpenAI secrets exist
+        env:
+          OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_URL: ${{ secrets.OPENAI_API_URL }}
+        run: |
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          p = Path('/tmp/alphacrafter-secret-readiness.json')
+          p.write_text(json.dumps({
+              'OPENAI_API_KEY_present': bool(os.environ.get('OPENAI_KEY')),
+              'OPENAI_API_URL_present': bool(os.environ.get('OPENAI_URL')),
+          }, indent=2) + '\n')
+          PY
+      - name: Upload official reproduction smoke evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: alphacrafter-official-reproduction-smoke
+          path: |
+            /tmp/alphacrafter-upstream-smoke.log
+            /tmp/alphacrafter-official-smoke.json
+            /tmp/alphacrafter-secret-readiness.json
+          if-no-files-found: error
