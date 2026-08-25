@@ -1,172 +1,24 @@
 {
-  "schema_version": "investor2.issue194.alphacrafter-frozen-evidence.v1",
+  "schema_version": "investor2.issue194.alphacrafter-diagnostic.v2",
+  "status": "DIAGNOSTIC_ONLY",
+  "withdrawn_as_frontier_evidence": true,
+  "reason": "This artifact was produced by a deterministic surrogate that implements public AlphaCrafter gates, not the full official AlphaCrafter LLM multi-agent pipeline. It must not be used for BEAT/TIE/LOSE or as a reproduced AlphaCrafter performance result.",
   "research_date": "2026-08-24",
   "execution_date_jst": "2026-08-25",
   "family": "AlphaCrafter",
-  "representative": "deterministic public-gate representative; not full LLM pipeline",
-  "reproduction_state": "PARTIAL",
+  "representative": "deterministic surrogate of public Miner/Screener/Trader gates; NOT full AlphaCrafter",
+  "reproduction_state": "NOT_REPRODUCED",
   "frontier_verdict": "BLOCKED",
   "execution_status": "completed",
+  "diagnostic_observation": {
+    "miner_candidates": 17,
+    "miner_passed": 0,
+    "interpretation": "Only the surrogate failed to produce a viable strategy. This is not evidence that official AlphaCrafter has zero performance."
+  },
+  "required_next_step": "Run the pinned official NJU-LINK/AlphaCrafter implementation end-to-end, including its LLM multi-agent workflow, first under paper-native settings and only then under the frozen J-Quants 256-asset adapter.",
   "source": {
     "workflow_run_id": 32760557729,
-    "workflow_run_url": "https://github.com/KAFKA2306/investor2/actions/runs/32760557729",
     "artifact_id": 9532598833,
-    "artifact_name": "alphacrafter-frozen-result-only",
-    "artifact_digest": "sha256:40b7eacfee0d6e3497bfaaac45f98af8072b5e15bfd36abe827a1c5e3f10fc94",
     "code_sha": "4eabb3826cb8c544db52be161f615ea1ca681353"
-  },
-  "contract": {
-    "asset_count": 256,
-    "source_window": {
-      "start": "2024-05-31",
-      "end": "2026-05-29"
-    },
-    "prepared_panel_window": {
-      "start": "2024-06-03",
-      "end": "2026-05-29"
-    },
-    "universe_cutoff": "2025-08-30",
-    "universe_master_date": "2025-08-29",
-    "walk_forward": {
-      "effective_test_end": "2026-05-27",
-      "generated_fold_count": 3,
-      "source_window_test_end": "2026-05-29",
-      "test_months": 3,
-      "train_months": 12,
-      "used_fold_indices": [0, 1],
-      "validation_months": 3
-    },
-    "transaction_cost_bps_per_side": 15.0,
-    "borrow_fee_bps_per_year": 30.0,
-    "dataset_sha256": "ef945797db2b56128df901bc8e5b0fd73cca8492859ef9595730a89a295660d5",
-    "dataset_manifest_sha256": "aee0b710241f6054893ab6b494148d8267e74be366b27374e3fd53f4ddaab7aa"
-  },
-  "tradability": {
-    "inactive_asset_days": 501,
-    "incomplete_market_days": 166,
-    "max_active_assets": 256,
-    "median_active_assets": 256.0,
-    "min_active_assets": 252,
-    "research_rule": "inactive asset-days are excluded from factor IC/rank-IC observations",
-    "trader_rule": "inactive assets are excluded before each long/short ranking and receive exactly zero weight"
-  },
-  "selection": [
-    {
-      "fold_index": 0,
-      "miner_candidate_count": 17,
-      "miner_passed_count": 0,
-      "selected_factors": [],
-      "trader_execution_state": "NO_VIABLE_STRATEGY",
-      "trader_trials": [
-        {
-          "name": "balanced_16x16",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -0.6543939644717396,
-            "benchmark_correlation": -0.0023897328330662335,
-            "cumulative_return": -0.010307282487551972,
-            "max_abs_net_exposure": 0.0,
-            "max_drawdown": -0.03169499594250691,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.014406779661016951,
-            "observations": 59
-          }
-        },
-        {
-          "name": "long_tilt_24x8",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -0.5002503463609687,
-            "benchmark_correlation": 0.5317181516392507,
-            "cumulative_return": -0.009461421826322036,
-            "max_abs_net_exposure": 0.4000000000000001,
-            "max_drawdown": -0.023974628532890452,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.014406779661016951,
-            "observations": 59
-          }
-        },
-        {
-          "name": "short_tilt_8x24",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -1.9444038313192606,
-            "benchmark_correlation": -0.4617696403705026,
-            "cumulative_return": -0.03806468472276858,
-            "max_abs_net_exposure": 0.4000000000000001,
-            "max_drawdown": -0.059755911983120136,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.013559322033898306,
-            "observations": 59
-          }
-        }
-      ]
-    },
-    {
-      "fold_index": 1,
-      "miner_candidate_count": 17,
-      "miner_passed_count": 0,
-      "selected_factors": [],
-      "trader_execution_state": "NO_VIABLE_STRATEGY",
-      "trader_trials": [
-        {
-          "name": "balanced_16x16",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -4.1601580597371814,
-            "benchmark_correlation": -0.09824232998876496,
-            "cumulative_return": -0.05119562209197315,
-            "max_abs_net_exposure": 0.0,
-            "max_drawdown": -0.05479623149039603,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.013559322033898306,
-            "observations": 59
-          }
-        },
-        {
-          "name": "long_tilt_24x8",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -2.8148962826795083,
-            "benchmark_correlation": 0.4448574310234899,
-            "cumulative_return": -0.04964241893663346,
-            "max_abs_net_exposure": 0.4000000000000001,
-            "max_drawdown": -0.05064463181452805,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.013559322033898306,
-            "observations": 59
-          }
-        },
-        {
-          "name": "short_tilt_8x24",
-          "paper_strategy_gate": false,
-          "validation_metrics": {
-            "annualized_sharpe": -4.7527686544465615,
-            "benchmark_correlation": -0.5222235109076303,
-            "cumulative_return": -0.08440327444516904,
-            "max_abs_net_exposure": 0.4000000000000001,
-            "max_drawdown": -0.10501878682066013,
-            "mean_gross_exposure": 0.7999999999999998,
-            "mean_turnover": 0.013559322033898306,
-            "observations": 59
-          }
-        }
-      ]
-    }
-  ],
-  "aggregate_oos_metrics": {
-    "annualized_sharpe": 0.0,
-    "benchmark_correlation": 0.0,
-    "cumulative_return": 0.0,
-    "max_abs_net_exposure": 0.0,
-    "max_drawdown": 0.0,
-    "mean_gross_exposure": 0.0,
-    "mean_turnover": 0.0,
-    "observations": 115
-  },
-  "interpretation": "Aggregate OOS metrics are exactly zero because no viable strategy passed preregistered validation gates; this is a no-trade outcome, not evidence of superior performance.",
-  "blockers": [
-    "Full AlphaCrafter LLM Miner/Screener/regime pipeline is not reproduced by this deterministic representative.",
-    "A matched AAARTS 256-asset result under the same frozen contract is not yet persisted."
-  ]
+  }
 }
