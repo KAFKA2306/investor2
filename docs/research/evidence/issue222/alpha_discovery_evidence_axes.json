@@ -1,0 +1,94 @@
+{
+  "schema_version": "investor2.issue222.alpha-discovery-evidence-axes.v1",
+  "research_date": "2026-08-26",
+  "purpose": "Keep paper-native evidence, compute-budget comparability, and untouched-OOS evidence separate. Unknown fields remain unknown rather than being inferred.",
+  "families": [
+    {
+      "family": "AlphaAgent",
+      "paper_native_evidence": "Paper reports alpha-decay resistance across Chinese CSI 500 and US S&P 500 settings over multiple market regimes.",
+      "paper_native_metric": "paper-specific alpha/predictive/portfolio metrics; not normalized here",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_GENERALIZATION; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "AlphaAgentEvo",
+      "paper_native_evidence": "ICLR 2026 paper reports OOS test-period performance, valid/pass rates and generalization on AlphaEvo500/Alpha158, including small 1.7B-4B models.",
+      "paper_native_metric": "paper-specific AER/IR/valid/pass metrics",
+      "compute_budget_comparability": "MODEL_SCALE_REPORTED_BUT_EVALUATOR_CALL_BUDGET_NOT_NORMALIZED",
+      "untouched_oos_evidence": "PAPER_REPORTED_OOS; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "AlphaForgeBench",
+      "paper_native_evidence": "Paper demonstrates that executable-factor evaluation removes action-emission instability and enables deterministic/reproducible comparison across LLMs.",
+      "paper_native_metric": "benchmark reproducibility and executable strategy quality",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "BENCHMARK_EVIDENCE; common survivor-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "AlphaPROBE",
+      "paper_native_evidence": "Paper reports gains against eight baselines on three Chinese equity datasets in predictive accuracy, return stability and training efficiency.",
+      "paper_native_metric": "paper-specific predictive/return/efficiency metrics",
+      "compute_budget_comparability": "TRAINING_EFFICIENCY_REPORTED_BUT_COMMON_EVALUATOR_CALL_BUDGET_NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_MARKET_EVALUATION; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "AlphaSchema",
+      "paper_native_evidence": "Paper reports strong predictive and portfolio performance in the Chinese stock market and comparable implementation quality across different LLMs for the same schema plans.",
+      "paper_native_metric": "paper-specific predictive/portfolio metrics",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_MARKET_EVALUATION; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "CogAlpha",
+      "paper_native_evidence": "Paper reports superior predictive accuracy, robustness and generalization on A-share equities relative to existing methods.",
+      "paper_native_metric": "paper-specific predictive/portfolio metrics",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_GENERALIZATION; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "FactorMiner",
+      "paper_native_evidence": "Paper reports diverse high-quality factor libraries with low redundancy across multiple datasets, assets and markets.",
+      "paper_native_metric": "paper-specific factor quality/diversity/redundancy metrics",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_MULTI_DATASET_EVALUATION; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "QuantaAlpha",
+      "paper_native_evidence": "Paper reports CSI 300 results and cross-market transfer to CSI 500 and S&P 500; headline values include IC/ARR/MDD and multi-year cumulative excess return.",
+      "paper_native_metric": "paper-specific IC/ARR/MDD and transfer performance",
+      "compute_budget_comparability": "NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_CROSS_MARKET_TRANSFER; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "R&D-Agent-Quant",
+      "paper_native_evidence": "Paper reports real-market backtests, up to 2x annualized return versus classical factor libraries with 70% fewer factors, plus gains over deep time-series models.",
+      "paper_native_metric": "paper-specific return/predictive metrics",
+      "compute_budget_comparability": "BANDIT_SEARCH_DESCRIBED_BUT_COMMON_EVALUATOR_CALL_BUDGET_NOT_EXTRACTED",
+      "untouched_oos_evidence": "PAPER_REPORTED_REAL_MARKET_BACKTEST; investor2 untouched-OOS contract NOT_FROZEN",
+      "investor2_head_to_head": "NOT_RUN"
+    },
+    {
+      "family": "AgonAlpha",
+      "paper_native_evidence": "External WorldQuant BRAIN deployments report 60 submissions / 17 SPECTACULAR, best Fitness 9.50 and Sharpe 3.48; all submissions entered platform OS tracking.",
+      "paper_native_metric": "WorldQuant BRAIN platform-assigned Fitness/Sharpe and SPECTACULAR status",
+      "compute_budget_comparability": "PARTIAL: normal 16-to-1 halving pipeline nominally uses 31 evaluator calls before retries; full deployment compute is not normalized to investor2",
+      "untouched_oos_evidence": "EXTERNAL_EVALUATOR_SUCCESS_BUT_PUBLIC_FUTURE_OS_METRICS_NOT_OBSERVED",
+      "investor2_head_to_head": "NOT_RUN",
+      "registry_status": "REGISTRY_GAP"
+    }
+  ],
+  "cross_family_gaps": [
+    "No family currently has a completed investor2 matched head-to-head under a common fixed evaluator-call budget.",
+    "Exact evaluator-call/token/wall-clock budgets are not consistently extractable from the current canonical notes; paper result magnitude must not be used to fill this gap.",
+    "Paper-reported OOS, cross-market transfer, benchmark reproducibility and external-platform acceptance are different evidence classes and must remain separate.",
+    "The common experiment must freeze untouched-OOS before adaptive search begins and count every candidate/evaluator call, including rejected and duplicate candidates."
+  ]
+}
