@@ -1,17 +1,15 @@
 {
-  "schema_version": "investor2.issue194.external-frontier-reference.v1",
+  "schema_version": "investor2.issue194.external-frontier-reference.v2",
   "research_date": "2026-08-25",
   "family": "AgonAlpha",
+  "frontier_verdict": null,
+  "reproduction_state": "NOT_REPRODUCED_IN_INVESTOR2",
   "paper": {
     "title": "AgonAlpha: Autonomous Alpha Discovery via Prompt Economy and Scalable Agentic Search",
     "arxiv_id": "2608.11250v1",
     "primary_url": "https://arxiv.org/abs/2608.11250",
     "released": "2026-08-04"
   },
-  "upstream_code": "https://github.com/AutoResearch-Factory/AgonAlpha",
-  "evidence_class": "paper-reported external-platform evidence",
-  "reproduction_state": "NOT_REPRODUCED_IN_INVESTOR2",
-  "frontier_verdict": null,
   "evaluation_contract": {
     "external_evaluator": "WorldQuant BRAIN",
     "universe": "US TOP3000 equities",
@@ -20,30 +18,127 @@
       "start": "2019-01-01",
       "end": "2023-12-31"
     },
-    "note": "Platform-assigned metrics reported by the paper. These values are stronger evidence than author-controlled backtests but are not an investor2 head-to-head reproduction."
+    "all_submissions_entered_platform_os_tracking": true,
+    "public_future_os_metrics_observed_in_paper": false,
+    "interpretation": "Platform-assigned metrics are stronger evidence than author-controlled backtests, but repeated adaptive search over the same evaluation window is not an untouched future-OOS test."
   },
   "deployments": [
-    {"user": "A", "submitted": 15, "spectacular": 2, "best_fitness": 2.87, "best_sharpe": 3.25},
-    {"user": "B", "submitted": 23, "spectacular": 7, "best_fitness": 9.50, "best_sharpe": 3.48},
-    {"user": "C", "submitted": 7, "spectacular": 4, "best_fitness": 3.34, "best_sharpe": 3.11},
-    {"user": "D", "submitted": 6, "spectacular": 0, "best_fitness": 2.25, "best_sharpe": 2.42},
-    {"user": "E", "submitted": 9, "spectacular": 4, "best_fitness": 3.98, "best_sharpe": 2.97}
+    {"user": "A", "submitted": 15, "spectacular": 2, "spectacular_rate": 0.1333333333, "best_fitness": 2.87, "best_sharpe": 3.25},
+    {"user": "B", "submitted": 23, "spectacular": 7, "spectacular_rate": 0.3043478261, "best_fitness": 9.50, "best_sharpe": 3.48},
+    {"user": "C", "submitted": 7, "spectacular": 4, "spectacular_rate": 0.5714285714, "best_fitness": 3.34, "best_sharpe": 3.11},
+    {"user": "D", "submitted": 6, "spectacular": 0, "spectacular_rate": 0.0, "best_fitness": 2.25, "best_sharpe": 2.42},
+    {"user": "E", "submitted": 9, "spectacular": 4, "spectacular_rate": 0.4444444444, "best_fitness": 3.98, "best_sharpe": 2.97}
   ],
   "aggregate": {
     "submitted": 60,
     "spectacular": 17,
-    "spectacular_rate": 0.2833333333333333,
+    "spectacular_rate": 0.2833333333,
+    "per_user_rate_range": [0.0, 0.5714285714],
     "best_fitness": 9.50,
-    "best_sharpe": 3.48
+    "best_sharpe": 3.48,
+    "independence_warning": "The 60 submissions are adaptive tree-search outputs with shared evaluation feedback and must not be treated as 60 independent Bernoulli trials. The denominator also excludes the many internal candidate simulations performed before each submitted finalist."
   },
+  "paper_mechanisms": {
+    "search_unit": "complete research artifact: hypothesis, executable formula, evidence, rationale and verdict",
+    "within_pipeline_selection": "16 -> 8 -> 4 -> 2 -> 1 halving tournament; nominal 31 evaluator calls before retries",
+    "verification": "fresh-context reviewer can re-execute evidence and veto verified fabrication, mismatch or leakage",
+    "lineage": "a candidate receives only selected ancestor reports rather than the complete global history",
+    "scheduler": "paper describes percentile reward, progressive widening, pending-aware UCB/backpressure and visit propagation",
+    "future_validation": "submitted alphas enter BRAIN OS tracking"
+  },
+  "upstream_public_framework": {
+    "repository": "https://github.com/AutoResearch-Factory/AgonAlpha",
+    "checked_revision": "07accd4c003af54c45a4542d1da0d145c725b321",
+    "checked_revision_date": "2026-08-13",
+    "checked_revision_message": "feat: publish backend-agnostic framework",
+    "implementation_parity_with_paper_experiment": "UNVERIFIED",
+    "scope_note": "The public repository identifies itself as the orchestration layer; data, evaluator integrations, generated candidates and results stay local and are not sufficient by themselves to recreate the paper deployment."
+  },
+  "public_framework_parity_audit": [
+    {
+      "mechanism": "pending-aware UCB / backpressure",
+      "paper_semantics": "pending evaluations affect scheduler allocation so parallel workers do not repeatedly over-allocate the same lineage",
+      "public_code_observation": "scripts/mcts.py _ucb() uses completed child visits only; no pending-count term is present. cmd_next() returns the first existing pending candidate before creating another candidate.",
+      "status": "PARITY_UNVERIFIED",
+      "required_test": "Run a deterministic multi-worker scheduler test proving unique concurrent allocations and paper-equivalent pending-count UCB semantics."
+    },
+    {
+      "mechanism": "frozen percentile reward",
+      "paper_semantics": "a completed node receives its percentile reward at completion and historical rewards are not recomputed as the population grows",
+      "public_code_observation": "_node_rewards() rebuilds percentile rewards from the current complete score history each time parent selection runs.",
+      "status": "PARITY_UNVERIFIED",
+      "required_test": "Persist reward-at-completion and prove later completions do not retroactively change prior node rewards."
+    },
+    {
+      "mechanism": "verified-fabrication exclusion",
+      "paper_semantics": "verified fabrication receives zero scheduler reward and is excluded from the percentile reference population",
+      "public_code_observation": "the scheduler state exposes only a finite numeric score and no explicit veto/exclusion state; a numeric zero would remain part of _score_history().",
+      "status": "PARITY_UNVERIFIED",
+      "required_test": "Introduce an explicit invalid/veto state and prove invalid nodes neither earn reward nor alter the percentile population."
+    },
+    {
+      "mechanism": "five-dimensional adversarial review",
+      "paper_semantics": "review includes evidence integrity plus sign logic, constant rationale, temporal stability and selection-risk diagnostics",
+      "public_code_observation": "the public generic alpha-reviewer prompt is centered on cheating/evidence consistency, rerun verification and leakage; it does not encode the full paper audit as mandatory output.",
+      "status": "PARITY_UNVERIFIED",
+      "required_test": "Pin the exact experiment reviewer contract or reproduce the five audit dimensions as machine-readable checks."
+    }
+  ],
+  "methodological_limits": [
+    "External evaluator independence reduces author-controlled backtest risk, but it does not remove adaptive multiple-testing risk when search repeatedly observes the same 2019-2023 evaluator window.",
+    "The paper reports entry into BRAIN OS tracking but not realized future OS performance, so durable future generalization remains unverified from the public paper evidence.",
+    "The headline 17/60 is a submitted-finalist success rate, not a raw candidate or evaluator-call hit rate; each normal 16-to-1 halving pipeline nominally performs 31 evaluations before retries.",
+    "Per-user SPECTACULAR rates range from 0% to 57.1% under different tree sizes and model routes, so the reported deployment does not causally isolate scheduler, reviewer or model contributions.",
+    "BRAIN is a proprietary evaluator. Public artifacts can establish consistency with returned platform evidence, but an independent third party cannot fully recompute the platform engine from the open repository alone.",
+    "The paper's sign-reflection shortcut depends on evaluator symmetry. It must not be copied into J-Quants after-cost/borrow experiments unless sign symmetry is directly verified."
+  ],
   "issue194_implication": {
-    "claimed_capability": "auditable alpha discovery under an externally governed evaluator with adversarial re-execution/veto and pending-aware lineage budget allocation",
+    "strongest_transferable_idea": "Separate proposal from verification authority and make the evidence-bearing research artifact, not a formula string or chat transcript, the unit of search and lineage.",
     "candidate_mechanisms_for_matched_ablation": [
-      "fresh-context adversarial reviewer with re-execution and veto authority",
-      "artifact-level lineage rather than formula-only search",
-      "pending-aware UCB/progressive-widening budget allocation"
+      "immutable evidence-bearing artifact lineage",
+      "fresh-context verifier with re-execution and veto authority",
+      "true pending-aware allocator with frozen rewards and explicit invalid-node exclusion",
+      "16-to-1 halving tournament as a compute-efficiency mechanism"
     ],
-    "required_next_evidence": "Freeze an investor2-compatible alpha-discovery contract and compare AAARTS baseline versus each mechanism with identical data, compute budget, candidate acceptance rules and untouched-OOS evaluation. Do not assign BEAT/TIE/LOSE from the paper-reported BRAIN values alone."
+    "do_not_copy_without_validation": [
+      "paper headline SPECTACULAR rate as an investor2 success target",
+      "automatic sign reflection",
+      "public mcts.py as proof that paper scheduler semantics are reproduced",
+      "platform evaluation-window success as untouched future OOS evidence"
+    ],
+    "preregistered_ablation": {
+      "arms": [
+        "AAARTS baseline",
+        "baseline + immutable artifact lineage",
+        "baseline + fresh-context verifier",
+        "baseline + true pending-aware allocator",
+        "baseline + all three"
+      ],
+      "fixed_controls": [
+        "same PIT universe and data snapshot",
+        "same train/validation/untouched-OOS folds",
+        "same model/backend and seed policy",
+        "same candidate-generation and evaluator-call budget",
+        "same transaction costs and borrow assumptions",
+        "same acceptance and multiple-testing rules"
+      ],
+      "primary_outputs": [
+        "untouched-OOS surviving candidates per fixed evaluator-call budget",
+        "median and best selected-candidate after-cost OOS Sharpe",
+        "duplicate/invalid/leakage rejection rate",
+        "verifier precision/recall on seeded evidence faults",
+        "wall-clock and evaluator calls per surviving OOS candidate"
+      ]
+    },
+    "required_next_evidence": "Implement only the minimal experiment adapters needed for the five-arm ablation and judge the mechanisms on untouched OOS and compute efficiency. Keep the AgonAlpha family BLOCKED until an investor2 head-to-head exists."
   },
-  "source_tables": [3, 4]
+  "source_tables": [3, 4, 5, 6, 7, 8, 9],
+  "source_code_files": [
+    "AutoResearch-Factory/AgonAlpha@07accd4:scripts/mcts.py",
+    "AutoResearch-Factory/AgonAlpha@07accd4:scripts/tests/test_mcts.py",
+    "AutoResearch-Factory/AgonAlpha@07accd4:commands/alpha-mcts.md",
+    "AutoResearch-Factory/AgonAlpha@07accd4:agents/alpha-proposer.md",
+    "AutoResearch-Factory/AgonAlpha@07accd4:agents/alpha-reviewer.md",
+    "AutoResearch-Factory/AgonAlpha@07accd4:README.md"
+  ]
 }
