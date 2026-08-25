@@ -1,0 +1,71 @@
+{
+  "schema_version": "investor2.issue194.alphacrafter-official-reproduction.v1",
+  "family": "AlphaCrafter",
+  "frontier_status": "BLOCKED",
+  "reproduction_state": "NOT_REPRODUCED",
+  "performance_evidence_available": false,
+  "upstream": {
+    "repository": "NJU-LINK/AlphaCrafter",
+    "commit": "c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d"
+  },
+  "verified_startup_findings": [
+    {
+      "id": "README_CLI_MISMATCH",
+      "detail": "README-style --session_id invocation is rejected; main.py requires positional session_id.",
+      "resolved_for_probe": true,
+      "semantic_change": false
+    },
+    {
+      "id": "MISSING_GPT_5_3_CODEX_MODEL_REGISTRY_ENTRY",
+      "detail": "config.yaml requests gpt-5.3-codex while template_a/config/models.json and template_us/config/models.json define only gpt-5 and gpt-5.2.",
+      "resolved_for_probe": true,
+      "resolution": "session-local models.json metadata entry only",
+      "semantic_change": false
+    },
+    {
+      "id": "OFFICIAL_PIPELINE_REACHES_OPENAI_RESPONSES_API",
+      "detail": "With the registry-only compatibility entry, all 3 Miners, Screener, Trader and Cycle 1 initialize and the official code reaches the OpenAI Responses API.",
+      "verified": true
+    }
+  ],
+  "current_execution_blocker": {
+    "id": "OPENAI_API_KEY_MISSING",
+    "github_actions_secret_present": false,
+    "github_actions_api_url_secret_present": false,
+    "hard_blocker_for_full_llm_execution": true
+  },
+  "paper_native_data_readiness": {
+    "csi300_index_csv_present": true,
+    "csi300_watch_list_present": true,
+    "per_symbol_stock_csvs_present": false,
+    "per_symbol_financial_statements_present": false,
+    "per_symbol_news_present": false,
+    "upstream_baostock_or_lixinger_downloader_present": false,
+    "lixinger_api_requires_user_token": true,
+    "full_paper_native_dataset_ready": false
+  },
+  "actions_evidence": [
+    {
+      "run_id": 32839430762,
+      "artifact_id": 9559912992,
+      "finding": "README CLI mismatch"
+    },
+    {
+      "run_id": 32839605933,
+      "artifact_id": 9559977116,
+      "finding": "missing gpt-5.3-codex registry entry"
+    },
+    {
+      "run_id": 32839750272,
+      "artifact_id": 9560027627,
+      "finding": "official 3-Miner/Screener/Trader path reaches OpenAI API after registry-only compatibility fix"
+    }
+  ],
+  "valid_interpretation": "Official AlphaCrafter has not been reproduced. The repository has only verified startup/reproducibility blockers. No AlphaCrafter return, Sharpe, drawdown or BEAT/TIE/LOSE value is currently valid.",
+  "next_required_steps": [
+    "Provide OPENAI_API_KEY as a GitHub Actions secret without placing credentials in repository content or issue comments.",
+    "Acquire paper-native CSI300 per-symbol market/fundamental/financial-statement/news inputs with source provenance matching the paper.",
+    "Run the official 3-Miner -> Screener -> Trader workflow end-to-end and preserve trial-level logs/artifacts.",
+    "Only then adapt the official pipeline to the frozen J-Quants 256 contract and perform direct AAARTS head-to-head evaluation."
+  ]
+}
