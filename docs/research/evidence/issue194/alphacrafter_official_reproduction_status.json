@@ -1,0 +1,79 @@
+{
+  "schema_version": "investor2.issue194.alphacrafter-official-reproduction.v1",
+  "family": "AlphaCrafter",
+  "frontier_status": "BLOCKED",
+  "reproduction_state": "NOT_REPRODUCED",
+  "performance_evidence_available": false,
+  "upstream": {
+    "repository": "NJU-LINK/AlphaCrafter",
+    "commit": "c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d",
+    "source_semantics_modified": false
+  },
+  "verified_reproducibility_findings": [
+    {
+      "finding": "README_CLI_MISMATCH",
+      "detail": "README-style --session_id invocation is rejected; main.py argparse requires positional session_id.",
+      "resolved_for_probe": true,
+      "semantic_change": false
+    },
+    {
+      "finding": "MISSING_GPT_5_3_CODEX_MODEL_REGISTRY_ENTRY",
+      "detail": "alphacrafter/config.yaml requests gpt-5.3-codex while template_a/config/models.json and template_us/config/models.json define only gpt-5 and gpt-5.2.",
+      "resolved_for_probe": true,
+      "resolution": "session-local models.json metadata entry only",
+      "semantic_change": false
+    },
+    {
+      "finding": "OFFICIAL_PIPELINE_REACHES_OPENAI_RESPONSES_API",
+      "detail": "After registry-only compatibility metadata, all 3 Miner agents, Screener, Trader, and Cycle 1 initialize. A deliberately invalid credential reaches OpenAI Responses API and receives 401 invalid_api_key.",
+      "verified": true
+    }
+  ],
+  "execution_environment_blockers": [
+    {
+      "blocker": "OPENAI_API_KEY_MISSING",
+      "verified_by_actions_secret_readiness": true,
+      "present": false,
+      "hard_blocker_for_full_llm_execution": true
+    },
+    {
+      "blocker": "OPENAI_API_URL_MISSING",
+      "verified_by_actions_secret_readiness": true,
+      "present": false,
+      "hard_blocker_for_standard_openai_endpoint": false,
+      "note": "The standard OpenAI base URL can be supplied explicitly, but the API key cannot be substituted."
+    }
+  ],
+  "paper_native_data_readiness": {
+    "template_a_index_data": "000300.SH.csv is included with real CSI300 index data starting 2016-01-04",
+    "template_a_watch_list": "account.json includes the CSI300 stock watch list",
+    "template_a_stock_data": "only template.csv is included; per-symbol stock CSVs are absent",
+    "template_a_financial_statements": "only template.json is included; per-symbol statements are absent",
+    "template_a_news": "only template.json is included; per-symbol news is absent",
+    "upstream_data_download_code_for_baostock_or_lixinger": false,
+    "full_paper_native_dataset_ready": false
+  },
+  "actions_evidence": [
+    {
+      "run_id": 32839430762,
+      "artifact_id": 9559912992,
+      "result": "README CLI form rejected; actual code CLI identified"
+    },
+    {
+      "run_id": 32839605933,
+      "artifact_id": 9559977116,
+      "result": "official code stops on missing gpt-5.3-codex model registry entry"
+    },
+    {
+      "run_id": 32839750272,
+      "artifact_id": 9560027627,
+      "result": "registry-only compatibility fix reaches OpenAI Responses API; repo OpenAI secrets absent"
+    }
+  ],
+  "next_required_steps": [
+    "Provide OPENAI_API_KEY as a GitHub Actions secret without placing the credential in repository content or issue comments.",
+    "Acquire the paper-native CSI300 per-symbol market/fundamental/financial-statement/news inputs with provenance matching the paper sources; do not substitute J-Quants and call it paper reproduction.",
+    "Run the official 3-Miner -> Screener -> Trader workflow end-to-end under paper-native conditions and preserve trial-level logs/artifacts.",
+    "Only after paper-native reproduction succeeds, adapt the official pipeline to the frozen J-Quants 256 contract and run AAARTS direct head-to-head."
+  ]
+}
