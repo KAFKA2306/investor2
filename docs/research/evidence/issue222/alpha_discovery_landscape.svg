@@ -1,0 +1,109 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1050" viewBox="0 0 1600 1050">
+  <rect width="1600" height="1050" fill="#ffffff"/>
+  <style>
+    text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:#111827}
+    .title{font-size:30px;font-weight:700}.sub{font-size:15px;fill:#4b5563}.h2{font-size:19px;font-weight:700}
+    .lab{font-size:13px}.small{font-size:12px;fill:#4b5563}.tiny{font-size:11px;fill:#6b7280}.bold{font-weight:700}
+    .grid{stroke:#e5e7eb;stroke-width:1}.axis{stroke:#9ca3af;stroke-width:1}.card{fill:#ffffff;stroke:#d1d5db;stroke-width:1.2}
+    .dot{fill:#2563eb}.soft{fill:#dbeafe}.gap{fill:#fff7ed;stroke:#f59e0b}.blocked{fill:#f3f4f6;stroke:#9ca3af}
+    .p1{fill:#eff6ff;stroke:#2563eb}.p2{fill:#f0fdf4;stroke:#16a34a}.p3{fill:#fffbeb;stroke:#d97706}.p4{fill:#faf5ff;stroke:#9333ea}.p5{fill:#f9fafb;stroke:#6b7280}
+  </style>
+
+  <text x="48" y="45" class="title">Alpha-discovery landscape — compare mechanisms, not favorite papers</text>
+  <text x="48" y="73" class="sub">Issue #222 · 9 canonical alpha-discovery families + AgonAlpha registry gap · no paper headline metric is normalized into a common score</text>
+
+  <rect x="48" y="102" width="1010" height="790" rx="10" class="card"/>
+  <text x="68" y="134" class="h2">A. Family × mechanism crosswalk</text>
+  <text x="68" y="157" class="small">● = dominant mechanism. Empty cells are not a negative result; they mean the mechanism is not the family's organizing novelty.</text>
+
+  <!-- headers -->
+  <text x="82" y="203" class="lab bold">Family</text>
+  <text x="390" y="188" class="tiny" text-anchor="middle">Originality /</text><text x="390" y="202" class="tiny" text-anchor="middle">semantics</text>
+  <text x="505" y="188" class="tiny" text-anchor="middle">Memory /</text><text x="505" y="202" class="tiny" text-anchor="middle">lineage</text>
+  <text x="620" y="188" class="tiny" text-anchor="middle">Evolution /</text><text x="620" y="202" class="tiny" text-anchor="middle">recombine</text>
+  <text x="735" y="188" class="tiny" text-anchor="middle">Executable /</text><text x="735" y="202" class="tiny" text-anchor="middle">verify</text>
+  <text x="850" y="188" class="tiny" text-anchor="middle">Adaptive</text><text x="850" y="202" class="tiny" text-anchor="middle">budget</text>
+  <text x="965" y="188" class="tiny" text-anchor="middle">Factor-model</text><text x="965" y="202" class="tiny" text-anchor="middle">joint search</text>
+  <line x1="68" y1="214" x2="1038" y2="214" class="axis"/>
+
+  <!-- row grid -->
+  <g class="grid">
+    <line x1="68" y1="274" x2="1038" y2="274"/><line x1="68" y1="334" x2="1038" y2="334"/>
+    <line x1="68" y1="394" x2="1038" y2="394"/><line x1="68" y1="454" x2="1038" y2="454"/>
+    <line x1="68" y1="514" x2="1038" y2="514"/><line x1="68" y1="574" x2="1038" y2="574"/>
+    <line x1="68" y1="634" x2="1038" y2="634"/><line x1="68" y1="694" x2="1038" y2="694"/>
+    <line x1="68" y1="754" x2="1038" y2="754"/><line x1="68" y1="814" x2="1038" y2="814"/>
+  </g>
+
+  <!-- families -->
+  <text x="82" y="250" class="lab bold">AlphaAgent</text><text x="82" y="266" class="tiny">AST originality / decay resistance</text>
+  <text x="82" y="310" class="lab bold">AlphaAgentEvo</text><text x="82" y="326" class="tiny">self-evolving agentic RL</text>
+  <text x="82" y="370" class="lab bold">AlphaForgeBench</text><text x="82" y="386" class="tiny">deterministic executable benchmark</text>
+  <text x="82" y="430" class="lab bold">AlphaPROBE</text><text x="82" y="446" class="tiny">retrieval + lineage DAG</text>
+  <text x="82" y="490" class="lab bold">AlphaSchema</text><text x="82" y="506" class="tiny">structured trading semantics</text>
+  <text x="82" y="550" class="lab bold">CogAlpha</text><text x="82" y="566" class="tiny">code-based evolution</text>
+  <text x="82" y="610" class="lab bold">FactorMiner</text><text x="82" y="626" class="tiny">failure memory + skills</text>
+  <text x="82" y="670" class="lab bold">QuantaAlpha</text><text x="82" y="686" class="tiny">trajectory mutation / crossover</text>
+  <text x="82" y="730" class="lab bold">R&amp;D-Agent-Quant</text><text x="82" y="746" class="tiny">factor-model co-optimization</text>
+  <rect x="76" y="765" width="245" height="42" rx="6" class="gap"/><text x="88" y="784" class="lab bold">AgonAlpha · registry gap</text><text x="88" y="800" class="tiny">artifact lineage + verifier + allocator</text>
+
+  <!-- dots -->
+  <circle cx="390" cy="247" r="9" class="dot"/>
+  <circle cx="505" cy="307" r="9" class="dot"/><circle cx="620" cy="307" r="9" class="dot"/><circle cx="850" cy="307" r="9" class="dot"/>
+  <circle cx="735" cy="367" r="9" class="dot"/>
+  <circle cx="505" cy="427" r="9" class="dot"/><circle cx="620" cy="427" r="9" class="dot"/><circle cx="850" cy="427" r="9" class="dot"/>
+  <circle cx="390" cy="487" r="9" class="dot"/><circle cx="850" cy="487" r="9" class="dot"/>
+  <circle cx="620" cy="547" r="9" class="dot"/><circle cx="735" cy="547" r="9" class="dot"/>
+  <circle cx="505" cy="607" r="9" class="dot"/><circle cx="735" cy="607" r="9" class="dot"/>
+  <circle cx="390" cy="667" r="9" class="dot"/><circle cx="505" cy="667" r="9" class="dot"/><circle cx="620" cy="667" r="9" class="dot"/><circle cx="735" cy="667" r="9" class="dot"/>
+  <circle cx="620" cy="727" r="9" class="dot"/><circle cx="850" cy="727" r="9" class="dot"/><circle cx="965" cy="727" r="9" class="dot"/>
+  <circle cx="505" cy="787" r="9" class="dot"/><circle cx="735" cy="787" r="9" class="dot"/><circle cx="850" cy="787" r="9" class="dot"/>
+
+  <!-- common status -->
+  <rect x="68" y="835" width="970" height="39" rx="7" class="blocked"/>
+  <text x="84" y="859" class="lab"><tspan class="bold">Frontier status:</tspan> 0 matched investor2 head-to-head completions in this track. Do not infer BEAT/TIE/LOSE from paper-native results.</text>
+
+  <!-- right panel -->
+  <rect x="1080" y="102" width="472" height="790" rx="10" class="card"/>
+  <text x="1102" y="134" class="h2">B. Mechanism-first ablation queue</text>
+  <text x="1102" y="157" class="small">Priority = expected information gain, not paper prestige.</text>
+
+  <rect x="1102" y="184" width="428" height="118" rx="8" class="p1"/>
+  <text x="1118" y="208" class="lab bold">1 · Originality + semantic control</text>
+  <text x="1118" y="231" class="small">AlphaAgent · AlphaSchema · QuantaAlpha</text>
+  <text x="1118" y="254" class="small">Test: do novelty gates increase unique untouched-OOS</text>
+  <text x="1118" y="273" class="small">survivors per fixed evaluator-call budget?</text>
+
+  <rect x="1102" y="316" width="428" height="118" rx="8" class="p2"/>
+  <text x="1118" y="340" class="lab bold">2 · Memory + lineage reuse</text>
+  <text x="1118" y="363" class="small">FactorMiner · AlphaPROBE · AgonAlpha</text>
+  <text x="1118" y="386" class="small">Test: reduce repeated invalid/duplicate trials without</text>
+  <text x="1118" y="405" class="small">collapsing lineage diversity.</text>
+
+  <rect x="1102" y="448" width="428" height="118" rx="8" class="p3"/>
+  <text x="1118" y="472" class="lab bold">3 · Executable evidence + verifier</text>
+  <text x="1118" y="495" class="small">AlphaForgeBench · AgonAlpha</text>
+  <text x="1118" y="518" class="small">Test first with seeded fabrication / leakage / result</text>
+  <text x="1118" y="537" class="small">mismatches; measure verifier precision / recall.</text>
+
+  <rect x="1102" y="580" width="428" height="118" rx="8" class="p4"/>
+  <text x="1118" y="604" class="lab bold">4 · Evolution + recombination</text>
+  <text x="1118" y="627" class="small">CogAlpha · QuantaAlpha · AlphaPROBE</text>
+  <text x="1118" y="650" class="small">Compare structured evolution against fresh independent</text>
+  <text x="1118" y="669" class="small">generation under identical evaluation budgets.</text>
+
+  <rect x="1102" y="712" width="428" height="148" rx="8" class="p5"/>
+  <text x="1118" y="736" class="lab bold">5 · Learned policy + joint optimization</text>
+  <text x="1118" y="759" class="small">AlphaAgentEvo · R&amp;D-Agent-Quant · adaptive allocators</text>
+  <text x="1118" y="782" class="small">High compute / confounding. Defer until simpler</text>
+  <text x="1118" y="801" class="small">mechanisms establish a measurable frontier gap.</text>
+  <text x="1118" y="830" class="tiny">Do not import full architectures before matched ablations.</text>
+
+  <!-- footer -->
+  <rect x="48" y="914" width="1504" height="92" rx="10" fill="#f9fafb" stroke="#d1d5db"/>
+  <text x="68" y="941" class="lab bold">Common acceptance metric</text>
+  <text x="68" y="965" class="lab">Untouched-OOS surviving candidates / fixed evaluator-call budget</text>
+  <text x="590" y="941" class="lab bold">Secondary</text>
+  <text x="590" y="965" class="lab">median &amp; best after-cost OOS Sharpe · duplicate/invalid/leakage rejection · calls &amp; wall-clock per survivor</text>
+  <text x="68" y="990" class="tiny">Sources: Issue #194 canonical registry at main 691cc033; primary paper pages; AgonAlpha deep audit. Research date 2026-08-26.</text>
+</svg>
