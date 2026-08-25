@@ -1,0 +1,49 @@
+{
+  "schema_version": "investor2.issue194.external-frontier-reference.v1",
+  "research_date": "2026-08-25",
+  "family": "AgonAlpha",
+  "paper": {
+    "title": "AgonAlpha: Autonomous Alpha Discovery via Prompt Economy and Scalable Agentic Search",
+    "arxiv_id": "2608.11250v1",
+    "primary_url": "https://arxiv.org/abs/2608.11250",
+    "released": "2026-08-04"
+  },
+  "upstream_code": "https://github.com/AutoResearch-Factory/AgonAlpha",
+  "evidence_class": "paper-reported external-platform evidence",
+  "reproduction_state": "NOT_REPRODUCED_IN_INVESTOR2",
+  "frontier_verdict": null,
+  "evaluation_contract": {
+    "external_evaluator": "WorldQuant BRAIN",
+    "universe": "US TOP3000 equities",
+    "delay": 1,
+    "evaluation_window": {
+      "start": "2019-01-01",
+      "end": "2023-12-31"
+    },
+    "note": "Platform-assigned metrics reported by the paper. These values are stronger evidence than author-controlled backtests but are not an investor2 head-to-head reproduction."
+  },
+  "deployments": [
+    {"user": "A", "submitted": 15, "spectacular": 2, "best_fitness": 2.87, "best_sharpe": 3.25},
+    {"user": "B", "submitted": 23, "spectacular": 7, "best_fitness": 9.50, "best_sharpe": 3.48},
+    {"user": "C", "submitted": 7, "spectacular": 4, "best_fitness": 3.34, "best_sharpe": 3.11},
+    {"user": "D", "submitted": 6, "spectacular": 0, "best_fitness": 2.25, "best_sharpe": 2.42},
+    {"user": "E", "submitted": 9, "spectacular": 4, "best_fitness": 3.98, "best_sharpe": 2.97}
+  ],
+  "aggregate": {
+    "submitted": 60,
+    "spectacular": 17,
+    "spectacular_rate": 0.2833333333333333,
+    "best_fitness": 9.50,
+    "best_sharpe": 3.48
+  },
+  "issue194_implication": {
+    "claimed_capability": "auditable alpha discovery under an externally governed evaluator with adversarial re-execution/veto and pending-aware lineage budget allocation",
+    "candidate_mechanisms_for_matched_ablation": [
+      "fresh-context adversarial reviewer with re-execution and veto authority",
+      "artifact-level lineage rather than formula-only search",
+      "pending-aware UCB/progressive-widening budget allocation"
+    ],
+    "required_next_evidence": "Freeze an investor2-compatible alpha-discovery contract and compare AAARTS baseline versus each mechanism with identical data, compute budget, candidate acceptance rules and untouched-OOS evaluation. Do not assign BEAT/TIE/LOSE from the paper-reported BRAIN values alone."
+  },
+  "source_tables": [3, 4]
+}
