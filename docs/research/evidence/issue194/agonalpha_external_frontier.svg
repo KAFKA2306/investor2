@@ -1,51 +1,54 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
-<rect width="1280" height="720" fill="#fff"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="980" viewBox="0 0 1280 980">
+<rect width="1280" height="980" fill="#ffffff"/>
 <style>
-text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:#111827}
-.title{font-size:28px;font-weight:700}.sub{font-size:15px;fill:#4b5563}.h2{font-size:18px;font-weight:700}
-.lab{font-size:13px}.small{font-size:12px;fill:#4b5563}.num{font-size:14px;font-weight:700}
-.axis{stroke:#9ca3af;stroke-width:1}.grid{stroke:#e5e7eb;stroke-width:1}.bar{fill:#2563eb}.dot{fill:#2563eb;stroke:#1d4ed8;stroke-width:1.5}
-</style>
-<text x="50" y="48" class="title">AgonAlpha external frontier reference</text>
-<text x="50" y="76" class="sub">WorldQuant BRAIN · 60 submissions · 17 SPECTACULAR · paper-external reference, not an investor2 head-to-head verdict</text>
-<text x="60" y="125" class="h2">A. SPECTACULAR hit rate by deployment</text>
-<line x1="60" y1="570" x2="560" y2="570" class="axis"/>
-<line x1="60" y1="150" x2="60" y2="570" class="axis"/>
-<line x1="60" y1="570.0" x2="560" y2="570.0" class="grid"/><text x="48" y="574.0" text-anchor="end" class="small">0</text>
-<line x1="60" y1="510.0" x2="560" y2="510.0" class="grid"/><text x="48" y="514.0" text-anchor="end" class="small">10</text>
-<line x1="60" y1="450.0" x2="560" y2="450.0" class="grid"/><text x="48" y="454.0" text-anchor="end" class="small">20</text>
-<line x1="60" y1="390.0" x2="560" y2="390.0" class="grid"/><text x="48" y="394.0" text-anchor="end" class="small">30</text>
-<line x1="60" y1="330.0" x2="560" y2="330.0" class="grid"/><text x="48" y="334.0" text-anchor="end" class="small">40</text>
-<line x1="60" y1="270.0" x2="560" y2="270.0" class="grid"/><text x="48" y="274.0" text-anchor="end" class="small">50</text>
-<line x1="60" y1="210.0" x2="560" y2="210.0" class="grid"/><text x="48" y="214.0" text-anchor="end" class="small">60</text>
-<line x1="60" y1="150.0" x2="560" y2="150.0" class="grid"/><text x="48" y="154.0" text-anchor="end" class="small">70</text>
-<text x="15" y="360.0" transform="rotate(-90 15 360.0)" text-anchor="middle" class="lab">SPECTACULAR rate (%)</text>
-<line x1="60" y1="400.0" x2="560" y2="400.0" stroke="#dc2626" stroke-dasharray="6 5" stroke-width="1.4"/><text x="556" y="393.0" text-anchor="end" class="small">overall 17/60 = 28.3%</text>
-<rect x="105" y="490.0" width="62" height="80.0" rx="4" class="bar"/><text x="136.0" y="478.0" text-anchor="middle" class="num">2/15</text><text x="136.0" y="497.0" text-anchor="middle" class="small" style="fill:#fff">13.3%</text><text x="136.0" y="594" text-anchor="middle" class="lab">User A</text>
-<rect x="202" y="387.4" width="62" height="182.6" rx="4" class="bar"/><text x="233.0" y="375.4" text-anchor="middle" class="num">7/23</text><text x="233.0" y="394.4" text-anchor="middle" class="small" style="fill:#fff">30.4%</text><text x="233.0" y="594" text-anchor="middle" class="lab">User B</text>
-<rect x="299" y="227.1" width="62" height="342.9" rx="4" class="bar"/><text x="330.0" y="215.1" text-anchor="middle" class="num">4/7</text><text x="330.0" y="234.1" text-anchor="middle" class="small" style="fill:#fff">57.1%</text><text x="330.0" y="594" text-anchor="middle" class="lab">User C</text>
-<rect x="396" y="570.0" width="62" height="0.0" rx="4" class="bar"/><text x="427.0" y="558.0" text-anchor="middle" class="num">0/6</text><text x="427.0" y="540.0" text-anchor="middle" class="small">0.0%</text><text x="427.0" y="594" text-anchor="middle" class="lab">User D</text>
-<rect x="493" y="303.3" width="62" height="266.7" rx="4" class="bar"/><text x="524.0" y="291.3" text-anchor="middle" class="num">4/9</text><text x="524.0" y="310.3" text-anchor="middle" class="small" style="fill:#fff">44.4%</text><text x="524.0" y="594" text-anchor="middle" class="lab">User E</text>
-<text x="680" y="125" class="h2">B. Best platform metric by deployment</text>
-<line x1="680" y1="570" x2="1200" y2="570" class="axis"/><line x1="680" y1="150" x2="680" y2="570" class="axis"/>
-<line x1="680.0" y1="150" x2="680.0" y2="570" class="grid"/><text x="680.0" y="592" text-anchor="middle" class="small">2</text>
-<line x1="810.0" y1="150" x2="810.0" y2="570" class="grid"/><text x="810.0" y="592" text-anchor="middle" class="small">4</text>
-<line x1="940.0" y1="150" x2="940.0" y2="570" class="grid"/><text x="940.0" y="592" text-anchor="middle" class="small">6</text>
-<line x1="1070.0" y1="150" x2="1070.0" y2="570" class="grid"/><text x="1070.0" y="592" text-anchor="middle" class="small">8</text>
-<line x1="1200.0" y1="150" x2="1200.0" y2="570" class="grid"/><text x="1200.0" y="592" text-anchor="middle" class="small">10</text>
-<line x1="680" y1="570.0" x2="1200" y2="570.0" class="grid"/><text x="668" y="574.0" text-anchor="end" class="small">2.2</text>
-<line x1="680" y1="450.0" x2="1200" y2="450.0" class="grid"/><text x="668" y="454.0" text-anchor="end" class="small">2.6</text>
-<line x1="680" y1="330.0" x2="1200" y2="330.0" class="grid"/><text x="668" y="334.0" text-anchor="end" class="small">3.0</text>
-<line x1="680" y1="210.0" x2="1200" y2="210.0" class="grid"/><text x="668" y="214.0" text-anchor="end" class="small">3.4</text>
-<line x1="680" y1="150.0" x2="1200" y2="150.0" class="grid"/><text x="668" y="154.0" text-anchor="end" class="small">3.6</text>
-<text x="940.0" y="620" text-anchor="middle" class="lab">Best Fitness</text><text x="635" y="360.0" transform="rotate(-90 635 360.0)" text-anchor="middle" class="lab">Best Sharpe</text>
-<circle cx="736.5" cy="255.0" r="12.4" class="dot"/><text x="748.5" y="245.0" text-anchor="start" class="lab">User A · n=15</text>
-<circle cx="1167.5" cy="186.0" r="15.2" class="dot"/><text x="1155.5" y="176.0" text-anchor="end" class="lab">User B · n=23</text>
-<circle cx="767.1" cy="297.0" r="9.5" class="dot"/><text x="779.1" y="287.0" text-anchor="start" class="lab">User C · n=7</text>
-<circle cx="696.2" cy="504.0" r="9.1" class="dot"/><text x="708.2" y="494.0" text-anchor="start" class="lab">User D · n=6</text>
-<circle cx="808.7" cy="339.0" r="10.2" class="dot"/><text x="820.7" y="329.0" text-anchor="start" class="lab">User E · n=9</text>
-<text x="1147.5" y="234.0" text-anchor="end" class="num">Fitness 9.50 · Sharpe 3.48</text>
-<rect x="50" y="620" width="1180" height="62" rx="8" fill="#f3f4f6"/>
-<text x="70" y="646" class="lab">Interpretation: stronger external-evaluator evidence than author-controlled backtests, but still not directly reproduced inside investor2.</text>
-<text x="70" y="668" class="small">Source: AgonAlpha, arXiv:2608.11250v1, Tables 3–4. Fixed US TOP3000, delay 1, 2019-01-01..2023-12-31. WorldQuant BRAIN platform-assigned metrics.</text>
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:#111827}.title{font-size:28px;font-weight:700}.sub{font-size:14px;fill:#4b5563}.h2{font-size:18px;font-weight:700}.lab{font-size:13px}.small{font-size:12px;fill:#4b5563}.tiny{font-size:11px;fill:#4b5563}.num{font-size:14px;font-weight:700}.card{fill:#fff;stroke:#d1d5db}.pass{fill:#ecfdf5;stroke:#10b981}.warn{fill:#fffbeb;stroke:#f59e0b}.unknown{fill:#fef2f2;stroke:#ef4444}.bar{fill:#2563eb}.grid{stroke:#e5e7eb}.axis{stroke:#9ca3af}.line{stroke:#6b7280;stroke-width:1.5}</style>
+<text x="50" y="45" class="title">AgonAlpha deep audit — external success vs reproducibility frontier</text>
+<text x="50" y="72" class="sub">arXiv:2608.11250v1 · WorldQuant BRAIN evidence + public framework audit at 07accd4 (2026-08-13)</text>
+
+<!-- A -->
+<rect x="45" y="95" width="560" height="330" rx="10" class="card"/>
+<text x="65" y="125" class="h2">A. External evaluator result</text>
+<text x="65" y="148" class="small">SPECTACULAR rate by deployment · overall 17/60 = 28.3%</text>
+<line x1="85" y1="370" x2="570" y2="370" class="axis"/>
+<line x1="85" y1="180" x2="85" y2="370" class="axis"/>
+<line x1="85" y1="315.7" x2="570" y2="315.7" class="grid"/><text x="78" y="320" text-anchor="end" class="tiny">20%</text>
+<line x1="85" y1="261.4" x2="570" y2="261.4" class="grid"/><text x="78" y="266" text-anchor="end" class="tiny">40%</text>
+<line x1="85" y1="207.1" x2="570" y2="207.1" class="grid"/><text x="78" y="212" text-anchor="end" class="tiny">60%</text>
+<line x1="85" y1="293.1" x2="570" y2="293.1" stroke="#dc2626" stroke-dasharray="5 4"/><text x="565" y="286" text-anchor="end" class="tiny">overall 28.3%</text>
+<rect x="118" y="333.8" width="55" height="36.2" rx="3" class="bar"/><text x="145" y="326" text-anchor="middle" class="num">13.3%</text><text x="145" y="392" text-anchor="middle" class="lab">A</text>
+<rect x="207" y="287.4" width="55" height="82.6" rx="3" class="bar"/><text x="234" y="279" text-anchor="middle" class="num">30.4%</text><text x="234" y="392" text-anchor="middle" class="lab">B</text>
+<rect x="296" y="214.9" width="55" height="155.1" rx="3" class="bar"/><text x="323" y="207" text-anchor="middle" class="num">57.1%</text><text x="323" y="392" text-anchor="middle" class="lab">C</text>
+<rect x="385" y="369" width="55" height="1" rx="1" class="bar"/><text x="412" y="360" text-anchor="middle" class="num">0%</text><text x="412" y="392" text-anchor="middle" class="lab">D</text>
+<rect x="474" y="249.4" width="55" height="120.6" rx="3" class="bar"/><text x="501" y="241" text-anchor="middle" class="num">44.4%</text><text x="501" y="392" text-anchor="middle" class="lab">E</text>
+<text x="65" y="414" class="tiny">Best paper-reported platform result: Fitness 9.50 · Sharpe 3.48</text>
+
+<!-- B -->
+<rect x="625" y="95" width="610" height="330" rx="10" class="card"/>
+<text x="645" y="125" class="h2">B. Evidence ladder</text>
+<rect x="650" y="155" width="560" height="48" rx="7" class="pass"/><text x="670" y="177" class="num">CONFIRMED</text><text x="775" y="177" class="lab">External platform evaluator</text><text x="775" y="195" class="tiny">BRAIN controls simulator/data/gates; stronger than author-only backtest</text>
+<rect x="650" y="216" width="560" height="48" rx="7" class="pass"/><text x="670" y="238" class="num">CONFIRMED</text><text x="775" y="238" class="lab">Evidence-bearing artifact + fresh-context review design</text><text x="775" y="256" class="tiny">Public framework preserves proposer/reviewer separation and rerun authority</text>
+<rect x="650" y="277" width="560" height="48" rx="7" class="warn"/><text x="670" y="299" class="num">UNVERIFIED</text><text x="775" y="299" class="lab">Exact paper ↔ public scheduler parity</text><text x="775" y="317" class="tiny">Public framework was published after the paper and differs in visible scheduler semantics</text>
+<rect x="650" y="338" width="560" height="48" rx="7" class="unknown"/><text x="670" y="360" class="num">UNKNOWN</text><text x="775" y="360" class="lab">Untouched future OOS performance</text><text x="775" y="378" class="tiny">Paper says submissions entered OS tracking; realized future OS metrics are not reported</text>
+<text x="650" y="410" class="small">Therefore: external validation ≠ proof of future generalization.</text>
+
+<!-- C -->
+<rect x="45" y="445" width="1190" height="335" rx="10" class="card"/>
+<text x="65" y="477" class="h2">C. Paper mechanism vs current public framework</text>
+<text x="65" y="500" class="small">Audit target: AutoResearch-Factory/AgonAlpha @ 07accd4</text>
+<text x="65" y="535" class="num">Paper mechanism</text><text x="365" y="535" class="num">Public-code observation</text><text x="1080" y="535" class="num">Status</text>
+<line x1="65" y1="545" x2="1210" y2="545" class="grid"/>
+<text x="65" y="575" class="lab">Pending-aware UCB / backpressure</text><text x="365" y="575" class="lab">_ucb uses completed visits; cmd_next returns an existing pending node first</text><text x="1080" y="575" class="lab">UNVERIFIED</text>
+<text x="65" y="630" class="lab">Frozen percentile reward</text><text x="365" y="630" class="lab">_node_rewards recomputes percentile from current full score history</text><text x="1080" y="630" class="lab">UNVERIFIED</text>
+<text x="65" y="685" class="lab">Fabrication-zero exclusion</text><text x="365" y="685" class="lab">Scheduler exposes numeric score only; no explicit invalid/excluded state</text><text x="1080" y="685" class="lab">UNVERIFIED</text>
+<text x="65" y="740" class="lab">Five-dimensional adversarial audit</text><text x="365" y="740" class="lab">Public reviewer centers on cheating, mismatch, rerun verification and leakage</text><text x="1080" y="740" class="lab">UNVERIFIED</text>
+<line x1="345" y1="555" x2="345" y2="755" class="grid"/><line x1="1060" y1="555" x2="1060" y2="755" class="grid"/>
+<text x="65" y="765" class="tiny">This is a parity gap, not a claim that the upstream experiment is wrong. Exact experiment code/configuration is not publicly pinned by these files.</text>
+
+<!-- D -->
+<rect x="45" y="800" width="1190" height="145" rx="10" fill="#f3f4f6" stroke="#d1d5db"/>
+<text x="65" y="832" class="h2">D. What AAARTS should actually test</text>
+<text x="65" y="860" class="lab">5 arms: baseline → + immutable artifact lineage → + fresh-context verifier → + true pending-aware allocator → all three</text>
+<text x="65" y="885" class="lab">Freeze: PIT data / folds / model+seed / evaluator-call budget / costs+borrow / acceptance &amp; multiple-testing rules</text>
+<text x="65" y="910" class="lab">Win condition: more untouched-OOS survivors per fixed compute, with better after-cost OOS Sharpe — not merely more submitted or SPECTACULAR candidates.</text>
+<text x="65" y="935" class="tiny">Current Issue #194 status remains BLOCKED: no AgonAlpha-vs-AAARTS head-to-head exists.</text>
 </svg>
