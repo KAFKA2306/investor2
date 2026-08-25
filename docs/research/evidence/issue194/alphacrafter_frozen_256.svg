@@ -1,80 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="860" viewBox="0 0 1280 860">
-<rect width="1280" height="860" fill="#ffffff"/>
-<style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:#111827}.muted{fill:#4b5563}.small{font-size:13px}.body{font-size:15px}.label{font-size:14px;font-weight:600}.title{font-size:28px;font-weight:700}.h2{font-size:20px;font-weight:700}.num{font-size:23px;font-weight:700}</style>
-<text x="50" y="48" class="title">AlphaCrafter frozen 256-asset evidence</text>
-<text x="50" y="75" class="body muted">J-Quants Free PIT · deterministic representative · preregistered paper gates</text>
-<rect x="50" y="96" width="1180" height="92" rx="10" fill="#f3f4f6" stroke="#d1d5db"/>
-<text x="70" y="123" class="small muted">Universe</text>
-<text x="70" y="151" class="label">256 PIT-fixed names</text>
-<line x1="280" y1="110" x2="280" y2="174" stroke="#d1d5db"/>
-<text x="300" y="123" class="small muted">Source window</text>
-<text x="300" y="151" class="label">2024-05-31 to 2026-05-29</text>
-<line x1="525" y1="110" x2="525" y2="174" stroke="#d1d5db"/>
-<text x="545" y="123" class="small muted">PIT cutoff</text>
-<text x="545" y="151" class="label">2025-08-30; master 2025-08-29</text>
-<line x1="770" y1="110" x2="770" y2="174" stroke="#d1d5db"/>
-<text x="790" y="123" class="small muted">Walk-forward</text>
-<text x="790" y="151" class="label">12m / 3m / 3m; folds 0, 1</text>
-<line x1="995" y1="110" x2="995" y2="174" stroke="#d1d5db"/>
-<text x="1015" y="123" class="small muted">Costs</text>
-<text x="1015" y="151" class="label">15 bps/side; borrow 30 bps/yr</text>
-<text x="50" y="228" class="h2">1. Selection funnel</text>
-<rect x="50" y="246" width="510" height="300" rx="10" fill="#fff" stroke="#d1d5db"/>
-<text x="75" y="278" class="label">Fold 0</text>
-<rect x="75" y="294" width="265" height="54" rx="8" fill="#f3f4f6"/>
-<text x="95" y="327" class="body">Miner candidates</text>
-<text x="298" y="330" class="num">17</text>
-<text x="355" y="328" class="label muted">-&gt;</text>
-<rect x="398" y="294" width="125" height="54" rx="8" fill="#fef2f2" stroke="#fecaca"/>
-<text x="420" y="314" class="small muted">Miner passed</text>
-<text x="453" y="339" class="num" style="fill:#b91c1c">0</text>
-<text x="75" y="372" class="small muted">Trader trials: 3 preregistered · paper gate passed: 0 / 3</text>
-<text x="75" y="377" class="label">Fold 1</text>
-<rect x="75" y="393" width="265" height="54" rx="8" fill="#f3f4f6"/>
-<text x="95" y="426" class="body">Miner candidates</text>
-<text x="298" y="429" class="num">17</text>
-<text x="355" y="427" class="label muted">-&gt;</text>
-<rect x="398" y="393" width="125" height="54" rx="8" fill="#fef2f2" stroke="#fecaca"/>
-<text x="420" y="413" class="small muted">Miner passed</text>
-<text x="453" y="438" class="num" style="fill:#b91c1c">0</text>
-<text x="75" y="471" class="small muted">Trader trials: 3 preregistered · paper gate passed: 0 / 3</text>
-<rect x="75" y="493" width="448" height="36" rx="6" fill="#fef2f2"/>
-<text x="90" y="517" class="label" style="fill:#b91c1c">No viable strategy reached untouched OOS trading</text>
-<text x="600" y="228" class="h2">2. Validation Sharpe: preregistered Trader trials</text>
-<rect x="600" y="246" width="630" height="300" rx="10" fill="#fff" stroke="#d1d5db"/>
-<line x1="815" y1="270" x2="815" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="815" y="531" text-anchor="middle" class="small muted">-5</text>
-<line x1="888.1" y1="270" x2="888.1" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="888.1" y="531" text-anchor="middle" class="small muted">-4</text>
-<line x1="961.2" y1="270" x2="961.2" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="961.2" y="531" text-anchor="middle" class="small muted">-3</text>
-<line x1="1034.2" y1="270" x2="1034.2" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="1034.2" y="531" text-anchor="middle" class="small muted">-2</text>
-<line x1="1107.3" y1="270" x2="1107.3" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="1107.3" y="531" text-anchor="middle" class="small muted">-1</text>
-<line x1="1180.4" y1="270" x2="1180.4" y2="511" stroke="#d1d5db" stroke-width="1"/>
-<text x="1180.4" y="531" text-anchor="middle" class="small muted">0</text>
-<line x1="1180.4" y1="270" x2="1180.4" y2="511" stroke="#1f2937" stroke-width="1.5"/>
-<text x="620" y="302" class="small">F0 · balanced</text><rect x="1132.6" y="286" width="47.8" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="1124.6" y="302" text-anchor="end" class="small" style="fill:#b91c1c">-0.65</text>
-<text x="620" y="338" class="small">F0 · long tilt</text><rect x="1143.8" y="322" width="36.6" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="1135.8" y="338" text-anchor="end" class="small" style="fill:#b91c1c">-0.50</text>
-<text x="620" y="374" class="small">F0 · short tilt</text><rect x="1038.3" y="358" width="142.1" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="1030.3" y="374" text-anchor="end" class="small" style="fill:#b91c1c">-1.94</text>
-<text x="620" y="410" class="small">F1 · balanced</text><rect x="876.4" y="394" width="304.0" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="868.4" y="410" text-anchor="end" class="small" style="fill:#b91c1c">-4.16</text>
-<text x="620" y="446" class="small">F1 · long tilt</text><rect x="974.6" y="430" width="205.8" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="966.6" y="446" text-anchor="end" class="small" style="fill:#b91c1c">-2.81</text>
-<text x="620" y="482" class="small">F1 · short tilt</text><rect x="832.9" y="466" width="347.5" height="22" rx="4" fill="#fee2e2" stroke="#ef4444"/><text x="824.9" y="482" text-anchor="end" class="small" style="fill:#b91c1c">-4.75</text>
-<text x="620" y="510" class="small muted">All 6 validation Sharpes are negative; all 6 paper strategy gates = false.</text>
-<text x="50" y="595" class="h2">3. Untouched OOS outcome</text>
-<rect x="50" y="615" width="1180" height="120" rx="10" fill="#f3f4f6" stroke="#d1d5db"/>
-<text x="75" y="646" class="label" style="fill:#b91c1c">NO_VIABLE_STRATEGY -&gt; no-trade OOS</text>
-<text x="75" y="680" class="small muted">Observations</text><text x="75" y="710" class="num">115</text>
-<text x="255" y="680" class="small muted">Return</text><text x="255" y="710" class="num">0.00%</text>
-<text x="435" y="680" class="small muted">Sharpe</text><text x="435" y="710" class="num">0.00</text>
-<text x="615" y="680" class="small muted">Max DD</text><text x="615" y="710" class="num">0.00%</text>
-<text x="795" y="680" class="small muted">Turnover</text><text x="795" y="710" class="num">0.00</text>
-<line x1="970" y1="658" x2="970" y2="720" stroke="#d1d5db"/>
-<text x="995" y="680" class="small muted">Interpretation</text>
-<text x="995" y="704" class="label" style="fill:#b91c1c">0 is not a performance win.</text>
-<text x="995" y="723" class="small muted">The strategy was rejected before OOS trading.</text>
-<text x="50" y="778" class="label">Reproduction state: PARTIAL · Frontier verdict: BLOCKED</text>
-<text x="50" y="802" class="small muted">Blockers: full LLM Miner/Screener/regime pipeline not reproduced; matched AAARTS 256 result not yet persisted.</text>
-<text x="50" y="826" class="small muted">Run 32760557729 · artifact 9532598833 · code 4eabb3826cb8 · dataset ef945797db2b · artifact digest 40b7eacfee0d</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="520" viewBox="0 0 1200 520">
+  <rect width="1200" height="520" fill="#ffffff"/>
+  <text x="60" y="90" font-family="Arial, sans-serif" font-size="34" font-weight="700" fill="#111111">AlphaCrafter surrogate result — WITHDRAWN as frontier evidence</text>
+  <text x="60" y="140" font-family="Arial, sans-serif" font-size="22" fill="#333333">This plot came from a deterministic surrogate of public gates, not the full official LLM multi-agent pipeline.</text>
+  <rect x="60" y="190" width="1080" height="150" rx="12" fill="#f2f2f2" stroke="#777777"/>
+  <text x="90" y="245" font-family="Arial, sans-serif" font-size="28" font-weight="700" fill="#111111">Diagnostic observation only</text>
+  <text x="90" y="290" font-family="Arial, sans-serif" font-size="24" fill="#333333">17 surrogate candidates → 0 passed Miner gates → no viable surrogate strategy</text>
+  <text x="90" y="325" font-family="Arial, sans-serif" font-size="22" fill="#333333">This is NOT evidence that official AlphaCrafter has zero performance or failed reproduction.</text>
+  <text x="60" y="400" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#111111">Frontier status: BLOCKED — official AlphaCrafter has not yet been fully reproduced.</text>
+  <text x="60" y="450" font-family="Arial, sans-serif" font-size="20" fill="#444444">Required next step: pinned NJU-LINK/AlphaCrafter end-to-end reproduction, including the official LLM workflow.</text>
 </svg>
