@@ -8,7 +8,7 @@ permissions:
   contents: read
 
 jobs:
-  upstream-unmodified-smoke:
+  official-upstream-compatibility-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     steps:
@@ -29,15 +29,36 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install openai python-dotenv pydantic requests pyyaml pandas numpy scikit-learn matplotlib seaborn tqdm lightgbm
           python -m pip install -e upstream
-      - name: Run pinned upstream code through its actual CLI
-        env:
-          OPENAI_API_KEY: dummy-not-used-for-real-reproduction
-          OPENAI_API_URL: https://api.openai.com/v1
+      - name: Create official template session and apply registry-only compatibility fix
         run: |
           set -euo pipefail
           cd upstream/alphacrafter
           rm -rf sandbox/gpt-5.3-backtest-csi300
           cp -a sandbox/template_a sandbox/gpt-5.3-backtest-csi300
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = Path('sandbox/gpt-5.3-backtest-csi300/config/models.json')
+          cfg = json.loads(p.read_text())
+          assert 'gpt-5.3-codex' not in cfg
+          # Compatibility metadata only. No agent instructions, tools, gates, workflow,
+          # trading logic, or data semantics are changed.
+          cfg['gpt-5.3-codex'] = {
+              'producer': 'OpenAI',
+              'inputs': ['text'],
+              'cost': {'input': 0, 'output': 0},
+              'input_token_limit': 128000,
+              'output_token_limit': 32000
+          }
+          p.write_text(json.dumps(cfg, indent=4) + '\n')
+          PY
+      - name: Run official Miner-Screener-Trader pipeline until external API boundary
+        env:
+          OPENAI_API_KEY: deliberately-invalid-smoke-key
+          OPENAI_API_URL: https://api.openai.com/v1
+        run: |
+          set -euo pipefail
+          cd upstream/alphacrafter
           set +e
           python main.py gpt-5.3-backtest-csi300 > /tmp/alphacrafter-upstream-smoke.log 2>&1
           exit_code=$?
@@ -48,36 +69,36 @@ jobs:
           import json, os
           from pathlib import Path
           log = Path('/tmp/alphacrafter-upstream-smoke.log').read_text(errors='replace')
-          if "Model 'gpt-5.3-codex' not found in config" in log:
-              blocker = "config.yaml requests gpt-5.3-codex but session models.json defines only gpt-5 and gpt-5.2"
-              status = 'BLOCKED_MODEL_REGISTRY'
-          elif '401' in log or 'AuthenticationError' in log or 'Incorrect API key' in log:
-              blocker = 'startup passed local configuration and reached the OpenAI API with the deliberately invalid smoke key'
+          auth_markers = ('401', 'AuthenticationError', 'Incorrect API key', 'invalid_api_key')
+          if any(marker in log for marker in auth_markers):
               status = 'REACHED_LLM_API'
-          elif 'unrecognized arguments: --session_id' in log:
-              blocker = 'README CLI disagrees with code: README documents --session_id but argparse requires positional session_id'
-              status = 'BLOCKED_README_CLI_MISMATCH'
+              blocker = 'official pipeline initialized after registry-only fix and reached the OpenAI API; deliberately invalid smoke credential was rejected'
+          elif "Model 'gpt-5.3-codex' not found in config" in log:
+              status = 'REGISTRY_FIX_FAILED'
+              blocker = 'session-local model registry compatibility fix did not take effect'
           else:
-              blocker = 'unexpected upstream startup blocker; inspect captured log'
               status = 'BLOCKED_OTHER'
+              blocker = 'next official-pipeline blocker occurred before confirmed authentication boundary; inspect log'
           evidence = {
-              'schema_version': 'investor2.alphacrafter.official-smoke.v3',
+              'schema_version': 'investor2.alphacrafter.official-smoke.v4',
               'upstream_repository': 'NJU-LINK/AlphaCrafter',
               'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
-              'mode': 'official_upstream_code_no_semantic_patch',
-              'readme_cli_mismatch_observed_in_prior_run': True,
-              'actual_cli': 'python main.py <session_id>',
+              'upstream_source_modified': False,
+              'session_local_compatibility_patch': {
+                  'file': 'sandbox/gpt-5.3-backtest-csi300/config/models.json',
+                  'change': 'add missing gpt-5.3-codex model metadata entry only',
+                  'semantic_agent_changes': False
+              },
               'process_exit_code': int(os.environ['EXIT_CODE']),
               'status': status,
               'blocker': blocker,
-              'frontier_evidence': False,
-              'next_step': 'Resolve only the first upstream reproducibility blocker, then rerun; do not replace the official Miner/Screener/Trader workflow with a surrogate.'
+              'frontier_evidence': False
           }
           Path('/tmp/alphacrafter-official-smoke.json').write_text(json.dumps(evidence, indent=2) + '\n')
           if int(os.environ['EXIT_CODE']) == 0:
-              raise SystemExit('Smoke unexpectedly completed with a dummy API key; inspect run semantics')
+              raise SystemExit('Smoke unexpectedly completed with deliberately invalid API credential')
           PY
-      - name: Record whether required OpenAI secrets exist
+      - name: Record repository secret readiness
         if: always()
         env:
           OPENAI_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -89,6 +110,7 @@ jobs:
           Path('/tmp/alphacrafter-secret-readiness.json').write_text(json.dumps({
               'OPENAI_API_KEY_present': bool(os.environ.get('OPENAI_KEY')),
               'OPENAI_API_URL_present': bool(os.environ.get('OPENAI_URL')),
+              'full_llm_reproduction_ready': bool(os.environ.get('OPENAI_KEY'))
           }, indent=2) + '\n')
           PY
       - name: Upload official reproduction smoke evidence
