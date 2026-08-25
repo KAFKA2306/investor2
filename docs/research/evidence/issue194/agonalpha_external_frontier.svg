@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+<rect width="1280" height="720" fill="#fff"/>
+<style>
+text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;fill:#111827}
+.title{font-size:28px;font-weight:700}.sub{font-size:15px;fill:#4b5563}.h2{font-size:18px;font-weight:700}
+.lab{font-size:13px}.small{font-size:12px;fill:#4b5563}.num{font-size:14px;font-weight:700}
+.axis{stroke:#9ca3af;stroke-width:1}.grid{stroke:#e5e7eb;stroke-width:1}.bar{fill:#2563eb}.dot{fill:#2563eb;stroke:#1d4ed8;stroke-width:1.5}
+</style>
+<text x="50" y="48" class="title">AgonAlpha external frontier reference</text>
+<text x="50" y="76" class="sub">WorldQuant BRAIN · 60 submissions · 17 SPECTACULAR · paper-external reference, not an investor2 head-to-head verdict</text>
+<text x="60" y="125" class="h2">A. SPECTACULAR hit rate by deployment</text>
+<line x1="60" y1="570" x2="560" y2="570" class="axis"/>
+<line x1="60" y1="150" x2="60" y2="570" class="axis"/>
+<line x1="60" y1="570.0" x2="560" y2="570.0" class="grid"/><text x="48" y="574.0" text-anchor="end" class="small">0</text>
+<line x1="60" y1="510.0" x2="560" y2="510.0" class="grid"/><text x="48" y="514.0" text-anchor="end" class="small">10</text>
+<line x1="60" y1="450.0" x2="560" y2="450.0" class="grid"/><text x="48" y="454.0" text-anchor="end" class="small">20</text>
+<line x1="60" y1="390.0" x2="560" y2="390.0" class="grid"/><text x="48" y="394.0" text-anchor="end" class="small">30</text>
+<line x1="60" y1="330.0" x2="560" y2="330.0" class="grid"/><text x="48" y="334.0" text-anchor="end" class="small">40</text>
+<line x1="60" y1="270.0" x2="560" y2="270.0" class="grid"/><text x="48" y="274.0" text-anchor="end" class="small">50</text>
+<line x1="60" y1="210.0" x2="560" y2="210.0" class="grid"/><text x="48" y="214.0" text-anchor="end" class="small">60</text>
+<line x1="60" y1="150.0" x2="560" y2="150.0" class="grid"/><text x="48" y="154.0" text-anchor="end" class="small">70</text>
+<text x="15" y="360.0" transform="rotate(-90 15 360.0)" text-anchor="middle" class="lab">SPECTACULAR rate (%)</text>
+<line x1="60" y1="400.0" x2="560" y2="400.0" stroke="#dc2626" stroke-dasharray="6 5" stroke-width="1.4"/><text x="556" y="393.0" text-anchor="end" class="small">overall 17/60 = 28.3%</text>
+<rect x="105" y="490.0" width="62" height="80.0" rx="4" class="bar"/><text x="136.0" y="478.0" text-anchor="middle" class="num">2/15</text><text x="136.0" y="497.0" text-anchor="middle" class="small" style="fill:#fff">13.3%</text><text x="136.0" y="594" text-anchor="middle" class="lab">User A</text>
+<rect x="202" y="387.4" width="62" height="182.6" rx="4" class="bar"/><text x="233.0" y="375.4" text-anchor="middle" class="num">7/23</text><text x="233.0" y="394.4" text-anchor="middle" class="small" style="fill:#fff">30.4%</text><text x="233.0" y="594" text-anchor="middle" class="lab">User B</text>
+<rect x="299" y="227.1" width="62" height="342.9" rx="4" class="bar"/><text x="330.0" y="215.1" text-anchor="middle" class="num">4/7</text><text x="330.0" y="234.1" text-anchor="middle" class="small" style="fill:#fff">57.1%</text><text x="330.0" y="594" text-anchor="middle" class="lab">User C</text>
+<rect x="396" y="570.0" width="62" height="0.0" rx="4" class="bar"/><text x="427.0" y="558.0" text-anchor="middle" class="num">0/6</text><text x="427.0" y="540.0" text-anchor="middle" class="small">0.0%</text><text x="427.0" y="594" text-anchor="middle" class="lab">User D</text>
+<rect x="493" y="303.3" width="62" height="266.7" rx="4" class="bar"/><text x="524.0" y="291.3" text-anchor="middle" class="num">4/9</text><text x="524.0" y="310.3" text-anchor="middle" class="small" style="fill:#fff">44.4%</text><text x="524.0" y="594" text-anchor="middle" class="lab">User E</text>
+<text x="680" y="125" class="h2">B. Best platform metric by deployment</text>
+<line x1="680" y1="570" x2="1200" y2="570" class="axis"/><line x1="680" y1="150" x2="680" y2="570" class="axis"/>
+<line x1="680.0" y1="150" x2="680.0" y2="570" class="grid"/><text x="680.0" y="592" text-anchor="middle" class="small">2</text>
+<line x1="810.0" y1="150" x2="810.0" y2="570" class="grid"/><text x="810.0" y="592" text-anchor="middle" class="small">4</text>
+<line x1="940.0" y1="150" x2="940.0" y2="570" class="grid"/><text x="940.0" y="592" text-anchor="middle" class="small">6</text>
+<line x1="1070.0" y1="150" x2="1070.0" y2="570" class="grid"/><text x="1070.0" y="592" text-anchor="middle" class="small">8</text>
+<line x1="1200.0" y1="150" x2="1200.0" y2="570" class="grid"/><text x="1200.0" y="592" text-anchor="middle" class="small">10</text>
+<line x1="680" y1="570.0" x2="1200" y2="570.0" class="grid"/><text x="668" y="574.0" text-anchor="end" class="small">2.2</text>
+<line x1="680" y1="450.0" x2="1200" y2="450.0" class="grid"/><text x="668" y="454.0" text-anchor="end" class="small">2.6</text>
+<line x1="680" y1="330.0" x2="1200" y2="330.0" class="grid"/><text x="668" y="334.0" text-anchor="end" class="small">3.0</text>
+<line x1="680" y1="210.0" x2="1200" y2="210.0" class="grid"/><text x="668" y="214.0" text-anchor="end" class="small">3.4</text>
+<line x1="680" y1="150.0" x2="1200" y2="150.0" class="grid"/><text x="668" y="154.0" text-anchor="end" class="small">3.6</text>
+<text x="940.0" y="620" text-anchor="middle" class="lab">Best Fitness</text><text x="635" y="360.0" transform="rotate(-90 635 360.0)" text-anchor="middle" class="lab">Best Sharpe</text>
+<circle cx="736.5" cy="255.0" r="12.4" class="dot"/><text x="748.5" y="245.0" text-anchor="start" class="lab">User A · n=15</text>
+<circle cx="1167.5" cy="186.0" r="15.2" class="dot"/><text x="1155.5" y="176.0" text-anchor="end" class="lab">User B · n=23</text>
+<circle cx="767.1" cy="297.0" r="9.5" class="dot"/><text x="779.1" y="287.0" text-anchor="start" class="lab">User C · n=7</text>
+<circle cx="696.2" cy="504.0" r="9.1" class="dot"/><text x="708.2" y="494.0" text-anchor="start" class="lab">User D · n=6</text>
+<circle cx="808.7" cy="339.0" r="10.2" class="dot"/><text x="820.7" y="329.0" text-anchor="start" class="lab">User E · n=9</text>
+<text x="1147.5" y="234.0" text-anchor="end" class="num">Fitness 9.50 · Sharpe 3.48</text>
+<rect x="50" y="620" width="1180" height="62" rx="8" fill="#f3f4f6"/>
+<text x="70" y="646" class="lab">Interpretation: stronger external-evaluator evidence than author-controlled backtests, but still not directly reproduced inside investor2.</text>
+<text x="70" y="668" class="small">Source: AgonAlpha, arXiv:2608.11250v1, Tables 3–4. Fixed US TOP3000, delay 1, 2019-01-01..2023-12-31. WorldQuant BRAIN platform-assigned metrics.</text>
+</svg>
