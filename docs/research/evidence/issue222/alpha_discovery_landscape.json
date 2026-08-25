@@ -1,0 +1,256 @@
+{
+  "schema_version": "investor2.issue222.alpha-discovery-landscape.v1",
+  "research_date": "2026-08-26",
+  "issue": 222,
+  "parent_issue": 194,
+  "repository_main_revision_inspected": "691cc033aa41ed8ab7e8a85b6f82f5e91ac2e690",
+  "canonical_registry": {
+    "path": "docs/research/paper_family_frontier.json",
+    "blob_sha": "a835e2d0675ac8052cc2c9af6181f370814f2b1e",
+    "alpha_discovery_family_count": 9,
+    "registry_gap": ["AgonAlpha"]
+  },
+  "policy": {
+    "organizing_principle": "mechanisms, not favorite papers",
+    "paper_native_metrics_are_not_common_scores": true,
+    "frontier_verdict_source": "Issue #194 canonical authority only",
+    "common_primary_output": "untouched-OOS surviving candidates per fixed evaluator-call budget"
+  },
+  "families": [
+    {
+      "family_id": "alphaagent",
+      "name": "AlphaAgent",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2502.16789",
+      "claimed_capability": "originality-regularized alpha discovery that resists alpha decay",
+      "search_unit": "formula / hypothesis-factor pair",
+      "dominant_mechanisms": ["ast_originality_regularization", "hypothesis_factor_alignment", "complexity_control"],
+      "memory_lineage": "existing-alpha similarity reference",
+      "verification": "multi-agent evaluator plus structural checks",
+      "budget_policy": "not the primary novelty",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "alphaagent-evo",
+      "name": "AlphaAgentEvo",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://iclr.cc/virtual/2026/poster/10007685",
+      "claimed_capability": "long-horizon self-evolving agentic reinforcement learning for alpha mining",
+      "search_unit": "multi-turn evolution trajectory",
+      "dominant_mechanisms": ["hierarchical_reward", "long_horizon_reflection", "self_evolving_policy"],
+      "memory_lineage": "stateful multi-turn evolution",
+      "verification": "tool-based alpha evaluation inside the RL trajectory",
+      "budget_policy": "learned search policy",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "alphaforgebench",
+      "name": "AlphaForgeBench",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2602.18481",
+      "claimed_capability": "reproducible end-to-end strategy design by treating the LLM as a quant researcher rather than a trader",
+      "search_unit": "executable alpha / strategy artifact",
+      "dominant_mechanisms": ["executable_artifact", "reasoning_execution_separation", "deterministic_evaluation"],
+      "memory_lineage": "not the primary novelty",
+      "verification": "deterministic execution of generated artifacts",
+      "budget_policy": "benchmark protocol rather than adaptive search",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "alphaprobe",
+      "name": "AlphaPROBE",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2602.11917",
+      "claimed_capability": "efficient nonredundant alpha evolution using principled retrieval and a global lineage DAG",
+      "search_unit": "factor node embedded in an evolution DAG",
+      "dominant_mechanisms": ["bayesian_factor_retrieval", "lineage_dag", "biased_evolution"],
+      "memory_lineage": "full ancestral trace on a DAG",
+      "verification": "factor evaluation with lineage-aware reuse",
+      "budget_policy": "retrieval balances exploration and exploitation",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "alphaschema",
+      "name": "AlphaSchema",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2607.26642",
+      "claimed_capability": "structured exploration of trading semantics before factor implementation",
+      "search_unit": "schema plan: Event / Context / Qualities / Direction / Output",
+      "dominant_mechanisms": ["semantic_schema_space", "surrogate_guided_search", "implementation_decoupling"],
+      "memory_lineage": "evaluated schema history",
+      "verification": "generated executable factor is evaluated after schema selection",
+      "budget_policy": "global exploration + surrogate exploitation + local mutation",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "cogalpha",
+      "name": "CogAlpha",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2511.18850",
+      "claimed_capability": "broader alpha search through LLM-driven code-based evolution",
+      "search_unit": "program / code-level alpha",
+      "dominant_mechanisms": ["code_based_evolution", "multi_stage_reasoning", "structural_recombination"],
+      "memory_lineage": "iterative evolutionary history",
+      "verification": "financial feedback and executable evaluation",
+      "budget_policy": "evolutionary search",
+      "reproduction_state": "CONTRACT_NOT_FROZEN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "factorminer",
+      "name": "FactorMiner",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2602.14670",
+      "claimed_capability": "low-redundancy scalable factor discovery through reusable skills and experience memory",
+      "search_unit": "formulaic factor plus retrieved experience",
+      "dominant_mechanisms": ["symbolic_experience_memory", "failure_constraint_reuse", "skill_module_decoupling"],
+      "memory_lineage": "success patterns and failure constraints distilled across trials",
+      "verification": "modular executable evaluation skills",
+      "budget_policy": "memory-guided exploration",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "quantaalpha",
+      "name": "QuantaAlpha",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2602.07085",
+      "claimed_capability": "structured multi-round alpha improvement by reusing and recombining successful mining trajectories",
+      "search_unit": "end-to-end mining trajectory",
+      "dominant_mechanisms": ["trajectory_mutation", "trajectory_recombination", "semantic_consistency", "complexity_redundancy_control"],
+      "memory_lineage": "validated trajectory segments",
+      "verification": "hypothesis-expression-code consistency plus market evaluation",
+      "budget_policy": "trajectory-level evolutionary selection",
+      "reproduction_state": "NOT_RUN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "rd-agent-quant",
+      "name": "R&D-Agent-Quant",
+      "registry_status": "CANONICAL",
+      "primary_url": "https://arxiv.org/abs/2505.15155",
+      "claimed_capability": "full-stack quantitative R&D through joint factor-model co-optimization",
+      "search_unit": "research hypothesis + factor task + model task + executable experiment",
+      "dominant_mechanisms": ["factor_model_cooptimization", "research_development_feedback", "multi_armed_bandit_direction_selection"],
+      "memory_lineage": "experiment feedback across research/development iterations",
+      "verification": "real-market backtest execution",
+      "budget_policy": "multi-armed-bandit direction scheduler",
+      "reproduction_state": "CONTRACT_NOT_FROZEN",
+      "matched_head_to_head": "BLOCKED"
+    },
+    {
+      "family_id": "agonalpha",
+      "name": "AgonAlpha",
+      "registry_status": "REGISTRY_GAP",
+      "primary_url": "https://arxiv.org/abs/2608.11250",
+      "claimed_capability": "auditable artifact search with adversarial verification and scalable budget allocation",
+      "search_unit": "frozen evidence-bearing research artifact",
+      "dominant_mechanisms": ["artifact_lineage", "fresh_context_verifier", "reexecution_veto", "progressive_widening", "pending_aware_budget_allocation", "successive_halving"],
+      "memory_lineage": "selected ancestor artifacts only",
+      "verification": "fresh-context reviewer can rerun evidence and veto",
+      "budget_policy": "paper describes pending-aware MCTS/UCB; parity of the public scheduler remains unverified",
+      "reproduction_state": "NOT_REPRODUCED_IN_INVESTOR2",
+      "matched_head_to_head": "BLOCKED",
+      "existing_evidence": "docs/research/evidence/issue194/agonalpha_external_frontier_summary.json"
+    }
+  ],
+  "mechanism_crosswalk": [
+    {
+      "mechanism_group": "originality_and_semantic_control",
+      "families": ["AlphaAgent", "AlphaSchema", "QuantaAlpha"],
+      "isolatable_mechanisms": ["AST similarity/originality", "structured semantic schema", "semantic consistency and redundancy control"],
+      "first_falsifiable_question": "Under the same evaluator-call budget, does explicit novelty/semantic control increase unique untouched-OOS survivors rather than only reducing duplicates?"
+    },
+    {
+      "mechanism_group": "memory_and_lineage_reuse",
+      "families": ["FactorMiner", "AlphaPROBE", "AgonAlpha"],
+      "isolatable_mechanisms": ["failure memory", "principled lineage retrieval", "ancestor-only artifact lineage"],
+      "first_falsifiable_question": "Does selective reuse reduce repeated invalid/duplicate trials and evaluator calls per OOS survivor without narrowing diversity?"
+    },
+    {
+      "mechanism_group": "executable_artifacts_and_verification",
+      "families": ["AlphaForgeBench", "AgonAlpha"],
+      "isolatable_mechanisms": ["reasoning/execution separation", "deterministic artifact replay", "fresh-context re-execution and veto"],
+      "first_falsifiable_question": "Can an independent verifier detect seeded fabrication, leakage and artifact/result mismatches with useful precision/recall?"
+    },
+    {
+      "mechanism_group": "evolution_and_recombination",
+      "families": ["CogAlpha", "QuantaAlpha", "AlphaPROBE"],
+      "isolatable_mechanisms": ["code-level evolution", "trajectory recombination", "biased graph evolution"],
+      "first_falsifiable_question": "Does structured evolution beat fresh independent generation on OOS survivors per fixed evaluation budget?"
+    },
+    {
+      "mechanism_group": "learned_or_adaptive_search_policy",
+      "families": ["AlphaAgentEvo", "R&D-Agent-Quant", "AlphaSchema", "AgonAlpha"],
+      "isolatable_mechanisms": ["agentic RL policy", "multi-armed-bandit direction selection", "surrogate allocation", "pending-aware tree allocation"],
+      "first_falsifiable_question": "Does adaptive allocation improve survivor yield after controlling for model, data, seed and total evaluator calls?"
+    },
+    {
+      "mechanism_group": "joint_factor_model_search",
+      "families": ["R&D-Agent-Quant"],
+      "isolatable_mechanisms": ["factor-model co-optimization"],
+      "first_falsifiable_question": "Does joint optimization beat a frozen-model factor-only search on untouched OOS after equalizing total research compute?"
+    }
+  ],
+  "ablation_priority": [
+    {
+      "priority": 1,
+      "group": "originality_and_semantic_control",
+      "reason": "low-to-medium implementation cost, direct duplicate-rate signal, and three independent paper families expose different levels of the same exploration problem",
+      "minimum_arms": ["AAARTS baseline", "baseline + AST originality gate", "baseline + semantic-schema gate"]
+    },
+    {
+      "priority": 2,
+      "group": "memory_and_lineage_reuse",
+      "reason": "tests whether accumulated history creates measurable search efficiency instead of context bloat; overlaps FactorMiner, AlphaPROBE and AgonAlpha",
+      "minimum_arms": ["baseline", "baseline + failure memory", "baseline + lineage retrieval"]
+    },
+    {
+      "priority": 3,
+      "group": "executable_artifacts_and_verification",
+      "reason": "orthogonal to alpha quality and directly testable using seeded evidence faults before expensive market experiments",
+      "minimum_arms": ["baseline verifier", "fresh-context verifier + re-execution/veto"]
+    },
+    {
+      "priority": 4,
+      "group": "evolution_and_recombination",
+      "reason": "potentially valuable but more confounded by implementation complexity; test only after duplicate/memory controls are measured",
+      "minimum_arms": ["fresh independent generation", "code/trajectory evolution under the same evaluator-call budget"]
+    },
+    {
+      "priority": 5,
+      "group": "learned_policy_and_joint_optimization",
+      "reason": "highest compute and causal-confounding risk; defer RL and factor-model co-optimization until simpler mechanisms justify added complexity",
+      "minimum_arms": ["best simple search policy", "adaptive allocator", "factor-model co-optimization only if factor-only frontier saturates"]
+    }
+  ],
+  "fixed_common_controls": [
+    "same PIT data snapshot and universe",
+    "same train/validation/untouched-OOS folds",
+    "same model/backend and seed policy where semantics permit",
+    "same candidate-generation budget",
+    "same evaluator-call budget",
+    "same invalid/duplicate/leakage rules",
+    "same transaction-cost and borrow assumptions for tradable outputs",
+    "same final untouched-OOS evaluation"
+  ],
+  "primary_outputs": [
+    "untouched-OOS surviving candidates per fixed evaluator-call budget",
+    "median selected-candidate after-cost OOS Sharpe",
+    "best selected-candidate after-cost OOS Sharpe",
+    "duplicate/invalid/leakage rejection rate",
+    "evaluator calls per surviving OOS candidate",
+    "wall-clock per surviving OOS candidate"
+  ],
+  "findings": [
+    "No tracked alpha-discovery family currently has an investor2 matched head-to-head verdict; all remain BLOCKED for frontier purposes.",
+    "The landscape is not one algorithmic race: the families attack distinct bottlenecks including novelty control, memory reuse, executable reproducibility, evolution, adaptive allocation and factor-model coupling.",
+    "AgonAlpha is currently a registry gap relative to the Issue #194 canonical family registry and must not become the organizing authority merely because it was investigated most recently.",
+    "The first experiments should compare mechanism groups with low confounding and high information gain before attempting full-paper reproductions or combining many mechanisms."
+  ]
+}
