@@ -29,7 +29,7 @@ jobs:
           python -m pip install --upgrade pip setuptools wheel
           python -m pip install openai python-dotenv pydantic requests pyyaml pandas numpy scikit-learn matplotlib seaborn tqdm lightgbm
           python -m pip install -e upstream
-      - name: Run pinned upstream without semantic modifications
+      - name: Run pinned upstream code through its actual CLI
         env:
           OPENAI_API_KEY: dummy-not-used-for-real-reproduction
           OPENAI_API_URL: https://api.openai.com/v1
@@ -39,7 +39,7 @@ jobs:
           rm -rf sandbox/gpt-5.3-backtest-csi300
           cp -a sandbox/template_a sandbox/gpt-5.3-backtest-csi300
           set +e
-          python main.py --session_id gpt-5.3-backtest-csi300 > /tmp/alphacrafter-upstream-smoke.log 2>&1
+          python main.py gpt-5.3-backtest-csi300 > /tmp/alphacrafter-upstream-smoke.log 2>&1
           exit_code=$?
           set -e
           cat /tmp/alphacrafter-upstream-smoke.log
@@ -54,14 +54,19 @@ jobs:
           elif '401' in log or 'AuthenticationError' in log or 'Incorrect API key' in log:
               blocker = 'startup passed local configuration and reached the OpenAI API with the deliberately invalid smoke key'
               status = 'REACHED_LLM_API'
+          elif 'unrecognized arguments: --session_id' in log:
+              blocker = 'README CLI disagrees with code: README documents --session_id but argparse requires positional session_id'
+              status = 'BLOCKED_README_CLI_MISMATCH'
           else:
               blocker = 'unexpected upstream startup blocker; inspect captured log'
               status = 'BLOCKED_OTHER'
           evidence = {
-              'schema_version': 'investor2.alphacrafter.official-smoke.v2',
+              'schema_version': 'investor2.alphacrafter.official-smoke.v3',
               'upstream_repository': 'NJU-LINK/AlphaCrafter',
               'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
-              'mode': 'unmodified_upstream_semantics',
+              'mode': 'official_upstream_code_no_semantic_patch',
+              'readme_cli_mismatch_observed_in_prior_run': True,
+              'actual_cli': 'python main.py <session_id>',
               'process_exit_code': int(os.environ['EXIT_CODE']),
               'status': status,
               'blocker': blocker,
