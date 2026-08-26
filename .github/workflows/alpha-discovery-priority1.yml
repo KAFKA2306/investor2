@@ -79,7 +79,11 @@ jobs:
           from pathlib import Path
 
           manifest = json.loads(Path('/tmp/jquants-free/manifest.json').read_text())
-          expected = {'start': '2024-05-31', 'end': '2026-05-29'}
+          contract = json.loads(Path('docs/research/contracts/alpha_discovery_priority1_jquants_256.json').read_text())
+          source = contract['dataset']
+          expected = {'start': source['source_window'][0], 'end': source['source_window'][1]}
+          if manifest['as_of'] != source['source_as_of']:
+              raise SystemExit(f"source as-of drifted: {manifest['as_of']} != {source['source_as_of']}")
           if manifest['actual_date_range'] != expected:
               raise SystemExit(f"source window drifted: {manifest['actual_date_range']} != {expected}")
           PY
