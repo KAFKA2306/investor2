@@ -1,0 +1,234 @@
+name: AlphaCrafter local LLM validation
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  local-ollama-responses-and-alphacrafter:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OLLAMA_VERSION: "0.32.14"
+      LOCAL_MODEL: "qwen3:0.6b"
+      OPENAI_API_URL: "http://127.0.0.1:11434/v1"
+      OPENAI_API_KEY: "ollama"
+    steps:
+      - name: Checkout investor2
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned official AlphaCrafter
+        uses: actions/checkout@v4
+        with:
+          repository: NJU-LINK/AlphaCrafter
+          ref: c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d
+          path: upstream
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Install Python runtime and official AlphaCrafter package
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip setuptools wheel
+          python -m pip install openai python-dotenv pydantic requests pyyaml pandas numpy scikit-learn matplotlib seaborn tqdm lightgbm
+          python -m pip install -e upstream
+
+      - name: Install pinned Ollama
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/ollama/ollama/releases/download/v${OLLAMA_VERSION}/install.sh" -o /tmp/ollama-install.sh
+          echo "25f64b810b947145095956533e1bdf56eacea2673c55a7e586be4515fc882c9f  /tmp/ollama-install.sh" | sha256sum -c -
+          OLLAMA_VERSION="${OLLAMA_VERSION}" sh /tmp/ollama-install.sh
+          ollama --version
+
+      - name: Start Ollama and pull small tool-capable validation model
+        run: |
+          set -euo pipefail
+          nohup ollama serve >/tmp/ollama-server.log 2>&1 &
+          echo $! >/tmp/ollama.pid
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/version >/tmp/ollama-version.json; then
+              break
+            fi
+            sleep 1
+          done
+          cat /tmp/ollama-version.json
+          ollama pull "${LOCAL_MODEL}"
+          ollama list
+
+      - name: Verify OpenAI Responses API and function-call round trip on localhost
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          from openai import OpenAI
+
+          client = OpenAI(base_url='http://127.0.0.1:11434/v1', api_key='ollama', timeout=300)
+          model = 'qwen3:0.6b'
+
+          plain = client.responses.create(
+              model=model,
+              input='Reply with exactly LOCAL_OK and nothing else.',
+              max_output_tokens=64,
+          )
+
+          tools = [{
+              'type': 'function',
+              'name': 'record_probe',
+              'description': 'Record a validation probe value.',
+              'parameters': {
+                  'type': 'object',
+                  'properties': {'value': {'type': 'string'}},
+                  'required': ['value'],
+                  'additionalProperties': False,
+              },
+          }]
+          first = client.responses.create(
+              model=model,
+              instructions='You must call record_probe. Do not answer directly.',
+              input=[{'role': 'user', 'content': 'Call record_probe with value LOCAL_TOOL_OK.'}],
+              tools=tools,
+              max_output_tokens=128,
+          )
+          calls = [x for x in first.output if getattr(x, 'type', None) == 'function_call']
+          if not calls:
+              raise SystemExit(f'No function_call returned: {first.output!r}')
+          call = calls[0]
+          args = json.loads(call.arguments)
+          if call.name != 'record_probe' or args.get('value') != 'LOCAL_TOOL_OK':
+              raise SystemExit(f'Unexpected tool call: name={call.name!r}, args={args!r}')
+
+          continuation = list(first.output)
+          continuation.append({
+              'type': 'function_call_output',
+              'call_id': call.call_id,
+              'output': json.dumps({'record_probe': 'accepted'}),
+          })
+          second = client.responses.create(
+              model=model,
+              instructions='The tool result is authoritative. Reply with exactly ROUNDTRIP_OK.',
+              input=continuation,
+              tools=tools,
+              max_output_tokens=64,
+          )
+
+          evidence = {
+              'schema_version': 'investor2.alphacrafter.local-llm-transport.v1',
+              'endpoint': 'http://127.0.0.1:11434/v1',
+              'external_llm_api_used': False,
+              'model': model,
+              'responses_api_ok': bool(plain.output_text),
+              'function_call_ok': True,
+              'function_call_output_roundtrip_ok': bool(second.output_text),
+              'plain_output': plain.output_text,
+              'roundtrip_output': second.output_text,
+              'frontier_evidence': False,
+              'interpretation': 'LOCAL_LLM_TRANSPORT_VERIFIED',
+          }
+          Path('/tmp/alphacrafter-local-transport.json').write_text(json.dumps(evidence, indent=2) + '\n')
+          print(json.dumps(evidence, indent=2))
+          PY
+
+      - name: Configure official AlphaCrafter session for local model only
+        run: |
+          set -euo pipefail
+          cd upstream/alphacrafter
+          rm -rf sandbox/local-qwen3-validation
+          cp -a sandbox/template_a sandbox/local-qwen3-validation
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          import yaml
+
+          model = 'qwen3:0.6b'
+          models_path = Path('sandbox/local-qwen3-validation/config/models.json')
+          models = json.loads(models_path.read_text())
+          models[model] = {
+              'producer': 'OpenAI',
+              'inputs': ['text'],
+              'cost': {'input': 0, 'output': 0},
+              'input_token_limit': 32768,
+              'output_token_limit': 4096,
+          }
+          models_path.write_text(json.dumps(models, indent=4) + '\n')
+
+          cfg_path = Path('config-local-qwen3.yaml')
+          cfg = yaml.safe_load(Path('config.yaml').read_text())
+          for role in ('miner', 'screener', 'trader'):
+              cfg[role]['model']['code'] = model
+          # Smoke-only budget reduction; agent/tool semantics stay unchanged.
+          cfg['miner']['count'] = 1
+          cfg['miner']['ids'] = ['miner_1']
+          cfg['miner']['max_iterations'] = 1
+          cfg['screener']['max_iterations'] = 1
+          cfg['trader']['max_iterations'] = 1
+          cfg['workflow']['max_cycles'] = 1
+          cfg_path.write_text(yaml.safe_dump(cfg, sort_keys=False))
+          PY
+
+      - name: Execute official AlphaCrafter against localhost Ollama
+        run: |
+          set -euo pipefail
+          cd upstream/alphacrafter
+          set +e
+          timeout 300 python main.py local-qwen3-validation --config config-local-qwen3.yaml > /tmp/alphacrafter-local-run.log 2>&1
+          exit_code=$?
+          set -e
+          cat /tmp/alphacrafter-local-run.log
+          export EXIT_CODE="$exit_code"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+
+          log = Path('/tmp/alphacrafter-local-run.log').read_text(errors='replace')
+          required = [
+              'Agent initialized with model: qwen3:0.6b',
+              'STARTING NEW WORKFLOW',
+              'MINER_1 PHASE',
+              'API Request',
+              'API Response',
+          ]
+          missing = [marker for marker in required if marker not in log]
+          if missing:
+              raise SystemExit(f'Official AlphaCrafter did not reach required local-agent markers: {missing}')
+          external_markers = ['api.openai.com', 'AuthenticationError', 'invalid_api_key']
+          if any(marker in log for marker in external_markers):
+              raise SystemExit('External OpenAI path unexpectedly appeared in local execution log')
+
+          evidence = {
+              'schema_version': 'investor2.alphacrafter.local-offline-smoke.v1',
+              'upstream_repository': 'NJU-LINK/AlphaCrafter',
+              'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
+              'model': 'qwen3:0.6b',
+              'endpoint': 'http://127.0.0.1:11434/v1',
+              'external_llm_api_used': False,
+              'official_agent_initialized': True,
+              'official_workflow_started': True,
+              'official_first_agent_request_completed': True,
+              'process_exit_code': int(os.environ['EXIT_CODE']),
+              'performance_evidence': False,
+              'reproduction_state': 'LOCAL_TRANSPORT_SMOKE_ONLY',
+          }
+          Path('/tmp/alphacrafter-local-offline-smoke.json').write_text(json.dumps(evidence, indent=2) + '\n')
+          print(json.dumps(evidence, indent=2))
+          PY
+
+      - name: Upload local-LLM validation evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alphacrafter-local-llm-validation
+          path: |
+            /tmp/ollama-version.json
+            /tmp/ollama-server.log
+            /tmp/alphacrafter-local-transport.json
+            /tmp/alphacrafter-local-run.log
+            /tmp/alphacrafter-local-offline-smoke.json
+          if-no-files-found: error
