@@ -79,7 +79,7 @@ def write_plot(path: Path, result: dict[str, object]) -> None:
         '<text x="60" y="88" class="sub">Primary: unique untouched-OOS survivors per 24 validation evaluator calls</text>',
         f'<line x1="100" y1="{base_y}" x2="1100" y2="{base_y}" class="axis"/>',
     ]
-    for index, ((key, label), x) in enumerate(zip(labels, x_positions, strict=True)):
+    for index, ((_key, label), x) in enumerate(zip(labels, x_positions, strict=True)):
         value = survivors[index]
         bar_height = bar_max * value / maximum
         y = base_y - bar_height
