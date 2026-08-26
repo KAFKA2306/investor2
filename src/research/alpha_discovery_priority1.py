@@ -3,6 +3,7 @@ from __future__ import annotations
 import re
 import time
 from dataclasses import asdict, dataclass
+from typing import Any
 
 import numpy as np
 
@@ -65,7 +66,9 @@ def semantic_signature(candidate: CandidateSpec) -> str:
         return f"single:{_semantic_atom(candidate.left)}"
     if candidate.right is None:
         raise ValueError(f"{candidate.operation} requires a right operand")
-    operands = sorted((_semantic_atom(candidate.left), _semantic_atom(candidate.right)))
+    operands = sorted(
+        (_semantic_atom(candidate.left), _semantic_atom(candidate.right))
+    )
     return f"{candidate.operation}:{operands[0]}:{operands[1]}"
 
 
@@ -82,18 +85,26 @@ def build_candidate_pool(feature_names: list[str]) -> list[CandidateSpec]:
         for right in feature_names[left_index + 1 :]:
             pool.extend(
                 [
-                    CandidateSpec(f"pair-{pair_index:03d}-blend-fwd", "blend", left, right),
-                    CandidateSpec(f"pair-{pair_index:03d}-blend-rev", "blend", right, left),
-                    CandidateSpec(f"pair-{pair_index:03d}-spread-fwd", "spread", left, right),
-                    CandidateSpec(f"pair-{pair_index:03d}-spread-rev", "spread", right, left),
+                    CandidateSpec(
+                        f"pair-{pair_index:03d}-blend-fwd", "blend", left, right
+                    ),
+                    CandidateSpec(
+                        f"pair-{pair_index:03d}-blend-rev", "blend", right, left
+                    ),
+                    CandidateSpec(
+                        f"pair-{pair_index:03d}-spread-fwd", "spread", left, right
+                    ),
+                    CandidateSpec(
+                        f"pair-{pair_index:03d}-spread-rev", "spread", right, left
+                    ),
                 ]
             )
             pair_index += 1
     return pool
 
 
-def candidate_dict(candidate: CandidateSpec) -> dict[str, object]:
-    payload = asdict(candidate)
+def candidate_dict(candidate: CandidateSpec) -> dict[str, Any]:
+    payload: dict[str, Any] = asdict(candidate)
     payload["expression"] = candidate.expression()
     payload["ast_fingerprint"] = ast_fingerprint(candidate)
     payload["semantic_signature"] = semantic_signature(candidate)
@@ -102,13 +113,13 @@ def candidate_dict(candidate: CandidateSpec) -> dict[str, object]:
 
 def select_candidates(
     pool: list[CandidateSpec], *, arm: str, evaluator_budget: int
-) -> tuple[list[CandidateSpec], list[dict[str, object]]]:
+) -> tuple[list[CandidateSpec], list[dict[str, Any]]]:
     if arm not in ARMS:
         raise ValueError(f"unknown arm: {arm}")
     if evaluator_budget < 1:
         raise ValueError("evaluator_budget must be positive")
     selected: list[CandidateSpec] = []
-    scan: list[dict[str, object]] = []
+    scan: list[dict[str, Any]] = []
     seen_ast: set[str] = set()
     seen_semantic: set[str] = set()
     for candidate in pool:
@@ -146,7 +157,9 @@ def select_candidates(
     return selected, scan
 
 
-def materialize_candidate(candidate: CandidateSpec, features: dict[str, np.ndarray]) -> np.ndarray:
+def materialize_candidate(
+    candidate: CandidateSpec, features: dict[str, np.ndarray]
+) -> np.ndarray:
     if candidate.left not in features:
         raise KeyError(candidate.left)
     left = np.asarray(features[candidate.left], dtype=np.float64)
@@ -166,7 +179,9 @@ def materialize_candidate(candidate: CandidateSpec, features: dict[str, np.ndarr
     return float(candidate.sign) * value
 
 
-def _mean_rank_ic(factor: np.ndarray, returns: np.ndarray, start: int, end: int) -> float:
+def _mean_rank_ic(
+    factor: np.ndarray, returns: np.ndarray, start: int, end: int
+) -> float:
     series = daily_rank_ic(factor, returns, 1)[start:end]
     observed = series[np.isfinite(series)]
     return float(observed.mean()) if observed.size else 0.0
@@ -194,36 +209,45 @@ def evaluate_arm(
     gamma: float,
     transaction_cost_bps: float,
     borrow_fee_bps: float,
-) -> dict[str, object]:
+) -> dict[str, Any]:
     started = time.perf_counter()
-    selected, scan = select_candidates(pool, arm=arm, evaluator_budget=evaluator_budget)
+    selected, scan = select_candidates(
+        pool, arm=arm, evaluator_budget=evaluator_budget
+    )
     if finalists < 1 or finalists > evaluator_budget:
         raise ValueError("finalists must be between 1 and evaluator_budget")
 
     train_start, train_end = train
     validation_start, validation_end = validation
     oos_start, oos_end = oos
-    validation_rows: list[dict[str, object]] = []
+    validation_rows: list[dict[str, Any]] = []
     oriented_by_id: dict[str, np.ndarray] = {}
     for candidate in selected:
         raw = materialize_candidate(candidate, features)
-        oriented, direction = orient_factor_on_train(raw, returns, train_start, train_end)
+        oriented, direction = orient_factor_on_train(
+            raw, returns, train_start, train_end
+        )
         oriented_by_id[candidate.candidate_id] = oriented
         row = candidate_dict(candidate)
         row.update(
             {
                 "train_orientation": int(direction),
-                "validation_mean_rank_ic": _mean_rank_ic(oriented, returns, validation_start, validation_end),
+                "validation_mean_rank_ic": _mean_rank_ic(
+                    oriented, returns, validation_start, validation_end
+                ),
             }
         )
         validation_rows.append(row)
 
     ranked = sorted(
         validation_rows,
-        key=lambda row: (-float(row["validation_mean_rank_ic"]), str(row["candidate_id"])),
+        key=lambda row: (
+            -float(row["validation_mean_rank_ic"]),
+            str(row["candidate_id"]),
+        ),
     )
     finalist_rows = ranked[:finalists]
-    oos_rows: list[dict[str, object]] = []
+    oos_rows: list[dict[str, Any]] = []
     for finalist in finalist_rows:
         candidate_id = str(finalist["candidate_id"])
         factor = oriented_by_id[candidate_id]
@@ -267,8 +291,12 @@ def evaluate_arm(
     unique_survivors = len(survivor_ast)
     evaluated_ast = [ast_fingerprint(candidate) for candidate in selected]
     evaluated_semantic = [semantic_signature(candidate) for candidate in selected]
-    rejected = sum(1 for row in scan if not bool(row["accepted_for_validation"]))
-    finalist_sharpes = [float(dict(row["oos_portfolio"])["annualized_sharpe"]) for row in oos_rows]
+    rejected = sum(
+        1 for row in scan if not bool(row["accepted_for_validation"])
+    )
+    finalist_sharpes = [
+        float(row["oos_portfolio"]["annualized_sharpe"]) for row in oos_rows
+    ]
     elapsed = time.perf_counter() - started
 
     return {
@@ -284,9 +312,15 @@ def evaluate_arm(
         "finalist_count": len(oos_rows),
         "unique_oos_survivors": unique_survivors,
         "survivors_per_validation_call": unique_survivors / len(selected),
-        "validation_calls_per_unique_survivor": (len(selected) / unique_survivors if unique_survivors else None),
-        "median_finalist_oos_sharpe": float(np.median(finalist_sharpes)) if finalist_sharpes else 0.0,
-        "best_finalist_oos_sharpe": max(finalist_sharpes) if finalist_sharpes else 0.0,
+        "validation_calls_per_unique_survivor": (
+            len(selected) / unique_survivors if unique_survivors else None
+        ),
+        "median_finalist_oos_sharpe": (
+            float(np.median(finalist_sharpes)) if finalist_sharpes else 0.0
+        ),
+        "best_finalist_oos_sharpe": (
+            max(finalist_sharpes) if finalist_sharpes else 0.0
+        ),
         "wall_clock_seconds": elapsed,
         "scan": scan,
         "validation": validation_rows,
@@ -311,7 +345,7 @@ def run_ablation(
     gamma: float = 0.0,
     transaction_cost_bps: float = 15.0,
     borrow_fee_bps: float = 30.0,
-) -> dict[str, object]:
+) -> dict[str, Any]:
     values = np.asarray(feature_tensor, dtype=np.float64)
     ret = np.asarray(returns, dtype=np.float64)
     bench = np.asarray(benchmark, dtype=np.float64)
@@ -326,7 +360,9 @@ def run_ablation(
     if n_long + n_short > values.shape[1]:
         raise ValueError("portfolio long/short counts exceed asset count")
 
-    feature_map = {name: values[:, :, index] for index, name in enumerate(feature_names)}
+    feature_map = {
+        name: values[:, :, index] for index, name in enumerate(feature_names)
+    }
     pool = build_candidate_pool(feature_names)
     arms = {
         arm: evaluate_arm(
@@ -349,18 +385,30 @@ def run_ablation(
         )
         for arm in ARMS
     }
-    baseline = int(dict(arms["baseline"])["unique_oos_survivors"])
+    baseline = int(arms["baseline"]["unique_oos_survivors"])
     verdicts: dict[str, str] = {"baseline": "REFERENCE"}
     for arm in ARMS[1:]:
-        value = int(dict(arms[arm])["unique_oos_survivors"])
+        value = int(arms[arm]["unique_oos_survivors"])
         verdicts[arm] = (
-            "IMPROVES_PRIMARY" if value > baseline else "WORSE_PRIMARY" if value < baseline else "TIE_PRIMARY"
+            "IMPROVES_PRIMARY"
+            if value > baseline
+            else "WORSE_PRIMARY"
+            if value < baseline
+            else "TIE_PRIMARY"
         )
-    best_value = max(int(dict(payload)["unique_oos_survivors"]) for payload in arms.values())
-    winners = [arm for arm, payload in arms.items() if int(dict(payload)["unique_oos_survivors"]) == best_value]
+    best_value = max(
+        int(payload["unique_oos_survivors"]) for payload in arms.values()
+    )
+    winners = [
+        arm
+        for arm, payload in arms.items()
+        if int(payload["unique_oos_survivors"]) == best_value
+    ]
     return {
         "candidate_pool_size": len(pool),
-        "candidate_pool_preview": [candidate_dict(candidate) for candidate in pool[:20]],
+        "candidate_pool_preview": [
+            candidate_dict(candidate) for candidate in pool[:20]
+        ],
         "arms": arms,
         "mechanism_verdict_vs_baseline": verdicts,
         "winner_by_primary": winners,
