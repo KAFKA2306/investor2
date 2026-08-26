@@ -161,9 +161,21 @@ jobs:
           print(json.dumps(evidence, indent=2))
           PY
           ollama ps | tee /tmp/ollama-ps.txt
-          runtime_context="$(awk 'NR==2 {print $5}' /tmp/ollama-ps.txt)"
-          printf '%s\n' "${runtime_context}" >/tmp/ollama-runtime-context.txt
-          test "${runtime_context}" -ge 32768
+          python - <<'PY'
+          import re
+          from pathlib import Path
+          lines = Path('/tmp/ollama-ps.txt').read_text().splitlines()
+          if len(lines) < 2:
+              raise SystemExit('ollama ps did not report a loaded model')
+          match = re.search(r'\b(?:\d+%\s+CPU|CPU)\s+(\d+)\b', lines[1])
+          if not match:
+              raise SystemExit(f'could not parse runtime context from: {lines[1]!r}')
+          context = int(match.group(1))
+          Path('/tmp/ollama-runtime-context.txt').write_text(f'{context}\n')
+          if context < 32768:
+              raise SystemExit(f'runtime context too small: {context}')
+          print(f'runtime_context={context}')
+          PY
 
       - name: Configure official AlphaCrafter session for local model only
         run: |
