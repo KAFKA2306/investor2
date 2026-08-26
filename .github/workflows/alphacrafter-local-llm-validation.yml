@@ -16,6 +16,8 @@ jobs:
     env:
       OLLAMA_VERSION: "0.32.14"
       LOCAL_MODEL: "qwen3:0.6b"
+      OLLAMA_CONTEXT_LENGTH: "32768"
+      OLLAMA_NO_CLOUD: "1"
       OPENAI_API_URL: "http://127.0.0.1:11434/v1"
       OPENAI_API_KEY: "ollama"
     steps:
@@ -49,10 +51,10 @@ jobs:
           OLLAMA_VERSION="${OLLAMA_VERSION}" sh /tmp/ollama-install.sh
           ollama --version
 
-      - name: Start Ollama and pull small tool-capable validation model
+      - name: Start local-only Ollama and pull validation model
         run: |
           set -euo pipefail
-          nohup ollama serve >/tmp/ollama-server.log 2>&1 &
+          nohup env OLLAMA_CONTEXT_LENGTH="${OLLAMA_CONTEXT_LENGTH}" OLLAMA_NO_CLOUD="${OLLAMA_NO_CLOUD}" OLLAMA_HOST=127.0.0.1:11434 ollama serve >/tmp/ollama-server.log 2>&1 &
           echo $! >/tmp/ollama.pid
           for i in $(seq 1 60); do
             if curl -fsS http://127.0.0.1:11434/api/version >/tmp/ollama-version.json; then
@@ -64,7 +66,7 @@ jobs:
           ollama pull "${LOCAL_MODEL}"
           ollama list
 
-      - name: Verify OpenAI Responses API and function-call round trip on localhost
+      - name: Verify Responses API and function-call round trip on localhost
         run: |
           set -euo pipefail
           python - <<'PY'
@@ -78,7 +80,7 @@ jobs:
           plain = client.responses.create(
               model=model,
               input='Reply with exactly LOCAL_OK and nothing else.',
-              max_output_tokens=64,
+              max_output_tokens=256,
           )
 
           tools = [{
@@ -97,7 +99,7 @@ jobs:
               instructions='You must call record_probe. Do not answer directly.',
               input=[{'role': 'user', 'content': 'Call record_probe with value LOCAL_TOOL_OK.'}],
               tools=tools,
-              max_output_tokens=128,
+              max_output_tokens=256,
           )
           calls = [x for x in first.output if getattr(x, 'type', None) == 'function_call']
           if not calls:
@@ -118,25 +120,30 @@ jobs:
               instructions='The tool result is authoritative. Reply with exactly ROUNDTRIP_OK.',
               input=continuation,
               tools=tools,
-              max_output_tokens=64,
+              max_output_tokens=256,
           )
 
           evidence = {
-              'schema_version': 'investor2.alphacrafter.local-llm-transport.v1',
+              'schema_version': 'investor2.alphacrafter.local-llm-transport.v2',
               'endpoint': 'http://127.0.0.1:11434/v1',
               'external_llm_api_used': False,
+              'ollama_cloud_disabled': True,
+              'context_length': 32768,
               'model': model,
-              'responses_api_ok': bool(plain.output_text),
+              'responses_api_request_completed': True,
+              'plain_output_text_nonempty': bool(plain.output_text),
               'function_call_ok': True,
-              'function_call_output_roundtrip_ok': bool(second.output_text),
-              'plain_output': plain.output_text,
-              'roundtrip_output': second.output_text,
+              'function_call_output_request_completed': True,
+              'roundtrip_output_text_nonempty': bool(second.output_text),
+              'first_output_types': [getattr(x, 'type', None) for x in first.output],
+              'second_output_types': [getattr(x, 'type', None) for x in second.output],
               'frontier_evidence': False,
               'interpretation': 'LOCAL_LLM_TRANSPORT_VERIFIED',
           }
           Path('/tmp/alphacrafter-local-transport.json').write_text(json.dumps(evidence, indent=2) + '\n')
           print(json.dumps(evidence, indent=2))
           PY
+          ollama ps | tee /tmp/ollama-ps.txt
 
       - name: Configure official AlphaCrafter session for local model only
         run: |
@@ -165,6 +172,7 @@ jobs:
           cfg = yaml.safe_load(Path('config.yaml').read_text())
           for role in ('miner', 'screener', 'trader'):
               cfg[role]['model']['code'] = model
+          # CI smoke budget only. Miner/Screener/Trader instructions and tool schemas are unchanged.
           cfg['miner']['count'] = 1
           cfg['miner']['ids'] = ['miner_1']
           cfg['miner']['max_iterations'] = 1
@@ -185,16 +193,18 @@ jobs:
           cat /tmp/alphacrafter-local-run.log
           export EXIT_CODE="$exit_code"
           python - <<'PY'
-          import json, os
+          import json, os, re
           from pathlib import Path
 
           log = Path('/tmp/alphacrafter-local-run.log').read_text(errors='replace')
+          ollama_log = Path('/tmp/ollama-server.log').read_text(errors='replace')
           required = [
               'Agent initialized with model: qwen3:0.6b',
               'STARTING NEW WORKFLOW',
-              'MINER_1 PHASE',
-              'API Request',
-              'API Response',
+              'MINER_MINER_1 PHASE',
+              'SCREENER PHASE',
+              'TRADER PHASE',
+              'WORKFLOW COMPLETED',
           ]
           missing = [marker for marker in required if marker not in log]
           if missing:
@@ -202,20 +212,32 @@ jobs:
           external_markers = ['api.openai.com', 'AuthenticationError', 'invalid_api_key']
           if any(marker in log for marker in external_markers):
               raise SystemExit('External OpenAI path unexpectedly appeared in local execution log')
+          if 'truncating input prompt' in ollama_log:
+              raise SystemExit('Ollama truncated the AlphaCrafter prompt; context contract is invalid')
 
+          api_requests = log.count('API Request')
+          api_responses = log.count('API Response')
+          tool_counts = [int(x) for x in re.findall(r'Total tool calls: (\d+)', log)]
+          semantic_grounding_pass = any(x > 0 for x in tool_counts)
           evidence = {
-              'schema_version': 'investor2.alphacrafter.local-offline-smoke.v1',
+              'schema_version': 'investor2.alphacrafter.local-offline-smoke.v2',
               'upstream_repository': 'NJU-LINK/AlphaCrafter',
               'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
               'model': 'qwen3:0.6b',
               'endpoint': 'http://127.0.0.1:11434/v1',
               'external_llm_api_used': False,
-              'official_agent_initialized': True,
-              'official_workflow_started': True,
-              'official_first_agent_request_completed': True,
+              'ollama_cloud_disabled': True,
+              'context_length': 32768,
+              'prompt_truncation_observed': False,
+              'official_workflow_completed': True,
+              'api_request_count': api_requests,
+              'api_response_count': api_responses,
+              'tool_call_counts_by_agent_run': tool_counts,
+              'semantic_grounding_pass': semantic_grounding_pass,
+              'semantic_quality_interpretation': 'PASS_TOOL_USE_OBSERVED' if semantic_grounding_pass else 'FAIL_NO_TOOL_USE_OUTPUT_IS_UNGROUNDED',
               'process_exit_code': int(os.environ['EXIT_CODE']),
               'performance_evidence': False,
-              'reproduction_state': 'LOCAL_TRANSPORT_SMOKE_ONLY',
+              'reproduction_state': 'LOCAL_TRANSPORT_VERIFIED_NOT_PERFORMANCE_REPRODUCTION',
           }
           Path('/tmp/alphacrafter-local-offline-smoke.json').write_text(json.dumps(evidence, indent=2) + '\n')
           print(json.dumps(evidence, indent=2))
@@ -228,6 +250,7 @@ jobs:
           name: alphacrafter-local-llm-validation
           path: |
             /tmp/ollama-version.json
+            /tmp/ollama-ps.txt
             /tmp/ollama-server.log
             /tmp/alphacrafter-local-transport.json
             /tmp/alphacrafter-local-run.log
