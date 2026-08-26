@@ -1,0 +1,109 @@
+{
+  "schema_version": "investor2.alpha-discovery-ablation-contract.v1",
+  "research_date": "2026-08-26",
+  "issues": [194, 222],
+  "decision": "Test whether structural-originality or trading-semantic prefilters improve alpha-discovery efficiency before adding more complex memory, verifier, evolution, or adaptive-search machinery.",
+  "claim_boundary": "This is a mechanism-level matched ablation on a fixed deterministic candidate generator. It does not reproduce AlphaAgent or AlphaSchema end-to-end and cannot by itself produce a BEAT/TIE/LOSE paper-family verdict.",
+  "track": "alpha_discovery",
+  "arms": [
+    {
+      "id": "baseline",
+      "mechanism": "no novelty prefilter"
+    },
+    {
+      "id": "ast_originality",
+      "mechanism": "reject a candidate before evaluation when its sign-invariant canonical expression AST fingerprint has already been evaluated"
+    },
+    {
+      "id": "semantic_schema",
+      "mechanism": "reject a candidate before evaluation when its operation + economic feature group + exact horizon schema has already been evaluated"
+    }
+  ],
+  "dataset": {
+    "source": "J-Quants Free owner-only private cache",
+    "source_window": ["2024-05-31", "2026-05-29"],
+    "universe": "PIT Prime/Standard/Growth common stocks, top 256 by pre-cutoff mean adjusted price*volume after the existing history gate",
+    "universe_cutoff": "2025-08-30",
+    "universe_master_date": "2025-08-29",
+    "benchmark": "13060 NEXT FUNDS TOPIX ETF proxy",
+    "max_assets": 256,
+    "panel_builder": "scripts/jquants_japan_panel.py"
+  },
+  "split": {
+    "train_calendar_start": "2024-08-30",
+    "validation_calendar_start": "2025-08-30",
+    "untouched_oos_calendar_start": "2025-11-30",
+    "untouched_oos_calendar_end": "2026-05-29",
+    "boundary_rule": "Use the first available panel trading day on/after each calendar boundary; OOS end is inclusive.",
+    "train_use": "orient candidate sign only",
+    "validation_use": "one-day mean rank IC for finalist ranking",
+    "oos_use": "read only after all arm candidates and finalists are frozen"
+  },
+  "generator": {
+    "version": "deterministic_feature_expression_pool_v1",
+    "source_features": "all backward-looking standardized features emitted by scripts/alphazerobeta_prepare.py",
+    "order": [
+      "all positive single-feature expressions in panel feature order",
+      "all sign-reflected single-feature expressions in the same order",
+      "for each feature pair i<j: blend(i,j), blend(j,i), spread(i,j), spread(j,i)"
+    ],
+    "operations": {
+      "single": "x",
+      "blend": "0.5 * (x + y)",
+      "spread": "x - y"
+    },
+    "note": "Sign reflection and commutative/reversed forms intentionally preserve generator redundancy; the experiment asks whether pre-evaluation gates convert that fixed redundancy into more useful evaluated candidates under equal evaluator-call budgets."
+  },
+  "budget": {
+    "validation_evaluator_calls_per_arm": 24,
+    "oos_finalists_per_arm": 8,
+    "same_candidate_pool_and_order": true,
+    "same_model_backend": "not applicable; generator is deterministic and model-free",
+    "seed_policy": "no stochastic generation"
+  },
+  "portfolio": {
+    "n_long": 32,
+    "n_short": 32,
+    "beta": 1.0,
+    "gamma": 0.0,
+    "transaction_cost_bps_per_side": 15,
+    "borrow_fee_bps_per_year": 30
+  },
+  "primary_metric": "unique untouched-OOS survivors per 24 validation evaluator calls",
+  "survivor_gate": {
+    "oos_mean_rank_ic_gt": 0.0,
+    "after_cost_oos_cumulative_return_gt": 0.0,
+    "after_cost_oos_annualized_sharpe_gt": 0.0
+  },
+  "secondary_metrics": [
+    "unique structural candidates evaluated",
+    "unique semantic schemas evaluated",
+    "prefilter rejection counts and rates",
+    "median finalist after-cost OOS Sharpe",
+    "best finalist after-cost OOS Sharpe",
+    "validation evaluator calls per unique OOS survivor",
+    "wall-clock seconds per arm"
+  ],
+  "comparison_rule": {
+    "mechanism_improves_primary": "arm unique OOS survivor count is strictly greater than baseline under exactly 24 validation calls",
+    "tie": "same unique OOS survivor count as baseline",
+    "worse": "strictly fewer unique OOS survivors than baseline",
+    "secondary_metrics_do_not_override_primary": true
+  },
+  "anti_overfitting": [
+    "No OOS result may change the pool order, fingerprints, schema definition, budget, finalist count, split, portfolio rule, costs, or survivor gate.",
+    "All three arms use the same candidate pool and the same train/validation/OOS panel.",
+    "Candidate orientation uses train data only.",
+    "Finalist selection uses validation data only.",
+    "OOS values are not used for candidate generation, gate decisions, orientation, or finalist selection.",
+    "A null or negative result is canonical evidence and does not trigger post-hoc parameter changes."
+  ],
+  "required_outputs": [
+    "machine-readable result with every scanned/evaluated/rejected candidate and exact reason",
+    "per-arm validation and OOS metrics",
+    "dataset and manifest SHA-256",
+    "exact code revision",
+    "one comparison plot",
+    "Issue #194 comment linking the reviewed evidence"
+  ]
+}
