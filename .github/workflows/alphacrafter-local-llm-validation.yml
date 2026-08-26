@@ -3,6 +3,8 @@ name: AlphaCrafter local LLM validation
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [research/alphacrafter-official-reproduction]
 
 permissions:
   contents: read
@@ -163,7 +165,6 @@ jobs:
           cfg = yaml.safe_load(Path('config.yaml').read_text())
           for role in ('miner', 'screener', 'trader'):
               cfg[role]['model']['code'] = model
-          # Smoke-only budget reduction; agent/tool semantics stay unchanged.
           cfg['miner']['count'] = 1
           cfg['miner']['ids'] = ['miner_1']
           cfg['miner']['max_iterations'] = 1
