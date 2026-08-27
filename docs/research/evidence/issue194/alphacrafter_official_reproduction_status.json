@@ -1,5 +1,5 @@
 {
-  "schema_version": "investor2.issue194.alphacrafter-official-reproduction.v1",
+  "schema_version": "investor2.issue194.alphacrafter-official-reproduction.v2",
   "family": "AlphaCrafter",
   "frontier_status": "BLOCKED",
   "reproduction_state": "NOT_REPRODUCED",
@@ -27,29 +27,74 @@
       "finding": "OFFICIAL_PIPELINE_REACHES_OPENAI_RESPONSES_API",
       "detail": "After registry-only compatibility metadata, all 3 Miner agents, Screener, Trader, and Cycle 1 initialize. A deliberately invalid credential reaches OpenAI Responses API and receives 401 invalid_api_key.",
       "verified": true
+    },
+    {
+      "finding": "LOCAL_OPENAI_COMPATIBLE_TRANSPORT_VERIFIED",
+      "detail": "Pinned official AlphaCrafter Agent code executes through a localhost OpenAI-compatible proxy into Ollama without any external LLM API. Direct Responses API, exact function-call schema, function_call_output continuation, and runtime context length 32768 are read back successfully.",
+      "verified": true,
+      "model": "qwen3:1.7b",
+      "endpoint": "http://127.0.0.1:18000/v1",
+      "ollama_endpoint": "http://127.0.0.1:11434/v1",
+      "max_output_tokens": 256,
+      "reasoning_effort": "none",
+      "prompt_truncation_observed": false,
+      "semantic_change": false
+    },
+    {
+      "finding": "OFFICIAL_AGENT_TOOL_LOOP_VERIFIED",
+      "detail": "The pinned upstream Agent class completed two iterations, executed record_probe exactly once with value OFFICIAL_AGENT_TOOL_OK, consumed the tool result, and returned DONE. Upstream Agent source was not modified.",
+      "verified": true,
+      "tool_calls": 1,
+      "performance_evidence": false
     }
   ],
   "execution_environment_blockers": [
     {
-      "blocker": "OPENAI_API_KEY_MISSING",
-      "verified_by_actions_secret_readiness": true,
+      "blocker": "EXTERNAL_LLM_API_CREDENTIAL",
       "present": false,
-      "hard_blocker_for_full_llm_execution": true
+      "hard_blocker_for_local_execution": false,
+      "resolved_by": "localhost OpenAI-compatible proxy plus local Ollama"
     },
     {
-      "blocker": "OPENAI_API_URL_MISSING",
-      "verified_by_actions_secret_readiness": true,
-      "present": false,
-      "hard_blocker_for_standard_openai_endpoint": false,
-      "note": "The standard OpenAI base URL can be supplied explicitly, but the API key cannot be substituted."
+      "blocker": "PAPER_NATIVE_DATASET_INCOMPLETE",
+      "present": true,
+      "hard_blocker_for_paper_native_performance_reproduction": true
+    },
+    {
+      "blocker": "FULL_MINER_SCREENER_TRADER_PERFORMANCE_RUN_NOT_EXECUTED",
+      "present": true,
+      "hard_blocker_for_frontier_verdict": true,
+      "note": "Transport and the official Agent tool loop are verified, but this is not a paper-native or J-Quants OOS performance reproduction."
     }
   ],
+  "local_agent_validation": {
+    "state": "VERIFIED",
+    "model": "qwen3:1.7b",
+    "external_llm_api_used": false,
+    "runtime_reported_context_length": 32768,
+    "prompt_truncation_observed": false,
+    "max_output_tokens": 256,
+    "reasoning_effort": "none",
+    "responses_transport_pass": true,
+    "direct_tool_roundtrip_pass": true,
+    "official_agent_tool_loop_pass": true,
+    "official_agent_tool_calls": [
+      {
+        "name": "record_probe",
+        "arguments": {
+          "value": "OFFICIAL_AGENT_TOOL_OK"
+        }
+      }
+    ],
+    "performance_evidence": false,
+    "interpretation": "LOCAL_LLM_AGENT_TOOL_LOOP_VERIFIED"
+  },
   "paper_native_data_readiness": {
     "template_a_index_data": "000300.SH.csv is included with real CSI300 index data starting 2016-01-04",
     "template_a_watch_list": "account.json includes the CSI300 stock watch list",
     "template_a_stock_data": "only template.csv is included; per-symbol stock CSVs are absent",
     "template_a_financial_statements": "only template.json is included; per-symbol statements are absent",
-    "template_a_news": "only template.json is included; per-symbol news is absent",
+    "template_a_news": "only template.json is included; per-symbol news are absent",
     "upstream_data_download_code_for_baostock_or_lixinger": false,
     "full_paper_native_dataset_ready": false
   },
@@ -68,12 +113,18 @@
       "run_id": 32839750272,
       "artifact_id": 9560027627,
       "result": "registry-only compatibility fix reaches OpenAI Responses API; repo OpenAI secrets absent"
+    },
+    {
+      "run_id": 33056643678,
+      "artifact_id": 9639939120,
+      "head_sha": "13dc3d45c57c13721dc57e9f50446025087ab856",
+      "result": "localhost qwen3:1.7b Responses transport and pinned official AlphaCrafter Agent tool loop verified; no performance evidence"
     }
   ],
   "next_required_steps": [
-    "Provide OPENAI_API_KEY as a GitHub Actions secret without placing the credential in repository content or issue comments.",
-    "Acquire the paper-native CSI300 per-symbol market/fundamental/financial-statement/news inputs with provenance matching the paper sources; do not substitute J-Quants and call it paper reproduction.",
-    "Run the official 3-Miner -> Screener -> Trader workflow end-to-end under paper-native conditions and preserve trial-level logs/artifacts.",
-    "Only after paper-native reproduction succeeds, adapt the official pipeline to the frozen J-Quants 256 contract and run AAARTS direct head-to-head."
+    "Acquire paper-native CSI300 per-symbol market/fundamental/financial-statement/news inputs with provenance matching the paper sources; do not substitute J-Quants and call it paper reproduction.",
+    "Run the official 3-Miner -> Screener -> Trader workflow end-to-end with the verified local LLM transport under frozen paper-native conditions and preserve trial-level logs/artifacts.",
+    "Only after paper-native reproduction succeeds, adapt the official pipeline to the frozen J-Quants 256 contract and measure OOS performance.",
+    "Run a legitimately frozen AAARTS 256 comparator on the same contract before assigning AlphaCrafter BEAT, TIE, or LOSE."
   ]
 }
