@@ -292,9 +292,7 @@ def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
             np.mean([cast(dict[str, float], fold["baseline_empirical_covariance"])[metric] for fold in folds])
         )
         candidate[metric] = float(
-            np.mean(
-                [cast(dict[str, float], fold["skfolio_characteristics_covariance"])[metric] for fold in folds]
-            )
+            np.mean([cast(dict[str, float], fold["skfolio_characteristics_covariance"])[metric] for fold in folds])
         )
         delta[metric] = candidate[metric] - baseline[metric]
 
