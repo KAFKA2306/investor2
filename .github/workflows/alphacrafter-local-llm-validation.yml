@@ -343,7 +343,7 @@ jobs:
               'prompt_truncation_observed': False,
               'max_output_tokens': 256,
               'reasoning_effort': 'none',
-              'responses_transport_pass': transport['responses_api_request_request_completed'] if 'responses_api_request_request_completed' in transport else transport['responses_api_request_completed'],
+              'responses_transport_pass': transport['responses_api_request_completed'],
               'direct_tool_roundtrip_pass': transport['function_call_output_request_completed'],
               'official_agent_tool_loop_pass': True,
               'official_agent_tool_calls': official_tool_calls,
