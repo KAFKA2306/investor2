@@ -9,9 +9,11 @@ import json
 import warnings
 from dataclasses import asdict, dataclass
 from pathlib import Path
+from typing import cast
 
 import numpy as np
 import pandas as pd
+from skfolio.containers import AssetPanel
 
 from scripts.jquants_japan_panel import choose_japan_universe, load_japan_inputs
 from src.research.skfolio_characteristics import (
@@ -152,7 +154,7 @@ def canonical_price_hash(prices: pd.DataFrame) -> str:
     return sha256_text(serialized)
 
 
-def returns_frame_from_panel(panel) -> pd.DataFrame:
+def returns_frame_from_panel(panel: AssetPanel) -> pd.DataFrame:
     return pd.DataFrame(
         panel["returns"],
         index=pd.DatetimeIndex(panel.observations),
@@ -286,8 +288,14 @@ def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
     candidate: dict[str, float] = {}
     delta: dict[str, float] = {}
     for metric in metric_names:
-        baseline[metric] = float(np.mean([fold["baseline_empirical_covariance"][metric] for fold in folds]))
-        candidate[metric] = float(np.mean([fold["skfolio_characteristics_covariance"][metric] for fold in folds]))
+        baseline[metric] = float(
+            np.mean([cast(dict[str, float], fold["baseline_empirical_covariance"])[metric] for fold in folds])
+        )
+        candidate[metric] = float(
+            np.mean(
+                [cast(dict[str, float], fold["skfolio_characteristics_covariance"])[metric] for fold in folds]
+            )
+        )
         delta[metric] = candidate[metric] - baseline[metric]
 
     direct_wins = {
