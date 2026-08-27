@@ -32,11 +32,22 @@ jobs:
           version: "0.11.32"
       - name: Install locked project
         run: uv sync --locked
-      - name: Verify focused contract
+      - name: Diagnose focused contract
+        shell: bash
         run: |
-          uv run ruff format --check scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
+          set -uo pipefail
+          uv run ruff format scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
+          echo '--- RUFF FORMAT DIFF ---'
+          git diff -- scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
+          format_changed=0
+          git diff --quiet -- scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py || format_changed=1
           uv run ruff check scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
+          lint_status=$?
           uv run pytest -q tests/test_skfolio_characteristics.py tests/test_skfolio_jquants_oos.py
+          test_status=$?
+          if [ "$format_changed" -ne 0 ] || [ "$lint_status" -ne 0 ] || [ "$test_status" -ne 0 ]; then
+            exit 1
+          fi
 
   frozen-jquants-oos:
     if: github.actor != 'github-actions[bot]'
