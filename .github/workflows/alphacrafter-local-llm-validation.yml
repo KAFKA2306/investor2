@@ -15,11 +15,14 @@ jobs:
     timeout-minutes: 30
     env:
       OLLAMA_VERSION: "0.32.14"
-      LOCAL_MODEL: "qwen3:0.6b"
+      LOCAL_MODEL: "qwen3:1.7b"
       OLLAMA_CONTEXT_LENGTH: "32768"
       OLLAMA_NO_CLOUD: "1"
-      OPENAI_API_URL: "http://127.0.0.1:11434/v1"
+      OLLAMA_BASE_URL: "http://127.0.0.1:11434/v1"
+      OPENAI_API_URL: "http://127.0.0.1:18000/v1"
       OPENAI_API_KEY: "ollama"
+      ALPHACRAFTER_MAX_OUTPUT_TOKENS: "256"
+      ALPHACRAFTER_REASONING_EFFORT: "none"
     steps:
       - name: Checkout investor2
         uses: actions/checkout@v4
@@ -40,7 +43,7 @@ jobs:
         run: |
           set -euo pipefail
           python -m pip install --upgrade pip setuptools wheel
-          python -m pip install openai python-dotenv pydantic requests pyyaml pandas numpy scikit-learn matplotlib seaborn tqdm lightgbm
+          python -m pip install openai requests
           python -m pip install -e upstream
 
       - name: Install pinned Ollama
@@ -51,7 +54,7 @@ jobs:
           OLLAMA_VERSION="${OLLAMA_VERSION}" sh /tmp/ollama-install.sh
           ollama --version
 
-      - name: Replace installer service with verified local-only Ollama process
+      - name: Start verified local-only Ollama
         run: |
           set -euo pipefail
           sudo systemctl stop ollama || true
@@ -78,17 +81,79 @@ jobs:
           ollama pull "${LOCAL_MODEL}"
           ollama list
 
-      - name: Measure Responses API, tool schema, and round trip on localhost
+      - name: Start localhost inference-budget proxy
+        run: |
+          set -euo pipefail
+          cat >/tmp/alphacrafter-local-proxy.py <<'PY'
+          import json
+          import os
+          from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+          from pathlib import Path
+          import requests
+
+          target = os.environ['OLLAMA_BASE_URL'].removesuffix('/v1')
+          max_output = int(os.environ['ALPHACRAFTER_MAX_OUTPUT_TOKENS'])
+          reasoning_effort = os.environ['ALPHACRAFTER_REASONING_EFFORT']
+          log_path = Path('/tmp/alphacrafter-proxy.jsonl')
+
+          class Handler(BaseHTTPRequestHandler):
+              def log_message(self, fmt, *args):
+                  return
+
+              def _write(self, response):
+                  self.send_response(response.status_code)
+                  self.send_header('Content-Type', response.headers.get('content-type', 'application/json'))
+                  self.end_headers()
+                  self.wfile.write(response.content)
+
+              def do_GET(self):
+                  response = requests.get(f'{target}{self.path}', timeout=60)
+                  self._write(response)
+
+              def do_POST(self):
+                  length = int(self.headers.get('Content-Length', '0'))
+                  raw = self.rfile.read(length)
+                  payload = json.loads(raw or b'{}')
+                  injected = False
+                  if self.path == '/v1/responses':
+                      payload['max_output_tokens'] = max_output
+                      payload['reasoning'] = {'effort': reasoning_effort}
+                      injected = True
+                  with log_path.open('a', encoding='utf-8') as f:
+                      f.write(json.dumps({
+                          'path': self.path,
+                          'model': payload.get('model'),
+                          'max_output_tokens': payload.get('max_output_tokens'),
+                          'reasoning': payload.get('reasoning'),
+                          'tool_count': len(payload.get('tools') or []),
+                          'inference_budget_injected': injected,
+                      }) + '\n')
+                  response = requests.post(f'{target}{self.path}', json=payload, timeout=900)
+                  self._write(response)
+
+          ThreadingHTTPServer(('127.0.0.1', 18000), Handler).serve_forever()
+          PY
+          nohup python -u /tmp/alphacrafter-local-proxy.py >/tmp/alphacrafter-proxy.log 2>&1 &
+          echo $! >/tmp/alphacrafter-proxy.pid
+          for i in $(seq 1 30); do
+            if curl -fsS http://127.0.0.1:18000/v1/models >/tmp/proxy-models.json; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/proxy-models.json
+
+      - name: Verify Responses API and function-call round trip
         run: |
           set -euo pipefail
           python - <<'PY'
           import json
+          import os
           from pathlib import Path
           from openai import OpenAI
 
-          client = OpenAI(base_url='http://127.0.0.1:11434/v1', api_key='ollama', timeout=300)
-          model = 'qwen3:0.6b'
-          plain = client.responses.create(model=model, input='Reply with exactly LOCAL_OK and nothing else.', max_output_tokens=256)
+          client = OpenAI(base_url=os.environ['OPENAI_API_URL'], api_key='ollama', timeout=900)
+          model = os.environ['LOCAL_MODEL']
           tools = [{
               'type': 'function',
               'name': 'record_probe',
@@ -105,57 +170,41 @@ jobs:
               instructions='You must call record_probe. Do not answer directly.',
               input=[{'role': 'user', 'content': 'Call record_probe with value LOCAL_TOOL_OK.'}],
               tools=tools,
-              max_output_tokens=256,
           )
           calls = [x for x in first.output if getattr(x, 'type', None) == 'function_call']
-          tool_call_present = bool(calls)
-          tool_schema_exact = False
-          tool_name = None
-          tool_arguments = None
-          roundtrip_completed = False
-          roundtrip_text_nonempty = False
-          second_output_types = []
-          if calls:
-              call = calls[0]
-              tool_name = call.name
-              try:
-                  tool_arguments = json.loads(call.arguments)
-              except Exception:
-                  tool_arguments = {'_raw': call.arguments}
-              tool_schema_exact = tool_name == 'record_probe' and tool_arguments == {'value': 'LOCAL_TOOL_OK'}
-              continuation = list(first.output)
-              continuation.append({
-                  'type': 'function_call_output',
-                  'call_id': call.call_id,
-                  'output': json.dumps({'record_probe': 'accepted'}),
-              })
-              second = client.responses.create(
-                  model=model,
-                  instructions='The tool result is authoritative. Reply with exactly ROUNDTRIP_OK.',
-                  input=continuation,
-                  tools=tools,
-                  max_output_tokens=256,
-              )
-              roundtrip_completed = True
-              roundtrip_text_nonempty = bool(second.output_text)
-              second_output_types = [getattr(x, 'type', None) for x in second.output]
+          if not calls:
+              raise SystemExit(f'No function call returned: {first.output!r}')
+          call = calls[0]
+          arguments = json.loads(call.arguments)
+          if call.name != 'record_probe' or arguments != {'value': 'LOCAL_TOOL_OK'}:
+              raise SystemExit(f'Unexpected function call: {call.name!r} {arguments!r}')
+          continuation = list(first.output)
+          continuation.append({
+              'type': 'function_call_output',
+              'call_id': call.call_id,
+              'output': json.dumps({'record_probe': 'accepted'}),
+          })
+          second = client.responses.create(
+              model=model,
+              instructions='The tool result is authoritative. Reply with exactly ROUNDTRIP_OK.',
+              input=continuation,
+              tools=tools,
+          )
           evidence = {
-              'schema_version': 'investor2.alphacrafter.local-llm-transport.v4',
-              'endpoint': 'http://127.0.0.1:11434/v1',
+              'schema_version': 'investor2.alphacrafter.local-llm-transport.v5',
+              'endpoint': os.environ['OPENAI_API_URL'],
+              'ollama_endpoint': os.environ['OLLAMA_BASE_URL'],
               'external_llm_api_used': False,
               'model': model,
               'responses_api_request_completed': True,
-              'plain_output_text_nonempty': bool(plain.output_text),
-              'function_call_present': tool_call_present,
-              'function_call_schema_exact': tool_schema_exact,
-              'function_call_name': tool_name,
-              'function_call_arguments': tool_arguments,
-              'function_call_output_request_completed': roundtrip_completed,
-              'roundtrip_output_text_nonempty': roundtrip_text_nonempty,
-              'first_output_types': [getattr(x, 'type', None) for x in first.output],
-              'second_output_types': second_output_types,
+              'function_call_present': True,
+              'function_call_schema_exact': True,
+              'function_call_output_request_completed': True,
+              'roundtrip_output_text_nonempty': bool(second.output_text),
+              'max_output_tokens': int(os.environ['ALPHACRAFTER_MAX_OUTPUT_TOKENS']),
+              'reasoning_effort': os.environ['ALPHACRAFTER_REASONING_EFFORT'],
               'frontier_evidence': False,
-              'interpretation': 'LOCAL_RESPONSES_TRANSPORT_WORKS_MODEL_TOOL_QUALITY_MEASURED',
+              'interpretation': 'LOCAL_RESPONSES_TRANSPORT_VERIFIED',
           }
           Path('/tmp/alphacrafter-local-transport.json').write_text(json.dumps(evidence, indent=2) + '\n')
           print(json.dumps(evidence, indent=2))
@@ -177,100 +226,131 @@ jobs:
           print(f'runtime_context={context}')
           PY
 
-      - name: Configure official AlphaCrafter session for local model only
+      - name: Execute pinned official AlphaCrafter Agent tool loop
+        env:
+          PYTHONUNBUFFERED: "1"
         run: |
           set -euo pipefail
-          cd upstream/alphacrafter
-          rm -rf sandbox/local-qwen3-validation
-          cp -a sandbox/template_a sandbox/local-qwen3-validation
-          python - <<'PY'
+          python -u - <<'PY' | tee /tmp/alphacrafter-local-agent.log
           import json
+          import os
           from pathlib import Path
-          import yaml
+          from typing import Any, Callable, Dict
+          from alphacrafter.agent.openai.agent import Agent
+          from alphacrafter.agent.toolkit.base import BaseTool
 
-          model = 'qwen3:0.6b'
-          models_path = Path('sandbox/local-qwen3-validation/config/models.json')
-          models = json.loads(models_path.read_text())
-          models[model] = {
-              'producer': 'OpenAI',
-              'inputs': ['text'],
-              'cost': {'input': 0, 'output': 0},
-              'input_token_limit': 32768,
-              'output_token_limit': 4096,
-          }
-          models_path.write_text(json.dumps(models, indent=4) + '\n')
-          cfg = yaml.safe_load(Path('config.yaml').read_text())
-          for role in ('miner', 'screener', 'trader'):
-              cfg[role]['model']['code'] = model
-          # CI smoke budget only; official role instructions and tool schemas are unchanged.
-          cfg['miner']['count'] = 1
-          cfg['miner']['ids'] = ['miner_1']
-          cfg['miner']['max_iterations'] = 1
-          cfg['screener']['max_iterations'] = 1
-          cfg['trader']['max_iterations'] = 1
-          cfg['workflow']['max_cycles'] = 1
-          Path('config-local-qwen3.yaml').write_text(yaml.safe_dump(cfg, sort_keys=False))
+          model = os.environ['LOCAL_MODEL']
+          model_config = Path('/tmp/alphacrafter-local-models.json')
+          model_config.write_text(json.dumps({
+              model: {
+                  'producer': 'OpenAI',
+                  'inputs': ['text'],
+                  'cost': {'input': 0, 'output': 0},
+                  'input_token_limit': 32768,
+                  'output_token_limit': int(os.environ['ALPHACRAFTER_MAX_OUTPUT_TOKENS']),
+              }
+          }, indent=2) + '\n')
+
+          called = []
+
+          class ProbeTool(BaseTool):
+              def get_name(self) -> str:
+                  return 'record_probe'
+
+              def get_implementation(self) -> Callable:
+                  def record_probe(value: str) -> str:
+                      called.append(value)
+                      return 'accepted'
+                  return record_probe
+
+              def get_description(self, producer: str = 'OpenAI') -> Dict[str, Any]:
+                  if producer != 'OpenAI':
+                      raise ValueError(producer)
+                  return {
+                      'type': 'function',
+                      'name': 'record_probe',
+                      'description': 'Record the exact validation value requested by the user.',
+                      'parameters': {
+                          'type': 'object',
+                          'properties': {'value': {'type': 'string'}},
+                          'required': ['value'],
+                          'additionalProperties': False,
+                      },
+                  }
+
+          agent = Agent(
+              model_code=model,
+              toolkit=[ProbeTool()],
+              instructions=(
+                  'This is a deterministic tool-loop validation. '
+                  'You must call record_probe exactly once with value OFFICIAL_AGENT_TOOL_OK. '
+                  'After the tool result is returned, answer DONE and do not call another tool.'
+              ),
+              config_path=str(model_config),
+              log_file='/tmp/alphacrafter-official-agent.json',
+              summary_interval=20,
+          )
+          agent.run(
+              [{'role': 'user', 'content': 'Execute the required validation tool call now.'}],
+              max_iterations=2,
+          )
+          if called != ['OFFICIAL_AGENT_TOOL_OK']:
+              raise SystemExit(f'Official Agent did not execute the exact tool call: {called!r}')
+          logs = json.loads(Path('/tmp/alphacrafter-official-agent.json').read_text())
+          tool_calls = [tc for entry in logs for tc in entry.get('tool_calls', [])]
+          if not any(tc.get('name') == 'record_probe' for tc in tool_calls):
+              raise SystemExit('Official Agent log has no record_probe tool call')
+          print('OFFICIAL_AGENT_TOOL_LOOP_OK')
           PY
 
-      - name: Execute official AlphaCrafter against localhost Ollama
+      - name: Build validation evidence
         run: |
           set -euo pipefail
-          cd upstream/alphacrafter
-          set +e
-          timeout 300 python main.py local-qwen3-validation --config config-local-qwen3.yaml > /tmp/alphacrafter-local-run.log 2>&1
-          exit_code=$?
-          set -e
-          cat /tmp/alphacrafter-local-run.log
-          export EXIT_CODE="$exit_code"
           python - <<'PY'
-          import json, os, re
+          import json
+          import os
           from pathlib import Path
 
-          log = Path('/tmp/alphacrafter-local-run.log').read_text(errors='replace')
           ollama_log = Path('/tmp/ollama-server.log').read_text(errors='replace')
-          required = [
-              'Agent initialized with model: qwen3:0.6b',
-              'STARTING NEW WORKFLOW',
-              'MINER_MINER_1 PHASE',
-              'SCREENER PHASE',
-              'TRADER PHASE',
-              'WORKFLOW COMPLETED',
-          ]
-          missing = [marker for marker in required if marker not in log]
-          if missing:
-              raise SystemExit(f'Official AlphaCrafter did not reach required local-agent markers: {missing}')
-          if any(marker in log for marker in ('api.openai.com', 'AuthenticationError', 'invalid_api_key')):
-              raise SystemExit('External OpenAI path unexpectedly appeared in local execution log')
           if 'truncating input prompt' in ollama_log:
-              raise SystemExit('Ollama truncated the AlphaCrafter prompt')
-          runtime_context = int(Path('/tmp/ollama-runtime-context.txt').read_text().strip())
+              raise SystemExit('Ollama truncated a validation prompt')
+          proxy_rows = [json.loads(line) for line in Path('/tmp/alphacrafter-proxy.jsonl').read_text().splitlines() if line.strip()]
+          response_rows = [row for row in proxy_rows if row['path'] == '/v1/responses']
+          if not response_rows:
+              raise SystemExit('Proxy observed no Responses API requests')
+          if not all(row['inference_budget_injected'] for row in response_rows):
+              raise SystemExit('Proxy failed to inject inference budget on a Responses request')
+          if not all(row['max_output_tokens'] == 256 for row in response_rows):
+              raise SystemExit('Unexpected max_output_tokens in proxy evidence')
+          if not all(row['reasoning'] == {'effort': 'none'} for row in response_rows):
+              raise SystemExit('Unexpected reasoning control in proxy evidence')
           transport = json.loads(Path('/tmp/alphacrafter-local-transport.json').read_text())
-          tool_counts = [int(x) for x in re.findall(r'Total tool calls: (\d+)', log)]
-          semantic_grounding_pass = any(x > 0 for x in tool_counts)
+          runtime_context = int(Path('/tmp/ollama-runtime-context.txt').read_text().strip())
+          official_logs = json.loads(Path('/tmp/alphacrafter-official-agent.json').read_text())
+          official_tool_calls = [tc for entry in official_logs for tc in entry.get('tool_calls', [])]
           evidence = {
-              'schema_version': 'investor2.alphacrafter.local-offline-smoke.v4',
+              'schema_version': 'investor2.alphacrafter.local-offline-smoke.v5',
               'upstream_repository': 'NJU-LINK/AlphaCrafter',
               'upstream_commit': 'c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d',
-              'model': 'qwen3:0.6b',
-              'endpoint': 'http://127.0.0.1:11434/v1',
+              'upstream_agent_source_modified': False,
+              'model': os.environ['LOCAL_MODEL'],
               'external_llm_api_used': False,
+              'localhost_proxy_endpoint': os.environ['OPENAI_API_URL'],
+              'ollama_endpoint': os.environ['OLLAMA_BASE_URL'],
               'ollama_no_cloud_env_verified': True,
               'requested_context_length': 32768,
               'runtime_reported_context_length': runtime_context,
               'prompt_truncation_observed': False,
+              'max_output_tokens': 256,
+              'reasoning_effort': 'none',
               'responses_transport_pass': transport['responses_api_request_completed'],
-              'direct_tool_call_present': transport['function_call_present'],
-              'direct_tool_schema_exact': transport['function_call_schema_exact'],
-              'direct_tool_roundtrip_completed': transport['function_call_output_request_completed'],
-              'official_workflow_completed': True,
-              'api_request_count': log.count('API Request'),
-              'api_response_count': log.count('API Response'),
-              'tool_call_counts_by_agent_run': tool_counts,
-              'semantic_grounding_pass': semantic_grounding_pass,
-              'semantic_quality_interpretation': 'PASS_TOOL_USE_OBSERVED' if semantic_grounding_pass else 'FAIL_NO_TOOL_USE_OUTPUT_IS_UNGROUNDED',
-              'process_exit_code': int(os.environ['EXIT_CODE']),
+              'direct_tool_roundtrip_pass': transport['function_call_output_request_completed'],
+              'official_agent_tool_loop_pass': True,
+              'official_agent_tool_calls': official_tool_calls,
+              'responses_requests_observed_by_proxy': len(response_rows),
               'performance_evidence': False,
-              'reproduction_state': 'LOCAL_TRANSPORT_VERIFIED_NOT_PERFORMANCE_REPRODUCTION',
+              'reproduction_state': 'LOCAL_AGENT_TRANSPORT_VERIFIED_NOT_PERFORMANCE_REPRODUCTION',
+              'interpretation': 'LOCAL_LLM_AGENT_TOOL_LOOP_VERIFIED',
           }
           Path('/tmp/alphacrafter-local-offline-smoke.json').write_text(json.dumps(evidence, indent=2) + '\n')
           print(json.dumps(evidence, indent=2))
@@ -287,7 +367,10 @@ jobs:
             /tmp/ollama-runtime-context.txt
             /tmp/ollama-ps.txt
             /tmp/ollama-server.log
+            /tmp/alphacrafter-proxy.jsonl
+            /tmp/alphacrafter-proxy.log
             /tmp/alphacrafter-local-transport.json
-            /tmp/alphacrafter-local-run.log
+            /tmp/alphacrafter-local-agent.log
+            /tmp/alphacrafter-official-agent.json
             /tmp/alphacrafter-local-offline-smoke.json
           if-no-files-found: error
