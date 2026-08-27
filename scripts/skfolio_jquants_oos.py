@@ -287,9 +287,7 @@ def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
     delta: dict[str, float] = {}
     for metric in metric_names:
         baseline[metric] = float(np.mean([fold["baseline_empirical_covariance"][metric] for fold in folds]))
-        candidate[metric] = float(
-            np.mean([fold["skfolio_characteristics_covariance"][metric] for fold in folds])
-        )
+        candidate[metric] = float(np.mean([fold["skfolio_characteristics_covariance"][metric] for fold in folds]))
         delta[metric] = candidate[metric] - baseline[metric]
 
     direct_wins = {
@@ -297,8 +295,7 @@ def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
             candidate["normalized_frobenius_error"] < baseline["normalized_frobenius_error"]
         ),
         "equal_weight_volatility_absolute_error": (
-            candidate["equal_weight_volatility_absolute_error"]
-            < baseline["equal_weight_volatility_absolute_error"]
+            candidate["equal_weight_volatility_absolute_error"] < baseline["equal_weight_volatility_absolute_error"]
         ),
     }
     if all(direct_wins.values()):
@@ -339,10 +336,14 @@ def main() -> None:
     prices_long, _, source_metadata = load_japan_inputs(load_args)
     selected_codes = sorted(choose_japan_universe(prices_long, cutoff, args.max_assets))
     selected = prices_long[prices_long["Code"].isin(selected_codes)].copy()
-    price_matrix = selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
+    price_matrix = (
+        selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
+    )
 
     earliest_required = min(fold.train_start for fold in folds)
-    working_prices = price_matrix.loc[(price_matrix.index >= earliest_required) & (price_matrix.index <= evaluation_end)]
+    working_prices = price_matrix.loc[
+        (price_matrix.index >= earliest_required) & (price_matrix.index <= evaluation_end)
+    ]
     incomplete_days = int(working_prices.isna().any(axis=1).sum())
     complete_prices = working_prices.dropna(axis=0, how="any")
     if complete_prices.empty:
