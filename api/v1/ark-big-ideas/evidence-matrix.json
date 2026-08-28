@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/45b04af3ba4acae276ea6db779e0b677015bee6ebfd0f28ad44ddf5bef600f07.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "45b04af3ba4acae276ea6db779e0b677015bee6ebfd0f28ad44ddf5bef600f07",
-        "mirror_snapshot_id": "53ab21540dbbacaf7ee3",
+        "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
+        "mirror_snapshot_id": "c7086a13fdf211b29733",
         "row_count": 18
       },
       "status": "ready",
@@ -148,11 +148,11 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/b8667b95a7007c2b928396b3360db0309ba98a09f2dee70faa706d744a88eb88.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/bb2881c0259e0136f596145bd3e8249009c2e893a01ae72592f21c38db715740.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "b8667b95a7007c2b928396b3360db0309ba98a09f2dee70faa706d744a88eb88",
-        "mirror_snapshot_id": "b3ec018be184da076ceb",
-        "row_count": 361
+        "mirror_sha256": "bb2881c0259e0136f596145bd3e8249009c2e893a01ae72592f21c38db715740",
+        "mirror_snapshot_id": "5523738cd88b7a8c1b5c",
+        "row_count": 363
       },
       "status": "ready",
       "theme": "Bitcoin / Derivatives"
@@ -180,11 +180,11 @@
       "logical_repo": "defi",
       "projection": {
         "adapter": "defi_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/defi-daily/7688eeb6b23473d7531ff031191de187da25a3c76b730d26846beb4a7d9ba5a9.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/defi-daily/57e85a0866ac6efd4c3ef90ce029ddcf4cd9d29f0e59a89455335341d8b481a9.json",
         "feed_id": "defi-daily",
-        "mirror_sha256": "7688eeb6b23473d7531ff031191de187da25a3c76b730d26846beb4a7d9ba5a9",
-        "mirror_snapshot_id": "b43b16fba765c0fcf1a3",
-        "row_count": 291
+        "mirror_sha256": "57e85a0866ac6efd4c3ef90ce029ddcf4cd9d29f0e59a89455335341d8b481a9",
+        "mirror_snapshot_id": "b25b4fca853d173bc5cf",
+        "row_count": 306
       },
       "status": "ready",
       "theme": "DeFi Applications"
@@ -212,10 +212,10 @@
       "logical_repo": "autonomous-logistics",
       "projection": {
         "adapter": "autonomous_logistics_events",
-        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/1411f9eb713d0ce19cba5b6129ff309c9b9a70e2590eee0e72d70bf74a517918.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/00c1c426ea0698503e4aca71cd65b45b88824c4d057d1036d0dc9987e1998b29.json",
         "feed_id": "autonomous-logistics-events",
-        "mirror_sha256": "1411f9eb713d0ce19cba5b6129ff309c9b9a70e2590eee0e72d70bf74a517918",
-        "mirror_snapshot_id": "b7fae2e1fa60a7ac3821",
+        "mirror_sha256": "00c1c426ea0698503e4aca71cd65b45b88824c4d057d1036d0dc9987e1998b29",
+        "mirror_snapshot_id": "4d97f509ae1fa136269d",
         "row_count": 19
       },
       "status": "ready",
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/a7f2b0e536ace2682a60b30339836c2ce7731849d42d41f5b5a14c9bf27105c6.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/d2e95cb514927bda560b03d3e783d27ab23af29abbe0bf5bd1d6519ff588d723.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "a7f2b0e536ace2682a60b30339836c2ce7731849d42d41f5b5a14c9bf27105c6",
-        "mirror_snapshot_id": "ee27acd6e689a3ad3257",
+        "mirror_sha256": "d2e95cb514927bda560b03d3e783d27ab23af29abbe0bf5bd1d6519ff588d723",
+        "mirror_snapshot_id": "45fc49a3d37ece083c5d",
         "row_count": 13
       },
       "status": "accumulating",
