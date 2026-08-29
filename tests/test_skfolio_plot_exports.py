@@ -6,7 +6,12 @@ import numpy as np
 import pandas as pd
 
 from src.research.skfolio_characteristics import asset_panel_from_prices, build_price_only_characteristics_model
-from src.research.skfolio_plot_exports import PLOT_CALLS, export_factor_model_plots, write_plot_index, write_plot_manifest
+from src.research.skfolio_plot_exports import (
+    PLOT_CALLS,
+    export_factor_model_plots,
+    write_plot_index,
+    write_plot_manifest,
+)
 
 
 def _fitted_factor_model():

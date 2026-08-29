@@ -22,7 +22,9 @@ from src.research.skfolio_plot_exports import (
 
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Export skfolio FactorModel plots for the frozen J-Quants OOS evidence.")
+    parser = argparse.ArgumentParser(
+        description="Export skfolio FactorModel plots for the frozen J-Quants OOS evidence."
+    )
     parser.add_argument("--market-snapshot-dir", required=True, type=Path)
     parser.add_argument("--summary", required=True, type=Path)
     parser.add_argument("--output-dir", required=True, type=Path)
@@ -67,9 +69,7 @@ def main() -> None:
     prices_long, _, _ = load_japan_inputs(load_args)
     selected = prices_long[prices_long["Code"].astype(str).isin(selected_codes)].copy()
     price_matrix = (
-        selected.pivot(index="Date", columns="Code", values="Close")
-        .sort_index()
-        .reindex(columns=selected_codes)
+        selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
     )
     working_start = pd.Timestamp(str(input_contract["working_date_start"]))
     working_end = pd.Timestamp(str(input_contract["working_date_end"]))

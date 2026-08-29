@@ -147,11 +147,9 @@ def write_plot_manifest(
 
 
 def write_plot_index(output_dir: Path, artifacts: list[dict[str, object]]) -> Path:
-    links = "\n".join(
-        f'<li><a href="{item["relative_path"]}">{item["plot"]}</a>' for item in artifacts
-    )
+    links = "\n".join(f'<li><a href="{item["relative_path"]}">{item["plot"]}</a>' for item in artifacts)
     html = (
-        "<!doctype html><html><head><meta charset=\"utf-8\"><title>skfolio J-Quants diagnostics</title></head>"
+        '<!doctype html><html><head><meta charset="utf-8"><title>skfolio J-Quants diagnostics</title></head>'
         "<body><h1>skfolio J-Quants diagnostics</h1>"
         "<p>Derived diagnostic plots. The OOS verdict remains authoritative in summary.json.</p>"
         f"<ul>{links}</ul></body></html>\n"
