@@ -81,7 +81,7 @@ For investment-strategy validation, report the direct decision metrics that appl
 
 The repository must remain operable by agents that cannot load the full repository or long conversation history.
 
-For every non-trivial Issue, create or maintain `docs/agent-tasks/<issue-number>.md` when the task cannot be understood from a short Issue body alone. That handoff is the bounded entry point.
+For every non-trivial Issue, create or maintain `docs/specs/agent-tasks/<issue-number>.md` when the task cannot be understood from a short Issue body alone. That handoff is the bounded entry point.
 
 The handoff must contain:
 
