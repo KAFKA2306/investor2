@@ -77,6 +77,29 @@ For investment-strategy validation, report the direct decision metrics that appl
 - Reproduce skills with `agr sync`.
 - Do not maintain tool-specific copies of repository rules. `AGENTS.md` is the single source of repository-wide agent guidance; tool-specific instruction files may only point here.
 
+## Short-context agent contract
+
+The repository must remain operable by agents that cannot load the full repository or long conversation history.
+
+For every non-trivial Issue, create or maintain `docs/agent-tasks/<issue-number>.md` when the task cannot be understood from a short Issue body alone. That handoff is the bounded entry point.
+
+The handoff must contain:
+
+- one goal only;
+- the authoritative Issue / PR / branch / evidence path;
+- no more than five files to read first;
+- exactly one next action;
+- the verifier or CI to run;
+- explicit acceptance criteria;
+- prohibited shortcuts and claim boundaries;
+- the evidence/output path.
+
+An agent should read the Issue, then the handoff, then only the listed files. Do not require an agent to scan the repository, reconstruct history from chat, read binary artifacts, or infer the next step from many PR comments.
+
+If understanding the task requires more than five source files or more than one independent outcome, split the work into child Issues before implementation. Keep experiments such as adding a new factor, changing the baseline, and completing an existing evidence run in separate tasks.
+
+When handing off unfinished work, update the handoff with the last verified state, measured result, current PR/branch, exact blocker, and one next falsifiable action. Long chat history is never the durable handoff surface.
+
 ## Continuation and scope
 
 Before changing the repository, inspect current `main`, relevant Issues/PRs, exact-head CI where applicable, and existing canonical artifacts. Continue an existing workline when it already owns the same decision and uncertainty.
