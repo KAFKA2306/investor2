@@ -2,306 +2,343 @@
   "artifacts": [
     {
       "fold": 0,
+      "key": "fold0-exposure-correlation",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_correlation",
       "plot": "exposure-correlation",
-      "relative_path": "fold0/exposure-correlation.html",
-      "sha256": "8e8cfb04e872ba039449f0fc44eb5da4dbe7de58bf78a2cbfae104bf525807ea",
-      "size_bytes": 8494
+      "relative_path": "index.html#fold0-exposure-correlation",
+      "sha256": "ff2837f5a95e222440aa7cb0dc7005b766ee8a6d00838a37d56ae9ded4d9eb7f",
+      "size_bytes": 7500
     },
     {
       "fold": 0,
+      "key": "fold0-exposure-stability",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_stability",
       "plot": "exposure-stability",
-      "relative_path": "fold0/exposure-stability.html",
-      "sha256": "9cecdd8e5ddfe011e41ef815cb11befb077dc1914cd39b406257c56d9c53955f",
-      "size_bytes": 18255
+      "relative_path": "index.html#fold0-exposure-stability",
+      "sha256": "207fe4f14297adf0081635ed3f0ba6ef8ad3522140cd815619e559a49addd936",
+      "size_bytes": 17261
     },
     {
       "fold": 0,
+      "key": "fold0-exposure-vif",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_vif",
       "plot": "exposure-vif",
-      "relative_path": "fold0/exposure-vif.html",
-      "sha256": "5e7d693f01ae82460df6a27de7b556504361e994851d8b7a0509728cdd661c26",
-      "size_bytes": 26405
+      "relative_path": "index.html#fold0-exposure-vif",
+      "sha256": "20de5ea471ad27d09d71d356f96d9bd3eb7a3f7fa7d8a5d6c7526e17897513d1",
+      "size_bytes": 25411
     },
     {
       "fold": 0,
+      "key": "fold0-exposure-condition-number",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_condition_number",
       "plot": "exposure-condition-number",
-      "relative_path": "fold0/exposure-condition-number.html",
-      "sha256": "90f961e1884c2e55c94ebb1b1ac542eb1ae0b13eecd2e38e207b0d643fe458b5",
-      "size_bytes": 19972
+      "relative_path": "index.html#fold0-exposure-condition-number",
+      "sha256": "7afe0f3789ea04886d9a06135ba224b223994df518e0737f8e5ca8b91cc1971c",
+      "size_bytes": 18978
     },
     {
       "fold": 0,
+      "key": "fold0-cs-adjusted-r2",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_cs_regression_scores",
       "plot": "cs-adjusted-r2",
-      "relative_path": "fold0/cs-adjusted-r2.html",
-      "sha256": "56e59849206c07bbf8f28b638485a589946e0d2ef7686777b7677fe358a39ebf",
-      "size_bytes": 20383
+      "relative_path": "index.html#fold0-cs-adjusted-r2",
+      "sha256": "fa993b5eadc5a241794013d1160719c6f646653fbc10c684a5bd570de17951aa",
+      "size_bytes": 19389
     },
     {
       "fold": 0,
+      "key": "fold0-cs-t-stat-exceedance",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_cs_regression_t_stat_exceedance_rate",
       "plot": "cs-t-stat-exceedance",
-      "relative_path": "fold0/cs-t-stat-exceedance.html",
-      "sha256": "bb7a745ec45e3d320364d680025c1713d908f658464b72c7b3add480b0b9cb1e",
-      "size_bytes": 8200
+      "relative_path": "index.html#fold0-cs-t-stat-exceedance",
+      "sha256": "7bc80920611c6851642153f4431afe76679ff1a41128784c9510486d552f1a8d",
+      "size_bytes": 7206
     },
     {
       "fold": 0,
+      "key": "fold0-factor-cumulative-returns",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_cumulative_returns",
       "plot": "factor-cumulative-returns",
-      "relative_path": "fold0/factor-cumulative-returns.html",
-      "sha256": "8f87eff8e45bc805cac8910a63e44b0627a4d32593ced7e3618cb685a7d9e2d1",
-      "size_bytes": 26396
+      "relative_path": "index.html#fold0-factor-cumulative-returns",
+      "sha256": "63190239755776b7d0b5e4ff8928ffeaf47c6a4c118e18a00859c74b2d07f879",
+      "size_bytes": 25402
     },
     {
       "fold": 0,
+      "key": "fold0-factor-forecast-correlation",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_forecast_correlation",
       "plot": "factor-forecast-correlation",
-      "relative_path": "fold0/factor-forecast-correlation.html",
-      "sha256": "c134026e68cdf2f28c59bfd1f0630b071c18363cf384ce7949c424d68e7924bb",
-      "size_bytes": 8508
+      "relative_path": "index.html#fold0-factor-forecast-correlation",
+      "sha256": "767f3c2ea8cb1fd95b34041fdad22f46671d20384f87a358599e2bfc81aa62d0",
+      "size_bytes": 7514
     },
     {
       "fold": 0,
+      "key": "fold0-factor-forecast-volatilities",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_forecast_volatilities",
       "plot": "factor-forecast-volatilities",
-      "relative_path": "fold0/factor-forecast-volatilities.html",
-      "sha256": "23895f2382899e291aa53426c37747a439b8f8decadf6fd3741527082cb40e9c",
-      "size_bytes": 7861
+      "relative_path": "index.html#fold0-factor-forecast-volatilities",
+      "sha256": "23c4f5757690f7e7bcc6d4c63b37a16067edfe56f6f1d592c4f574ad3c5980d0",
+      "size_bytes": 6867
     },
     {
       "fold": 0,
+      "key": "fold0-idio-calibration",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_calibration",
       "plot": "idio-calibration",
-      "relative_path": "fold0/idio-calibration.html",
-      "sha256": "98ef5f400bc4d9cf8783c83e0647549b18cc7eee2c4bb761eea7c17fdf6236e5",
-      "size_bytes": 14573
+      "relative_path": "index.html#fold0-idio-calibration",
+      "sha256": "9f75f90584ae93590434be2d5c987fd30caa0f38aa325e3d8c038bc2a991591f",
+      "size_bytes": 13579
     },
     {
       "fold": 0,
+      "key": "fold0-idio-vol-ic",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_vol_ic",
       "plot": "idio-vol-ic",
-      "relative_path": "fold0/idio-vol-ic.html",
-      "sha256": "d1525aff278aeaf7f6094b62dd4d48800cab973dae264dabde4e7d9e2aa82ce1",
-      "size_bytes": 20016
+      "relative_path": "index.html#fold0-idio-vol-ic",
+      "sha256": "f987f6cc9d58d365a11656c627d8f3aa1b78a534a5b65e1047d7bdc1969c55c5",
+      "size_bytes": 19022
     },
     {
       "fold": 0,
+      "key": "fold0-idio-tail-rate",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_tail_rate",
       "plot": "idio-tail-rate",
-      "relative_path": "fold0/idio-tail-rate.html",
-      "sha256": "3160e77d711745760482b41c0f2d9cace2413ddd76b744375966f03c81b43926",
-      "size_bytes": 14370
+      "relative_path": "index.html#fold0-idio-tail-rate",
+      "sha256": "3f3e2301c7b8c4b18292394facb7aeb86076ae755d1937c653ce24c21c68baf4",
+      "size_bytes": 13376
     },
     {
       "fold": 0,
+      "key": "fold0-idio-kurtosis",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_kurtosis",
       "plot": "idio-kurtosis",
-      "relative_path": "fold0/idio-kurtosis.html",
-      "sha256": "15c248dd719c0ac402fb5ffab69d05919531c6a7eb17bdac5cb1e54273fbda52",
-      "size_bytes": 14416
+      "relative_path": "index.html#fold0-idio-kurtosis",
+      "sha256": "0a4fe8220f8e9ee38799e695707769e0b8ef9dcde9ac0334c958a03e0b894062",
+      "size_bytes": 13422
     },
     {
       "fold": 0,
+      "key": "fold0-idio-skewness",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_skewness",
       "plot": "idio-skewness",
-      "relative_path": "fold0/idio-skewness.html",
-      "sha256": "62172b78a47d329494d065f038105beea9bb9ab6c3c7905855d5c05a496f5bef",
-      "size_bytes": 14528
+      "relative_path": "index.html#fold0-idio-skewness",
+      "sha256": "89b36bb959387d90741baf4e9f4e031dfc5159b8e28fb6c1a82b4195fdf1cb64",
+      "size_bytes": 13534
     },
     {
       "fold": 0,
+      "key": "fold0-idio-vol-residual-dependence",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_vol_residual_dependence",
       "plot": "idio-vol-residual-dependence",
-      "relative_path": "fold0/idio-vol-residual-dependence.html",
-      "sha256": "dea815a42d109d40c0c870f75ac05b15638de384e247ab1b0850c201a722373c",
-      "size_bytes": 20146
+      "relative_path": "index.html#fold0-idio-vol-residual-dependence",
+      "sha256": "a5227f08fb1258d8b4dbf2f8d1e833fe908ba8b0390efb876f6cd7df3564a480",
+      "size_bytes": 19152
     },
     {
       "fold": 1,
+      "key": "fold1-exposure-correlation",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_correlation",
       "plot": "exposure-correlation",
-      "relative_path": "fold1/exposure-correlation.html",
-      "sha256": "2233dfbcf79e6dc2e0bb215f1a6a9bfa23a205a20d13cc981966f2a174036a02",
-      "size_bytes": 8499
+      "relative_path": "index.html#fold1-exposure-correlation",
+      "sha256": "741f72d912932aadfc24c13245b149a4f4c12e0cc8353561be56904e9277387f",
+      "size_bytes": 7505
     },
     {
       "fold": 1,
+      "key": "fold1-exposure-stability",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_stability",
       "plot": "exposure-stability",
-      "relative_path": "fold1/exposure-stability.html",
-      "sha256": "2b65a548b91b66ec1482c6aa7bffb77893f019f98660022e24eb9bd26e18f457",
-      "size_bytes": 18295
+      "relative_path": "index.html#fold1-exposure-stability",
+      "sha256": "10c3b924a5529df455c637bc5b071a382afce08507a991b6735d94f50dc9349d",
+      "size_bytes": 17301
     },
     {
       "fold": 1,
+      "key": "fold1-exposure-vif",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_vif",
       "plot": "exposure-vif",
-      "relative_path": "fold1/exposure-vif.html",
-      "sha256": "ba1ab381c870b807aa98b8de29dd897197a5da99e0609544674525f4b2960b84",
-      "size_bytes": 26562
+      "relative_path": "index.html#fold1-exposure-vif",
+      "sha256": "423aed7a57845eacf58437904d058703485f581d161b60cbf92ddd85cd9b9fa0",
+      "size_bytes": 25568
     },
     {
       "fold": 1,
+      "key": "fold1-exposure-condition-number",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_exposure_condition_number",
       "plot": "exposure-condition-number",
-      "relative_path": "fold1/exposure-condition-number.html",
-      "sha256": "0ca3cdf1614edc4de4e6ab47258d4d0a8fa6f7beb41d0add71ae094a88db3616",
-      "size_bytes": 20235
+      "relative_path": "index.html#fold1-exposure-condition-number",
+      "sha256": "69d51609d711afa5f694dbc4c0c74e92128d9e620c5fad1dedfe35d902cf6fb2",
+      "size_bytes": 19241
     },
     {
       "fold": 1,
+      "key": "fold1-cs-adjusted-r2",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_cs_regression_scores",
       "plot": "cs-adjusted-r2",
-      "relative_path": "fold1/cs-adjusted-r2.html",
-      "sha256": "07021bc0f4edbda7b74c3e85248b87f3ff1cf34f72c30cb083e5e48409af7ac6",
-      "size_bytes": 20506
+      "relative_path": "index.html#fold1-cs-adjusted-r2",
+      "sha256": "c4cfcf12690a7a89ab9ae31f155673cc69ab2622f81dfe66813dfb084cabf7ff",
+      "size_bytes": 19512
     },
     {
       "fold": 1,
+      "key": "fold1-cs-t-stat-exceedance",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_cs_regression_t_stat_exceedance_rate",
       "plot": "cs-t-stat-exceedance",
-      "relative_path": "fold1/cs-t-stat-exceedance.html",
-      "sha256": "02681c0b3f7b835393699c2376924274cfac65740c8e2e1d85bb7c095939f5bd",
-      "size_bytes": 8205
+      "relative_path": "index.html#fold1-cs-t-stat-exceedance",
+      "sha256": "fe6d5377c730f563eed4e4429851ddcdb88ffd3732c978a2d7452ef8c3f79eec",
+      "size_bytes": 7211
     },
     {
       "fold": 1,
+      "key": "fold1-factor-cumulative-returns",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_cumulative_returns",
       "plot": "factor-cumulative-returns",
-      "relative_path": "fold1/factor-cumulative-returns.html",
-      "sha256": "037ab01ca8cdd64cd45e79a6e2dcce352feda3544231930249fd75d9d1432647",
-      "size_bytes": 26386
+      "relative_path": "index.html#fold1-factor-cumulative-returns",
+      "sha256": "ff627519f18f0f1fe81ac3ccfdb6283e6bf0bac116addc3509c40d2c91300709",
+      "size_bytes": 25392
     },
     {
       "fold": 1,
+      "key": "fold1-factor-forecast-correlation",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_forecast_correlation",
       "plot": "factor-forecast-correlation",
-      "relative_path": "fold1/factor-forecast-correlation.html",
-      "sha256": "b77e8655b73fa12fc17ecdd54e3a8d09158ee4e9d9184fa58695965ecad50908",
-      "size_bytes": 8508
+      "relative_path": "index.html#fold1-factor-forecast-correlation",
+      "sha256": "a917ddc9355893a9ad26e75b559de9fcc129776aed2e2522860ff4aa7b299cac",
+      "size_bytes": 7514
     },
     {
       "fold": 1,
+      "key": "fold1-factor-forecast-volatilities",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_factor_forecast_volatilities",
       "plot": "factor-forecast-volatilities",
-      "relative_path": "fold1/factor-forecast-volatilities.html",
-      "sha256": "2a8c26efc8ab3b5cc961a446354a439fc8d1fc53c48b86258d771c9cd4a16802",
-      "size_bytes": 7861
+      "relative_path": "index.html#fold1-factor-forecast-volatilities",
+      "sha256": "93efe26b32c201b2390b2d4014b95ac9f4d989bc85219622dd4aa1c9826182b5",
+      "size_bytes": 6867
     },
     {
       "fold": 1,
+      "key": "fold1-idio-calibration",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_calibration",
       "plot": "idio-calibration",
-      "relative_path": "fold1/idio-calibration.html",
-      "sha256": "e83f153a5a01ba67635e7ba0e8f1a4cc688025489d41683251d3d76c4658dcc4",
-      "size_bytes": 14588
+      "relative_path": "index.html#fold1-idio-calibration",
+      "sha256": "4870f141498a0d426dfe1cc60b44c4e6bbea0b1d6ba6520041dbc9c4d9e4368b",
+      "size_bytes": 13594
     },
     {
       "fold": 1,
+      "key": "fold1-idio-vol-ic",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_vol_ic",
       "plot": "idio-vol-ic",
-      "relative_path": "fold1/idio-vol-ic.html",
-      "sha256": "0495790b1eabc6bca2f5d38a7af8b44083adc2d6b03359711f6843690405a8f3",
-      "size_bytes": 20069
+      "relative_path": "index.html#fold1-idio-vol-ic",
+      "sha256": "0f5536b9b785f19d68d7a8bbcff867d8037c7feaeef91f0e7b8017188f70a83a",
+      "size_bytes": 19075
     },
     {
       "fold": 1,
+      "key": "fold1-idio-tail-rate",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_tail_rate",
       "plot": "idio-tail-rate",
-      "relative_path": "fold1/idio-tail-rate.html",
-      "sha256": "7ea5bbc0cba96fe2354c6a51b89a8659b2e8ec39b49186f98bb8c42b08fe9f5a",
-      "size_bytes": 14394
+      "relative_path": "index.html#fold1-idio-tail-rate",
+      "sha256": "c20ed3b38f6df2a7fe8a093d1f5daaba951eea7439ceb530c1056ccbdcbf383e",
+      "size_bytes": 13400
     },
     {
       "fold": 1,
+      "key": "fold1-idio-kurtosis",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_kurtosis",
       "plot": "idio-kurtosis",
-      "relative_path": "fold1/idio-kurtosis.html",
-      "sha256": "793122cd9c0ad161fc4e5b599bc4575acf05ca60261f7a804644f8afec09c3d5",
-      "size_bytes": 14451
+      "relative_path": "index.html#fold1-idio-kurtosis",
+      "sha256": "2c89c3b87a9ed36c892887100f3f420b12ec324f928d0739f282272003cb57d1",
+      "size_bytes": 13457
     },
     {
       "fold": 1,
+      "key": "fold1-idio-skewness",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_skewness",
       "plot": "idio-skewness",
-      "relative_path": "fold1/idio-skewness.html",
-      "sha256": "d49e7edf2e1217e16a8006381e9361f3142289bce8bbf3bb8255cd2663ca5c23",
-      "size_bytes": 14485
+      "relative_path": "index.html#fold1-idio-skewness",
+      "sha256": "f6e89be1dbf3af4937c6c8f08072415570d4e8d7854eb59b66b0f86b3de13d05",
+      "size_bytes": 13491
     },
     {
       "fold": 1,
+      "key": "fold1-idio-vol-residual-dependence",
       "kind": "skfolio-factor-model-plot",
       "method": "plot_idio_vol_residual_dependence",
       "plot": "idio-vol-residual-dependence",
-      "relative_path": "fold1/idio-vol-residual-dependence.html",
-      "sha256": "f36c6a639a2355fc6b310d298215c282273e5629fde67ff2f51d471d77f9de6b",
-      "size_bytes": 20349
+      "relative_path": "index.html#fold1-idio-vol-residual-dependence",
+      "sha256": "063b7a1e57740863c7f050f7de572b4022148a70af7a7a6a5d36adaa5ea8af40",
+      "size_bytes": 19355
     },
     {
       "fold": null,
+      "key": "oos-normalized-frobenius-error",
       "kind": "oos-direct-metric-plot",
       "method": "plotly.graph_objects.Bar",
       "plot": "oos-normalized-frobenius-error",
-      "relative_path": "oos-normalized-frobenius-error.html",
-      "sha256": "9b7cb8f065b3ede2402eba357d955e3dce2ca9b81f8c1cf1397feb6dc137acea",
-      "size_bytes": 7751
+      "relative_path": "index.html#oos-normalized-frobenius-error",
+      "sha256": "fec3be0bf753e24fe30783db35fcac2dbfe5067c962b5d5ccab86b68a84a3443",
+      "size_bytes": 6757
     },
     {
       "fold": null,
+      "key": "oos-equal-weight-volatility-error",
       "kind": "oos-direct-metric-plot",
       "method": "plotly.graph_objects.Bar",
       "plot": "oos-equal-weight-volatility-error",
-      "relative_path": "oos-equal-weight-volatility-error.html",
-      "sha256": "a7dd2864938a733c53c01c63b37cddf7c97a8790632cd83f173397cfbe35bfe8",
-      "size_bytes": 7779
+      "relative_path": "index.html#oos-equal-weight-volatility-error",
+      "sha256": "c96d6fe5beedab0a223cdc176c41f64efd604f97cc1580c63ca9eac585fd9d11",
+      "size_bytes": 6785
     },
     {
       "fold": null,
+      "key": "oos-diagonal-variance-mae",
       "kind": "oos-direct-metric-plot",
       "method": "plotly.graph_objects.Bar",
       "plot": "oos-diagonal-variance-mae",
-      "relative_path": "oos-diagonal-variance-mae.html",
-      "sha256": "1636cef9bc21e0af362b491411b4de8736b69586f7b04e7a7b48094d4e4124cd",
-      "size_bytes": 7748
+      "relative_path": "index.html#oos-diagonal-variance-mae",
+      "sha256": "4c1e89b96aebd738985359e9eb67f7002c1759e49a5f06ae1afeefb7c24c05ac",
+      "size_bytes": 6754
     }
   ],
   "claim_boundary": "Diagnostic visualization only. Plot appearance does not establish alpha, expected-return, strategy-performance, or covariance-forecast improvement.",
   "model_contract_sha256": "00ef50c334d39d31f638b4632eb11139c32511a2c0f109f24771c271aae4a0ce",
+  "physical_files": [
+    "index.html",
+    "plot-manifest.json"
+  ],
   "plot_count": 33,
-  "schema_version": "investor2.skfolio-characteristics-plots.v1",
+  "schema_version": "investor2.skfolio-characteristics-plots.v2",
   "skfolio_version": "1.0.0",
   "summary_sha256": "94bfe7c5c79f0d6625eeec206d0dd29039702cd44c00c621c089657b88ba8d20"
 }
