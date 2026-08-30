@@ -1,33 +1,59 @@
-<!doctype html><html><head><meta charset="utf-8"><title>skfolio J-Quants diagnostics</title></head><body><h1>skfolio J-Quants diagnostics</h1><p>Derived diagnostic plots. The OOS verdict remains authoritative in summary.json.</p><ul><li><a href="fold0/exposure-correlation.html">exposure-correlation</a>
-<li><a href="fold0/exposure-stability.html">exposure-stability</a>
-<li><a href="fold0/exposure-vif.html">exposure-vif</a>
-<li><a href="fold0/exposure-condition-number.html">exposure-condition-number</a>
-<li><a href="fold0/cs-adjusted-r2.html">cs-adjusted-r2</a>
-<li><a href="fold0/cs-t-stat-exceedance.html">cs-t-stat-exceedance</a>
-<li><a href="fold0/factor-cumulative-returns.html">factor-cumulative-returns</a>
-<li><a href="fold0/factor-forecast-correlation.html">factor-forecast-correlation</a>
-<li><a href="fold0/factor-forecast-volatilities.html">factor-forecast-volatilities</a>
-<li><a href="fold0/idio-calibration.html">idio-calibration</a>
-<li><a href="fold0/idio-vol-ic.html">idio-vol-ic</a>
-<li><a href="fold0/idio-tail-rate.html">idio-tail-rate</a>
-<li><a href="fold0/idio-kurtosis.html">idio-kurtosis</a>
-<li><a href="fold0/idio-skewness.html">idio-skewness</a>
-<li><a href="fold0/idio-vol-residual-dependence.html">idio-vol-residual-dependence</a>
-<li><a href="fold1/exposure-correlation.html">exposure-correlation</a>
-<li><a href="fold1/exposure-stability.html">exposure-stability</a>
-<li><a href="fold1/exposure-vif.html">exposure-vif</a>
-<li><a href="fold1/exposure-condition-number.html">exposure-condition-number</a>
-<li><a href="fold1/cs-adjusted-r2.html">cs-adjusted-r2</a>
-<li><a href="fold1/cs-t-stat-exceedance.html">cs-t-stat-exceedance</a>
-<li><a href="fold1/factor-cumulative-returns.html">factor-cumulative-returns</a>
-<li><a href="fold1/factor-forecast-correlation.html">factor-forecast-correlation</a>
-<li><a href="fold1/factor-forecast-volatilities.html">factor-forecast-volatilities</a>
-<li><a href="fold1/idio-calibration.html">idio-calibration</a>
-<li><a href="fold1/idio-vol-ic.html">idio-vol-ic</a>
-<li><a href="fold1/idio-tail-rate.html">idio-tail-rate</a>
-<li><a href="fold1/idio-kurtosis.html">idio-kurtosis</a>
-<li><a href="fold1/idio-skewness.html">idio-skewness</a>
-<li><a href="fold1/idio-vol-residual-dependence.html">idio-vol-residual-dependence</a>
-<li><a href="oos-normalized-frobenius-error.html">oos-normalized-frobenius-error</a>
-<li><a href="oos-equal-weight-volatility-error.html">oos-equal-weight-volatility-error</a>
-<li><a href="oos-diagonal-variance-mae.html">oos-diagonal-variance-mae</a></ul></body></html>
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>skfolio J-Quants diagnostics overview</title>
+<style>    :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f6f7f9; color: #16181d; }
+    a { color: inherit; }
+    header { padding: 34px clamp(18px, 5vw, 64px) 24px; background: #fff; border-bottom: 1px solid #dfe3e8; }
+    h1 { margin: 0 0 8px; font-size: clamp(26px, 4vw, 44px); letter-spacing: -0.035em; }
+    h2 { margin: 0 0 14px; font-size: 24px; }
+    h3 { margin: 24px 0 10px; }
+    p { line-height: 1.6; }
+    .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+    .chip { padding: 7px 10px; border: 1px solid #cfd5dc; border-radius: 999px; background: #f9fafb; font-size: 13px; }
+    .verdict { margin-top: 18px; padding: 14px 16px; background: #fff7db; border-left: 4px solid #b47b00; max-width: 920px; }
+    nav { position: sticky; top: 0; z-index: 10; display: flex; gap: 8px; overflow-x: auto; padding: 10px clamp(18px, 5vw, 64px); background: rgba(255,255,255,.96); border-bottom: 1px solid #dfe3e8; backdrop-filter: blur(10px); }
+    nav a { white-space: nowrap; text-decoration: none; padding: 7px 10px; border-radius: 8px; background: #eef1f4; font-size: 13px; }
+    main { width: min(1500px, calc(100% - 32px)); margin: 0 auto; padding: 28px 0 60px; }
+    section { margin: 0 0 36px; }
+    .preview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 440px), 1fr)); gap: 14px; }
+    .preview-card { min-width: 0; overflow: hidden; background: #fff; border: 1px solid #dfe3e8; border-radius: 12px; }
+    .preview-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 11px 13px; border-bottom: 1px solid #e7eaee; font-size: 13px; }
+    .preview-head a { white-space: nowrap; }
+    iframe { display: block; width: 100%; height: 310px; border: 0; background: #fff; }
+    .matrix-wrap { overflow-x: auto; background: #fff; border: 1px solid #dfe3e8; border-radius: 12px; }
+    table { width: 100%; min-width: 780px; border-collapse: collapse; }
+    th, td { padding: 12px 14px; text-align: left; border-bottom: 1px solid #e7eaee; vertical-align: middle; }
+    th { position: sticky; top: 51px; z-index: 4; background: #f3f5f7; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    td.group { width: 190px; background: #fafbfc; font-weight: 700; }
+    td small { display: block; margin-top: 3px; color: #6b7280; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11px; }
+    .plot-link { display: inline-block; padding: 7px 11px; border: 1px solid #bfc7d1; border-radius: 8px; text-decoration: none; background: #fff; font-weight: 650; }
+    .plot-link:hover { background: #eef2f6; }
+    .anchor { color: #606b78; font-size: 12px; }
+    .missing { color: #9aa1aa; }
+    .category-anchor { scroll-margin-top: 70px; }
+    .diagnostic-preview { scroll-margin-top: 70px; }
+    footer { padding: 22px clamp(18px, 5vw, 64px); color: #66707c; border-top: 1px solid #dfe3e8; background: #fff; font-size: 13px; }
+    @media (max-width: 700px) { main { width: min(100% - 20px, 1500px); } iframe { height: 270px; } th { top: 49px; } }
+    </style>
+</head>
+<body>
+<header>
+<h1>skfolio J-Quants diagnostics</h1>
+<p>33 plotsをクリック探索ではなく、OOS結果 → Fold比較 → 重要診断の順に一画面で俯瞰するためのindex。</p>
+<div class="meta"><span class="chip">33 plots</span><span class="chip">2 frozen folds</span><span class="chip">skfolio 1.0.0</span></div>
+<div class="verdict"><strong>判定境界:</strong> 可視化は診断用。既存OOS verdict <code>empirical_baseline_better_or_equal_on_both_primary_risk_metrics</code> を上書きしない。</div>
+</header>
+<nav><a href="#oos">OOS比較</a><a href="#matrix">15×2 Fold比較</a><a href="#key-previews">重要plot</a><a href="#exposure">Exposure</a><a href="#cross-sectional">Cross-sectional regression</a><a href="#factor">Factor dynamics</a><a href="#idiosyncratic">Idiosyncratic diagnostics</a></nav>
+<main>
+<section id="oos"><h2>OOS direct comparison</h2><p>まず性能差を確認。下に進むほどモデル内部の診断。</p><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>normalized frobenius error</strong><a href="oos-normalized-frobenius-error.html">全画面で開く ↗</a></div><iframe loading="lazy" title="normalized frobenius error" src="oos-normalized-frobenius-error.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>equal weight volatility error</strong><a href="oos-equal-weight-volatility-error.html">全画面で開く ↗</a></div><iframe loading="lazy" title="equal weight volatility error" src="oos-equal-weight-volatility-error.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>diagonal variance mae</strong><a href="oos-diagonal-variance-mae.html">全画面で開く ↗</a></div><iframe loading="lazy" title="diagonal variance mae" src="oos-diagonal-variance-mae.html"></iframe></article></div></section>
+<section id="matrix"><h2>15 diagnostics × 2 folds</h2><p>同じ診断をFold 0 / Fold 1で横並びに開ける全体マトリクス。</p><span id="exposure" class="category-anchor"></span><span id="cross-sectional" class="category-anchor"></span><span id="factor" class="category-anchor"></span><span id="idiosyncratic" class="category-anchor"></span><div class="matrix-wrap"><table><thead><tr><th>Category</th><th>Diagnostic</th><th>Fold 0</th><th>Fold 1</th><th>Group</th></tr></thead><tbody><tr><td class="group" rowspan="4">Exposure / 多重共線性</td><td><strong>exposure-correlation</strong><small>plot_exposure_correlation</small></td><td><a class="plot-link" href="fold0/exposure-correlation.html">Fold 0</a></td><td><a class="plot-link" href="fold1/exposure-correlation.html">Fold 1</a></td><td><a class="anchor" href="#exposure">exposure</a></td></tr><tr><td><strong>exposure-stability</strong><small>plot_exposure_stability</small></td><td><a class="plot-link" href="fold0/exposure-stability.html">Fold 0</a></td><td><a class="plot-link" href="fold1/exposure-stability.html">Fold 1</a></td><td><a class="anchor" href="#exposure">exposure</a></td></tr><tr><td><strong>exposure-vif</strong><small>plot_exposure_vif</small></td><td><a class="plot-link" href="fold0/exposure-vif.html">Fold 0</a></td><td><a class="plot-link" href="fold1/exposure-vif.html">Fold 1</a></td><td><a class="anchor" href="#exposure">exposure</a></td></tr><tr><td><strong>exposure-condition-number</strong><small>plot_exposure_condition_number</small></td><td><a class="plot-link" href="fold0/exposure-condition-number.html">Fold 0</a></td><td><a class="plot-link" href="fold1/exposure-condition-number.html">Fold 1</a></td><td><a class="anchor" href="#exposure">exposure</a></td></tr><tr><td class="group" rowspan="2">Cross-sectional regression / 横断回帰</td><td><strong>cs-adjusted-r2</strong><small>plot_cs_regression_scores</small></td><td><a class="plot-link" href="fold0/cs-adjusted-r2.html">Fold 0</a></td><td><a class="plot-link" href="fold1/cs-adjusted-r2.html">Fold 1</a></td><td><a class="anchor" href="#cross-sectional">cross-sectional</a></td></tr><tr><td><strong>cs-t-stat-exceedance</strong><small>plot_cs_regression_t_stat_exceedance_rate</small></td><td><a class="plot-link" href="fold0/cs-t-stat-exceedance.html">Fold 0</a></td><td><a class="plot-link" href="fold1/cs-t-stat-exceedance.html">Fold 1</a></td><td><a class="anchor" href="#cross-sectional">cross-sectional</a></td></tr><tr><td class="group" rowspan="3">Factor dynamics / 因子挙動</td><td><strong>factor-cumulative-returns</strong><small>plot_factor_cumulative_returns</small></td><td><a class="plot-link" href="fold0/factor-cumulative-returns.html">Fold 0</a></td><td><a class="plot-link" href="fold1/factor-cumulative-returns.html">Fold 1</a></td><td><a class="anchor" href="#factor">factor</a></td></tr><tr><td><strong>factor-forecast-correlation</strong><small>plot_factor_forecast_correlation</small></td><td><a class="plot-link" href="fold0/factor-forecast-correlation.html">Fold 0</a></td><td><a class="plot-link" href="fold1/factor-forecast-correlation.html">Fold 1</a></td><td><a class="anchor" href="#factor">factor</a></td></tr><tr><td><strong>factor-forecast-volatilities</strong><small>plot_factor_forecast_volatilities</small></td><td><a class="plot-link" href="fold0/factor-forecast-volatilities.html">Fold 0</a></td><td><a class="plot-link" href="fold1/factor-forecast-volatilities.html">Fold 1</a></td><td><a class="anchor" href="#factor">factor</a></td></tr><tr><td class="group" rowspan="6">Idiosyncratic diagnostics / 残差診断</td><td><strong>idio-calibration</strong><small>plot_idio_calibration</small></td><td><a class="plot-link" href="fold0/idio-calibration.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-calibration.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr><tr><td><strong>idio-vol-ic</strong><small>plot_idio_vol_ic</small></td><td><a class="plot-link" href="fold0/idio-vol-ic.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-vol-ic.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr><tr><td><strong>idio-tail-rate</strong><small>plot_idio_tail_rate</small></td><td><a class="plot-link" href="fold0/idio-tail-rate.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-tail-rate.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr><tr><td><strong>idio-kurtosis</strong><small>plot_idio_kurtosis</small></td><td><a class="plot-link" href="fold0/idio-kurtosis.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-kurtosis.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr><tr><td><strong>idio-skewness</strong><small>plot_idio_skewness</small></td><td><a class="plot-link" href="fold0/idio-skewness.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-skewness.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr><tr><td><strong>idio-vol-residual-dependence</strong><small>plot_idio_vol_residual_dependence</small></td><td><a class="plot-link" href="fold0/idio-vol-residual-dependence.html">Fold 0</a></td><td><a class="plot-link" href="fold1/idio-vol-residual-dependence.html">Fold 1</a></td><td><a class="anchor" href="#idiosyncratic">idiosyncratic</a></td></tr></tbody></table></div></section>
+<section id="key-previews"><h2>重要診断のFold横並びプレビュー</h2><p>最初に見る6診断だけを埋め込み。その他は上の比較表から開く。</p><section class="diagnostic-preview" id="preview-exposure-correlation"><h3>exposure-correlation</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>exposure-correlation · Fold 0</strong><a href="fold0/exposure-correlation.html">全画面で開く ↗</a></div><iframe loading="lazy" title="exposure-correlation · Fold 0" src="fold0/exposure-correlation.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>exposure-correlation · Fold 1</strong><a href="fold1/exposure-correlation.html">全画面で開く ↗</a></div><iframe loading="lazy" title="exposure-correlation · Fold 1" src="fold1/exposure-correlation.html"></iframe></article></div></section><section class="diagnostic-preview" id="preview-cs-adjusted-r2"><h3>cs-adjusted-r2</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>cs-adjusted-r2 · Fold 0</strong><a href="fold0/cs-adjusted-r2.html">全画面で開く ↗</a></div><iframe loading="lazy" title="cs-adjusted-r2 · Fold 0" src="fold0/cs-adjusted-r2.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>cs-adjusted-r2 · Fold 1</strong><a href="fold1/cs-adjusted-r2.html">全画面で開く ↗</a></div><iframe loading="lazy" title="cs-adjusted-r2 · Fold 1" src="fold1/cs-adjusted-r2.html"></iframe></article></div></section><section class="diagnostic-preview" id="preview-factor-cumulative-returns"><h3>factor-cumulative-returns</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>factor-cumulative-returns · Fold 0</strong><a href="fold0/factor-cumulative-returns.html">全画面で開く ↗</a></div><iframe loading="lazy" title="factor-cumulative-returns · Fold 0" src="fold0/factor-cumulative-returns.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>factor-cumulative-returns · Fold 1</strong><a href="fold1/factor-cumulative-returns.html">全画面で開く ↗</a></div><iframe loading="lazy" title="factor-cumulative-returns · Fold 1" src="fold1/factor-cumulative-returns.html"></iframe></article></div></section><section class="diagnostic-preview" id="preview-idio-calibration"><h3>idio-calibration</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>idio-calibration · Fold 0</strong><a href="fold0/idio-calibration.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-calibration · Fold 0" src="fold0/idio-calibration.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>idio-calibration · Fold 1</strong><a href="fold1/idio-calibration.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-calibration · Fold 1" src="fold1/idio-calibration.html"></iframe></article></div></section><section class="diagnostic-preview" id="preview-idio-vol-ic"><h3>idio-vol-ic</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>idio-vol-ic · Fold 0</strong><a href="fold0/idio-vol-ic.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-vol-ic · Fold 0" src="fold0/idio-vol-ic.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>idio-vol-ic · Fold 1</strong><a href="fold1/idio-vol-ic.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-vol-ic · Fold 1" src="fold1/idio-vol-ic.html"></iframe></article></div></section><section class="diagnostic-preview" id="preview-idio-vol-residual-dependence"><h3>idio-vol-residual-dependence</h3><div class="preview-grid"><article class="preview-card"><div class="preview-head"><strong>idio-vol-residual-dependence · Fold 0</strong><a href="fold0/idio-vol-residual-dependence.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-vol-residual-dependence · Fold 0" src="fold0/idio-vol-residual-dependence.html"></iframe></article><article class="preview-card"><div class="preview-head"><strong>idio-vol-residual-dependence · Fold 1</strong><a href="fold1/idio-vol-residual-dependence.html">全画面で開く ↗</a></div><iframe loading="lazy" title="idio-vol-residual-dependence · Fold 1" src="fold1/idio-vol-residual-dependence.html"></iframe></article></div></section></section>
+</main>
+<footer>Derived diagnostic visualization only. Plot appearance does not establish alpha, expected-return, strategy-performance, or covariance-forecast improvement.</footer>
+</body>
+</html>

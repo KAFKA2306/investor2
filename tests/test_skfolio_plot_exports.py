@@ -8,6 +8,7 @@ import pandas as pd
 
 from src.research.skfolio_characteristics import asset_panel_from_prices, build_price_only_characteristics_model
 from src.research.skfolio_plot_exports import (
+    OVERVIEW_PLOTS,
     PLOT_CALLS,
     export_factor_model_plots,
     write_plot_index,
@@ -73,3 +74,50 @@ def test_export_factor_model_plots_writes_interactive_html_and_manifest(tmp_path
     assert manifest["skfolio_version"] == "1.0.0"
     assert index_path.exists()
     assert "factor-cumulative-returns" in index_path.read_text(encoding="utf-8")
+
+
+def test_plot_index_is_overview_first_with_fold_matrix_and_lazy_previews(tmp_path: Path) -> None:
+    artifacts: list[dict[str, object]] = []
+    for fold in (0, 1):
+        for slug, method, _ in PLOT_CALLS:
+            artifacts.append(
+                {
+                    "fold": fold,
+                    "kind": "skfolio-factor-model-plot",
+                    "plot": slug,
+                    "method": method,
+                    "relative_path": f"fold{fold}/{slug}.html",
+                    "sha256": "a" * 64,
+                    "size_bytes": 1,
+                }
+            )
+    for slug in (
+        "oos-normalized-frobenius-error",
+        "oos-equal-weight-volatility-error",
+        "oos-diagonal-variance-mae",
+    ):
+        artifacts.append(
+            {
+                "fold": None,
+                "kind": "oos-direct-metric-plot",
+                "plot": slug,
+                "method": "plotly.graph_objects.Bar",
+                "relative_path": f"{slug}.html",
+                "sha256": "b" * 64,
+                "size_bytes": 1,
+            }
+        )
+
+    index_path = write_plot_index(tmp_path, artifacts)
+    index_html = index_path.read_text(encoding="utf-8")
+
+    assert "33 plots" in index_html
+    assert "15 diagnostics × 2 folds" in index_html
+    assert "OOS direct comparison" in index_html
+    assert "Fold 0" in index_html and "Fold 1" in index_html
+    assert "Exposure / 多重共線性" in index_html
+    assert "Cross-sectional regression / 横断回帰" in index_html
+    assert 'loading="lazy"' in index_html
+    assert index_html.count("<iframe") == 3 + len(OVERVIEW_PLOTS) * 2
+    for slug in OVERVIEW_PLOTS:
+        assert f"preview-{slug}" in index_html
