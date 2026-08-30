@@ -51,12 +51,16 @@ jobs:
           }
           if recovered != expected:
               raise SystemExit(f"unexpected recovered files: {sorted(recovered)}")
+
+          plot_workflow = Path(".github/workflows/skfolio-jquants-plots.yml")
+          workflow_text = plot_workflow.read_text(encoding="utf-8")
+          workflow_text = workflow_text.replace("research/skfolio-jquants-plots", "main")
+          if "research/skfolio-jquants-plots" in workflow_text:
+              raise SystemExit("stale plot branch reference remains")
+          if "main" not in workflow_text:
+              raise SystemExit("plot workflow does not target main")
+          plot_workflow.write_text(workflow_text, encoding="utf-8")
           PY
-          grep -q '      - main' .github/workflows/skfolio-jquants-plots.yml
-          if grep -q 'research/skfolio-jquants-plots' .github/workflows/skfolio-jquants-plots.yml; then
-            echo "stale plot branch reference remains" >&2
-            exit 1
-          fi
       - name: Validate compact exporter
         shell: bash
         run: |
