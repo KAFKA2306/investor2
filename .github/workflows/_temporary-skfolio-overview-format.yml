@@ -1,0 +1,45 @@
+name: Temporary skfolio overview formatter
+
+on:
+  push:
+    branches:
+      - research/skfolio-plot-overview
+    paths:
+      - "src/research/skfolio_plot_exports.py"
+      - "tests/test_skfolio_plot_exports.py"
+      - ".github/workflows/_temporary-skfolio-overview-format.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: temporary-skfolio-overview-format
+  cancel-in-progress: true
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: research/skfolio-plot-overview
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - run: uv sync --locked --only-group dev
+      - run: uv run ruff format src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
+      - name: Persist formatting
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
+          if ! git diff --cached --quiet; then
+            git commit -m "style: format skfolio overview"
+            git push origin HEAD:research/skfolio-plot-overview
+          fi
