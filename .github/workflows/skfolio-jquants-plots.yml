@@ -1,0 +1,126 @@
+name: skfolio J-Quants diagnostic plots
+
+on:
+  push:
+    branches:
+      - research/skfolio-jquants-plots
+    paths:
+      - "src/research/skfolio_plot_exports.py"
+      - "scripts/skfolio_jquants_plots.py"
+      - "scripts/skfolio_jquants_oos.py"
+      - "src/research/skfolio_characteristics.py"
+      - "tests/test_skfolio_plot_exports.py"
+      - "docs/research/results/skfolio_characteristics_jquants_free/summary.json"
+      - ".github/workflows/skfolio-jquants-plots.yml"
+  workflow_dispatch:
+
+concurrency:
+  group: skfolio-jquants-plots-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  contract:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - run: uv sync --locked
+      - name: Check plot exporter
+        shell: bash
+        run: |
+          set -euo pipefail
+          uv run ruff format --check src/research/skfolio_plot_exports.py scripts/skfolio_jquants_plots.py tests/test_skfolio_plot_exports.py
+          uv run ruff check src/research/skfolio_plot_exports.py scripts/skfolio_jquants_plots.py tests/test_skfolio_plot_exports.py
+          uv run pytest -q tests/test_skfolio_plot_exports.py
+
+  real-jquants-plots:
+    if: github.actor != 'github-actions[bot]'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install locked project and snapshot dependencies
+        run: |
+          uv sync --locked
+          uv pip install --python .venv/bin/python jquants-api-client cryptography pyarrow
+      - name: Materialize complete visible Free window from owner-only private cache
+        run: |
+          rm -rf /tmp/jquants-free /tmp/skfolio-jquants-plots /tmp/huggingface-personal-cache
+          .venv/bin/python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15
+      - name: Resolve frozen PIT master date
+        run: |
+          .venv/bin/python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          from pathlib import Path
+
+          summary = json.loads(Path('docs/research/results/skfolio_characteristics_jquants_free/summary.json').read_text())
+          dates = summary['source']['universe_master_dates']
+          if len(dates) != 1:
+              raise SystemExit(f'expected one frozen universe master date, got {dates}')
+          print(f"UNIVERSE_MASTER_DATE={dates[0]}")
+          PY
+      - name: Replace current master with frozen PIT master
+        run: |
+          sleep 15
+          .venv/bin/python scripts/jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output /tmp/jquants-free/universe.parquet \
+            --request-interval 15
+      - name: Export official skfolio plots from verified frozen folds
+        run: |
+          mkdir -p /tmp/skfolio-jquants-plots
+          .venv/bin/python scripts/skfolio_jquants_plots.py \
+            --market-snapshot-dir /tmp/jquants-free \
+            --summary docs/research/results/skfolio_characteristics_jquants_free/summary.json \
+            --output-dir /tmp/skfolio-jquants-plots \
+            --market-regions jp
+      - name: Persist derived plots only
+        shell: bash
+        run: |
+          set -euo pipefail
+          target=docs/research/results/skfolio_characteristics_jquants_free/plots
+          rm -rf "$target"
+          mkdir -p "$target"
+          cp -R /tmp/skfolio-jquants-plots/. "$target/"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist skfolio diagnostic plots [evidence]"
+            git push origin HEAD:research/skfolio-jquants-plots
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-free /tmp/skfolio-jquants-plots /tmp/huggingface-personal-cache
