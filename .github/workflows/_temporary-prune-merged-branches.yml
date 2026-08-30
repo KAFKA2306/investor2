@@ -18,7 +18,7 @@ jobs:
       - uses: actions/checkout@v7
         with:
           fetch-depth: 0
-      - name: List fully merged inactive branches
+      - name: Delete fully merged inactive branches
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
@@ -35,6 +35,14 @@ jobs:
               candidates+=("$branch")
             fi
           done
-          printf 'DELETE_CANDIDATE %s\n' "${candidates[@]}"
-          echo "candidate_count=${#candidates[@]}"
-          echo "branch_count_before=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/HEAD$' | wc -l)"
+          before=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/HEAD$' | wc -l)
+          printf 'DELETE %s\n' "${candidates[@]}"
+          if ((${#candidates[@]})); then
+            printf '%s\0' "${candidates[@]}" | xargs -0 -r -n 20 git push origin --delete
+          fi
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          after=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/HEAD$' | wc -l)
+          echo "branch_count_before=$before"
+          echo "deleted_count=${#candidates[@]}"
+          echo "branch_count_after=$after"
+          test "$after" -eq "$((before - ${#candidates[@]}))"
