@@ -1,4 +1,4 @@
-name: Temporary skfolio artifact compactor retry
+name: Temporary skfolio exporter compactor
 
 on:
   push:
@@ -23,7 +23,7 @@ jobs:
       - uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "0.11.32"
-      - name: Recover compact contract
+      - name: Recover compact exporter and tests
         shell: bash
         run: |
           set -euo pipefail
@@ -41,25 +41,20 @@ jobs:
           recovered = set()
           for payload, target_text in pattern.findall(text):
               target = Path(target_text.strip())
+              if target.as_posix() not in {
+                  "src/research/skfolio_plot_exports.py",
+                  "tests/test_skfolio_plot_exports.py",
+              }:
+                  continue
               target.parent.mkdir(parents=True, exist_ok=True)
               target.write_bytes(gzip.decompress(base64.b64decode(payload)))
               recovered.add(target.as_posix())
           expected = {
               "src/research/skfolio_plot_exports.py",
               "tests/test_skfolio_plot_exports.py",
-              ".github/workflows/skfolio-jquants-plots.yml",
           }
           if recovered != expected:
               raise SystemExit(f"unexpected recovered files: {sorted(recovered)}")
-
-          plot_workflow = Path(".github/workflows/skfolio-jquants-plots.yml")
-          workflow_text = plot_workflow.read_text(encoding="utf-8")
-          workflow_text = workflow_text.replace("research/skfolio-jquants-plots", "main")
-          if "research/skfolio-jquants-plots" in workflow_text:
-              raise SystemExit("stale plot branch reference remains")
-          if "main" not in workflow_text:
-              raise SystemExit("plot workflow does not target main")
-          plot_workflow.write_text(workflow_text, encoding="utf-8")
           PY
       - name: Validate compact exporter
         shell: bash
@@ -70,7 +65,7 @@ jobs:
           uv run ruff check --fix src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
           uv run ruff check src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
           uv run pytest -q tests/test_skfolio_plot_exports.py
-      - name: Persist validated contract and delete temporary workflow
+      - name: Persist validated exporter and delete temporary workflow
         shell: bash
         run: |
           set -euo pipefail
@@ -78,7 +73,7 @@ jobs:
           test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py .github/workflows/skfolio-jquants-plots.yml
+          git add src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
           git rm .github/workflows/_temporary-prune-merged-branches.yml
           git diff --cached --check
           git commit -m "chore: compact skfolio plot artifact contract"
