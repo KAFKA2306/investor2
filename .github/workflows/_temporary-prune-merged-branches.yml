@@ -58,11 +58,12 @@ jobs:
 
           exporter = Path("src/research/skfolio_plot_exports.py")
           content = exporter.read_text(encoding="utf-8")
-          old = "    for group_slug, group_label, slugs in PLOT_GROUPS:\n        pairs ="
-          new = "    for _group_slug, group_label, slugs in PLOT_GROUPS:\n        pairs ="
-          if content.count(old) != 1:
-              raise SystemExit("expected exactly one unused group_slug loop")
-          exporter.write_text(content.replace(old, new), encoding="utf-8")
+          token = "for group_slug, group_label, slugs in PLOT_GROUPS:"
+          position = content.rfind(token)
+          if position < 0:
+              raise SystemExit("unused group_slug loop not found")
+          content = content[:position] + content[position:].replace(token, "for _group_slug, group_label, slugs in PLOT_GROUPS:", 1)
+          exporter.write_text(content, encoding="utf-8")
           PY
           grep -q '      - main' .github/workflows/skfolio-jquants-plots.yml
           if grep -q 'research/skfolio-jquants-plots' .github/workflows/skfolio-jquants-plots.yml; then
