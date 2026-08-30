@@ -3,7 +3,7 @@ name: skfolio J-Quants diagnostic plots
 on:
   push:
     branches:
-      - research/skfolio-jquants-plots
+      - main
     paths:
       - "src/research/skfolio_plot_exports.py"
       - "scripts/skfolio_jquants_plots.py"
@@ -105,20 +105,39 @@ jobs:
             --summary docs/research/results/skfolio_characteristics_jquants_free/summary.json \
             --output-dir /tmp/skfolio-jquants-plots \
             --market-regions jp
+      - name: Verify two-file derived artifact contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -f /tmp/skfolio-jquants-plots/index.html
+          test -f /tmp/skfolio-jquants-plots/plot-manifest.json
+          test "$(find /tmp/skfolio-jquants-plots -type f | wc -l)" -eq 2
+          .venv/bin/python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('/tmp/skfolio-jquants-plots/plot-manifest.json').read_text())
+          assert manifest['plot_count'] == 33, manifest['plot_count']
+          assert manifest['physical_files'] == ['index.html', 'plot-manifest.json']
+          assert len(manifest['artifacts']) == 33
+          assert all(str(item['relative_path']).startswith('index.html#') for item in manifest['artifacts'])
+          PY
       - name: Persist derived plots only
         shell: bash
         run: |
           set -euo pipefail
+          git fetch origin main
+          test "$(git rev-parse HEAD)" = "$(git rev-parse origin/main)"
           target=docs/research/results/skfolio_characteristics_jquants_free/plots
           rm -rf "$target"
           mkdir -p "$target"
           cp -R /tmp/skfolio-jquants-plots/. "$target/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add "$target"
+          git add -A "$target"
           if ! git diff --cached --quiet; then
-            git commit -m "research: persist skfolio diagnostic plots [evidence]"
-            git push origin HEAD:research/skfolio-jquants-plots
+            git commit -m "research: persist compact skfolio diagnostic plots [evidence]"
+            git push origin HEAD:main
           fi
       - name: Delete plaintext working copies
         if: always()
