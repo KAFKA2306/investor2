@@ -1,132 +1,67 @@
 # Repository Guidelines
 
-## Purpose
+## Short-context start
 
-`investor2` is the canonical workspace for investment hypotheses, point-in-time evidence, out-of-sample validation, and decision records. Optimize for better decisions and reproducible evidence, not for issue count, experiment count, or code volume.
+Read this file once, then read only the files that own the current task. Do not preload all docs, Issues, PR history, datasets, or research notes.
 
-## Canonical commands
+For non-trivial work, keep one bounded workline with five fields:
 
-- `task setup` — install locked Bun/Python dependencies and the local `prek` hook.
-- `task setup:quality` — install only fast quality-gate dependencies.
-- `task check` — non-mutating repository reliability gate.
-- `task run:newalphasearch` — validate a frozen real-data hypothesis capture and deep-dive candidates.
-- `task dashboard:dev` — run the evidence dashboard locally.
+- **Decision** — what decision can improve.
+- **Uncertainty** — what is not known.
+- **Evidence test** — the smallest falsifiable next check.
+- **Acceptance criteria** — direct conditions that prove the outcome.
+- **Next action** — exactly one bounded action when the work must continue.
 
-Use Taskfile tasks when a canonical task exists. Do not add aliases that duplicate another entry point without reducing real operational complexity.
+If an existing Issue/PR already owns the same decision and uncertainty, continue it. Durable state belongs in the repository/Issue/PR, not chat memory.
 
-## Execution contract
+## Purpose and authority
 
-For non-trivial work, keep one bounded goal and make these explicit:
+`investor2` is the canonical workspace for investment hypotheses, point-in-time evidence, out-of-sample validation, and decision records. Optimize for decision quality and reproducible evidence, not activity volume.
 
-- **Decision** — what investment or research decision can improve.
-- **Uncertainty** — what is not yet known.
-- **Evidence test** — the smallest falsifiable observation or experiment that can reduce that uncertainty.
-- **Acceptance criteria** — direct conditions that prove the requested outcome.
-- **Capability delta** — what reusable data, code, validation, or process remains afterward.
+Prefer current primary data, canonical repository state, exact revisions, and direct measurements over summaries or historical prose. Never infer unavailable values, dates, provenance, or model results.
 
-Then execute the shortest valid loop:
+## Canonical entry points
 
 ```text
-inspect current state
-  -> choose the smallest falsifiable next step
-  -> implement or acquire evidence
-  -> run the closest verifier
-  -> inspect the result
-  -> repair or reject when falsified
-  -> persist reusable evidence
-  -> stop when the acceptance criteria are satisfied
+task setup
+task setup:quality
+task check
+task run:newalphasearch
+task dashboard:dev
 ```
 
-Do not create a second workline, ledger, pipeline, or state store when an existing canonical surface already represents the same outcome.
+Use an existing Taskfile task instead of adding an alias or wrapper. For persisted external data, read `docs/specs/external_snapshot_store.md` only when that boundary is in scope.
 
-## Evidence and data
+## Evidence and research
 
-- Prefer current primary data, repository state, exact code revisions, and direct measurements over summaries or memory.
-- Never infer unavailable rows, values, dates, provenance, or model results.
-- Reusable external data acquired through APIs, MCP, connectors, or web sources must be materialized and registered through the repository's canonical snapshot/ledger path when persistence is in scope.
-- Reuse an accepted sufficiently fresh snapshot instead of fetching the same dataset again.
-- Preserve source identity, retrieval time, query/scope, primary-source URLs, schema version, record count, and SHA-256 where the owning data contract requires them.
-- Fail closed when source identity, provenance, schema, or required artifacts are incomplete.
+- Reuse a sufficiently fresh accepted snapshot instead of fetching the same dataset again.
+- Preserve source identity, retrieval time, query/scope, primary-source URL, schema/version, record count, and hash when the owning contract requires them.
+- Fail closed when required provenance, schema, or artifacts are incomplete.
+- A good backtest is not acceptance evidence by itself. Respect the applicable point-in-time, OOS, baseline, ablation, cost, and reproducibility contract.
+- Report direct decision metrics that apply: after-cost return/P&L, Sharpe, drawdown, beta/correlation, turnover/exposure, benchmark comparison, and tested capital scale.
+- A failed hypothesis is a valid result. Do not relabel it as success.
 
-Canonical external-snapshot protocol: `docs/specs/external_snapshot_store.md`.
+## Change rules
 
-## Research validity
+- Prefer the smallest structure that satisfies the goal. Do not create a second ledger, pipeline, state store, config authority, or workline for the same outcome.
+- `DELETE > MERGE > REPLACE > ADD`; remove dead/obsolete paths only after current references prove them unused or invalid.
+- Do not hide failures with broad exceptions, permissive defaults, silent fallback, stubs, mocks, dummy responses, cached examples, synthetic substitutes, or placeholders in production/runtime or acceptance-critical evaluation.
+- A fallback is valid only when it is intentional behavior with an explicit trigger, observable state, bounded effect, and deterministic test. If an acceptance-critical run uses degraded/substitute behavior, it is not evidence of the requested outcome.
+- Use Zod/Pydantic only at genuine runtime/untrusted boundaries; do not duplicate trusted internal types for ceremony.
+- Comments should explain non-obvious rationale or external constraints, not narrate the code.
 
-A good backtest is not acceptance evidence by itself. Research claims must respect the relevant preregistration, point-in-time, OOS, baseline, ablation, cost, and reproducibility contracts.
+## Verification
 
-For investment-strategy validation, report the direct decision metrics that apply, such as after-cost return/P&L, Sharpe, maximum drawdown, beta/correlation, turnover/exposure, benchmark comparison, and the tested capital scale. A failed hypothesis is a valid result; do not relabel it as success.
+Run the narrowest relevant verifier first. `task check` is the canonical repository-level gate unless a narrower documented contract fully owns the change.
 
-## Code and quality
+A PR may merge when the exact reviewed revision satisfies the bounded repository-local acceptance criteria and deterministic checks with no unresolved correctness/data-integrity blocker.
 
-- Prefer the smallest structure that satisfies the goal.
-- Remove dead entry points, duplicate configuration, obsolete instructions, and superseded paths when they are directly verified as unused or invalid.
-- Do not hide failures with fallback values or broad exception handling. Handle recoverable external-boundary failures only when the recovery policy is explicit and testable.
-- Prefer an explicit partial implementation over a misleadingly complete path. If a required capability is not implemented or cannot be verified, leave it unavailable and report `UNIMPLEMENTED` or `BLOCKED` rather than inserting a permissive fallback.
-- Do not let stubs, mocks, dummy responses, synthetic substitutes, cached example outputs, or placeholder values enter production/runtime paths or acceptance-critical evaluation. Test doubles belong only in isolated tests unless the task explicitly defines synthetic data as the subject of evaluation.
-- A fallback is permitted only when it is an intentional product/research behavior with a documented trigger, observable state, bounded effect, and deterministic test. It must not silently change the data source, model, metric, universe, benchmark, or evidence standard.
-- If an acceptance-critical run touches a fallback, stub, placeholder, unverifiable substitute, or degraded mode, the run is not evidence of the requested outcome. Classify it as invalid, blocked, or partial and preserve only the verified sub-results.
-- TypeScript: Biome for formatting/import organization, Oxlint for lint, `tsc --noEmit` for types.
-- Python: Ruff for format/lint, Pyrefly for types.
-- Use Zod/Pydantic at genuine untrusted/runtime boundaries; do not duplicate trusted internal types solely to add validation ceremony.
-- Relevant focused tests should run before the full gate when they provide a cheaper signal.
-- `task check` is the canonical repository-level verifier for code changes unless a narrower documented contract is sufficient.
+Release is separate. A dataset/model/dashboard/public surface is released only after the merged revision and the actual external artifact/surface are directly verified. CI success does not prove deployment; merge does not prove release.
 
-## Agent resources
+Classify claims as verified, observed, inferred, or unverified. Never upgrade inference or activity logs into verified results.
 
-- Canonical skill source: `.agent/skills/`.
-- Reproduce skills with `agr sync`.
-- Do not maintain tool-specific copies of repository rules. `AGENTS.md` is the single source of repository-wide agent guidance; tool-specific instruction files may only point here.
+## Agent resources and continuation
 
-## Short-context agent contract
+Canonical skill source is `.agent/skills/`; reproduce with `agr sync`. `AGENTS.md` is the only repository-wide agent rule source.
 
-The repository must remain operable by agents that cannot load the full repository or long conversation history.
-
-For every non-trivial Issue, create or maintain `docs/specs/agent-tasks/<issue-number>.md` when the task cannot be understood from a short Issue body alone. That handoff is the bounded entry point.
-
-The handoff must contain:
-
-- one goal only;
-- the authoritative Issue / PR / branch / evidence path;
-- no more than five files to read first;
-- exactly one next action;
-- the verifier or CI to run;
-- explicit acceptance criteria;
-- prohibited shortcuts and claim boundaries;
-- the evidence/output path.
-
-An agent should read the Issue, then the handoff, then only the listed files. Do not require an agent to scan the repository, reconstruct history from chat, read binary artifacts, or infer the next step from many PR comments.
-
-If understanding the task requires more than five source files or more than one independent outcome, split the work into child Issues before implementation. Keep experiments such as adding a new factor, changing the baseline, and completing an existing evidence run in separate tasks.
-
-When handing off unfinished work, update the handoff with the last verified state, measured result, current PR/branch, exact blocker, and one next falsifiable action. Long chat history is never the durable handoff surface.
-
-## Continuation and scope
-
-Before changing the repository, inspect current `main`, relevant Issues/PRs, exact-head CI where applicable, and existing canonical artifacts. Continue an existing workline when it already owns the same decision and uncertainty.
-
-If a workline cannot finish, record the last verified revision, evidence already acquired, remaining uncertainty, blocker, and exact next falsifiable action in the existing Issue/PR/artifact surface. Do not rely on chat memory as the durable continuation mechanism.
-
-Branch deletion and orphan-branch cleanup are outside this agent's completion responsibility. Do not create cleanup-only worklines, do not treat branch deletion as an outcome blocker, and do not report repository work as incomplete solely because stale branches exist. Avoid creating unnecessary branches; code changes should still use a normal reviewable PR workline when appropriate.
-
-## Merge and release
-
-Repository integration and external release are separate states.
-
-A PR may merge when the exact reviewed revision satisfies the bounded repository-local acceptance criteria and relevant deterministic checks, with no unresolved correctness or data-integrity blocker.
-
-A product, dataset, model, dashboard, or public surface is released only after the merged `main` revision and the actual release surface/artifact are directly verified. CI success does not prove deployment; merge does not prove release.
-
-Report `merged` and `released` independently when release is in scope.
-
-## Completion
-
-A workline is complete only when the requested outcome itself has been inspected. Examples:
-
-- code change -> focused verifier plus repository gate/CI as applicable;
-- reusable dataset -> persisted artifact plus canonical registration/read-back;
-- research claim -> versioned inputs/code plus direct OOS/result metrics;
-- publication/deployment -> live surface read-back tied to the merged revision.
-
-Partial completion is acceptable when the verified boundary is explicit. Do not fill the remaining gap with temporary behavior merely to make the path appear complete.
-
-Distinguish claims as verified, observed, inferred, or unverified. Never upgrade an inference or activity log into a verified result.
+If work cannot finish, update the existing Issue/PR/artifact with the last verified revision, evidence already obtained, remaining uncertainty, blocker, and one exact next falsifiable action. Branch cleanup is not a completion criterion.

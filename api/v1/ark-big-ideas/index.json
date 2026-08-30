@@ -7,7 +7,7 @@
       "status": "blocked_external_evidence"
     }
   ],
-  "metric_row_count": 857,
+  "metric_row_count": 875,
   "rules": [
     "domain repositories remain authoritative; mirrored JSON is evidence only",
     "deferred and externally blocked domains emit no zero-filled metrics",
