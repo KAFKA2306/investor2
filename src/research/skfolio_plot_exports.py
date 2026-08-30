@@ -224,14 +224,16 @@ def write_plot_index(output_dir: Path, artifacts: list[dict[str, object]]) -> Pa
     table_rows: list[str] = []
     for group_slug, group_label, slugs in PLOT_GROUPS:
         for index, slug in enumerate(slugs):
-            group_cell = f'<td class="group" rowspan="{len(slugs)}">{html.escape(group_label)}</td>' if index == 0 else ""
+            group_cell = (
+                f'<td class="group" rowspan="{len(slugs)}">{html.escape(group_label)}</td>' if index == 0 else ""
+            )
             method_name = next(method for candidate, method, _ in PLOT_CALLS if candidate == slug)
             table_rows.append(
                 "<tr>"
                 f"{group_cell}"
-                f'<td><strong>{html.escape(slug)}</strong><small>{html.escape(method_name)}</small></td>'
-                f'<td>{_plot_link(by_key.get((0, slug)), "Fold 0")}</td>'
-                f'<td>{_plot_link(by_key.get((1, slug)), "Fold 1")}</td>'
+                f"<td><strong>{html.escape(slug)}</strong><small>{html.escape(method_name)}</small></td>"
+                f"<td>{_plot_link(by_key.get((0, slug)), 'Fold 0')}</td>"
+                f"<td>{_plot_link(by_key.get((1, slug)), 'Fold 1')}</td>"
                 f'<td><a class="anchor" href="#{html.escape(group_slug, quote=True)}">{html.escape(group_slug)}</a></td>'
                 "</tr>"
             )
@@ -243,7 +245,7 @@ def write_plot_index(output_dir: Path, artifacts: list[dict[str, object]]) -> Pa
         if fold0 or fold1:
             preview_sections.append(
                 f'<section class="diagnostic-preview" id="preview-{html.escape(slug, quote=True)}">'
-                f"<h3>{html.escape(slug)}</h3><div class=\"preview-grid\">{fold0}{fold1}</div></section>"
+                f'<h3>{html.escape(slug)}</h3><div class="preview-grid">{fold0}{fold1}</div></section>'
             )
 
     category_nav = "".join(
@@ -311,8 +313,8 @@ def write_plot_index(output_dir: Path, artifacts: list[dict[str, object]]) -> Pa
 <nav><a href="#oos">OOS比較</a><a href="#matrix">15×2 Fold比較</a><a href="#key-previews">重要plot</a>{category_nav}</nav>
 <main>
 <section id="oos"><h2>OOS direct comparison</h2><p>まず性能差を確認。下に進むほどモデル内部の診断。</p><div class="preview-grid">{oos_cards}</div></section>
-<section id="matrix"><h2>15 diagnostics × 2 folds</h2><p>同じ診断をFold 0 / Fold 1で横並びに開ける全体マトリクス。</p>{category_blocks}<div class="matrix-wrap"><table><thead><tr><th>Category</th><th>Diagnostic</th><th>Fold 0</th><th>Fold 1</th><th>Group</th></tr></thead><tbody>{''.join(table_rows)}</tbody></table></div></section>
-<section id="key-previews"><h2>重要診断のFold横並びプレビュー</h2><p>最初に見る6診断だけを埋め込み。その他は上の比較表から開く。</p>{''.join(preview_sections)}</section>
+<section id="matrix"><h2>15 diagnostics × 2 folds</h2><p>同じ診断をFold 0 / Fold 1で横並びに開ける全体マトリクス。</p>{category_blocks}<div class="matrix-wrap"><table><thead><tr><th>Category</th><th>Diagnostic</th><th>Fold 0</th><th>Fold 1</th><th>Group</th></tr></thead><tbody>{"".join(table_rows)}</tbody></table></div></section>
+<section id="key-previews"><h2>重要診断のFold横並びプレビュー</h2><p>最初に見る6診断だけを埋め込み。その他は上の比較表から開く。</p>{"".join(preview_sections)}</section>
 </main>
 <footer>Derived diagnostic visualization only. Plot appearance does not establish alpha, expected-return, strategy-performance, or covariance-forecast improvement.</footer>
 </body>
