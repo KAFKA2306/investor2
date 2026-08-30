@@ -76,7 +76,7 @@ def test_price_only_model_contract_does_not_fake_market_cap() -> None:
     assert contract["market_cap_status"] == "not_required_equal_weighted"
 
 
-def test_price_only_model_fits_without_market_cap() -> None:
+def test_price_only_model_fits_with_explicit_investment_universe() -> None:
     n_observations = 260
     n_assets = 35
     time = np.arange(n_observations, dtype=float)
@@ -94,11 +94,18 @@ def test_price_only_model_fits_without_market_cap() -> None:
         index=pd.date_range("2025-01-01", periods=n_observations, freq="B"),
     )
     panel = asset_panel_from_prices(price_frame)
+    returns = pd.DataFrame(
+        panel["returns"],
+        index=pd.DatetimeIndex(panel.observations),
+        columns=[str(name) for name in panel.asset_names],
+    )
     model = build_price_only_characteristics_model()
 
-    model.fit(characteristics=panel)
+    model.fit(X=returns, characteristics=panel)
 
     distribution = model.return_distribution_
     assert distribution.covariance.shape == (n_assets, n_assets)
     assert distribution.mu.shape == (n_assets,)
     assert np.isfinite(distribution.covariance).all()
+    assert list(model.feature_names_in_) == list(returns.columns)
+    assert list(model.factor_model_.asset_names) == list(returns.columns)
