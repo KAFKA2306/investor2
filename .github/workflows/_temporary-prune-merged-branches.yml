@@ -23,7 +23,7 @@ jobs:
       - uses: astral-sh/setup-uv@v9.0.0
         with:
           version: "0.11.32"
-      - name: Recover and patch compact contract
+      - name: Recover compact contract
         shell: bash
         run: |
           set -euo pipefail
@@ -36,12 +36,8 @@ jobs:
 
           source_commit = "5783db35016bd34805a91264c04c4a164749fabc"
           workflow_path = ".github/workflows/_temporary-prune-merged-branches.yml"
-          text = subprocess.check_output(
-              ["git", "show", f"{source_commit}:{workflow_path}"], text=True
-          )
-          pattern = re.compile(
-              r"printf '%s' '([^']+)' \\| base64 -d \\| gzip -d > ([^\n]+)"
-          )
+          text = subprocess.check_output(["git", "show", f"{source_commit}:{workflow_path}"], text=True)
+          pattern = re.compile(r"printf '%s' '([^']+)' \\| base64 -d \\| gzip -d > ([^\n]+)")
           recovered = set()
           for payload, target_text in pattern.findall(text):
               target = Path(target_text.strip())
@@ -55,15 +51,6 @@ jobs:
           }
           if recovered != expected:
               raise SystemExit(f"unexpected recovered files: {sorted(recovered)}")
-
-          exporter = Path("src/research/skfolio_plot_exports.py")
-          content = exporter.read_text(encoding="utf-8")
-          token = "for group_slug, group_label, slugs in PLOT_GROUPS:"
-          position = content.rfind(token)
-          if position < 0:
-              raise SystemExit("unused group_slug loop not found")
-          content = content[:position] + content[position:].replace(token, "for _group_slug, group_label, slugs in PLOT_GROUPS:", 1)
-          exporter.write_text(content, encoding="utf-8")
           PY
           grep -q '      - main' .github/workflows/skfolio-jquants-plots.yml
           if grep -q 'research/skfolio-jquants-plots' .github/workflows/skfolio-jquants-plots.yml; then
@@ -76,6 +63,7 @@ jobs:
           set -euo pipefail
           uv sync --locked
           uv run ruff format src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
+          uv run ruff check --fix src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
           uv run ruff check src/research/skfolio_plot_exports.py tests/test_skfolio_plot_exports.py
           uv run pytest -q tests/test_skfolio_plot_exports.py
       - name: Persist validated contract and delete temporary workflow
