@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -47,7 +48,7 @@ def test_pinned_skfolio_factor_model_exposes_all_required_plot_methods() -> None
         assert callable(getattr(factor_model, method_name))
 
 
-def test_export_factor_model_plots_writes_interactive_html_and_manifest(tmp_path) -> None:
+def test_export_factor_model_plots_writes_interactive_html_and_manifest(tmp_path: Path) -> None:
     factor_model = _fitted_factor_model()
     artifacts = export_factor_model_plots(factor_model, tmp_path, fold_index=0)
 
