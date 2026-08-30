@@ -1,0 +1,40 @@
+name: Temporary merged branch prune
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/_temporary-prune-merged-branches.yml"
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  prune:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: List fully merged inactive branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
+          mapfile -t open_heads < <(gh api --paginate "repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" --jq '.[].head.ref' | sort -u)
+          mapfile -t merged < <(git branch -r --merged origin/main --format='%(refname:short)' | sed 's#^origin/##' | grep -vE '^(main|HEAD)$' || true)
+          candidates=()
+          for branch in "${merged[@]}"; do
+            if printf '%s\n' "${open_heads[@]}" | grep -Fxq "$branch"; then
+              echo "KEEP_OPEN_PR $branch"
+            else
+              candidates+=("$branch")
+            fi
+          done
+          printf 'DELETE_CANDIDATE %s\n' "${candidates[@]}"
+          echo "candidate_count=${#candidates[@]}"
+          echo "branch_count_before=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin | grep -v '^origin/HEAD$' | wc -l)"
