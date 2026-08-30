@@ -53,6 +53,12 @@ def _list(value: object, name: str) -> list[object]:
     return value
 
 
+def _int(value: object, name: str) -> int:
+    if not isinstance(value, int):
+        raise TypeError(f"{name} must be an integer")
+    return value
+
+
 def main() -> None:
     args = parse_args()
     summary = _load_summary(args.summary)
@@ -92,7 +98,7 @@ def main() -> None:
     for fold_value in folds:
         fold_result = _dict(fold_value, "fold result")
         fold = _dict(fold_result["fold"], "fold")
-        fold_index = int(fold["index"])
+        fold_index = _int(fold["index"], "fold.index")
         train_start = pd.Timestamp(str(fold["train_start"]))
         train_end = pd.Timestamp(str(fold["train_end"]))
         train_prices = complete_prices.loc[
