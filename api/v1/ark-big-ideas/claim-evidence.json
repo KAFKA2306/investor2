@@ -106,8 +106,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2024-10-28",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-overviews-search-october-2024/",
               "unit": "users",
@@ -123,8 +123,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2024-12-27",
               "source_url": "https://about.fb.com/news/2024/12/our-year-in-review-metas-2024-highlights/",
               "unit": "users",
@@ -140,8 +140,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2025-03-19",
               "source_url": "https://about.fb.com/news/2025/03/europe-meet-your-newest-assistant-meta-ai/",
               "unit": "users",
@@ -157,8 +157,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2025-04-24",
               "source_url": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q1-2025/",
               "unit": "users",
@@ -174,8 +174,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2025-10-01",
               "source_url": "https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/",
               "unit": "users",
@@ -191,8 +191,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "consumer_subscribers",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2026-02-27",
               "source_url": "https://openai.com/index/scaling-ai-for-everyone/",
               "unit": "subscribers",
@@ -208,8 +208,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2026-05-19",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/",
               "unit": "users",
@@ -225,8 +225,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "dfa1c4502ff3cd8c1ca91e4e2893962cfeb9d67dab83dd303465368285220356",
-              "mirror_snapshot_id": "c7086a13fdf211b29733",
+              "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+              "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
               "period": "2026-06-03",
               "source_url": "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
               "unit": "users",
@@ -309,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 363,
+          "derivatives_metric_rows": 365,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -352,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 372,
+      "evidence_row_count": 374,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -438,8 +438,8 @@
         "observation": {
           "early_mean": 2162.714285714286,
           "first_period": "2026-05-18",
-          "latest_period": "2026-08-27",
-          "recent_mean": 1767.4285714285713,
+          "latest_period": "2026-08-29",
+          "recent_mean": 1689.5714285714287,
           "window": 7
         },
         "research_implication": {
@@ -448,7 +448,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 306,
+      "evidence_row_count": 312,
       "measurement_variables": [
         "aave_event_count",
         "aave_liquidation_count",
@@ -590,7 +590,7 @@
           "early_mean": 13.0,
           "first_period": "2024-01",
           "latest_period": "2026-08",
-          "recent_mean": 14.833333333333334,
+          "recent_mean": 15.0,
           "window": 6
         },
         "research_implication": {
@@ -814,8 +814,8 @@
               "feed_id": "autonomous-vehicles-summary",
               "logical_repo": "autonomous-vehicles",
               "metric_id": "autonomous_testing_miles",
-              "mirror_sha256": "ad9d20f8959d2c8eb8c04c96c53bf9f9203eed0baf573b0fbb6250dca5526bb1",
-              "mirror_snapshot_id": "bd9aedf9affd40d9602d",
+              "mirror_sha256": "4ae2330169bb47377d11ef4f2a7d68fea941a0ac9b1fbcc9682a5e46e44e3943",
+              "mirror_snapshot_id": "14ab3302d491b764e348",
               "period": "2024-11-30",
               "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
               "unit": "miles",
@@ -827,8 +827,8 @@
               "feed_id": "autonomous-vehicles-summary",
               "logical_repo": "autonomous-vehicles",
               "metric_id": "permitted_company_groups",
-              "mirror_sha256": "ad9d20f8959d2c8eb8c04c96c53bf9f9203eed0baf573b0fbb6250dca5526bb1",
-              "mirror_snapshot_id": "bd9aedf9affd40d9602d",
+              "mirror_sha256": "4ae2330169bb47377d11ef4f2a7d68fea941a0ac9b1fbcc9682a5e46e44e3943",
+              "mirror_snapshot_id": "14ab3302d491b764e348",
               "period": "2024-11-30",
               "source_url": "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
               "unit": "company_groups",
@@ -864,8 +864,8 @@
         "kind": "directional_evidence_gap",
         "measurement_gap": "Primary-source operating events confirm deployments but do not provide a common cost-per-delivery or global revenue scale series.",
         "observation": {
-          "commercial_marked_events": 15,
-          "operation_events": 19
+          "commercial_marked_events": 24,
+          "operation_events": 28
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -873,7 +873,7 @@
           "thesis_state": "strengthening"
         }
       },
-      "evidence_row_count": 19,
+      "evidence_row_count": 28,
       "measurement_variables": [
         "operation_evidence_event"
       ],
