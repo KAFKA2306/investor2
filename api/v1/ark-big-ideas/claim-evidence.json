@@ -309,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 365,
+          "derivatives_metric_rows": 366,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -352,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 374,
+      "evidence_row_count": 375,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -438,8 +438,8 @@
         "observation": {
           "early_mean": 2162.714285714286,
           "first_period": "2026-05-18",
-          "latest_period": "2026-08-29",
-          "recent_mean": 1689.5714285714287,
+          "latest_period": "2026-08-31",
+          "recent_mean": 1544.5714285714287,
           "window": 7
         },
         "research_implication": {
@@ -448,7 +448,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 312,
+      "evidence_row_count": 318,
       "measurement_variables": [
         "aave_event_count",
         "aave_liquidation_count",
@@ -663,9 +663,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "net_electrical_capacity",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "MW",
               "value": 379610.0
             },
@@ -678,9 +678,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "net_electrical_capacity",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "MW",
               "value": 81694.0
             },
@@ -693,9 +693,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "net_electrical_capacity",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "MW",
               "value": 19387.0
             },
@@ -708,9 +708,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "net_electrical_capacity",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "MW",
               "value": 110812.0
             },
@@ -723,9 +723,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "reactor_count",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "reactors",
               "value": 417
             },
@@ -738,9 +738,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "reactor_count",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "reactors",
               "value": 78
             },
@@ -753,9 +753,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "reactor_count",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "reactors",
               "value": 21
             },
@@ -768,9 +768,9 @@
               "feed_id": "nuclear-capacity",
               "logical_repo": "nuclear-power",
               "metric_id": "reactor_count",
-              "mirror_sha256": "abe864014be087ee02537fb0d10fb8289702a0b5a1059ab77a363b4f6106394d",
-              "mirror_snapshot_id": "407fa63c735978dc17ab",
-              "period": "2026-08-24T15:53:54.345248+00:00",
+              "mirror_sha256": "33a57c2af2c137fbed6486c9eb27b8207caf098b1b8274330314d69146037d04",
+              "mirror_snapshot_id": "32421f460f1eea7388ee",
+              "period": "2026-08-31T20:49:24.171652+00:00",
               "unit": "reactors",
               "value": 220
             }

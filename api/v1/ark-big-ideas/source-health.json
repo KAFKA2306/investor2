@@ -96,7 +96,7 @@
       "live_check": "ok",
       "logical_repo": "nuclear-power",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/status-events-2026.json",
-      "sha256": "e67241aa1502000f23f20f09f928b3ff275af56031e48d4f03ab71d192dd162c",
+      "sha256": "88b5344b3379045ef8297c12cbb38ed24f7b7740b4f305affbcf12d50640b073",
       "status": "ready",
       "theme": "Distributed Energy / Nuclear",
       "top_level_keys": [
@@ -187,7 +187,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "04e6b660362490d5410d41e03a16b2475ef05434d20410e0a910ade8f533fa52",
+      "sha256": "add39ae4172b981d4f2256c12b94a971df805462396bacc824e787b27501fcd4",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -220,7 +220,7 @@
       ]
     },
     {
-      "bytes": 445833,
+      "bytes": 453313,
       "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "current_repo": "KAFKA2306/skew",
       "issue_url": "https://github.com/KAFKA2306/skew/issues/11",
@@ -228,7 +228,7 @@
       "live_check": "ok",
       "logical_repo": "defi",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/provenance.json",
-      "sha256": "26e3b4cc8f980e9d2fcfd38af7b0119759bc808caf0706b6ffdfc783a833fc92",
+      "sha256": "19b663d3d3d21bd1dc6cd5a07f0c92a127261ba024593de1a2f48dd6de492ec5",
       "status": "ready",
       "theme": "DeFi Applications",
       "top_level_keys": [
@@ -252,7 +252,7 @@
       "live_check": "ok",
       "logical_repo": "factory",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
-      "sha256": "28026b05a35e108a3eaa5989764ca6e9720b16adf8eb79e96635eb3a46116503",
+      "sha256": "6c5914b49a2644ac8a0d355f7e9d8a109cb9302a270b0acf5960ab5112b764c1",
       "status": "ready",
       "theme": "Robotics",
       "top_level_keys": [
@@ -269,7 +269,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
-      "sha256": "6353fb24f6c5304bcf58d4c57d7572fea0dfb5ab2df65faf68ee0a419a622bd0",
+      "sha256": "7a987ee5e5605521f8626ee444abe4eeb4eb52ad0804c86a28d59a25254aeaff",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
@@ -286,7 +286,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "8e45d06852271dc84c43b8873d418d57bc9959950520bf3fef25c134a7e57a37",
+      "sha256": "e0a5787a55beae8e5e05d4f3b393237f694f6359cbe649deb41a326e49574b57",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
