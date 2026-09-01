@@ -50,6 +50,30 @@ def make_registry(path: Path) -> None:
     )
 
 
+def test_load_registry_merges_source_fragments(tmp_path: Path) -> None:
+    registry_path = tmp_path / "data/input_ledger/source_registry.json"
+    fragment_path = tmp_path / "data/input_ledger/source_registry.d/factset.json"
+    make_registry(registry_path)
+    write_json(
+        fragment_path,
+        {
+            "schema_version": "test",
+            "sources": {
+                "factset_insight_rss": {
+                    "enabled": True,
+                    "failure_mode": "fail-closed",
+                    "snapshot_required_provenance": [],
+                }
+            },
+        },
+    )
+
+    registry = load_registry(registry_path)
+
+    assert set(registry["sources"]) == {"test_mcp", "factset_insight_rss"}
+    assert registry["sources"]["factset_insight_rss"]["enabled"] is True
+
+
 def test_repository_snapshot_catalog_passes() -> None:
     result = audit_catalog()
     assert result["status"] == "PASS"
