@@ -52,7 +52,8 @@ def _validate_feed(feed: dict[str, Any]) -> dict[str, Any]:
     for article in articles:
         if not isinstance(article, dict):
             raise AssertionError("FactSet feed snapshot article must be an object")
-        missing = [field for field in ("article_id", "article_url", "title", "published_at") if not article.get(field)]
+        required_fields = ("article_id", "article_url", "title", "published_at")
+        missing = [field for field in required_fields if not article.get(field)]
         if missing:
             raise AssertionError(f"FactSet feed snapshot article missing required fields {missing}")
         identity = str(article["article_id"])
@@ -111,15 +112,22 @@ def parse_rss(payload: bytes, *, source_feed_url: str = FEED_URL) -> dict[str, A
 
         missing = [
             field
-            for field, value in (("title", title), ("article_url", article_url), ("published_at", pub_date))
+            for field, value in (
+                ("title", title),
+                ("article_url", article_url),
+                ("published_at", pub_date),
+            )
             if not value
         ]
         if missing:
             raise AssertionError(f"FactSet RSS item missing required fields {missing}")
+        assert title is not None
+        assert article_url is not None
+        assert pub_date is not None
         if not article_url.startswith(("https://", "http://")):
             raise AssertionError(f"FactSet RSS item has invalid article URL: {article_url!r}")
 
-        identity = guid or article_url
+        identity = guid if guid is not None else article_url
         if identity in identities:
             raise AssertionError(f"FactSet RSS contains duplicate article identity: {identity!r}")
         identities.add(identity)
@@ -179,10 +187,14 @@ def pending_articles(feed: dict[str, Any], state: dict[str, Any]) -> list[dict[s
 def render_monitor_output(articles: list[dict[str, Any]]) -> str:
     if not articles:
         return "[SILENT]\n"
-    return "\n".join(
-        "NEW_ARTICLE\t" + json.dumps(article, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
-        for article in articles
-    ) + "\n"
+    return (
+        "\n".join(
+            "NEW_ARTICLE\t"
+            + json.dumps(article, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            for article in articles
+        )
+        + "\n"
+    )
 
 
 def bootstrap_state(feed: dict[str, Any]) -> dict[str, Any]:
@@ -203,7 +215,10 @@ def acknowledge_articles(state: dict[str, Any], article_ids: list[str]) -> dict[
 def write_state_atomic(path: Path, state: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     tmp = path.with_suffix(path.suffix + ".tmp")
-    tmp.write_text(json.dumps(state, ensure_ascii=False, sort_keys=True, indent=2) + "\n", encoding="utf-8")
+    tmp.write_text(
+        json.dumps(state, ensure_ascii=False, sort_keys=True, indent=2) + "\n",
+        encoding="utf-8",
+    )
     tmp.replace(path)
 
 
@@ -234,22 +249,36 @@ def _print_path(path: Path) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Deterministically monitor and materialize FactSet Insight RSS metadata.")
+    parser = argparse.ArgumentParser(
+        description="Deterministically monitor and materialize FactSet Insight RSS metadata."
+    )
     sub = parser.add_subparsers(dest="command", required=True)
 
-    bootstrap = sub.add_parser("bootstrap", help="Mark the current feed as the initial delivered baseline.")
+    bootstrap = sub.add_parser(
+        "bootstrap",
+        help="Mark the current feed as the initial delivered baseline.",
+    )
     _add_feed_input(bootstrap)
     bootstrap.add_argument("--state", type=Path, required=True)
 
-    monitor = sub.add_parser("monitor", help="Emit only undelivered article metadata; never mutates state.")
+    monitor = sub.add_parser(
+        "monitor",
+        help="Emit only undelivered article metadata; never mutates state.",
+    )
     _add_feed_input(monitor)
     monitor.add_argument("--state", type=Path, required=True)
 
-    ack = sub.add_parser("ack", help="Acknowledge article IDs only after downstream delivery succeeds.")
+    ack = sub.add_parser(
+        "ack",
+        help="Acknowledge article IDs only after downstream delivery succeeds.",
+    )
     ack.add_argument("--state", type=Path, required=True)
     ack.add_argument("--article-id", action="append", dest="article_ids", required=True)
 
-    snapshot = sub.add_parser("snapshot", help="Materialize RSS metadata as a content-addressed JSON snapshot.")
+    snapshot = sub.add_parser(
+        "snapshot",
+        help="Materialize RSS metadata as a content-addressed JSON snapshot.",
+    )
     snapshot.add_argument("--rss", type=Path, required=True)
     snapshot.add_argument("--output-dir", type=Path, required=True)
     snapshot.add_argument("--latest-path", type=Path)
