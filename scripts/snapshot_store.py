@@ -41,9 +41,29 @@ def load_ndjson(path: Path) -> list[dict[str, Any]]:
 
 def load_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
     registry = json.loads(path.read_text(encoding="utf-8"))
-    if "sources" not in registry or not isinstance(registry["sources"], dict):
+    schema_version = registry.get("schema_version")
+    sources = registry.get("sources")
+    if not isinstance(schema_version, str) or not schema_version:
+        raise AssertionError("source registry is missing schema_version")
+    if not isinstance(sources, dict):
         raise AssertionError("source registry must contain a sources object")
-    return registry
+
+    merged_sources = dict(sources)
+    fragment_root = path.with_name("source_registry.d")
+    if fragment_root.is_dir():
+        for fragment_path in sorted(fragment_root.glob("*.json")):
+            fragment = json.loads(fragment_path.read_text(encoding="utf-8"))
+            if fragment.get("schema_version") != schema_version:
+                raise AssertionError(f"source registry fragment schema mismatch: {fragment_path.name}")
+            fragment_sources = fragment.get("sources")
+            if not isinstance(fragment_sources, dict) or not fragment_sources:
+                raise AssertionError(f"source registry fragment must contain sources: {fragment_path.name}")
+            duplicate_ids = sorted(set(merged_sources) & set(fragment_sources))
+            if duplicate_ids:
+                raise AssertionError(f"duplicate source registry ids: {duplicate_ids}")
+            merged_sources.update(fragment_sources)
+
+    return {"schema_version": schema_version, "sources": merged_sources}
 
 
 def resolve_artifact(root: Path, artifact_path: str) -> Path:
