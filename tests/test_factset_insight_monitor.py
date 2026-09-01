@@ -9,8 +9,7 @@ from typing import Any
 
 import scripts.factset_insight_monitor as monitor
 
-
-RSS = b'''<?xml version="1.0" encoding="UTF-8"?>
+RSS = b"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>FactSet Insight</title>
@@ -30,8 +29,8 @@ RSS = b'''<?xml version="1.0" encoding="UTF-8"?>
     </item>
   </channel>
 </rss>
-'''
-RSS_REVERSED = b'''<?xml version="1.0" encoding="UTF-8"?>
+"""
+RSS_REVERSED = b"""<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/">
   <channel>
     <title>FactSet Insight</title>
@@ -51,7 +50,7 @@ RSS_REVERSED = b'''<?xml version="1.0" encoding="UTF-8"?>
     </item>
   </channel>
 </rss>
-'''
+"""
 
 
 class FactSetInsightMonitorTest(unittest.TestCase):

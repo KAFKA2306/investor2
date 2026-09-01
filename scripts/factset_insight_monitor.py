@@ -189,8 +189,7 @@ def render_monitor_output(articles: list[dict[str, Any]]) -> str:
         return "[SILENT]\n"
     return (
         "\n".join(
-            "NEW_ARTICLE\t"
-            + json.dumps(article, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+            "NEW_ARTICLE\t" + json.dumps(article, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
             for article in articles
         )
         + "\n"
