@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
+      "sha256": "abd2488e1921c6a4b9a258a247c4fdceb3b0a955038c258c9f380bb50d536eb7",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -165,7 +165,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "3c1a9e7ef8030a7d9d0254e70c4b4dc13a5a31e7c867622d695beaf0097ac636",
+      "sha256": "43b4dea21a0b5a067eeecb1291bb9c0ed3ff38d87237272516b6d6a57b3f6d15",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -269,7 +269,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
-      "sha256": "7a987ee5e5605521f8626ee444abe4eeb4eb52ad0804c86a28d59a25254aeaff",
+      "sha256": "5f587f4afc5b652595b64b339bf941b2111f6e195d1bf3761cd036b91c4fcaf3",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
@@ -295,7 +295,7 @@
       ]
     },
     {
-      "bytes": 2684,
+      "bytes": 2685,
       "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
       "current_repo": "KAFKA2306/etf",
       "issue_url": "https://github.com/KAFKA2306/etf/issues/9",
@@ -303,7 +303,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "d2e95cb514927bda560b03d3e783d27ab23af29abbe0bf5bd1d6519ff588d723",
+      "sha256": "5aeb41802eb6711ee53621fedae620d4140f48e020ef01891554c0e1c9eaa1bd",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [

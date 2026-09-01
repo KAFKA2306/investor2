@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/abd2488e1921c6a4b9a258a247c4fdceb3b0a955038c258c9f380bb50d536eb7.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "47fbbb2fa74dd85475dc1ed6e6a6202be45a53b75520512e0d3bee751b10737b",
-        "mirror_snapshot_id": "6d0dd65fd0fa5c4f6e1b",
+        "mirror_sha256": "abd2488e1921c6a4b9a258a247c4fdceb3b0a955038c258c9f380bb50d536eb7",
+        "mirror_snapshot_id": "34ccf68bf22f084daf1c",
         "row_count": 18
       },
       "status": "ready",
@@ -212,10 +212,10 @@
       "logical_repo": "autonomous-logistics",
       "projection": {
         "adapter": "autonomous_logistics_events",
-        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/7a987ee5e5605521f8626ee444abe4eeb4eb52ad0804c86a28d59a25254aeaff.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/5f587f4afc5b652595b64b339bf941b2111f6e195d1bf3761cd036b91c4fcaf3.json",
         "feed_id": "autonomous-logistics-events",
-        "mirror_sha256": "7a987ee5e5605521f8626ee444abe4eeb4eb52ad0804c86a28d59a25254aeaff",
-        "mirror_snapshot_id": "e267910f7fd3a3562dd1",
+        "mirror_sha256": "5f587f4afc5b652595b64b339bf941b2111f6e195d1bf3761cd036b91c4fcaf3",
+        "mirror_snapshot_id": "6f0d724ad126cd31fccc",
         "row_count": 28
       },
       "status": "ready",
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/d2e95cb514927bda560b03d3e783d27ab23af29abbe0bf5bd1d6519ff588d723.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/5aeb41802eb6711ee53621fedae620d4140f48e020ef01891554c0e1c9eaa1bd.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "d2e95cb514927bda560b03d3e783d27ab23af29abbe0bf5bd1d6519ff588d723",
-        "mirror_snapshot_id": "45fc49a3d37ece083c5d",
+        "mirror_sha256": "5aeb41802eb6711ee53621fedae620d4140f48e020ef01891554c0e1c9eaa1bd",
+        "mirror_snapshot_id": "049921af2312df746741",
         "row_count": 13
       },
       "status": "accumulating",
