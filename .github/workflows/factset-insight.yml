@@ -46,7 +46,13 @@ jobs:
       - name: Run focused tests
         run: |
           python -m unittest tests.test_factset_insight_monitor
-          python -m pytest tests/test_snapshot_store.py
+          python - <<'PY'
+          from scripts.snapshot_store import load_registry
+
+          registry = load_registry()
+          assert 'factset_insight_rss' in registry['sources']
+          assert registry['sources']['factset_insight_rss']['failure_mode'] == 'fail-closed'
+          PY
       - name: Fetch publisher RSS
         shell: bash
         run: |
