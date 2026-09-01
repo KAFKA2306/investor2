@@ -1,4 +1,4 @@
-name: Collect FactSet Insight RSS
+name: Collect and deliver FactSet Insight RSS
 
 on:
   workflow_dispatch:
@@ -9,8 +9,10 @@ on:
       - main
     paths:
       - "scripts/factset_insight_monitor.py"
+      - "scripts/factset_insight_delivery.py"
       - "scripts/snapshot_store.py"
       - "tests/test_factset_insight_monitor.py"
+      - "tests/test_factset_insight_delivery.py"
       - "tests/test_snapshot_store.py"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
       - "docs/data-sources/factset-insight.md"
@@ -19,9 +21,12 @@ on:
   pull_request:
     paths:
       - "scripts/factset_insight_monitor.py"
+      - "scripts/factset_insight_delivery.py"
       - "scripts/snapshot_store.py"
       - "tests/test_factset_insight_monitor.py"
+      - "tests/test_factset_insight_delivery.py"
       - "tests/test_snapshot_store.py"
+      - "data/factset_insight/delivery_state.json"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
       - "docs/data-sources/factset-insight.md"
       - "docs/specs/agent-tasks/242.md"
@@ -30,6 +35,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 concurrency:
   group: factset-insight-rss
@@ -38,6 +44,12 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OLLAMA_VERSION: "0.32.14"
+      LOCAL_MODEL: "qwen3:1.7b"
+      OLLAMA_CONTEXT_LENGTH: "32768"
+      OLLAMA_NO_CLOUD: "1"
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v6
@@ -45,7 +57,7 @@ jobs:
           python-version: "3.12"
       - name: Run focused tests
         run: |
-          python -m unittest tests.test_factset_insight_monitor
+          python -m unittest tests.test_factset_insight_monitor tests.test_factset_insight_delivery
           python - <<'PY'
           from scripts.snapshot_store import load_registry
 
@@ -137,4 +149,84 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add -f data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json
           git commit -m "data: refresh FactSet Insight RSS"
+          git push
+      - name: Detect pending FactSet delivery
+        id: delivery
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(python scripts/factset_insight_monitor.py monitor \
+            --feed-json data/factset_insight/latest_feed.json \
+            --state data/factset_insight/delivery_state.json)"
+          if [ "$output" = "[SILENT]" ]; then
+            echo "has_pending=false" >> "$GITHUB_OUTPUT"
+            echo "[SILENT]"
+          else
+            printf '%s\n' "$output"
+            echo "has_pending=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install pinned Ollama
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/ollama/ollama/releases/download/v${OLLAMA_VERSION}/install.sh" -o /tmp/ollama-install.sh
+          echo "25f64b810b947145095956533e1bdf56eacea2673c55a7e586be4515fc882c9f  /tmp/ollama-install.sh" | sha256sum -c -
+          OLLAMA_VERSION="${OLLAMA_VERSION}" sh /tmp/ollama-install.sh
+          ollama --version
+      - name: Start verified local-only Ollama
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo systemctl stop ollama || true
+          sleep 1
+          if curl -fsS http://127.0.0.1:11434/api/version >/dev/null 2>&1; then
+            echo "installer-managed Ollama still owns localhost:11434" >&2
+            exit 1
+          fi
+          nohup env OLLAMA_CONTEXT_LENGTH="${OLLAMA_CONTEXT_LENGTH}" OLLAMA_NO_CLOUD="${OLLAMA_NO_CLOUD}" OLLAMA_HOST=127.0.0.1:11434 ollama serve >/tmp/ollama-server.log 2>&1 &
+          echo $! >/tmp/ollama.pid
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/version >/tmp/ollama-version.json; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/ollama-version.json
+          server_pid="$(cat /tmp/ollama.pid)"
+          tr '\0' '\n' < "/proc/${server_pid}/environ" | grep -E '^OLLAMA_(CONTEXT_LENGTH|NO_CLOUD|HOST)=' | sort | tee /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_CONTEXT_LENGTH=32768' /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_NO_CLOUD=1' /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_HOST=127.0.0.1:11434' /tmp/ollama-server-env.txt
+          ollama pull "${LOCAL_MODEL}"
+          ollama list
+      - name: Deliver pending FactSet articles
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m scripts.factset_insight_delivery \
+            --feed-json data/factset_insight/latest_feed.json \
+            --state data/factset_insight/delivery_state.json \
+            --repository "$GITHUB_REPOSITORY" \
+            --issue-number 242 \
+            --github-token "$GITHUB_TOKEN" \
+            --model "$LOCAL_MODEL"
+      - name: Persist successful FactSet delivery acknowledgements
+        if: always() && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/factset_insight/delivery_state.json; then
+            echo "No FactSet delivery acknowledgement change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/factset_insight/delivery_state.json
+          git commit -m "data: acknowledge FactSet Insight delivery"
+          git pull --rebase origin main
           git push
