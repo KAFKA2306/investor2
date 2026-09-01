@@ -9,7 +9,9 @@ on:
       - main
     paths:
       - "scripts/factset_insight_monitor.py"
+      - "scripts/snapshot_store.py"
       - "tests/test_factset_insight_monitor.py"
+      - "tests/test_snapshot_store.py"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
       - "docs/data-sources/factset-insight.md"
       - "docs/specs/agent-tasks/242.md"
@@ -17,7 +19,9 @@ on:
   pull_request:
     paths:
       - "scripts/factset_insight_monitor.py"
+      - "scripts/snapshot_store.py"
       - "tests/test_factset_insight_monitor.py"
+      - "tests/test_snapshot_store.py"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
       - "docs/data-sources/factset-insight.md"
       - "docs/specs/agent-tasks/242.md"
@@ -40,7 +44,15 @@ jobs:
         with:
           python-version: "3.12"
       - name: Run focused tests
-        run: python -m unittest tests.test_factset_insight_monitor
+        run: |
+          python -m unittest tests.test_factset_insight_monitor
+          python - <<'PY'
+          from scripts.snapshot_store import load_registry
+
+          registry = load_registry()
+          assert 'factset_insight_rss' in registry['sources']
+          assert registry['sources']['factset_insight_rss']['failure_mode'] == 'fail-closed'
+          PY
       - name: Fetch publisher RSS
         shell: bash
         run: |

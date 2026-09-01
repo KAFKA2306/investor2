@@ -4,7 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
-from datetime import date, datetime, timezone
+from datetime import UTC, date, datetime
 from pathlib import Path
 from typing import Any
 
@@ -25,12 +25,12 @@ def sha256_file(path: Path) -> str:
 def parse_observed_at(value: str) -> datetime:
     if len(value) == 10:
         parsed_date = date.fromisoformat(value)
-        return datetime(parsed_date.year, parsed_date.month, parsed_date.day, tzinfo=timezone.utc)
+        return datetime(parsed_date.year, parsed_date.month, parsed_date.day, tzinfo=UTC)
     normalized = value[:-1] + "+00:00" if value.endswith("Z") else value
     parsed = datetime.fromisoformat(normalized)
     if parsed.tzinfo is None:
         raise ValueError("observed_at datetime must include a timezone offset")
-    return parsed.astimezone(timezone.utc)
+    return parsed.astimezone(UTC)
 
 
 def load_ndjson(path: Path) -> list[dict[str, Any]]:
@@ -41,9 +41,29 @@ def load_ndjson(path: Path) -> list[dict[str, Any]]:
 
 def load_registry(path: Path = DEFAULT_REGISTRY) -> dict[str, Any]:
     registry = json.loads(path.read_text(encoding="utf-8"))
-    if "sources" not in registry or not isinstance(registry["sources"], dict):
+    schema_version = registry.get("schema_version")
+    sources = registry.get("sources")
+    if not isinstance(schema_version, str) or not schema_version:
+        raise AssertionError("source registry is missing schema_version")
+    if not isinstance(sources, dict):
         raise AssertionError("source registry must contain a sources object")
-    return registry
+
+    merged_sources = dict(sources)
+    fragment_root = path.with_name("source_registry.d")
+    if fragment_root.is_dir():
+        for fragment_path in sorted(fragment_root.glob("*.json")):
+            fragment = json.loads(fragment_path.read_text(encoding="utf-8"))
+            if fragment.get("schema_version") != schema_version:
+                raise AssertionError(f"source registry fragment schema mismatch: {fragment_path.name}")
+            fragment_sources = fragment.get("sources")
+            if not isinstance(fragment_sources, dict) or not fragment_sources:
+                raise AssertionError(f"source registry fragment must contain sources: {fragment_path.name}")
+            duplicate_ids = sorted(set(merged_sources) & set(fragment_sources))
+            if duplicate_ids:
+                raise AssertionError(f"duplicate source registry ids: {duplicate_ids}")
+            merged_sources.update(fragment_sources)
+
+    return {"schema_version": schema_version, "sources": merged_sources}
 
 
 def resolve_artifact(root: Path, artifact_path: str) -> Path:
@@ -178,14 +198,12 @@ def audit_entry(entry: dict[str, Any], *, root: Path, registry: dict[str, Any]) 
     actual_hash = sha256_file(artifact)
     if actual_hash != entry["artifact_sha256"]:
         raise AssertionError(
-            f"artifact SHA-256 mismatch for {entry['artifact_path']}: "
-            f"{actual_hash} != {entry['artifact_sha256']}"
+            f"artifact SHA-256 mismatch for {entry['artifact_path']}: {actual_hash} != {entry['artifact_sha256']}"
         )
     actual_count = infer_record_count(artifact)
     if actual_count != entry["record_count"]:
         raise AssertionError(
-            f"record_count mismatch for {entry['artifact_path']}: "
-            f"{actual_count} != {entry['record_count']}"
+            f"record_count mismatch for {entry['artifact_path']}: {actual_count} != {entry['record_count']}"
         )
     expected_id = make_snapshot_id(
         entry["dataset_id"], entry["reuse_key"], entry["observed_at"], entry["artifact_sha256"]
