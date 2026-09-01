@@ -1,0 +1,128 @@
+name: Collect FactSet Insight RSS
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/factset_insight_monitor.py"
+      - "tests/test_factset_insight_monitor.py"
+      - "data/input_ledger/source_registry.d/factset_insight_rss.json"
+      - "docs/data-sources/factset-insight.md"
+      - "docs/specs/agent-tasks/242.md"
+      - ".github/workflows/factset-insight.yml"
+  pull_request:
+    paths:
+      - "scripts/factset_insight_monitor.py"
+      - "tests/test_factset_insight_monitor.py"
+      - "data/input_ledger/source_registry.d/factset_insight_rss.json"
+      - "docs/data-sources/factset-insight.md"
+      - "docs/specs/agent-tasks/242.md"
+      - ".github/workflows/factset-insight.yml"
+      - "data/input_ledger/**"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: factset-insight-rss
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Run focused tests
+        run: python -m unittest tests.test_factset_insight_monitor
+      - name: Fetch publisher RSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+            --user-agent "KAFKA2306/investor2 FactSet Insight collector" \
+            "https://insight.factset.com/rss.xml" \
+            -o /tmp/factset-insight.xml
+      - name: Verify live RSS on pull requests
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/factset_insight_monitor.py snapshot \
+            --rss /tmp/factset-insight.xml \
+            --output-dir /tmp/factset-insight-output \
+            --latest-path /tmp/factset-insight-latest.json)"
+          test -f "$artifact_path"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('/tmp/factset-insight-latest.json').read_text(encoding='utf-8'))
+          assert payload['schema_version'] == 'investor2.factset-insight-feed.v1'
+          assert payload['article_count'] > 0
+          assert all(article['article_url'].startswith('https://') for article in payload['articles'])
+          PY
+      - name: Materialize and register accepted RSS snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/factset_insight_monitor.py snapshot \
+            --rss /tmp/factset-insight.xml \
+            --output-dir data/snapshots/factset_insight \
+            --latest-path data/factset_insight/latest_feed.json)"
+
+          if latest_json="$(python scripts/snapshot_store.py latest --reuse-key factset/insight/rss 2>/dev/null)"; then
+            latest_artifact="$(python -c 'import json,sys; print(json.load(sys.stdin)["artifact_path"])' <<<"$latest_json")"
+            if [ "$latest_artifact" = "$artifact_path" ]; then
+              echo "FactSet RSS content unchanged; reusing accepted snapshot."
+              exit 0
+            fi
+          fi
+
+          observed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          provenance="$(OBSERVED_AT="$observed_at" python - <<'PY'
+          import json
+          import os
+
+          observed_at = os.environ['OBSERVED_AT']
+          print(json.dumps({
+              'tool': 'curl',
+              'operation': 'download FactSet Insight publisher RSS metadata',
+              'query_or_scope': 'current RSS window; all published items returned by the feed',
+              'retrieved_at': observed_at,
+              'source_urls': ['https://insight.factset.com/rss.xml'],
+          }, separators=(',', ':')))
+          PY
+          )"
+
+          python scripts/snapshot_store.py register \
+            --dataset-id factset_insight_feed \
+            --reuse-key factset/insight/rss \
+            --artifact-path "$artifact_path" \
+            --source factset_insight_rss \
+            --source-kind official_web \
+            --observed-at "$observed_at" \
+            --schema-version investor2.factset-insight-feed.v1 \
+            --provenance-json "$provenance"
+          python scripts/snapshot_store.py audit
+      - name: Commit changed accepted RSS snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json \
+             && [ -z "$(git status --porcelain --untracked-files=all data/snapshots/factset_insight data/factset_insight/latest_feed.json)" ]; then
+            echo "No accepted FactSet RSS data change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json
+          git commit -m "data: refresh FactSet Insight RSS"
+          git push
