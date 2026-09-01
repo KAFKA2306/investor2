@@ -109,7 +109,7 @@ NEW_ARTICLE
 
 runtime導入時は既存feed全件を一括通知しない。初期cursorでは過去9件をbaseline済みとし、導入時点の最新1件だけをpendingに残してfull-path canaryとする。
 
-canary成功後はそのarticleもackされ、以後は純粋な新着のみ通知される。
+2026-09-01 のproduction canaryでは、最新1件について本文取得、local-only Ollama要約、Issue #242への配信、配信成功後のack commitまで通過した。canary成功後は10件すべてがack済みとなり、以後は純粋な新着のみ通知対象になる。
 
 ## Failure contract
 
