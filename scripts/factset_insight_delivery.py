@@ -13,7 +13,7 @@ import urllib.request
 from datetime import datetime
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any
+from typing import Any, override
 from zoneinfo import ZoneInfo
 
 from scripts.factset_insight_monitor import (
@@ -45,6 +45,7 @@ class ArticleTextParser(HTMLParser):
         self._main_parts: list[str] = []
         self._body_parts: list[str] = []
 
+    @override
     def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
         normalized = tag.lower()
         if normalized in self._SKIP_TAGS:
@@ -57,6 +58,7 @@ class ArticleTextParser(HTMLParser):
         elif normalized == "main":
             self._main_depth += 1
 
+    @override
     def handle_endtag(self, tag: str) -> None:
         normalized = tag.lower()
         if normalized in self._SKIP_TAGS:
@@ -70,6 +72,7 @@ class ArticleTextParser(HTMLParser):
         elif normalized == "main" and self._main_depth:
             self._main_depth -= 1
 
+    @override
     def handle_data(self, data: str) -> None:
         if self._skip_depth:
             return

@@ -10,7 +10,6 @@ from unittest.mock import patch
 import scripts.factset_insight_delivery as delivery
 import scripts.factset_insight_monitor as monitor
 
-
 ARTICLE_ID = "https://insight.factset.com/example-article"
 ARTICLE_URL = ARTICLE_ID
 
