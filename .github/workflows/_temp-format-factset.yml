@@ -1,0 +1,42 @@
+name: Temporary FactSet formatter
+
+on:
+  push:
+    branches:
+      - feat/factset-insight-monitor
+    paths:
+      - ".github/workflows/_temp-format-factset.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: feat/factset-insight-monitor
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Format with repository-pinned Ruff
+        run: |
+          uvx ruff==0.15.5 check --fix scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py
+          uvx ruff==0.15.5 format scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py
+          uvx ruff==0.15.5 check scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py
+          uvx ruff==0.15.5 format --check scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py
+      - name: Commit exact formatter output
+        run: |
+          if git diff --quiet -- scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py; then
+            echo "No formatter changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/factset_insight_monitor.py tests/test_factset_insight_monitor.py
+          git commit -m "style: apply Ruff to FactSet monitor"
+          git push origin HEAD:feat/factset-insight-monitor
