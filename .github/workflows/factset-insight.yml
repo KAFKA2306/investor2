@@ -135,6 +135,6 @@ jobs:
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json
+          git add -f data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json
           git commit -m "data: refresh FactSet Insight RSS"
           git push
