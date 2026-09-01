@@ -5,8 +5,9 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from typing import Any
 
-from scripts import factset_insight_monitor as monitor
+import scripts.factset_insight_monitor as monitor
 
 
 RSS = b'''<?xml version="1.0" encoding="UTF-8"?>
@@ -63,9 +64,14 @@ class FactSetInsightMonitorTest(unittest.TestCase):
         self.assertEqual(feed["articles"][0]["author"], "Analyst A")
 
     def test_item_order_does_not_change_monitor_output(self) -> None:
-        state = {"schema_version": monitor.DELIVERY_STATE_SCHEMA, "delivered_article_ids": []}
+        state: dict[str, Any] = {
+            "schema_version": monitor.DELIVERY_STATE_SCHEMA,
+            "delivered_article_ids": [],
+        }
         normal = monitor.render_monitor_output(monitor.pending_articles(monitor.parse_rss(RSS), state))
-        reversed_output = monitor.render_monitor_output(monitor.pending_articles(monitor.parse_rss(RSS_REVERSED), state))
+        reversed_output = monitor.render_monitor_output(
+            monitor.pending_articles(monitor.parse_rss(RSS_REVERSED), state)
+        )
         self.assertEqual(normal, reversed_output)
 
     def test_bootstrap_is_silent_and_marks_current_feed_delivered(self) -> None:
@@ -76,7 +82,10 @@ class FactSetInsightMonitorTest(unittest.TestCase):
 
     def test_one_undelivered_article_emits_exactly_one_new_article(self) -> None:
         feed = monitor.parse_rss(RSS)
-        state = {"schema_version": monitor.DELIVERY_STATE_SCHEMA, "delivered_article_ids": ["factset-older"]}
+        state: dict[str, Any] = {
+            "schema_version": monitor.DELIVERY_STATE_SCHEMA,
+            "delivered_article_ids": ["factset-older"],
+        }
         pending = monitor.pending_articles(feed, state)
         self.assertEqual([a["article_id"] for a in pending], ["factset-newer"])
         rendered = monitor.render_monitor_output(pending)
@@ -85,7 +94,10 @@ class FactSetInsightMonitorTest(unittest.TestCase):
 
     def test_ack_is_separate_from_monitor_and_makes_next_monitor_silent(self) -> None:
         feed = monitor.parse_rss(RSS)
-        before = {"schema_version": monitor.DELIVERY_STATE_SCHEMA, "delivered_article_ids": ["factset-older"]}
+        before: dict[str, Any] = {
+            "schema_version": monitor.DELIVERY_STATE_SCHEMA,
+            "delivered_article_ids": ["factset-older"],
+        }
         after = monitor.acknowledge_articles(before, ["factset-newer"])
         self.assertEqual(monitor.render_monitor_output(monitor.pending_articles(feed, after)), "[SILENT]\n")
 
