@@ -23,7 +23,9 @@ def write_json(path: Path, value: object) -> None:
 def write_catalog(path: Path, entries: list[dict]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(
-        "".join(json.dumps(entry, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n" for entry in entries),
+        "".join(
+            json.dumps(entry, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n" for entry in entries
+        ),
         encoding="utf-8",
     )
 
