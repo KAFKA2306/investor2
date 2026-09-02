@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "abd2488e1921c6a4b9a258a247c4fdceb3b0a955038c258c9f380bb50d536eb7",
+      "sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -75,7 +75,7 @@
       "live_check": "ok",
       "logical_repo": "multiomics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
-      "sha256": "c62694ca5463a30366cbda8d7e22417761d6fb0f8ae76247a3f4669fabe533cd",
+      "sha256": "888732f3d0c6c74956436a3c0e424a400d6cba1601cc569a9115b19d71587506",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
@@ -165,7 +165,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "43b4dea21a0b5a067eeecb1291bb9c0ed3ff38d87237272516b6d6a57b3f6d15",
+      "sha256": "122e6210717677bf31aa6ce5d71f5c54d6c346eda0058aa2e04ffb407cb9ce8a",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -179,7 +179,7 @@
       ]
     },
     {
-      "bytes": 1625,
+      "bytes": 1618,
       "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
       "current_repo": "KAFKA2306/option",
       "issue_url": "https://github.com/KAFKA2306/option/issues/16",
@@ -187,7 +187,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "add39ae4172b981d4f2256c12b94a971df805462396bacc824e787b27501fcd4",
+      "sha256": "4f836f4d0c42a018573452e46b3aca30798f28e3c4f8bcad4d1d0700b1f37d27",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -220,7 +220,7 @@
       ]
     },
     {
-      "bytes": 453313,
+      "bytes": 454087,
       "canonical_url": "https://github.com/KAFKA2306/skew/blob/main/api/v1/defi/provenance.json",
       "current_repo": "KAFKA2306/skew",
       "issue_url": "https://github.com/KAFKA2306/skew/issues/11",
@@ -228,7 +228,7 @@
       "live_check": "ok",
       "logical_repo": "defi",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/skew/main/api/v1/defi/provenance.json",
-      "sha256": "19b663d3d3d21bd1dc6cd5a07f0c92a127261ba024593de1a2f48dd6de492ec5",
+      "sha256": "c667f8edc30dfb1745202c90d11224523c28f37ec2c4b4162307ad56c674953a",
       "status": "ready",
       "theme": "DeFi Applications",
       "top_level_keys": [
@@ -269,7 +269,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
-      "sha256": "5f587f4afc5b652595b64b339bf941b2111f6e195d1bf3761cd036b91c4fcaf3",
+      "sha256": "39a84416b092c7b55ec05fe86088ed838851fd33fc9c47087f83c735f3d3592f",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
@@ -295,7 +295,7 @@
       ]
     },
     {
-      "bytes": 2685,
+      "bytes": 2686,
       "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
       "current_repo": "KAFKA2306/etf",
       "issue_url": "https://github.com/KAFKA2306/etf/issues/9",
@@ -303,7 +303,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "5aeb41802eb6711ee53621fedae620d4140f48e020ef01891554c0e1c9eaa1bd",
+      "sha256": "4c14fd5504c6a95e015f3a118940447036d8391956fd9372198959771eec6ddc",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [
