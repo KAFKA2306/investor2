@@ -42,9 +42,7 @@ const config: FxOverlayConfig = {
 };
 
 const leg = [0.01, -0.005, 0.008, -0.002, 0.006, -0.004, 0.004, -0.001];
-const base = [
-  0.001, -0.002, 0.0005, -0.001, 0.0015, -0.0015, 0.001, -0.0005,
-];
+const base = [0.001, -0.002, 0.0005, -0.001, 0.0015, -0.0015, 0.001, -0.0005];
 
 const observation = (index: number): FxOverlayObservation => {
   const day = String(index + 1).padStart(2, "0");
@@ -59,8 +57,7 @@ const observation = (index: number): FxOverlayObservation => {
     realizedSwapShortReturn: -0.0001,
     fundingCostReturn: 0,
     usdLongCrowdingPercentile: index >= 4 ? 0.9 : undefined,
-    crowdingAvailableAt:
-      index >= 4 ? `2026-01-${day}T00:00:00Z` : undefined,
+    crowdingAvailableAt: index >= 4 ? `2026-01-${day}T00:00:00Z` : undefined,
     sourceRefs: [
       `fixture://fx/${day}`,
       `fixture://swap/${day}`,
