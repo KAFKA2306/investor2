@@ -180,7 +180,9 @@ const validateObservation = (row: FxOverlayObservation): void => {
   finite(row.realizedSwapLongReturn, "realizedSwapLongReturn");
   finite(row.fundingCostReturn, "fundingCostReturn");
   if (row.usdJpySpotReturn <= -1) {
-    throw new UnverifiedDataError("usdJpySpotReturn must be greater than -100%");
+    throw new UnverifiedDataError(
+      "usdJpySpotReturn must be greater than -100%",
+    );
   }
   if (row.realizedSwapShortReturn !== undefined) {
     finite(row.realizedSwapShortReturn, "realizedSwapShortReturn");
