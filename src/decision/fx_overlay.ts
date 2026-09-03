@@ -179,6 +179,11 @@ const validateObservation = (row: FxOverlayObservation): void => {
   finite(row.usdJpySpotReturn, "usdJpySpotReturn");
   finite(row.realizedSwapLongReturn, "realizedSwapLongReturn");
   finite(row.fundingCostReturn, "fundingCostReturn");
+  if (row.usdJpySpotReturn <= -1) {
+    throw new UnverifiedDataError(
+      "usdJpySpotReturn must be greater than -100%",
+    );
+  }
   if (row.realizedSwapShortReturn !== undefined) {
     finite(row.realizedSwapShortReturn, "realizedSwapShortReturn");
   }
@@ -445,6 +450,7 @@ const evaluatePath = (
   }
   const returns: number[] = [];
   let equity = 1;
+  let usdJpySpotIndex = 1;
   let previousExposure = 0;
   let liquidated = false;
   let marginCallCount = 0;
@@ -458,6 +464,7 @@ const evaluatePath = (
   for (let index = 0; index < rows.length; index += 1) {
     const row = rows[index];
     validateObservation(row);
+    usdJpySpotIndex *= 1 + row.usdJpySpotReturn;
     const exposure = liquidated ? 0 : exposures[index];
     finite(exposure, "exposure");
     const change = Math.abs(exposure - previousExposure);
@@ -483,12 +490,13 @@ const evaluatePath = (
     fundingContribution += funding;
     transactionContribution += transaction;
 
-    if (equity < Math.abs(exposure) * config.marginCallMarginRate) {
+    const currentNotionalFraction = Math.abs(exposure) * usdJpySpotIndex;
+    if (equity < currentNotionalFraction * config.marginCallMarginRate) {
       marginCallCount += 1;
     }
     if (
       !liquidated &&
-      equity < Math.abs(exposure) * config.liquidationMarginRate
+      equity < currentNotionalFraction * config.liquidationMarginRate
     ) {
       forcedLiquidationCount += 1;
       liquidated = true;

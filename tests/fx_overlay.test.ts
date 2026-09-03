@@ -69,6 +69,49 @@ const observation = (index: number): FxOverlayObservation => {
 
 const rows = leg.map((_, index) => observation(index));
 
+const cashOnlyPositions: AssetPosition[] = [
+  {
+    id: "JPY_CASH",
+    marketValueJpy: 1_000_000,
+    usdExposureRatio: 0,
+    sourceRef: "portfolio://jpy-cash",
+    evidenceKind: "test_fixture",
+  },
+];
+
+const marginConfig: FxOverlayConfig = {
+  minIncrementalUsdExposure: 0,
+  maxIncrementalUsdExposure: 3,
+  minTotalUsdExposure: 0,
+  maxTotalUsdExposure: 3,
+  initialMarginRate: 0.04,
+  maxMarginUsageFraction: 0.2,
+  marginCallMarginRate: 0.04,
+  liquidationMarginRate: 0.02,
+  maxOverlayExpectedShortfallContribution: 10,
+  maxCrowdingReduction: 0,
+  riskAversion: 50,
+  spreadCostRatePerUnitTurnover: 0,
+  trainingWindow: 2,
+};
+
+const marginRows = (oosSpotReturn: number): FxOverlayObservation[] =>
+  [0, 0, oosSpotReturn].map((usdJpySpotReturn, index) => {
+    const day = String(index + 1).padStart(2, "0");
+    return {
+      periodStart: `2026-02-${day}T00:00:00Z`,
+      periodEnd: `2026-02-${day}T12:00:00Z`,
+      observedAt: `2026-02-${day}T13:00:00Z`,
+      basePortfolioReturn: 0,
+      usdJpySpotReturn,
+      realizedSwapLongReturn: 0,
+      realizedSwapShortReturn: 0,
+      fundingCostReturn: 0,
+      sourceRefs: [`fixture://margin/${day}`],
+      evidenceKind: "test_fixture",
+    };
+  });
+
 describe("FX overlay", () => {
   test("counts existing USD assets before adding an FX overlay", () => {
     expect(calculateCurrentUsdExposure(positions)).toBeCloseTo(0.6, 12);
@@ -115,6 +158,39 @@ describe("FX overlay", () => {
     expect(
       result.baselines.find((row) => row.incrementalUsdExposure === 2)?.status,
     ).toBe("INFEASIBLE");
+  });
+
+  test("marks margin against current USDJPY notional instead of opening notional", () => {
+    const survivesThirtyPercentDrop = buildFxOverlayDecision(
+      cashOnlyPositions,
+      marginRows(-0.3),
+      marginConfig,
+    );
+    const breachesAfterThirtyOnePercentDrop = buildFxOverlayDecision(
+      cashOnlyPositions,
+      marginRows(-0.31),
+      marginConfig,
+    );
+
+    expect(survivesThirtyPercentDrop.status).toBe("TEST_ONLY");
+    expect(breachesAfterThirtyOnePercentDrop.status).toBe("TEST_ONLY");
+    if (
+      survivesThirtyPercentDrop.status !== "TEST_ONLY" ||
+      breachesAfterThirtyOnePercentDrop.status !== "TEST_ONLY"
+    ) {
+      throw new Error("expected test-only margin results");
+    }
+
+    const survivor = survivesThirtyPercentDrop.baselines.find(
+      (row) => row.incrementalUsdExposure === 3,
+    );
+    const breached = breachesAfterThirtyOnePercentDrop.baselines.find(
+      (row) => row.incrementalUsdExposure === 3,
+    );
+    expect(survivor?.status).toBe("EVALUATED");
+    expect(breached?.status).toBe("EVALUATED");
+    expect(survivor?.metrics?.marginCallCount).toBe(0);
+    expect(breached?.metrics?.marginCallCount).toBe(1);
   });
 
   test("fails closed when the requested negative overlay has no realized short swap", () => {
