@@ -14,6 +14,22 @@ Issue: #252
 - Missing short-side realized swap makes negative overlay evaluation `UNVERIFIED`; there is no silent policy-rate fallback.
 - `test_fixture` evidence can exercise deterministic logic but can produce only `TEST_ONLY`, never `VERIFIED`.
 
+## Published API
+
+Canonical publication path:
+
+`api/v1/portfolio/fx-overlay.json`
+
+This file is the public machine-readable FX overlay artifact for downstream consumers such as `KAFKA2306/finBI`. Consumers should read this artifact directly and must not maintain a second hand-authored copy of the same result.
+
+The artifact uses the same `investor2.fx-overlay.v1` result union as `src/decision/fx_overlay.ts`:
+
+- `VERIFIED`: publish the calculated result only when every production input and provenance/PIT gate passes.
+- `TEST_ONLY`: permitted for deterministic test evidence, but never as a production recommendation.
+- `UNVERIFIED`: publish only `schema_version`, `status`, and a concrete `reason`; do not publish invented numeric defaults.
+
+When the canonical production inputs become available, update this same path from the canonical calculation output. Do not create a second portfolio/FX API path for compatibility.
+
 ## Output
 
 Schema version: `investor2.fx-overlay.v1`
