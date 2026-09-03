@@ -1,5 +1,5 @@
-import { readFileSync } from "node:fs";
 import { expect, test } from "bun:test";
+import { readFileSync } from "node:fs";
 
 test("publishes one fail-closed canonical FX overlay API artifact", () => {
   const artifact = JSON.parse(
