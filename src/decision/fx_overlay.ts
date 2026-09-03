@@ -218,7 +218,9 @@ const validateConfig = (config: FxOverlayConfig): void => {
     config.riskAversion < 0 ||
     config.spreadCostRatePerUnitTurnover < 0
   ) {
-    throw new UnverifiedDataError("invalid risk, margin, or cost configuration");
+    throw new UnverifiedDataError(
+      "invalid risk, margin, or cost configuration",
+    );
   }
 };
 
@@ -245,9 +247,7 @@ const overlayUnitReturn = (
 ): number => {
   if (direction === "long") {
     return (
-      row.usdJpySpotReturn +
-      row.realizedSwapLongReturn -
-      row.fundingCostReturn
+      row.usdJpySpotReturn + row.realizedSwapLongReturn - row.fundingCostReturn
     );
   }
   if (row.realizedSwapShortReturn === undefined) {
@@ -256,9 +256,7 @@ const overlayUnitReturn = (
     );
   }
   return (
-    -row.usdJpySpotReturn +
-    row.realizedSwapShortReturn -
-    row.fundingCostReturn
+    -row.usdJpySpotReturn + row.realizedSwapShortReturn - row.fundingCostReturn
   );
 };
 
@@ -268,8 +266,7 @@ const exposureBounds = (
   config: FxOverlayConfig,
   crowding?: number,
 ): Bounds => {
-  const marginLimit =
-    config.maxMarginUsageFraction / config.initialMarginRate;
+  const marginLimit = config.maxMarginUsageFraction / config.initialMarginRate;
   let min = Math.max(
     config.minIncrementalUsdExposure,
     config.minTotalUsdExposure - currentUsdExposure,
@@ -319,12 +316,9 @@ const utility = (
   magnitude: number,
   riskAversion: number,
 ): number => {
-  const combined = base.map(
-    (value, index) => value + magnitude * leg[index],
-  );
+  const combined = base.map((value, index) => value + magnitude * leg[index]);
   return (
-    average(combined) * 252 -
-    riskAversion * sampleVariance(combined) * 252
+    average(combined) * 252 - riskAversion * sampleVariance(combined) * 252
   );
 };
 
@@ -344,8 +338,7 @@ const bestMagnitude = (
     return legMean > 0 ? upper : lower;
   }
   const unconstrained =
-    (legMean / (2 * riskAversion) - sampleCovariance(base, leg)) /
-    legVariance;
+    (legMean / (2 * riskAversion) - sampleCovariance(base, leg)) / legVariance;
   return Math.min(upper, Math.max(lower, unconstrained));
 };
 
@@ -362,12 +355,7 @@ export const optimizeIncrementalUsdExposure = (
     );
   }
   training.forEach(validateObservation);
-  const bounds = exposureBounds(
-    training,
-    currentUsdExposure,
-    config,
-    crowding,
-  );
+  const bounds = exposureBounds(training, currentUsdExposure, config, crowding);
   const base = training.map((row) => row.basePortfolioReturn);
   const candidates: Array<{ exposure: number; score: number }> = [];
 
@@ -375,8 +363,7 @@ export const optimizeIncrementalUsdExposure = (
     candidates.push({
       exposure: 0,
       score:
-        average(base) * 252 -
-        config.riskAversion * sampleVariance(base) * 252,
+        average(base) * 252 - config.riskAversion * sampleVariance(base) * 252,
     });
   }
   if (bounds.max > 0) {
@@ -439,8 +426,7 @@ const performanceMetrics = (returns: number[]): PerformanceMetrics => {
     cagr: wealth ** (252 / returns.length) - 1,
     annualizedVolatility: dailyVol * Math.sqrt(252),
     sharpe: dailyVol === 0 ? 0 : (dailyMean / dailyVol) * Math.sqrt(252),
-    sortino:
-      downsideVol === 0 ? 0 : (dailyMean / downsideVol) * Math.sqrt(252),
+    sortino: downsideVol === 0 ? 0 : (dailyMean / downsideVol) * Math.sqrt(252),
     maxDrawdown,
     expectedShortfall95: expectedShortfallLoss(returns),
     worstPeriodReturn: Math.min(...returns),
@@ -516,8 +502,7 @@ const evaluatePath = (
     fxContributionAnnualized: fxContribution * annualizer,
     carryContributionAnnualized: carryContribution * annualizer,
     fundingCostContributionAnnualized: fundingContribution * annualizer,
-    transactionCostContributionAnnualized:
-      transactionContribution * annualizer,
+    transactionCostContributionAnnualized: transactionContribution * annualizer,
     marginCallCount,
     forcedLiquidationCount,
     turnover,
@@ -536,7 +521,10 @@ const baselineBlocker = (
     return "outside incremental exposure bounds";
   }
   const total = currentUsdExposure + exposure;
-  if (total < config.minTotalUsdExposure || total > config.maxTotalUsdExposure) {
+  if (
+    total < config.minTotalUsdExposure ||
+    total > config.maxTotalUsdExposure
+  ) {
     return "outside total USD exposure bounds";
   }
   if (
@@ -581,7 +569,9 @@ export const walkForwardFxOverlay = (
     const target = sorted[index];
     const decisionTime = time(target.periodStart, "periodStart");
     const training = sorted.slice(index - config.trainingWindow, index);
-    if (training.some((row) => time(row.observedAt, "observedAt") > decisionTime)) {
+    if (
+      training.some((row) => time(row.observedAt, "observedAt") > decisionTime)
+    ) {
       throw new UnverifiedDataError(
         "PIT violation: a training observation was unavailable at decision time",
       );
