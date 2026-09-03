@@ -124,5 +124,7 @@ def test_plot_payload_hashes_are_stable_metadata(tmp_path: Path) -> None:
     assert len(artifacts) == len(PLOT_CALLS)
     for artifact in artifacts:
         assert len(str(artifact["sha256"])) == 64
-        assert int(artifact["size_bytes"]) > 0
+        size_bytes = artifact["size_bytes"]
+        assert isinstance(size_bytes, int)
+        assert size_bytes > 0
         assert str(artifact["relative_path"]).startswith("index.html#")
