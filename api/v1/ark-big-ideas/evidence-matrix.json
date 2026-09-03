@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-        "mirror_snapshot_id": "da509b6885271b01d662",
+        "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+        "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
         "row_count": 18
       },
       "status": "ready",
@@ -56,11 +56,11 @@
       "logical_repo": "multiomics",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/multiomics-metrics/961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/multiomics-metrics/b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13.json",
         "feed_id": "multiomics-metrics",
-        "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-        "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
-        "row_count": 5
+        "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+        "mirror_snapshot_id": "c429d913e368d6b9810f",
+        "row_count": 159
       },
       "status": "ready",
       "theme": "Multiomics"
@@ -148,11 +148,11 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/0c4f7b0dfacea01cf9efd0935f08330fa6839d9d987a4b332a56fad180fda61e.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/6870bf7ea502d71e2d71342f5350f21626f6b2b2c4ca740beeab7762eaacf695.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "0c4f7b0dfacea01cf9efd0935f08330fa6839d9d987a4b332a56fad180fda61e",
-        "mirror_snapshot_id": "ff89895e8d738189225d",
-        "row_count": 367
+        "mirror_sha256": "6870bf7ea502d71e2d71342f5350f21626f6b2b2c4ca740beeab7762eaacf695",
+        "mirror_snapshot_id": "0932012f1c4254008c0a",
+        "row_count": 368
       },
       "status": "ready",
       "theme": "Bitcoin / Derivatives"
@@ -180,11 +180,11 @@
       "logical_repo": "defi",
       "projection": {
         "adapter": "defi_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/defi-daily/5e71c6017183416d55e5fd8b6dcc7e3b6fe03741de157ad36eec005b055d2057.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/defi-daily/1626dc6c46c41d3073ab0218bf8fdce0da56c64c0b762214da36272a8bd14a63.json",
         "feed_id": "defi-daily",
-        "mirror_sha256": "5e71c6017183416d55e5fd8b6dcc7e3b6fe03741de157ad36eec005b055d2057",
-        "mirror_snapshot_id": "a667d4b5d82b2a0775e1",
-        "row_count": 318
+        "mirror_sha256": "1626dc6c46c41d3073ab0218bf8fdce0da56c64c0b762214da36272a8bd14a63",
+        "mirror_snapshot_id": "4d558414c670f5ab7442",
+        "row_count": 321
       },
       "status": "ready",
       "theme": "DeFi Applications"
@@ -212,10 +212,10 @@
       "logical_repo": "autonomous-logistics",
       "projection": {
         "adapter": "autonomous_logistics_events",
-        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/39a84416b092c7b55ec05fe86088ed838851fd33fc9c47087f83c735f3d3592f.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/3f8bd53e6ae7fdb2ac41df39ca52fedc4041f24de219e72e3b392bff94a56de7.json",
         "feed_id": "autonomous-logistics-events",
-        "mirror_sha256": "39a84416b092c7b55ec05fe86088ed838851fd33fc9c47087f83c735f3d3592f",
-        "mirror_snapshot_id": "861b9e7fbe13950f2f4f",
+        "mirror_sha256": "3f8bd53e6ae7fdb2ac41df39ca52fedc4041f24de219e72e3b392bff94a56de7",
+        "mirror_snapshot_id": "c1768f7ff970e3de02b7",
         "row_count": 28
       },
       "status": "ready",
@@ -228,11 +228,11 @@
       "logical_repo": "space-launches",
       "projection": {
         "adapter": "space_launches_monthly",
-        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/2b9c79e0944ea171f43982c539c854ab34f7b7fad5d335ae3436c77736561cd2.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/d4c9ec43bf8358065144f09056f531c87ee0b8115955e92c0819c9c9551ee967.json",
         "feed_id": "space-launches-monthly-cadence",
-        "mirror_sha256": "2b9c79e0944ea171f43982c539c854ab34f7b7fad5d335ae3436c77736561cd2",
-        "mirror_snapshot_id": "794fd5e0218f2e7fd443",
-        "row_count": 32
+        "mirror_sha256": "d4c9ec43bf8358065144f09056f531c87ee0b8115955e92c0819c9c9551ee967",
+        "mirror_snapshot_id": "2918336c1830eb728871",
+        "row_count": 33
       },
       "status": "ready",
       "theme": "Reusable Rockets"
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/4c14fd5504c6a95e015f3a118940447036d8391956fd9372198959771eec6ddc.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/45aae249cd683bcd0c270424f03bd4bf161e702a00b9e8870be9c81bc00c3427.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "4c14fd5504c6a95e015f3a118940447036d8391956fd9372198959771eec6ddc",
-        "mirror_snapshot_id": "37fe811273db31042026",
+        "mirror_sha256": "45aae249cd683bcd0c270424f03bd4bf161e702a00b9e8870be9c81bc00c3427",
+        "mirror_snapshot_id": "dd71289f37c964a3f52d",
         "row_count": 13
       },
       "status": "accumulating",

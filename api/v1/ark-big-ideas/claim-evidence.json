@@ -18,7 +18,7 @@
             "nuclear-capacity",
             "robotics-deployments"
           ],
-          "evidence_row_count": 52
+          "evidence_row_count": 129
         },
         "research_implication": {
           "prescriptive_action": null,
@@ -26,7 +26,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 52,
+      "evidence_row_count": 129,
       "measurement_variables": [
         "capital_expenditures",
         "labor_productivity",
@@ -106,8 +106,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2024-10-28",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-overviews-search-october-2024/",
               "unit": "users",
@@ -123,8 +123,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2024-12-27",
               "source_url": "https://about.fb.com/news/2024/12/our-year-in-review-metas-2024-highlights/",
               "unit": "users",
@@ -140,8 +140,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2025-03-19",
               "source_url": "https://about.fb.com/news/2025/03/europe-meet-your-newest-assistant-meta-ai/",
               "unit": "users",
@@ -157,8 +157,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2025-04-24",
               "source_url": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q1-2025/",
               "unit": "users",
@@ -174,8 +174,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2025-10-01",
               "source_url": "https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/",
               "unit": "users",
@@ -191,8 +191,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "consumer_subscribers",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2026-02-27",
               "source_url": "https://openai.com/index/scaling-ai-for-everyone/",
               "unit": "subscribers",
@@ -208,8 +208,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2026-05-19",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/",
               "unit": "users",
@@ -225,8 +225,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "f6c23ba84a7496d51d88b9dd545d1ec4c3b2686811f7b620a7f1149887d38ba8",
-              "mirror_snapshot_id": "da509b6885271b01d662",
+              "mirror_sha256": "ac9f68d332dba439927db75733882dc95fcf0b9a17548fdc528ab966541252a8",
+              "mirror_snapshot_id": "e8886bb3b6d1cc29bd68",
               "period": "2026-06-03",
               "source_url": "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
               "unit": "users",
@@ -309,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 367,
+          "derivatives_metric_rows": 368,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -352,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 376,
+      "evidence_row_count": 377,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -438,8 +438,8 @@
         "observation": {
           "early_mean": 2162.714285714286,
           "first_period": "2026-05-18",
-          "latest_period": "2026-08-31",
-          "recent_mean": 1544.5714285714287,
+          "latest_period": "2026-09-01",
+          "recent_mean": 1730.0,
           "window": 7
         },
         "research_implication": {
@@ -448,7 +448,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 318,
+      "evidence_row_count": 321,
       "measurement_variables": [
         "aave_event_count",
         "aave_liquidation_count",
@@ -469,7 +469,7 @@
         "kind": "directional_evidence_gap",
         "measurement_gap": "Clinical-trial registrations, official approval records and sequencing costs establish research scale and economics but do not isolate AI causality, discovery quality, precision outcomes, or resulting healthcare economics.",
         "observation": {
-          "evidence_row_count": 5,
+          "evidence_row_count": 159,
           "latest_observations": [
             {
               "dimensions": {
@@ -480,13 +480,30 @@
               "fact_class": "observed",
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
+              "metric_id": "sequencing_cost_per_megabase_usd",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2021-11",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+              "unit": "USD_per_megabase",
+              "value": 0.006135518030494901
+            },
+            {
+              "dimensions": {
+                "geography": null,
+                "reported_period": null
+              },
+              "entity": "NHGRI / DNA sequencing costs",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
               "metric_id": "sequencing_cost_per_genome_usd",
-              "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-              "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
-              "period": "2021",
-              "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2022-02",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
               "unit": "USD_per_human_genome",
-              "value": 562
+              "value": 524.6246837058089
             },
             {
               "dimensions": {
@@ -498,12 +515,46 @@
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "sequencing_cost_per_megabase_usd",
-              "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-              "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
-              "period": "2021",
-              "source_url": "https://www.genome.gov/genetics-glossary/Megabase-Mb",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2022-02",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
               "unit": "USD_per_megabase",
-              "value": 0.006
+              "value": 0.005829163152286766
+            },
+            {
+              "dimensions": {
+                "geography": null,
+                "reported_period": null
+              },
+              "entity": "NHGRI / DNA sequencing costs",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "sequencing_cost_per_genome_usd",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2022-05",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+              "unit": "USD_per_human_genome",
+              "value": 524.6246837058089
+            },
+            {
+              "dimensions": {
+                "geography": null,
+                "reported_period": null
+              },
+              "entity": "NHGRI / DNA sequencing costs",
+              "fact_class": "observed",
+              "feed_id": "multiomics-metrics",
+              "logical_repo": "multiomics",
+              "metric_id": "sequencing_cost_per_megabase_usd",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2022-05",
+              "source_url": "https://www.genome.gov/sites/default/files/media/files/2023-05/Sequencing_Cost_Data_Table_May2022.xls",
+              "unit": "USD_per_megabase",
+              "value": 0.005829163152286766
             },
             {
               "dimensions": {
@@ -515,8 +566,8 @@
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "clinical_trial_count",
-              "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-              "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
               "period": "2026-07-15",
               "source_url": "https://clinicaltrials.gov/study/NCT06264180",
               "unit": "studies",
@@ -532,8 +583,8 @@
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "multiomics_trial_count",
-              "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-              "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
               "period": "2026-07-15",
               "source_url": "https://clinicaltrials.gov/study/NCT06264180",
               "unit": "studies",
@@ -549,12 +600,12 @@
               "feed_id": "multiomics-metrics",
               "logical_repo": "multiomics",
               "metric_id": "fda_approval_count",
-              "mirror_sha256": "961a076691826017714d7d258f89d351617be0f3f018c529e0e7dffda4607b2b",
-              "mirror_snapshot_id": "9ba1e600a1bd3bf940af",
-              "period": "2026-08-06",
-              "source_url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-grants-accelerated-approval-vusolimogene-oderparepvec-wtpg-combination-nivolumab-melanoma",
+              "mirror_sha256": "b83ee274fb5e8d6f45f2c54d2ffb3ce77086e4eb8b40c9162d8e82ea8a4ebe13",
+              "mirror_snapshot_id": "c429d913e368d6b9810f",
+              "period": "2026-08-26",
+              "source_url": "https://www.fda.gov/drugs/resources-information-approved-drugs/fda-approves-daraxonrasib-metastatic-pancreatic-adenocarcinoma",
               "unit": "approvals",
-              "value": 1
+              "value": 4
             }
           ]
         },
@@ -564,7 +615,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 5,
+      "evidence_row_count": 159,
       "measurement_variables": [
         "clinical_trial_count",
         "multiomics_trial_count",
@@ -583,23 +634,23 @@
       "claim_paraphrase": "Reusable launch systems are lowering access-to-orbit costs and enabling higher launch cadence and expanding space infrastructure.",
       "claim_source_url": "https://www.ark-invest.com/big-ideas-2026",
       "deviation": {
-        "classification": "directionally_supporting",
+        "classification": "mixed",
         "kind": "directional_evidence_gap",
         "measurement_gap": "Launch cadence is observed, but this cross-theme feed does not yet carry a comparable launch-cost series or explicit reuse-rate series.",
         "observation": {
           "early_mean": 13.0,
           "first_period": "2024-01",
-          "latest_period": "2026-08",
-          "recent_mean": 15.0,
+          "latest_period": "2026-09",
+          "recent_mean": 12.166666666666666,
           "window": 6
         },
         "research_implication": {
           "prescriptive_action": null,
-          "text": "Observed proxies move in the direction of the ARK hypothesis, but the stated measurement gap remains material; this strengthens only the measured part of the thesis.",
-          "thesis_state": "strengthening"
+          "text": "Observed evidence establishes activity or scale but does not test the full ARK hypothesis; treat the thesis as mixed rather than confirmed or rejected.",
+          "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 32,
+      "evidence_row_count": 33,
       "measurement_variables": [
         "completed_launch_count"
       ],
