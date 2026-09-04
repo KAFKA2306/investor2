@@ -35,6 +35,26 @@ jobs:
           version: "0.11.32"
       - name: Install locked project
         run: uv sync --locked
+      - name: Apply canonical Ruff formatting once
+        shell: bash
+        run: |
+          set -euo pipefail
+          files=(
+            scripts/skfolio_jquants_oos.py
+            scripts/skfolio_allocation_oos.py
+            src/research/skfolio_characteristics.py
+            tests/test_skfolio_jquants_oos.py
+            tests/test_skfolio_allocation_oos.py
+            tests/test_skfolio_characteristics.py
+          )
+          uv run ruff format "${files[@]}"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if ! git diff --quiet -- "${files[@]}"; then
+            git add "${files[@]}"
+            git commit -m "style: apply canonical Ruff formatting"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+          fi
       - name: Validate focused contract
         shell: bash
         run: |
