@@ -32,22 +32,19 @@ jobs:
           version: "0.11.32"
       - name: Install locked project
         run: uv sync --locked
-      - name: Diagnose focused contract
+      - name: Validate focused contract
         shell: bash
         run: |
-          set -uo pipefail
-          uv run ruff format scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
-          echo '--- RUFF FORMAT DIFF ---'
-          git diff -- scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
-          format_changed=0
-          git diff --quiet -- scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py || format_changed=1
-          uv run ruff check scripts/skfolio_jquants_oos.py tests/test_skfolio_jquants_oos.py tests/test_skfolio_characteristics.py
-          lint_status=$?
+          set -euo pipefail
+          files=(
+            scripts/skfolio_jquants_oos.py
+            src/research/skfolio_characteristics.py
+            tests/test_skfolio_jquants_oos.py
+            tests/test_skfolio_characteristics.py
+          )
+          uv run ruff format --check "${files[@]}"
+          uv run ruff check "${files[@]}"
           uv run pytest -q tests/test_skfolio_characteristics.py tests/test_skfolio_jquants_oos.py
-          test_status=$?
-          if [ "$format_changed" -ne 0 ] || [ "$lint_status" -ne 0 ] || [ "$test_status" -ne 0 ]; then
-            exit 1
-          fi
 
   frozen-jquants-oos:
     if: github.actor != 'github-actions[bot]'
@@ -136,7 +133,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          target=docs/research/results/skfolio_characteristics_jquants_free
+          target=docs/research/results/skfolio_mktcap_jquants_free
           rm -rf "$target"
           mkdir -p "$target"
           cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
@@ -147,7 +144,7 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$target"
           if ! git diff --cached --quiet; then
-            git commit -m "research: persist skfolio J-Quants OOS evidence [evidence]"
+            git commit -m "research: persist true MktCap skfolio OOS evidence [evidence]"
             git push origin HEAD:research/skfolio-jquants-oos
           fi
       - name: Delete plaintext working copies

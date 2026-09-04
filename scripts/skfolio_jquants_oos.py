@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Run a frozen J-Quants OOS covariance comparison for skfolio CharacteristicsFactorModel."""
+"""Run frozen J-Quants OOS covariance comparisons for skfolio factor models."""
 
 from __future__ import annotations
 
@@ -16,15 +16,23 @@ import pandas as pd
 from skfolio.containers import AssetPanel
 
 from scripts.jquants_japan_panel import choose_japan_universe, load_japan_inputs
+from src.research.market_snapshot import MarketSnapshot, load_prices
 from src.research.skfolio_characteristics import (
     asset_panel_from_prices,
+    asset_panel_from_prices_and_market_cap,
+    build_market_cap_characteristics_model,
     build_price_only_characteristics_model,
+    market_cap_model_contract,
     model_contract,
 )
 
 ANNUALIZATION_FACTOR = 252.0
 MIN_TRAIN_RETURN_OBSERVATIONS = 180
 MIN_TEST_RETURN_OBSERVATIONS = 30
+PRIMARY_METRICS = (
+    "normalized_frobenius_error",
+    "equal_weight_volatility_absolute_error",
+)
 
 
 @dataclass(frozen=True)
@@ -39,8 +47,8 @@ class Fold:
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description=(
-            "Compare empirical covariance with skfolio CharacteristicsFactorModel "
-            "on fixed PIT Japanese equities and walk-forward OOS folds."
+            "Compare empirical covariance, price-only CharacteristicsFactorModel, and "
+            "true-MktCap Size/Beta CharacteristicsFactorModel on fixed PIT Japanese equities."
         )
     )
     parser.add_argument("--market-snapshot-dir", required=True, type=Path)
@@ -70,7 +78,12 @@ def sha256_text(text: str) -> str:
 def sha256_array(array: np.ndarray) -> str:
     normalized = np.ascontiguousarray(np.asarray(array, dtype=np.float64))
     digest = hashlib.sha256()
-    digest.update(json.dumps({"shape": normalized.shape, "dtype": "float64"}, separators=(",", ":")).encode())
+    digest.update(
+        json.dumps(
+            {"shape": normalized.shape, "dtype": "float64"},
+            separators=(",", ":"),
+        ).encode()
+    )
     digest.update(normalized.tobytes(order="C"))
     return digest.hexdigest()
 
@@ -144,8 +157,8 @@ def covariance_error_metrics(
     }
 
 
-def canonical_price_hash(prices: pd.DataFrame) -> str:
-    serialized = prices.to_csv(
+def canonical_frame_hash(frame: pd.DataFrame) -> str:
+    serialized = frame.to_csv(
         index=True,
         date_format="%Y-%m-%d",
         float_format="%.12g",
@@ -163,7 +176,57 @@ def returns_frame_from_panel(panel: AssetPanel) -> pd.DataFrame:
     )
 
 
-def run_fold(fold: Fold, prices: pd.DataFrame, output_dir: Path) -> dict[str, object]:
+def load_market_cap_matrix(
+    snapshot_dir: Path,
+    *,
+    regions: list[str],
+    selected_codes: list[str],
+    index: pd.DatetimeIndex,
+) -> pd.DataFrame:
+    raw = load_prices(MarketSnapshot(snapshot_dir), regions=regions)
+    if "MktCap" not in raw.columns:
+        raise AssertionError("J-Quants snapshot prices do not contain true MktCap")
+    code_column = "Code" if "Code" in raw.columns else "Ticker" if "Ticker" in raw.columns else None
+    if code_column is None or "Date" not in raw.columns:
+        raise AssertionError("J-Quants snapshot prices lack Code/Ticker or Date identity")
+
+    caps = raw[[code_column, "Date", "MktCap"]].copy()
+    caps = caps.rename(columns={code_column: "Code"})
+    caps["Code"] = caps["Code"].astype(str)
+    caps["Date"] = pd.to_datetime(caps["Date"], errors="raise").dt.tz_localize(None)
+    caps["MktCap"] = pd.to_numeric(caps["MktCap"], errors="coerce")
+    caps = caps[caps["Code"].isin(selected_codes)]
+    duplicate = caps.duplicated(["Code", "Date"], keep=False)
+    if duplicate.any():
+        sample = caps.loc[duplicate, ["Code", "Date"]].head(5).to_dict(orient="records")
+        raise AssertionError(f"duplicate selected Code/Date MktCap rows: {sample}")
+    matrix = caps.pivot(index="Date", columns="Code", values="MktCap").sort_index()
+    return matrix.reindex(index=index, columns=selected_codes)
+
+
+def market_cap_coverage(frame: pd.DataFrame) -> dict[str, object]:
+    values = frame.to_numpy(dtype=float, copy=True)
+    total = int(values.size)
+    finite_positive = np.isfinite(values) & (values > 0)
+    valid = int(finite_positive.sum())
+    complete_assets = int(finite_positive.all(axis=0).sum()) if values.size else 0
+    return {
+        "cells": total,
+        "finite_positive_cells": valid,
+        "invalid_cells": total - valid,
+        "coverage": float(valid / total) if total else 0.0,
+        "asset_count": int(frame.shape[1]),
+        "assets_with_complete_coverage": complete_assets,
+        "all_finite_positive": bool(total > 0 and finite_positive.all()),
+    }
+
+
+def run_fold(
+    fold: Fold,
+    prices: pd.DataFrame,
+    market_cap: pd.DataFrame,
+    output_dir: Path,
+) -> dict[str, object]:
     train_prices = prices.loc[(prices.index >= fold.train_start) & (prices.index <= fold.train_end)]
     if len(train_prices) < MIN_TRAIN_RETURN_OBSERVATIONS + 1:
         raise AssertionError(
@@ -181,18 +244,22 @@ def run_fold(fold: Fold, prices: pd.DataFrame, output_dir: Path) -> dict[str, ob
     if len(train_returns) < MIN_TRAIN_RETURN_OBSERVATIONS:
         raise AssertionError(f"fold {fold.index} has only {len(train_returns)} training returns")
 
-    model = build_price_only_characteristics_model()
-    with warnings.catch_warnings(record=True) as caught_warnings:
+    current_model = build_price_only_characteristics_model()
+    with warnings.catch_warnings(record=True) as current_warnings:
         warnings.simplefilter("always")
-        model.fit(X=train_returns, characteristics=train_panel)
+        current_model.fit(X=train_returns, characteristics=train_panel)
 
-    investment_universe = [str(name) for name in model.feature_names_in_]
+    investment_universe = [str(name) for name in current_model.feature_names_in_]
     expected_universe = [str(name) for name in train_returns.columns]
     if investment_universe != expected_universe:
         raise AssertionError(f"fold {fold.index} skfolio investment universe differs from X.columns")
 
     full_mask = pd.DataFrame(True, index=prices.index, columns=prices.columns)
-    full_panel = asset_panel_from_prices(prices, active_mask=full_mask, estimation_mask=full_mask)
+    full_panel = asset_panel_from_prices(
+        prices,
+        active_mask=full_mask,
+        estimation_mask=full_mask,
+    )
     all_returns = returns_frame_from_panel(full_panel)
     test_returns = all_returns.loc[(all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)]
     if len(test_returns) < MIN_TEST_RETURN_OBSERVATIONS:
@@ -204,41 +271,102 @@ def run_fold(fold: Fold, prices: pd.DataFrame, output_dir: Path) -> dict[str, ob
         raise AssertionError("OOS return columns do not match the explicit investment universe")
 
     baseline_covariance = train_returns.cov().to_numpy(dtype=float)
-    skfolio_covariance = np.asarray(model.return_distribution_.covariance, dtype=float)
+    current_covariance = np.asarray(
+        current_model.return_distribution_.covariance,
+        dtype=float,
+    )
     realized_covariance = test_returns.cov().to_numpy(dtype=float)
     expected_shape = (len(investment_universe), len(investment_universe))
     for name, covariance in (
         ("baseline", baseline_covariance),
-        ("skfolio", skfolio_covariance),
+        ("current_skfolio", current_covariance),
         ("realized", realized_covariance),
     ):
         if covariance.shape != expected_shape or not np.isfinite(covariance).all():
             raise AssertionError(f"{name} covariance is not finite with shape {expected_shape}")
 
-    factor_model = model.factor_model_
-    if [str(name) for name in factor_model.asset_names] != investment_universe:
-        raise AssertionError("factor_model asset_names do not match explicit investment universe")
-    if factor_model.factor_returns is None or factor_model.exposures is None:
-        raise AssertionError("characteristics factor outputs are unexpectedly missing")
+    current_factor_model = current_model.factor_model_
+    if [str(name) for name in current_factor_model.asset_names] != investment_universe:
+        raise AssertionError("current factor_model asset_names do not match investment universe")
+    if current_factor_model.factor_returns is None or current_factor_model.exposures is None:
+        raise AssertionError("current characteristics factor outputs are unexpectedly missing")
 
     baseline_metrics = covariance_error_metrics(baseline_covariance, realized_covariance)
-    skfolio_metrics = covariance_error_metrics(skfolio_covariance, realized_covariance)
+    current_metrics = covariance_error_metrics(current_covariance, realized_covariance)
+
+    train_market_cap = market_cap.loc[train_returns.index, train_returns.columns]
+    coverage = market_cap_coverage(train_market_cap)
+    candidate: dict[str, object]
+    candidate_arrays: dict[str, np.ndarray] = {}
+    if cast(bool, coverage["all_finite_positive"]):
+        candidate_market_cap = market_cap.loc[train_prices.index, train_prices.columns]
+        candidate_panel = asset_panel_from_prices_and_market_cap(
+            train_prices,
+            candidate_market_cap,
+            active_mask=mask,
+            estimation_mask=mask,
+        )
+        candidate_model = build_market_cap_characteristics_model()
+        with warnings.catch_warnings(record=True) as candidate_warnings:
+            warnings.simplefilter("always")
+            candidate_model.fit(X=train_returns, characteristics=candidate_panel)
+        if [str(name) for name in candidate_model.feature_names_in_] != investment_universe:
+            raise AssertionError("MktCap candidate investment universe differs from baseline")
+        candidate_covariance = np.asarray(
+            candidate_model.return_distribution_.covariance,
+            dtype=float,
+        )
+        if candidate_covariance.shape != expected_shape or not np.isfinite(candidate_covariance).all():
+            raise AssertionError("MktCap candidate covariance is not finite with expected shape")
+        candidate_factor_model = candidate_model.factor_model_
+        if candidate_factor_model.factor_returns is None or candidate_factor_model.exposures is None:
+            raise AssertionError("MktCap candidate factor outputs are unexpectedly missing")
+        candidate_metrics = covariance_error_metrics(candidate_covariance, realized_covariance)
+        candidate = {
+            "status": "EVALUATED",
+            "market_cap_coverage": coverage,
+            "metrics": candidate_metrics,
+            "delta_candidate_minus_baseline": {
+                key: candidate_metrics[key] - baseline_metrics[key]
+                for key in (
+                    "frobenius_error",
+                    "normalized_frobenius_error",
+                    "diagonal_variance_mae",
+                    "equal_weight_volatility_absolute_error",
+                )
+            },
+            "model_warnings": sorted({str(item.message) for item in candidate_warnings}),
+            "factor_diagnostics": dataframe_records(candidate_factor_model.summary()),
+        }
+        candidate_arrays = {
+            "candidate_covariance": candidate_covariance,
+            "candidate_factor_returns": np.asarray(candidate_factor_model.factor_returns, dtype=float),
+            "candidate_exposures": np.asarray(candidate_factor_model.exposures, dtype=float),
+            "candidate_loading_matrix": np.asarray(candidate_factor_model.loading_matrix, dtype=float),
+            "candidate_idio_covariance": np.asarray(candidate_factor_model.idio_covariance, dtype=float),
+        }
+    else:
+        candidate = {
+            "status": "UNVERIFIED",
+            "reason": "selected train-window true MktCap is not finite and strictly positive for every asset/date",
+            "market_cap_coverage": coverage,
+        }
 
     artifact_path = output_dir / f"fold{fold.index}.npz"
     np.savez_compressed(
         artifact_path,
         codes=np.asarray(investment_universe, dtype="U32"),
-        factor_names=np.asarray(factor_model.factor_names, dtype="U64"),
+        current_factor_names=np.asarray(current_factor_model.factor_names, dtype="U64"),
         baseline_covariance=baseline_covariance,
-        skfolio_covariance=skfolio_covariance,
+        current_skfolio_covariance=current_covariance,
         realized_covariance=realized_covariance,
-        factor_returns=np.asarray(factor_model.factor_returns, dtype=float),
-        exposures=np.asarray(factor_model.exposures, dtype=float),
-        loading_matrix=np.asarray(factor_model.loading_matrix, dtype=float),
-        idio_covariance=np.asarray(factor_model.idio_covariance, dtype=float),
+        current_factor_returns=np.asarray(current_factor_model.factor_returns, dtype=float),
+        current_exposures=np.asarray(current_factor_model.exposures, dtype=float),
+        current_loading_matrix=np.asarray(current_factor_model.loading_matrix, dtype=float),
+        current_idio_covariance=np.asarray(current_factor_model.idio_covariance, dtype=float),
+        **candidate_arrays,
     )
 
-    diagnostics = dataframe_records(factor_model.summary())
     return {
         "fold": {
             key: (str(value.date()) if isinstance(value, pd.Timestamp) else value)
@@ -252,9 +380,9 @@ def run_fold(fold: Fold, prices: pd.DataFrame, output_dir: Path) -> dict[str, ob
             "test_returns": int(len(test_returns)),
         },
         "baseline_empirical_covariance": baseline_metrics,
-        "skfolio_characteristics_covariance": skfolio_metrics,
-        "delta_skfolio_minus_baseline": {
-            key: skfolio_metrics[key] - baseline_metrics[key]
+        "current_price_only_characteristics_covariance": current_metrics,
+        "delta_current_minus_baseline": {
+            key: current_metrics[key] - baseline_metrics[key]
             for key in (
                 "frobenius_error",
                 "normalized_frobenius_error",
@@ -262,61 +390,79 @@ def run_fold(fold: Fold, prices: pd.DataFrame, output_dir: Path) -> dict[str, ob
                 "equal_weight_volatility_absolute_error",
             )
         },
+        "true_mktcap_size_beta_candidate": candidate,
         "output_hashes": {
             "baseline_covariance_sha256": sha256_array(baseline_covariance),
-            "skfolio_covariance_sha256": sha256_array(skfolio_covariance),
+            "current_skfolio_covariance_sha256": sha256_array(current_covariance),
             "realized_covariance_sha256": sha256_array(realized_covariance),
-            "factor_returns_sha256": sha256_array(np.asarray(factor_model.factor_returns, dtype=float)),
-            "exposures_sha256": sha256_array(np.asarray(factor_model.exposures, dtype=float)),
-            "loading_matrix_sha256": sha256_array(np.asarray(factor_model.loading_matrix, dtype=float)),
-            "idio_covariance_sha256": sha256_array(np.asarray(factor_model.idio_covariance, dtype=float)),
             "npz_sha256": sha256_file(artifact_path),
+            **{f"{name}_sha256": sha256_array(value) for name, value in candidate_arrays.items()},
         },
-        "model_warnings": sorted({str(item.message) for item in caught_warnings}),
-        "factor_diagnostics": diagnostics,
+        "current_model_warnings": sorted({str(item.message) for item in current_warnings}),
+        "current_factor_diagnostics": dataframe_records(current_factor_model.summary()),
     }
 
 
-def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
+def _mean_metrics(
+    folds: list[dict[str, object]],
+    key: str,
+) -> dict[str, float]:
     metric_names = (
         "frobenius_error",
         "normalized_frobenius_error",
         "diagonal_variance_mae",
         "equal_weight_volatility_absolute_error",
     )
-    baseline: dict[str, float] = {}
-    candidate: dict[str, float] = {}
-    delta: dict[str, float] = {}
-    for metric in metric_names:
-        baseline[metric] = float(
-            np.mean([cast(dict[str, float], fold["baseline_empirical_covariance"])[metric] for fold in folds])
-        )
-        candidate[metric] = float(
-            np.mean([cast(dict[str, float], fold["skfolio_characteristics_covariance"])[metric] for fold in folds])
-        )
-        delta[metric] = candidate[metric] - baseline[metric]
-
-    direct_wins = {
-        "normalized_frobenius_error": (
-            candidate["normalized_frobenius_error"] < baseline["normalized_frobenius_error"]
-        ),
-        "equal_weight_volatility_absolute_error": (
-            candidate["equal_weight_volatility_absolute_error"] < baseline["equal_weight_volatility_absolute_error"]
-        ),
+    return {
+        metric: float(np.mean([cast(dict[str, float], fold[key])[metric] for fold in folds])) for metric in metric_names
     }
-    if all(direct_wins.values()):
-        verdict = "skfolio_better_on_both_primary_risk_metrics"
-    elif any(direct_wins.values()):
-        verdict = "mixed"
-    else:
-        verdict = "empirical_baseline_better_or_equal_on_both_primary_risk_metrics"
 
+
+def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
+    baseline = _mean_metrics(folds, "baseline_empirical_covariance")
+    current = _mean_metrics(folds, "current_price_only_characteristics_covariance")
+    current_wins = {metric: current[metric] < baseline[metric] for metric in PRIMARY_METRICS}
+
+    candidates = [cast(dict[str, object], fold["true_mktcap_size_beta_candidate"]) for fold in folds]
+    if not all(candidate["status"] == "EVALUATED" for candidate in candidates):
+        return {
+            "mean_baseline_empirical_covariance": baseline,
+            "mean_current_price_only_characteristics_covariance": current,
+            "current_primary_metric_wins": current_wins,
+            "true_mktcap_size_beta_candidate": {
+                "status": "UNVERIFIED",
+                "verdict": "UNVERIFIED",
+                "reason": "true MktCap coverage failed in at least one training fold",
+            },
+        }
+
+    candidate_metrics: dict[str, float] = {}
+    for metric in (
+        "frobenius_error",
+        "normalized_frobenius_error",
+        "diagonal_variance_mae",
+        "equal_weight_volatility_absolute_error",
+    ):
+        candidate_metrics[metric] = float(
+            np.mean(
+                [
+                    cast(dict[str, float], cast(dict[str, object], candidate["metrics"]))[metric]
+                    for candidate in candidates
+                ]
+            )
+        )
+    candidate_wins = {metric: candidate_metrics[metric] < baseline[metric] for metric in PRIMARY_METRICS}
+    verdict = "USE" if all(candidate_wins.values()) else "REJECT"
     return {
         "mean_baseline_empirical_covariance": baseline,
-        "mean_skfolio_characteristics_covariance": candidate,
-        "mean_delta_skfolio_minus_baseline": delta,
-        "primary_metric_wins": direct_wins,
-        "verdict": verdict,
+        "mean_current_price_only_characteristics_covariance": current,
+        "current_primary_metric_wins": current_wins,
+        "true_mktcap_size_beta_candidate": {
+            "status": "EVALUATED",
+            "mean_metrics": candidate_metrics,
+            "primary_metric_wins_vs_empirical": candidate_wins,
+            "verdict": verdict,
+        },
     }
 
 
@@ -361,24 +507,43 @@ def main() -> None:
     if complete_prices.index.max() < evaluation_end - pd.Timedelta(days=10):
         raise AssertionError("selected universe lacks the required evaluation end history")
 
-    args.output_dir.mkdir(parents=True, exist_ok=True)
-    fold_results = [run_fold(fold, complete_prices, args.output_dir) for fold in folds]
+    regions = [value.strip().lower() for value in args.market_regions.split(",") if value.strip()]
+    market_cap_matrix = load_market_cap_matrix(
+        args.market_snapshot_dir,
+        regions=regions,
+        selected_codes=selected_codes,
+        index=complete_prices.index,
+    )
+    overall_market_cap_coverage = market_cap_coverage(market_cap_matrix.iloc[1:])
 
-    contract = model_contract()
-    contract_json = json.dumps(contract, ensure_ascii=False, sort_keys=True, separators=(",", ":"))
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    fold_results = [run_fold(fold, complete_prices, market_cap_matrix, args.output_dir) for fold in folds]
+
+    current_contract = model_contract()
+    candidate_contract = market_cap_model_contract()
+    contracts_json = json.dumps(
+        {"current": current_contract, "candidate": candidate_contract},
+        ensure_ascii=False,
+        sort_keys=True,
+        separators=(",", ":"),
+    )
     source_manifest = args.market_snapshot_dir / "manifest.json"
     universe_file = args.market_snapshot_dir / "universe.parquet"
     if not source_manifest.exists() or not universe_file.exists():
         raise FileNotFoundError("market snapshot must contain manifest.json and universe.parquet")
 
     summary = {
-        "schema_version": "investor2.skfolio-characteristics-jquants-oos.v1",
+        "schema_version": "investor2.skfolio-mktcap-jquants-oos.v1",
         "execution_status": "completed",
         "source": source_metadata,
         "input_contract": {
             "source_manifest_sha256": sha256_file(source_manifest),
             "pit_universe_parquet_sha256": sha256_file(universe_file),
-            "selected_price_panel_sha256": canonical_price_hash(complete_prices),
+            "selected_price_panel_sha256": canonical_frame_hash(complete_prices),
+            "selected_market_cap_panel_sha256": canonical_frame_hash(market_cap_matrix),
+            "selected_market_cap_coverage": overall_market_cap_coverage,
+            "market_cap_source_field": "J-Quants MktCap",
+            "market_cap_fallback": "none",
             "selected_codes": selected_codes,
             "selected_asset_count": len(selected_codes),
             "universe_cutoff": str(cutoff.date()),
@@ -390,8 +555,11 @@ def main() -> None:
                 "intersection of dates with finite adjusted Close for every fixed selected asset; no forward/back fill"
             ),
         },
-        "model_contract": contract,
-        "model_contract_sha256": sha256_text(contract_json),
+        "model_contracts": {
+            "current_price_only": current_contract,
+            "true_mktcap_size_beta": candidate_contract,
+        },
+        "model_contracts_sha256": sha256_text(contracts_json),
         "walk_forward_contract": {
             "train_months": args.train_months,
             "fold_months": args.fold_months,
@@ -401,12 +569,21 @@ def main() -> None:
             "annualization_factor": ANNUALIZATION_FACTOR,
         },
         "baseline": "sample covariance of the same simple-return training observations",
-        "candidate": "skfolio CharacteristicsFactorModel return_distribution_.covariance",
+        "current_candidate": "market + momentum + volatility, equal-weight characteristics model",
+        "tested_candidate": (
+            "market + EWMarketBeta + LogMarketCap using true J-Quants MktCap, "
+            "market-cap benchmark and sqrt-market-cap regression weighting"
+        ),
+        "acceptance_rule": (
+            "USE only if the true-MktCap candidate beats empirical covariance on both normalized "
+            "Frobenius error and equal-weight volatility absolute error; otherwise REJECT; "
+            "insufficient MktCap coverage is UNVERIFIED"
+        ),
         "folds": fold_results,
         "aggregate": aggregate_results(fold_results),
         "claim_boundary": (
-            "Risk/covariance forecast comparison only. This result does not establish alpha, expected-return, "
-            "or strategy-performance improvement."
+            "Risk/covariance forecast comparison only. This result does not establish alpha, "
+            "expected-return, or strategy-performance improvement."
         ),
     }
     summary_path = args.output_dir / "summary.json"
@@ -415,14 +592,15 @@ def main() -> None:
         encoding="utf-8",
     )
     artifact_manifest = {
-        "schema_version": "investor2.skfolio-characteristics-jquants-oos-artifacts.v1",
+        "schema_version": "investor2.skfolio-mktcap-jquants-oos-artifacts.v1",
         "summary_sha256": sha256_file(summary_path),
         "artifacts": {path.name: sha256_file(path) for path in sorted(args.output_dir.glob("fold*.npz"))},
         "input_hashes": {
             "source_manifest_sha256": summary["input_contract"]["source_manifest_sha256"],
             "pit_universe_parquet_sha256": summary["input_contract"]["pit_universe_parquet_sha256"],
             "selected_price_panel_sha256": summary["input_contract"]["selected_price_panel_sha256"],
-            "model_contract_sha256": summary["model_contract_sha256"],
+            "selected_market_cap_panel_sha256": summary["input_contract"]["selected_market_cap_panel_sha256"],
+            "model_contracts_sha256": summary["model_contracts_sha256"],
         },
     }
     manifest_path = args.output_dir / "artifact-manifest.json"

@@ -1,0 +1,15 @@
+{
+  "artifacts": {
+    "fold0.npz": "3a42c99e7e6cf2a1fa4a3daba34b81eff80c043683f59804f4878be4d616ec61",
+    "fold1.npz": "2699c7cc60c4132ddd296a0ad3e122f7be0739dea7126e94cf279fd370c8067f"
+  },
+  "input_hashes": {
+    "model_contracts_sha256": "a6f71b5f64277baba88a84d5e60c124e162503031260cb338e7aed64f69816c8",
+    "pit_universe_parquet_sha256": "940f9c4752d066203a6f5ab899a6550c142d1b8e61dfa2dbd6ef698af5241228",
+    "selected_market_cap_panel_sha256": "affb46e299c782a0ce88f465b2e997adfc72d1b20ca45a6e4fa2437a15fdef63",
+    "selected_price_panel_sha256": "cdb0a8c254acd32cc7e50114d9a3d1d84e375d3d6b78a689bb26c1160f714d4a",
+    "source_manifest_sha256": "20eaab28a9137f739a900c41cff657046291724748148168a87d113c2f5ed064"
+  },
+  "schema_version": "investor2.skfolio-mktcap-jquants-oos-artifacts.v1",
+  "summary_sha256": "2b317fa24b1f68bcf2c1679f02bf86fbe8f7d6f4ee137702792d904dee18a548"
+}
