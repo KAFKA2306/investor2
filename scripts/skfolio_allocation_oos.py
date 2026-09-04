@@ -40,7 +40,9 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-def min_variance_weights(covariance: np.ndarray, *, max_weight: float = MAX_ASSET_WEIGHT) -> np.ndarray:
+def min_variance_weights(
+    covariance: np.ndarray, *, max_weight: float = MAX_ASSET_WEIGHT
+) -> np.ndarray:
     covariance = np.asarray(covariance, dtype=float)
     if covariance.ndim != 2 or covariance.shape[0] != covariance.shape[1]:
         raise ValueError("covariance must be square")
@@ -56,12 +58,19 @@ def min_variance_weights(covariance: np.ndarray, *, max_weight: float = MAX_ASSE
         [cp.sum(weights) == 1, weights >= 0, weights <= max_weight],
     )
     problem.solve(solver="CLARABEL")
-    if problem.status not in {cp.OPTIMAL, cp.OPTIMAL_INACCURATE} or weights.value is None:
+    if (
+        problem.status not in {cp.OPTIMAL, cp.OPTIMAL_INACCURATE}
+        or weights.value is None
+    ):
         raise RuntimeError(f"minimum-variance optimization failed: {problem.status}")
 
     solved = np.asarray(weights.value, dtype=float).reshape(-1)
     solved[np.abs(solved) < 1e-10] = 0.0
-    if not np.isfinite(solved).all() or solved.min() < -1e-7 or solved.max() > max_weight + 1e-7:
+    if (
+        not np.isfinite(solved).all()
+        or solved.min() < -1e-7
+        or solved.max() > max_weight + 1e-7
+    ):
         raise RuntimeError("minimum-variance solution violates weight bounds")
     if abs(float(solved.sum()) - 1.0) > 1e-6:
         raise RuntimeError("minimum-variance solution is not fully invested")
@@ -97,7 +106,9 @@ def portfolio_metrics(returns: pd.Series) -> dict[str, float]:
         "cagr": cagr,
         "annualized_volatility": float(daily_vol * np.sqrt(ANNUALIZATION_FACTOR)),
         "sharpe_zero_risk_free": float(
-            0.0 if daily_vol == 0 else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR)
+            0.0
+            if daily_vol == 0
+            else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR)
         ),
         "maximum_drawdown": float(drawdowns.min()),
         "expected_shortfall_95_daily": expected_shortfall,
@@ -118,12 +129,20 @@ def load_selected_returns(
     )
     prices_long, _, _ = load_japan_inputs(load_args)
     selected = prices_long[prices_long["Code"].isin(selected_codes)].copy()
-    prices = selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
+    prices = (
+        selected.pivot(index="Date", columns="Code", values="Close")
+        .sort_index()
+        .reindex(columns=selected_codes)
+    )
     prices = prices.dropna(axis=0, how="any")
     if prices.empty or list(prices.columns) != selected_codes:
-        raise AssertionError("selected price panel could not be reconstructed from canonical snapshot")
+        raise AssertionError(
+            "selected price panel could not be reconstructed from canonical snapshot"
+        )
     mask = pd.DataFrame(True, index=prices.index, columns=prices.columns)
-    return returns_frame_from_panel(asset_panel_from_prices(prices, active_mask=mask, estimation_mask=mask))
+    return returns_frame_from_panel(
+        asset_panel_from_prices(prices, active_mask=mask, estimation_mask=mask)
+    )
 
 
 def evaluate(
@@ -132,18 +151,29 @@ def evaluate(
     all_returns: pd.DataFrame,
     transaction_cost_bps: float = TRANSACTION_COST_BPS,
 ) -> dict[str, object]:
-    summary = json.loads((covariance_dir / "summary.json").read_text(encoding="utf-8"))
+    summary = json.loads(
+        (covariance_dir / "summary.json").read_text(encoding="utf-8")
+    )
     folds = cast(list[dict[str, object]], summary["folds"])
     selected_codes = [
-        str(code) for code in cast(list[object], cast(dict[str, object], summary["input_contract"])["selected_codes"])
+        str(code)
+        for code in cast(
+            list[object],
+            cast(dict[str, object], summary["input_contract"])["selected_codes"],
+        )
     ]
     if list(all_returns.columns) != selected_codes:
-        raise AssertionError("reconstructed return columns differ from frozen investment universe")
+        raise AssertionError(
+            "reconstructed return columns differ from frozen investment universe"
+        )
 
     previous_weights = {
-        key: np.full(len(selected_codes), 1.0 / len(selected_codes), dtype=float) for key in STRATEGY_KEYS
+        key: np.full(len(selected_codes), 1.0 / len(selected_codes), dtype=float)
+        for key in STRATEGY_KEYS
     }
-    strategy_returns: dict[str, list[pd.Series]] = {key: [] for key in STRATEGY_KEYS}
+    strategy_returns: dict[str, list[pd.Series]] = {
+        key: [] for key in STRATEGY_KEYS
+    }
     turnover: dict[str, float] = {key: 0.0 for key in STRATEGY_KEYS}
     fold_details: list[dict[str, object]] = []
 
@@ -152,9 +182,13 @@ def evaluate(
         fold_index = int(cast(int | str, fold["index"]))
         test_start = pd.Timestamp(cast(str, fold["test_start"]))
         test_end = pd.Timestamp(cast(str, fold["test_end"]))
-        test_returns = all_returns.loc[(all_returns.index >= test_start) & (all_returns.index <= test_end)]
+        test_returns = all_returns.loc[
+            (all_returns.index >= test_start) & (all_returns.index <= test_end)
+        ]
         if test_returns.empty:
-            raise AssertionError(f"fold {fold_index} has no reconstructed OOS returns")
+            raise AssertionError(
+                f"fold {fold_index} has no reconstructed OOS returns"
+            )
 
         artifact = np.load(covariance_dir / f"fold{fold_index}.npz")
         required = {
@@ -163,13 +197,23 @@ def evaluate(
             "candidate_covariance",
         }
         if not required.issubset(artifact.files):
-            raise AssertionError(f"fold {fold_index} lacks required covariance arrays")
+            raise AssertionError(
+                f"fold {fold_index} lacks required covariance arrays"
+            )
 
         weights_by_strategy = {
-            "equal_weight": np.full(len(selected_codes), 1.0 / len(selected_codes), dtype=float),
-            "empirical_covariance_min_variance": min_variance_weights(artifact["baseline_covariance"]),
-            "price_only_min_variance": min_variance_weights(artifact["current_skfolio_covariance"]),
-            "true_mktcap_size_beta_min_variance": min_variance_weights(artifact["candidate_covariance"]),
+            "equal_weight": np.full(
+                len(selected_codes), 1.0 / len(selected_codes), dtype=float
+            ),
+            "empirical_covariance_min_variance": min_variance_weights(
+                artifact["baseline_covariance"]
+            ),
+            "price_only_min_variance": min_variance_weights(
+                artifact["current_skfolio_covariance"]
+            ),
+            "true_mktcap_size_beta_min_variance": min_variance_weights(
+                artifact["candidate_covariance"]
+            ),
         }
         fold_summary: dict[str, object] = {"fold": fold, "strategies": {}}
         for key, weights in weights_by_strategy.items():
@@ -189,7 +233,9 @@ def evaluate(
                 "one_way_turnover": fold_turnover,
                 "transaction_cost_return": cost,
                 "maximum_weight": float(weights.max()),
-                "effective_number_of_assets": float(1.0 / np.square(weights).sum()),
+                "effective_number_of_assets": float(
+                    1.0 / np.square(weights).sum()
+                ),
                 "metrics_after_cost": portfolio_metrics(period),
             }
         fold_details.append(fold_summary)
@@ -201,20 +247,28 @@ def evaluate(
             raise AssertionError(f"{key} OOS folds overlap")
         aggregate[key] = {
             "cumulative_one_way_turnover": turnover[key],
-            "estimated_transaction_cost_return": (turnover[key] * transaction_cost_bps / 10_000.0),
+            "estimated_transaction_cost_return": (
+                turnover[key] * transaction_cost_bps / 10_000.0
+            ),
             "metrics_after_cost": portfolio_metrics(combined),
         }
 
-    empirical = cast(dict[str, object], aggregate["empirical_covariance_min_variance"])
-    candidate = cast(dict[str, object], aggregate["true_mktcap_size_beta_min_variance"])
+    empirical = cast(
+        dict[str, object], aggregate["empirical_covariance_min_variance"]
+    )
+    candidate = cast(
+        dict[str, object], aggregate["true_mktcap_size_beta_min_variance"]
+    )
     empirical_metrics = cast(dict[str, float], empirical["metrics_after_cost"])
     candidate_metrics = cast(dict[str, float], candidate["metrics_after_cost"])
     wins = {
         "annualized_volatility": bool(
-            candidate_metrics["annualized_volatility"] < empirical_metrics["annualized_volatility"]
+            candidate_metrics["annualized_volatility"]
+            < empirical_metrics["annualized_volatility"]
         ),
         "maximum_drawdown": bool(
-            candidate_metrics["maximum_drawdown"] > empirical_metrics["maximum_drawdown"]
+            candidate_metrics["maximum_drawdown"]
+            > empirical_metrics["maximum_drawdown"]
         ),
     }
     verdict = "USE" if all(wins.values()) else "REJECT"
@@ -244,7 +298,9 @@ def evaluate(
         "aggregate": aggregate,
         "folds": fold_details,
         "source_covariance_schema": summary["schema_version"],
-        "source_covariance_verdict": cast(dict[str, object], summary["aggregate"])["true_mktcap_size_beta_candidate"],
+        "source_covariance_verdict": cast(
+            dict[str, object], summary["aggregate"]
+        )["true_mktcap_size_beta_candidate"],
         "claim_boundary": (
             "This evaluates risk allocation over the frozen OOS window only; it does not establish alpha or "
             "expected-return improvement."
@@ -254,10 +310,17 @@ def evaluate(
 
 def main() -> None:
     args = parse_args()
-    source_summary = json.loads((args.covariance_dir / "summary.json").read_text(encoding="utf-8"))
+    source_summary = json.loads(
+        (args.covariance_dir / "summary.json").read_text(encoding="utf-8")
+    )
     selected_codes = [
         str(code)
-        for code in cast(list[object], cast(dict[str, object], source_summary["input_contract"])["selected_codes"])
+        for code in cast(
+            list[object],
+            cast(dict[str, object], source_summary["input_contract"])[
+                "selected_codes"
+            ],
+        )
     ]
     all_returns = load_selected_returns(
         args.market_snapshot_dir,
