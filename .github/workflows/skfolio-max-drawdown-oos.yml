@@ -1,0 +1,135 @@
+name: skfolio Maximum Drawdown OOS validation
+
+on:
+  push:
+    branches:
+      - research/max-drawdown-risk-budgeting
+    paths:
+      - "scripts/skfolio_max_drawdown_oos.py"
+      - "tests/test_skfolio_max_drawdown_oos.py"
+      - ".github/workflows/skfolio-max-drawdown-oos.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  contract:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Install locked project
+        run: uv sync --locked
+      - name: Validate focused contract
+        run: |
+          set -euo pipefail
+          uv run ruff format --check scripts/skfolio_max_drawdown_oos.py tests/test_skfolio_max_drawdown_oos.py
+          uv run ruff check scripts/skfolio_max_drawdown_oos.py tests/test_skfolio_max_drawdown_oos.py
+          uv run pytest -q tests/test_skfolio_max_drawdown_oos.py
+
+  frozen-jquants-oos:
+    if: github.actor != 'github-actions[bot]'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+      MAX_ASSETS: "64"
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install locked project and snapshot dependencies
+        run: |
+          uv sync --locked
+          uv pip install --python .venv/bin/python jquants-api-client cryptography pyarrow
+      - name: Materialize complete visible Free window from owner-only private cache
+        run: |
+          rm -rf /tmp/jquants-free /tmp/skfolio-max-drawdown /tmp/huggingface-personal-cache
+          .venv/bin/python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15
+      - name: Resolve frozen evaluation dates and PIT master date
+        run: |
+          ROOT=/tmp/jquants-free .venv/bin/python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path(os.environ['ROOT'])
+          manifest = json.loads((root / 'manifest.json').read_text())
+          actual_end = pd.Timestamp(manifest['actual_date_range']['end'])
+          evaluation_end = actual_end
+          evaluation_start = evaluation_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = evaluation_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / 'benchmark.parquet')
+          benchmark_dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
+          eligible = benchmark_dates[benchmark_dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit('no benchmark date on/before universe cutoff')
+          master_date = eligible.max()
+          print(f"SNAPSHOT_ROOT={root}")
+          print(f"EVALUATION_START={evaluation_start.date()}")
+          print(f"EVALUATION_END={evaluation_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={master_date.date()}")
+          PY
+      - name: Replace end-date master with cutoff-date PIT master
+        run: |
+          sleep 15
+          .venv/bin/python scripts/jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output "$SNAPSHOT_ROOT/universe.parquet" \
+            --request-interval 15
+      - name: Run preregistered Maximum Drawdown RiskBudgeting OOS study
+        run: |
+          mkdir -p /tmp/skfolio-max-drawdown
+          .venv/bin/python scripts/skfolio_max_drawdown_oos.py \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
+            --output-dir /tmp/skfolio-max-drawdown \
+            --max-assets "$MAX_ASSETS" \
+            --universe-cutoff "$UNIVERSE_CUTOFF" \
+            --evaluation-start "$EVALUATION_START" \
+            --evaluation-end "$EVALUATION_END" \
+            --train-months 12 \
+            --fold-months 3
+      - name: Persist derived evidence only
+        run: |
+          set -euo pipefail
+          target=docs/research/results/skfolio_max_drawdown_jquants_free
+          mkdir -p "$target"
+          cp /tmp/skfolio-max-drawdown/summary.json "$target/summary.json"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target/summary.json"
+          if ! git diff --cached --quiet; then
+            git commit -m "research: persist Maximum Drawdown OOS evidence [evidence]"
+            git push origin HEAD:research/max-drawdown-risk-budgeting
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: rm -rf /tmp/jquants-free /tmp/skfolio-max-drawdown /tmp/huggingface-personal-cache
