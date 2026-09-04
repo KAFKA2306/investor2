@@ -160,9 +160,7 @@ def main() -> None:
 
     selected = prices_long[prices_long["Code"].isin(selected_codes)].copy()
     price_matrix = (
-        selected.pivot(index="Date", columns="Code", values="Close")
-        .sort_index()
-        .reindex(columns=selected_codes)
+        selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
     )
     earliest_required = min(fold.train_start for fold in folds)
     working_prices = price_matrix.loc[
@@ -191,12 +189,8 @@ def main() -> None:
     fold_records: list[dict[str, object]] = []
 
     for fold in folds:
-        train_returns = all_returns.loc[
-            (all_returns.index >= fold.train_start) & (all_returns.index <= fold.train_end)
-        ]
-        test_returns = all_returns.loc[
-            (all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)
-        ]
+        train_returns = all_returns.loc[(all_returns.index >= fold.train_start) & (all_returns.index <= fold.train_end)]
+        test_returns = all_returns.loc[(all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)]
         if len(train_returns) < 180 or len(test_returns) < 30:
             raise AssertionError("fold lacks preregistered minimum observations")
         targets = target_weights(train_returns)

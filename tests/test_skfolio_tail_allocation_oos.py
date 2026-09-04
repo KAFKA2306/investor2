@@ -36,7 +36,4 @@ def test_portfolio_metrics_reward_less_negative_tail() -> None:
     improved_metrics = portfolio_metrics(improved)
 
     assert improved_metrics["maximum_drawdown"] > base_metrics["maximum_drawdown"]
-    assert (
-        improved_metrics["expected_shortfall_95_daily"]
-        > base_metrics["expected_shortfall_95_daily"]
-    )
+    assert improved_metrics["expected_shortfall_95_daily"] > base_metrics["expected_shortfall_95_daily"]
