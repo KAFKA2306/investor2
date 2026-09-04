@@ -133,8 +133,7 @@ def evaluate(
     summary = json.loads((covariance_dir / "summary.json").read_text(encoding="utf-8"))
     folds = cast(list[dict[str, object]], summary["folds"])
     selected_codes = [
-        str(code)
-        for code in cast(list[object], cast(dict[str, object], summary["input_contract"])["selected_codes"])
+        str(code) for code in cast(list[object], cast(dict[str, object], summary["input_contract"])["selected_codes"])
     ]
     if list(all_returns.columns) != selected_codes:
         raise AssertionError("reconstructed return columns differ from frozen investment universe")
@@ -254,9 +253,7 @@ def main() -> None:
     source_summary = json.loads((args.covariance_dir / "summary.json").read_text(encoding="utf-8"))
     selected_codes = [
         str(code)
-        for code in cast(
-            list[object], cast(dict[str, object], source_summary["input_contract"])["selected_codes"]
-        )
+        for code in cast(list[object], cast(dict[str, object], source_summary["input_contract"])["selected_codes"])
     ]
     all_returns = load_selected_returns(
         args.market_snapshot_dir,
