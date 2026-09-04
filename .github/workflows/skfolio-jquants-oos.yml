@@ -32,10 +32,10 @@ jobs:
           version: "0.11.32"
       - name: Install locked project
         run: uv sync --locked
-      - name: Diagnose focused contract
+      - name: Format and validate focused contract
         shell: bash
         run: |
-          set -uo pipefail
+          set -euo pipefail
           files=(
             scripts/skfolio_jquants_oos.py
             src/research/skfolio_characteristics.py
@@ -43,17 +43,17 @@ jobs:
             tests/test_skfolio_characteristics.py
           )
           uv run ruff format "${files[@]}"
-          echo '--- RUFF FORMAT DIFF ---'
-          git diff -- "${files[@]}"
-          format_changed=0
-          git diff --quiet -- "${files[@]}" || format_changed=1
-          uv run ruff check "${files[@]}"
-          lint_status=$?
-          uv run pytest -q tests/test_skfolio_characteristics.py tests/test_skfolio_jquants_oos.py
-          test_status=$?
-          if [ "$format_changed" -ne 0 ] || [ "$lint_status" -ne 0 ] || [ "$test_status" -ne 0 ]; then
+          if ! git diff --quiet -- "${files[@]}"; then
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "${files[@]}"
+            git commit -m "style: format skfolio MktCap research"
+            git push origin HEAD:research/skfolio-jquants-oos
+            echo "Formatting commit pushed; stop this run so the exact formatted head is revalidated."
             exit 1
           fi
+          uv run ruff check "${files[@]}"
+          uv run pytest -q tests/test_skfolio_characteristics.py tests/test_skfolio_jquants_oos.py
 
   frozen-jquants-oos:
     if: github.actor != 'github-actions[bot]'
