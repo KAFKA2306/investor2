@@ -130,11 +130,7 @@ def covariance_error_metrics(
 ) -> dict[str, float]:
     predicted = np.asarray(predicted_covariance, dtype=float)
     realized = np.asarray(realized_covariance, dtype=float)
-    if (
-        predicted.shape != realized.shape
-        or predicted.ndim != 2
-        or predicted.shape[0] != predicted.shape[1]
-    ):
+    if predicted.shape != realized.shape or predicted.ndim != 2 or predicted.shape[0] != predicted.shape[1]:
         raise ValueError("covariance matrices must be square and have identical shape")
 
     delta = predicted - realized
@@ -153,12 +149,8 @@ def covariance_error_metrics(
     realized_vol = float(np.sqrt(realized_variance * ANNUALIZATION_FACTOR))
     return {
         "frobenius_error": float(np.linalg.norm(delta, ord="fro")),
-        "normalized_frobenius_error": float(
-            np.linalg.norm(delta, ord="fro") / realized_norm
-        ),
-        "diagonal_variance_mae": float(
-            np.mean(np.abs(np.diag(predicted) - np.diag(realized)))
-        ),
+        "normalized_frobenius_error": float(np.linalg.norm(delta, ord="fro") / realized_norm),
+        "diagonal_variance_mae": float(np.mean(np.abs(np.diag(predicted) - np.diag(realized)))),
         "equal_weight_forecast_annualized_volatility": predicted_vol,
         "equal_weight_realized_annualized_volatility": realized_vol,
         "equal_weight_volatility_absolute_error": abs(predicted_vol - realized_vol),
@@ -235,9 +227,7 @@ def run_fold(
     market_cap: pd.DataFrame,
     output_dir: Path,
 ) -> dict[str, object]:
-    train_prices = prices.loc[
-        (prices.index >= fold.train_start) & (prices.index <= fold.train_end)
-    ]
+    train_prices = prices.loc[(prices.index >= fold.train_start) & (prices.index <= fold.train_end)]
     if len(train_prices) < MIN_TRAIN_RETURN_OBSERVATIONS + 1:
         raise AssertionError(
             f"fold {fold.index} has only {len(train_prices)} training prices; "
@@ -262,9 +252,7 @@ def run_fold(
     investment_universe = [str(name) for name in current_model.feature_names_in_]
     expected_universe = [str(name) for name in train_returns.columns]
     if investment_universe != expected_universe:
-        raise AssertionError(
-            f"fold {fold.index} skfolio investment universe differs from X.columns"
-        )
+        raise AssertionError(f"fold {fold.index} skfolio investment universe differs from X.columns")
 
     full_mask = pd.DataFrame(True, index=prices.index, columns=prices.columns)
     full_panel = asset_panel_from_prices(
@@ -273,9 +261,7 @@ def run_fold(
         estimation_mask=full_mask,
     )
     all_returns = returns_frame_from_panel(full_panel)
-    test_returns = all_returns.loc[
-        (all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)
-    ]
+    test_returns = all_returns.loc[(all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)]
     if len(test_returns) < MIN_TEST_RETURN_OBSERVATIONS:
         raise AssertionError(
             f"fold {fold.index} has only {len(test_returns)} OOS return observations; "
@@ -410,10 +396,7 @@ def run_fold(
             "current_skfolio_covariance_sha256": sha256_array(current_covariance),
             "realized_covariance_sha256": sha256_array(realized_covariance),
             "npz_sha256": sha256_file(artifact_path),
-            **{
-                f"{name}_sha256": sha256_array(value)
-                for name, value in candidate_arrays.items()
-            },
+            **{f"{name}_sha256": sha256_array(value) for name, value in candidate_arrays.items()},
         },
         "current_model_warnings": sorted({str(item.message) for item in current_warnings}),
         "current_factor_diagnostics": dataframe_records(current_factor_model.summary()),
@@ -431,10 +414,7 @@ def _mean_metrics(
         "equal_weight_volatility_absolute_error",
     )
     return {
-        metric: float(
-            np.mean([cast(dict[str, float], fold[key])[metric] for fold in folds])
-        )
-        for metric in metric_names
+        metric: float(np.mean([cast(dict[str, float], fold[key])[metric] for fold in folds])) for metric in metric_names
     }
 
 
@@ -465,12 +445,13 @@ def aggregate_results(folds: list[dict[str, object]]) -> dict[str, object]:
     ):
         candidate_metrics[metric] = float(
             np.mean(
-                [cast(dict[str, float], cast(dict[str, object], candidate["metrics"]))[metric] for candidate in candidates]
+                [
+                    cast(dict[str, float], cast(dict[str, object], candidate["metrics"]))[metric]
+                    for candidate in candidates
+                ]
             )
         )
-    candidate_wins = {
-        metric: candidate_metrics[metric] < baseline[metric] for metric in PRIMARY_METRICS
-    }
+    candidate_wins = {metric: candidate_metrics[metric] < baseline[metric] for metric in PRIMARY_METRICS}
     verdict = "USE" if all(candidate_wins.values()) else "REJECT"
     return {
         "mean_baseline_empirical_covariance": baseline,
@@ -508,9 +489,7 @@ def main() -> None:
     selected_codes = sorted(choose_japan_universe(prices_long, cutoff, args.max_assets))
     selected = prices_long[prices_long["Code"].isin(selected_codes)].copy()
     price_matrix = (
-        selected.pivot(index="Date", columns="Code", values="Close")
-        .sort_index()
-        .reindex(columns=selected_codes)
+        selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
     )
 
     earliest_required = min(fold.train_start for fold in folds)
@@ -538,9 +517,7 @@ def main() -> None:
     overall_market_cap_coverage = market_cap_coverage(market_cap_matrix.iloc[1:])
 
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    fold_results = [
-        run_fold(fold, complete_prices, market_cap_matrix, args.output_dir) for fold in folds
-    ]
+    fold_results = [run_fold(fold, complete_prices, market_cap_matrix, args.output_dir) for fold in folds]
 
     current_contract = model_contract()
     candidate_contract = market_cap_model_contract()
@@ -575,8 +552,7 @@ def main() -> None:
             "complete_calendar_days": int(len(complete_prices)),
             "dropped_incomplete_calendar_days": incomplete_days,
             "calendar_policy": (
-                "intersection of dates with finite adjusted Close for every fixed selected asset; "
-                "no forward/back fill"
+                "intersection of dates with finite adjusted Close for every fixed selected asset; no forward/back fill"
             ),
         },
         "model_contracts": {
@@ -618,9 +594,7 @@ def main() -> None:
     artifact_manifest = {
         "schema_version": "investor2.skfolio-mktcap-jquants-oos-artifacts.v1",
         "summary_sha256": sha256_file(summary_path),
-        "artifacts": {
-            path.name: sha256_file(path) for path in sorted(args.output_dir.glob("fold*.npz"))
-        },
+        "artifacts": {path.name: sha256_file(path) for path in sorted(args.output_dir.glob("fold*.npz"))},
         "input_hashes": {
             "source_manifest_sha256": summary["input_contract"]["source_manifest_sha256"],
             "pit_universe_parquet_sha256": summary["input_contract"]["pit_universe_parquet_sha256"],
