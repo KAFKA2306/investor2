@@ -4,12 +4,15 @@ on:
   push:
     branches:
       - research/skfolio-jquants-oos
+      - research/skfolio-allocation-oos
     paths:
       - "scripts/skfolio_jquants_oos.py"
+      - "scripts/skfolio_allocation_oos.py"
       - "scripts/jquants_japan_panel.py"
       - "src/research/skfolio_characteristics.py"
       - "tests/test_skfolio_characteristics.py"
       - "tests/test_skfolio_jquants_oos.py"
+      - "tests/test_skfolio_allocation_oos.py"
       - "pyproject.toml"
       - "uv.lock"
       - ".github/workflows/skfolio-jquants-oos.yml"
@@ -38,13 +41,18 @@ jobs:
           set -euo pipefail
           files=(
             scripts/skfolio_jquants_oos.py
+            scripts/skfolio_allocation_oos.py
             src/research/skfolio_characteristics.py
             tests/test_skfolio_jquants_oos.py
+            tests/test_skfolio_allocation_oos.py
             tests/test_skfolio_characteristics.py
           )
           uv run ruff format --check "${files[@]}"
           uv run ruff check "${files[@]}"
-          uv run pytest -q tests/test_skfolio_characteristics.py tests/test_skfolio_jquants_oos.py
+          uv run pytest -q \
+            tests/test_skfolio_characteristics.py \
+            tests/test_skfolio_jquants_oos.py \
+            tests/test_skfolio_allocation_oos.py
 
   frozen-jquants-oos:
     if: github.actor != 'github-actions[bot]'
@@ -129,6 +137,13 @@ jobs:
             --evaluation-end "$EVALUATION_END" \
             --train-months 12 \
             --fold-months 3
+      - name: Evaluate OOS minimum-variance allocations
+        run: |
+          .venv/bin/python scripts/skfolio_allocation_oos.py \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
+            --covariance-dir /tmp/skfolio-jquants-oos \
+            --output /tmp/skfolio-jquants-oos/allocation-summary.json
       - name: Persist derived evidence only
         shell: bash
         run: |
@@ -138,14 +153,15 @@ jobs:
           mkdir -p "$target"
           cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
           cp /tmp/skfolio-jquants-oos/summary.json "$target/summary.json"
+          cp /tmp/skfolio-jquants-oos/allocation-summary.json "$target/allocation-summary.json"
           cp /tmp/skfolio-jquants-oos/artifact-manifest.json "$target/artifact-manifest.json"
           cp /tmp/skfolio-jquants-oos/fold*.npz "$target/"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add "$target"
           if ! git diff --cached --quiet; then
-            git commit -m "research: persist true MktCap skfolio OOS evidence [evidence]"
-            git push origin HEAD:research/skfolio-jquants-oos
+            git commit -m "research: persist skfolio covariance and allocation OOS evidence [evidence]"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
           fi
       - name: Delete plaintext working copies
         if: always()
