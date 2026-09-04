@@ -31,8 +31,8 @@ class PathResult:
 
 
 def load_prices() -> tuple[pd.DataFrame, list[dict[str, object]]]:
-    setattr(market_source, "SOURCE_START", START)
-    setattr(market_source, "SOURCE_END", END)
+    market_source.__dict__["SOURCE_START"] = START
+    market_source.__dict__["SOURCE_END"] = END
     frames: list[pd.DataFrame] = []
     records: list[dict[str, object]] = []
     for symbol in ("QQQ", "GLD", "SPY"):
@@ -46,11 +46,15 @@ def load_prices() -> tuple[pd.DataFrame, list[dict[str, object]]]:
         prices = prices.merge(frame, on="Date", how="inner", validate="one_to_one")
     prices = prices.sort_values("Date").reset_index(drop=True)
 
-    counts = {str(record["symbol"]): cast(int, record["row_count"]) for record in records}
+    counts = {
+        str(record["symbol"]): cast(int, record["row_count"]) for record in records
+    }
     if len(set(counts.values())) != 1:
         raise RuntimeError(f"symbol row counts differ before alignment: {counts}")
     if len(prices) != next(iter(counts.values())):
-        raise RuntimeError(f"common-date alignment dropped rows: common={len(prices)}, raw={counts}")
+        raise RuntimeError(
+            f"common-date alignment dropped rows: common={len(prices)}, raw={counts}"
+        )
     if prices.isna().any().any():
         raise RuntimeError("daily adjusted-close panel contains missing values")
     if (prices[["QQQ", "GLD", "SPY"]] <= 0).any().any():
@@ -82,7 +86,9 @@ def simulate(prices: pd.DataFrame, target: dict[str, float]) -> PathResult:
         )
         one_way = 0.0
         if is_month_end and idx != len(prices) - 1:
-            current_weights = {symbol: sleeves[symbol] / pre_rebalance for symbol in symbols}
+            current_weights = {
+                symbol: sleeves[symbol] / pre_rebalance for symbol in symbols
+            }
             one_way = 0.5 * sum(
                 abs(current_weights[symbol] - target[symbol]) for symbol in symbols
             )
@@ -105,7 +111,9 @@ def metrics(
     path: PathResult, start: str | None = None, end: str | None = None
 ) -> dict[str, float | int]:
     selected: list[tuple[pd.Timestamp, float, float]] = []
-    for date, ret, turnover in zip(path.dates, path.returns, path.turnover, strict=True):
+    for date, ret, turnover in zip(
+        path.dates, path.returns, path.turnover, strict=True
+    ):
         if start is not None and date < pd.Timestamp(start):
             continue
         if end is not None and date > pd.Timestamp(end):
@@ -128,7 +136,9 @@ def metrics(
     tail = sorted(rets)[:tail_count]
     daily_std = statistics.stdev(rets)
     annualized_volatility = daily_std * math.sqrt(252.0)
-    sharpe = statistics.mean(rets) / daily_std * math.sqrt(252.0) if daily_std > 0 else 0.0
+    sharpe = (
+        statistics.mean(rets) / daily_std * math.sqrt(252.0) if daily_std > 0 else 0.0
+    )
     cagr = wealth ** (252.0 / n) - 1.0
     return {
         "observations": n,
@@ -154,8 +164,10 @@ def passes_period(results: dict[str, dict[str, float | int]]) -> bool:
         > float(qqq["daily_expected_shortfall_95"])
         and float(gold["daily_expected_shortfall_95"])
         > float(spy["daily_expected_shortfall_95"])
-        and float(gold["annualized_volatility"]) < float(qqq["annualized_volatility"])
-        and float(gold["annualized_volatility"]) < float(spy["annualized_volatility"])
+        and float(gold["annualized_volatility"])
+        < float(qqq["annualized_volatility"])
+        and float(gold["annualized_volatility"])
+        < float(spy["annualized_volatility"])
         and float(gold["cagr"]) >= float(qqq["cagr"]) - 0.03
     )
 
@@ -179,9 +191,9 @@ def main() -> None:
     payload = {
         "schema_version": "investor2.portfolio-research-result.v1",
         "hypothesis": (
-            "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces daily realized tail risk "
-            "more reliably than replacing the same 20% with SPY, without sacrificing more than "
-            "3 percentage points of CAGR."
+            "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces daily realized tail "
+            "risk more reliably than replacing the same 20% with SPY, without sacrificing "
+            "more than 3 percentage points of CAGR."
         ),
         "verdict": verdict,
         "adoption_rule": {
@@ -196,7 +208,9 @@ def main() -> None:
         },
         "data_contract": {
             "provider": "yahoo_chart",
-            "provider_implementation": "scripts/alphazerobeta_empirical_run.py::download_daily",
+            "provider_implementation": (
+                "scripts/alphazerobeta_empirical_run.py::download_daily"
+            ),
             "frequency": "1Day",
             "price_field": "adjusted_close_when_available",
             "currency": "USD",
@@ -205,13 +219,14 @@ def main() -> None:
             "common_rows": int(len(prices)),
             "source_records": records,
             "missing_data_policy": (
-                "Fail on row-count disagreement, common-date drops, missing adjusted closes, or "
-                "non-positive values. No interpolation or alternate-feed fallback."
+                "Fail on row-count disagreement, common-date drops, missing adjusted closes, "
+                "or non-positive values. No interpolation or alternate-feed fallback."
             ),
         },
         "portfolio_contract": {
             "rebalancing": (
-                "monthly fixed weights; rebalance after each month-end close for the next trading day"
+                "monthly fixed weights; rebalance after each month-end close for the next "
+                "trading day"
             ),
             "transaction_cost_bps_per_one_way_turnover": 20,
             "initial_entry_cost": "excluded equally",
