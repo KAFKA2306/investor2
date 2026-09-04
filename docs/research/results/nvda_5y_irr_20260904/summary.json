@@ -1,0 +1,123 @@
+{
+  "research_id": "nvda_5y_irr_20260904",
+  "ticker": "NVDA",
+  "information_cutoff": "2026-09-04",
+  "hypothesis": "At the 2026-09-04 market price, NVIDIA can deliver at least a 10% annualized 5-year price IRR under a base case of issuer-reported non-GAAP TTM EPS, 15% annual EPS growth, and a 20x terminal P/E.",
+  "acceptance_criteria": {
+    "use_if_base_case_price_irr_5y_gte": 0.10,
+    "reject_if_base_case_price_irr_5y_lt": 0.10
+  },
+  "verdict": "REJECT",
+  "decision": "Do not treat NVIDIA's current earnings yield or a growth-plus-earnings-yield shortcut as sufficient evidence for a 10% 5-year expected return. At this price, a 10% price IRR requires materially stronger sustained EPS growth and/or a higher terminal multiple than the base case.",
+  "market_price": {
+    "date": "2026-09-04",
+    "close_usd": 230.28,
+    "provider": "Alpaca Market Data",
+    "feed": "IEX",
+    "timeframe": "1Day",
+    "query_start": "2026-09-03T00:00:00",
+    "query_end": "2026-09-05T00:00:00"
+  },
+  "reported_ttm": {
+    "gaap_diluted_eps": 7.91,
+    "reported_ttm_earnings_yield": 0.03434949,
+    "quarters": [
+      {"period": "Q3 FY2026", "gaap_diluted_eps": 1.30},
+      {"period": "Q4 FY2026", "gaap_diluted_eps": 1.76},
+      {"period": "Q1 FY2027", "gaap_diluted_eps": 2.39},
+      {"period": "Q2 FY2027", "gaap_diluted_eps": 2.46}
+    ]
+  },
+  "normalized_inputs": {
+    "eps": 7.01,
+    "status": "adjusted",
+    "normalization_basis": "Sum of NVIDIA issuer-reported non-GAAP diluted EPS for Q3 FY2026 through Q2 FY2027. This is company-defined non-GAAP EPS, not an independently reconstructed normalized earnings measure.",
+    "normalized_earnings_yield": 0.03044120,
+    "current_price_to_normalized_eps": 32.850214,
+    "quarters": [
+      {"period": "Q3 FY2026", "non_gaap_diluted_eps": 1.30},
+      {"period": "Q4 FY2026", "non_gaap_diluted_eps": 1.62},
+      {"period": "Q1 FY2027", "non_gaap_diluted_eps": 1.87},
+      {"period": "Q2 FY2027", "non_gaap_diluted_eps": 2.22}
+    ]
+  },
+  "irr_5y": {
+    "formula": "terminal_eps = normalized_eps * (1 + growth)^5; terminal_price = terminal_eps * terminal_pe; price_irr_5y = (terminal_price / current_price)^(1/5) - 1",
+    "growth_scenarios": [0.10, 0.15, 0.20],
+    "terminal_pe_scenarios": [15, 20, 25],
+    "grid": [
+      {"eps_growth": 0.10, "terminal_pe": 15, "terminal_eps": 11.289675, "terminal_price": 169.345127, "price_irr_5y": -0.05962019},
+      {"eps_growth": 0.10, "terminal_pe": 20, "terminal_eps": 11.289675, "terminal_price": 225.793502, "price_irr_5y": -0.00392729},
+      {"eps_growth": 0.10, "terminal_pe": 25, "terminal_eps": 11.289675, "terminal_price": 282.241878, "price_irr_5y": 0.04153303},
+      {"eps_growth": 0.15, "terminal_pe": 15, "terminal_eps": 14.099614, "terminal_price": 211.494208, "price_irr_5y": -0.01687565},
+      {"eps_growth": 0.15, "terminal_pe": 20, "terminal_eps": 14.099614, "terminal_price": 281.992278, "price_irr_5y": 0.04134875},
+      {"eps_growth": 0.15, "terminal_pe": 25, "terminal_eps": 14.099614, "terminal_price": 352.490347, "price_irr_5y": 0.08887544},
+      {"eps_growth": 0.20, "terminal_pe": 15, "terminal_eps": 17.443123, "terminal_price": 261.646848, "price_irr_5y": 0.02586888},
+      {"eps_growth": 0.20, "terminal_pe": 20, "terminal_eps": 17.443123, "terminal_price": 348.862464, "price_irr_5y": 0.08662478},
+      {"eps_growth": 0.20, "terminal_pe": 25, "terminal_eps": 17.443123, "terminal_price": 436.078080, "price_irr_5y": 0.13621785}
+    ],
+    "base_case": {
+      "eps_growth": 0.15,
+      "terminal_pe": 20,
+      "price_irr_5y": 0.04134875
+    },
+    "required_eps_growth_for_10pct_price_irr": [
+      {"terminal_pe": 15, "required_eps_growth": 0.28671414},
+      {"terminal_pe": 20, "required_eps_growth": 0.21477075},
+      {"terminal_pe": 25, "required_eps_growth": 0.16174904}
+    ]
+  },
+  "benchmark_comparison": {
+    "invalid_shortcut_example": {
+      "description": "15% assumed EPS growth plus current reported TTM earnings yield",
+      "implied_return": 0.18434949,
+      "base_case_terminal_multiple_irr": 0.04134875,
+      "difference": 0.14300074,
+      "conclusion": "The shortcut ignores valuation multiple change and materially overstates the base-case 5-year price IRR in this test."
+    },
+    "alternative": {
+      "description": "20% EPS growth with 25x terminal P/E",
+      "price_irr_5y": 0.13621785,
+      "conclusion": "A double-digit IRR remains possible, but only in the high-growth/high-terminal-multiple corner of the preregistered grid."
+    }
+  },
+  "risk_interpretation": {
+    "bear_case_price_irr_5y": -0.05962019,
+    "base_case_price_irr_5y": 0.04134875,
+    "bull_case_price_irr_5y": 0.13621785,
+    "note": "This is a scenario valuation study, not a traded time-series strategy. Volatility, Sharpe, maximum drawdown, and Expected Shortfall are not estimated from this valuation grid; scenario downside and hurdle-rate sensitivity are the relevant risk outputs here."
+  },
+  "sources": [
+    {
+      "type": "issuer_primary",
+      "period": "Q3 FY2026",
+      "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2026/default.aspx"
+    },
+    {
+      "type": "issuer_primary",
+      "period": "Q4 FY2026",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"
+    },
+    {
+      "type": "issuer_primary",
+      "period": "Q1 FY2027",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2027/default.aspx"
+    },
+    {
+      "type": "issuer_primary",
+      "period": "Q2 FY2027",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+    }
+  ],
+  "limitations": [
+    "Issuer-reported non-GAAP EPS is used as a transparent adjustment basis; it is not independently normalized for every recurring/non-recurring item.",
+    "Price IRR excludes dividends. Buybacks are not added separately because their effect can already flow through per-share EPS growth; adding them again would risk double counting.",
+    "The growth and terminal P/E grid is scenario analysis, not a forecast or analyst consensus.",
+    "The result applies to the 2026-09-04 price and should be recomputed when price or normalized earnings materially change."
+  ],
+  "do_not_use": [
+    "Do not label high earnings yield as cheap or low earnings yield as expensive.",
+    "Do not compute expected return as EPS growth plus earnings yield.",
+    "Do not treat the 15%/20x base case as a forecast; it is a scenario used to test the 10% hurdle."
+  ]
+}
