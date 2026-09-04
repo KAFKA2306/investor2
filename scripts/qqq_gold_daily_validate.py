@@ -5,6 +5,7 @@ import json
 import math
 import statistics
 from dataclasses import dataclass
+from typing import cast
 
 import pandas as pd
 
@@ -30,8 +31,8 @@ class PathResult:
 
 
 def load_prices() -> tuple[pd.DataFrame, list[dict[str, object]]]:
-    market_source.SOURCE_START = START
-    market_source.SOURCE_END = END
+    setattr(market_source, "SOURCE_START", START)
+    setattr(market_source, "SOURCE_END", END)
     frames: list[pd.DataFrame] = []
     records: list[dict[str, object]] = []
     for symbol in ("QQQ", "GLD", "SPY"):
@@ -45,7 +46,7 @@ def load_prices() -> tuple[pd.DataFrame, list[dict[str, object]]]:
         prices = prices.merge(frame, on="Date", how="inner", validate="one_to_one")
     prices = prices.sort_values("Date").reset_index(drop=True)
 
-    counts = {str(record["symbol"]): int(record["row_count"]) for record in records}
+    counts = {str(record["symbol"]): cast(int, record["row_count"]) for record in records}
     if len(set(counts.values())) != 1:
         raise RuntimeError(f"symbol row counts differ before alignment: {counts}")
     if len(prices) != next(iter(counts.values())):
@@ -75,11 +76,16 @@ def simulate(prices: pd.DataFrame, target: dict[str, float]) -> PathResult:
             raise RuntimeError("portfolio wealth became non-positive")
 
         current_date = pd.Timestamp(prices.loc[idx, "Date"])
-        is_month_end = idx == len(prices) - 1 or pd.Timestamp(prices.loc[idx + 1, "Date"]).month != current_date.month
+        is_month_end = (
+            idx == len(prices) - 1
+            or pd.Timestamp(prices.loc[idx + 1, "Date"]).month != current_date.month
+        )
         one_way = 0.0
         if is_month_end and idx != len(prices) - 1:
             current_weights = {symbol: sleeves[symbol] / pre_rebalance for symbol in symbols}
-            one_way = 0.5 * sum(abs(current_weights[symbol] - target[symbol]) for symbol in symbols)
+            one_way = 0.5 * sum(
+                abs(current_weights[symbol] - target[symbol]) for symbol in symbols
+            )
             wealth = pre_rebalance * (1.0 - one_way * COST_RATE)
             sleeves = {symbol: wealth * target[symbol] for symbol in symbols}
         else:
@@ -88,10 +94,16 @@ def simulate(prices: pd.DataFrame, target: dict[str, float]) -> PathResult:
         returns.append(wealth / prev_wealth - 1.0)
         turnover_path.append(one_way)
 
-    return PathResult(dates=[pd.Timestamp(value) for value in dates[1:]], returns=returns, turnover=turnover_path)
+    return PathResult(
+        dates=[pd.Timestamp(value) for value in dates[1:]],
+        returns=returns,
+        turnover=turnover_path,
+    )
 
 
-def metrics(path: PathResult, start: str | None = None, end: str | None = None) -> dict[str, float | int]:
+def metrics(
+    path: PathResult, start: str | None = None, end: str | None = None
+) -> dict[str, float | int]:
     selected: list[tuple[pd.Timestamp, float, float]] = []
     for date, ret, turnover in zip(path.dates, path.returns, path.turnover, strict=True):
         if start is not None and date < pd.Timestamp(start):
@@ -138,8 +150,10 @@ def passes_period(results: dict[str, dict[str, float | int]]) -> bool:
     return bool(
         float(gold["maximum_drawdown"]) > float(qqq["maximum_drawdown"])
         and float(gold["maximum_drawdown"]) > float(spy["maximum_drawdown"])
-        and float(gold["daily_expected_shortfall_95"]) > float(qqq["daily_expected_shortfall_95"])
-        and float(gold["daily_expected_shortfall_95"]) > float(spy["daily_expected_shortfall_95"])
+        and float(gold["daily_expected_shortfall_95"])
+        > float(qqq["daily_expected_shortfall_95"])
+        and float(gold["daily_expected_shortfall_95"])
+        > float(spy["daily_expected_shortfall_95"])
         and float(gold["annualized_volatility"]) < float(qqq["annualized_volatility"])
         and float(gold["annualized_volatility"]) < float(spy["annualized_volatility"])
         and float(gold["cagr"]) >= float(qqq["cagr"]) - 0.03
@@ -164,7 +178,11 @@ def main() -> None:
 
     payload = {
         "schema_version": "investor2.portfolio-research-result.v1",
-        "hypothesis": "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces daily realized tail risk more reliably than replacing the same 20% with SPY, without sacrificing more than 3 percentage points of CAGR.",
+        "hypothesis": (
+            "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces daily realized tail risk "
+            "more reliably than replacing the same 20% with SPY, without sacrificing more than "
+            "3 percentage points of CAGR."
+        ),
         "verdict": verdict,
         "adoption_rule": {
             "required": [
@@ -186,20 +204,30 @@ def main() -> None:
             "source_period": {"start": START, "end": END},
             "common_rows": int(len(prices)),
             "source_records": records,
-            "missing_data_policy": "Fail on row-count disagreement, common-date drops, missing adjusted closes, or non-positive values. No interpolation or alternate-feed fallback.",
+            "missing_data_policy": (
+                "Fail on row-count disagreement, common-date drops, missing adjusted closes, or "
+                "non-positive values. No interpolation or alternate-feed fallback."
+            ),
         },
         "portfolio_contract": {
-            "rebalancing": "monthly fixed weights; rebalance after each month-end close for the next trading day",
+            "rebalancing": (
+                "monthly fixed weights; rebalance after each month-end close for the next trading day"
+            ),
             "transaction_cost_bps_per_one_way_turnover": 20,
             "initial_entry_cost": "excluded equally",
             "strategies": TARGETS,
             "risk_free_rate_for_sharpe": 0.0,
-            "expected_shortfall": "mean of the worst ceil(5% * observations) daily portfolio returns",
+            "expected_shortfall": (
+                "mean of the worst ceil(5% * observations) daily portfolio returns"
+            ),
             "annualization": 252,
         },
         "results": results,
         "decision": {
-            "use": "Promote the 20% gold sleeve to USE only when both fixed subperiods pass all adoption criteria.",
+            "use": (
+                "Promote the 20% gold sleeve to USE only when both fixed subperiods pass all "
+                "adoption criteria."
+            ),
             "do_not_use": ["Do not use gold as an expected-return timing signal."],
         },
     }
