@@ -8,8 +8,8 @@
     "pit_universe_parquet_sha256": "940f9c4752d066203a6f5ab899a6550c142d1b8e61dfa2dbd6ef698af5241228",
     "selected_market_cap_panel_sha256": "affb46e299c782a0ce88f465b2e997adfc72d1b20ca45a6e4fa2437a15fdef63",
     "selected_price_panel_sha256": "cdb0a8c254acd32cc7e50114d9a3d1d84e375d3d6b78a689bb26c1160f714d4a",
-    "source_manifest_sha256": "9b4f1bf5101521e3895cf29ada3d3ff3e92fe2e2fe8f8454b2d326d4060ef5e5"
+    "source_manifest_sha256": "e0d6ef330e0013204c68b2b2418e35746228ab6c5e292116850e31de4ed4383d"
   },
   "schema_version": "investor2.skfolio-mktcap-jquants-oos-artifacts.v1",
-  "summary_sha256": "581be819f5ded0b8864172d3601669dc7f8500ad713605672205739a23d969c6"
+  "summary_sha256": "3a61e56ef6c9e227720f2364e334bdd9e1c06b7358cdc6f87c2961984b4d1752"
 }
