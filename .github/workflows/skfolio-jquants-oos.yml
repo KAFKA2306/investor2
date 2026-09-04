@@ -138,12 +138,29 @@ jobs:
             --train-months 12 \
             --fold-months 3
       - name: Evaluate OOS minimum-variance allocations
+        shell: bash
         run: |
+          set +e
           .venv/bin/python scripts/skfolio_allocation_oos.py \
             --market-snapshot-dir "$SNAPSHOT_ROOT" \
             --market-regions jp \
             --covariance-dir /tmp/skfolio-jquants-oos \
-            --output /tmp/skfolio-jquants-oos/allocation-summary.json
+            --output /tmp/skfolio-jquants-oos/allocation-summary.json \
+            > /tmp/allocation-eval.log 2>&1
+          status=$?
+          set -e
+          cat /tmp/allocation-eval.log
+          if [ "$status" -ne 0 ]; then
+            target=docs/research/results/skfolio_mktcap_jquants_free
+            mkdir -p "$target"
+            cp /tmp/allocation-eval.log "$target/allocation-error.txt"
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git add "$target/allocation-error.txt"
+            git commit -m "debug: capture allocation OOS failure"
+            git push origin "HEAD:${GITHUB_REF_NAME}"
+            exit "$status"
+          fi
       - name: Persist derived evidence only
         shell: bash
         run: |
