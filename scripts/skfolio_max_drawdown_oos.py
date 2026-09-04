@@ -254,18 +254,18 @@ def main() -> None:
     baseline = metrics["empirical_min_variance"]
     candidate = metrics["max_drawdown_risk_budgeting"]
     wins = {
-        "maximum_drawdown": (
+        "maximum_drawdown": bool(
             candidate["maximum_drawdown"] > baseline["maximum_drawdown"]
         ),
-        "expected_shortfall_95_daily": (
+        "expected_shortfall_95_daily": bool(
             candidate["expected_shortfall_95_daily"]
             > baseline["expected_shortfall_95_daily"]
         ),
-        "annualized_volatility_within_105pct": (
+        "annualized_volatility_within_105pct": bool(
             candidate["annualized_volatility"]
             <= baseline["annualized_volatility"] * 1.05
         ),
-        "sharpe_ratio": candidate["sharpe_ratio"] >= baseline["sharpe_ratio"],
+        "sharpe_ratio": bool(candidate["sharpe_ratio"] >= baseline["sharpe_ratio"]),
     }
     verdict = "USE" if all(wins.values()) else "REJECT"
 
