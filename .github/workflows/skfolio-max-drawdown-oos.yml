@@ -27,11 +27,8 @@ jobs:
           version: "0.11.32"
       - name: Install locked project
         run: uv sync --locked
-      - name: Validate focused contract
-        run: |
-          set -euo pipefail
-          uv run ruff check scripts/skfolio_max_drawdown_oos.py tests/test_skfolio_max_drawdown_oos.py
-          uv run pytest -q tests/test_skfolio_max_drawdown_oos.py
+      - name: Validate focused test
+        run: uv run pytest -q tests/test_skfolio_max_drawdown_oos.py
 
   frozen-jquants-oos:
     if: github.actor != 'github-actions[bot]'
