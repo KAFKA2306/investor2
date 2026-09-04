@@ -134,8 +134,8 @@ jobs:
         run: |
           set -euo pipefail
           target=docs/research/results/skfolio_mktcap_jquants_free
-          rm -rf "$target"
           mkdir -p "$target"
+          rm -f "$target"/fold*.npz
           cp "$SNAPSHOT_ROOT/manifest.json" "$target/source-manifest.json"
           cp /tmp/skfolio-jquants-oos/summary.json "$target/summary.json"
           cp /tmp/skfolio-jquants-oos/artifact-manifest.json "$target/artifact-manifest.json"

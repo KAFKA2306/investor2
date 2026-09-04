@@ -1,0 +1,228 @@
+{
+  "schema_version": "investor2.skfolio-tail-allocation-oos.v1",
+  "hypothesis_issue": 259,
+  "source": {
+    "source": "ephemeral-jquants-free-runner-snapshot",
+    "market_snapshot_dir": "/tmp/jquants-free",
+    "market_regions": [
+      "jp"
+    ],
+    "snapshot_fetched_at_utc": null,
+    "snapshot_ticker_count": 4640,
+    "universe_filter": "J-Quants PIT master Mkt in 0111/0112/0113; benchmark ETF 13060 excluded",
+    "universe_master_dates": [
+      "2025-09-12"
+    ],
+    "universe_master_rows": 4411,
+    "allowed_common_stock_codes": 3800,
+    "liquidity_history_gate": "top mean pre-cutoff price*volume among PIT common stocks with >=250 observations, first observation no later than cutoff-15m+7d, and last observation within 10d of cutoff"
+  },
+  "universe": {
+    "asset_count": 64,
+    "codes": [
+      "24320",
+      "29140",
+      "33500",
+      "33820",
+      "40630",
+      "43850",
+      "45020",
+      "45190",
+      "45680",
+      "46610",
+      "47550",
+      "54010",
+      "58010",
+      "58030",
+      "60980",
+      "61460",
+      "62730",
+      "63670",
+      "65010",
+      "65030",
+      "65260",
+      "65940",
+      "67010",
+      "67020",
+      "67230",
+      "67580",
+      "67620",
+      "68570",
+      "68610",
+      "69020",
+      "69200",
+      "69540",
+      "69810",
+      "70030",
+      "70110",
+      "70120",
+      "70130",
+      "72010",
+      "72030",
+      "72670",
+      "74530",
+      "77350",
+      "77410",
+      "77510",
+      "79360",
+      "79740",
+      "80010",
+      "80310",
+      "80350",
+      "80580",
+      "81360",
+      "83060",
+      "83160",
+      "84110",
+      "87250",
+      "87660",
+      "91010",
+      "91040",
+      "91070",
+      "94320",
+      "94330",
+      "95010",
+      "99830",
+      "99840"
+    ],
+    "universe_cutoff": "2025-09-13"
+  },
+  "evaluation": {
+    "start": "2025-12-13",
+    "end": "2026-06-12",
+    "train_months": 12,
+    "fold_months": 3,
+    "transaction_cost_per_one_way_turnover": 0.002,
+    "max_asset_weight": 0.05,
+    "cvar_beta": 0.95
+  },
+  "folds": [
+    {
+      "fold": 0,
+      "train_start": "2024-12-13",
+      "train_end": "2025-12-12",
+      "test_start": "2025-12-13",
+      "test_end": "2026-03-12",
+      "train_returns": 242,
+      "test_returns": 58,
+      "strategies": {
+        "equal_weight": {
+          "target_max_weight": 0.015625,
+          "target_effective_assets": 64.0,
+          "one_way_turnover": 0.0,
+          "transaction_cost_fraction": 0.0
+        },
+        "empirical_min_variance": {
+          "target_max_weight": 0.049999988764275936,
+          "target_effective_assets": 21.843670017315254,
+          "one_way_turnover": 0.0,
+          "transaction_cost_fraction": 0.0
+        },
+        "variance_risk_budgeting": {
+          "target_max_weight": 0.039875510156985323,
+          "target_effective_assets": 52.56405735404765,
+          "one_way_turnover": 0.0,
+          "transaction_cost_fraction": 0.0
+        },
+        "cvar_risk_budgeting": {
+          "target_max_weight": 0.04999999993156284,
+          "target_effective_assets": 45.3341840771419,
+          "one_way_turnover": 0.0,
+          "transaction_cost_fraction": 0.0
+        }
+      }
+    },
+    {
+      "fold": 1,
+      "train_start": "2025-03-13",
+      "train_end": "2026-03-12",
+      "test_start": "2026-03-13",
+      "test_end": "2026-06-12",
+      "train_returns": 244,
+      "test_returns": 61,
+      "strategies": {
+        "equal_weight": {
+          "target_max_weight": 0.015625,
+          "target_effective_assets": 64.0,
+          "one_way_turnover": 0.07779829026504569,
+          "transaction_cost_fraction": 0.00015559658053009137
+        },
+        "empirical_min_variance": {
+          "target_max_weight": 0.049999977920144496,
+          "target_effective_assets": 22.023256495056504,
+          "one_way_turnover": 0.2009568456790214,
+          "transaction_cost_fraction": 0.0004019136913580428
+        },
+        "variance_risk_budgeting": {
+          "target_max_weight": 0.04436984649263282,
+          "target_effective_assets": 51.09011128056381,
+          "one_way_turnover": 0.08567399101848891,
+          "transaction_cost_fraction": 0.00017134798203697783
+        },
+        "cvar_risk_budgeting": {
+          "target_max_weight": 0.049999999919899805,
+          "target_effective_assets": 45.89889145109938,
+          "one_way_turnover": 0.09304121849385755,
+          "transaction_cost_fraction": 0.0001860824369877151
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "equal_weight": {
+      "cagr": 0.41692482021748933,
+      "annualized_volatility": 0.24700263960637206,
+      "sharpe_ratio": 1.534188236673828,
+      "maximum_drawdown": -0.10673311241190797,
+      "expected_shortfall_95_daily": -0.03448536192252483,
+      "worst_day": -0.04162894101606261,
+      "cumulative_return": 0.1788792565061934,
+      "total_one_way_turnover": 0.07779829026504569,
+      "total_transaction_cost_fraction": 0.00015559658053009137,
+      "oos_observations": 119.0
+    },
+    "empirical_min_variance": {
+      "cagr": 0.06280342227502267,
+      "annualized_volatility": 0.16363259490300905,
+      "sharpe_ratio": 0.45355725467644303,
+      "maximum_drawdown": -0.08060212023269897,
+      "expected_shortfall_95_daily": -0.022750425991631174,
+      "worst_day": -0.02960673240648229,
+      "cumulative_return": 0.029180782239430325,
+      "total_one_way_turnover": 0.2009568456790214,
+      "total_transaction_cost_fraction": 0.0004019136913580428,
+      "oos_observations": 119.0
+    },
+    "variance_risk_budgeting": {
+      "cagr": 0.27396789712683156,
+      "annualized_volatility": 0.19889192327180955,
+      "sharpe_ratio": 1.3166805336207512,
+      "maximum_drawdown": -0.0868805355511637,
+      "expected_shortfall_95_daily": -0.029484495261217037,
+      "worst_day": -0.034866670126991156,
+      "cumulative_return": 0.12113567737896513,
+      "total_one_way_turnover": 0.08567399101848891,
+      "total_transaction_cost_fraction": 0.00017134798203697783,
+      "oos_observations": 119.0
+    },
+    "cvar_risk_budgeting": {
+      "cagr": 0.2388876091169072,
+      "annualized_volatility": 0.19029801147887912,
+      "sharpe_ratio": 1.2205848599874953,
+      "maximum_drawdown": -0.0850734032974273,
+      "expected_shortfall_95_daily": -0.028497625780426448,
+      "worst_day": -0.03370414540889295,
+      "cumulative_return": 0.10644985180123956,
+      "total_one_way_turnover": 0.09304121849385755,
+      "total_transaction_cost_fraction": 0.0001860824369877151,
+      "oos_observations": 119.0
+    }
+  },
+  "candidate_wins_vs_empirical_min_variance": {
+    "maximum_drawdown": false,
+    "expected_shortfall_95_daily": false,
+    "annualized_volatility_within_105pct": false,
+    "sharpe_ratio": true
+  },
+  "verdict": "REJECT"
+}
