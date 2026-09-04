@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -19,7 +20,11 @@ from src.research.skfolio_characteristics import asset_panel_from_prices
 ANNUALIZATION_FACTOR = 252.0
 MAX_WEIGHT = 0.05
 ONE_WAY_TURNOVER_COST = 0.002
-STRATEGIES = ("equal_weight", "empirical_min_variance", "max_drawdown_risk_budgeting")
+STRATEGIES = (
+    "equal_weight",
+    "empirical_min_variance",
+    "max_drawdown_risk_budgeting",
+)
 
 
 def parse_args() -> argparse.Namespace:
@@ -42,6 +47,7 @@ def portfolio_metrics(returns: pd.Series) -> dict[str, float]:
         raise AssertionError("portfolio returns must be finite and non-empty")
     if np.any(values <= -1.0):
         raise AssertionError("portfolio return <= -100% invalidates wealth path")
+
     wealth = np.cumprod(1.0 + values)
     path = np.concatenate(([1.0], wealth))
     running_peak = np.maximum.accumulate(path)
@@ -53,7 +59,11 @@ def portfolio_metrics(returns: pd.Series) -> dict[str, float]:
     return {
         "cagr": float(wealth[-1] ** (ANNUALIZATION_FACTOR / values.size) - 1.0),
         "annualized_volatility": daily_vol * np.sqrt(ANNUALIZATION_FACTOR),
-        "sharpe_ratio": 0.0 if daily_vol == 0.0 else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR),
+        "sharpe_ratio": (
+            0.0
+            if daily_vol == 0.0
+            else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR)
+        ),
         "maximum_drawdown": float(drawdown.min()),
         "expected_shortfall_95_daily": float(tail.mean()),
         "worst_day": float(values.min()),
@@ -68,7 +78,11 @@ def simulate_fold(
 ) -> tuple[pd.Series, np.ndarray, float, float]:
     weights = np.asarray(target_weights, dtype=float).copy()
     previous = np.asarray(previous_end_weights, dtype=float)
-    if weights.ndim != 1 or weights.shape[0] != test_returns.shape[1] or previous.shape != weights.shape:
+    if (
+        weights.ndim != 1
+        or weights.shape[0] != test_returns.shape[1]
+        or previous.shape != weights.shape
+    ):
         raise AssertionError("weights do not match test assets")
     if not np.isfinite(weights).all() or np.any(weights < -1e-10):
         raise AssertionError("target weights must be finite and long-only")
@@ -87,7 +101,13 @@ def simulate_fold(
         if denominator <= 0.0:
             raise AssertionError("portfolio wealth became non-positive")
         weights = weights * (1.0 + row) / denominator
-    return pd.Series(realized, index=test_returns.index, dtype=float), weights, turnover, cost
+
+    return (
+        pd.Series(realized, index=test_returns.index, dtype=float),
+        weights,
+        turnover,
+        cost,
+    )
 
 
 def target_weights(train_returns: pd.DataFrame) -> dict[str, np.ndarray]:
@@ -135,19 +155,38 @@ def main() -> None:
         max_assets=args.max_assets,
     )
     prices_long, _, source_metadata = load_japan_inputs(load_args)
-    selected_codes = sorted(choose_japan_universe(prices_long, cutoff, args.max_assets))
+    selected_codes = sorted(
+        choose_japan_universe(prices_long, cutoff, args.max_assets)
+    )
     if len(selected_codes) != args.max_assets:
         raise AssertionError("selected universe size differs from the fixed asset count")
+
     selected = prices_long[prices_long["Code"].isin(selected_codes)].copy()
-    price_matrix = selected.pivot(index="Date", columns="Code", values="Close").sort_index().reindex(columns=selected_codes)
+    price_matrix = (
+        selected.pivot(index="Date", columns="Code", values="Close")
+        .sort_index()
+        .reindex(columns=selected_codes)
+    )
     earliest_required = min(fold.train_start for fold in folds)
-    working_prices = price_matrix.loc[(price_matrix.index >= earliest_required) & (price_matrix.index <= evaluation_end)]
+    working_prices = price_matrix.loc[
+        (price_matrix.index >= earliest_required)
+        & (price_matrix.index <= evaluation_end)
+    ]
     complete_prices = working_prices.dropna(axis=0, how="any")
     if complete_prices.empty:
         raise AssertionError("no complete selected-universe price observations")
-    full_mask = pd.DataFrame(True, index=complete_prices.index, columns=complete_prices.columns)
+
+    full_mask = pd.DataFrame(
+        True,
+        index=complete_prices.index,
+        columns=complete_prices.columns,
+    )
     all_returns = returns_frame_from_panel(
-        asset_panel_from_prices(complete_prices, active_mask=full_mask, estimation_mask=full_mask)
+        asset_panel_from_prices(
+            complete_prices,
+            active_mask=full_mask,
+            estimation_mask=full_mask,
+        )
     )
 
     series: dict[str, list[pd.Series]] = {name: [] for name in STRATEGIES}
@@ -155,15 +194,22 @@ def main() -> None:
     previous_weights = {name: equal_start.copy() for name in STRATEGIES}
     total_turnover = {name: 0.0 for name in STRATEGIES}
     total_cost = {name: 0.0 for name in STRATEGIES}
-    fold_records: list[dict[str, object]] = []
+    fold_records: list[dict[str, Any]] = []
 
     for fold in folds:
-        train_returns = all_returns.loc[(all_returns.index >= fold.train_start) & (all_returns.index <= fold.train_end)]
-        test_returns = all_returns.loc[(all_returns.index >= fold.test_start) & (all_returns.index <= fold.test_end)]
+        train_returns = all_returns.loc[
+            (all_returns.index >= fold.train_start)
+            & (all_returns.index <= fold.train_end)
+        ]
+        test_returns = all_returns.loc[
+            (all_returns.index >= fold.test_start)
+            & (all_returns.index <= fold.test_end)
+        ]
         if len(train_returns) < 180 or len(test_returns) < 30:
             raise AssertionError("fold lacks preregistered minimum observations")
+
         targets = target_weights(train_returns)
-        record: dict[str, object] = {
+        record: dict[str, Any] = {
             "fold": fold.index,
             "train_start": str(fold.train_start.date()),
             "train_end": str(fold.train_end.date()),
@@ -173,17 +219,21 @@ def main() -> None:
             "test_returns": int(len(test_returns)),
             "strategies": {},
         }
-        strategies = record["strategies"]
-        assert isinstance(strategies, dict)
         for name in STRATEGIES:
-            fold_series, end_weights, turnover, cost = simulate_fold(test_returns, targets[name], previous_weights[name])
+            fold_series, end_weights, turnover, cost = simulate_fold(
+                test_returns,
+                targets[name],
+                previous_weights[name],
+            )
             series[name].append(fold_series)
             previous_weights[name] = end_weights
             total_turnover[name] += turnover
             total_cost[name] += cost
-            strategies[name] = {
+            record["strategies"][name] = {
                 "target_max_weight": float(np.max(targets[name])),
-                "target_effective_assets": float(1.0 / np.sum(np.square(targets[name]))),
+                "target_effective_assets": float(
+                    1.0 / np.sum(np.square(targets[name]))
+                ),
                 "one_way_turnover": turnover,
                 "transaction_cost_fraction": cost,
             }
@@ -204,12 +254,21 @@ def main() -> None:
     baseline = metrics["empirical_min_variance"]
     candidate = metrics["max_drawdown_risk_budgeting"]
     wins = {
-        "maximum_drawdown": candidate["maximum_drawdown"] > baseline["maximum_drawdown"],
-        "expected_shortfall_95_daily": candidate["expected_shortfall_95_daily"] > baseline["expected_shortfall_95_daily"],
-        "annualized_volatility_within_105pct": candidate["annualized_volatility"] <= baseline["annualized_volatility"] * 1.05,
+        "maximum_drawdown": (
+            candidate["maximum_drawdown"] > baseline["maximum_drawdown"]
+        ),
+        "expected_shortfall_95_daily": (
+            candidate["expected_shortfall_95_daily"]
+            > baseline["expected_shortfall_95_daily"]
+        ),
+        "annualized_volatility_within_105pct": (
+            candidate["annualized_volatility"]
+            <= baseline["annualized_volatility"] * 1.05
+        ),
         "sharpe_ratio": candidate["sharpe_ratio"] >= baseline["sharpe_ratio"],
     }
     verdict = "USE" if all(wins.values()) else "REJECT"
+
     output = {
         "schema_version": "investor2.skfolio-max-drawdown-allocation-oos.v1",
         "hypothesis_issue": 261,
