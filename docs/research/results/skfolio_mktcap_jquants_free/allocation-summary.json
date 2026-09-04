@@ -1,0 +1,234 @@
+{
+  "acceptance_rule": "USE only if true-MktCap Size/Beta minimum-variance allocation has both lower after-cost annualized OOS volatility and a smaller-magnitude OOS maximum drawdown than empirical-covariance minimum-variance allocation; otherwise REJECT",
+  "aggregate": {
+    "empirical_covariance_min_variance": {
+      "cumulative_one_way_turnover": 0.7722759065605684,
+      "estimated_transaction_cost_return": 0.001544551813121137,
+      "metrics_after_cost": {
+        "annualized_volatility": 0.1615293072139149,
+        "cagr": 0.07345825688496421,
+        "expected_shortfall_95_daily": -0.02217796332058426,
+        "maximum_drawdown": -0.07495602727815076,
+        "sharpe_zero_risk_free": 0.5191137384654386,
+        "total_return": 0.03404023354170138,
+        "worst_day": -0.029337990485847933
+      }
+    },
+    "equal_weight": {
+      "cumulative_one_way_turnover": 0.0,
+      "estimated_transaction_cost_return": 0.0,
+      "metrics_after_cost": {
+        "annualized_volatility": 0.2365914413112735,
+        "cagr": 0.3798469380168774,
+        "expected_shortfall_95_daily": -0.03281203036725644,
+        "maximum_drawdown": -0.10353758644125977,
+        "sharpe_zero_risk_free": 1.4788601171585805,
+        "total_return": 0.16420983831847802,
+        "worst_day": -0.038354371314703165
+      }
+    },
+    "price_only_min_variance": {
+      "cumulative_one_way_turnover": 0.763621980088185,
+      "estimated_transaction_cost_return": 0.00152724396017637,
+      "metrics_after_cost": {
+        "annualized_volatility": 0.1742023794864122,
+        "cagr": 0.16456902225004444,
+        "expected_shortfall_95_daily": -0.02548270912889627,
+        "maximum_drawdown": -0.07399841288328635,
+        "sharpe_zero_risk_free": 0.9613352848791037,
+        "total_return": 0.07459469849764377,
+        "worst_day": -0.02821245724133167
+      }
+    },
+    "true_mktcap_size_beta_min_variance": {
+      "cumulative_one_way_turnover": 0.6349699724513725,
+      "estimated_transaction_cost_return": 0.0012699399449027451,
+      "metrics_after_cost": {
+        "annualized_volatility": 0.15880312661065107,
+        "cagr": 0.10212420852568393,
+        "expected_shortfall_95_daily": -0.02339156158878782,
+        "maximum_drawdown": -0.076129489146192,
+        "sharpe_zero_risk_free": 0.6913760679886214,
+        "total_return": 0.046989196439297,
+        "worst_day": -0.030325049493151915
+      }
+    }
+  },
+  "allocation_contract": {
+    "fully_invested": true,
+    "initial_previous_weights": "equal weight",
+    "long_only": true,
+    "maximum_asset_weight": 0.05,
+    "objective": "minimum variance",
+    "transaction_cost_bps_per_one_way_turnover": 20.0,
+    "transaction_cost_note": "research stress assumption, not a broker fee claim"
+  },
+  "claim_boundary": "This evaluates risk allocation over the frozen OOS window only; it does not establish alpha or expected-return improvement.",
+  "folds": [
+    {
+      "fold": {
+        "index": 0,
+        "test_end": "2026-03-12",
+        "test_start": "2025-12-13",
+        "train_end": "2025-12-12",
+        "train_start": "2024-12-13"
+      },
+      "strategies": {
+        "empirical_covariance_min_variance": {
+          "effective_number_of_assets": 21.84718376391836,
+          "maximum_weight": 0.04999996802632153,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.15070446266412213,
+            "cagr": 0.398175011721988,
+            "expected_shortfall_95_daily": -0.01925885711010199,
+            "maximum_drawdown": -0.045514985469588654,
+            "sharpe_zero_risk_free": 2.2996728452533173,
+            "total_return": 0.08019523783902693,
+            "worst_day": -0.020817807232873124
+          },
+          "one_way_turnover": 0.6258880123971421,
+          "transaction_cost_return": 0.0012517760247942843
+        },
+        "equal_weight": {
+          "effective_number_of_assets": 64.0,
+          "maximum_weight": 0.015625,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.22595549103078041,
+            "cagr": 0.4962866407927835,
+            "expected_shortfall_95_daily": -0.03316637194834611,
+            "maximum_drawdown": -0.08122906592052004,
+            "sharpe_zero_risk_free": 1.896129614531105,
+            "total_return": 0.0971883403434497,
+            "worst_day": -0.038354371314703165
+          },
+          "one_way_turnover": 0.0,
+          "transaction_cost_return": 0.0
+        },
+        "price_only_min_variance": {
+          "effective_number_of_assets": 31.692261069011156,
+          "maximum_weight": 0.04999553273951729,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.18000222792506437,
+            "cagr": 0.4009772251870962,
+            "expected_shortfall_95_daily": -0.025396412256926487,
+            "maximum_drawdown": -0.05656383389543207,
+            "sharpe_zero_risk_free": 1.963104407553163,
+            "total_return": 0.08069312923153626,
+            "worst_day": -0.02821245724133167
+          },
+          "one_way_turnover": 0.43351528588748456,
+          "transaction_cost_return": 0.0008670305717749691
+        },
+        "true_mktcap_size_beta_min_variance": {
+          "effective_number_of_assets": 28.525829163568424,
+          "maximum_weight": 0.04999396983868813,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.14908008387064664,
+            "cagr": 0.3906810966794336,
+            "expected_shortfall_95_daily": -0.02076131156735986,
+            "maximum_drawdown": -0.048361949877825716,
+            "sharpe_zero_risk_free": 2.287118725785746,
+            "total_return": 0.07885995015243674,
+            "worst_day": -0.022910549878641072
+          },
+          "one_way_turnover": 0.4632319456481404,
+          "transaction_cost_return": 0.0009264638912962809
+        }
+      }
+    },
+    {
+      "fold": {
+        "index": 1,
+        "test_end": "2026-06-12",
+        "test_start": "2026-03-13",
+        "train_end": "2026-03-12",
+        "train_start": "2025-03-13"
+      },
+      "strategies": {
+        "empirical_covariance_min_variance": {
+          "effective_number_of_assets": 22.039569859916462,
+          "maximum_weight": 0.04999998823846426,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.1709413944727369,
+            "cagr": -0.16506334936558797,
+            "expected_shortfall_95_daily": -0.022925145096157912,
+            "maximum_drawdown": -0.07495602727815087,
+            "sharpe_zero_risk_free": -0.9707782911628874,
+            "total_return": -0.04272839083206881,
+            "worst_day": -0.029337990485847933
+          },
+          "one_way_turnover": 0.14638789416342637,
+          "transaction_cost_return": 0.00029277578832685275
+        },
+        "equal_weight": {
+          "effective_number_of_assets": 64.0,
+          "maximum_weight": 0.015625,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.24806430862934678,
+            "cagr": 0.2775484661008232,
+            "expected_shortfall_95_daily": -0.030309183757125966,
+            "maximum_drawdown": -0.07015961427796502,
+            "sharpe_zero_risk_free": 1.109364622698195,
+            "total_return": 0.06108477050899763,
+            "worst_day": -0.038239243441682384
+          },
+          "one_way_turnover": 0.0,
+          "transaction_cost_return": 0.0
+        },
+        "price_only_min_variance": {
+          "effective_number_of_assets": 24.48207248532177,
+          "maximum_weight": 0.04999995195813194,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.16923954454904502,
+            "cagr": -0.023107236854549407,
+            "expected_shortfall_95_daily": -0.02202679814131001,
+            "maximum_drawdown": -0.05529234156552776,
+            "sharpe_zero_risk_free": -0.0548745221614014,
+            "total_return": -0.005643073476583105,
+            "worst_day": -0.028037760030730167
+          },
+          "one_way_turnover": 0.3301066942007005,
+          "transaction_cost_return": 0.000660213388401401
+        },
+        "true_mktcap_size_beta_min_variance": {
+          "effective_number_of_assets": 25.10011276790153,
+          "maximum_weight": 0.049999955353126714,
+          "metrics_after_cost": {
+            "annualized_volatility": 0.1675789820902667,
+            "cagr": -0.11651211510739046,
+            "expected_shortfall_95_daily": -0.023565973347328878,
+            "maximum_drawdown": -0.07001807512848912,
+            "sharpe_zero_risk_free": -0.6564630816167086,
+            "total_return": -0.02954114082058268,
+            "worst_day": -0.030325049493151915
+          },
+          "one_way_turnover": 0.1717380268032321,
+          "transaction_cost_return": 0.0003434760536064642
+        }
+      }
+    }
+  ],
+  "hypothesis": "true-MktCap Size/Beta covariance improves constrained long-only minimum-variance OOS risk versus empirical covariance",
+  "primary_metric_wins_vs_empirical": {
+    "annualized_volatility": true,
+    "maximum_drawdown": false
+  },
+  "schema_version": "investor2.skfolio-allocation-oos.v1",
+  "source_covariance_schema": "investor2.skfolio-mktcap-jquants-oos.v1",
+  "source_covariance_verdict": {
+    "mean_metrics": {
+      "diagonal_variance_mae": 0.000328387129634237,
+      "equal_weight_volatility_absolute_error": 0.014650656394928588,
+      "frobenius_error": 0.012147578787259083,
+      "normalized_frobenius_error": 0.5240852684463206
+    },
+    "primary_metric_wins_vs_empirical": {
+      "equal_weight_volatility_absolute_error": true,
+      "normalized_frobenius_error": true
+    },
+    "status": "EVALUATED",
+    "verdict": "USE"
+  },
+  "status": "EVALUATED",
+  "verdict": "REJECT"
+}

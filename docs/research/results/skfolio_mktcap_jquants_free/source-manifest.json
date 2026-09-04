@@ -52,7 +52,7 @@
       "size_bytes": 15069959
     }
   ],
-  "materialized_at_utc": "2026-09-04T06:24:03.357400+00:00",
+  "materialized_at_utc": "2026-09-04T09:39:47.712674+00:00",
   "minimum_request_interval_seconds": 15.0,
   "nominal_free_window": {
     "delay_weeks": 12,
