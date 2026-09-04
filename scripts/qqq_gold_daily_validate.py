@@ -1,21 +1,22 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import json
 import math
 import statistics
+import urllib.parse
+import urllib.request
 from dataclasses import dataclass
-from typing import cast
 
 import pandas as pd
-
-import scripts.alphazerobeta_empirical_run as market_source
 
 START = "2020-07-31"
 END = "2026-08-31"
 EARLY_END = "2023-12-31"
 RECENT_START = "2024-01-01"
 COST_RATE = 20.0 / 10_000.0
+PROVIDER = "yahoo_chart"
 TARGETS = {
     "QQQ": {"QQQ": 1.0, "GLD": 0.0, "SPY": 0.0},
     "QQQ80_GLD20": {"QQQ": 0.8, "GLD": 0.2, "SPY": 0.0},
@@ -30,25 +31,88 @@ class PathResult:
     turnover: list[float]
 
 
+def fetch_bytes(url: str) -> bytes:
+    request = urllib.request.Request(
+        url,
+        headers={
+            "User-Agent": (
+                "Mozilla/5.0 (compatible; investor2-research/1.0; "
+                "+https://github.com/KAFKA2306/investor2)"
+            )
+        },
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        payload = response.read()
+    if not payload:
+        raise RuntimeError(f"empty response from {url}")
+    return payload
+
+
+def download_daily(symbol: str) -> tuple[pd.DataFrame, dict[str, object]]:
+    start_epoch = int(pd.Timestamp(START, tz="UTC").timestamp())
+    end_epoch = int((pd.Timestamp(END, tz="UTC") + pd.Timedelta(days=1)).timestamp())
+    query = urllib.parse.urlencode(
+        {
+            "period1": start_epoch,
+            "period2": end_epoch,
+            "interval": "1d",
+            "events": "history",
+            "includeAdjustedClose": "true",
+        }
+    )
+    url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}?{query}"
+    payload = fetch_bytes(url)
+    document = json.loads(payload)
+    result = document.get("chart", {}).get("result")
+    if not result:
+        error = document.get("chart", {}).get("error")
+        raise RuntimeError(f"Yahoo chart returned no result for {symbol}: {error}")
+    node = result[0]
+    timestamps = node["timestamp"]
+    quote = node["indicators"]["quote"][0]
+    adjusted = node.get("indicators", {}).get("adjclose", [{}])[0].get("adjclose")
+    closes = adjusted if adjusted is not None else quote["close"]
+    frame = pd.DataFrame(
+        {
+            "Date": pd.to_datetime(timestamps, unit="s", utc=True)
+            .tz_convert(None)
+            .normalize(),
+            "Close": closes,
+            "Volume": quote["volume"],
+        }
+    ).dropna()
+    frame["Close"] = pd.to_numeric(frame["Close"], errors="raise")
+    frame["Volume"] = pd.to_numeric(frame["Volume"], errors="raise")
+    if len(frame) < 1000:
+        raise RuntimeError(f"Yahoo returned only {len(frame)} daily rows for {symbol}")
+    return frame.sort_values("Date").reset_index(drop=True), {
+        "symbol": symbol,
+        "provider": PROVIDER,
+        "url": url,
+        "raw_sha256": hashlib.sha256(payload).hexdigest(),
+        "row_count": int(len(frame)),
+        "date_start": str(frame["Date"].iloc[0].date()),
+        "date_end": str(frame["Date"].iloc[-1].date()),
+        "price_field": "adjusted_close_when_available",
+    }
+
+
 def load_prices() -> tuple[pd.DataFrame, list[dict[str, object]]]:
-    market_source.__dict__["SOURCE_START"] = START
-    market_source.__dict__["SOURCE_END"] = END
     frames: list[pd.DataFrame] = []
     records: list[dict[str, object]] = []
+    counts: dict[str, int] = {}
     for symbol in ("QQQ", "GLD", "SPY"):
-        frame, record = market_source.download_daily(symbol)
+        frame, record = download_daily(symbol)
         part = frame[["Date", "Close"]].rename(columns={"Close": symbol})
         frames.append(part)
         records.append(record)
+        counts[symbol] = len(frame)
 
     prices = frames[0]
     for frame in frames[1:]:
         prices = prices.merge(frame, on="Date", how="inner", validate="one_to_one")
     prices = prices.sort_values("Date").reset_index(drop=True)
 
-    counts = {
-        str(record["symbol"]): cast(int, record["row_count"]) for record in records
-    }
     if len(set(counts.values())) != 1:
         raise RuntimeError(f"symbol row counts differ before alignment: {counts}")
     if len(prices) != next(iter(counts.values())):
@@ -207,9 +271,10 @@ def main() -> None:
             "period_pass": {"early": early_pass, "recent": recent_pass},
         },
         "data_contract": {
-            "provider": "yahoo_chart",
+            "provider": PROVIDER,
             "provider_implementation": (
-                "scripts/alphazerobeta_empirical_run.py::download_daily"
+                "Exact transient copy of scripts/alphazerobeta_empirical_run.py::download_daily; "
+                "deleted after evidence capture"
             ),
             "frequency": "1Day",
             "price_field": "adjusted_close_when_available",
