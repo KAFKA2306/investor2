@@ -8,13 +8,15 @@ from scripts.skfolio_tail_allocation_oos import portfolio_metrics, simulate_fold
 
 def test_simulate_fold_applies_only_rebalance_cost() -> None:
     index = pd.date_range("2026-01-01", periods=2, freq="D")
-    returns = pd.DataFrame(
-        [[0.01, 0.00], [0.00, 0.01]],
-        index=index,
-        columns=["A", "B"],
-    )
-    target = np.array([0.5, 0.5])
-    previous = np.array([0.6, 0.4])
+    columns = [f"A{i:02d}" for i in range(20)]
+    values = np.zeros((2, 20), dtype=float)
+    values[0, 0] = 0.01
+    values[1, 1] = 0.01
+    returns = pd.DataFrame(values, index=index, columns=columns)
+    target = np.full(20, 0.05)
+    previous = target.copy()
+    previous[0] = 0.06
+    previous[1] = 0.04
 
     realized, end_weights, turnover, cost = simulate_fold(
         returns,
@@ -22,9 +24,9 @@ def test_simulate_fold_applies_only_rebalance_cost() -> None:
         previous,
     )
 
-    assert np.isclose(turnover, 0.1)
-    assert np.isclose(cost, 0.0002)
-    assert np.isclose(realized.iloc[0], 0.0048)
+    assert np.isclose(turnover, 0.01)
+    assert np.isclose(cost, 0.00002)
+    assert np.isclose(realized.iloc[0], 0.00048)
     assert np.isclose(end_weights.sum(), 1.0)
 
 
