@@ -11,7 +11,7 @@ import numpy as np
 import pandas as pd
 
 from scripts.jquants_japan_panel import load_japan_inputs
-from scripts.skfolio_jquants_oos import canonical_price_hash, returns_frame_from_panel, sha256_array, sha256_file
+from scripts.skfolio_jquants_oos import canonical_frame_hash, returns_frame_from_panel, sha256_array, sha256_file
 from src.research.skfolio_characteristics import asset_panel_from_prices, build_price_only_characteristics_model
 from src.research.skfolio_plot_exports import (
     export_factor_model_plots,
@@ -85,7 +85,7 @@ def main() -> None:
     if list(complete_prices.columns) != selected_codes:
         raise AssertionError("plot price matrix columns differ from frozen selected_codes")
     expected_panel_hash = str(input_contract["selected_price_panel_sha256"])
-    actual_panel_hash = canonical_price_hash(complete_prices)
+    actual_panel_hash = canonical_frame_hash(complete_prices)
     if actual_panel_hash != expected_panel_hash:
         raise AssertionError(
             "plot input does not match the frozen OOS selected price panel: "
