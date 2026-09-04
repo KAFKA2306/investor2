@@ -1,0 +1,49 @@
+{
+  "as_of": "2026-09-04",
+  "verdict": "REJECT",
+  "hypothesis": "NVDAとAVGOを同じ成長率と同じ5年後P/Eで評価すると、単純な現在益利回り順位から5年IRR順位が変わる。",
+  "acceptance_rule": "GAAPまたは会社公表non-GAAPの少なくとも一方で、10%/15%/20% EPS成長率 x 15/20/25倍terminal P/Eの9シナリオ中1つ以上でAVGOの5年IRRがNVDAを上回れば採用候補。全シナリオで順位不変ならREJECT。",
+  "prices_usd": {
+    "source": "Alpaca Market Data IEX daily bar",
+    "date": "2026-09-04",
+    "NVDA": 230.19,
+    "AVGO": 357.835
+  },
+  "ttm_diluted_eps": {
+    "NVDA": {
+      "gaap": 7.91,
+      "company_non_gaap": 7.01,
+      "quarters": ["Q3 FY2026", "Q4 FY2026", "Q1 FY2027", "Q2 FY2027"]
+    },
+    "AVGO": {
+      "gaap": 7.83,
+      "company_non_gaap": 9.76,
+      "quarters": ["Q4 FY2025", "Q1 FY2026", "Q2 FY2026", "Q3 FY2026"]
+    }
+  },
+  "current_earnings_yield_pct": {
+    "gaap": {"NVDA": 3.4363, "AVGO": 2.1882},
+    "company_non_gaap": {"NVDA": 3.0453, "AVGO": 2.7275}
+  },
+  "base_case_15pct_growth_20x_terminal_pe_irr_pct": {
+    "gaap": {"NVDA": 6.69, "AVGO": -2.52, "NVDA_minus_AVGO": 9.21},
+    "company_non_gaap": {"NVDA": 4.14, "AVGO": 1.87, "NVDA_minus_AVGO": 2.27}
+  },
+  "grid_result": {
+    "scenarios": 9,
+    "gaap_NVDA_wins": 9,
+    "company_non_gaap_NVDA_wins": 9,
+    "rank_changed_vs_current_earnings_yield": false
+  },
+  "decision": "同一growth・同一terminal P/Eという相対比較では5年IRRは現在のearnings yield順位を変えず、追加の資本配分情報を生まない。NVDA > AVGOという順位自体は両EPS基準で頑健だが、これは会社固有の将来成長差を検証した結論ではない。",
+  "do_not_use": [
+    "会社公表non-GAAP EPSを企業間で完全に同一のnormalized earningsとみなさない。",
+    "この結果をNVDAの絶対的な買い推奨またはAVGOの売り推奨に使わない。",
+    "同一growth仮定の結果から両社の実際の将来成長率が同じだと推定しない。"
+  ],
+  "primary_sources": [
+    "NVIDIA Q2 FY2027, Q1 FY2027, Q4 FY2026, Q3 FY2026 official investor relations releases",
+    "Broadcom Q3 FY2026, Q2 FY2026, Q1 FY2026, Q4 FY2025 official investor relations releases"
+  ],
+  "next_research": "会社固有のpoint-in-time売上・AI売上・margin・share count assumptionsから5年EPSを別々に構築し、同一terminal P/Eではなく事業構成と成長持続性を反映したbear/base/bull IRRでNVDAとAVGOを比較する。"
+}
