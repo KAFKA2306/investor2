@@ -10,21 +10,77 @@
       "CAGR no more than 3 percentage points below QQQ in either subperiod"
     ],
     "observed": "PASS",
-    "period_pass": {"early_2020_08_to_2023_12": true, "recent_2024_01_to_2026_08": true}
+    "period_pass": {
+      "early_2020_08_to_2023_12": true,
+      "recent_2024_01_to_2026_08": true
+    }
+  },
+  "secondary_research": {
+    "hypothesis": "The same fixed 20% gold sleeve is a consistently superior risk-adjusted-return diversifier to replacing 20% of QQQ with SPY, not merely a tail-risk reducer.",
+    "verdict": "REJECT",
+    "decision_rule": {
+      "required": [
+        "QQQ80_GLD20 Sharpe ratio is at least QQQ80_SPY20 in both fixed subperiods",
+        "QQQ80_GLD20 maximum drawdown and 95% daily Expected Shortfall are no worse than QQQ80_SPY20 in both fixed subperiods",
+        "QQQ80_GLD20 CAGR is no more than 3 percentage points below QQQ in either fixed subperiod"
+      ],
+      "observed": "FAIL"
+    },
+    "evidence": {
+      "early_2020_08_to_2023_12": {
+        "QQQ80_GLD20_sharpe": 0.669783,
+        "QQQ80_SPY20_sharpe": 0.702098,
+        "sharpe_difference_gold_minus_spy": -0.032315,
+        "gold_cagr_difference_vs_QQQ_percentage_points": -2.2951,
+        "gold_maximum_drawdown_improvement_vs_QQQ_percentage_points": 4.4769,
+        "gold_expected_shortfall_improvement_vs_QQQ_percentage_points": 0.5731
+      },
+      "recent_2024_01_to_2026_08": {
+        "QQQ80_GLD20_sharpe": 1.38971,
+        "QQQ80_SPY20_sharpe": 1.168106,
+        "sharpe_difference_gold_minus_spy": 0.221604,
+        "gold_cagr_difference_vs_QQQ_percentage_points": 2.417,
+        "gold_maximum_drawdown_improvement_vs_QQQ_percentage_points": 4.591,
+        "gold_expected_shortfall_improvement_vs_QQQ_percentage_points": 0.364
+      }
+    },
+    "conclusion": "Reject the stronger claim that gold is a regime-independent Sharpe enhancer versus a 20% SPY sleeve. The early fixed period has lower Sharpe than QQQ80_SPY20 even though gold still provides materially better drawdown, Expected Shortfall, and volatility protection. Keep the existing USE decision narrowly scoped to tail-risk reduction."
   },
   "daily_validation": {
     "provider": "yahoo_chart",
     "provider_contract": "Existing investor2 Yahoo Chart adjusted-close contract from scripts/alphazerobeta_empirical_run.py::download_daily",
     "frequency": "1Day",
     "currency": "USD",
-    "symbols": ["QQQ", "GLD", "SPY"],
-    "source_period": {"start": "2020-07-31", "end": "2026-08-31"},
+    "symbols": [
+      "QQQ",
+      "GLD",
+      "SPY"
+    ],
+    "source_period": {
+      "start": "2020-07-31",
+      "end": "2026-08-31"
+    },
     "common_rows": 1528,
     "price_field": "adjusted_close_when_available",
     "source_records": {
-      "QQQ": {"row_count": 1528, "date_start": "2020-07-31", "date_end": "2026-08-31", "raw_sha256": "939d6c30b075ee815acb33cf5c63300623ea1d4e175b6fd713cf2f67aad3550a"},
-      "GLD": {"row_count": 1528, "date_start": "2020-07-31", "date_end": "2026-08-31", "raw_sha256": "9c70d0326fb12f649fb5110be34526f4840ea251a45da80f37666224931410b3"},
-      "SPY": {"row_count": 1528, "date_start": "2020-07-31", "date_end": "2026-08-31", "raw_sha256": "48728a0f3020f433770131d193398848bad0f51c8368770cb9e9695e3b51cfd6"}
+      "QQQ": {
+        "row_count": 1528,
+        "date_start": "2020-07-31",
+        "date_end": "2026-08-31",
+        "raw_sha256": "939d6c30b075ee815acb33cf5c63300623ea1d4e175b6fd713cf2f67aad3550a"
+      },
+      "GLD": {
+        "row_count": 1528,
+        "date_start": "2020-07-31",
+        "date_end": "2026-08-31",
+        "raw_sha256": "9c70d0326fb12f649fb5110be34526f4840ea251a45da80f37666224931410b3"
+      },
+      "SPY": {
+        "row_count": 1528,
+        "date_start": "2020-07-31",
+        "date_end": "2026-08-31",
+        "raw_sha256": "48728a0f3020f433770131d193398848bad0f51c8368770cb9e9695e3b51cfd6"
+      }
     },
     "missing_data_policy": "Fail on row-count disagreement, common-date drops, missing adjusted closes, or non-positive values. No interpolation or alternate-feed fallback.",
     "portfolio_contract": {
@@ -35,26 +91,124 @@
       "annualization": 252,
       "expected_shortfall": "mean of the worst ceil(5% * observations) daily portfolio returns",
       "strategies": {
-        "QQQ": {"QQQ": 1.0},
-        "QQQ80_GLD20": {"QQQ": 0.8, "GLD": 0.2},
-        "QQQ80_SPY20": {"QQQ": 0.8, "SPY": 0.2}
+        "QQQ": {
+          "QQQ": 1.0
+        },
+        "QQQ80_GLD20": {
+          "QQQ": 0.8,
+          "GLD": 0.2
+        },
+        "QQQ80_SPY20": {
+          "QQQ": 0.8,
+          "SPY": 0.2
+        }
       }
     },
     "results": {
       "full_2020_08_to_2026_08": {
-        "QQQ": {"observations": 1527, "cagr": 0.184543, "annualized_volatility": 0.226498, "sharpe": 0.861049, "maximum_drawdown": -0.351187, "daily_expected_shortfall_95": -0.032461, "worst_day": -0.062109, "total_return": 1.790503, "turnover": 0.0},
-        "QQQ80_GLD20": {"observations": 1527, "cagr": 0.181015, "annualized_volatility": 0.190406, "sharpe": 0.969143, "maximum_drawdown": -0.306418, "daily_expected_shortfall_95": -0.027386, "worst_day": -0.054154, "total_return": 1.740524, "turnover": 0.688508},
-        "QQQ80_SPY20": {"observations": 1527, "cagr": 0.181637, "annualized_volatility": 0.212835, "sharpe": 0.890677, "maximum_drawdown": -0.329816, "daily_expected_shortfall_95": -0.030532, "worst_day": -0.061397, "total_return": 1.749276, "turnover": 0.212718}
+        "QQQ": {
+          "observations": 1527,
+          "cagr": 0.184543,
+          "annualized_volatility": 0.226498,
+          "sharpe": 0.861049,
+          "maximum_drawdown": -0.351187,
+          "daily_expected_shortfall_95": -0.032461,
+          "worst_day": -0.062109,
+          "total_return": 1.790503,
+          "turnover": 0.0
+        },
+        "QQQ80_GLD20": {
+          "observations": 1527,
+          "cagr": 0.181015,
+          "annualized_volatility": 0.190406,
+          "sharpe": 0.969143,
+          "maximum_drawdown": -0.306418,
+          "daily_expected_shortfall_95": -0.027386,
+          "worst_day": -0.054154,
+          "total_return": 1.740524,
+          "turnover": 0.688508
+        },
+        "QQQ80_SPY20": {
+          "observations": 1527,
+          "cagr": 0.181637,
+          "annualized_volatility": 0.212835,
+          "sharpe": 0.890677,
+          "maximum_drawdown": -0.329816,
+          "daily_expected_shortfall_95": -0.030532,
+          "worst_day": -0.061397,
+          "total_return": 1.749276,
+          "turnover": 0.212718
+        }
       },
       "early_2020_08_to_2023_12": {
-        "QQQ": {"observations": 859, "cagr": 0.142171, "annualized_volatility": 0.238612, "sharpe": 0.676599, "maximum_drawdown": -0.351187, "daily_expected_shortfall_95": -0.034205, "worst_day": -0.054837, "total_return": 0.573219, "turnover": 0.0},
-        "QQQ80_GLD20": {"observations": 859, "cagr": 0.11922, "annualized_volatility": 0.197248, "sharpe": 0.669783, "maximum_drawdown": -0.306418, "daily_expected_shortfall_95": -0.028474, "worst_day": -0.046665, "total_return": 0.468047, "turnover": 0.364692},
-        "QQQ80_SPY20": {"observations": 859, "cagr": 0.141144, "annualized_volatility": 0.223776, "sharpe": 0.702098, "maximum_drawdown": -0.329816, "daily_expected_shortfall_95": -0.032172, "worst_day": -0.052563, "total_return": 0.568406, "turnover": 0.130147}
+        "QQQ": {
+          "observations": 859,
+          "cagr": 0.142171,
+          "annualized_volatility": 0.238612,
+          "sharpe": 0.676599,
+          "maximum_drawdown": -0.351187,
+          "daily_expected_shortfall_95": -0.034205,
+          "worst_day": -0.054837,
+          "total_return": 0.573219,
+          "turnover": 0.0
+        },
+        "QQQ80_GLD20": {
+          "observations": 859,
+          "cagr": 0.11922,
+          "annualized_volatility": 0.197248,
+          "sharpe": 0.669783,
+          "maximum_drawdown": -0.306418,
+          "daily_expected_shortfall_95": -0.028474,
+          "worst_day": -0.046665,
+          "total_return": 0.468047,
+          "turnover": 0.364692
+        },
+        "QQQ80_SPY20": {
+          "observations": 859,
+          "cagr": 0.141144,
+          "annualized_volatility": 0.223776,
+          "sharpe": 0.702098,
+          "maximum_drawdown": -0.329816,
+          "daily_expected_shortfall_95": -0.032172,
+          "worst_day": -0.052563,
+          "total_return": 0.568406,
+          "turnover": 0.130147
+        }
       },
       "recent_2024_01_to_2026_08": {
-        "QQQ": {"observations": 668, "cagr": 0.241349, "annualized_volatility": 0.210041, "sharpe": 1.134108, "maximum_drawdown": -0.227683, "daily_expected_shortfall_95": -0.029381, "worst_day": -0.062109, "total_return": 0.773753, "turnover": 0.0},
-        "QQQ80_GLD20": {"observations": 668, "cagr": 0.265519, "annualized_volatility": 0.181285, "sharpe": 1.38971, "maximum_drawdown": -0.181773, "daily_expected_shortfall_95": -0.025741, "worst_day": -0.054154, "total_return": 0.866782, "turnover": 0.323816},
-        "QQQ80_SPY20": {"observations": 668, "cagr": 0.235826, "annualized_volatility": 0.198015, "sharpe": 1.168106, "maximum_drawdown": -0.219798, "daily_expected_shortfall_95": -0.027793, "worst_day": -0.061397, "total_return": 0.752911, "turnover": 0.082571}
+        "QQQ": {
+          "observations": 668,
+          "cagr": 0.241349,
+          "annualized_volatility": 0.210041,
+          "sharpe": 1.134108,
+          "maximum_drawdown": -0.227683,
+          "daily_expected_shortfall_95": -0.029381,
+          "worst_day": -0.062109,
+          "total_return": 0.773753,
+          "turnover": 0.0
+        },
+        "QQQ80_GLD20": {
+          "observations": 668,
+          "cagr": 0.265519,
+          "annualized_volatility": 0.181285,
+          "sharpe": 1.38971,
+          "maximum_drawdown": -0.181773,
+          "daily_expected_shortfall_95": -0.025741,
+          "worst_day": -0.054154,
+          "total_return": 0.866782,
+          "turnover": 0.323816
+        },
+        "QQQ80_SPY20": {
+          "observations": 668,
+          "cagr": 0.235826,
+          "annualized_volatility": 0.198015,
+          "sharpe": 1.168106,
+          "maximum_drawdown": -0.219798,
+          "daily_expected_shortfall_95": -0.027793,
+          "worst_day": -0.061397,
+          "total_return": 0.752911,
+          "turnover": 0.082571
+        }
       }
     }
   },
@@ -63,14 +217,21 @@
     "feed": "IEX",
     "frequency": "1Month",
     "return_type": "Monthly close-to-close plus actual Alpaca cash distributions with ex-date in the month; distributions credited to the sleeve and reinvested at monthly rebalance.",
-    "source_period": {"start": "2020-07-31", "end": "2026-08-31"},
+    "source_period": {
+      "start": "2020-07-31",
+      "end": "2026-08-31"
+    },
     "finding": "The earlier distribution-aware monthly study also passed the same directional tail-risk test: QQQ80_GLD20 reduced volatility, maximum drawdown, and monthly 95% Expected Shortfall versus QQQ and QQQ80_SPY20 in both fixed subperiods.",
-    "limitations": ["IEX is not consolidated SIP.", "Distribution accrual was assigned to ex-date month rather than exact payable-date cash availability."]
+    "limitations": [
+      "IEX is not consolidated SIP.",
+      "Distribution accrual was assigned to ex-date month rather than exact payable-date cash availability."
+    ]
   },
   "decision": {
     "use": "Use a fixed 20% gold sleeve as a reusable tail-risk reducer for QQQ-heavy allocation research. The result passed both pre-registered daily subperiod gates and independently agreed with the prior Alpaca IEX monthly distribution-aware study.",
     "do_not_use": [
       "Do not treat gold as an expected-return timing signal.",
+      "Do not treat the 20% gold sleeve as a regime-independent Sharpe-ratio improvement over a 20% SPY sleeve; the early fixed period Sharpe is lower despite stronger tail-risk protection.",
       "Do not infer that 20% is globally optimal; this study validates the fixed 20% decision rule against QQQ100 and QQQ80_SPY20 only."
     ]
   },
