@@ -1,94 +1,75 @@
 {
   "schema_version": "investor2.portfolio-research-result.v1",
-  "hypothesis": "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces realized tail risk more reliably than replacing the same 20% with broad US equities, without sacrificing more than 3 percentage points of annualized return.",
-  "decision_scope": "Risk sleeve for a QQQ-heavy allocation; not an expected-return timing signal and not a recommendation for a specific gold vehicle.",
+  "hypothesis": "A fixed 20% gold sleeve in a QQQ-heavy portfolio reduces realized tail risk more reliably than replacing the same 20% with SPY, without sacrificing more than 3 percentage points of annualized return.",
   "verdict": "CONDITION",
   "adoption_rule": {
     "required": [
-      "QQQ80_GLD20 maximum drawdown is lower than QQQ and QQQ80_SPY20 in both evaluation subperiods",
-      "QQQ80_GLD20 95% monthly Expected Shortfall is lower than QQQ and QQQ80_SPY20 in both evaluation subperiods",
-      "QQQ80_GLD20 annualized volatility is lower than QQQ and QQQ80_SPY20 in both evaluation subperiods",
-      "QQQ80_GLD20 CAGR is no more than 3 percentage points below QQQ in either evaluation subperiod"
+      "Lower maximum drawdown than QQQ and QQQ80_SPY20 in both subperiods",
+      "Lower 95% monthly Expected Shortfall than both in both subperiods",
+      "Lower annualized volatility than both in both subperiods",
+      "CAGR no more than 3 percentage points below QQQ in either subperiod"
     ],
-    "condition_reason": "The risk result passes, but Alpaca IEX bars are price-return observations rather than dividend-adjusted total returns; therefore this result is not promoted to an unconditional production allocation rule."
+    "observed": "PASS",
+    "condition_reason": "Actual cash distributions are now included, but monthly bars cannot verify intra-month maximum drawdown or daily Expected Shortfall. Canonical daily evidence is still required for USE."
   },
   "data_contract": {
     "provider": "Alpaca Market Data",
     "feed": "IEX",
     "frequency": "1Month",
-    "price_field": "monthly market close",
-    "return_type": "price return; distributions are not reinvested",
     "currency": "USD",
     "symbols": ["QQQ", "GLD", "SPY"],
-    "source_period": {
-      "start": "2020-07-31",
-      "end": "2026-08-31"
+    "source_period": {"start": "2020-07-31", "end": "2026-08-31"},
+    "as_of": "2026-09-05",
+    "return_type": "Monthly close-to-close plus actual Alpaca cash distributions with ex-date in the month; distributions are credited to the sleeve and reinvested at the monthly rebalance.",
+    "corporate_actions": {
+      "QQQ": {"raw": 26, "unique": 25, "dedup": "Exact duplicate by symbol+ex_date+rate removed; QQQ 2022-09-19 rate 0.51856 appeared twice."},
+      "SPY": {"raw": 24, "unique": 24},
+      "GLD": {"raw": 0, "unique": 0}
     },
-    "as_of": "2026-09-04",
-    "observations": {
-      "full_monthly_returns": 73,
-      "early_subperiod_monthly_returns": 41,
-      "recent_subperiod_monthly_returns": 31
-    },
-    "missing_data_policy": "No synthetic values, interpolation, dividend estimates, or alternate-feed fallback.",
+    "missing_data_policy": "No synthetic values, interpolation, estimated dividends, or alternate-feed fallback.",
     "limitations": [
-      "IEX is not the consolidated SIP feed.",
-      "Monthly closes understate intra-month drawdowns.",
-      "Price returns omit ETF cash distributions, which disadvantages QQQ and SPY relative to non-distributing gold exposure in return comparisons."
+      "IEX is not consolidated SIP.",
+      "Monthly closes understate intra-month drawdowns and cannot produce daily Expected Shortfall.",
+      "Distribution accrual is assigned to the ex-date month; exact payable-date cash availability is not modeled."
     ]
   },
   "portfolio_contract": {
-    "rebalancing": "monthly to fixed target weights",
+    "rebalancing": "monthly fixed weights",
     "transaction_cost_bps_per_one_way_turnover": 20,
-    "initial_entry_cost": "excluded equally from all strategies",
+    "initial_entry_cost": "excluded equally",
     "strategies": {
-      "QQQ": {"QQQ": 1.0, "GLD": 0.0, "SPY": 0.0},
-      "QQQ80_GLD20": {"QQQ": 0.8, "GLD": 0.2, "SPY": 0.0},
-      "QQQ80_SPY20": {"QQQ": 0.8, "GLD": 0.0, "SPY": 0.2},
-      "QQQ50_GLD50": {"QQQ": 0.5, "GLD": 0.5, "SPY": 0.0}
+      "QQQ": {"QQQ": 1.0},
+      "QQQ80_GLD20": {"QQQ": 0.8, "GLD": 0.2},
+      "QQQ80_SPY20": {"QQQ": 0.8, "SPY": 0.2}
     },
     "risk_free_rate_for_sharpe": 0.0
   },
   "results": {
     "full_2020_08_to_2026_08": {
-      "QQQ": {"cagr": 0.177098, "annualized_volatility": 0.204577, "sharpe": 0.902708, "maximum_drawdown": -0.329937, "monthly_expected_shortfall_95": -0.105917, "worst_month": -0.134219, "total_return": 1.696351, "turnover": 0.0},
-      "QQQ80_GLD20": {"cagr": 0.174916, "annualized_volatility": 0.169596, "sharpe": 1.040276, "maximum_drawdown": -0.282161, "monthly_expected_shortfall_95": -0.087683, "worst_month": -0.111483, "total_return": 1.666089, "turnover": 0.687079},
-      "QQQ80_SPY20": {"cagr": 0.172346, "annualized_volatility": 0.192876, "sharpe": 0.924511, "maximum_drawdown": -0.311566, "monthly_expected_shortfall_95": -0.101332, "worst_month": -0.125036, "total_return": 1.630810, "turnover": 0.210244},
-      "QQQ50_GLD50": {"cagr": 0.166411, "annualized_volatility": 0.137688, "sharpe": 1.193048, "maximum_drawdown": -0.213161, "monthly_expected_shortfall_95": -0.071224, "worst_month": -0.080258, "total_return": 1.550831, "turnover": 1.075254}
+      "QQQ": {"cagr": 0.183994, "annualized_volatility": 0.204133, "sharpe": 0.933186, "maximum_drawdown": -0.324913, "monthly_expected_shortfall_95": -0.104498, "worst_month": -0.134219, "total_return": 1.793886, "turnover": 0.0},
+      "QQQ80_GLD20": {"cagr": 0.180399, "annualized_volatility": 0.169226, "sharpe": 1.070032, "maximum_drawdown": -0.27932, "monthly_expected_shortfall_95": -0.087014, "worst_month": -0.11151, "total_return": 1.742679, "turnover": 0.694959},
+      "QQQ80_SPY20": {"cagr": 0.181024, "annualized_volatility": 0.192279, "sharpe": 0.965597, "maximum_drawdown": -0.307178, "monthly_expected_shortfall_95": -0.099591, "worst_month": -0.125048, "total_return": 1.751522, "turnover": 0.21253}
     },
     "early_2020_08_to_2023_12": {
-      "QQQ": {"cagr": 0.134812, "annualized_volatility": 0.228488, "sharpe": 0.668175, "maximum_drawdown": -0.329937, "monthly_expected_shortfall_95": -0.110810, "worst_month": -0.134219, "total_return": 0.540482, "turnover": 0.0},
-      "QQQ80_GLD20": {"cagr": 0.113379, "annualized_volatility": 0.190713, "sharpe": 0.658927, "maximum_drawdown": -0.282161, "monthly_expected_shortfall_95": -0.092741, "worst_month": -0.111483, "total_return": 0.443323, "turnover": 0.356693},
-      "QQQ80_SPY20": {"cagr": 0.131682, "annualized_volatility": 0.216760, "sharpe": 0.679718, "maximum_drawdown": -0.311566, "monthly_expected_shortfall_95": -0.106431, "worst_month": -0.125036, "total_return": 0.526013, "turnover": 0.124738},
-      "QQQ50_GLD50": {"cagr": 0.077501, "annualized_volatility": 0.146721, "sharpe": 0.581750, "maximum_drawdown": -0.213161, "monthly_expected_shortfall_95": -0.066121, "worst_month": -0.077370, "total_return": 0.290509, "turnover": 0.559731}
+      "QQQ": {"cagr": 0.142216, "annualized_volatility": 0.227968, "sharpe": 0.69795, "maximum_drawdown": -0.324913, "monthly_expected_shortfall_95": -0.109488, "worst_month": -0.134219, "total_return": 0.575095, "turnover": 0.0},
+      "QQQ80_GLD20": {"cagr": 0.119163, "annualized_volatility": 0.190324, "sharpe": 0.687317, "maximum_drawdown": -0.27932, "monthly_expected_shortfall_95": -0.091844, "worst_month": -0.11151, "total_return": 0.469104, "turnover": 0.361983},
+      "QQQ80_SPY20": {"cagr": 0.141104, "annualized_volatility": 0.216071, "sharpe": 0.719901, "maximum_drawdown": -0.307178, "monthly_expected_shortfall_95": -0.104992, "worst_month": -0.125048, "total_return": 0.569862, "turnover": 0.127386}
     },
-    "recent_2024_02_to_2026_08": {
-      "QQQ": {"cagr": 0.233285, "annualized_volatility": 0.174840, "sharpe": 1.291905, "maximum_drawdown": -0.102202, "monthly_expected_shortfall_95": -0.071265, "worst_month": -0.077074, "total_return": 0.718887, "turnover": 0.0},
-      "QQQ80_GLD20": {"cagr": 0.262422, "annualized_volatility": 0.140844, "sharpe": 1.737454, "maximum_drawdown": -0.075168, "monthly_expected_shortfall_95": -0.056351, "worst_month": -0.061977, "total_return": 0.825764, "turnover": 0.319102},
-      "QQQ80_SPY20": {"cagr": 0.226282, "annualized_volatility": 0.162440, "sharpe": 1.342905, "maximum_drawdown": -0.095943, "monthly_expected_shortfall_95": -0.062829, "worst_month": -0.073328, "total_return": 0.693784, "turnover": 0.083476},
-      "QQQ50_GLD50": {"cagr": 0.300852, "annualized_volatility": 0.122517, "sharpe": 2.229849, "maximum_drawdown": -0.086874, "monthly_expected_shortfall_95": -0.070127, "worst_month": -0.080258, "total_return": 0.972825, "turnover": 0.497702}
+    "recent_2024_01_to_2026_08": {
+      "QQQ": {"cagr": 0.239762, "annualized_volatility": 0.17169, "sharpe": 1.343724, "maximum_drawdown": -0.100831, "monthly_expected_shortfall_95": -0.070561, "worst_month": -0.075666, "total_return": 0.773788, "turnover": 0.0},
+      "QQQ80_GLD20": {"cagr": 0.263778, "annualized_volatility": 0.13834, "sharpe": 1.77446, "maximum_drawdown": -0.074319, "monthly_expected_shortfall_95": -0.055854, "worst_month": -0.060997, "total_return": 0.866906, "turnover": 0.332976},
+      "QQQ80_SPY20": {"cagr": 0.234218, "annualized_volatility": 0.159372, "sharpe": 1.407066, "maximum_drawdown": -0.094291, "monthly_expected_shortfall_95": -0.06199, "worst_month": -0.071632, "total_return": 0.752716, "turnover": 0.085143}
     }
   },
   "decision": {
-    "use": "A 20% gold sleeve is supported as a tail-risk reducer for a QQQ-heavy portfolio under this evidence contract.",
+    "use": "Keep a 20% gold sleeve as a CONDITION-level tail-risk reducer for a QQQ-heavy allocation; the conclusion survives inclusion of actual QQQ/SPY distributions.",
     "do_not_use": [
-      "Do not treat gold as an expected-return timing signal.",
-      "Do not infer that 50% gold is superior: it reduced volatility but was less stable on drawdown/ES in the recent subperiod and gave up more return in the early subperiod.",
-      "Do not promote this result to a production target weight until dividend-adjusted total-return and daily-drawdown evidence reproduces the result."
+      "Do not use gold as an expected-return timing signal.",
+      "Do not promote 20% to a production target until canonical daily data reproduces drawdown and Expected-Shortfall improvement."
     ]
   },
-  "primary_reference_metadata": {
-    "QQQ": {
-      "issuer": "Invesco",
-      "objective": "Tracks the Nasdaq-100 Index",
-      "official_url": "https://www.invesco.com/jp/ja/etf/qqq.html",
-      "expense_ratio_as_of_2026_09": 0.0018
-    },
-    "GLD": {
-      "issuer": "State Street / World Gold Trust Services",
-      "objective": "Seeks to reflect the performance of the price of gold bullion, less expenses",
-      "official_url": "https://www.ssga.com/jp/ja/institutional/etfs/spdr-gold-shares-gld",
-      "expense_ratio_as_of_2026_09": 0.004
-    }
+  "prior_price_only_reference": {
+    "commit": "34cdb46413c4a3b3e04c3ed29fae01a44b81172d",
+    "finding": "Including actual distributions increases equity returns but does not reverse the tail-risk result."
   }
 }
