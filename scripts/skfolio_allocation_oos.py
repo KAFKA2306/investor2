@@ -95,8 +95,10 @@ def portfolio_metrics(returns: pd.Series) -> dict[str, float]:
     return {
         "total_return": total_return,
         "cagr": cagr,
-        "annualized_volatility": daily_vol * np.sqrt(ANNUALIZATION_FACTOR),
-        "sharpe_zero_risk_free": (0.0 if daily_vol == 0 else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR)),
+        "annualized_volatility": float(daily_vol * np.sqrt(ANNUALIZATION_FACTOR)),
+        "sharpe_zero_risk_free": float(
+            0.0 if daily_vol == 0 else daily_mean / daily_vol * np.sqrt(ANNUALIZATION_FACTOR)
+        ),
         "maximum_drawdown": float(drawdowns.min()),
         "expected_shortfall_95_daily": expected_shortfall,
         "worst_day": float(values.min()),
@@ -208,10 +210,12 @@ def evaluate(
     empirical_metrics = cast(dict[str, float], empirical["metrics_after_cost"])
     candidate_metrics = cast(dict[str, float], candidate["metrics_after_cost"])
     wins = {
-        "annualized_volatility": (
+        "annualized_volatility": bool(
             candidate_metrics["annualized_volatility"] < empirical_metrics["annualized_volatility"]
         ),
-        "maximum_drawdown": (candidate_metrics["maximum_drawdown"] > empirical_metrics["maximum_drawdown"]),
+        "maximum_drawdown": bool(
+            candidate_metrics["maximum_drawdown"] > empirical_metrics["maximum_drawdown"]
+        ),
     }
     verdict = "USE" if all(wins.values()) else "REJECT"
     return {
