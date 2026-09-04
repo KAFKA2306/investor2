@@ -21,4 +21,4 @@ jobs:
       - name: Install locked project
         run: uv sync --locked
       - name: Run daily total-return validation
-        run: uv run python scripts/qqq_gold_daily_validate.py
+        run: PYTHONPATH=. uv run python scripts/qqq_gold_daily_validate.py
