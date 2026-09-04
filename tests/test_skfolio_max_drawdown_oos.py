@@ -8,13 +8,12 @@ from scripts.skfolio_max_drawdown_oos import portfolio_metrics, simulate_fold
 
 def test_simulate_fold_charges_initial_rebalance_cost() -> None:
     index = pd.date_range("2026-01-01", periods=2, freq="D")
-    returns = pd.DataFrame(
-        [[0.01, 0.00], [0.00, 0.01]],
-        index=index,
-        columns=["A", "B"],
-    )
-    target = np.array([0.5, 0.5])
-    previous = np.array([0.6, 0.4])
+    columns = [f"A{i:02d}" for i in range(20)]
+    returns = pd.DataFrame(np.zeros((2, 20)), index=index, columns=columns)
+    target = np.full(20, 0.05)
+    previous = target.copy()
+    previous[0] = 0.06
+    previous[1] = 0.04
 
     realized, end_weights, turnover, cost = simulate_fold(
         returns,
@@ -22,9 +21,9 @@ def test_simulate_fold_charges_initial_rebalance_cost() -> None:
         previous,
     )
 
-    assert np.isclose(turnover, 0.1)
-    assert np.isclose(cost, 0.0002)
-    assert np.isclose(realized.iloc[0], 0.0048)
+    assert np.isclose(turnover, 0.01)
+    assert np.isclose(cost, 0.00002)
+    assert np.isclose(realized.iloc[0], -0.00002)
     assert np.isclose(end_weights.sum(), 1.0)
 
 
