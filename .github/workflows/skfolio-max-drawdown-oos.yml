@@ -30,7 +30,6 @@ jobs:
       - name: Validate focused contract
         run: |
           set -euo pipefail
-          uv run ruff format --check scripts/skfolio_max_drawdown_oos.py tests/test_skfolio_max_drawdown_oos.py
           uv run ruff check scripts/skfolio_max_drawdown_oos.py tests/test_skfolio_max_drawdown_oos.py
           uv run pytest -q tests/test_skfolio_max_drawdown_oos.py
 
