@@ -1,0 +1,69 @@
+{
+  "schema_version": "investor2.portfolio-research-jpy-result.v1",
+  "hypothesis": "For an unhedged JPY investor, QQQ80+GLD20 improves realized tail risk versus QQQ100 and QQQ80+SPY20 across fixed periods while keeping CAGR drag versus QQQ within 3 percentage points.",
+  "verdict": "USE",
+  "adoption_rule": {
+    "required_in_every_fixed_period": [
+      "QQQ80_GLD20 maximum drawdown is no worse than QQQ100 and QQQ80_SPY20",
+      "QQQ80_GLD20 95% daily Expected Shortfall is no worse than both benchmarks",
+      "QQQ80_GLD20 annualized volatility is no higher than both benchmarks",
+      "QQQ80_GLD20 CAGR is no more than 3 percentage points below QQQ100"
+    ],
+    "observed": "PASS",
+    "full": true,
+    "early_2020_08_to_2023_12": true,
+    "recent_2024_01_to_2026_08": true
+  },
+  "data_contract": {
+    "asset_prices": "Yahoo Chart adjusted close using the existing investor2 provider contract",
+    "asset_currency": "USD",
+    "investor_currency": "JPY",
+    "fx_source": "Board of Governors of the Federal Reserve System H.10 Data Download Program",
+    "fx_series": "H10/H10/RXI_N.B.JA",
+    "fx_units": "Japanese Yen per U.S. Dollar",
+    "fx_observation_convention": "Federal Reserve H.10 daily noon buying rate",
+    "alignment": "Exact-date intersection only; no forward fill, interpolation, or alternate-feed fallback",
+    "common_rows": 1511,
+    "common_start": "2020-07-31",
+    "common_end": "2026-08-28",
+    "portfolio": "Monthly fixed weights; one-way turnover cost 20 bps; initial entry cost excluded equally; risk-free rate 0; annualization 252",
+    "expected_shortfall": "Mean of the worst ceil(5% * observations) daily portfolio returns",
+    "source_hashes": {
+      "QQQ_yahoo_raw_sha256": "c21d0b1c3ee7651955c38a8fcd5f1b151ab880c75ac04c231700203e7402a1fb",
+      "GLD_yahoo_raw_sha256": "592b2ad964a28346d0c67bbc57698bed7d6048f73054d9c94aa015ac730ae566",
+      "SPY_yahoo_raw_sha256": "0feae8bd500305d589d37b633af1ed06df78b23868a36758ddd60c42e283ca55",
+      "Federal_Reserve_H10_raw_sha256": "a810849a6fa14b405d2831f03526ac519602e50f527491c7de3a3c0002207c34"
+    }
+  },
+  "results": {
+    "full_2020_08_to_2026_08": {
+      "QQQ100": {"observations": 1509, "cagr": 0.185827, "annualized_volatility": 0.275680, "sharpe": 0.756335, "maximum_drawdown": -0.448235, "daily_expected_shortfall_95": -0.038570, "worst_day": -0.107734, "one_way_turnover": 0.0},
+      "QQQ80_GLD20": {"observations": 1509, "cagr": 0.182797, "annualized_volatility": 0.246899, "sharpe": 0.803701, "maximum_drawdown": -0.409880, "daily_expected_shortfall_95": -0.034588, "worst_day": -0.100166, "one_way_turnover": 0.686746},
+      "QQQ80_SPY20": {"observations": 1509, "cagr": 0.183269, "annualized_volatility": 0.263438, "sharpe": 0.770758, "maximum_drawdown": -0.429831, "daily_expected_shortfall_95": -0.036927, "worst_day": -0.107056, "one_way_turnover": 0.211703}
+    },
+    "early_2020_08_to_2023_12": {
+      "QQQ100": {"observations": 846, "cagr": 0.126423, "annualized_volatility": 0.295057, "sharpe": 0.551025, "maximum_drawdown": -0.448235, "daily_expected_shortfall_95": -0.040716, "worst_day": -0.071854},
+      "QQQ80_GLD20": {"observations": 846, "cagr": 0.104244, "annualized_volatility": 0.261098, "sharpe": 0.510317, "maximum_drawdown": -0.409880, "daily_expected_shortfall_95": -0.036009, "worst_day": -0.063830, "one_way_turnover": 0.356352},
+      "QQQ80_SPY20": {"observations": 846, "cagr": 0.125823, "annualized_volatility": 0.282049, "sharpe": 0.561244, "maximum_drawdown": -0.429831, "daily_expected_shortfall_95": -0.039092, "worst_day": -0.069622, "one_way_turnover": 0.127581}
+    },
+    "recent_2024_01_to_2026_08": {
+      "QQQ100": {"observations": 662, "cagr": 0.278980, "annualized_volatility": 0.248607, "sharpe": 1.114504, "maximum_drawdown": -0.270251, "daily_expected_shortfall_95": -0.033933, "worst_day": -0.107734},
+      "QQQ80_GLD20": {"observations": 662, "cagr": 0.302862, "annualized_volatility": 0.227304, "sharpe": 1.278266, "maximum_drawdown": -0.227617, "daily_expected_shortfall_95": -0.031409, "worst_day": -0.100166, "one_way_turnover": 0.326114},
+      "QQQ80_SPY20": {"observations": 662, "cagr": 0.272465, "annualized_volatility": 0.237466, "sharpe": 1.133887, "maximum_drawdown": -0.262812, "daily_expected_shortfall_95": -0.032449, "worst_day": -0.107056, "one_way_turnover": 0.084395}
+    }
+  },
+  "decision": {
+    "use": "The existing fixed 20% gold tail-risk sleeve remains usable for unhedged JPY capital-allocation research: the pre-registered tail-risk gates passed in both fixed subperiods and the full sample after JPY translation.",
+    "do_not_use": [
+      "Do not treat gold as a regime-independent Sharpe enhancer; in 2020-08 through 2023-12 its JPY Sharpe was below both QQQ100 and QQQ80_SPY20.",
+      "Do not infer that 20% is a globally optimal gold weight.",
+      "Do not use these Federal Reserve noon FX observations as an exact brokerage-close JPY mark."
+    ]
+  },
+  "limitations": [
+    "Federal Reserve H.10 is a daily noon buying-rate series, while ETF adjusted closes are U.S. market closes; this is an official daily JPY translation, not a synchronous close-to-close FX mark.",
+    "Exact-date intersection leaves 1511 common price/FX dates versus 1528 ETF price dates; no missing FX dates were filled.",
+    "Yahoo Chart adjusted close is a vendor total-return series, not an exchange-consolidated SIP source.",
+    "Taxes and investor-specific account treatment are not modeled."
+  ]
+}
