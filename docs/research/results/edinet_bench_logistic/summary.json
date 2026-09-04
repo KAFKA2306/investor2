@@ -1,0 +1,92 @@
+{
+  "algorithm_contract": {
+    "constant_columns": "drop train columns with <=1 unique value; align test to train",
+    "missing_values": "train numeric mean applied to train and test",
+    "model": "sklearn LogisticRegression with default constructor arguments",
+    "scaling": "sklearn StandardScaler",
+    "summary_flattening": "metric/year -> numeric column; Japanese dash and null -> NaN",
+    "tasks": [
+      "fraud_detection",
+      "earnings_forecast"
+    ]
+  },
+  "claim_boundary": "Reproduces the official deterministic logistic baselines for fraud_detection and earnings_forecast only. This is not an AAARTS candidate, not a head-to-head result, and does not justify BEAT/TIE/LOSE.",
+  "environment": {
+    "datasets": "3.5.0",
+    "numpy": "2.2.6",
+    "pandas": "2.2.3",
+    "pyarrow": "19.0.1",
+    "scikit-learn": "1.6.0"
+  },
+  "execution_status": "completed",
+  "family": "EDINET-Bench",
+  "frontier": {
+    "head_to_head": "NOT_RUN",
+    "reproduction_state": "BASELINE_REPRODUCED",
+    "verdict": null
+  },
+  "reproduction_scope": "official summary-only logistic baseline",
+  "schema_version": "investor2.edinet-bench-logistic-reproduction.v1",
+  "tasks": {
+    "earnings_forecast": {
+      "feature_count_after_official_preprocessing": 105,
+      "metrics": {
+        "accuracy": 0.5676274944567627,
+        "confusion_matrix": [
+          [
+            60,
+            97
+          ],
+          [
+            98,
+            196
+          ]
+        ],
+        "f1": 0.6678023850085179,
+        "precision": 0.6689419795221843,
+        "recall": 0.6666666666666666,
+        "roc_auc": 0.5612244897959184
+      },
+      "test_doc_ids_unique": true,
+      "test_positive": 294,
+      "test_rows": 451,
+      "train_doc_ids_unique": true,
+      "train_positive": 295,
+      "train_rows": 549
+    },
+    "fraud_detection": {
+      "feature_count_after_official_preprocessing": 110,
+      "metrics": {
+        "accuracy": 0.5848214285714286,
+        "confusion_matrix": [
+          [
+            63,
+            39
+          ],
+          [
+            54,
+            68
+          ]
+        ],
+        "f1": 0.5938864628820961,
+        "precision": 0.6355140186915887,
+        "recall": 0.5573770491803278,
+        "roc_auc": 0.6761491481838637
+      },
+      "test_doc_ids_unique": true,
+      "test_positive": 122,
+      "test_rows": 224,
+      "train_doc_ids_unique": true,
+      "train_positive": 412,
+      "train_rows": 865
+    }
+  },
+  "upstream": {
+    "data_key": "summary",
+    "dataset_id": "SakanaAI/EDINET-Bench",
+    "dataset_revision": "cf0bc74fb85cce99878f15426f8cf3ba750d0cba",
+    "official_logistic_blob": "37184505cd88d4bacdfa8576778da59dd32e434c",
+    "repository": "https://github.com/SakanaAI/EDINET-Bench",
+    "repository_commit": "797fbb50051c14b97ee2fd88595b0a3c12432058"
+  }
+}
