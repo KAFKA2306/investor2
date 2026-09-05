@@ -1,0 +1,105 @@
+{
+  "research_date": "2026-09-05",
+  "status": "CONDITION",
+  "hypothesis": "日経平均高配当株50への長期・買い持ち投資では、1489を既定選択とせず、より低コストのTracers日経平均高配当株50インデックス（奇数月分配型）または399Aを優先できる。1489を選ぶには、流動性・スプレッド・実行利便性の便益が年間14.3bp（399A比）または20.075bp（Tracers比）を上回る根拠が必要である。",
+  "acceptance_rule": {
+    "use": "同じ日経平均高配当株50エクスポージャーで、低コスト商品の実現tracking differenceと売買フリクションを含むnet returnが1489以上であることを一次データで確認できる。",
+    "condition": "指数エクスポージャーと公表継続費用の優位は確認できるが、同一期間の実現tracking differenceまたはETFのspread/depthを完全には固定できない。",
+    "reject": "低コスト商品が異なる経済エクスポージャーを持つ、または実現tracking/execution costが公表費用差を継続的に上回る。"
+  },
+  "products": [
+    {
+      "name": "Tracers 日経平均高配当株50インデックス（奇数月分配型）",
+      "vehicle": "公募投資信託",
+      "benchmark_or_target": "日経平均高配当株50指数（トータルリターン）",
+      "management_fee_pct_per_year": 0.10725,
+      "other_stated_cost_cap_pct_per_year": 0.035,
+      "purchase_fee": "なし",
+      "redemption_fee": "なし",
+      "distribution_frequency": "年6回（奇数月）",
+      "nisa": "成長投資枠適格",
+      "inception": "2024-01-31",
+      "source": "https://www.amova-am.com/20lab/fund/tracers/nkhd50"
+    },
+    {
+      "name": "上場インデックスファンド日経平均高配当株50",
+      "ticker": "399A",
+      "vehicle": "東証ETF",
+      "target": "日経平均高配当株50指数",
+      "management_fee_pct_per_year_max": 0.165,
+      "distribution_frequency": "年2回",
+      "trading_unit": "1口",
+      "nisa": "成長投資枠適格",
+      "listed": "2025-07-24",
+      "source": "https://www.amova-am.com/products/etf/lineup/jhigh50",
+      "fee_source": "https://www.amova-am.com/products/etf/we-love-etf/amova_etf/lp-jhigh50"
+    },
+    {
+      "name": "NEXT FUNDS 日経平均高配当株50指数連動型上場投信",
+      "ticker": "1489",
+      "vehicle": "東証ETF",
+      "benchmark_or_target": "日経平均高配当株50指数（トータルリターン）",
+      "management_fee_pct_per_year": 0.308,
+      "total_expense_ratio_pct_per_year": 0.37,
+      "distribution_frequency": "年4回",
+      "aum_billion_jpy": 560.91,
+      "aum_as_of": "2026-09-03",
+      "distribution_yield_pct": 2.60,
+      "distribution_yield_as_of": "2026-09-03",
+      "source": "https://nextfunds.jp/lineup/1489/"
+    }
+  ],
+  "verified_fee_gaps": {
+    "tracers_vs_1489_bp_per_year": 20.075,
+    "399a_vs_1489_bp_per_year": 14.3,
+    "tracers_vs_399a_bp_per_year": 5.775
+  },
+  "fee_only_relative_wealth_advantage_pct": {
+    "method": "((1-low_fee)/(1-high_fee))^years - 1。市場returnは両商品で同一と仮定し、継続費用差だけを分離する。税・spread・tracking differenceは含めない。",
+    "tracers_over_1489": {
+      "1y": 0.20137,
+      "5y": 1.01091,
+      "10y": 2.03205,
+      "20y": 4.10539
+    },
+    "399a_over_1489": {
+      "1y": 0.14344,
+      "5y": 0.71927,
+      "10y": 1.44371,
+      "20y": 2.90827
+    },
+    "tracers_over_399a": {
+      "1y": 0.05785,
+      "5y": 0.28956,
+      "10y": 0.57996,
+      "20y": 1.16329
+    }
+  },
+  "benchmark_comparison": {
+    "simple_default": "1489を純資産・知名度だけで既定選択する",
+    "alternative_1": "NISA長期積立はTracersを使う",
+    "alternative_2": "場中売買が必要なら399Aを使う",
+    "decision": "1489の高い純資産・既存流動性は実行面の利点だが、それだけでは年間14.3〜20.075bpの継続費用差を正当化しない。"
+  },
+  "risk_metrics": {
+    "not_separately_compared": true,
+    "reason": "3商品はいずれも同じ日経平均高配当株50への連動を目的とするため、本runの主要差分は市場リスクではなくimplementation costである。商品間のSharpe/DD/ES差を主張するには同一期間の日次total-return系列が必要であり、未固定のため推測しない。"
+  },
+  "limitations": [
+    "399Aは2025-07-24上場で実績期間が短い。",
+    "JPXがETF spread/depth統計を公表していることは確認したが、本runでは399A/1489の同一日の個別spread/depth値をcanonical snapshotとして固定できていない。",
+    "Tracersのその他費用は上限年0.035%の項目があり、実際の総経費率と公表信託報酬は同一ではない。",
+    "ETFの売買手数料・bid-ask spread・premium/discountは証券会社と執行時点に依存する。",
+    "課税口座では分配課税・再投資の扱いがnet returnに影響するため、本判定は主にNISA長期保有を対象とする。"
+  ],
+  "decision_use": {
+    "long_term_nisa_accumulation": "Tracersを第一候補。",
+    "intraday_etf_execution_needed": "399Aを第一候補として1489と実際のspread/depthを比較する。",
+    "1489": "流動性・約定品質・既存保有の売却税/移管コスト等が年間費用差を上回る場合のみ優先。"
+  },
+  "do_not_use": [
+    "1489の純資産額だけを理由に最安・最適と扱う。",
+    "信託報酬だけから実現total returnを断定する。",
+    "未取得のspread/depthを推測してETF間の約定品質を順位付けする。"
+  ]
+}
