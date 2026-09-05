@@ -1,1 +1,70 @@
-PLACEHOLDER
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gold_risk_sleeve_20260906",
+  "status": "CONDITION",
+  "hypothesis": "SMHの20%をGLDへ配分し月次リバランスすると、SMH単独より10bpコスト込みSharpeを改善し、Maximum Drawdownと95% Expected Shortfallも改善する。",
+  "decision_rule": {
+    "use_if": "全期間に加え2025年と2026年1-8月の両時間分割で、20% GLDがSMH単独よりSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化しない",
+    "reject_if": "いずれかの時間分割でSharpeがSMH単独以下、またはMaximum Drawdown/95% Expected Shortfallが悪化"
+  },
+  "source": {
+    "market_data": "Alpaca Market Data API",
+    "feed": "IEX",
+    "currency": "USD",
+    "timeframe": "1Month",
+    "period": "2024-08-01..2026-08-31",
+    "retrieved_as_of": "2026-09-06",
+    "fallback": "none",
+    "smh_identity_url": "https://www.vaneck.com/us/en/investments/semiconductor-etf-smh/",
+    "gld_identity_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld"
+  },
+  "method": {
+    "returns": "month-end close-to-close price return",
+    "rebalance": "monthly to fixed target weights",
+    "transaction_cost_bps_per_two_sided_turnover": 10,
+    "risk_free_rate_for_sharpe": 0,
+    "annualization_months": 12,
+    "expected_shortfall": "mean of returns at or below empirical 5th percentile",
+    "missing_data": "no interpolation, no forward fill"
+  },
+  "inputs": {
+    "months": ["2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"],
+    "SMH_close": [243.52,245.435,241.76,242.105,242.28,243.71,232.7,211.37,211.26,239.52,278.96,288.9,290.25,326.45,363.04,352.46,360.19,403.33,406.12,383.04,506.63,599.06,656.31,540.52,556.64],
+    "GLD_close": [231.305,243.1,253.61,245.61,242.15,258.62,263.385,288.16,303.71,303.6,304.82,302.96,318.02,355.44,368.14,387.96,396.35,446.035,483.8,430.27,423.78,417.18,368.38,371.47,408.52]
+  },
+  "correlation": {"SMH_GLD_monthly_return": -0.07777952},
+  "full_period_10bp": {
+    "SMH": {"cagr":0.51188893,"volatility":0.35724272,"sharpe":1.33778756,"maximum_drawdown":-0.17642577,"expected_shortfall_95":-0.13404443},
+    "SMH80_GLD20": {"cagr":0.49190041,"volatility":0.28563601,"sharpe":1.55408263,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.10357179,"turnover_two_sided":0.67164458},
+    "SMH60_GLD40": {"cagr":0.46331796,"volatility":0.22436342,"sharpe":1.827629,"maximum_drawdown":-0.10259908,"expected_shortfall_95":-0.09049168,"turnover_two_sided":1.01522091},
+    "SMH50_GLD50": {"cagr":0.44588029,"volatility":0.20064462,"sharpe":1.95963854,"maximum_drawdown":-0.09402238,"expected_shortfall_95":-0.0839434,"turnover_two_sided":1.06247411}
+  },
+  "time_split_10bp": {
+    "2025": {
+      "SMH": {"cagr":0.48666832,"volatility":0.2769728,"sharpe":1.57731093,"maximum_drawdown":-0.13315006,"expected_shortfall_95":-0.09166309},
+      "SMH80_GLD20": {"cagr":0.52716791,"volatility":0.21563333,"sharpe":2.09305631,"maximum_drawdown":-0.08528534,"expected_shortfall_95":-0.05458056}
+    },
+    "2026_01_08": {
+      "SMH": {"cagr":0.92116267,"volatility":0.5267436,"sharpe":1.49195134,"maximum_drawdown":-0.17642577,"expected_shortfall_95":-0.17642577},
+      "SMH80_GLD20": {"cagr":0.74491925,"volatility":0.42650212,"sharpe":1.51500197,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.13953173},
+      "SMH60_GLD40": {"cagr":0.56599314,"volatility":0.3412958,"sharpe":1.48454372,"maximum_drawdown":-0.10259908,"expected_shortfall_95":-0.10259908},
+      "SMH50_GLD50": {"cagr":0.47662137,"volatility":0.30833458,"sharpe":1.41735932,"maximum_drawdown":-0.09402238,"expected_shortfall_95":-0.08411973}
+    }
+  },
+  "cost_sensitivity_SMH80_GLD20": {
+    "0bp": {"cagr":0.4923832,"sharpe":1.55517288,"maximum_drawdown":-0.139463,"expected_shortfall_95":-0.10352819},
+    "5bp": {"cagr":0.49214179,"sharpe":1.55462778,"maximum_drawdown":-0.13949737,"expected_shortfall_95":-0.10354999},
+    "10bp": {"cagr":0.49190041,"sharpe":1.55408263,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.10357179},
+    "20bp": {"cagr":0.49141776,"sharpe":1.55299214,"maximum_drawdown":-0.13960045,"expected_shortfall_95":-0.10361538}
+  },
+  "decision": {
+    "condition": "半導体集中ポートフォリオのrisk-control候補として20%金sleeveを維持する。production target weightにはしない。",
+    "why_not_use": "月次returnは24点と短く、SMHのclose-to-close価格returnは分配金を含まない。税も未評価。2026年の95% Expected Shortfallは実質1観測。",
+    "higher_gold_rejected_for_robustness": "40%と50% GLDは全期間のrisk指標を改善するが、2026年1-8月のSharpeがSMH単独を下回る。"
+  },
+  "prohibited_inference": [
+    "20%を恒久的な最適weightとして扱わない。",
+    "将来の半導体drawdownでも金が必ずhedgeすると推定しない。",
+    "ETFのclose-to-close価格returnを分配金込みtotal returnとして扱わない。"
+  ]
+}
