@@ -1,0 +1,91 @@
+{
+  "schema_version": "investor2.research-evidence.v1",
+  "as_of": "2026-09-05",
+  "paper": {
+    "title": "Safe havens or war hedges? Asset behavior during the 2026 escalation of the Iran conflict",
+    "authors": ["Andrea Paltrinieri", "Salvatore Perdichizzi", "Stefano Pisera"],
+    "journal": "Economics Letters",
+    "volume": 265,
+    "article": "113010",
+    "issue_date": "2026-06",
+    "doi": "10.1016/j.econlet.2026.113010",
+    "event_date": "2026-02-27",
+    "paper_claim": "Gold and Bitcoin were not robust safe havens around the 2026 Iran escalation, while oil displayed the clearest short-run war-hedge behavior."
+  },
+  "hypothesis": "Around the 2026-02-27 Iran escalation shock, oil-linked exposure protects an equity portfolio more effectively than gold or Bitcoin over the short event window.",
+  "decision_gate": {
+    "condition_if": "For the 2026-02-20 through 2026-03-06 event window, an 80% SPY / 20% hedge portfolio improves cumulative return, maximum drawdown, and daily 95% Expected Shortfall versus SPY alone, while gold and Bitcoin do not both satisfy the same three-metric gate.",
+    "reject_if": "Oil-linked exposure fails the same three-metric gate or is not better than the gold and Bitcoin alternatives.",
+    "otherwise": "UNVERIFIED"
+  },
+  "canonical_real_data": {
+    "equity_and_etf_source": "Alpaca Market Data Stock Bars, IEX feed",
+    "equity_and_etf_symbols": ["SPY", "GLD", "USO"],
+    "crypto_source": "Alpaca Market Data Crypto Bars, US feed",
+    "crypto_symbol": "BTC/USD",
+    "price_field": "daily close",
+    "timezone": "America/New_York for equity bars; BTC/USD aligned exactly to the listed US-equity trading dates",
+    "event_window": "2026-02-20/2026-03-06",
+    "observations": 11,
+    "return_observations": 10,
+    "interpolation": false,
+    "forward_fill": false,
+    "alternate_feed_fallback": false,
+    "identity_note": "This is an independent tradable-proxy replication, not an exact reproduction of the paper's Refinitiv MSCI World, spot/commodity, and volatility-regression dataset.",
+    "aligned_closes": [
+      {"date":"2026-02-20","SPY":689.44,"GLD":468.54,"USO":80.84,"BTC_USD":67998.0565},
+      {"date":"2026-02-23","SPY":682.39,"GLD":481.31,"USO":80.905,"BTC_USD":64628.779},
+      {"date":"2026-02-24","SPY":687.37,"GLD":474.64,"USO":80.75,"BTC_USD":64061.71},
+      {"date":"2026-02-25","SPY":693.1,"GLD":473.385,"USO":79.71,"BTC_USD":67989.963},
+      {"date":"2026-02-26","SPY":689.32,"GLD":477.43,"USO":79.77,"BTC_USD":67482.7965},
+      {"date":"2026-02-27","SPY":686.16,"GLD":483.8,"USO":81.93,"BTC_USD":65863.21},
+      {"date":"2026-03-02","SPY":686.35,"GLD":489.965,"USO":87.175,"BTC_USD":68841.1155},
+      {"date":"2026-03-03","SPY":680.29,"GLD":468.23,"USO":90.18,"BTC_USD":68353.501},
+      {"date":"2026-03-04","SPY":685.13,"GLD":471.89,"USO":91.54,"BTC_USD":72700.389},
+      {"date":"2026-03-05","SPY":681.405,"GLD":466.24,"USO":96.33,"BTC_USD":70887.205},
+      {"date":"2026-03-06","SPY":672.44,"GLD":473.55,"USO":108.775,"BTC_USD":68108.84}
+    ]
+  },
+  "method": {
+    "benchmark": "SPY buy-and-hold over the fixed event window",
+    "alternatives": ["80% SPY + 20% GLD", "80% SPY + 20% USO", "80% SPY + 20% BTC/USD"],
+    "portfolio_return_convention": "Daily constant-weight diagnostic return: 0.8 * SPY daily return + 0.2 * hedge daily return.",
+    "annualization": 252,
+    "sharpe_risk_free_rate": 0,
+    "expected_shortfall": "Mean of worst 5% daily returns; with 10 returns this equals the single worst daily return and is therefore only an event-window diagnostic.",
+    "transaction_cost_note": "No repeated trading strategy is claimed. The test evaluates a pre-positioned 20% hedge sleeve during one event, so no turnover optimization or after-cost alpha claim is made."
+  },
+  "asset_event_returns": {
+    "2026-02-20_to_2026-02-27": {"SPY":-0.0047575,"GLD":0.0325693,"USO":0.0134834,"BTC_USD":-0.0313957},
+    "2026-02-27_to_2026-03-06": {"SPY":-0.0199953,"GLD":-0.0211864,"USO":0.3276578,"BTC_USD":0.0340954},
+    "2026-02-20_to_2026-03-06": {"SPY":-0.0246577,"GLD":0.0106928,"USO":0.3455591,"BTC_USD":0.0016292},
+    "event_day_2026-02-27": {"SPY":-0.0045842,"GLD":0.0133423,"USO":0.0270778,"BTC_USD":-0.024}
+  },
+  "portfolio_results": {
+    "SPY": {"cumulative_return":-0.0246577,"annualized_volatility":0.1239348,"annualized_sharpe_rf0":-5.0144,"maximum_drawdown":-0.0298081,"daily_95_expected_shortfall":-0.0131566},
+    "SPY80_GLD20": {"cumulative_return":-0.0173082,"annualized_volatility":0.1119105,"annualized_sharpe_rf0":-3.8776,"maximum_drawdown":-0.0236262,"daily_95_expected_shortfall":-0.0159355},
+    "SPY80_USO20": {"cumulative_return":0.0426174,"annualized_volatility":0.1149794,"annualized_sharpe_rf0":9.2176,"maximum_drawdown":-0.0042125,"daily_95_expected_shortfall":-0.0080197},
+    "SPY80_BTC20": {"cumulative_return":-0.0185935,"annualized_volatility":0.2180096,"annualized_sharpe_rf0":-2.0695,"maximum_drawdown":-0.0275303,"daily_95_expected_shortfall":-0.0183641}
+  },
+  "benchmark_comparison": {
+    "oil_meets_three_metric_gate": true,
+    "gold_meets_three_metric_gate": false,
+    "bitcoin_meets_three_metric_gate": false,
+    "key_observation": "Only the 20% USO sleeve improved cumulative return, maximum drawdown, and daily 95% Expected Shortfall simultaneously versus SPY during the fixed event window."
+  },
+  "verdict": "CONDITION",
+  "claim_boundary": "CONDITION applies only to the event-specific principle that oil-linked exposure behaved as the stronger short-run war hedge than gold or Bitcoin during the 2026 Iran escalation in this independent tradable-proxy replication. It does not establish oil as a general safe haven, a permanent portfolio sleeve, or a profitable ex-ante geopolitical trading strategy.",
+  "portfolio_implication": "Do not assume gold or Bitcoin automatically hedge geopolitical equity shocks. For supply-disruption conflicts, oil-linked exposure can be evaluated explicitly as a short-run hedge candidate, but any reusable allocation rule requires multi-event out-of-sample validation and implementable entry timing/costs.",
+  "sources": [
+    "https://doi.org/10.1016/j.econlet.2026.113010",
+    "https://www.sciencedirect.com/science/article/pii/S0165176526002044"
+  ],
+  "do_not_use_for": [
+    "direct buy or sell decisions",
+    "permanent strategic oil allocation",
+    "claims that oil is a universal safe haven",
+    "claims that Bitcoin or gold never hedge geopolitical shocks",
+    "after-cost alpha estimates",
+    "future-war return forecasts"
+  ]
+}
