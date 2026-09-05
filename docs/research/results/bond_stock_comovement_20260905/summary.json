@@ -1,0 +1,56 @@
+{
+  "status": "CONDITION",
+  "research_date": "2026-09-05",
+  "paper": {
+    "title": "Bond-Stock Comovements",
+    "authors": ["John Y. Campbell", "Carolin Pflueger", "Luis M. Viceira"],
+    "series": "NBER Working Paper 34323",
+    "issue_date": "2025-10",
+    "revision_date": "2026-06",
+    "doi": "10.3386/w34323",
+    "url": "https://www.nber.org/papers/w34323"
+  },
+  "hypothesis": "直近の米国市場では株式と中期国債の相関が十分に負ではなく、60/40の債券sleeveより金sleeveの方が株式portfolioのrisk-adjusted return改善に寄与する。",
+  "decision_gate": {
+    "condition": "SPY-IEF月次相関が0以上で、80/20 SPY/GLDが60/40 SPY/IEFをSharpeで上回り、SPY単独よりvolatilityとmaximum drawdownを改善すること",
+    "reject": "SPY-IEF相関が負で、60/40 SPY/IEFが80/20 SPY/GLD以上のSharpeを示すこと"
+  },
+  "data": {
+    "source": "Alpaca Market Data",
+    "feed": "IEX",
+    "currency": "USD",
+    "frequency": "monthly",
+    "period": "2024-08 to 2026-08",
+    "observations_prices": 25,
+    "observations_returns": 24,
+    "symbols": ["SPY", "IEF", "GLD"],
+    "price_field": "monthly close",
+    "missing_data_policy": "no interpolation, no forward fill, no alternate-feed fallback",
+    "important_limitation": "Alpaca IEX monthly close is not asserted here to be dividend-adjusted total return. Portfolio-return metrics are therefore price-return diagnostics, not final total-return evidence."
+  },
+  "results": {
+    "monthly_return_correlation": {
+      "SPY_IEF": 0.1912,
+      "SPY_GLD": 0.0146,
+      "IEF_GLD": 0.3376
+    },
+    "price_return_portfolios": {
+      "SPY": {"cagr": 0.1665, "volatility": 0.1282, "sharpe": 1.2699, "max_drawdown": -0.0804, "expected_shortfall_95_monthly": -0.0554},
+      "60_SPY_40_IEF": {"cagr": 0.0890, "volatility": 0.0835, "sharpe": 1.0652, "max_drawdown": -0.0448, "expected_shortfall_95_monthly": -0.0384},
+      "80_SPY_20_GLD": {"cagr": 0.2029, "volatility": 0.1116, "sharpe": 1.7217, "max_drawdown": -0.0641, "expected_shortfall_95_monthly": -0.0489},
+      "60_SPY_20_IEF_20_GLD": {"cagr": 0.1620, "volatility": 0.0924, "sharpe": 1.6795, "max_drawdown": -0.0589, "expected_shortfall_95_monthly": -0.0451}
+    }
+  },
+  "decision": {
+    "status": "CONDITION",
+    "supported_claim": "2024-08から2026-08の月次price returnではSPYとIEFの相関は+0.19で、国債は強い逆相関hedgeではなかった。一方SPYとGLDはほぼ無相関で、80/20 SPY/GLDはこの期間のprice-return診断でSPY単独と60/40 SPY/IEFの双方より高いSharpeを示した。",
+    "capital_allocation_implication": "債券を常に株式の逆相関hedgeと仮定しない。現在のrisk-sleeve比較では金を独立候補として維持し、bond-stock correlation regimeを観測する。",
+    "do_not_use_for": [
+      "60/40の恒久的棄却",
+      "GLD 20%の固定allocation決定",
+      "dividend/distribution込みtotal-return優劣の断定",
+      "将来のbond-stock correlation予測"
+    ]
+  },
+  "next_validation": "同じ期間をdividend-adjusted total-return系列で再計算し、さらに2022年以降のrolling 12/24/36か月相関と10bp rebalance costを比較する。"
+}
