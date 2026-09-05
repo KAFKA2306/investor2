@@ -1,0 +1,67 @@
+{
+  "schema_version": "investor2.research-evidence.v1",
+  "as_of": "2026-09-05",
+  "paper": {
+    "title": "Assessing the Benefits of Optimized Agentic AI Systems for Asset Pricing",
+    "authors": ["Ralph S. J. Koijen", "Bradford Levy"],
+    "nber_working_paper": "35431",
+    "issue_date": "2026-07",
+    "doi": "10.3386/w35431",
+    "primary_claim": "Agentic AI signals extracted from earnings-announcement text add explanatory power for contemporaneous stock returns beyond standard earnings-surprise benchmarks in real-time out-of-sample evaluation."
+  },
+  "hypothesis": "Text-derived AI signals available at earnings-announcement time add positive incremental out-of-sample explanatory power beyond an earnings-surprise-only benchmark.",
+  "pre_registered_gate": {
+    "use_if": "At least one finalized live out-of-sample quarter has positive delta_R2 for every reported language-model baseline and the best baseline delta_R2 is at least 0.04.",
+    "reject_if": "The finalized live out-of-sample quarter shows non-positive delta_R2 for a majority of reported language-model baselines or the best baseline delta_R2 is below 0.01.",
+    "otherwise": "CONDITION"
+  },
+  "canonical_real_data": {
+    "source": "Explaining Markets official leaderboard and rules",
+    "evaluation_design": "real-time out-of-sample earnings events with event-specific knowledge_cutoff",
+    "q1_2026": {
+      "status": "final",
+      "scorable_events": 2308,
+      "finalized_on": "2026-04-08",
+      "reported_language_model_baselines": [
+        {"name": "GPT-5-nano — SummaryBaseline", "delta_r2": 0.058},
+        {"name": "Gemini Flash Lite — SummaryBaseline", "delta_r2": 0.058},
+        {"name": "Gemini Flash Lite — Full TranscriptBaseline", "delta_r2": 0.050},
+        {"name": "GPT-5-nano — Full TranscriptBaseline", "delta_r2": 0.045}
+      ],
+      "best_delta_r2": 0.058,
+      "worst_delta_r2": 0.045,
+      "all_positive": true
+    },
+    "q3_2026": {
+      "status": "preliminary",
+      "scoring_period": "2026-08-10/2026-10-02",
+      "snapshot_updated_at": "2026-08-15T00:08:00Z",
+      "top10_delta_r2_range": [0.208, 0.247],
+      "note": "Preliminary leaderboard only; not used to determine the final verdict."
+    },
+    "sources": [
+      "https://www.nber.org/papers/w35431",
+      "https://explainingmarkets.ai/leaderboard?period=2026Q1",
+      "https://explainingmarkets.ai/faq",
+      "https://explainingmarkets.ai/contest-rules"
+    ]
+  },
+  "benchmark": "earnings-surprise-only regression benchmark used by Explaining Markets",
+  "alternative": "language-model signals derived from earnings-call summary or full transcript",
+  "observed_result": {
+    "finalized_q1_best_delta_r2": 0.058,
+    "finalized_q1_worst_delta_r2": 0.045,
+    "finalized_q1_all_four_language_model_baselines_positive": true,
+    "paper_reported_standard_r2_approx": 0.08,
+    "paper_reported_best_optimized_r2_approx": 0.20
+  },
+  "verdict": "USE",
+  "claim_boundary": "USE applies only to the research principle that announcement-time text-derived AI signals contain incremental explanatory information beyond earnings surprise in live out-of-sample evaluation. It does not establish tradable alpha, positive after-cost returns, or that any specific LLM/agent should receive portfolio capital.",
+  "portfolio_implication": "Future earnings-event models may include text-derived AI signals as candidate features, but capital allocation requires a separate point-in-time trading test with implementable execution timing, transaction costs, slippage, turnover, and risk metrics.",
+  "do_not_use_for": [
+    "direct buy or sell decisions",
+    "expected-return estimates without a trading test",
+    "historical backtests that violate event knowledge_cutoff",
+    "claims that optimized agentic AI doubles investable alpha"
+  ]
+}
