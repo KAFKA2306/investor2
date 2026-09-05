@@ -10,9 +10,22 @@
     "paper_claim": "The five largest U.S. technology firms spent about USD 380bn on capital expenditures in 2025 and were forecast to spend about USD 755bn in 2026; the model maps the investment path through 2027 to an AI-sector productivity boom of roughly 2.7x."
   },
   "hypothesis": "The paper's central revealed-preference input, an approximately USD 755bn 2026 capex scale for Amazon, Alphabet, Microsoft, Meta and Oracle, remains supported by information available after the paper was issued.",
-  "acceptance_rule": "CONDITION if the latest company-reported or management-guided aggregate remains at or above USD 755bn but definitions or fiscal periods prevent an exact apples-to-apples reconstruction; REJECT if the current comparable aggregate falls materially below USD 755bn; USE only after the paper model is rerun with harmonized capex definitions and periods.",
+  "acceptance_rule": "CONDITION if a conservative post-paper cross-check remains at or above USD 755bn but definitions or fiscal periods prevent an exact apples-to-apples reconstruction; REJECT if the current comparable aggregate falls materially below USD 755bn; USE only after the paper model is rerun with harmonized capex definitions and periods.",
   "paper_2026_capex_usd_bn": 755.0,
-  "latest_cross_check": {
+  "conservative_cross_check": {
+    "values_usd_bn": {
+      "Amazon": 200.0,
+      "Alphabet": 195.0,
+      "Microsoft": 175.0,
+      "Meta": 130.0,
+      "Oracle": 55.663
+    },
+    "aggregate_usd_bn": 755.663,
+    "difference_vs_paper_usd_bn": 0.663,
+    "difference_vs_paper_pct": 0.087815,
+    "method": "Use Amazon's officially confirmed approximately USD 200bn 2026 plan rather than the later USD 220bn management-call figure; use the low ends of Alphabet and Meta's latest guidance ranges; use Microsoft's approximately USD 175bn calendar-2026 expectation; use Oracle's latest completed FY2026 GAAP capital expenditures."
+  },
+  "latest_midpoint_cross_check": {
     "values_usd_bn": {
       "Amazon": 220.0,
       "Alphabet": 200.0,
@@ -24,10 +37,10 @@
     "difference_vs_paper_usd_bn": 33.163,
     "difference_vs_paper_pct": 4.39245,
     "notes": {
-      "Amazon": "Latest Q2 management transcript reports about USD 220bn 2026 capital spending; Amazon's official February release and shareholder letter had about USD 200bn and Q2 official results confirm AI-driven capex pressure.",
-      "Alphabet": "Q2 management updated FY2026 capex guidance to USD 195-205bn; midpoint USD 200bn is used.",
+      "Amazon": "The latest Q2 management-call transcript reports about USD 220bn 2026 capital spending. Amazon's own February release and shareholder letter had already confirmed approximately USD 200bn; the conservative cross-check therefore uses USD 200bn.",
+      "Alphabet": "Q2 management updated FY2026 capex guidance to USD 195-205bn; midpoint USD 200bn is used here and USD 195bn in the conservative cross-check.",
       "Microsoft": "FY2026 Q4 earnings call states calendar-year 2026 capex expectation of approximately USD 175bn after lease classification changes.",
-      "Meta": "Q2 2026 official release gives full-year 2026 capex guidance of USD 130-145bn including principal payments on finance leases; midpoint USD 137.5bn is used.",
+      "Meta": "Q2 2026 official release gives full-year 2026 capex guidance of USD 130-145bn including principal payments on finance leases; midpoint USD 137.5bn is used here and USD 130bn in the conservative cross-check.",
       "Oracle": "Latest completed FY2026 GAAP capital expenditures were USD 55.663bn. Oracle has not provided a directly comparable calendar-2026 capex guide in the cited release, so this is not an exact period match."
     }
   },
@@ -36,12 +49,15 @@
     "https://knowledge.wharton.upenn.edu/article/can-ai-productivity-grow-fast-enough-to-justify-big-techs-spending/",
     "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Fourth-Quarter-Results/default.aspx",
     "https://www.aboutamazon.com/news/company-news/amazon-earnings-q2-2026-report",
+    "https://www.investing.com/news/transcripts/earningscall-transcript-amazon-tops-q2-2026-estimates-as-aws-growthaccelerates-93CH-4826442",
+    "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/googexhibit991q22026.htm",
+    "https://m.investing.com/news/transcripts/earnings-call-transcript-alphabet-beats-q2-2026-estimates-shares-fall-on-capex-surge-93CH-4807140?ampMode=1",
     "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4",
     "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Second-Quarter-2026-Results/default.aspx",
-    "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000066/googexhibit991q22026.htm",
     "https://investor.oracle.com/investor-news/news-details/2026/Oracle-Announces-Record-Q4-and-FY-2026-Results-Driven-by-Cloud-Infrastructure--Cloud-Applications/"
   ],
-  "verdict_reason": "The observed investment scale has not weakened relative to the paper's USD 755bn premise; the current cross-check is about USD 788.2bn, roughly 4.4% higher. However, firm definitions differ, Oracle is on a fiscal-year actual rather than a calendar-year guide, and the 2.7x productivity result is produced by a nonlinear structural model. Therefore the capex premise is supported but the exact 2.7x productivity hurdle is not independently re-estimated here.",
+  "source_quality": "Primary company, SEC and NBER sources are used where they expose the needed values. Amazon's later USD 220bn and Alphabet's updated USD 195-205bn ranges are management-call transcript mirrors; the conservative test avoids depending on Amazon's later USD 220bn figure. Oracle remains a fiscal-period mismatch.",
+  "verdict_reason": "Even the conservative cross-check totals USD 755.663bn, essentially matching and slightly exceeding the paper's USD 755bn premise. A midpoint/latest cross-check is about USD 788.2bn, roughly 4.4% higher. The observed investment scale therefore has not weakened. However, firm definitions differ, Oracle is on a fiscal-year actual rather than a calendar-year guide, and the 2.7x productivity result is produced by a nonlinear structural model. The capex premise is supported but the exact 2.7x productivity hurdle is not independently re-estimated here.",
   "decision_use": "Treat hyperscaler AI capex intensity as an unresolved valuation and capital-efficiency risk that remains at least as large as in the paper. Do not infer that higher capex itself proves future returns or productivity.",
   "do_not_use_for": [
     "Recomputing the paper's 2.7x productivity factor by proportional scaling",
