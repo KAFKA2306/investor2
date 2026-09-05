@@ -1,0 +1,64 @@
+{
+  "event": {
+    "name": "Employment Situation",
+    "observation_period": "2026-08",
+    "published_at": "2026-09-04T08:30:00-04:00"
+  },
+  "records": [
+    {
+      "classification": "actual",
+      "metric": "total_nonfarm_payroll_employment_change",
+      "unit": "thousands",
+      "value": 162
+    },
+    {
+      "classification": "actual",
+      "metric": "unemployment_rate",
+      "unit": "percent",
+      "value": 4.1
+    },
+    {
+      "classification": "actual",
+      "metric": "average_hourly_earnings_all_private",
+      "unit": "USD_per_hour",
+      "value": 37.75
+    },
+    {
+      "classification": "actual",
+      "metric": "average_hourly_earnings_monthly_change",
+      "unit": "percent",
+      "value": 0.3
+    },
+    {
+      "classification": "actual",
+      "metric": "average_hourly_earnings_yearly_change",
+      "unit": "percent",
+      "value": 3.1
+    },
+    {
+      "classification": "revision",
+      "metric": "june_nonfarm_payroll_change",
+      "previous_value": 20,
+      "revised_value": 31,
+      "revision": 11,
+      "unit": "thousands"
+    },
+    {
+      "classification": "revision",
+      "metric": "july_nonfarm_payroll_change",
+      "previous_value": -23,
+      "revised_value": 21,
+      "revision": 44,
+      "unit": "thousands"
+    },
+    {
+      "classification": "revision",
+      "metric": "june_july_combined_revision",
+      "unit": "thousands",
+      "value": 55
+    }
+  ],
+  "schema_version": "investor2.bls-employment-situation.v1",
+  "source": "U.S. Bureau of Labor Statistics",
+  "source_url": "https://www.bls.gov/news.release/archives/empsit_09042026.htm"
+}
