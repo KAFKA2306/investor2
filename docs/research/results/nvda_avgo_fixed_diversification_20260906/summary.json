@@ -1,0 +1,110 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-04",
+  "hypothesis": "A fixed NVDA/AVGO diversification sleeve materially reduces NVIDIA concentration risk: monthly-rebalanced 50/50 NVDA/AVGO should improve Sharpe ratio while not worsening maximum drawdown or 95% Expected Shortfall versus NVDA-only, and should remain competitive after modest rebalance costs.",
+  "decision_rule": {
+    "use_or_condition_if": "50/50 NVDA/AVGO must exceed NVDA-only Sharpe ratio without worsening maximum drawdown or 95% Expected Shortfall; cost sensitivity must not reverse the conclusion.",
+    "reject_if": "50/50 fails the Sharpe gate or worsens either maximum drawdown or 95% Expected Shortfall versus NVDA-only, especially in the more recent 2026 subperiod."
+  },
+  "verdict_scope": "Reject the claim that simply adding AVGO at a fixed 50% weight is a reliable risk-reduction substitute for NVDA concentration. This does not reject AVGO as a holding and does not test a point-in-time valuation-conditioned allocation rule.",
+  "market_data": {
+    "source": "Alpaca Market Data IEX",
+    "currency": "USD",
+    "fallback": "none",
+    "price_type": "unadjusted IEX monthly OHLCV close; real market bars, not synthetic fixtures",
+    "period": "2025-01 through 2026-08 complete calendar months",
+    "observations": {
+      "monthly_closes_per_symbol": 20,
+      "monthly_returns_per_symbol": 19
+    },
+    "daily_source_check": {
+      "period": "2025-01-02 through 2026-09-04",
+      "bars_per_symbol": 420,
+      "symbols": ["NVDA", "AVGO", "SPY"]
+    },
+    "monthly_closes": [
+      {"month": "2025-01", "NVDA_close": 120.035, "AVGO_close": 221.22, "SPY_close": 601.785},
+      {"month": "2025-02", "NVDA_close": 124.995, "AVGO_close": 199.33, "SPY_close": 593.895},
+      {"month": "2025-03", "NVDA_close": 108.525, "AVGO_close": 167.4, "SPY_close": 559.26},
+      {"month": "2025-04", "NVDA_close": 108.79, "AVGO_close": 192.31, "SPY_close": 554.02},
+      {"month": "2025-05", "NVDA_close": 134.89, "AVGO_close": 242.2, "SPY_close": 589.3},
+      {"month": "2025-06", "NVDA_close": 157.98, "AVGO_close": 275.62, "SPY_close": 617.83},
+      {"month": "2025-07", "NVDA_close": 178.06, "AVGO_close": 293.77, "SPY_close": 631.9},
+      {"month": "2025-08", "NVDA_close": 174.215, "AVGO_close": 297.37, "SPY_close": 645.03},
+      {"month": "2025-09", "NVDA_close": 186.54, "AVGO_close": 329.8, "SPY_close": 666.06},
+      {"month": "2025-10", "NVDA_close": 202.49, "AVGO_close": 369.61, "SPY_close": 682.03},
+      {"month": "2025-11", "NVDA_close": 176.95, "AVGO_close": 403.0, "SPY_close": 683.36},
+      {"month": "2025-12", "NVDA_close": 186.52, "AVGO_close": 346.22, "SPY_close": 681.82},
+      {"month": "2026-01", "NVDA_close": 191.13, "AVGO_close": 331.38, "SPY_close": 691.8},
+      {"month": "2026-02", "NVDA_close": 177.205, "AVGO_close": 319.71, "SPY_close": 686.16},
+      {"month": "2026-03", "NVDA_close": 174.41, "AVGO_close": 309.47, "SPY_close": 650.12},
+      {"month": "2026-04", "NVDA_close": 199.54, "AVGO_close": 417.55, "SPY_close": 718.41},
+      {"month": "2026-05", "NVDA_close": 211.155, "AVGO_close": 447.41, "SPY_close": 756.34},
+      {"month": "2026-06", "NVDA_close": 199.93, "AVGO_close": 377.55, "SPY_close": 746.65},
+      {"month": "2026-07", "NVDA_close": 200.74, "AVGO_close": 389.3, "SPY_close": 746.79},
+      {"month": "2026-08", "NVDA_close": 220.86, "AVGO_close": 370.215, "SPY_close": 766.87}
+    ]
+  },
+  "method": {
+    "portfolio": "50% NVDA / 50% AVGO, reset to target weights monthly",
+    "benchmarks": ["NVDA-only", "AVGO-only", "SPY"],
+    "alternatives": ["75% NVDA / 25% AVGO", "25% NVDA / 75% AVGO"],
+    "risk_free_rate": "0% for like-for-like sample Sharpe comparison",
+    "annualization": "12 monthly periods",
+    "expected_shortfall": "historical 95% ES; with 19 monthly returns this equals the single worst observed month and is therefore a tail diagnostic, not a stable population estimate",
+    "transaction_cost": "5/10/20 bp multiplied by two-sided absolute rebalance-weight turnover at each month-end; initial purchase cost excluded equally from all allocation choices"
+  },
+  "full_period_results": {
+    "correlation_NVDA_AVGO": 0.604576,
+    "NVDA": {"cum": 0.839963, "cagr": 0.469765, "vol": 0.337591, "sharpe": 1.313896, "maxdd": -0.138674, "es95": -0.131765, "worst": -0.131765},
+    "AVGO": {"cum": 0.673515, "cagr": 0.38433, "vol": 0.474292, "sharpe": 0.906829, "maxdd": -0.243287, "es95": -0.160187, "worst": -0.160187},
+    "SPY": {"cum": 0.274326, "cagr": 0.165448, "vol": 0.133974, "sharpe": 1.212427, "maxdd": -0.079372, "es95": -0.058318, "worst": -0.058318},
+    "NVDA_AVGO_50_50_gross": {"cum": 0.800958, "cagr": 0.450009, "vol": 0.364872, "sharpe": 1.197217, "maxdd": -0.170585, "es95": -0.145976, "worst": -0.145976},
+    "NVDA_AVGO_75_25_gross": {"cum": 0.83229, "cagr": 0.465891, "vol": 0.33833, "sharpe": 1.301081, "maxdd": -0.138871, "es95": -0.138871, "worst": -0.138871},
+    "NVDA_AVGO_25_75_gross": {"cum": 0.747379, "cagr": 0.422612, "vol": 0.412262, "sharpe": 1.051434, "maxdd": -0.207185, "es95": -0.153081, "worst": -0.153081}
+  },
+  "cost_sensitivity_50_50": {
+    "0bp": {"cum": 0.800958, "cagr": 0.450009, "vol": 0.364872, "sharpe": 1.197217, "maxdd": -0.170585, "es95": -0.145976, "worst": -0.145976, "cumulative_two_sided_weight_turnover": 0.691321},
+    "5bp": {"cum": 0.800336, "cagr": 0.449693, "vol": 0.364872, "sharpe": 1.196603, "maxdd": -0.170621, "es95": -0.145983, "worst": -0.145983, "cumulative_two_sided_weight_turnover": 0.691321},
+    "10bp": {"cum": 0.799714, "cagr": 0.449376, "vol": 0.364872, "sharpe": 1.195989, "maxdd": -0.170658, "es95": -0.14599, "worst": -0.14599, "cumulative_two_sided_weight_turnover": 0.691321},
+    "20bp": {"cum": 0.79847, "cagr": 0.448743, "vol": 0.364872, "sharpe": 1.194762, "maxdd": -0.170732, "es95": -0.146004, "worst": -0.146004, "cumulative_two_sided_weight_turnover": 0.691321}
+  },
+  "subperiods": {
+    "2025_Feb_Dec": {
+      "NVDA": {"cum": 0.55388, "cagr": 0.617406, "vol": 0.394665, "sharpe": 1.417453, "maxdd": -0.131765, "es95": -0.131765, "worst": -0.131765},
+      "AVGO": {"cum": 0.565048, "cagr": 0.630092, "vol": 0.459507, "sharpe": 1.292438, "maxdd": -0.243287, "es95": -0.160187, "worst": -0.160187},
+      "NVDA_AVGO_50_50": {"cum": 0.586752, "cagr": 0.654768, "vol": 0.377784, "sharpe": 1.526408, "maxdd": -0.170585, "es95": -0.145976, "worst": -0.145976},
+      "SPY": {"cum": 0.132996, "cagr": 0.14593, "vol": 0.11538, "sharpe": 1.239755, "maxdd": -0.079372, "es95": -0.058318, "worst": -0.058318}
+    },
+    "2026_Jan_Aug": {
+      "NVDA": {"cum": 0.184109, "cagr": 0.288509, "vol": 0.257624, "sharpe": 1.103363, "maxdd": -0.08748, "es95": -0.072856, "worst": -0.072856},
+      "AVGO": {"cum": 0.069306, "cagr": 0.105739, "vol": 0.518141, "sharpe": 0.395455, "maxdd": -0.172537, "es95": -0.156143, "worst": -0.156143},
+      "NVDA_AVGO_50_50": {"cum": 0.134997, "cagr": 0.209183, "vol": 0.36383, "sharpe": 0.67223, "maxdd": -0.104652, "es95": -0.104652, "worst": -0.104652},
+      "SPY": {"cum": 0.12474, "cagr": 0.192829, "vol": 0.164377, "sharpe": 1.15038, "maxdd": -0.060249, "es95": -0.052524, "worst": -0.052524}
+    }
+  },
+  "primary_fundamental_context": [
+    {"issuer": "NVIDIA Corporation", "document": "Q2 FY2027 earnings release", "date": "2026-08-26", "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx", "context": "Data Center revenue was $89.0 billion, up 117% year over year."},
+    {"issuer": "Broadcom Inc.", "document": "Q3 FY2026 financial results", "date": "2026-09-02", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial", "context": "AI semiconductor revenue was $16.7 billion, up 221% year over year and 54% quarter over quarter."}
+  ],
+  "interpretation": {
+    "result": "The diversification label is misleading here. NVDA and AVGO remained positively correlated (about 0.60 monthly), AVGO had substantially higher volatility, and the 50/50 portfolio worsened full-period Sharpe, maximum drawdown, and 95% Expected Shortfall versus NVDA-only. In 2026 Jan-Aug the deterioration was stronger.",
+    "capital_allocation_decision": "Do not reduce NVDA concentration by mechanically assigning a fixed 50% AVGO weight. Keep AVGO as a separately valued AI semiconductor candidate; any allocation shift should be justified by point-in-time expected return or a broader low-correlation sleeve, not by the assumption that two AI semiconductor names provide strong diversification."
+  },
+  "risk_and_limitations": [
+    "Monthly IEX closes are not verified total-return prices; dividends are omitted. This is a price-return allocation test, not an exact total-shareholder-return backtest.",
+    "Only 19 complete monthly returns are available in the selected recent period; 95% Expected Shortfall equals the worst month and must not be treated as a precise tail-distribution estimate.",
+    "Both securities share AI semiconductor and technology-cycle exposure, so the result does not generalize to diversification with bonds, gold, cash, or other lower-correlation assets.",
+    "No parameter fitting or look-ahead signal is used; this tests a fixed allocation, not the previously proposed point-in-time reverse-DCF selector."
+  ],
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "reason": "The fixed-diversification thesis was rejected. Retain only reusable negative evidence; do not add a production allocation model."
+  },
+  "next_high_value_hypothesis": "Using only information available at each quarterly rebalance date, does selecting or weighting NVDA versus AVGO by the lower reverse-DCF growth hurdle improve cost-adjusted out-of-sample return, maximum drawdown and Expected Shortfall versus NVDA-only and fixed 50/50?"
+}
