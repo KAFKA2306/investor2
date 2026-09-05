@@ -1,0 +1,72 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-06",
+  "hypothesis": "Free Cash Flow前年同期比成長率の高い銘柄へ50%、もう一方へ25%、SPYへ25%を配分する単純な集中上限付きルールは、NVDA単独とNVDA/AVGO 50:50を10bp切替コスト込みSharpe、Maximum Drawdown、95% Expected Shortfallで安定して上回る。",
+  "decision_rule": {
+    "signal": "各月末までに公表済みの最新四半期会社公表Free Cash Flow前年同期比成長率をNVDAとAVGOで比較する。",
+    "allocation": "翌月は成長率が高い銘柄50%、もう一方25%、SPY25%。",
+    "timing": "月末時点までに公表済みの情報だけを使い、翌月リターンに適用する。",
+    "cost": "signal leaderが入れ替わる際のtwo-sided weight turnoverに10bpを課す。",
+    "adoption_gate": "全期間だけでなく2026年の時間分割でも、NVDA単独とNVDA/AVGO 50:50のSharpeを上回り、Maximum Drawdownと95% Expected Shortfallを悪化させないこと。",
+    "reject_if": "上記のいずれかを満たさない。"
+  },
+  "data": {
+    "source_artifact": "docs/research/results/nvda_avgo_fcf_growth_leader_20260906/summary.json",
+    "market_source": "Alpaca Market Data API",
+    "feed": "iex",
+    "currency": "USD",
+    "timeframe": "1Month",
+    "period": "2025-03 through 2026-08 closes; 2025-04 through 2026-08 returns",
+    "observations": 17,
+    "fundamental_metric": "company-reported quarterly Free Cash Flow year-over-year growth",
+    "point_in_time": true,
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "evaluation": {
+    "risk_free_rate": 0.0,
+    "annualization_months": 12,
+    "turnover": {
+      "leader_switches": 3,
+      "cumulative_two_sided_weight_turnover": 1.5
+    },
+    "risk_capped_50_25_25": {
+      "0bp": {"cumulative_return": 1.03052628, "cagr": 0.64867667, "annualized_volatility": 0.27706399, "sharpe": 1.96505098, "maximum_drawdown": -0.12970130, "expected_shortfall_95": -0.06881871},
+      "10bp": {"cumulative_return": 1.02764556, "cagr": 0.64702528, "annualized_volatility": 0.27700064, "sharpe": 1.96167793, "maximum_drawdown": -0.13014945, "expected_shortfall_95": -0.06881871},
+      "20bp": {"cumulative_return": 1.02476757, "cagr": 0.64537475, "annualized_volatility": 0.27693895, "sharpe": 1.95829160, "maximum_drawdown": -0.13059761, "expected_shortfall_95": -0.06881871}
+    },
+    "benchmarks_full_period": {
+      "nvda_only": {"cumulative_return": 1.03510712, "cagr": 0.65130125, "annualized_volatility": 0.32504693, "sharpe": 1.72155466, "maximum_drawdown": -0.13867351, "expected_shortfall_95": -0.12612969},
+      "nvda_avgo_50_50": {"cumulative_return": 1.17135883, "cagr": 0.72859357, "annualized_volatility": 0.34486532, "sharpe": 1.77345954, "maximum_drawdown": -0.14040170, "expected_shortfall_95": -0.10465157},
+      "spy": {"cumulative_return": 0.37122269, "cagr": 0.24963192, "annualized_volatility": 0.12393451, "sharpe": 1.87166864, "maximum_drawdown": -0.06024863, "expected_shortfall_95": -0.05252419}
+    },
+    "time_split_2026": {
+      "risk_capped_50_25_25_10bp": {"cumulative_return": 0.13950547, "cagr": 0.21639499, "annualized_volatility": 0.27598135, "sharpe": 0.82849410, "maximum_drawdown": -0.06881871, "expected_shortfall_95": -0.06881871},
+      "nvda_only": {"cumulative_return": 0.18410894, "cagr": 0.28850910, "annualized_volatility": 0.25762449, "sharpe": 1.10336294, "maximum_drawdown": -0.08747973, "expected_shortfall_95": -0.07285617},
+      "nvda_avgo_50_50": {"cumulative_return": 0.13499672, "cagr": 0.20918266, "annualized_volatility": 0.36382973, "sharpe": 0.67223044, "maximum_drawdown": -0.10465157, "expected_shortfall_95": -0.10465157},
+      "spy": {"cumulative_return": 0.12473967, "cagr": 0.19282853, "annualized_volatility": 0.16437698, "sharpe": 1.15037985, "maximum_drawdown": -0.06024863, "expected_shortfall_95": -0.05252419}
+    }
+  },
+  "result": {
+    "verdict": "REJECT",
+    "reason": "全17か月では10bp後Sharpe 1.962、Maximum Drawdown -13.015%、95% Expected Shortfall -6.882%でNVDA単独と50:50を上回った。しかし2026年の時間分割ではSharpe 0.828でNVDA単独1.103を下回り、SPY 1.150にも届かなかった。tail riskは改善したが、risk-adjusted returnの優位性が時間分割で再現しないため事前条件を満たさない。",
+    "scope": "50/25/25の固定risk-cap allocation ruleをproduction portfolio authorityへ追加しない。FCF成長率をexpected-return rankingの補助情報として使う可能性までは棄却しない。",
+    "production_use": "none"
+  },
+  "limitations": [
+    "観測期間は17か月、2026年の時間分割は8か月と短い。",
+    "Alpaca IEX monthly closeは配当込みtotal return系列として扱わない。",
+    "NVIDIAとBroadcomのFree Cash Flowは各社公表定義であり完全同一の計算式ではない。",
+    "95% Expected Shortfallは標本数が少なく粗い。",
+    "50/25/25は単純な集中上限候補であり、最適化されたproduction weightではない。"
+  ],
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_only": true,
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false
+  },
+  "next_hypothesis": "NVDA/AVGOの単一銘柄選択ではなく、半導体・AI infrastructureの複数銘柄をpoint-in-time fundamentalsで順位付けし、sector-neutralまたはsingle-name cap付きで組む方が、単純な半導体ETFまたはequal-weight basketよりcost込みOOS Sharpeとtail riskを改善するか。"
+}
