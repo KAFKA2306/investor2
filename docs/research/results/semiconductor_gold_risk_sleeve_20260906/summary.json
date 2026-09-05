@@ -2,69 +2,80 @@
   "schema_version": "research-result.v1",
   "research_id": "semiconductor_gold_risk_sleeve_20260906",
   "status": "CONDITION",
-  "hypothesis": "SMHの20%をGLDへ配分し月次リバランスすると、SMH単独より10bpコスト込みSharpeを改善し、Maximum Drawdownと95% Expected Shortfallも改善する。",
+  "hypothesis": "SMHの20%をGLDへ配分する改善は、単に20%を低リスク資産へ逃がした効果ではなく、分配金と10bpの月次リバランスコストを含めても、SMH80%/SGOV20%よりSharpe・Maximum Drawdown・95% Expected Shortfallで優位である。",
   "decision_rule": {
-    "use_if": "全期間に加え2025年と2026年1-8月の両時間分割で、20% GLDがSMH単独よりSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化しない",
-    "reject_if": "いずれかの時間分割でSharpeがSMH単独以下、またはMaximum Drawdown/95% Expected Shortfallが悪化"
+    "use_if": "全期間、2025年、2026年1-8月のすべてでSMH80/GLD20がSMH単独とSMH80/SGOV20の両方よりSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化しない。",
+    "reject_if": "いずれかの時間分割でSMH80/GLD20がSMH80/SGOV20以下のSharpe、またはMaximum Drawdown/95% Expected Shortfallが悪化する。"
   },
   "source": {
     "market_data": "Alpaca Market Data API",
+    "corporate_actions": "Alpaca Corporate Actions API",
     "feed": "IEX",
     "currency": "USD",
     "timeframe": "1Month",
     "period": "2024-08-01..2026-08-31",
     "retrieved_as_of": "2026-09-06",
     "fallback": "none",
-    "smh_identity_url": "https://www.vaneck.com/us/en/investments/semiconductor-etf-smh/",
-    "gld_identity_url": "https://www.ssga.com/us/en/intermediary/etfs/spdr-gold-shares-gld"
+    "sgov_identity": "iShares 0-3 Month Treasury Bond ETF; ICE 0-3 Month US Treasury Securities Index; monthly distributions",
+    "sgov_official_url": "https://www.ishares.com/us/products/314116/ishares-0-3-month-treasury-bond-etf"
   },
   "method": {
-    "returns": "month-end close-to-close price return",
+    "returns": "月末close-to-closeに、その月のcash dividendを加算して月次total returnを構成。分配金は当月末に再投資する保守的な月次近似。",
     "rebalance": "monthly to fixed target weights",
     "transaction_cost_bps_per_two_sided_turnover": 10,
     "risk_free_rate_for_sharpe": 0,
     "annualization_months": 12,
-    "expected_shortfall": "mean of returns at or below empirical 5th percentile",
-    "missing_data": "no interpolation, no forward fill"
+    "expected_shortfall": "historical 95% Expected Shortfall = worst ceil(5% * n) monthly returns の平均",
+    "missing_data": "no interpolation, no forward fill, no alternate feed"
   },
   "inputs": {
     "months": ["2024-08","2024-09","2024-10","2024-11","2024-12","2025-01","2025-02","2025-03","2025-04","2025-05","2025-06","2025-07","2025-08","2025-09","2025-10","2025-11","2025-12","2026-01","2026-02","2026-03","2026-04","2026-05","2026-06","2026-07","2026-08"],
     "SMH_close": [243.52,245.435,241.76,242.105,242.28,243.71,232.7,211.37,211.26,239.52,278.96,288.9,290.25,326.45,363.04,352.46,360.19,403.33,406.12,383.04,506.63,599.06,656.31,540.52,556.64],
-    "GLD_close": [231.305,243.1,253.61,245.61,242.15,258.62,263.385,288.16,303.71,303.6,304.82,302.96,318.02,355.44,368.14,387.96,396.35,446.035,483.8,430.27,423.78,417.18,368.38,371.47,408.52]
+    "GLD_close": [231.305,243.1,253.61,245.61,242.15,258.62,263.385,288.16,303.71,303.6,304.82,302.96,318.02,355.44,368.14,387.96,396.35,446.035,483.8,430.27,423.78,417.18,368.38,371.47,408.52],
+    "SGOV_close": [100.75,100.73,100.705,100.68,100.33,100.685,100.65,100.68,100.68,100.715,100.7,100.71,100.73,100.705,100.725,100.675,100.38,100.675,100.645,100.665,100.67,100.675,100.67,100.715,100.695],
+    "cash_dividends_by_ex_month": {
+      "SMH": {"2024-12":1.0713,"2025-12":1.1047},
+      "GLD": {},
+      "SGOV": {"2024-09":0.443547,"2024-10":0.429639,"2024-11":0.415164,"2024-12":0.749623,"2025-01":0,"2025-02":0.363396,"2025-03":0.313292,"2025-04":0.346022,"2025-05":0.334981,"2025-06":0.357977,"2025-07":0.347169,"2025-08":0.362484,"2025-09":0.360128,"2025-10":0.346643,"2025-11":0.347608,"2025-12":0.635952,"2026-01":0,"2026-02":0.309236,"2026-03":0.27239,"2026-04":0.292689,"2026-05":0.29792,"2026-06":0.299492,"2026-07":0.295765,"2026-08":0.306812}
+    }
   },
-  "correlation": {"SMH_GLD_monthly_return": -0.07777952},
+  "correlation_total_return": {"SMH_GLD":-0.079151,"SMH_SGOV":-0.212588,"GLD_SGOV":0.028953},
   "full_period_10bp": {
-    "SMH": {"cagr":0.51188893,"volatility":0.35724272,"sharpe":1.33778756,"maximum_drawdown":-0.17642577,"expected_shortfall_95":-0.13404443},
-    "SMH80_GLD20": {"cagr":0.49190041,"volatility":0.28563601,"sharpe":1.55408263,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.10357179,"turnover_two_sided":0.67164458},
-    "SMH60_GLD40": {"cagr":0.46331796,"volatility":0.22436342,"sharpe":1.827629,"maximum_drawdown":-0.10259908,"expected_shortfall_95":-0.09049168,"turnover_two_sided":1.01522091},
-    "SMH50_GLD50": {"cagr":0.44588029,"volatility":0.20064462,"sharpe":1.95963854,"maximum_drawdown":-0.09402238,"expected_shortfall_95":-0.0839434,"turnover_two_sided":1.06247411}
+    "SMH": {"n":24,"cagr":0.51754966,"volatility":0.35692769,"sharpe":1.34955754,"maximum_drawdown":-0.17642577,"expected_shortfall_95":-0.13404443},
+    "SMH80_GLD20": {"n":24,"cagr":0.49637537,"volatility":0.2853288,"sharpe":1.56634891,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.10357179,"turnover_two_sided":0.67402079},
+    "SMH80_SGOV20": {"n":24,"cagr":0.4205495,"volatility":0.28544525,"sharpe":1.37753535,"maximum_drawdown":-0.14053057,"expected_shortfall_95":-0.10660585,"turnover_two_sided":0.5268759},
+    "SMH60_GLD20_SGOV20": {"n":24,"cagr":0.39468522,"volatility":0.21491137,"sharpe":1.66845117,"maximum_drawdown":-0.10359847,"expected_shortfall_95":-0.07963476,"turnover_two_sided":0.94448984}
   },
   "time_split_10bp": {
     "2025": {
-      "SMH": {"cagr":0.48666832,"volatility":0.2769728,"sharpe":1.57731093,"maximum_drawdown":-0.13315006,"expected_shortfall_95":-0.09166309},
-      "SMH80_GLD20": {"cagr":0.52716791,"volatility":0.21563333,"sharpe":2.09305631,"maximum_drawdown":-0.08528534,"expected_shortfall_95":-0.05458056}
+      "SMH": {"cagr":0.49122792,"volatility":0.2768118,"sharpe":1.58955102,"maximum_drawdown":-0.13315006,"expected_shortfall_95":-0.09166309},
+      "SMH80_GLD20": {"cagr":0.53091372,"volatility":0.21544822,"sharpe":2.10648817,"maximum_drawdown":-0.08528534,"expected_shortfall_95":-0.05458056},
+      "SMH80_SGOV20": {"cagr":0.39607088,"volatility":0.22146289,"sharpe":1.62579281,"maximum_drawdown":-0.10560564,"expected_shortfall_95":-0.07268113},
+      "SMH60_GLD20_SGOV20": {"cagr":0.42938512,"volatility":0.16061339,"sharpe":2.32853245,"maximum_drawdown":-0.05755812,"expected_shortfall_95":-0.03557281}
     },
     "2026_01_08": {
       "SMH": {"cagr":0.92116267,"volatility":0.5267436,"sharpe":1.49195134,"maximum_drawdown":-0.17642577,"expected_shortfall_95":-0.17642577},
       "SMH80_GLD20": {"cagr":0.74491925,"volatility":0.42650212,"sharpe":1.51500197,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.13953173},
-      "SMH60_GLD40": {"cagr":0.56599314,"volatility":0.3412958,"sharpe":1.48454372,"maximum_drawdown":-0.10259908,"expected_shortfall_95":-0.10259908},
-      "SMH50_GLD50": {"cagr":0.47662137,"volatility":0.30833458,"sharpe":1.41735932,"maximum_drawdown":-0.09402238,"expected_shortfall_95":-0.08411973}
+      "SMH80_SGOV20": {"cagr":0.73087477,"volatility":0.42130998,"sharpe":1.50812634,"maximum_drawdown":-0.14053057,"expected_shortfall_95":-0.14053057},
+      "SMH60_GLD20_SGOV20": {"cagr":0.55814902,"volatility":0.32262895,"sharpe":1.53698097,"maximum_drawdown":-0.10359847,"expected_shortfall_95":-0.10359847}
     }
   },
   "cost_sensitivity_SMH80_GLD20": {
-    "0bp": {"cagr":0.4923832,"sharpe":1.55517288,"maximum_drawdown":-0.139463,"expected_shortfall_95":-0.10352819},
-    "5bp": {"cagr":0.49214179,"sharpe":1.55462778,"maximum_drawdown":-0.13949737,"expected_shortfall_95":-0.10354999},
-    "10bp": {"cagr":0.49190041,"sharpe":1.55408263,"maximum_drawdown":-0.13953173,"expected_shortfall_95":-0.10357179},
-    "20bp": {"cagr":0.49141776,"sharpe":1.55299214,"maximum_drawdown":-0.13960045,"expected_shortfall_95":-0.10361538}
+    "0bp": {"cagr":0.496858,"volatility":0.28534,"sharpe":1.56745,"maximum_drawdown":-0.139463,"expected_shortfall_95":-0.103528},
+    "5bp": {"cagr":0.496617,"volatility":0.28534,"sharpe":1.56690,"maximum_drawdown":-0.13950,"expected_shortfall_95":-0.10355},
+    "10bp": {"cagr":0.496375,"volatility":0.285329,"sharpe":1.566349,"maximum_drawdown":-0.139532,"expected_shortfall_95":-0.103572},
+    "20bp": {"cagr":0.495892,"volatility":0.28531,"sharpe":1.56525,"maximum_drawdown":-0.13960,"expected_shortfall_95":-0.10362}
+  },
+  "cost_sensitivity_SMH80_SGOV20": {
+    "0bp": {"cagr":0.42090,"volatility":0.28548,"sharpe":1.37828,"maximum_drawdown":-0.14046,"expected_shortfall_95":-0.10656},
+    "5bp": {"cagr":0.42073,"volatility":0.28546,"sharpe":1.37791,"maximum_drawdown":-0.14050,"expected_shortfall_95":-0.10658},
+    "10bp": {"cagr":0.42055,"volatility":0.28545,"sharpe":1.37754,"maximum_drawdown":-0.14053,"expected_shortfall_95":-0.10661},
+    "20bp": {"cagr":0.42020,"volatility":0.28541,"sharpe":1.37679,"maximum_drawdown":-0.14060,"expected_shortfall_95":-0.10666}
   },
   "decision": {
-    "condition": "半導体集中ポートフォリオのrisk-control候補として20%金sleeveを維持する。production target weightにはしない。",
-    "why_not_use": "月次returnは24点と短く、SMHのclose-to-close価格returnは分配金を含まない。税も未評価。2026年の95% Expected Shortfallは実質1観測。",
-    "higher_gold_rejected_for_robustness": "40%と50% GLDは全期間のrisk指標を改善するが、2026年1-8月のSharpeがSMH単独を下回る。"
+    "condition": "半導体集中ポートフォリオのrisk-control候補として20%金sleeveを維持する。20%短期米国債への単純なde-riskingより、今回の期間では金固有の分散効果が追加で観測された。",
+    "why_not_use": "月次returnは24点と短く、2026年1-8月のGLD対SGOVのSharpe差は0.0069と小さい。分配金は月末再投資近似で、税と実際のbid/ask・fundingは未評価。",
+    "alternative": "SMH60/GLD20/SGOV20は全期間と各時間分割でtail riskをさらに低下させたが、今回の仮説は20% gold sleeveの固有価値の反証に限定し、production target weightには昇格しない。"
   },
-  "prohibited_inference": [
-    "20%を恒久的な最適weightとして扱わない。",
-    "将来の半導体drawdownでも金が必ずhedgeすると推定しない。",
-    "ETFのclose-to-close価格returnを分配金込みtotal returnとして扱わない。"
-  ]
+  "prohibited_inference": ["20%を恒久的な最適weightとして扱わない。","金が将来の半導体drawdownでも必ずhedgeすると推定しない。","24か月の結果だけでSGOVより恒久的に優位と扱わない。","月末分配金再投資近似を日次厳密total returnと同一視しない。"]
 }
