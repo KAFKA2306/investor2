@@ -1,0 +1,100 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-06",
+  "hypothesis": "各月末時点で公開済みの直近四半期Free Cash Flow前年同期比成長率が高い方を翌月保有するNVDA/AVGO選択ルールは、NVDA単独とNVDA/AVGO 50:50を取引コスト込みSharpe、Maximum Drawdown、95% Expected Shortfallで上回る。",
+  "decision_rule": {
+    "signal": "各月末までに公表済みの最新四半期Free Cash Flow前年同期比成長率をNVDAとAVGOで比較し、高い方を翌月保有する。",
+    "timing": "月末確定後の翌月リターンだけを使い、決算公表前の情報は使わない。",
+    "adoption_gate": "10bp/switch後もNVDA単独と50:50のSharpeを上回り、かつMaximum Drawdownと95% Expected Shortfallを悪化させないこと。",
+    "reject_if": "上記のいずれかを満たさない。"
+  },
+  "data": {
+    "market": {
+      "source": "Alpaca Market Data API",
+      "feed": "iex",
+      "currency": "USD",
+      "timeframe": "1Month",
+      "price_field": "close",
+      "period": "2025-03 through 2026-08 closes; 2025-04 through 2026-08 returns",
+      "observations": 17,
+      "fallback": "none",
+      "missing_value_imputation": "none",
+      "monthly_closes": {
+        "2025-03": {"NVDA": 108.525, "AVGO": 167.4, "SPY": 559.26},
+        "2025-04": {"NVDA": 108.79, "AVGO": 192.31, "SPY": 554.02},
+        "2025-05": {"NVDA": 134.89, "AVGO": 242.2, "SPY": 589.3},
+        "2025-06": {"NVDA": 157.98, "AVGO": 275.62, "SPY": 617.83},
+        "2025-07": {"NVDA": 178.06, "AVGO": 293.77, "SPY": 631.9},
+        "2025-08": {"NVDA": 174.215, "AVGO": 297.37, "SPY": 645.03},
+        "2025-09": {"NVDA": 186.54, "AVGO": 329.8, "SPY": 666.06},
+        "2025-10": {"NVDA": 202.49, "AVGO": 369.61, "SPY": 682.03},
+        "2025-11": {"NVDA": 176.95, "AVGO": 403.0, "SPY": 683.36},
+        "2025-12": {"NVDA": 186.52, "AVGO": 346.22, "SPY": 681.82},
+        "2026-01": {"NVDA": 191.13, "AVGO": 331.38, "SPY": 691.8},
+        "2026-02": {"NVDA": 177.205, "AVGO": 319.71, "SPY": 686.16},
+        "2026-03": {"NVDA": 174.41, "AVGO": 309.47, "SPY": 650.12},
+        "2026-04": {"NVDA": 199.54, "AVGO": 417.55, "SPY": 718.41},
+        "2026-05": {"NVDA": 211.155, "AVGO": 447.41, "SPY": 756.34},
+        "2026-06": {"NVDA": 199.93, "AVGO": 377.55, "SPY": 746.65},
+        "2026-07": {"NVDA": 200.74, "AVGO": 389.3, "SPY": 746.79},
+        "2026-08": {"NVDA": 220.86, "AVGO": 370.215, "SPY": 766.87}
+      }
+    },
+    "fundamentals": {
+      "metric": "company-reported Free Cash Flow, year-over-year quarterly growth",
+      "point_in_time": true,
+      "sources": [
+        {"company": "NVIDIA", "release_date": "2025-02-26", "quarter": "Q4 FY2025", "fcf_musd": 15519, "prior_year_fcf_musd": 11217, "yoy": 0.38352501, "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2025/default.aspx"},
+        {"company": "Broadcom", "release_date": "2025-03-06", "quarter": "Q1 FY2025", "fcf_musd": 6013, "yoy": 0.28, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2025-financial"},
+        {"company": "NVIDIA", "release_date": "2025-05-28", "quarter": "Q1 FY2026", "fcf_musd": 26135, "prior_year_fcf_musd": 14936, "yoy": 0.74966524, "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2026/default.aspx"},
+        {"company": "Broadcom", "release_date": "2025-06-05", "quarter": "Q2 FY2025", "fcf_musd": 6411, "prior_year_fcf_musd": 4448, "yoy": 0.44132194, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2025-financial"},
+        {"company": "NVIDIA", "release_date": "2025-08-27", "quarter": "Q2 FY2026", "fcf_musd": 13450, "prior_year_fcf_musd": 13483, "yoy": -0.00244753, "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2026/default.aspx"},
+        {"company": "Broadcom", "release_date": "2025-09-04", "quarter": "Q3 FY2025", "fcf_musd": 7024, "yoy": 0.47, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2025-financial"},
+        {"company": "NVIDIA", "release_date": "2025-11-19", "quarter": "Q3 FY2026", "fcf_musd": 22089, "prior_year_fcf_musd": 16787, "yoy": 0.31583964, "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2026/"},
+        {"company": "Broadcom", "release_date": "2025-12-11", "quarter": "Q4 FY2025", "fcf_musd": 7466, "yoy": 0.3619, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025"},
+        {"company": "NVIDIA", "release_date": "2026-02-25", "quarter": "Q4 FY2026", "fcf_musd": 34902, "prior_year_fcf_musd": 15519, "yoy": 1.24911399, "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"},
+        {"company": "Broadcom", "release_date": "2026-03-04", "quarter": "Q1 FY2026", "fcf_musd": 8010, "prior_year_fcf_musd": 6013, "yoy": 0.33211375, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial"},
+        {"company": "NVIDIA", "release_date": "2026-05-27", "quarter": "Q1 FY2027", "fcf_musd": 48554, "prior_year_fcf_musd": 26135, "yoy": 0.85775588, "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2027/default.aspx"},
+        {"company": "Broadcom", "release_date": "2026-06-03", "quarter": "Q2 FY2026", "fcf_musd": 10262, "prior_year_fcf_musd": 6411, "yoy": 0.60068632, "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial"},
+        {"company": "NVIDIA", "release_date": "2026-08-26", "quarter": "Q2 FY2027", "fcf_musd": 21341, "prior_year_fcf_musd": 13450, "yoy": 0.58669145, "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"}
+      ]
+    }
+  },
+  "monthly_selection": {
+    "2025-04": "AVGO", "2025-05": "AVGO", "2025-06": "NVDA", "2025-07": "NVDA", "2025-08": "NVDA", "2025-09": "AVGO", "2025-10": "AVGO", "2025-11": "AVGO", "2025-12": "AVGO", "2026-01": "AVGO", "2026-02": "AVGO", "2026-03": "NVDA", "2026-04": "NVDA", "2026-05": "NVDA", "2026-06": "NVDA", "2026-07": "NVDA", "2026-08": "NVDA"
+  },
+  "switches": ["2025-06 AVGO->NVDA", "2025-09 NVDA->AVGO", "2026-03 AVGO->NVDA"],
+  "evaluation": {
+    "risk_free_rate": 0.0,
+    "annualization_months": 12,
+    "expected_shortfall_note": "17 monthly observations make 95% Expected Shortfall effectively the single worst month; treat as coarse tail evidence.",
+    "signal_gross": {"cumulative_return": 1.50394416, "cagr": 0.91153431, "annualized_volatility": 0.35555931, "sharpe": 2.03230724, "maximum_drawdown": -0.21918781, "expected_shortfall_95": -0.1408933},
+    "signal_10bp_per_switch": {"cumulative_return": 1.49701078, "cagr": 0.90779655, "annualized_volatility": 0.35538509, "sharpe": 2.02734479, "maximum_drawdown": -0.21998114, "expected_shortfall_95": -0.1408933},
+    "signal_20bp_per_switch": {"cumulative_return": 1.49009018, "cagr": 0.90406263, "annualized_volatility": 0.35521601, "sharpe": 2.02234826, "maximum_drawdown": -0.22077446, "expected_shortfall_95": -0.1408933},
+    "nvda_only": {"cumulative_return": 1.03510712, "cagr": 0.65130125, "annualized_volatility": 0.32504693, "sharpe": 1.72155466, "maximum_drawdown": -0.13867351, "expected_shortfall_95": -0.12612969},
+    "avgo_only": {"cumulative_return": 1.21155914, "cagr": 0.75112291, "annualized_volatility": 0.45364821, "sharpe": 1.46285894, "maximum_drawdown": -0.23208437, "expected_shortfall_95": -0.15614313},
+    "equal_weight_50_50": {"cumulative_return": 1.17135883, "cagr": 0.72859357, "annualized_volatility": 0.34486532, "sharpe": 1.77345954, "maximum_drawdown": -0.1404017, "expected_shortfall_95": -0.10465157},
+    "spy": {"cumulative_return": 0.37122269, "cagr": 0.24963192, "annualized_volatility": 0.12393451, "sharpe": 1.87166864, "maximum_drawdown": -0.06024863, "expected_shortfall_95": -0.05252419}
+  },
+  "result": {
+    "verdict": "REJECT",
+    "reason": "10bp/switch後のSharpe 2.027はNVDA単独1.722と50:50の1.773を上回ったが、Maximum Drawdownは-21.998%でNVDA単独-13.867%、50:50 -14.040%より悪く、95% Expected Shortfallも-14.089%でNVDA単独-12.613%、50:50 -10.465%より悪化した。事前の採用条件を満たさない。",
+    "scope": "FCF前年同期比成長率の高い銘柄へ100%配分する単独allocation ruleを棄却する。Free Cash Flow成長情報そのものの予測価値や、risk cap付きの補助signalまでは棄却しない。",
+    "production_use": "portfolio weight authorityへ追加しない。"
+  },
+  "limitations": [
+    "観測期間は17か月と短い。",
+    "Alpaca IEX monthly closeは配当込みtotal return系列として扱わない。",
+    "NVIDIAとBroadcomでは会社定義のFree Cash Flow計算が完全同一ではないため、成長率の相対比較はcompany-reported metricとして扱う。",
+    "95% Expected Shortfallは17点では粗い。"
+  ],
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_only": true,
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false
+  },
+  "next_hypothesis": "FCF成長率を100%配分signalではなく既存valuation signalの補助変数として使い、単一銘柄上限を設けたrisk-capped allocationがNVDA単独と50:50をcost込みSharpe、Maximum Drawdown、Expected Shortfallの全てで上回るか。"
+}
