@@ -1,0 +1,119 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-04",
+  "hypothesis": "Broadcom offers a lower current cash-flow valuation hurdle than NVIDIA despite its faster AI semiconductor growth, so rotating part of an NVIDIA allocation into Broadcom improves valuation margin of safety.",
+  "decision_rule": {
+    "use_or_condition_if": "AVGO must be no more expensive than NVDA on both TTM enterprise-value/free-cash-flow and five-year reverse-DCF implied free-cash-flow growth across the stated sensitivity grid.",
+    "reject_if": "AVGO requires a higher valuation multiple or higher implied five-year free-cash-flow growth than NVDA under the same assumptions."
+  },
+  "verdict_scope": "Reject the claim that AVGO is currently the cheaper cash-flow allocation alternative to NVDA. This does not reject AVGO as an AI semiconductor holding or claim that NVDA has the higher future return.",
+  "market_data": {
+    "source": "Alpaca Market Data IEX",
+    "currency": "USD",
+    "date": "2026-09-04",
+    "fallback": "none",
+    "prices": {
+      "NVDA": 230.19,
+      "AVGO": 357.835
+    }
+  },
+  "primary_fundamental_sources": [
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Q2 FY2027 earnings release and Form 10-Q for quarter ended 2026-07-26",
+      "urls": [
+        "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+        "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+      ]
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Q3 FY2026 earnings release / Form 8-K exhibit for quarter ended 2026-08-02",
+      "urls": [
+        "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+        "https://investors.broadcom.com/static-files/9d426ddc-fa55-4fa1-8685-fc64642cbdad"
+      ]
+    }
+  ],
+  "inputs_usd_billions": {
+    "NVDA": {
+      "shares_outstanding_billions": 24.1,
+      "shares_identity": "common shares outstanding as of 2026-08-21",
+      "market_cap": 5547.579,
+      "cash_and_marketable_debt_securities": 56.586,
+      "debt": 33.366,
+      "enterprise_value": 5524.359,
+      "ttm_free_cash_flow": 126.886,
+      "ttm_fcf_construction": "FY2026 FCF 96.575 - first-half FY2026 FCF 39.584 + first-half FY2027 FCF 69.895",
+      "latest_quarter_fcf": 21.341,
+      "year_ago_quarter_fcf": 13.45,
+      "latest_quarter_fcf_yoy_pct": 58.6691
+    },
+    "AVGO": {
+      "diluted_weighted_average_shares_billions": 4.887,
+      "shares_identity": "Q3 FY2026 GAAP diluted weighted-average shares; used as the available primary-source equity-count proxy, not represented as period-end shares outstanding",
+      "market_cap_proxy": 1748.739645,
+      "cash": 23.975,
+      "short_term_debt": 2.252,
+      "long_term_debt": 57.167,
+      "enterprise_value_proxy": 1784.183645,
+      "ttm_free_cash_flow": 39.403,
+      "ttm_fcf_construction": "Q4 FY2025 FCF 7.466 + first-three-quarters FY2026 FCF 31.937",
+      "latest_quarter_fcf": 13.665,
+      "year_ago_quarter_fcf": 7.024,
+      "latest_quarter_fcf_yoy_pct": 94.5473
+    }
+  },
+  "benchmark": {
+    "name": "simple TTM EV/FCF",
+    "NVDA": 43.538,
+    "AVGO": 45.2804,
+    "result": "AVGO trades at the higher cash-flow multiple by about 4.0 percent."
+  },
+  "reverse_dcf": {
+    "method": "Solve one constant annual FCF growth rate for years 1-5 such that discounted five-year FCF plus year-5 terminal value equals current enterprise value. Terminal value equals year-5 FCF times a terminal EV/FCF multiple.",
+    "baseline": {
+      "discount_rate_pct": 10.0,
+      "terminal_ev_fcf": 25.0,
+      "implied_fcf_growth_pct": {
+        "NVDA": 19.0723,
+        "AVGO": 20.0636
+      },
+      "difference_avgo_minus_nvda_percentage_points": 0.9913
+    },
+    "sensitivity": [
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 22.7927, "AVGO_implied_growth_pct": 23.8201},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 23.9192, "AVGO_implied_growth_pct": 24.9560},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 25.0457, "AVGO_implied_growth_pct": 26.0920},
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 17.9898, "AVGO_implied_growth_pct": 18.9721},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 19.0723, "AVGO_implied_growth_pct": 20.0636},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 20.1548, "AVGO_implied_growth_pct": 21.1551},
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 14.1465, "AVGO_implied_growth_pct": 15.0933},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 15.1938, "AVGO_implied_growth_pct": 16.1492},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 16.2410, "AVGO_implied_growth_pct": 17.2051}
+    ],
+    "sensitivity_result": "AVGO requires the higher five-year FCF CAGR in all 9 of 9 discount-rate and terminal-multiple combinations."
+  },
+  "alternative_hypothesis": {
+    "statement": "AVGO's faster current operating growth can still justify the higher valuation hurdle.",
+    "evidence": "Latest quarterly FCF grew about 94.5% year over year at AVGO versus about 58.7% at NVDA, while AVGO Q3 AI semiconductor revenue grew 221% year over year. This supports growth strength but does not itself establish a higher future shareholder return because the valuation hurdle is also higher.",
+    "decision": "CONDITION only; requires forward, point-in-time FCF realization versus the reverse-DCF hurdle before changing portfolio weights."
+  },
+  "risk_and_limitations": [
+    "This is valuation research, not a historical trading strategy; Sharpe ratio, maximum drawdown and Expected Shortfall are not decision-valid outputs for this test.",
+    "AVGO market capitalization uses Q3 diluted weighted-average shares as a primary-source proxy because a period-end share count was not verified in this run. The resulting valuation comparison must not be presented as exact to the last basis point.",
+    "NVIDIA marketable equity securities are excluded from cash-like assets in enterprise value; only cash and marketable debt securities are netted against debt.",
+    "Free-cash-flow definitions are issuer-reported and may differ in detail between companies.",
+    "Reverse DCF results are assumption sensitivities, not price targets."
+  ],
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "reason": "The cheaper-AVGO thesis was rejected; retain only reusable negative evidence and do not add a production allocation model."
+  },
+  "next_high_value_hypothesis": "Using point-in-time quarterly FCF through FY2027 and current prices at each rebalance date, does an allocation rule that buys the lower reverse-DCF hurdle between NVDA and AVGO improve cost-adjusted out-of-sample return, maximum drawdown and Expected Shortfall versus NVDA-only and equal-weight NVDA/AVGO?"
+}
