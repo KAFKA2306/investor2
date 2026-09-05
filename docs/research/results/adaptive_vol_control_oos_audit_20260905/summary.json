@@ -1,0 +1,105 @@
+{
+  "research_question": "Devanathan et al. (2026) の proportional-feedback volatility controller は、strict out-of-sample evidence として canonical 採用できるほど一般化が実証されているか",
+  "paper": {
+    "title": "Single-Asset Adaptive Leveraged Volatility Control",
+    "authors": [
+      "Nikhil Devanathan",
+      "Dylan Rueter",
+      "Stephen Boyd",
+      "Emmanuel Candes",
+      "Trevor Hastie",
+      "Mykel J. Kochenderfer",
+      "Arpit Apoorv",
+      "David Soronow",
+      "Igor Zamkovsky"
+    ],
+    "date": "2026-03-30",
+    "arxiv": "2603.01298",
+    "ssrn": "6321918",
+    "primary_url": "https://stanford.edu/~boyd/papers/pdf/sa_vol_ctrl.pdf"
+  },
+  "acceptance_rule": {
+    "required": [
+      "controller parameters are fixed before the test period",
+      "test asset universe is fixed using only information available before the test period",
+      "transaction costs are included",
+      "controller improves volatility tracking versus open-loop without relying on ex-post outcome filtering"
+    ],
+    "reject_if": "test-universe membership uses realized outcomes from the test period"
+  },
+  "paper_method": {
+    "risky_asset_baseline": "IVV",
+    "target_annualized_volatility": 0.15,
+    "leverage_limit": 1.5,
+    "ewma_halflife_trading_days": 126,
+    "controller": {
+      "g": 55,
+      "kappa_min": -1,
+      "kappa_max": 1,
+      "theta": 0.6
+    },
+    "transaction_cost_bid_ask_spread_bps": 5,
+    "parameter_selection_period": "2000-06-08/2009-12-31",
+    "multi_asset_test_period": "2010-01-01/2024-12-31",
+    "multi_asset_reported_universe_size": 44
+  },
+  "reported_baseline_results": {
+    "IVV": {
+      "volatility_tracking_error": 0.052,
+      "annualized_return": 0.078,
+      "annualized_volatility": 0.191,
+      "sharpe": 0.31,
+      "maximum_drawdown": 0.553,
+      "turnover": 0.0
+    },
+    "open_loop": {
+      "volatility_tracking_error": 0.023,
+      "annualized_return": 0.068,
+      "annualized_volatility": 0.149,
+      "sharpe": 0.33,
+      "maximum_drawdown": 0.386,
+      "turnover": 0.93
+    },
+    "volatility_control": {
+      "volatility_tracking_error": 0.004,
+      "annualized_return": 0.082,
+      "annualized_volatility": 0.149,
+      "sharpe": 0.42,
+      "maximum_drawdown": 0.371,
+      "turnover": 11.05
+    }
+  },
+  "critical_oos_audit": {
+    "paper_statement": "The ETF cohort consists of all ETFs in our dataset with positive price data throughout the test period and annualized returns exceeding 5%.",
+    "problem": "The >5% annualized-return criterion is computed over the 2010-2024 test period itself. Universe inclusion therefore depends on future realized returns and is not point-in-time. Requiring positive prices throughout the full test period also conditions on full-period survival/data availability.",
+    "consequence": "The reported 44-ETF multi-asset section is not a strict out-of-sample test of cross-asset generalization. It can still describe performance conditional on an ex-post selected cohort, but it cannot by itself justify canonical adoption as a general ETF volatility controller.",
+    "not_claimed": [
+      "The controller is ineffective.",
+      "The IVV baseline numbers are false.",
+      "A strict pre-specified-universe rerun would necessarily fail."
+    ]
+  },
+  "reported_multi_asset_results": {
+    "volatility_control_tracking_error": "predominantly below 0.4% and entirely below 0.6%",
+    "volatility_control_turnover": "800%-1800%",
+    "open_loop_tracking_error": "1%-3%",
+    "open_loop_turnover": "70%-100%",
+    "interpretation_boundary": "These values are conditional on the paper's ex-post filtered 44-ETF cohort."
+  },
+  "verdict": "REJECT",
+  "verdict_scope": "Reject the claim that the paper's reported 44-ETF multi-asset evidence is strict OOS proof sufficient for canonical adoption. Do not reject the controller itself.",
+  "do_not_use_for": [
+    "production volatility-targeting allocation",
+    "claiming generalization across ETFs",
+    "claiming leakage-free OOS superiority over open-loop"
+  ],
+  "required_next_test": {
+    "universe": "Freeze an ETF universe at 2009-12-31 using only point-in-time listing/history/liquidity information; do not filter on 2010-2024 returns or survival.",
+    "period": "2010-01-01 onward, with an untouched extension beyond 2024 preferred",
+    "comparators": ["underlying", "open-loop volatility targeting", "proportional-feedback controller"],
+    "costs": ["bid-ask spread", "turnover", "cash/funding return", "leverage cost"],
+    "metrics": ["volatility tracking error", "CAGR", "volatility", "Sharpe", "maximum drawdown", "Expected Shortfall", "turnover"]
+  },
+  "owner_repository": "KAFKA2306/investor2",
+  "as_of": "2026-09-05"
+}
