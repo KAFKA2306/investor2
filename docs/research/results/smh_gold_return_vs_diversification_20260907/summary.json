@@ -1,0 +1,81 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gold_return_vs_diversification_20260907",
+  "status": "CONDITION",
+  "hypothesis": "2020年7月以降のSMH 80% defensive sleeve比較で、GLD 20%がBIL 20%より高いSharpeを示した主因は、より低い相関によるtail-risk低減ではなく、GLD自身の高いreturn contributionである。",
+  "decision_gate": {
+    "condition_if": "GLD sleeveがBIL sleeveよりCAGRとSharpeで上回る一方、volatility・Maximum Drawdown・95% Expected Shortfallの少なくとも2指標で悪化し、かつSMHとの相関はGLDの方が低いこと。",
+    "reject_if": "GLD sleeveがBIL sleeveよりCAGRとSharpeで上回り、同時にvolatility・Maximum Drawdown・95% Expected Shortfallも一貫して改善すること。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "assets": ["SMH", "GLD", "BIL"],
+    "currency": "USD",
+    "return_period": "2020-08-01..2026-08-31",
+    "monthly_return_observations": 73,
+    "fallback": "none"
+  },
+  "method": {
+    "comparison": "same 80% SMH risky asset weight; compare 20% GLD versus 20% BIL defensive sleeve",
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps": 10,
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "historical 95% Expected Shortfall from canonical source artifact",
+    "lookahead": "none; this is a decomposition of already validated realized portfolio outcomes",
+    "missing_data": "no interpolation, no forward fill, no alternate feed"
+  },
+  "benchmark": {
+    "portfolio": "SMH80_BIL20",
+    "rationale": "BIL keeps the SMH risky weight identical while providing a low-volatility defensive sleeve, allowing the incremental GLD result to be separated from simply lowering SMH exposure."
+  },
+  "results_10bp": {
+    "SMH80_GLD20": {
+      "cagr": 0.33672534,
+      "volatility": 0.26292236,
+      "sharpe": 1.24337587,
+      "maximum_drawdown": -0.34201565,
+      "expected_shortfall_95": -0.12792343
+    },
+    "SMH80_BIL20": {
+      "cagr": 0.30817722,
+      "volatility": 0.25903681,
+      "sharpe": 1.17277618,
+      "maximum_drawdown": -0.32749770,
+      "expected_shortfall_95": -0.12476619
+    },
+    "GLD_minus_BIL": {
+      "cagr": 0.02854812,
+      "volatility": 0.00388555,
+      "sharpe": 0.07059969,
+      "maximum_drawdown": -0.01451795,
+      "expected_shortfall_95": -0.00315724
+    },
+    "return_correlations": {
+      "SMH_GLD": 0.05335656,
+      "SMH_BIL": 0.09585265
+    }
+  },
+  "interpretation": {
+    "observed": "GLD sleeveはBIL sleeveよりCAGRが2.85 percentage points、Sharpeが0.071高い。一方でvolatilityは0.39 percentage points高く、Maximum Drawdownは1.45 percentage points、95% Expected Shortfallは0.32 percentage points悪い。SMHとの相関はGLDの方が低い。",
+    "inference": "この期間のGLD sleeveのSharpe優位は、より低いSMH相関がtail riskを一貫して小さくした結果ではない。少なくともBIL対比では、GLD自身のreturn contributionがSharpe優位に大きく寄与している。",
+    "capital_allocation_implication": "GLD 20%を『純粋なtail-risk hedge』として扱わない。期待returnを含むrisk asset的sleeveとして評価し、tail-risk control目的ではBIL等の短期米国債を並列benchmarkに残す。"
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "事前条件を満たした。GLDはBILより低相関だが、同じ80% SMH配分でvolatility・Maximum Drawdown・Expected ShortfallはすべてBILより悪い一方、CAGRとSharpeは高い。したがって2020-2026のSharpe優位を純粋な分散・tail-risk低減効果だけで説明できず、GLD自身のreturn contributionが重要である。",
+    "scope": "73月次returnに限定した因果分解ではなく実測比較であり、GLDの将来期待returnや長期最適weightを確定しない。"
+  },
+  "implementation": {
+    "reusable_decision": "半導体集中portfolioでGLD sleeveを評価するときは、Sharpe改善だけでhedge効果と判定せず、同SMH weightの短期米国債benchmarkに対するCAGR、volatility、Maximum Drawdown、Expected Shortfallを併記する。",
+    "do_not_add": ["GLD 30% default weight", "dynamic gold switch", "new optimizer", "duplicate market-data collector"]
+  },
+  "remaining_uncertainty": [
+    "共通期間は2020年7月以降で、2008年金融危機などを含まない。",
+    "この比較はGLDの実現returnを統計的にdemeanしたcounterfactualではなく、同SMH weightのBIL sleeveとの実測比較である。",
+    "税、実際のbid-ask spread、fund-specific tracking differenceは含まない。"
+  ],
+  "next_high_value_hypothesis": "GLDの月次returnを事前情報で予測しようとせず、SMH80/GLD20とSMH80/BIL20のどちらを選ぶべきかを、point-in-timeで利用可能なreal yieldまたはinflation regimeでwalk-forward選択すると、固定GLD/BILの両方をcost込みrisk-adjusted指標で上回るか。"
+}
