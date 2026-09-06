@@ -1,0 +1,93 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "lrcx_buyback_cash_yield_20260906",
+  "status": "REJECT",
+  "hypothesis": "2026-09-04のLam Research株価でも、FY2026の会社定義Free Cash Flow利回りと2026年9月期会社予想EPS中心値の単純年率換算利益利回りが米国3か月国債利回りを上回り、現在価格での追加自社株買いをcash-yield basisで合理化できる。",
+  "decision_rule": {
+    "use_if": "FY2026 Free Cash Flow yieldと2026年9月期会社予想GAAP EPS中心値の単純年率換算利益利回りが、2026-09-04の米国3か月Constant Maturity Treasury yield 3.91%をともに上回る。",
+    "reject_if": "いずれかが3.91%以下。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "canonical_verified_revenue_growth": {
+      "path": "data/earnings_ledger/verified_revenue_growth_latest.json",
+      "ticker": "LRCX",
+      "fy2026_yoy_percent": 26.0209,
+      "source": "SEC EDGAR Company Facts / Lam Research 2026 Form 10-K"
+    },
+    "issuer_filing": "https://www.sec.gov/Archives/edgar/data/707549/000070754926000037/lrcx-20260628.htm",
+    "issuer_q4_release": "https://www.sec.gov/Archives/edgar/data/707549/000070754926000033/lrcx_exhibitx991xq4x2026.htm",
+    "market_data": {
+      "provider": "Alpaca Market Data API",
+      "feed": "IEX",
+      "ticker": "LRCX",
+      "timestamp": "2026-09-04T19:59:59.576558+00:00",
+      "price_usd": 307.645,
+      "fallback": "none"
+    },
+    "risk_free_benchmark": {
+      "provider": "U.S. Department of the Treasury",
+      "series": "3-month Constant Maturity Treasury",
+      "date": "2026-09-04",
+      "yield_percent": 3.91
+    }
+  },
+  "inputs": {
+    "fy2026_revenue_usd": 23232690000,
+    "fy2025_revenue_usd": 18435591000,
+    "fy2026_revenue_yoy_percent": 26.0,
+    "fy2026_net_cash_from_operations_usd": 5857657000,
+    "fy2026_capex_and_intangible_assets_usd": 966405000,
+    "fy2026_free_cash_flow_usd": 4891252000,
+    "free_cash_flow_definition": "net cash provided by operating activities less capital expenditures and intangible assets",
+    "shares_outstanding_as_of_2026_08_04": 1251321000,
+    "fy2026_diluted_eps_usd": 5.76,
+    "september_2026_quarter_guidance": {
+      "revenue_midpoint_usd": 8100000000,
+      "revenue_range_usd": 400000000,
+      "gaap_eps_midpoint_usd": 2.15,
+      "gaap_eps_range_usd": 0.15,
+      "diluted_share_count": 1255000000
+    },
+    "remaining_buyback_authorization_as_of_2026_06_28_usd": 4042724000,
+    "march_2026_asr_weighted_average_price_usd": 270.71,
+    "june_2026_quarter_open_market_average_price_usd": 325.14,
+    "commercial_paper_outstanding_as_of_2026_06_28_usd": 0
+  },
+  "measured_results": {
+    "market_cap_usd_using_2026_08_04_shares": 384962649045,
+    "fy2026_free_cash_flow_yield_percent": 1.2706,
+    "fy2026_diluted_eps_earnings_yield_percent": 1.8723,
+    "september_guidance_midpoint_annualized_eps_yield_percent": 2.7954,
+    "september_guidance_low_annualized_eps_yield_percent": 2.6004,
+    "september_guidance_high_annualized_eps_yield_percent": 2.9905,
+    "treasury_3m_yield_percent": 3.91,
+    "free_cash_flow_yield_gap_vs_treasury_percentage_points": -2.6394,
+    "forward_midpoint_earnings_yield_gap_vs_treasury_percentage_points": -1.1146,
+    "free_cash_flow_needed_for_3m_treasury_yield_usd": 15052039578,
+    "free_cash_flow_multiple_needed_vs_fy2026": 3.0773,
+    "share_price_for_fy2026_fcf_yield_to_equal_treasury_usd": 99.97,
+    "current_price_change_vs_march_2026_asr_percent": 13.64,
+    "current_price_change_vs_june_2026_quarter_open_market_average_percent": -5.38,
+    "remaining_buyback_authorization_as_percent_of_market_cap": 1.0502
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "2026-09-04 U.S. 3-month Constant Maturity Treasury yield 3.91%",
+    "alternative_1": "FY2026 trailing GAAP diluted EPS earnings yield 1.87%",
+    "alternative_2": "September 2026 quarter GAAP EPS guidance midpoint annualized yield 2.80%",
+    "result": "Both operating cash yield and simple forward earnings yield remain below the Treasury benchmark."
+  },
+  "finding": {
+    "summary": "FY2026売上高は26.0%増で9月期売上高会社予想も81億ドルと強いが、2026-09-04株価307.645ドルではFY2026 Free Cash Flow利回り1.27%、9月期GAAP EPS中心値の単純年率換算利益利回り2.80%で、3か月米国債3.91%を下回る。現在のcash generationだけを根拠に追加自社株買いを割安な資本還元とみなす仮説は棄却する。",
+    "scope": "Lam Research株式そのもの、将来成長、既存の自社株買いauthorizationは棄却しない。現在価格での買戻しをtrailing/near-term cash-yieldだけで正当化することを棄却する。",
+    "production_action": "buyback-positive signal、valuation rule、portfolio weight authorityへ追加しない"
+  },
+  "reusable_decision": "LRCXの追加買戻し評価では、最新株価に対する会社定義Free Cash Flow yieldと短期米国債利回りを必ず比較する。現状価格では将来の大幅なcash-flow成長を前提にしない限りcash-yield basisの割安判定をしない。",
+  "limitations": [
+    "時価総額は2026-08-04の発行済株式数と2026-09-04のIEX価格を組み合わせており、その間の株式数変動を完全には反映しない。",
+    "9月期EPSの年率換算は四半期guidanceを4倍した感応度で、会社の通期FY2027 guidanceではない。",
+    "株式の期待収益はFree Cash Flow yieldだけで決まらないため、本結果はLRCX株式全体ではなくbuyback cash-yield仮説の反証である。",
+    "米国3か月Constant Maturity Treasuryは機会費用benchmarkであり、株式risk premiumを直接推定していない。"
+  ],
+  "next_hypothesis": "LRCXのFY2027各四半期について、公表済み売上高・営業利益率・Free Cash Flowと実際の買戻し価格をpoint-in-timeで追跡し、一株当たりFree Cash Flowの増加速度が株価上昇による買戻し効率低下を上回るか。"
+}
