@@ -1,0 +1,97 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "amat_sequential_guidance_return_signal_20260907",
+  "status": "REJECT",
+  "hypothesis": "Applied Materialsの次四半期Revenue guidance midpointが直近実績Revenueを上回るときだけAMATを保有し、下回るときは現金にする単純なpoint-in-timeルールは、同じ公表後期間でAMATを常時保有するbenchmarkを、20bp往復コスト込みの複利returnとSharpeで上回り、Maximum Drawdownと95% Expected Shortfallも悪化させない。",
+  "decision_rule": {
+    "use_if": "positive-guidance strategyがalways-AMAT benchmarkをcompound returnとSharpeの両方で上回り、Maximum Drawdownと95% Expected Shortfallが悪化しない。",
+    "condition_if": "returnまたはSharpeの一方だけ改善し、tail riskが悪化しないが、10観測のため再現性が不足する。",
+    "reject_if": "compound returnまたはSharpeでalways-AMATに劣後する、もしくはguidance signalとその後returnの順位相関が実質的に確認できない。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "guidance_research_input": "KAFKA2306/investor2/docs/research/results/amat_quarterly_revenue_guidance_accuracy_20260906/summary.json",
+    "research_owner": "KAFKA2306/investor2",
+    "market_data_source": "Alpaca Market Data API / IEX daily bars",
+    "corporate_actions_source": "Alpaca Corporate Actions API / cash dividends",
+    "verification_as_of": "2026-09-07",
+    "market_period": "2024-02-16 through 2026-08-13",
+    "missing_value_policy": "補間、forward fill、別価格sourceへのfallbackはしない。AMATの実市場IEX終値とAlpaca corporate actionsで確認したcash dividendだけを使う。"
+  },
+  "method": {
+    "signal": "各決算releaseで公表された次四半期Revenue guidance midpoint / 直近四半期確定Revenue - 1。",
+    "entry": "releaseが米国市場引け後のため、翌取引日終値でのみ新signalを利用する。",
+    "exit": "次の決算release日の通常取引終値。次releaseは引け後なので、このexitには次回情報を含めない。",
+    "primary_strategy": "signal > 0 のevent windowだけAMATを保有。signal <= 0は現金0% return。",
+    "benchmark": "10 event windowすべてAMATを保有。",
+    "alternative_simple_strategy": "signal <= 0 のevent windowだけAMATを保有するinverse rule。",
+    "total_return": "entry/exit終値にholding window内ex-dateのcash dividendを加算。配当再投資はしない。",
+    "transaction_cost": "AMATを保有する各event windowに10bp one-way x 2 = 20bp round-tripを控除。現金は0% return、金利は付与しない。",
+    "risk_metrics": "10 event-window returnを四半期頻度としてannualized volatilityとSharpeを計算。Sharpeのrisk-free rateは0。Maximum Drawdownはevent-window equity curve、95% Expected Shortfallは標本が10件のため最悪1 event return。",
+    "look_ahead": "なし。",
+    "observations": 10
+  },
+  "measured_results": {
+    "signal_return_correlation": {
+      "spearman_rho": 0.0303,
+      "spearman_p_value": 0.9338,
+      "pearson_r": -0.0239,
+      "pearson_p_value": 0.9477
+    },
+    "positive_signal_observations": 7,
+    "nonpositive_signal_observations": 3,
+    "positive_signal_mean_gross_return_pct": 15.1091,
+    "nonpositive_signal_mean_gross_return_pct": 16.3680,
+    "positive_signal_median_gross_return_pct": 14.0053,
+    "nonpositive_signal_median_gross_return_pct": 7.4860,
+    "primary_strategy": {
+      "compound_return_pct": 145.5188,
+      "annualized_return_pct": 43.2300,
+      "annualized_volatility_pct": 32.9365,
+      "sharpe": 1.2675,
+      "maximum_drawdown_pct": -10.6517,
+      "expected_shortfall_95_pct": -10.5423
+    },
+    "always_amat_benchmark": {
+      "compound_return_pct": 275.0657,
+      "annualized_return_pct": 69.6848,
+      "annualized_volatility_pct": 34.7102,
+      "sharpe": 1.7616,
+      "maximum_drawdown_pct": -10.6517,
+      "expected_shortfall_95_pct": -10.5423
+    },
+    "inverse_strategy": {
+      "compound_return_pct": 52.7646,
+      "annualized_return_pct": 18.4702,
+      "annualized_volatility_pct": 23.8735,
+      "sharpe": 0.8127,
+      "maximum_drawdown_pct": 0.0,
+      "expected_shortfall_95_pct": 0.0
+    },
+    "key_counterexample": {
+      "target_quarter": "Q4 FY2025",
+      "sequential_guidance_signal_pct": -8.2443,
+      "following_amat_gross_total_return_pct": 38.3460,
+      "interpretation": "大きな下方guidance signalを避けるルールが、その後の大幅上昇を取り逃がした。"
+    },
+    "detail": [
+      {"target_quarter":"Q2 FY2024","entry_date":"2024-02-16","exit_date":"2024-05-16","guidance_midpoint_musd":6500,"previous_quarter_revenue_musd":6707,"sequential_guidance_signal_pct":-3.0863,"entry_close_usd":199.505,"exit_close_usd":214.12,"cash_dividend_usd":0.32,"amat_total_return_gross_pct":7.4860,"positive_signal":false},
+      {"target_quarter":"Q3 FY2024","entry_date":"2024-05-17","exit_date":"2024-08-15","guidance_midpoint_musd":6650,"previous_quarter_revenue_musd":6646,"sequential_guidance_signal_pct":0.0602,"entry_close_usd":212.14,"exit_close_usd":211.905,"cash_dividend_usd":0.40,"amat_total_return_gross_pct":0.0778,"positive_signal":true},
+      {"target_quarter":"Q4 FY2024","entry_date":"2024-08-16","exit_date":"2024-11-14","guidance_midpoint_musd":6930,"previous_quarter_revenue_musd":6778,"sequential_guidance_signal_pct":2.2425,"entry_close_usd":207.98,"exit_close_usd":186.07,"cash_dividend_usd":0.40,"amat_total_return_gross_pct":-10.3423,"positive_signal":true},
+      {"target_quarter":"Q1 FY2025","entry_date":"2024-11-15","exit_date":"2025-02-13","guidance_midpoint_musd":7150,"previous_quarter_revenue_musd":7045,"sequential_guidance_signal_pct":1.4904,"entry_close_usd":168.92,"exit_close_usd":184.26,"cash_dividend_usd":0.40,"amat_total_return_gross_pct":9.3180,"positive_signal":true},
+      {"target_quarter":"Q2 FY2025","entry_date":"2025-02-14","exit_date":"2025-05-15","guidance_midpoint_musd":7100,"previous_quarter_revenue_musd":7166,"sequential_guidance_signal_pct":-0.9210,"entry_close_usd":169.31,"exit_close_usd":174.45,"cash_dividend_usd":0.40,"amat_total_return_gross_pct":3.2721,"positive_signal":false},
+      {"target_quarter":"Q3 FY2025","entry_date":"2025-05-16","exit_date":"2025-08-14","guidance_midpoint_musd":7200,"previous_quarter_revenue_musd":7100,"sequential_guidance_signal_pct":1.4085,"entry_close_usd":165.58,"exit_close_usd":188.31,"cash_dividend_usd":0.46,"amat_total_return_gross_pct":14.0053,"positive_signal":true},
+      {"target_quarter":"Q4 FY2025","entry_date":"2025-08-15","exit_date":"2025-11-13","guidance_midpoint_musd":6700,"previous_quarter_revenue_musd":7302,"sequential_guidance_signal_pct":-8.2443,"entry_close_usd":161.79,"exit_close_usd":223.37,"cash_dividend_usd":0.46,"amat_total_return_gross_pct":38.3460,"positive_signal":false},
+      {"target_quarter":"Q1 FY2026","entry_date":"2025-11-14","exit_date":"2026-02-12","guidance_midpoint_musd":6850,"previous_quarter_revenue_musd":6800,"sequential_guidance_signal_pct":0.7353,"entry_close_usd":226.08,"exit_close_usd":328.31,"cash_dividend_usd":0.46,"amat_total_return_gross_pct":45.4220,"positive_signal":true},
+      {"target_quarter":"Q2 FY2026","entry_date":"2026-02-13","exit_date":"2026-05-14","guidance_midpoint_musd":7650,"previous_quarter_revenue_musd":7012,"sequential_guidance_signal_pct":9.0987,"entry_close_usd":354.81,"exit_close_usd":440.86,"cash_dividend_usd":0.46,"amat_total_return_gross_pct":24.3821,"positive_signal":true},
+      {"target_quarter":"Q3 FY2026","entry_date":"2026-05-15","exit_date":"2026-08-13","guidance_midpoint_musd":8950,"previous_quarter_revenue_musd":7910,"sequential_guidance_signal_pct":13.1479,"entry_close_usd":436.335,"exit_close_usd":535.73,"cash_dividend_usd":0.53,"amat_total_return_gross_pct":22.9010,"positive_signal":true}
+    ]
+  },
+  "decision": {
+    "status": "REJECT",
+    "reusable_evidence": "Applied MaterialsのRevenue guidanceは次四半期実Revenueの予測には高精度だが、直近実績比のguidance増減率をAMATの保有/回避signalへ直接変換しない。guidance accuracyと株価alphaを分離する。",
+    "implementation": "portfolio weight、signal service、forecast-to-trade mappingは追加しない。negative research artifactだけを保存する。",
+    "scope_limit": "AMAT単独、10 event window、決算後終値から次決算前終値まで。決算翌日openでの取引、analyst consensus surprise、valuation multiple、SMH relative returnはこのartifactでは未検証。",
+    "next_research": "issuer guidance自体ではなく、guidanceと市場期待の差であるconsensus surpriseをpoint-in-timeで取得できるcanonical sourceがある場合、そのsurpriseがAMAT/SMH relative returnを予測するか検証する。市場期待のidentity/as-ofが確保できなければUNVERIFIEDとする。"
+  }
+}
