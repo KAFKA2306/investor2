@@ -17,6 +17,7 @@ on:
       - "prek.toml"
       - "Taskfile.yml"
       - ".github/workflows/quality.yml"
+      - ".agent/skills/**"
   workflow_dispatch:
 
 permissions:
