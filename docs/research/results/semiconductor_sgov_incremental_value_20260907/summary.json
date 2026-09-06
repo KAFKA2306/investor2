@@ -1,0 +1,76 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_sgov_incremental_value_20260907",
+  "status": "REJECT",
+  "hypothesis": "半導体集中ポートフォリオの30% defensive sleeveにおいて、SMH70%/GLD20%/SGOV10%は、同じSMH70%を維持したSMH70%/GLD30%およびSMH70%/SGOV30%より、10bpの月次リバランスコスト込みでrisk-adjusted returnとtail riskの両方を一貫して改善する。",
+  "decision_gate": {
+    "use_or_condition": "full period、2025年、2026年1-8月の全splitで70/20/10のSharpeが70/30/0と70/0/30の両方以上で、Maximum Drawdownと95% Expected Shortfallも悪化しないこと。さらに80/20/0からのCAGR低下が各splitで相対15%以内であること。",
+    "reject": "同じ30% defensive budgetの単純代替に対してSharpeまたはtail riskで一貫して優位でないこと。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/semiconductor_gold_risk_sleeve_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period": "2024-08-01..2026-08-31",
+    "frequency": "monthly",
+    "observations": 24,
+    "assets": ["SMH", "GLD", "SGOV"],
+    "currency": "USD",
+    "fallback": "none"
+  },
+  "method": {
+    "returns": "canonical artifactの月末close-to-close returnに当月cash dividendを加えたtotal-return近似をそのまま再利用",
+    "rebalance": "monthly to fixed target weights",
+    "transaction_cost_bps_per_two_sided_turnover": 10,
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "historical 95% Expected Shortfall = worst ceil(5% * n) monthly returns の平均",
+    "lookahead": "weight candidates are fixed ex ante; no return-based fitting or optimization is used",
+    "missing_data": "no interpolation, no forward fill, no alternate feed"
+  },
+  "portfolios": {
+    "primary": {"SMH": 0.70, "GLD": 0.20, "SGOV": 0.10},
+    "gold_alternative": {"SMH": 0.70, "GLD": 0.30, "SGOV": 0.00},
+    "sgov_alternative": {"SMH": 0.70, "GLD": 0.00, "SGOV": 0.30},
+    "prior_condition_reference": {"SMH": 0.80, "GLD": 0.20, "SGOV": 0.00}
+  },
+  "results_10bp": {
+    "full_period": {
+      "SMH70_GLD20_SGOV10": {"cagr": 0.445455, "volatility": 0.250043, "sharpe": 1.610656, "maximum_drawdown": -0.121569, "expected_shortfall_95": -0.091605},
+      "SMH70_GLD30": {"cagr": 0.482553, "volatility": 0.252911, "sharpe": 1.698627, "maximum_drawdown": -0.121070, "expected_shortfall_95": -0.097035},
+      "SMH70_SGOV30": {"cagr": 0.372120, "volatility": 0.249709, "sharpe": 1.397694, "maximum_drawdown": -0.122569, "expected_shortfall_95": -0.092876},
+      "SMH80_GLD20": {"cagr": 0.496375, "volatility": 0.285329, "sharpe": 1.566349, "maximum_drawdown": -0.139532, "expected_shortfall_95": -0.103572}
+    },
+    "2025": {
+      "SMH70_GLD20_SGOV10": {"cagr": 0.479793, "volatility": 0.187992, "sharpe": 2.201714, "maximum_drawdown": -0.071471, "expected_shortfall_95": -0.045079},
+      "SMH70_GLD30": {"cagr": 0.548900, "volatility": 0.186400, "sharpe": 2.471700, "maximum_drawdown": -0.061200, "expected_shortfall_95": -0.036000},
+      "SMH70_SGOV30": {"cagr": 0.349400, "volatility": 0.193800, "sharpe": 1.651800, "maximum_drawdown": -0.091900, "expected_shortfall_95": -0.063200},
+      "SMH80_GLD20": {"cagr": 0.530914, "volatility": 0.215448, "sharpe": 2.106488, "maximum_drawdown": -0.085285, "expected_shortfall_95": -0.054581}
+    },
+    "2026_01_08": {
+      "SMH70_GLD20_SGOV10": {"cagr": 0.650833, "volatility": 0.374455, "sharpe": 1.524862, "maximum_drawdown": -0.121569, "expected_shortfall_95": -0.121569},
+      "SMH70_GLD30": {"cagr": 0.655600, "volatility": 0.381300, "sharpe": 1.511400, "maximum_drawdown": -0.121100, "expected_shortfall_95": -0.121100},
+      "SMH70_SGOV30": {"cagr": 0.637300, "volatility": 0.368600, "sharpe": 1.519900, "maximum_drawdown": -0.122600, "expected_shortfall_95": -0.122600},
+      "SMH80_GLD20": {"cagr": 0.744919, "volatility": 0.426502, "sharpe": 1.515002, "maximum_drawdown": -0.139532, "expected_shortfall_95": -0.139532}
+    }
+  },
+  "cost_sensitivity_full_period": {
+    "0bp": {"primary_sharpe": 1.612124, "gold_alternative_sharpe": 1.700258, "sgov_alternative_sharpe": 1.398804},
+    "5bp": {"primary_sharpe": 1.611390, "gold_alternative_sharpe": 1.699443, "sgov_alternative_sharpe": 1.398249},
+    "10bp": {"primary_sharpe": 1.610656, "gold_alternative_sharpe": 1.698627, "sgov_alternative_sharpe": 1.397694},
+    "20bp": {"primary_sharpe": 1.609187, "gold_alternative_sharpe": 1.696997, "sgov_alternative_sharpe": 1.396584}
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "10% SGOV追加は80/20/0よりvolatility・Maximum Drawdown・Expected Shortfallを改善するが、同じ30% defensive budgetをGLDに置く70/30/0に対してfull periodと2025年でSharpeが劣後し、2025年はMaximum DrawdownとExpected Shortfallも悪い。0-20bpのcost sensitivityでもfull-period順位は反転しない。",
+    "capital_allocation_implication": "今回の24か月canonical sampleだけを根拠に、既存20% gold sleeveへSGOVを追加する配分ルールは採用しない。SGOV30%単独よりは70/20/10が優れるためSGOV自体の価値を否定する結果ではない。",
+    "do_not_implement": ["SGOV incremental target weight", "portfolio auto-rebalance rule", "new optimizer", "duplicate market-data collector"]
+  },
+  "remaining_uncertainty": [
+    "24 monthly observations only; multiple semiconductor and rate cycles are not covered",
+    "GLD and SGOV dividend timing is approximated at month-end in the canonical source artifact",
+    "taxes and actual bid/ask execution are excluded",
+    "the test addresses a fixed semiconductor-heavy sleeve and does not identify a global optimum for the user's full portfolio"
+  ],
+  "next_high_value_hypothesis": "より長いcanonical total-return historyを確保し、SMH/GLD/SGOVの固定weight候補をrolling-originで評価すると、gold-heavy defensive sleeveの優位は2024-2026特有ではなく複数cycleでも維持されるか。"
+}
