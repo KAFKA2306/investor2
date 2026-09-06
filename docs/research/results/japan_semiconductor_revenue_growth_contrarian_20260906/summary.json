@@ -1,0 +1,63 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "japan_semiconductor_revenue_growth_contrarian_20260906",
+  "status": "REJECT",
+  "hypothesis": "東京エレクトロン、アドバンテスト、DISCO、SCREEN Holdings、レーザーテックでは、前年の売上高成長率が最も低かった企業を翌年度の回復候補として選ぶ単純な逆張りsignalは、翌年の5社平均成長率を安定して上回る。",
+  "decision_rule": {
+    "use_if": "5社が揃う2021-2024 signal yearの4回中3回以上で前年成長率最下位企業の翌年成長率が5社平均を上回り、中央値premiumが正、翌年平均順位が3位より良い。",
+    "reject_if": "上記のいずれかを満たさない。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "canonical_dataset": "data/financial_analysis/investor2/investor2-kioxia-semiconductor-universe-50-5y-quarterly.json",
+    "prior_research": "docs/research/results/japan_semiconductor_revenue_growth_persistence_20260906/summary.json",
+    "verification_as_of": "2026-09-06",
+    "primary_source_system": "EDINET annual securities reports / XBRL",
+    "companies": [
+      {"name": "東京エレクトロン", "edinet_code": "E02652"},
+      {"name": "アドバンテスト", "edinet_code": "E01950"},
+      {"name": "DISCO", "edinet_code": "E01506"},
+      {"name": "SCREEN Holdings", "edinet_code": "E02288"},
+      {"name": "レーザーテック", "edinet_code": "E01991"}
+    ],
+    "missing_value_policy": "欠損を補完しない。2026年度はレーザーテックの年次実績が未取得のため、5社共通の判定期間から除外。"
+  },
+  "method": {
+    "signal": "各signal yearの売上高YoY成長率が5社中最低の企業を1社選択",
+    "target": "同じ企業の翌年度売上高YoY成長率",
+    "benchmark": "翌年度の5社平均売上高成長率",
+    "alternative": "前年成長率トップ企業を翌年も選ぶ単純momentum signal",
+    "signal_years": [2021, 2022, 2023, 2024],
+    "look_ahead": "なし。signal yearの年次売上実績だけで翌年度候補を固定。"
+  },
+  "measured_results": {
+    "contrarian_outperformed_peer_average_years": 1,
+    "test_years": 4,
+    "contrarian_median_next_year_growth_premium_percentage_points": -10.7752,
+    "contrarian_next_year_average_rank_out_of_5": 4.0,
+    "detail": [
+      {"signal_year": 2021, "selected": "SCREEN Holdings", "signal_growth_percent": -0.9055, "next_year_growth_percent": 28.5784, "peer_average_percent": 34.5053, "premium_pp": -5.9269, "next_year_rank": 5},
+      {"signal_year": 2022, "selected": "SCREEN Holdings", "signal_growth_percent": 28.5784, "next_year_growth_percent": 11.8896, "peer_average_percent": 27.5130, "premium_pp": -15.6235, "next_year_rank": 4},
+      {"signal_year": 2023, "selected": "東京エレクトロン", "signal_growth_percent": 10.2415, "next_year_growth_percent": -17.1342, "peer_average_percent": 5.4440, "premium_pp": -22.5782, "next_year_rank": 5},
+      {"signal_year": 2024, "selected": "東京エレクトロン", "signal_growth_percent": -17.1342, "next_year_growth_percent": 32.8343, "peer_average_percent": 32.5211, "premium_pp": 0.3132, "next_year_rank": 2}
+    ],
+    "alternative_prior_winner_same_years": {
+      "outperformed_peer_average_years": 1,
+      "test_years": 4,
+      "median_next_year_growth_premium_percentage_points": -10.2931
+    }
+  },
+  "finding": {
+    "summary": "前年の高成長を追うmomentumだけでなく、前年の低成長企業を回復候補として買う単純な逆張りも有効ではない。最下位企業は翌年平均を4回中1回しか上回らず、中央値premiumは-10.78pt、翌年平均順位は4.0位だった。",
+    "scope": "売上成長のmean reversion自体を一般に否定しない。前年成長率順位だけで企業選択やforward growth assumptionを作ることを棄却する。",
+    "production_action": "revenue-growth contrarian signal、portfolio weight rule、valuation growth defaultへ追加しない。"
+  },
+  "reusable_decision": "日本の主要半導体製造装置企業では、前年売上成長率の上位追随も下位逆張りも単独signalにしない。企業固有の受注・受注残、会社guidance、margin、valuationなど前向き情報をpoint-in-timeで使う。",
+  "limitations": [
+    "5社、4共通signal yearで標本は小さい。",
+    "各社の決算期は完全には一致しない。",
+    "本研究は財務成長の予測だけを検証し、株価total returnは検証していない。",
+    "受注・受注残・会社guidanceの履歴はcanonical datasetで十分に揃っていないため、このrunでは推測補完していない。"
+  ],
+  "next_hypothesis": "前年売上成長率ではなく、各公表時点で利用可能な会社売上guidanceのYoY予想値またはrevisionが、翌年度の実売上成長率を単純な前年成長率より高精度に予測できるか。"
+}
