@@ -1,0 +1,75 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "amat_quarterly_revenue_guidance_accuracy_20260906",
+  "status": "CONDITION",
+  "hypothesis": "Applied Materialsの次四半期Revenue予測では、会社が決算時点で公表するRevenue guidance midpointを使う方が、直近四半期Revenue据え置きや直近2四半期平均より高精度である。",
+  "decision_rule": {
+    "use_if": "20完了四半期以上で、issuer guidanceが直近実績据え置きに70%以上勝ち、MAPEを30%以上削減し、worst-case errorも改善する。",
+    "condition_if": "10完了四半期以上で上記の方向が確認できるが、20四半期未満のためcycle跨ぎの再現性が不足する。Applied Materialsのquarterly valuation inputとしてのみ利用する。",
+    "reject_if": "issuer guidanceのMAPE改善が30%未満、勝率70%未満、またはworst-case errorがbenchmarkより悪化する。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "research_owner": "KAFKA2306/investor2",
+    "verification_as_of": "2026-09-06",
+    "issuer": "Applied Materials, Inc.",
+    "primary_source_system": "Applied Materials Investor Relations quarterly results and Business Outlook",
+    "source_urls": [
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-first-quarter-2024-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-second-quarter-2024-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-third-quarter-2024-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2024/",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-first-quarter-2025-results/",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-second-quarter-2025-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-third-quarter-2025-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-fourth-quarter-and-fiscal-year-2025/",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-first-quarter-2026-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-second-quarter-2026-results",
+      "https://ir.appliedmaterials.com/news-releases/news-release-details/applied-materials-announces-third-quarter-2026-results"
+    ],
+    "missing_value_policy": "各releaseで明示された次四半期Revenue guidance midpointと確定Revenueだけを使う。補間、forward fill、alternate-source fallbackはしない。Q4 FY2026は未確定のため評価対象外。"
+  },
+  "method": {
+    "period": "Q2 FY2024 through Q3 FY2026, 10 completed quarterly forecasts",
+    "target": "次四半期確定Revenue",
+    "primary_model": "issuer Revenue guidance midpoint",
+    "benchmark": "guidance公表時点の直近四半期Revenueを次四半期予測として据え置く",
+    "alternative_simple_model": "直近2四半期Revenueの単純平均。Q3 FY2024以降の9観測で比較する。",
+    "look_ahead": "なし。各guidanceは前四半期決算release公表後のみ利用可能とする。",
+    "error_metric": "absolute percentage error of quarterly Revenue",
+    "purpose": "quarterly valuationでRevenueを古い実績のまま据え置く簡易法より、issuer自身のforward informationを利用する価値を測る。"
+  },
+  "measured_results": {
+    "observations": 10,
+    "issuer_guidance_mape_pct": 1.6216,
+    "stale_revenue_mape_pct": 4.7018,
+    "guidance_vs_stale_mape_reduction_pct": 65.5114,
+    "guidance_beats_stale_observations": 9,
+    "guidance_worse_observations": 1,
+    "issuer_guidance_worst_error_pct": 3.2870,
+    "stale_revenue_worst_error_pct": 13.2200,
+    "two_quarter_average_observations": 9,
+    "issuer_guidance_mape_on_two_quarter_comparable_sample_pct": 1.5577,
+    "two_quarter_average_mape_pct": 5.4955,
+    "guidance_vs_two_quarter_average_mape_reduction_pct": 71.6555,
+    "guidance_beats_two_quarter_average_observations": 7,
+    "detail": [
+      {"target_quarter":"Q2 FY2024","previous_revenue_musd":6707,"guidance_midpoint_musd":6500,"actual_revenue_musd":6646,"guidance_error_pct":2.1968,"stale_error_pct":0.9178},
+      {"target_quarter":"Q3 FY2024","previous_revenue_musd":6646,"guidance_midpoint_musd":6650,"actual_revenue_musd":6778,"guidance_error_pct":1.8885,"stale_error_pct":1.9475},
+      {"target_quarter":"Q4 FY2024","previous_revenue_musd":6778,"guidance_midpoint_musd":6930,"actual_revenue_musd":7045,"guidance_error_pct":1.6324,"stale_error_pct":3.7899},
+      {"target_quarter":"Q1 FY2025","previous_revenue_musd":7045,"guidance_midpoint_musd":7150,"actual_revenue_musd":7166,"guidance_error_pct":0.2233,"stale_error_pct":1.6885},
+      {"target_quarter":"Q2 FY2025","previous_revenue_musd":7166,"guidance_midpoint_musd":7100,"actual_revenue_musd":7100,"guidance_error_pct":0.0000,"stale_error_pct":0.9296},
+      {"target_quarter":"Q3 FY2025","previous_revenue_musd":7100,"guidance_midpoint_musd":7200,"actual_revenue_musd":7302,"guidance_error_pct":1.3969,"stale_error_pct":2.7664},
+      {"target_quarter":"Q4 FY2025","previous_revenue_musd":7302,"guidance_midpoint_musd":6700,"actual_revenue_musd":6800,"guidance_error_pct":1.4706,"stale_error_pct":7.3824},
+      {"target_quarter":"Q1 FY2026","previous_revenue_musd":6800,"guidance_midpoint_musd":6850,"actual_revenue_musd":7012,"guidance_error_pct":2.3103,"stale_error_pct":3.0234},
+      {"target_quarter":"Q2 FY2026","previous_revenue_musd":7012,"guidance_midpoint_musd":7650,"actual_revenue_musd":7910,"guidance_error_pct":3.2870,"stale_error_pct":11.3527},
+      {"target_quarter":"Q3 FY2026","previous_revenue_musd":7910,"guidance_midpoint_musd":8950,"actual_revenue_musd":9115,"guidance_error_pct":1.8102,"stale_error_pct":13.2200}
+    ]
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reusable_rule": "Applied Materialsのquarterly forward Revenueは、確認済みの会社Revenue guidance midpointがある場合、それを直近実績据え置きより優先する。予測誤差帯の参考値として直近10完了四半期のMAEではなくMAPE約1.62%を使い、20四半期以上へ更新するまで会社固有ルールとして扱う。",
+    "scope_limit": "Revenue forecast accuracyのみ。株価return、EPS surprise、他社への一般化は未検証。",
+    "next_validation": "Q4 FY2026確定後に11観測目を追加し、同じ判定基準で継続評価する。"
+  }
+}
