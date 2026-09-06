@@ -1,0 +1,88 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "japan_semiconductor_revenue_growth_persistence_20260906",
+  "status": "REJECT",
+  "hypothesis": "東京エレクトロン、アドバンテスト、DISCO、SCREEN Holdings、レーザーテックでは、前年の売上高成長率が高い会社ほど翌年度も高成長になり、前年成長率トップは翌年も5社平均を安定して上回るため、valuationの成長外挿や候補順位付けに使える。",
+  "decision_rule": {
+    "use_if": "共通5社で、年次cross-sectional Spearman rank correlationが5年中4年以上で正、前年成長率トップが翌年の5社平均を5年中4年以上上回り、30 company-yearのpooled Spearmanが0.20超かつleave-one-company-outで全て正。",
+    "reject_if": "上記のいずれかを満たさない。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "canonical_dataset": "data/financial_analysis/investor2/investor2-kioxia-semiconductor-universe-50-5y-quarterly.json",
+    "canonical_dataset_as_of": "2026-09-06",
+    "primary_source_system": "EDINET annual securities reports / XBRL",
+    "companies": [
+      {"name": "東京エレクトロン", "ticker": "8035", "edinet_code": "E02652", "filings": ["S100IVX0", "S100LJ5R", "S100OA3X", "S100QYR0", "S100TM39", "S100VX9R", "S100YEOO"]},
+      {"name": "アドバンテスト", "ticker": "6857", "edinet_code": "E01950", "filings": ["S100ITQK", "S100LOF7", "S100OCWZ", "S100R218", "S100TTJ3", "S100W4E8", "S100YKTA"]},
+      {"name": "DISCO", "ticker": "6146", "edinet_code": "E01506", "filings": ["S100IW9J", "S100LQKR", "S100OJ7R", "S100R389", "S100TNLG", "S100W0JY", "S100YC6I"]},
+      {"name": "SCREEN Holdings", "ticker": "7735", "edinet_code": "E02288", "filings": ["S100IWBK", "S100LLOH", "S100OCWL", "S100R3O2", "S100TQ8N", "S100VZW3", "S100YK9N"]},
+      {"name": "レーザーテック", "ticker": "6920", "edinet_code": "E01991", "filings": ["S100JRT9", "S100MI7Y", "S100P96S", "S100RWZQ", "S100UFKD", "S100WQ7F"]}
+    ],
+    "market_return_note": "EDINETのtotalShareholderReturnは1年先リターンとしてperiod identityを確認できないため、本研究のforward returnには使用しない。売買ルールのreturn検証はUNVERIFIEDのまま残し、誤ったperiod変換をしない。"
+  },
+  "method": {
+    "signal": "各社の年次売上高YoY成長率",
+    "target": "同一企業の翌年度売上高YoY成長率",
+    "pooled_observations": 30,
+    "common_cross_section_signal_years": [2020, 2021, 2022, 2023, 2024],
+    "tests": ["pooled Spearman", "年次cross-sectional Spearman", "前年成長率トップの翌年成長率 vs 5社平均", "leave-one-company-out", "company-by-company Spearman"]
+  },
+  "measured_results": {
+    "pooled_spearman": 0.171969,
+    "pooled_spearman_p_value": 0.363517,
+    "pooled_pearson": 0.139998,
+    "cross_sectional_spearman_by_signal_year": {
+      "2020": 0.5,
+      "2021": 0.3,
+      "2022": -0.4,
+      "2023": 0.6,
+      "2024": -0.9
+    },
+    "cross_sectional_spearman_mean": 0.02,
+    "positive_cross_sectional_years": 3,
+    "winner_outperformed_peer_average_years": 2,
+    "winner_test_years": 5,
+    "winner_median_next_year_growth_premium_percentage_points": -5.8497,
+    "winner_next_year_average_rank_out_of_5": 3.2,
+    "winner_detail": [
+      {"signal_year": 2020, "winner": "レーザーテック", "next_year_growth_percent": 65.0099, "peer_average_percent": 26.2398, "premium_pp": 38.7700, "next_year_rank": 1},
+      {"signal_year": 2021, "winner": "レーザーテック", "next_year_growth_percent": 28.6556, "peer_average_percent": 34.5053, "premium_pp": -5.8497, "next_year_rank": 4},
+      {"signal_year": 2022, "winner": "東京エレクトロン", "next_year_growth_percent": 10.2415, "peer_average_percent": 27.5130, "premium_pp": -17.2715, "next_year_rank": 5},
+      {"signal_year": 2023, "winner": "レーザーテック", "next_year_growth_percent": 39.6998, "peer_average_percent": 5.4440, "premium_pp": 34.2558, "next_year_rank": 1},
+      {"signal_year": 2024, "winner": "レーザーテック", "next_year_growth_percent": 17.7845, "peer_average_percent": 32.5211, "premium_pp": -14.7366, "next_year_rank": 5}
+    ],
+    "within_company_spearman": {
+      "東京エレクトロン": -0.314286,
+      "アドバンテスト": -0.2,
+      "DISCO": -0.085714,
+      "SCREEN Holdings": -0.2,
+      "レーザーテック": -0.485714
+    },
+    "leave_one_company_out_pooled_spearman": {
+      "exclude_東京エレクトロン": 0.2783,
+      "exclude_アドバンテスト": 0.2339,
+      "exclude_DISCO": 0.2174,
+      "exclude_SCREEN_Holdings": 0.1165,
+      "exclude_レーザーテック": -0.1174
+    }
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "5社の翌年度売上高成長率平均、および順位情報を使わない単純比較",
+    "alternative": "前年成長率トップを翌年も高成長とみなす単純外挿",
+    "result": "トップ外挿は5年中2年しか5社平均を上回らず、年次rank correlation平均は0.02。pooledの弱い正相関もレーザーテックを除くと負へ反転し、各社内では5社すべて負相関だった。"
+  },
+  "finding": {
+    "summary": "日本の主要半導体製造装置5社では、単年度の売上高成長率順位を翌年へ外挿する根拠は弱い。pooled Spearman 0.172は有意でなく、年次cross-sectional相関は+0.5,+0.3,-0.4,+0.6,-0.9と不安定、前年トップの翌年勝率は2/5。各社内の相関は全5社で負であり、単純な成長継続よりmean reversion/cycleを無視しない方が妥当。",
+    "scope": "売上高成長そのものの価値や各社の株式価値を棄却しない。前年の単年売上成長率だけをforward growth assumptionまたはcross-sectional ranking signalとして使うことを棄却する。",
+    "production_action": "revenue-growth winner signal、portfolio weight rule、valuation growth defaultへ追加しない。"
+  },
+  "reusable_decision": "半導体企業のvaluationでは直近1年の売上成長率を翌年へ自動外挿しない。少なくとも複数年成長、受注/受注残、会社guidance、margin、valuationをpoint-in-timeで併用し、単年成長率単独の順位付けはbenchmarkに留める。",
+  "limitations": [
+    "5社・5共通年のcross-sectional検証で標本は小さい。",
+    "各社の決算期は完全には一致しないため、同一マクロ暦年の比較ではない。",
+    "EDINET annual filingで確認できる実績のみを使い、会社guidanceや受注残は今回のsignalへ含めていない。",
+    "株式のforward returnはcanonicalな1年total-return系列を本runで確保できなかったためUNVERIFIEDで、財務signalの反証を株価リターンへ読み替えない。"
+  ],
+  "next_hypothesis": "前年売上成長率ではなく、各公表時点で利用可能な受注/受注残のYoY変化と会社売上guidance revisionを組み合わせた単純signalは、翌年度の実売上成長率を5社横断でout-of-sampleに予測できるか。"
+}
