@@ -1,47 +1,31 @@
 ---
 name: cache
-description: Use for reusable external-data retrieval, cache reuse, provenance capture, and snapshot auditing.
+description: Use for reusable external-data snapshot lookup, refresh, and provenance registration.
 origin: local-git-analysis
 ---
 
 # Reusable External Data
 
-Use the repository's canonical snapshot and input-ledger contracts instead of inventing cache paths, cache schemas, or ad-hoc refresh commands.
+Use the repository snapshot store before fetching a reusable external dataset again.
 
-## Rules
+## Flow
 
-1. Reuse a sufficiently fresh accepted snapshot before refetching the same dataset.
-2. For reusable external data, preserve source identity, operation/query scope, retrieval time, information cutoff, primary-source URLs, schema version, record count, and content hash where required.
-3. Keep observed facts, derived values, and assumptions distinct.
-4. Do not invent missing values or silently substitute another source when the requested source is unavailable.
-5. Materialize reusable results and register them through the canonical snapshot/ledger path when persistence is in scope.
-6. Fail closed on missing provenance, missing artifacts, hash mismatch, disabled/unregistered sources, or incompatible schema.
+1. Resolve the newest accepted snapshot for the reuse key.
+2. Reuse it when it satisfies the caller's freshness requirement.
+3. Otherwise fetch through the source-specific repository path.
+4. Materialize the result and register its provenance and content hash.
+5. Audit the snapshot store before consumption.
 
-## Canonical commands
+## Commands
 
 ```bash
-task data:snapshots:audit
 task data:snapshots:latest REUSE_KEY=<reuse-key>
+task data:snapshots:audit
 ```
 
-Use the specific documented acquisition task for a source when a fresh fetch is required, for example `task jquants:fetch:latest` or `task edinet:fetch:all`. Do not assume undocumented aliases such as `data:sync` or `cache:inspect` exist.
+Source-specific acquisition commands remain in `Taskfile.yml`.
 
-## Canonical flow
-
-```text
-resolve accepted snapshot
-  -> reuse if sufficiently fresh
-  -> otherwise fetch from the intended source
-  -> normalize without inventing missing values
-  -> materialize reusable data
-  -> register provenance + hash
-  -> audit
-  -> consume registered artifact
-```
-
-## Canonical references
+## Reference
 
 - `docs/specs/external_snapshot_store.md`
 - `data/input_ledger/`
-- `Taskfile.yml`
-- `AGENTS.md`
