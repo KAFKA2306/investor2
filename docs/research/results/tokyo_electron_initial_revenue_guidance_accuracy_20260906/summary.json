@@ -1,0 +1,100 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "tokyo_electron_initial_revenue_guidance_accuracy_20260906",
+  "status": "CONDITION",
+  "hypothesis": "東京エレクトロンの年度初め売上高guidanceは、前年実績をそのまま翌年予想に使う単純benchmarkより、翌年度の実売上高と増減方向を高精度に予測できる。",
+  "decision_rule": {
+    "use_if": "FY2023-FY2026の完了4年度で、年度初めguidanceが実績の増減方向を4/4で当て、実績に対する平均絶対誤差率が前年実績据え置きbenchmarkより低く、かつ各年の誤差が15%未満。",
+    "condition_if": "use_ifを満たすが、完了年度が4年以下、または少なくとも1年度で単純benchmarkに劣後する。",
+    "reject_if": "増減方向が3/4以下、または平均絶対誤差率が単純benchmark以上。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_research": "docs/research/results/japan_semiconductor_revenue_growth_contrarian_20260906/summary.json",
+    "verification_as_of": "2026-09-06",
+    "issuer": "Tokyo Electron Ltd.",
+    "primary_source_system": "Tokyo Electron Investor Relations annual financial announcement presentations and transcripts",
+    "source_urls": [
+      "https://www.tel.com/ir/library/report/hq95qj00000007nc-att/fy22q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/a4fd9v000000004h-att/fy23q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/ll4pka00000000l9-att/fy24q4presentations-e.pdf",
+      "https://www.tel.com/ir/irta3a00000006g5-att/fy25q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/pjuomj00000000tf-att/fy26q4presentations-e.pdf"
+    ],
+    "missing_value_policy": "欠損を推測補完しない。FY2027は通期guidance開示方式が変更され、完了年度でもないため判定対象外。"
+  },
+  "method": {
+    "signal": "各年度の前年度通期決算発表時に会社が公表した翌年度初回の通期売上高guidance",
+    "target": "同じ年度の確定通期売上高実績",
+    "benchmark": "前年通期売上高実績を翌年度予想値とするno-growth forecast",
+    "alternative": "前年売上高成長率の単純外挿。前研究でREJECT済みのため、本研究では追加parameterを作らずno-growthを主要benchmarkとする。",
+    "period": "FY2023-FY2026 completed fiscal years",
+    "look_ahead": "なし。各年度開始前後に公表された最初の通期guidanceだけを固定し、後続revisionを使わない。",
+    "error_metric": "absolute percentage error relative to actual net sales"
+  },
+  "measured_results": {
+    "direction_accuracy": 1.0,
+    "direction_correct_years": 4,
+    "test_years": 4,
+    "guidance_mean_absolute_error_pct": 7.3594,
+    "naive_prior_year_mean_absolute_error_pct": 13.7934,
+    "guidance_mae_improvement_pct": 46.6452,
+    "guidance_better_than_naive_years": 3,
+    "detail": [
+      {
+        "fiscal_year": "FY2023",
+        "prior_year_actual_billion_yen": 2003.8,
+        "initial_guidance_billion_yen": 2350.0,
+        "actual_billion_yen": 2209.0,
+        "guidance_error_pct_of_actual": -6.3830,
+        "guidance_absolute_error_pct_of_actual": 6.3830,
+        "naive_prior_year_absolute_error_pct_of_actual": 9.2893,
+        "direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2024",
+        "prior_year_actual_billion_yen": 2209.0,
+        "initial_guidance_billion_yen": 1700.0,
+        "actual_billion_yen": 1830.527,
+        "guidance_error_pct_of_actual": 7.1306,
+        "guidance_absolute_error_pct_of_actual": 7.1306,
+        "naive_prior_year_absolute_error_pct_of_actual": 20.6756,
+        "direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2025",
+        "prior_year_actual_billion_yen": 1830.527,
+        "initial_guidance_billion_yen": 2200.0,
+        "actual_billion_yen": 2431.5,
+        "guidance_error_pct_of_actual": 9.5209,
+        "guidance_absolute_error_pct_of_actual": 9.5209,
+        "naive_prior_year_absolute_error_pct_of_actual": 24.7161,
+        "direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2026",
+        "prior_year_actual_billion_yen": 2431.5,
+        "initial_guidance_billion_yen": 2600.0,
+        "actual_billion_yen": 2443.533,
+        "guidance_error_pct_of_actual": -6.4033,
+        "guidance_absolute_error_pct_of_actual": 6.4033,
+        "naive_prior_year_absolute_error_pct_of_actual": 0.4924,
+        "direction_correct": true
+      }
+    ]
+  },
+  "finding": {
+    "summary": "東京エレクトロンの年度初め通期売上高guidanceはFY2023-FY2026で増減方向を4/4で当て、平均絶対誤差率7.36%で前年実績据え置きbenchmarkの13.79%を約46.6%改善した。一方FY2026では前年実績据え置きの誤差0.49%に対してguidanceは6.40%で劣後したため、guidanceを絶対値authorityとしては扱わない。",
+    "scope": "東京エレクトロンの短い4年度標本で、年度初めguidanceが前年実績だけより情報量を持つことを支持する。日本半導体装置全社への一般化や株価return予測はしない。",
+    "production_action": "valuationやforward revenue estimateでは東京エレクトロンの会社guidanceを前年成長率外挿より優先する候補情報とするが、単独の確定値として使わず、guidance error bandとrevision履歴を併記する。"
+  },
+  "reusable_decision": "東京エレクトロンでは、単純な前年成長率momentum/contrarianより年度初め会社guidanceをforward revenue assumptionの第一候補にする。ただし4年度の平均絶対誤差率約7.36%を考慮し、point estimateではなく誤差帯付きで利用する。",
+  "limitations": [
+    "完了年度はFY2023-FY2026の4件だけで標本が小さい。",
+    "FY2026では前年実績据え置きbenchmarkの方が大幅に正確だった。",
+    "初回guidanceだけを使っており、Q1/Q2/Q3のrevisionに追加予測力があるかは未検証。",
+    "売上高予測の精度を検証したもので、EPS、Free Cash Flow、株価total returnは検証していない。",
+    "FY2027から東京エレクトロンは通期forecastから該当半期forecast中心へ開示方式を変更したため、同じcontractをそのまま延長できない。"
+  ],
+  "next_hypothesis": "東京エレクトロンのQ1/Q2/Q3売上高guidance revisionは、初回guidanceより通期実績誤差を一貫して縮小し、revision方向自体が翌決算までの業績surpriseを予測するか。"
+}
