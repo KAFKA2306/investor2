@@ -1,0 +1,53 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gold_bil_blended_sleeve_20260906",
+  "status": "CONDITION",
+  "hypothesis": "SMH60%/GLD20%/BIL20%は、SMH80%/GLD20%またはSMH80%/BIL20%の単一防御sleeveより、10bp月次リバランスコスト込みで長期Sharpe・Maximum Drawdown・95% Expected Shortfallを改善し、年次Sharpeでも大半の年で上回る。",
+  "decision_rule": {
+    "use_if": "2020-07から2026-08の73月次returnで60/20/20が80/20 GLDと80/20 BILの双方よりSharpeが高く、Maximum Drawdownと95% Expected Shortfallが良好で、2021-2026の6期間中5期間以上で両単一sleeveのSharpe以上。",
+    "reject_if": "全期間のSharpe・Maximum Drawdown・95% Expected Shortfallのいずれかで単一sleeveに劣る、または年次優位が6期間中4期間以下。"
+  },
+  "canonical_source": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+  "source_identity": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "symbols": ["SMH", "GLD", "BIL"],
+    "period": "2020-07 through 2026-08",
+    "monthly_returns": 73,
+    "currency": "USD",
+    "fallback": "none"
+  },
+  "method": {
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "benchmark_comparison": {
+    "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343},
+    "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161}
+  },
+  "yearly_sharpe": {
+    "2021": {"blend": 2.42560088, "GLD_sleeve": 2.47080730, "BIL_sleeve": 2.49027037, "beats_both": false},
+    "2022": {"blend": -0.71732494, "GLD_sleeve": -0.73570196, "BIL_sleeve": -0.75267859, "beats_both": true},
+    "2023": {"blend": 2.03474708, "GLD_sleeve": 1.98551532, "BIL_sleeve": 2.00769949, "beats_both": true},
+    "2024": {"blend": 2.11276657, "GLD_sleeve": 1.93522863, "BIL_sleeve": 1.67429080, "beats_both": true},
+    "2025": {"blend": 2.32723727, "GLD_sleeve": 2.10647874, "BIL_sleeve": 1.62495630, "beats_both": true},
+    "2026": {"blend": 1.53635201, "GLD_sleeve": 1.51492246, "BIL_sleeve": 1.50773339, "beats_both": true}
+  },
+  "finding": {
+    "summary": "60/20/20は全73か月で両80/20 benchmarkよりSharpeが高く、Maximum Drawdownと95% Expected Shortfallも明確に改善した。年次Sharpeは6期間中5期間で両benchmarkを上回ったが、2021年は両方に劣った。",
+    "tradeoff": "CAGRは26.68%でGLD sleeveの33.67%、BIL sleeveの30.82%を下回るため、return最大化ではなくrisk-adjusted returnとtail-risk削減を優先する場合の候補に限定する。",
+    "production_action": "固定portfolio weight authorityへは追加しない。半導体集中portfolioの防御benchmarkとして再利用する。"
+  },
+  "reusable_decision": "半導体集中リスクを下げる比較では、GLD20%またはBIL20%の二者択一だけでなく、GLD20%+BIL20%を含む60/20/20を標準benchmarkに加える。",
+  "limitations": [
+    "開始点は2020年7月でCOVID-19急落そのものを含まない。",
+    "73月次returnであり、独立した長期out-of-sampleではない。",
+    "CAGRは両80/20 benchmarkより低く、期待return最大化の根拠には使えない。",
+    "Sharpeは比較目的でrisk-free rate 0%。"
+  ],
+  "next_hypothesis": "固定60/20/20の低いtail riskを維持しつつ期待returnを回復するため、半導体比率を市場volatilityまたはvaluationに応じて60-80%の範囲だけpoint-in-timeで調整する単純ruleは、固定60/20/20と固定80/20をwalk-forward・cost込みで上回るか。"
+}
