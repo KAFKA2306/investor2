@@ -1,0 +1,94 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gld_correlation_switch_20260907",
+  "status": "REJECT",
+  "hypothesis": "各月末までに観測可能なSMHとGLDの直近6か月相関が過去の相関中央値より低いときだけGLDを30%、それ以外は20%とする単純ルールは、固定SMH 80% / GLD 20%と固定SMH 70% / GLD 30%の両方を翌月walk-forward・取引コスト込みSharpeで上回り、Maximum Drawdownと95% Expected Shortfallも悪化させない。",
+  "decision_gate": {
+    "required": [
+      "dynamic Sharpe > fixed 80/20 Sharpe",
+      "dynamic Sharpe > fixed 70/30 Sharpe",
+      "dynamic Maximum Drawdown is no worse than both fixed allocations",
+      "dynamic 95% Expected Shortfall is no worse than both fixed allocations"
+    ],
+    "result": "FAIL: dynamic improved on fixed 80/20 but remained below fixed 70/30 on Sharpe, volatility, and Expected Shortfall."
+  },
+  "capital_allocation_relevance": "固定GLD 30%はtail riskを改善するが全局面のdefaultにはできず、SMH実現ボラティリティによる切替もREJECTだった。今回はGLDの分散効果そのものを事前相関で識別できるかを検証した。",
+  "canonical_data": {
+    "market_data": "Alpaca Market Data API / IEX monthly bars for SMH and GLD",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "market_query": {
+      "symbols": ["SMH", "GLD"],
+      "start": "2020-06-01",
+      "end": "2026-09-01",
+      "timeframe": "1Month",
+      "feed": "iex",
+      "currency": "USD"
+    },
+    "period_raw": "2020-07 through 2026-08",
+    "evaluation_period": "2022-02 through 2026-08",
+    "evaluation_months": 55,
+    "currency": "USD",
+    "smh_forward_split": {
+      "ex_date": "2023-05-05",
+      "ratio": "2:1"
+    },
+    "smh_cash_dividends": "2020-2025 Alpaca-confirmed cash dividends included in monthly total return",
+    "gld_cash_dividends": "none returned by the same Alpaca query",
+    "fallback": "none"
+  },
+  "point_in_time_method": {
+    "signal": "At month-end t, calculate Pearson correlation between the latest 6 completed monthly total returns of SMH and GLD.",
+    "threshold": "Compare current 6-month correlation with the expanding median of prior 6-month correlation observations available before month-end t. Require at least 12 prior correlation observations.",
+    "allocation_for_next_month": "correlation below prior expanding median => SMH 70% / GLD 30%; otherwise SMH 80% / GLD 20%",
+    "look_ahead": "none; signal at month-end t is applied only to month t+1",
+    "rebalance": "monthly fixed-weight rebalance",
+    "transaction_cost": "10 bp multiplied by two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0.0
+  },
+  "benchmarks": {
+    "fixed_80_20": "SMH 80% / GLD 20%",
+    "fixed_70_30": "SMH 70% / GLD 30%",
+    "alternative_reverse_rule": "correlation below prior median => SMH 80% / GLD 20%; otherwise SMH 70% / GLD 30%"
+  },
+  "results_10bp": {
+    "dynamic_low_corr_gold_30": {"cagr": 0.34482298220555574, "annualized_volatility": 0.27914514338207297, "sharpe": 1.2078767598874465, "maximum_drawdown": -0.26133376876863335, "expected_shortfall_95_monthly": -0.1326028670092211, "cumulative_return": 2.8879005191865383},
+    "fixed_80_20": {"cagr": 0.34624680618027726, "annualized_volatility": 0.28745247048129025, "sharpe": 1.1844193332477473, "maximum_drawdown": -0.27527793304098824, "expected_shortfall_95_monthly": -0.1326028670092211, "cumulative_return": 2.9068026844894495},
+    "fixed_70_30": {"cagr": 0.3349924144826655, "annualized_volatility": 0.2568994245666044, "sharpe": 1.2612799846813711, "maximum_drawdown": -0.2572643438782449, "expected_shortfall_95_monthly": -0.11722073954498097, "cumulative_return": 2.759336121015111},
+    "reverse_rule": {"cagr": 0.3356175356647233, "annualized_volatility": 0.2659467352879207, "sharpe": 1.2285078766654367, "maximum_drawdown": -0.2714875741197732, "expected_shortfall_95_monthly": -0.11866744960655191, "cumulative_return": 2.7674111180034044}
+  },
+  "signal_diagnostics": {
+    "months_gold_30": 25,
+    "months_gold_20": 30,
+    "allocation_switches": 9,
+    "rolling_24m_windows": 32,
+    "dynamic_sharpe_beats_fixed_80_20_windows": 31,
+    "dynamic_sharpe_beats_fixed_70_30_windows": 5,
+    "dynamic_sharpe_beats_both_fixed_windows": 5
+  },
+  "subperiod_sharpe_10bp": {
+    "2022-02_to_2022-12": {"dynamic": -0.5226792834395129, "fixed_80_20": -0.5081490387269731, "fixed_70_30": -0.48848783556140635, "reverse": -0.4746224129603445},
+    "2023-01_to_2024-12": {"dynamic": 2.027326048629892, "fixed_80_20": 1.957777605875202, "fixed_70_30": 2.034394357293212, "reverse": 1.952763402867182},
+    "2025-01_to_2026-08": {"dynamic": 1.7376200077132884, "fixed_80_20": 1.7249385910646995, "fixed_70_30": 1.863958505806033, "reverse": 1.8385216816029557}
+  },
+  "cost_sensitivity_sharpe": {
+    "0bp": {"dynamic": 1.2102003817749858, "fixed_80_20": 1.1855243940773375, "fixed_70_30": 1.26291480426846, "reverse": 1.2312206538134012},
+    "5bp": {"dynamic": 1.2090386267358946, "fixed_80_20": 1.1849718784116652, "fixed_70_30": 1.2620974241561533, "reverse": 1.2298644227294675},
+    "10bp": {"dynamic": 1.2078767598874465, "fixed_80_20": 1.1844193332477473, "fixed_70_30": 1.2612799846813711, "reverse": 1.2285078766654367},
+    "20bp": {"dynamic": 1.2055526929704843, "fixed_80_20": 1.1833141545065662, "fixed_70_30": 1.259644927915109, "reverse": 1.2257938436881255}
+  },
+  "decision": "直近6か月のSMH/GLD相関が過去中央値より低いときにGLDを20%から30%へ増やすこの単純ルールは採用しない。固定80/20よりSharpeとMaximum Drawdownを改善したが、固定70/30よりSharpeが低く、24か月rollingでも両固定配分を上回ったのは5/32窓だけだった。",
+  "implementation": {
+    "portfolio_rule_added": false,
+    "optimizer_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "one_off_script_added": false,
+    "negative_evidence_only": true
+  },
+  "remaining_uncertainty": [
+    "評価開始は12個の過去相関観測を確保できる2022-02で、2008年金融危機やCOVID-19急落そのものは含まない。",
+    "6か月相関とprior expanding medianという事前固定の単純仕様のみを検証し、lookbackや閾値を後付け最適化していない。",
+    "月次IEX barとcash dividendによるtotal-return再現で、ETF provider公式total-return indexではない。"
+  ],
+  "next_hypothesis": "動的な20%/30%切替をさらに調整せず、SMHとGLDの固定70/30が固定80/20より強かった理由が金価格上昇そのものか分散効果かを分解するため、GLD excess returnを除いたvolatility-targeted comparisonでも70/30のtail-risk優位が残るか。"
+}
