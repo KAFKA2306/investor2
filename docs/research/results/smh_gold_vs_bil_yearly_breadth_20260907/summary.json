@@ -1,0 +1,71 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gold_vs_bil_yearly_breadth_20260907",
+  "status": "REJECT",
+  "hypothesis": "SMH80%/GLD20%のSMH80%/BIL20%に対するSharpe優位は、2021-2026の各年に広く分散しており、特定の少数年に依存しない。",
+  "decision_gate": {
+    "use_if": "2021-2026の6年中5年以上でGLD sleeveの年次SharpeがBIL sleeve以上で、かつ上位2年のSharpe差寄与が年次Sharpe差合計の70%未満。",
+    "reject_if": "GLD sleeveの年次Sharpe優位が4年以下、または上位2年のSharpe差寄与が年次Sharpe差合計の70%以上。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "assets": ["SMH", "GLD", "BIL"],
+    "currency": "USD",
+    "period": "2020-08-01..2026-08-31",
+    "monthly_returns": 73,
+    "fallback": "none"
+  },
+  "method": {
+    "comparison": "same 80% SMH risky weight; compare annual Sharpe of 20% GLD versus 20% BIL",
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps": 10,
+    "risk_free_rate_for_sharpe": 0,
+    "lookahead": "none; decomposition of already validated realized annual outcomes",
+    "missing_data": "no interpolation, no forward fill, no alternate feed"
+  },
+  "full_period_context": {
+    "SMH80_GLD20": {"cagr": 0.33672534, "sharpe": 1.24337587, "maximum_drawdown": -0.34201565, "expected_shortfall_95": -0.12792343},
+    "SMH80_BIL20": {"cagr": 0.30817722, "sharpe": 1.17277618, "maximum_drawdown": -0.32749770, "expected_shortfall_95": -0.12476619}
+  },
+  "annual_sharpe_decomposition": {
+    "2021": {"GLD": 2.47080730, "BIL": 2.49027037, "GLD_minus_BIL": -0.01946307},
+    "2022": {"GLD": -0.73570196, "BIL": -0.75267859, "GLD_minus_BIL": 0.01697663},
+    "2023": {"GLD": 1.98551532, "BIL": 2.00769949, "GLD_minus_BIL": -0.02218417},
+    "2024": {"GLD": 1.93522863, "BIL": 1.67429080, "GLD_minus_BIL": 0.26093783},
+    "2025": {"GLD": 2.10647874, "BIL": 1.62495630, "GLD_minus_BIL": 0.48152244},
+    "2026": {"GLD": 1.51492246, "BIL": 1.50773339, "GLD_minus_BIL": 0.00718907}
+  },
+  "breadth_results": {
+    "GLD_beats_BIL_years": 4,
+    "total_years": 6,
+    "win_rate": 0.66666667,
+    "sum_annual_sharpe_differences": 0.72497873,
+    "2024_2025_sharpe_difference_sum": 0.74246027,
+    "2024_2025_share_of_signed_sum": 1.02411318,
+    "other_four_years_net_sharpe_difference": -0.01748154
+  },
+  "interpretation": {
+    "observed": "GLD sleeveは6年中4年でBIL sleeveの年次Sharpeを上回ったが、2024年と2025年を除く4年のSharpe差は合計で-0.0175だった。2024年と2025年のSharpe差合計0.7425は、6年の符号付きSharpe差合計0.7250を上回る。",
+    "inference": "全期間SharpeのGLD優位を、複数年に広く再現した安定的な防御優位とは扱えない。優位の大半は2024-2025に集中しており、少なくともこの73か月ではregime concentrationが大きい。",
+    "capital_allocation_implication": "GLD20%をBIL20%より恒久的に優先する根拠としてfull-period Sharpeだけを使わない。年次breadthとtail-riskを併記し、GLD期待returnの強い局面依存を前提に扱う。"
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "事前REJECT条件を満たした。GLDの年次Sharpe優位は4/6年に留まり、2024-2025の2年だけで年次Sharpe差の符号付き合計の102.4%を占めた。残る4年は合計でBILにわずかに劣後した。",
+    "scope": "GLD sleeve自体を棄却しない。棄却するのは、2020-2026のfull-period Sharpe優位を時期に依存しない安定的優位と解釈すること。"
+  },
+  "implementation": {
+    "reusable_decision": "半導体集中portfolioのdefensive sleeve比較では、full-period Sharpeに加え、年次Sharpe勝率と上位2年への寄与集中を必ず確認する。",
+    "do_not_add": ["GLD20% permanent preference over BIL20%", "dynamic gold switch", "new optimizer", "duplicate market-data collector"]
+  },
+  "remaining_uncertainty": [
+    "年次Sharpeは6観測年で標本が小さい。",
+    "2026年は1-8月の部分年で、完全な12か月ではない。",
+    "開始点は2020年7月で2008年金融危機などを含まない。",
+    "年次Sharpe差の単純合計はfull-period Sharpeの厳密な加法分解ではなく、breadthと集中度の診断である。"
+  ],
+  "next_high_value_hypothesis": "GLDの優位が2024-2025に集中した原因を、当時点で観測可能な実質金利やインフレ期待に依存せず、GLD自身の過去12か月relative momentumだけでpoint-in-timeに識別できるか。固定GLD20%、固定BIL20%をwalk-forward・10bp cost込みで上回らなければ動的sleeve選択をREJECTする。"
+}
