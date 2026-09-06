@@ -1,0 +1,69 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gold_sleeve_long_horizon_20260906",
+  "status": "REJECT",
+  "hypothesis": "2020年7月以降の長期実データでも、SMH80%/GLD20%はSMH80%/BIL20%を10bpの月次リバランスコスト込みでSharpe、Maximum Drawdown、95% Expected Shortfallのすべてで上回り、年次でも優位が安定する。",
+  "decision_rule": {
+    "use_if": "全73月次returnでSMH80/GLD20がSMH80/BIL20よりSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化せず、2021-2026の各年でSharpeがbenchmark以上。",
+    "reject_if": "全期間のMaximum Drawdownまたは95% Expected ShortfallがBIL sleeveより悪い、またはいずれかの通年でSharpeがBIL sleeveを下回る。"
+  },
+  "source": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "market_query": {
+      "symbols": ["SMH", "GLD", "BIL"],
+      "start": "2020-06-01",
+      "end": "2026-09-01",
+      "timeframe": "1Month",
+      "feed": "iex",
+      "currency": "USD"
+    },
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "corporate_action_query": {
+      "types": ["cash_dividend", "forward_split", "reverse_split"],
+      "start": "2020-06-01",
+      "end": "2026-09-01",
+      "symbols": ["SMH", "GLD", "BIL"]
+    },
+    "data_period": "2020-07 through 2026-08 month-end bars; 2026-09 incomplete bar excluded",
+    "observations": {"monthly_prices": 74, "monthly_returns": 73},
+    "fallback": "none",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05 applied to May 2023 holding-period return",
+    "dividend_method": "cash dividends with ex-date in month added to month-end holding-period return; month-end reinvestment approximation"
+  },
+  "method": {
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "annualization": 12,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "full_period_metrics": {
+    "SMH": {"CAGR": 0.37530837, "Vol": 0.32365256, "Sharpe": 1.15208655, "MaxDD": -0.39971504, "ES95": -0.15631567, "Cum": 5.94918486, "n": 73.0},
+    "80GLD": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343, "Cum": 4.84462433, "n": 73.0},
+    "80BIL": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.3274977, "ES95": -0.12476619, "Cum": 4.1253285, "n": 73.0},
+    "60_20_20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161, "Cum": 3.21548194, "n": 73.0}
+  },
+  "yearly_sharpe": {
+    "2021": {"SMH": 2.49296337, "80GLD": 2.4708073, "80BIL": 2.49027037, "60_20_20": 2.42560088},
+    "2022": {"SMH": -0.75981329, "80GLD": -0.73570196, "80BIL": -0.75267859, "60_20_20": -0.71732494},
+    "2023": {"SMH": 1.96906816, "80GLD": 1.98551532, "80BIL": 2.00769949, "60_20_20": 2.03474708},
+    "2024": {"SMH": 1.61813209, "80GLD": 1.93522863, "80BIL": 1.6742908, "60_20_20": 2.11276657},
+    "2025": {"SMH": 1.58955102, "80GLD": 2.10647874, "80BIL": 1.6249563, "60_20_20": 2.32723727},
+    "2026": {"SMH": 1.49195134, "80GLD": 1.51492246, "80BIL": 1.50773339, "60_20_20": 1.53635201}
+  },
+  "return_correlations": {"SMH_GLD": 0.05335656, "SMH_BIL": 0.09585265, "GLD_BIL": 0.23212875},
+  "finding": {
+    "summary": "GLD 20%はSMH単独より全期間Sharpeとdrawdownを改善したが、短期米国債BIL 20%に対してはSharpe/CAGRは高い一方、Maximum Drawdownと95% Expected Shortfallが悪く、年次Sharpeも2021年と2023年でBIL sleeveを下回った。したがって『金20%が短期債20%を長期・全リスク指標で安定して上回る』仮説は棄却する。",
+    "scope": "gold sleeve自体を棄却しない。SMH単独に対する分散候補としては維持するが、tail-risk controlの恒久的な最適sleeveとは扱わない。",
+    "production_action": "portfolio weight authorityへ追加しない"
+  },
+  "reusable_decision": "半導体集中リスクの20% sleeveはGLDを自動採用せず、GLDと短期米国債を少なくとも並列benchmarkとして評価する。",
+  "limitations": [
+    "開始点は2020年7月でCOVID-19急落そのものを含まない。",
+    "Alpaca IEX monthly barsとCorporate Actionsを用いた月末再投資近似で、税・bid-ask spread・実際の再投資日は含まない。",
+    "BILはSGOVより長い実測期間を得るための0-3 month Treasury ETF proxyであり、既存24か月研究のSGOVと同一商品ではない。",
+    "Sharpeは比較目的でrisk-free rate 0%。"
+  ],
+  "next_hypothesis": "金と短期米国債を固定配分で競わせるのではなく、各時点で公表済みの米国実質金利の水準・変化を使って20% sleeveをGLD/BIL間で切り替える単純point-in-time ruleは、固定GLD20%、固定BIL20%、SMH100%を長期walk-forward・10bp cost込みrisk-adjusted指標で上回るか。"
+}
