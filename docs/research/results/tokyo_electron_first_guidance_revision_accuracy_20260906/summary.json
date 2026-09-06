@@ -1,0 +1,111 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "tokyo_electron_first_guidance_revision_accuracy_20260906",
+  "status": "CONDITION",
+  "hypothesis": "東京エレクトロンの通期売上高guidanceの最初のrevisionは、年度初めguidanceより最終通期売上高の予測誤差を一貫して縮小し、revision方向も最終着地の方向を示す。",
+  "decision_rule": {
+    "use_if": "FY2023-FY2026の完了4年度すべてで最初のrevisionが初回guidanceより絶対誤差率を縮小し、平均絶対誤差率も改善し、revision方向が4/4で最終実績の初回guidanceからの乖離方向と一致する。",
+    "condition_if": "use_ifを満たすが完了年度が4年以下のため、単独の確定値authorityにはせずvaluationの更新入力として利用する。",
+    "reject_if": "誤差改善が3/4年度以下、または平均絶対誤差率が初回guidance以上。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_research": "docs/research/results/tokyo_electron_initial_revenue_guidance_accuracy_20260906/summary.json",
+    "verification_as_of": "2026-09-06",
+    "issuer": "Tokyo Electron Ltd.",
+    "primary_source_system": "Tokyo Electron Investor Relations financial announcement presentations and transcripts",
+    "source_urls": [
+      "https://www.tel.com/ir/library/report/hq95qj00000007ih-att/fy23q2presentations-e_2.pdf",
+      "https://www.tel.com/ir/library/report/plgm7r000000003e-att/fy24q2presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/tpc8u500000000s3-att/fy25q1presentations-e.pdf",
+      "https://www.tel.com/ir/irta3a00000006g5-att/fy26q1transcript-e.pdf",
+      "https://www.tel.com/ir/library/report/hq95qj00000007nc-att/fy22q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/a4fd9v000000004h-att/fy23q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/ll4pka00000000l9-att/fy24q4presentations-e.pdf",
+      "https://www.tel.com/ir/irta3a00000006g5-att/fy25q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/pjuomj00000000tf-att/fy26q4presentations-e.pdf"
+    ],
+    "missing_value_policy": "Q1で通期売上高guidanceが変更されなかった年度は、実際に最初に変更された決算時点をfirst revisionとする。欠損や未確認revisionを推測しない。FY2027は通期forecast開示方式が変更されたため対象外。"
+  },
+  "method": {
+    "signal": "各年度の年度初め通期売上高guidanceから最初に変更された通期売上高guidance",
+    "target": "同じ年度の確定通期売上高実績",
+    "benchmark": "年度初め通期売上高guidance",
+    "alternative": "前年実績据え置きforecast。前研究で初回guidanceが平均的に優位と確認済みのため、本研究ではrevisionの追加情報量を主要比較とする。",
+    "period": "FY2023-FY2026 completed fiscal years",
+    "look_ahead": "なし。各revisionは当該決算公表日以後のみ利用可能として扱う。",
+    "error_metric": "absolute percentage error relative to actual net sales"
+  },
+  "measured_results": {
+    "test_years": 4,
+    "revision_improved_error_years": 4,
+    "revision_direction_correct_years": 4,
+    "revision_direction_accuracy": 1.0,
+    "initial_guidance_mean_absolute_error_pct": 7.3591,
+    "first_revision_mean_absolute_error_pct": 4.9152,
+    "mae_reduction_pct": 33.2097,
+    "detail": [
+      {
+        "fiscal_year": "FY2023",
+        "initial_guidance_billion_yen": 2350.0,
+        "first_revision_billion_yen": 2100.0,
+        "first_revision_timing": "Q2 FY2023, 2022-11-10",
+        "actual_billion_yen": 2209.0,
+        "initial_absolute_error_pct": 6.3830,
+        "first_revision_absolute_error_pct": 4.9344,
+        "error_improvement_points": 1.4486,
+        "revision_billion_yen": -250.0,
+        "revision_direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2024",
+        "initial_guidance_billion_yen": 1700.0,
+        "first_revision_billion_yen": 1730.0,
+        "first_revision_timing": "Q2 FY2024, 2023-11-10",
+        "actual_billion_yen": 1830.527,
+        "initial_absolute_error_pct": 7.1306,
+        "first_revision_absolute_error_pct": 5.4911,
+        "error_improvement_points": 1.6395,
+        "revision_billion_yen": 30.0,
+        "revision_direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2025",
+        "initial_guidance_billion_yen": 2200.0,
+        "first_revision_billion_yen": 2300.0,
+        "first_revision_timing": "Q1 FY2025, 2024-08-08",
+        "actual_billion_yen": 2431.5,
+        "initial_absolute_error_pct": 9.5209,
+        "first_revision_absolute_error_pct": 5.4082,
+        "error_improvement_points": 4.1127,
+        "revision_billion_yen": 100.0,
+        "revision_direction_correct": true
+      },
+      {
+        "fiscal_year": "FY2026",
+        "initial_guidance_billion_yen": 2600.0,
+        "first_revision_billion_yen": 2350.0,
+        "first_revision_timing": "Q1 FY2026, 2025-07-31",
+        "actual_billion_yen": 2443.533,
+        "initial_absolute_error_pct": 6.4033,
+        "first_revision_absolute_error_pct": 3.8278,
+        "error_improvement_points": 2.5755,
+        "revision_billion_yen": -250.0,
+        "revision_direction_correct": true
+      }
+    ]
+  },
+  "finding": {
+    "summary": "FY2023-FY2026では最初の通期売上高guidance revisionが4/4年度で初回guidanceより最終実績誤差を縮小した。平均絶対誤差率は7.36%から4.92%へ約33.2%低下し、上方・下方revisionの方向も4/4で最終実績が初回guidanceから乖離した方向と一致した。",
+    "scope": "東京エレクトロンの4完了年度に限定した結果。revisionそのものを株価signalとして採用する根拠ではない。",
+    "production_action": "東京エレクトロンのforward revenue assumptionでは、初回guidanceを固定し続けず、確認済みの会社revisionが出た時点でcanonical valuation inputを更新する。ただし小標本のためhistorical error bandを残す。"
+  },
+  "reusable_decision": "東京エレクトロンでは、確認済みの最初の通期売上高guidance revisionを初回guidanceより優先してforward revenue estimateへ反映する。4年度のfirst-revision MAE約4.92%を誤差帯の参考値とし、未確認値や独自推計へfallbackしない。",
+  "limitations": [
+    "完了年度はFY2023-FY2026の4件だけで標本が小さい。",
+    "first revision以降のQ2/Q3 revisionを全年度同じ時点で比較した研究ではない。",
+    "売上高予測の精度を検証したもので、EPS、Free Cash Flow、株価total returnの反応は未検証。",
+    "FY2027から通期forecastではなく該当半期forecast中心へ開示方式が変わったため、このcontractをそのまま延長しない。"
+  ],
+  "next_hypothesis": "東京エレクトロンのguidance revision magnitudeを、その公表後の12か月total returnへpoint-in-timeで対応させると、revision方向・大きさはSMHまたはTOPIXを上回るrelative returnを予測するか。"
+}
