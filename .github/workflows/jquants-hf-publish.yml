@@ -109,9 +109,14 @@ jobs:
       - name: Record fail-closed publication boundary
         if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED != 'true'
         run: echo "J-Quants snapshot validated; HF publication blocked by default."
-      - name: Install Hugging Face CLI
+      - name: Install pinned Hugging Face CLI
         if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED == 'true'
-        run: curl -LsSf https://hf.co/cli/install.sh | bash
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m pip install "huggingface_hub==1.29.0"
+          python -c 'import huggingface_hub; assert huggingface_hub.__version__ == "1.29.0", huggingface_hub.__version__'
+          hf --help >/dev/null
       - name: Publish authorized snapshot with Hugging Face OIDC
         if: env.JQUANTS_EXTERNAL_DISTRIBUTION_ALLOWED == 'true'
         env:
