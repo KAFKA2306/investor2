@@ -1,0 +1,81 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_fcf_ranked_sleeve_20260906",
+  "status": "REJECT",
+  "as_of": "2026-09-06",
+  "hypothesis": "固定60%半導体株式sleeveの中で、各月末までに公表済みのFree Cash Flow前年同期比成長率が高い方をNVDA/AVGOから翌月60%保有し、GLD20%/BIL20%を維持するpoint-in-time ruleは、固定SMH60%/GLD20%/BIL20%とNVDA30%/AVGO30%/GLD20%/BIL20%の双方より10bpコスト込みCAGRとSharpeが高く、Maximum Drawdownと95% Expected Shortfallを悪化させない。",
+  "decision_rule": {
+    "use_if": "10bpコスト込みでFCF ranking portfolioが固定SMH60/20/20とNVDA/AVGO均等30/30/20/20の双方よりCAGRとSharpeが高く、Maximum Drawdownと95% Expected Shortfallも悪化しない。",
+    "reject_if": "CAGR、Sharpe、Maximum Drawdown、95% Expected Shortfallのいずれかで上記benchmarkのどちらかに劣る。"
+  },
+  "canonical_inputs": {
+    "fundamental_signal": "docs/research/results/nvda_avgo_fcf_growth_leader_20260906/summary.json",
+    "risk_budget_reference": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json"
+  },
+  "source_identity": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "symbols": ["NVDA", "AVGO", "SMH", "GLD", "BIL"],
+    "period": "2025-03 through 2026-08 month-end bars; 2025-04 through 2026-08 returns",
+    "monthly_returns": 17,
+    "currency": "USD",
+    "fallback": "none",
+    "missing_value_imputation": "none",
+    "dividend_method": "cash dividends with ex-date in month added to holding-period return; month-end reinvestment approximation",
+    "fundamental_timing": "各月のallocationは前月末までに公表済みの最新四半期Free Cash Flow前年同期比成長率だけで決定"
+  },
+  "method": {
+    "fcf_ranked_allocation": "leader 60%, GLD 20%, BIL 20%",
+    "benchmark_equal_weight": "NVDA 30%, AVGO 30%, GLD 20%, BIL 20%",
+    "benchmark_smh": "SMH 60%, GLD 20%, BIL 20%",
+    "alternative_nvda": "NVDA 60%, GLD 20%, BIL 20%",
+    "rebalance": "monthly",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute target-weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "annualization": 12,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "monthly_selection": {
+    "2025-04": "AVGO", "2025-05": "AVGO", "2025-06": "NVDA", "2025-07": "NVDA", "2025-08": "NVDA", "2025-09": "AVGO", "2025-10": "AVGO", "2025-11": "AVGO", "2025-12": "AVGO", "2026-01": "AVGO", "2026-02": "AVGO", "2026-03": "NVDA", "2026-04": "NVDA", "2026-05": "NVDA", "2026-06": "NVDA", "2026-07": "NVDA", "2026-08": "NVDA"
+  },
+  "center_result": {
+    "fcf_signal_60_20_20": {"CAGR": 0.59002067, "Vol": 0.22156893, "Sharpe": 2.23535241, "MaxDD": -0.11168887, "ES95": -0.07859145, "Cum": 0.92894832, "n": 17},
+    "nvda_avgo_equal_30_30_20_20": {"CAGR": 0.49758306, "Vol": 0.21342229, "Sharpe": 2.02112746, "MaxDD": -0.08486242, "ES95": -0.08486242, "Cum": 0.77202754, "n": 17},
+    "smh_60_20_20": {"CAGR": 0.63250809, "Vol": 0.23709568, "Sharpe": 2.21782645, "MaxDD": -0.10357734, "ES95": -0.10357734, "Cum": 1.00237341, "n": 17},
+    "nvda_60_20_20": {"CAGR": 0.45414094, "Vol": 0.19976253, "Sharpe": 1.99510945, "MaxDD": -0.06437709, "ES95": -0.06437709, "Cum": 0.69964888, "n": 17}
+  },
+  "time_split": {
+    "2025-04_to_2025-12": {
+      "fcf_signal_60_20_20": {"CAGR": 1.09413733, "Sharpe": 3.33300242, "MaxDD": -0.07859145, "ES95": -0.07859145},
+      "nvda_avgo_equal_30_30_20_20": {"CAGR": 0.87746319, "Sharpe": 3.60654819, "MaxDD": -0.02061351, "ES95": -0.02061351},
+      "smh_60_20_20": {"CAGR": 0.70177161, "Sharpe": 3.79709829, "MaxDD": -0.00619638, "ES95": -0.00619638}
+    },
+    "2026-01_to_2026-08": {
+      "fcf_signal_60_20_20": {"CAGR": 0.16640691, "Sharpe": 0.97975662, "MaxDD": -0.05404517, "ES95": -0.05404517},
+      "nvda_avgo_equal_30_30_20_20": {"CAGR": 0.16128239, "Sharpe": 0.74704127, "MaxDD": -0.08486242, "ES95": -0.08486242},
+      "smh_60_20_20": {"CAGR": 0.55795056, "Sharpe": 1.53635201, "MaxDD": -0.10357734, "ES95": -0.10357734}
+    }
+  },
+  "cost_sensitivity": {
+    "0bp": {"CAGR": 0.59460842, "Sharpe": 2.24732431, "MaxDD": -0.11044430, "ES95": -0.07856352},
+    "10bp": {"CAGR": 0.59002067, "Sharpe": 2.23535241, "MaxDD": -0.11168887, "ES95": -0.07859145},
+    "20bp": {"CAGR": 0.58544144, "Sharpe": 2.22324349, "MaxDD": -0.11293308, "ES95": -0.07861939}
+  },
+  "execution": {
+    "signal_switches": 3,
+    "cumulative_two_sided_turnover": 4.28231205
+  },
+  "finding": {
+    "summary": "FCF rankingを60%株式sleeveへ閉じ込めると100%集中時よりtail riskは抑えられ、全17か月Sharpeは2.235でSMH60/20/20の2.218と均等30/30/20/20の2.021を上回った。しかしCAGRは59.00%でSMH60/20/20の63.25%を下回り、Maximum Drawdownも-11.17%でSMHの-10.36%、均等配分の-8.49%より悪い。2025年SharpeもFCF ranking 3.333に対しSMH 3.797、均等配分3.607で劣る。",
+    "production_action": "FCF rankingを半導体株式sleeveのportfolio weight authorityへ追加しない。",
+    "reusable_decision": "NVDA/AVGOのFree Cash Flow成長率rankingは補助的な予測情報の可能性を残すが、現時点では固定SMHを置き換えるだけの再現性とtail-risk優位がない。"
+  },
+  "limitations": [
+    "観測期間は17か月と短く、95% Expected Shortfallは実質的に最悪月1点である。",
+    "NVDAとAVGOの会社定義Free Cash Flowは完全同一ではない。",
+    "Alpaca IEX月次barとCorporate Actionsによる月末再投資近似で、税・bid-ask spread・実際の分配金再投資日は含まない。",
+    "対象企業がNVDAとAVGOの2社だけなのでcross-sectional breadthが不足している。"
+  ],
+  "next_hypothesis": "2社rankingをこれ以上最適化せず、TSM・ASML・AMAT・LRCX・KLAC・MUなどを含む複数社のpoint-in-time earnings、Free Cash Flow、valuationを同一as-of contractへ揃え、単純equal-weight semiconductor basketとSMHをbenchmarkにしたcross-sectional fundamental rankingを検証する。"
+}
