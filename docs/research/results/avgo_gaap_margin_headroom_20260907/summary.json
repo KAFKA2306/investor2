@@ -1,0 +1,76 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_gaap_margin_headroom_20260907",
+  "status": "REJECT",
+  "as_of": "2026-09-07",
+  "hypothesis": "BroadcomのVMware統合後のGAAP margin拡大には、現在の売上growth差を前提に、NVDAに対する約11 percentage points/年の5年GAAP EPS CAGRハードル不足を追加margin拡大だけで埋める十分な余地が残っている。",
+  "decision_rule": {
+    "use_if": "前回のflat-relative-share-countケースで必要なAVGO GAAP net margin 63.0253%が、Broadcomのpost-VMware実績GAAP gross/operating marginと継続費用構造の範囲内で到達可能で、GAAP operating marginを超えるnet marginや主要費用の消失を必要としない。",
+    "reject_if": "必要net marginが現在のGAAP operating marginを上回り、現行gross margin、interest、tax、amortization、stock-based compensationを踏まえると、追加の売上優位または大幅な費用構造変化なしでは成立しない。",
+    "unverified_if": "Broadcomの比較可能なGAAP revenue、gross margin、operating income、net income、interest、tax、主要GAAP-to-non-GAAP調整項目が一次情報で確認できない。"
+  },
+  "canonical_context": {
+    "owner_repository": "KAFKA2306/investor2",
+    "valuation_hurdle_artifact": "docs/research/results/nvda_avgo_relative_growth_hurdle_20260907/summary.json",
+    "revenue_only_hurdle_artifact": "docs/research/results/avgo_revenue_only_growth_hurdle_20260907/summary.json",
+    "required_relative_eps_growth_factor": 1.094465855,
+    "required_avgo_net_margin_pct_flat_relative_share_count": 63.0253343,
+    "required_avgo_net_margin_pct_current_share_count_stress": 68.1584413
+  },
+  "primary_sources": {
+    "Broadcom_Q4_FY2024": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2024",
+    "Broadcom_Q1_FY2025": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2025-financial",
+    "Broadcom_Q2_FY2025": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2025-financial",
+    "Broadcom_Q3_FY2025": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2025-financial",
+    "Broadcom_Q4_FY2025": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+    "Broadcom_Q1_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial",
+    "Broadcom_Q2_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial",
+    "Broadcom_Q3_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+  },
+  "post_vmware_gaap_net_margin_history_pct": {
+    "Q4_FY2024": 30.7670,
+    "Q1_FY2025": 36.8933,
+    "Q2_FY2025": 33.0912,
+    "Q3_FY2025": 25.9529,
+    "Q4_FY2025": 47.2828,
+    "Q1_FY2026": 38.0560,
+    "Q2_FY2026": 41.9615,
+    "Q3_FY2026": 44.2297
+  },
+  "q3_fy2026_cost_structure_pct_of_revenue": {
+    "gaap_gross_margin": 69.1291,
+    "gaap_operating_margin": 53.9184,
+    "gaap_net_margin": 44.2297,
+    "non_gaap_operating_margin": 67.9092,
+    "interest_expense": 2.6292,
+    "income_tax_provision": 7.3908,
+    "acquisition_related_intangible_amortization": 6.7791,
+    "stock_based_compensation": 6.8230,
+    "restructuring_and_other_charges": 0.3886
+  },
+  "derived_metrics": {
+    "required_net_margin_increase_from_q3_fy2026_pp": 18.7957,
+    "required_net_margin_minus_current_gaap_operating_margin_pp": 9.1069,
+    "required_net_margin_below_current_gaap_gross_margin_pp": 6.1038,
+    "current_gaap_gross_to_net_margin_wedge_pp": 24.8995,
+    "current_non_gaap_to_gaap_operating_margin_wedge_pp": 13.9907
+  },
+  "benchmark_comparison": {
+    "historical_post_vmware_peak_gaap_net_margin_pct": 47.2828,
+    "current_q3_fy2026_gaap_net_margin_pct": 44.2297,
+    "required_flat_share_case_gaap_net_margin_pct": 63.0253,
+    "required_share_count_stress_gaap_net_margin_pct": 68.1584,
+    "finding": "必要な63.03% net marginは、直近Q3 FY2026 GAAP operating margin 53.92%を9.11 points上回り、同四半期GAAP gross margin 69.13%との差は6.10 pointsしか残さない。現時点ではinterest 2.63%、tax provision 7.39%、acquisition-related intangible amortization 6.78%、stock-based compensation 6.82%がrevenue比で存在するため、現在の売上growth差のままmarginだけで5年EPS hurdle不足を埋めるには、追加の大幅な売上優位、gross margin上昇、または費用構造の大幅な変化が必要。"
+  },
+  "finding": "BroadcomのGAAP net marginはVMware統合後に改善しているが、Q4 FY2024からQ3 FY2026まで25.95%-47.28%と変動が大きく、直近は44.23%。前回の売上growth差を固定したflat-shareケースで必要な63.03%は現在のGAAP operating margin 53.92%を上回る。したがって、追加margin拡大だけでNVDAに対する約11 points/年の5年GAAP EPS CAGRハードル不足を埋められるという仮説をREJECTする。",
+  "reusable_decision": "AVGOの相対valuationを擁護する5年forecastでは、現在のmargin拡大を自動延長しない。base caseで必要なEPS成長差を満たすには、marginだけでなく会社固有の売上growth差、share count、gross margin、GAAP operating cost、interest、taxを明示し、63%超のGAAP net marginを暗黙に要求するシナリオは採用しない。",
+  "implementation_action": "REJECT結果のdecision evidenceのみを保存する。新しいforecast engine、margin model、collector、workflow、one-off scriptは追加しない。",
+  "limitations": [
+    "63.03%と68.16%は前回の売上growth差が5年間続く限定条件での必要marginであり、会社forecastではない。",
+    "GAAP income tax provisionは四半期ごとの離散要因で変動するため、Q3 FY2026の7.39% of revenueを長期税率として固定していない。",
+    "acquisition-related intangible amortizationのrevenue比は売上成長や償却進行で低下し得るため、現在比率の永続を仮定していない。",
+    "Broadcomは将来GAAP operating marginをguidanceしておらず、non-GAAP operating income guidanceからGAAPを無理に推測していない。",
+    "terminal P/EをNVDAとAVGOで同一とする既存relative hurdleを前提にする。"
+  ],
+  "next_hypothesis": "NVDAとAVGOの会社guidance、GAAP gross/operating margin、share countをそれぞれpoint-in-timeで減速させるbear/base/bull 5年trajectoryを構築すると、AVGOのbase caseは約11 percentage points/年の相対GAAP EPS CAGRハードルを超えられるか。"
+}
