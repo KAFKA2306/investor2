@@ -1,0 +1,74 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_macro_defensive_switch_20260908",
+  "status": "REJECT",
+  "hypothesis": "2か月遅れの米国5年実質金利とCPI-U前年比だけでSMH80%の20% defensive sleeveをGLD/DBC間で切り替えるpoint-in-time ruleは、固定SMH80%/GLD20%とSMH80%/DBC20%を10bpコスト込みのSharpe、Maximum Drawdown、95% Expected Shortfallで上回る。",
+  "decision_rule": {
+    "macro_switch": "return month mに対しm-2の情報を使用。5年実質金利<=0%ならGLD、5年実質金利>0%かつCPI-U YoY>=4%ならDBC、それ以外はGLD。",
+    "alternative": "5年実質金利<=0%ならGLD、それ以外はDBC。",
+    "acceptance_gate": "macro switchが固定80/GLD20と80/DBC20の双方よりSharpeを高め、Maximum DrawdownとES95を悪化させない。独立OOSで同条件を満たさない限りUSEにしない。",
+    "outcome": "FAIL"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "market_data": "Alpaca Market Data API / IEX",
+    "assets": ["SMH", "GLD", "DBC"],
+    "currency": "USD",
+    "market_period_available": "2020-07 through 2026-08 completed monthly bars",
+    "evaluation_period": "2020-08 through 2025-11",
+    "evaluation_months": 64,
+    "oos_period": "2024-01 through 2025-11",
+    "oos_months": 23,
+    "transaction_cost_bps": 10,
+    "fallback": "none",
+    "macro_sources": {
+      "real_yield": "U.S. Treasury / Federal Reserve H.15 5-year TIPS real yield; monthly observation",
+      "inflation": "U.S. Bureau of Labor Statistics CPI-U, not seasonally adjusted, CUUR0000SA0"
+    },
+    "point_in_time_guard": "return month m uses only m-2 macro observations. CPI-U NSA is treated as final when released; no revised seasonally-adjusted CPI is used.",
+    "cpi_missing_data_guard": "BLS has no October 2025 CPI-U observation; evaluation stops at November 2025 so no missing CPI is imputed."
+  },
+  "market_return_contract": {
+    "rebalance": "monthly fixed target weights",
+    "transaction_cost_basis": "10bp times two-sided absolute target-weight turnover after monthly drift",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05",
+    "smh_cash_distributions": "actual pre-split cash amounts used before the May 2023 split; later amounts use post-split basis",
+    "dbc_cash_distributions": {"2022-12": 0.14467, "2023-12": 1.08926, "2024-12": 1.11582, "2025-12": 0.74424},
+    "gld_distributions": "none",
+    "risk_free_rate_for_sharpe": 0,
+    "annualization": 12,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "full_walk_forward_metrics": {
+    "macro_switch": {"CAGR": 0.28581624, "Vol": 0.23791722, "Sharpe": 1.18342171, "MaxDD": -0.34633369, "ES95": -0.11769469, "n": 64},
+    "real_yield_only": {"CAGR": 0.25103362, "Vol": 0.23858805, "Sharpe": 1.06356017, "MaxDD": -0.34633369, "ES95": -0.11769469, "n": 64},
+    "fixed_SMH80_GLD20": {"CAGR": 0.29295084, "Vol": 0.23995522, "Sharpe": 1.19830548, "MaxDD": -0.34204636, "ES95": -0.11560653, "n": 64},
+    "fixed_SMH80_DBC20": {"CAGR": 0.29030384, "Vol": 0.24050646, "Sharpe": 1.18773675, "MaxDD": -0.30800081, "ES95": -0.11504917, "n": 64}
+  },
+  "oos_metrics": {
+    "macro_switch": {"CAGR": 0.45444263, "Vol": 0.19582614, "Sharpe": 2.03283628, "MaxDD": -0.09573272, "ES95": -0.04352899, "n": 23, "selected_sleeve": "GLD in all 23 months"},
+    "real_yield_only": {"CAGR": 0.36210131, "Vol": 0.20538925, "Sharpe": 1.61878675, "MaxDD": -0.16191242, "ES95": -0.05798947, "n": 23, "selected_sleeve": "DBC in all 23 months"},
+    "fixed_SMH80_GLD20": {"CAGR": 0.45444263, "Vol": 0.19582614, "Sharpe": 2.03283628, "MaxDD": -0.09573272, "ES95": -0.04352899, "n": 23},
+    "fixed_SMH80_DBC20": {"CAGR": 0.36210131, "Vol": 0.20538925, "Sharpe": 1.61878675, "MaxDD": -0.16191242, "ES95": -0.05798947, "n": 23}
+  },
+  "finding": {
+    "decision": "REJECT",
+    "summary": "full walk-forwardでmacro switchは固定80/GLD20よりCAGR、Sharpe、Maximum Drawdown、ES95のすべてで劣り、固定80/DBC20に対してもCAGR、Sharpe、Maximum Drawdown、ES95で劣った。2024-01以降のOOSではmacro switchが全23か月GLDを選び、固定80/GLD20と完全に同一の成績となったため、動的ruleの追加価値は観測されなかった。",
+    "capital_allocation_implication": "実質金利0%とCPI 4%という単純な外生macro thresholdをportfolio weight authorityへ追加しない。固定80/GLD20、80/DBC20、および既存60/20/10/10 benchmarkを維持する。"
+  },
+  "implementation": {
+    "reusable_allocation_rule_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "model_added": false,
+    "negative_evidence_only": true
+  },
+  "limitations": [
+    "BLSのOctober 2025 CPI-U欠損を補間せず、評価を2025-11で打ち切った。",
+    "5年実質金利は月次観測を2か月遅れで使用しており、日次情報を最大限利用する戦略ではない。",
+    "4% CPI thresholdと0% real-yield thresholdは経済的に単純な事前閾値であり最適化していない。",
+    "税と実際のbid-ask spreadは含まず、10bp transaction costを使用した。",
+    "2024-01..2025-11 OOSではsignalがGLDから切り替わらず、動的ruleの識別力を実証できなかった。"
+  ],
+  "next_high_value_hypothesis": "macro threshold timingの追加探索を止め、SMH60/GLD20/BIL10/DBC10を固定候補として、2020年以前を含むより長い一次価格系列または将来walk-forwardで、SMH80/DBC20に対するSharpe・Maximum Drawdown・ES95の優位がregimeを跨いで維持されるかを検証する。"
+}
