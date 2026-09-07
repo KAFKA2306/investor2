@@ -1,0 +1,53 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_dbc_sleeve_20260907",
+  "status": "CONDITION",
+  "hypothesis": "SMH80%/DBC20%は、借入なしでSMH80%/GLD20%とSMH80%/BIL20%よりCAGR・Sharpe・Maximum Drawdown・95% Expected Shortfallを同一73か月・10bpコスト条件で改善し、半導体集中portfolioの高期待return分散benchmarkとして再利用できる。",
+  "decision_rule": {
+    "use_if": "80/20 DBCが80/20 GLDと80/20 BILの双方よりCAGR、Sharpe、Maximum Drawdown、ES95を改善し、年次Sharpeの優位が単一年だけに依存しない。",
+    "reject_if": "full-period主要指標のいずれかで両benchmarkに対する優位が成立しない。",
+    "condition_if": "full-periodでは両80/20 benchmarkを主要指標で上回るが、年次優位が安定せず、60/20/20のrisk-control benchmarkよりSharpeまたはtail riskで劣る。"
+  },
+  "source": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "market_query": {"symbols": ["SMH", "DBC"], "start": "2020-07-01", "end": "2026-09-01", "timeframe": "1Month", "feed": "iex", "currency": "USD"},
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "corporate_action_query": {"types": ["cash_dividend", "forward_split"], "start": "2020-07-01", "end": "2026-09-01", "symbols": ["SMH", "DBC"]},
+    "data_period": "2020-07 through 2026-08 month-end bars; 2026-09 incomplete bar excluded",
+    "observations": {"monthly_prices": 74, "monthly_returns": 73},
+    "fallback": "none",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05 applied to May 2023 holding-period return",
+    "dividend_method": "cash dividends with ex-date in month added to month-end holding-period return; month-end reinvestment approximation",
+    "dbc_cash_distributions": {"2022-12": 0.14467, "2023-12": 1.08926, "2024-12": 1.11582, "2025-12": 0.74424}
+  },
+  "method": {
+    "rebalance": "monthly fixed weight",
+    "weights": {"SMH": 0.8, "DBC": 0.2},
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "annualization": 12,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "candidate_metrics": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD": -0.30800081, "ES95": -0.12434810, "Cum": 5.14332936, "n": 73},
+  "asset_diagnostics": {
+    "DBC": {"CAGR": 0.18283227, "Vol": 0.17204228, "Sharpe": 1.06646604, "MaxDD": -0.23041692, "ES95": -0.08621980},
+    "SMH_DBC_return_correlation": -0.00417649
+  },
+  "canonical_benchmarks": {
+    "source_artifact": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+    "80GLD": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343},
+    "80BIL": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619},
+    "60_20_20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161}
+  },
+  "yearly_sharpe": {"2021": 3.35421223, "2022": -0.62445770, "2023": 1.95295867, "2024": 1.62638838, "2025": 1.60848919, "2026_YTD_Aug": 1.82871778},
+  "yearly_comparison_to_80GLD": "DBC wins 2021, 2022, 2026 YTD; GLD wins 2023, 2024, 2025. Full-period dominance is not a stable yearly dominance.",
+  "tail_adjusted_efficiency": {"CAGR_over_abs_MaxDD": 1.12896767, "CAGR_over_abs_ES95": 2.79636717, "CAGR_over_Vol": 1.33202896},
+  "finding": {
+    "summary": "80/20 DBCはfull-periodで80/20 GLDと80/20 BILの双方よりCAGRとSharpeが高く、Maximum DrawdownとES95も改善した。一方、年次Sharpeでは80/20 GLDに3/6期間しか勝たず、60/20/20よりSharpeとtail riskが悪い。したがってDBC20%をdefault allocationにはせず、高期待return分散benchmarkとしてCONDITION採用する。",
+    "production_action": "portfolio weight authorityへ追加しない。今後の半導体risk/return研究で80/20 DBCを比較benchmarkに含める。"
+  },
+  "reusable_decision": "半導体集中portfolioで借入なしにreturnを回復する候補としてDBCは無視しない。ただし60/20/20をrisk-control benchmarkとして維持し、DBC20%を恒久weightにしない。",
+  "limitations": ["開始点は2020年7月でCOVID-19急落そのものを含まない。", "DBCはcommodity futures ETFであり、spot commodity basketではない。futures roll/collateral構造はETF価格returnへ内包されるが、要因分解していない。", "2026年は8月までの部分年。", "税・bid-ask spreadは含まない。"],
+  "next_hypothesis": "SMH60%/GLD20%/BIL10%/DBC10%は、60/20/20のBILの半分だけをDBCへ置換することでCAGRを回復しつつ、60/20/20のSharpe・Maximum Drawdown・ES95の優位を維持できるか。"
+}
