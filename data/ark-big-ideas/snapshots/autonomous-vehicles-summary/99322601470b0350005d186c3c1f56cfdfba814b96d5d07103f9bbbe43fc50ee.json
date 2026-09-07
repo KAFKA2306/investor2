@@ -1,0 +1,79 @@
+{
+  "california_dmv": {
+    "autonomous_testing_miles": 3912657.536,
+    "company_permit_group_count": 20,
+    "current_permit_snapshot": {
+      "categories": {
+        "deployment": {
+          "effective_at": "2025-11-21",
+          "holder_count": 3
+        },
+        "driverless_testing": {
+          "effective_at": "2026-04-03",
+          "holder_count": 6
+        },
+        "testing_with_safety_driver": {
+          "effective_at": "2026-08-12",
+          "holder_count": 28
+        }
+      },
+      "retrieved_at": "2026-08-29",
+      "source_url": "https://www.dmv.ca.gov/portal/vehicle-industry-services/autonomous-vehicles/autonomous-vehicle-testing-permit-holders/"
+    },
+    "current_reporting_regime": {
+      "availability_warning": "submission requirements and due dates do not establish that submitted records have been published; unpublished values remain UNVERIFIED",
+      "effective_date": "2026-04-28",
+      "first_quarterly_report_due": "2026-09-30",
+      "industry_memo": "AVIM 2026-001A",
+      "industry_memo_url": "https://qr.dmv.ca.gov/portal/file/avim-2026-001-reporting-requirements-pdf/",
+      "monthly_reporting_start": "2026-08-26",
+      "report_format": "csv",
+      "reporting_operative_date": "2026-08-26"
+    },
+    "latest_report_year": 2024,
+    "latest_statewide_public_road_testing_miles": {
+      "period": {
+        "end": "2025-11-30",
+        "start": "2024-12-01"
+      },
+      "qualifier": "greater_than",
+      "scope": "all_testing_permit_holders",
+      "source_url": "https://www.dmv.ca.gov/portal/news-and-media/autonomous-vehicle-permit-holders-in-california-logged-more-than-9-million-test-miles-between-december-1-2024-and-november-30-2025/",
+      "unit": "miles",
+      "value": 9000000
+    },
+    "metric_warning": "testing_miles_per_disengagement is an operational testing metric, not a safety rate or cross-company safety ranking",
+    "period": {
+      "end": "2024-11-30",
+      "start": "2023-12-01"
+    },
+    "publisher": "California Department of Motor Vehicles",
+    "reported_disengagements": 1773,
+    "source_revision_id": "246928648625703fa4a5936b6ec7965a43595573a9740c17b95bf042852fc8cf",
+    "source_urls": [
+      "https://www.dmv.ca.gov/portal/file/2024-autonomous-mileage-reports-csv/",
+      "https://www.dmv.ca.gov/portal/file/2024-autonomous-vehicle-disengagement-reports-csv/"
+    ]
+  },
+  "nhtsa_sgo": {
+    "ads": {
+      "california_distinct_same_incident_id_count_2024_plus": 713,
+      "california_report_count_2024_plus": 713,
+      "latest_report_count": 1324,
+      "report_count_2024_plus": 1324,
+      "reporting_entity_count_2024_plus": 16
+    },
+    "comparison_warning": "report counts are not exposure-normalized; ADS and Level 2 ADAS stay separate, and no company safety rate is produced without a matching mileage denominator",
+    "level_2_adas": {
+      "california_distinct_same_incident_id_count_2024_plus": 532,
+      "california_report_count_2024_plus": 533,
+      "latest_report_count": 1915,
+      "report_count_2024_plus": 1904,
+      "reporting_entity_count_2024_plus": 20
+    },
+    "publisher": "National Highway Traffic Safety Administration",
+    "source_page": "https://www.nhtsa.gov/es/node/103486",
+    "source_revision_id": "409f3cf01849dc949949bf72adf4336d59b41755f57ad83494e8410becf75469"
+  },
+  "schema_version": 1
+}
