@@ -1,0 +1,75 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_tail_risk_budget_gate_20260908",
+  "status": "CONDITION",
+  "hypothesis": "既存canonical候補の中で、Maximum Drawdown 30%以下かつ95% Expected Shortfall 10%以下という実務的なtail-risk上限を同時に満たす配分はSMH60%/GLD20%/BIL20%であり、hard risk budgetを置く資本配分ではこれをdefensive benchmarkとして再利用できる。",
+  "decision_rule": {
+    "use_if": "同一canonical sampleで二重risk capを満たし、独立OOSまたはより長期の複数regimeでも両capを維持する。",
+    "condition_if": "同一canonical sampleで二重risk capを満たす唯一の候補だが、独立OOSまたはより長期regime確認が未完了。",
+    "reject_if": "既存candidateの別配分も同じcapを満たす、またはSMH60/GLD20/BIL20がいずれかのcapを超える。"
+  },
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifacts": [
+      "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+      "docs/research/results/smh_diversifier_pareto_frontier_20260907/summary.json"
+    ],
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period": "2020-07 through 2026-08",
+    "monthly_returns": 73,
+    "currency": "USD",
+    "transaction_cost_bps": 10,
+    "fallback": "none"
+  },
+  "risk_budget": {
+    "maximum_drawdown_limit_abs": 0.30,
+    "expected_shortfall_95_limit_abs": 0.10,
+    "gate": "abs(MaxDD) <= 0.30 AND abs(ES95) <= 0.10"
+  },
+  "candidate_metrics": {
+    "SMH100": {"CAGR": 0.37530837, "Vol": 0.32365256, "Sharpe": 1.15208655, "MaxDD": -0.39971504, "ES95": -0.15631567, "passes_risk_budget": false},
+    "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343, "passes_risk_budget": false},
+    "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619, "passes_risk_budget": false},
+    "SMH80_DBC20": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD": -0.30800081, "ES95": -0.12434810, "passes_risk_budget": false},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161, "passes_risk_budget": true}
+  },
+  "risk_budget_margin": {
+    "SMH60_GLD20_BIL20": {
+      "maximum_drawdown_headroom_percentage_points": 3.347467,
+      "expected_shortfall_headroom_percentage_points": 0.363839
+    },
+    "SMH80_DBC20": {
+      "maximum_drawdown_excess_percentage_points": 0.800081,
+      "expected_shortfall_excess_percentage_points": 2.434810
+    }
+  },
+  "benchmark_comparison": {
+    "primary_benchmark": "SMH80_DBC20",
+    "CAGR_difference_candidate_minus_benchmark_percentage_points": -8.090382,
+    "Sharpe_difference": 0.01365726,
+    "Maximum_Drawdown_improvement_percentage_points": 4.147548,
+    "ES95_improvement_percentage_points": 2.798649,
+    "interpretation": "60/20/20は80/DBC20よりCAGRを8.09pt犠牲にする一方、Sharpeをわずかに改善し、MaxDDとES95を明確に改善して二重risk capを満たす。return最大化ではなくhard tail-risk制約下のbenchmarkとして価値がある。"
+  },
+  "finding": {
+    "decision": "CONDITION",
+    "summary": "2020-07〜2026-08の73月次return、10bp月次リバランス条件では、既存5候補のうちSMH60/GLD20/BIL20だけがMaxDD 30%以下とES95 10%以下を同時に満たした。SMH80/DBC20はMaxDDを0.80pt、ES95を2.43pt超過した。",
+    "capital_allocation_implication": "hard tail-risk budgetを置く研究・意思決定ではSMH60/GLD20/BIL20を必須defensive benchmarkとする。ただしportfolio weight authorityは変更しない。return優先でhard capを置かない場合はSMH80/DBC20を引き続き高期待return benchmarkとして比較する。"
+  },
+  "implementation": {
+    "reusable_decision_artifact_added": true,
+    "portfolio_weight_authority_changed": false,
+    "new_model_added": false,
+    "new_collector_added": false,
+    "new_workflow_added": false,
+    "duplicate_financial_calculation_added": false
+  },
+  "limitations": [
+    "2020-07開始のためCOVID-19の2020年3月急落を含まない。",
+    "独立OOSではなく同一73月次sample上のcandidate比較。",
+    "税・bid-ask spread・実際の配当再投資日は含まない。",
+    "30% MaxDDと10% ES95は明示的なrisk-budget scenarioであり、全投資家に普遍的な閾値ではない。"
+  ],
+  "next_hypothesis": "SMH60/GLD20/BIL20は、2016年以降のより長い共通実市場履歴または将来walk-forwardでもMaxDD 30%以下・ES95 10%以下の二重risk budgetを維持し、SMH80/DBC20より高いSharpeを維持するか。"
+}
