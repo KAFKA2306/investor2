@@ -2,27 +2,31 @@
   "schema_version": "research-result.v1",
   "research_id": "smh_gold_bil_risk_matched_funding_hurdle_20260907",
   "status": "REJECT",
-  "hypothesis": "SMH60%/GLD20%/BIL20%をSMH80%/GLD20%と同じ実現volatilityまで定率レバレッジすると、現在利用可能なbroker margin funding costを差し引いてもSMH80%/GLD20%よりrisk-adjusted returnを改善する。",
+  "hypothesis": "SMH60%/GLD20%/BIL20%を現在の高期待return分散benchmarkであるSMH80%/DBC20%と同じ実現volatilityまで定率レバレッジすると、現在利用可能なbroker margin funding costを差し引いてもrisk-adjusted returnを改善する。",
   "decision_gate": {
-    "use_if": "risk-matched leverage後のSharpeがSMH80/GLD20を上回り、current executable margin funding rateがSharpe break-even funding rate以下である。",
+    "use_if": "risk-matched leverage後のSharpeがSMH80/DBC20を上回り、current executable margin funding rateがSharpe break-even funding rate以下である。",
     "reject_if": "current executable margin funding rateがbreak-evenを上回る、またはfunding込みSharpeがbenchmark以下。tail-risk比較は採用時のみ追加gateとして要求する。"
   },
   "canonical_input": {
     "owner_repository": "KAFKA2306/investor2",
-    "source_artifact": "docs/research/results/smh_gold_bil_blend_capital_efficiency_20260907/summary.json",
     "period": "2020-08-01..2026-08-31",
     "monthly_returns": 73,
     "market_data": "Alpaca Market Data API / IEX",
     "corporate_actions": "Alpaca Corporate Actions API",
-    "fallback": "none"
+    "fallback": "none",
+    "source_artifacts": [
+      "docs/research/results/smh_gold_bil_blend_capital_efficiency_20260907/summary.json",
+      "docs/research/results/smh_dbc_sleeve_20260907/summary.json",
+      "docs/research/results/smh_diversifier_pareto_frontier_20260907/summary.json"
+    ]
   },
   "benchmark": {
-    "portfolio": "SMH80_GLD20",
-    "annualized_volatility": 0.26292236,
-    "sharpe": 1.24337587,
-    "annualized_arithmetic_return_from_sharpe_times_vol": 0.3269113181,
-    "maximum_drawdown": -0.34201565,
-    "es95_monthly": -0.12792343
+    "portfolio": "SMH80_DBC20",
+    "annualized_volatility": 0.26104759,
+    "sharpe": 1.28214985,
+    "annualized_arithmetic_return_from_sharpe_times_vol": 0.3347021284,
+    "maximum_drawdown": -0.30800081,
+    "es95_monthly": -0.12434810
   },
   "base_blend": {
     "portfolio": "SMH60_GLD20_BIL20",
@@ -33,36 +37,36 @@
     "es95_monthly": -0.09636161
   },
   "risk_match": {
-    "target_volatility": 0.26292236,
-    "gross_leverage": 1.3207295514,
-    "borrow_fraction_of_equity": 0.3207295514,
-    "initial_equity_to_gross_assets": 0.7571572840,
+    "target_volatility": 0.26104759,
+    "gross_leverage": 1.3113120787,
+    "borrow_fraction_of_equity": 0.3113120787,
+    "initial_equity_to_gross_assets": 0.7625950045,
     "zero_funding_cost_sharpe": 1.29580711,
-    "sharpe_break_even_annual_funding_rate": 0.0429812136
+    "sharpe_break_even_annual_funding_rate": 0.0114521570
   },
   "current_funding": {
     "as_of": "2026-09-07",
-    "source": "Alpaca official Margin and Short Selling documentation",
+    "source": "Alpaca Securities Brokerage Fee Schedule / Margin and Short Selling documentation",
     "elite_annual_rate": 0.0475,
     "non_elite_annual_rate": 0.0625,
     "daily_charge_basis": 360,
-    "elite_risk_matched_annualized_arithmetic_return": 0.3254620098,
-    "elite_risk_matched_sharpe": 1.2378635647,
-    "non_elite_risk_matched_annualized_arithmetic_return": 0.3206510665,
-    "non_elite_risk_matched_sharpe": 1.2195656030
+    "elite_risk_matched_annualized_arithmetic_return": 0.3234799994,
+    "elite_risk_matched_sharpe": 1.2391610259,
+    "non_elite_risk_matched_annualized_arithmetic_return": 0.3188103183,
+    "non_elite_risk_matched_sharpe": 1.2212727888
   },
-  "margin_feasibility": {
-    "reg_t_initial_margin_reference": 0.50,
-    "finra_general_long_maintenance_reference": 0.25,
-    "initial_equity_ratio_at_1_3207x": 0.7571572840,
-    "note": "1.3207xは一般的な50% initial margin上限の2xより十分低い。個別ETF・broker house marginは別途適用され得る。"
+  "benchmark_change": {
+    "previous_benchmark": "SMH80_GLD20",
+    "previous_break_even_funding_rate": 0.0429812136,
+    "reason_for_replacement": "SMH80/DBC20が同一73か月・10bp条件でSMH80/GLD20をCAGR、Volatility、Sharpe、Maximum Drawdown、ES95の全5指標でstrict Pareto-dominanceしたため。",
+    "effect": "高期待return benchmark更新によりfunding hurdleは4.30%から1.15%へ低下し、margin leverage案の棄却が強まった。"
   },
   "verdict": {
     "status": "REJECT",
-    "reason": "risk-matchに必要な1.3207x leverageのSharpe break-even funding rateは年4.30%。2026-09-07時点のAlpaca公式margin rateはelite 4.75%、non-elite 6.25%で、どちらもbreak-evenを上回る。funding込みSharpeはelite 1.2379、non-elite 1.2196でbenchmark 1.2434を下回り、annualized arithmetic returnもbenchmark 0.3269を下回るため、現在実行可能なbroker margin financingでrisk-matched blendを採用しない。",
-    "scope": "60/20/20自体のdefensive benchmarkとしてのCONDITIONは維持する。棄却するのは、現在のbroker margin rateで1.3207xへレバレッジして80/20 GLDを置き換える案。"
+    "reason": "SMH80/DBC20へrisk-matchする1.3113x leverageのSharpe break-even funding rateは年1.15%。2026-09-07時点のAlpaca公式margin rateはelite 4.75%、non-elite 6.25%で大幅に上回る。funding込みSharpeはelite 1.2392、non-elite 1.2213でbenchmark 1.2821を下回るため、現在のbroker margin financingでrisk-matched blendを採用しない。",
+    "scope": "60/20/20自体のdefensive benchmarkとしてのCONDITIONは維持する。棄却するのは、現在のbroker margin rateでレバレッジして80/20 DBCのrisk-adjusted returnを置き換える案。"
   },
-  "reusable_decision": "60/20/20をレバレッジして80/20 GLDとrisk-matchする案は、実行時のall-in annual funding rateが4.30%未満にならない限り再採用しない。margin rateやより低コストなfinancing vehicleが変わった場合だけ再評価する。",
+  "reusable_decision": "60/20/20をレバレッジして現在の高期待return benchmark 80/20 DBCとrisk-matchする案は、all-in annual funding rateが1.15%以下にならない限り再採用しない。margin rateまたはfinancing vehicleが大幅に変わった場合だけ再評価する。",
   "implementation": {
     "owner_repository": "KAFKA2306/investor2",
     "artifact_type": "decision/evaluation artifact",
@@ -74,5 +78,5 @@
     "funding rateが時変ならpath-dependent CAGR、Maximum Drawdown、Expected Shortfallは再計算が必要。今回はSharpeとannualized arithmetic returnの必要条件で既に不合格のためproduction採用を棄却した。",
     "税、bid-ask spread、broker house margin、強制清算条件は含まない。"
   ],
-  "next_high_value_hypothesis": "レバレッジではなく、60/20/20の40% defensive sleeveの一部を半導体以外の高期待return・低相関資産へ置換すると、追加借入なしで80/20 GLDのCAGRに近づきつつ60/20/20のtail-risk優位を維持できるか。"
+  "next_high_value_hypothesis": "SMH60%/GLD20%/BIL10%/DBC10%は、追加借入なしで60/20/20のtail-risk優位を大きく損なわずCAGRとSharpeを改善できるか。"
 }
