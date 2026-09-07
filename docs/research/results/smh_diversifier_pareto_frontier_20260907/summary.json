@@ -1,0 +1,67 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_diversifier_pareto_frontier_20260907",
+  "status": "CONDITION",
+  "hypothesis": "同一73か月・10bp月次リバランス条件ではSMH80%/DBC20%がSMH80%/GLD20%をCAGR、Volatility、Sharpe、Maximum Drawdown、95% Expected ShortfallのすべてでPareto-dominanceし、GLD20%を唯一の高期待return分散benchmarkとして扱う必要がなくなる。",
+  "decision_rule": {
+    "use_if": "80/20 DBCが80/20 GLDをfull-periodの5指標すべてで改善し、2021-2026の年次Sharpeでも少なくとも4/6期間で上回る。",
+    "condition_if": "80/20 DBCがfull-periodの5指標すべてで改善するが、年次Sharpeの優位が4/6未満で安定しない。",
+    "reject_if": "80/20 DBCがfull-periodの5指標のいずれかで80/20 GLDに劣る。"
+  },
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period": "2020-07 through 2026-08",
+    "monthly_returns": 73,
+    "transaction_cost_bps": 10,
+    "fallback": "none",
+    "source_artifacts": [
+      "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+      "docs/research/results/smh_dbc_sleeve_20260907/summary.json"
+    ]
+  },
+  "full_period_metrics": {
+    "SMH100": {"CAGR": 0.37530837, "Vol": 0.32365256, "Sharpe": 1.15208655, "MaxDD": -0.39971504, "ES95": -0.15631567},
+    "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343},
+    "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161},
+    "SMH80_DBC20": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD": -0.30800081, "ES95": -0.12434810}
+  },
+  "dbc_minus_gld": {
+    "CAGR": 0.01099761,
+    "Vol": -0.00187477,
+    "Sharpe": 0.03877398,
+    "MaxDD": 0.03401484,
+    "ES95": 0.00357533
+  },
+  "pareto_test": {
+    "objectives": {
+      "maximize": ["CAGR", "Sharpe"],
+      "minimize": ["Vol", "abs(MaxDD)", "abs(ES95)"]
+    },
+    "strict_dominance_rule": "A dominates B when A is no worse on every objective and strictly better on at least one.",
+    "SMH80_DBC20_dominates_SMH80_GLD20": true,
+    "frontier_members": ["SMH100", "SMH80_DBC20", "SMH80_BIL20", "SMH60_GLD20_BIL20"],
+    "dominated_full_period": ["SMH80_GLD20"]
+  },
+  "regime_robustness": {
+    "dbc_vs_gld_yearly_sharpe_wins": 3,
+    "years_compared": 6,
+    "dbc_wins": ["2021", "2022", "2026_YTD_Aug"],
+    "gld_wins": ["2023", "2024", "2025"],
+    "interpretation": "full-period Pareto dominance does not imply year-by-year dominance. GLD remains relevant for regime-specific stress and mechanism comparison."
+  },
+  "finding": {
+    "summary": "SMH80/DBC20はfull-periodでSMH80/GLD20よりCAGRが1.10pt高く、Volatilityが0.19pt低く、Sharpeが0.0388高く、Maximum Drawdownを3.40pt、ES95を0.36pt改善したため、5指標すべてでstrict Pareto-dominanceした。ただし年次SharpeはDBCの3勝3敗で安定しないため、GLDを全研究から削除せず、full-period高期待return benchmarkの主比較対象をDBCへ移す。",
+    "production_action": "portfolio weight authorityは変更しない。今後のfull-period semiconductor diversifier比較では80/20 DBCを必須benchmarkにし、80/20 GLDを唯一または最上位の高期待return diversifier benchmarkとして扱わない。GLDはregime/tail-mechanism比較には残す。"
+  },
+  "reusable_decision": "full-periodの半導体分散比較ではDBC20をGLD20より先に比較する。GLD20の採用主張には、DBC20を上回るregime-specificまたは別objectiveの直接証拠を要求する。",
+  "limitations": [
+    "同じ2020-07〜2026-08の73月次returnに基づく事後比較で、独立OOS frontierではない。",
+    "DBCはcommodity futures ETF、GLDはgold ETFで経済的役割が異なるため、full-period dominanceだけでGLDのhedge mechanismを否定しない。",
+    "2026年は8月までの部分年。",
+    "税・bid-ask spreadは含まない。"
+  ],
+  "next_hypothesis": "SMH60%/GLD20%/BIL10%/DBC10%は、60/20/20の絶対tail riskを大きく悪化させずにCAGRを回復し、SharpeまたはCAGR/|ES95|を改善できるか。"
+}
