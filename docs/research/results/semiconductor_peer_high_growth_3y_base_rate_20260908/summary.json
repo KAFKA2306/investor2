@@ -1,0 +1,106 @@
+{
+  "as_of": "2026-09-08",
+  "owner_repository": "KAFKA2306/investor2",
+  "status": "REJECT",
+  "hypothesis": "Broadcom、AMD、NVIDIA、Intelの大型半導体peerを同一ルールで横断すると、entry yearのreported annual revenue growthが10%以上だった局面のうち、その後3年間のreported annual revenue CAGRが10%以上となる経験的確率は、AVGOがNVDAと同等になるためのcanonical probability hurdle 78.70986999%を95%信頼区間の下限でも上回る。",
+  "capital_allocation_importance": "AVGOのpost-FY2028 total revenue growth 10% scenarioがNVDAと同等になるためには78.70986999%の確率が必要である。Broadcom単独では標本が5局面しかなかったため、AI infrastructureに近い大型半導体peerへ拡張し、10%成長持続のbase rateを直接検証する。",
+  "decision_rule": {
+    "USE": "peer high-growth hit rateの95% Wilson下限が78.70986999%以上で、単純な全entry-year benchmark以上。",
+    "CONDITION": "点推定は78.70986999%以上だが95% Wilson下限はhurdle未満。ただし企業別感応度が一方向で、peer selectionによる結論反転がない。",
+    "REJECT": "95% Wilson下限が78.70986999%未満、または企業別感応度で0%から100%まで大きく分かれ、単一priorとしての移植が不安定。",
+    "UNVERIFIED": "source、identity、period、unit、as-ofのいずれかが不足する。"
+  },
+  "canonical_dependency": {
+    "artifact": "docs/research/results/avgo_probability_hurdle_vs_nvda_20260908/summary.json",
+    "required_probability_for_10pct_post_FY2028_growth": 0.7870986999
+  },
+  "peer_panel": [
+    "Broadcom",
+    "Advanced Micro Devices",
+    "NVIDIA",
+    "Intel"
+  ],
+  "peer_selection_note": "現時点の大型半導体incumbentに、AI加速計算の勝ち組だけでなくIntelを含めた。delisted企業を含む完全なsurvivorship-free universeではないため、そのようには主張しない。",
+  "data_definition": {
+    "metric": "reported annual consolidated revenue/net revenue",
+    "unit": "USD million",
+    "entry_years_evaluated": "各社FY2016-FY2022。FY2023以降は2026-09-08時点で3年forward actualが未確定のため除外。",
+    "high_growth_entry_rule": "entry yearのreported annual revenue YoY >= 10%",
+    "outcome_rule": "entry yearから3年後までのreported annual revenue CAGR >= 10%",
+    "look_ahead_policy": "entry classificationは当該年までに公表されたannual actualだけで定義し、outcomeは3年後の確定annual actualで評価する。後年10-Kの比較表示による軽微なrecastがあるAMD等ではthreshold判定が変わらないことを確認し、recast差はlimitationとして保持する。"
+  },
+  "annual_revenue_usd_m": {
+    "Broadcom": {"FY2015": 6824, "FY2016": 13240, "FY2017": 17636, "FY2018": 20848, "FY2019": 22597, "FY2020": 23888, "FY2021": 27450, "FY2022": 33203, "FY2023": 35819, "FY2024": 51574, "FY2025": 63887},
+    "AMD": {"FY2015": 3991, "FY2016": 4319, "FY2017": 5253, "FY2018": 6475, "FY2019": 6731, "FY2020": 9763, "FY2021": 16434, "FY2022": 23601, "FY2023": 22680, "FY2024": 25785, "FY2025": 34639},
+    "NVIDIA": {"FY2015": 4682, "FY2016": 5010, "FY2017": 6910, "FY2018": 9714, "FY2019": 11716, "FY2020": 10918, "FY2021": 16675, "FY2022": 26914, "FY2023": 26974, "FY2024": 60922, "FY2025": 130497},
+    "Intel": {"FY2015": 55355, "FY2016": 59387, "FY2017": 62761, "FY2018": 70848, "FY2019": 71965, "FY2020": 77867, "FY2021": 79024, "FY2022": 63054, "FY2023": 54228, "FY2024": 53101, "FY2025": 52853}
+  },
+  "company_results": {
+    "Broadcom": {"eligible_entry_years": 7, "high_growth_entries": 5, "high_growth_hits": 4, "high_growth_hit_rate": 0.8},
+    "AMD": {"eligible_entry_years": 7, "high_growth_entries": 5, "high_growth_hits": 5, "high_growth_hit_rate": 1.0},
+    "NVIDIA": {"eligible_entry_years": 7, "high_growth_entries": 5, "high_growth_hits": 5, "high_growth_hit_rate": 1.0},
+    "Intel": {"eligible_entry_years": 7, "high_growth_entries": 1, "high_growth_hits": 0, "high_growth_hit_rate": 0.0}
+  },
+  "results": {
+    "all_eligible_entry_years_hits": 20,
+    "all_eligible_entry_years_n": 28,
+    "all_eligible_entry_years_hit_rate": 0.7142857142857143,
+    "high_growth_hits": 14,
+    "high_growth_n": 16,
+    "high_growth_hit_rate": 0.875,
+    "high_growth_hit_rate_percent": 87.5,
+    "high_growth_wilson_95_low": 0.639771727342413,
+    "high_growth_wilson_95_high": 0.9650225122567595,
+    "hurdle": 0.7870986999,
+    "point_estimate_minus_hurdle_percentage_points": 8.79013001,
+    "wilson_lower_minus_hurdle_percentage_points": -14.7326972557587,
+    "high_growth_filter_minus_unconditional_percentage_points": 16.07142857142857,
+    "company_equal_weight_mean_high_growth_hit_rate": 0.7,
+    "company_high_growth_hit_rate_range": [0.0, 1.0]
+  },
+  "benchmark_comparison": {
+    "benchmark": "4社のFY2016-FY2022全entry yearを無条件に使う単純base rate",
+    "benchmark_hit_rate": 0.7142857142857143,
+    "high_growth_filter_hit_rate": 0.875,
+    "difference_percentage_points": 16.07142857142857,
+    "interpretation": "high-growth filterはpooled point estimateでは単純benchmarkを上回る。ただし95% Wilson下限63.97717273%は78.70986999% hurdleを大きく下回り、企業別hit rateはIntel 0%からAMD/NVIDIA 100%まで分散するため、AVGO固有のforward probability priorとして固定できない。"
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "pooled high-growth hit rate 87.5%はhurdleを8.79013001pt上回るが、95% Wilson下限は63.97717273%でhurdleを14.73269726pt下回る。さらに企業別高成長hit rateはBroadcom 80%、AMD 100%、NVIDIA 100%、Intel 0%で、company-equal-weight平均は70%。peer compositionで結論が大きく変わるため、87.5%をAVGOのFY2029-FY2031 10% growth scenario probabilityとして採用しない。",
+    "usage_rule": "87.5%をportfolio/valuationのAVGO probability inputへ使用しない。peer descriptive base rateと、企業選択リスクを示すnegative evidenceとしてのみ再利用する。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "これはreported revenue growth persistenceのbase-rate研究であり、realized security return seriesではない。"
+  },
+  "primary_sources": [
+    {"source": "KAFKA2306/investor2 canonical Broadcom 3-year base-rate artifact", "url": "https://github.com/KAFKA2306/investor2/blob/a95d5b6dc92138a9a0a07a11a436cb4e14c88790/docs/research/results/avgo_high_growth_3y_base_rate_20260908/summary.json", "fact": "Broadcom FY2015-FY2025 annual revenue series and 4/5 high-growth hit result."},
+    {"source": "AMD FY2018 Form 10-K", "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-19-000011/amd-12292018x10k.htm", "fact": "AMD FY2015-FY2018 selected annual net revenue."},
+    {"source": "AMD FY2022 Form 10-K", "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-23-000047/amd-20221231.htm", "fact": "AMD FY2020-FY2022 annual net revenue."},
+    {"source": "AMD FY2024 Form 10-K and FY2025 results", "url": "https://ir.amd.com/financial-information/sec-filings/content/0000002488-25-000012/amd-20241228.htm", "fact": "AMD FY2022-FY2024 annual net revenue; FY2025 revenue is cross-checked against issuer FY2025 results."},
+    {"source": "NVIDIA FY2019 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581019000023/nvda-2019x10k.htm", "fact": "NVIDIA FY2015-FY2019 annual revenue."},
+    {"source": "NVIDIA FY2022 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581022000036/nvda-20220130.htm", "fact": "NVIDIA FY2020-FY2022 annual revenue."},
+    {"source": "NVIDIA FY2025 results", "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2025/default.aspx", "fact": "NVIDIA FY2024-FY2025 annual revenue."},
+    {"source": "Intel FY2017 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086318000007/a12302017q4-10kdocument.htm", "fact": "Intel FY2015-FY2017 annual net revenue."},
+    {"source": "Intel FY2019 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086320000011/a12282019q4-10kdocument.htm", "fact": "Intel FY2018-FY2019 annual revenue."},
+    {"source": "Intel FY2022 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086323000006/intc-20221231.htm", "fact": "Intel FY2020-FY2022 annual revenue."},
+    {"source": "Intel FY2025 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/50863/000005086326000011/intc-20251227.htm", "fact": "Intel FY2023-FY2025 annual revenue."}
+  ],
+  "limitations": [
+    "4社は現在の大型半導体incumbentであり、delisted企業を含む完全なsurvivorship-free historical universeではない。",
+    "3-year outcomeは同一企業内でoverlapするため独立標本ではない。Wilson intervalは単純二項近似で、cluster dependenceを完全には反映しない。",
+    "AMD等では後年10-Kで過年度recastがある。10% threshold判定は変わらないが、厳密なas-reported point-in-time値と後年比較表示値に軽微な差がある。",
+    "M&Aでreported revenue identityが変化する年を完全にorganic growthへ分離していない。Broadcom FY2016やAMD Xilinx統合などが含まれる。",
+    "現在のcustom AI accelerator需要は過去の半導体事業mixと異なるため、peer base rateをAVGO固有確率へ直接移植できない。"
+  ],
+  "deleted_or_avoided": [
+    "peer base rateをAVGO probability priorへ自動投入するmodelは追加しない。",
+    "finBIその他consumer repositoryへ同じ計算を複製しない。",
+    "REJECT結果のため専用collector、workflow、one-off scriptを残さない。"
+  ],
+  "next_hypothesis": "企業別0%-100%という分散を説明するため、reported total revenueではなく、entry時点のdata-center/accelerated-compute exposureとM&A寄与を分けたpeer cohortを作ると、3年forward organic-like revenue CAGR >=10%の持続率がAVGO 78.70986999% hurdleをより安定して識別できるか。"
+}
