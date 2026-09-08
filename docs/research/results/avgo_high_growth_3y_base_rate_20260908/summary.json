@@ -1,0 +1,99 @@
+{
+  "as_of": "2026-09-08",
+  "owner_repository": "KAFKA2306/investor2",
+  "status": "REJECT",
+  "hypothesis": "Broadcomの年次売上高が前年比10%以上だった高成長局面を選ぶと、その後3年間の売上高CAGRが10%以上となる経験的確率は、AVGOがNVDAと同等になるためのcanonical probability hurdle 78.70986999%以上で、かつ高成長局面を選ばない単純benchmarkより有用である。",
+  "capital_allocation_importance": "直前のcanonical研究では、AVGOのpost-FY2028 total revenue growth 10% scenarioがNVDAと同等になるために78.70986999%の確率を必要とした。短期guidance精度では同じtarget/horizonを測れなかったため、今回は3年forward revenue CAGRを直接測る。",
+  "decision_rule": {
+    "USE": "高成長局面のhit rateが78.70986999%以上、95% Wilson下限も78.70986999%以上、かつ単純な全局面benchmark以上。",
+    "CONDITION": "点推定は78.70986999%以上だが95% Wilson下限がhurdle未満で、かつ単純benchmarkを下回らない。",
+    "REJECT": "点推定が78.70986999%未満、または高成長フィルタが単純benchmarkを下回る、または主要な企業結合を除く感応度でhurdle未満。",
+    "UNVERIFIED": "source/identity/period/unit/as-ofのいずれかが欠ける。"
+  },
+  "canonical_dependency": {
+    "artifact": "docs/research/results/avgo_probability_hurdle_vs_nvda_20260908/summary.json",
+    "required_probability_for_10pct_post_FY2028_growth": 0.7870986999
+  },
+  "data_definition": {
+    "metric": "Broadcom reported annual net revenue",
+    "unit": "USD million",
+    "entry_years_evaluated": "FY2016-FY2022。FY2023以降は2026-09-08時点で3年forward actualが未確定のため除外。",
+    "high_growth_entry_rule": "entry yearのreported annual net revenue YoY >= 10%",
+    "outcome_rule": "entry yearから3年後までのreported annual net revenue CAGR >= 10%",
+    "look_ahead_policy": "各entry yearの判定にはその時点までのannual actualだけを使用し、outcomeは3年後の確定annual actualで評価。"
+  },
+  "annual_revenue_usd_m": {
+    "FY2015": 6824,
+    "FY2016": 13240,
+    "FY2017": 17636,
+    "FY2018": 20848,
+    "FY2019": 22597,
+    "FY2020": 23888,
+    "FY2021": 27450,
+    "FY2022": 33203,
+    "FY2023": 35819,
+    "FY2024": 51574,
+    "FY2025": 63887
+  },
+  "high_growth_entries": [
+    {"entry_fy": 2016, "entry_yoy_growth": 0.94021101992966, "forward_fy": 2019, "forward_3y_cagr": 0.19505419346104058, "hit_ge_10pct": true, "note": "2016はBroadcom Corporation acquisitionで企業identityが大きく変化したためacquisition-distorted sensitivityでは除外。"},
+    {"entry_fy": 2017, "entry_yoy_growth": 0.33202416918429, "forward_fy": 2020, "forward_3y_cagr": 0.10643668484761659, "hit_ge_10pct": true},
+    {"entry_fy": 2018, "entry_yoy_growth": 0.182127466545702, "forward_fy": 2021, "forward_3y_cagr": 0.0960389386474072, "hit_ge_10pct": false},
+    {"entry_fy": 2021, "entry_yoy_growth": 0.14911252511721362, "forward_fy": 2024, "forward_3y_cagr": 0.2339460034495897, "hit_ge_10pct": true},
+    {"entry_fy": 2022, "entry_yoy_growth": 0.20958105646630232, "forward_fy": 2025, "forward_3y_cagr": 0.24378426000041764, "hit_ge_10pct": true}
+  ],
+  "results": {
+    "high_growth_hits": 4,
+    "high_growth_n": 5,
+    "high_growth_hit_rate": 0.8,
+    "high_growth_hit_rate_percent": 80.0,
+    "high_growth_wilson_95_low": 0.37553462976252533,
+    "high_growth_wilson_95_high": 0.9637758913675698,
+    "hurdle": 0.7870986999,
+    "point_estimate_minus_hurdle_percentage_points": 1.29013001,
+    "all_eligible_entry_years_hits": 6,
+    "all_eligible_entry_years_n": 7,
+    "all_eligible_entry_years_hit_rate": 0.8571428571428571,
+    "high_growth_filter_minus_unconditional_percentage_points": -5.714285714285716,
+    "acquisition_distorted_FY2016_excluded_hits": 3,
+    "acquisition_distorted_FY2016_excluded_n": 4,
+    "acquisition_distorted_FY2016_excluded_hit_rate": 0.75,
+    "acquisition_distorted_FY2016_excluded_wilson_95_low": 0.30064184258240184,
+    "acquisition_distorted_FY2016_excluded_wilson_95_high": 0.9544127391902995,
+    "acquisition_excluded_minus_hurdle_percentage_points": -3.70986999
+  },
+  "benchmark_comparison": {
+    "benchmark": "FY2016-FY2022の全entry yearを無条件に使う単純base rate",
+    "benchmark_hit_rate": 0.8571428571428571,
+    "high_growth_filter_hit_rate": 0.8,
+    "result": "高成長フィルタは単純benchmarkを5.71428571 percentage points下回り、予測価値を追加しなかった。"
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "高成長局面の点推定80%は78.70986999% hurdleを1.29013001ptだけ上回るが、95% Wilson下限は37.55346298%に留まる。さらに単純benchmark 85.71428571%を5.71428571pt下回り、2016年の企業結合歪みを除くと75%でhurdle未満になる。したがって、historical high-growth regimeを78.70986999%のevidence-backed probability priorとして採用しない。",
+    "usage_rule": "80%をAVGOのFY2029-FY2031 10% growth scenario probabilityとしてportfolio/valuationへ入力しない。historical descriptive base rateとしてのみ参照可能。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "これはreported revenue growth persistenceのbase-rate研究であり、realized security return seriesではない。"
+  },
+  "primary_sources": [
+    {"source": "SEC Broadcom Inc. FY2019 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016819000144/avgo-11032019x10k.htm", "fact": "FY2015-FY2019 total net revenue: 6,824 / 13,240 / 17,636 / 20,848 / 22,597 USD million."},
+    {"source": "Broadcom FY2020 results", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2020", "fact": "FY2020 net revenue 23,888 USD million; FY2019 22,597."},
+    {"source": "Broadcom FY2021 results", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2021", "fact": "FY2021 net revenue 27,450 USD million; FY2020 23,888."},
+    {"source": "Broadcom FY2022 results", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2022", "fact": "FY2022 net revenue 33,203 USD million; FY2021 27,450."},
+    {"source": "Broadcom FY2024 results", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2024", "fact": "FY2024 net revenue 51,574 USD million; FY2023 35,819."},
+    {"source": "Broadcom FY2025 results", "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025", "fact": "FY2025 net revenue 63,887 USD million; FY2024 51,574."},
+    {"source": "SEC Broadcom Limited FY2016 Form 10-K", "url": "https://www.sec.gov/Archives/edgar/data/1649338/000164933816000151/avgo-10302016x10k.htm", "fact": "Broadcom Corporation acquisition closed February 1, 2016; pre-February 2016 financial information relates to predecessor Avago, making FY2016 a structural identity break."}
+  ],
+  "limitations": [
+    "独立標本は5局面しかなく、overlapping 3-year outcomesも含むため統計的独立性は弱い。",
+    "reported revenueには買収効果が含まれる。FY2016は明確なidentity breakとして感応度で除外したが、他年のM&A寄与を完全にorganic growthへ分離していない。",
+    "現在のAI custom accelerator需要は歴史的事業mixと異なり、過去base rateをそのまま将来確率に移せない。",
+    "FY2023以降は2026-09-08時点で3年forward actualが未確定のためoutcome sampleへ含めていない。"
+  ],
+  "next_hypothesis": "Broadcom単独の小標本ではなく、AI infrastructureに近い大型半導体企業のpoint-in-time高成長局面を同一ルールで横断し、survivorshipを避けたpeer base rateを作ると、3年forward revenue CAGR >=10%の確率下限は78.70986999%を支持するか。"
+}
