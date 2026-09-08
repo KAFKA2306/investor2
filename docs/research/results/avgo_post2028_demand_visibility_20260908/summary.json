@@ -1,0 +1,75 @@
+{
+  "research_id": "avgo_post2028_demand_visibility_20260908",
+  "as_of": "2026-09-08",
+  "status": "REJECT",
+  "hypothesis": "Publicly announced Broadcom customer deployment commitments are sufficient to support the prior 7.83910862% post-FY2028 total-revenue CAGR assumption through FY2031.",
+  "capital_allocation_importance": "The prior AVGO-vs-NVDA stress study found that, after assuming FY2027 AI semiconductor revenue of 115B USD and FY2028 of 230B USD, AVGO required post-FY2028 total-revenue CAGR of 7.83910862% to match the NVIDIA canonical base case under explicit downside stress. If customer commitments do not extend through the full FY2029-FY2031 interval, that CAGR cannot be treated as evidence-backed.",
+  "precommitted_decision_rule": {
+    "USE": "Explicit customer deployment or contracted capacity evidence extends through FY2031 or later and directly covers Broadcom XPU/networking demand.",
+    "CONDITION": "Explicit evidence extends through FY2030 but not FY2031.",
+    "REJECT": "The latest explicit dated customer deployment evidence ends in FY2029 or earlier, leaving two or more years of the required FY2029-FY2031 interval unsupported."
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/avgo_management_outlook_fcf_stress_20260908/summary.json",
+    "prior_break_even_post_fy2028_total_revenue_cagr_pct": 7.83910862,
+    "required_forward_years": ["FY2029", "FY2030", "FY2031"]
+  },
+  "primary_evidence": [
+    {
+      "source": "Broadcom / OpenAI official announcement",
+      "date": "2025-10-13",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/openai-and-broadcom-announce-strategic-collaboration-deploy-10",
+      "fact": "10GW of OpenAI-designed accelerators and Broadcom networking systems; deployment targeted to start in 2H 2026 and complete by end of 2029.",
+      "latest_explicit_year": 2029
+    },
+    {
+      "source": "Broadcom / Apollo / Blackstone official announcement",
+      "date": "2026-06-09",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-apollo-and-blackstone-establish-landmark-strategic",
+      "fact": "AI XPV Platform designed to enable more than 20GW of compute capacity using Broadcom XPUs and networking for frontier AI labs through 2028; initial 35B USD infrastructure tranche supports more than 1GW.",
+      "latest_explicit_year": 2028,
+      "unit_warning": "35B USD is infrastructure transaction value, not Broadcom revenue."
+    },
+    {
+      "source": "Broadcom / Meta official announcement",
+      "date": "2026-04-14",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-announces-extended-partnership-meta-deploy-technology",
+      "fact": "Multi-year, multi-generation MTIA partnership, with plans to extend through 2029; initial commitment exceeds 1GW and the parties plan multi-gigawatt rollout.",
+      "latest_explicit_year": 2029
+    }
+  ],
+  "verification_method": {
+    "method": "Point-in-time horizon coverage test using only dated issuer announcements. No GW-to-revenue conversion and no inferred renewal beyond explicit deployment horizons.",
+    "benchmark": "Prior deterministic post-FY2028 CAGR assumption of 7.83910862% for FY2029-FY2031.",
+    "alternative": "Require explicit dated customer/deployment evidence for each forward year before treating the CAGR as evidence-backed."
+  },
+  "measured_result": {
+    "required_year_count": 3,
+    "required_years": [2029, 2030, 2031],
+    "latest_explicit_customer_deployment_year": 2029,
+    "explicitly_covered_required_years": [2029],
+    "uncovered_required_years": [2030, 2031],
+    "coverage_ratio": 0.3333333333,
+    "uncovered_ratio": 0.6666666667,
+    "decision": "REJECT"
+  },
+  "interpretation": "The current public evidence strongly supports Broadcom AI deployment visibility into 2028-2029, but it does not provide dated customer deployment commitments for 2030-2031. Therefore 7.83910862% cannot be promoted from a sensitivity boundary to a deterministic evidence-backed post-FY2028 growth assumption. This does not reject Broadcom, the customer projects, or the possibility of growth beyond 2029; it rejects the sufficiency of current public commitments for the full FY2029-FY2031 valuation horizon.",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a forward fundamental evidence-horizon test, not a return-series backtest."
+  },
+  "implementation": {
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "consumer_duplication": false,
+    "usage_rule": "Do not use 7.83910862% as an evidence-backed deterministic FY2029-FY2031 growth assumption. Keep it only as a break-even sensitivity boundary until 2030-2031 demand evidence exists."
+  },
+  "remaining_uncertainty": "Publicly announced projects may be renewed, expanded, or supplemented after 2029, but no dated 2030-2031 Broadcom customer deployment commitment was verified in this run. Absence of public evidence is not evidence of zero demand.",
+  "next_hypothesis": "A probability-weighted AVGO valuation that treats FY2030-FY2031 growth as an explicit scenario distribution, rather than a deterministic 7.83910862% assumption, produces a materially different expected 5-year return versus NVIDIA after margin, dilution, and terminal-multiple stress."
+}
