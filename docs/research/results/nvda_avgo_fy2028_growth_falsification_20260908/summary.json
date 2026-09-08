@@ -1,0 +1,102 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_fy2028_growth_falsification_20260908",
+  "status": "REJECT",
+  "hypothesis": "NVIDIAが2026-08-26に示したFY2028売上高約70%成長見通しを、前回のpoint-in-time FCF IRR契約へ保守的に組み込んでも、Broadcomの9/9 IRR優位は維持される。",
+  "decision_rule": {
+    "reject_if": "同じFCF margin/share-count stressと同じterminal Price/FCF gridでNVDAが9/9のIRR比較を取り返す、またはbase 35xでNVDAが1 percentage point以上上回る。",
+    "condition_if": "winnerがscenario/multipleで混在する、またはbase 35xの差が1 percentage point未満。",
+    "use_if": "AVGOが9/9を維持し、base 35xでも1 percentage point以上優位を維持する。"
+  },
+  "capital_allocation_importance": "直前のcanonical研究では、最新四半期guidanceから作った5年成長アンカーを固定するとAVGOが9/9でNVDAを上回った。しかしNVDAはその後の最新決算コールでFY2028売上高約70%成長という会社自身の近接見通しを開示した。これを無視したままAVGOを相対上位と扱うと、成長仮定の取り方だけで資本配分順位を固定する危険がある。",
+  "canonical_inputs": {
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "source_artifact": "docs/research/results/nvda_avgo_guidance_anchored_fcf_irr_20260908/summary.json",
+    "NVDA": {"price": 230.19, "TTM_revenue_USD_billion": 302.970, "TTM_FCF_margin_pct": 41.88071426, "latest_diluted_shares_billion": 24.285, "prior_growth_anchor_pct": 16.83136944},
+    "AVGO": {"price": 357.835, "TTM_revenue_USD_billion": 89.104, "TTM_FCF_margin_pct": 44.22135931, "latest_diluted_shares_billion": 4.887, "prior_growth_anchor_pct": 18.83753816}
+  },
+  "primary_sources": {
+    "NVDA_Q2_FY2027_results": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVDA_Q2_FY2027_earnings_call_transcript": "https://investor.nvidia.com/files/content_files/TRANSCRIPT_-NVIDIA-Corp-NVDA-US-Q2-2027-Earnings-Call-26-August-2026-5_00-PM-ET.pdf",
+    "AVGO_Q3_FY2026_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "AVGO_OpenAI_10GW_collaboration": "https://investors.broadcom.com/news-releases/news-release-details/openai-and-broadcom-announce-strategic-collaboration-deploy-10"
+  },
+  "point_in_time_evidence": {
+    "NVDA": {
+      "Q2_FY2027_revenue_USD_billion": 96.221,
+      "Q2_FY2027_revenue_yoy_pct": 106,
+      "Q2_FY2027_data_center_revenue_USD_billion": 89.023,
+      "Q2_FY2027_data_center_revenue_yoy_pct": 117,
+      "issuer_FY2028_revenue_growth_outlook_pct": 70,
+      "customer_concentration_note": "Q2 FY2027で最大direct customerはtotal revenueの16%。H1 FY2027では上位3 direct customersが16%、15%、13%。"
+    },
+    "AVGO": {
+      "Q3_FY2026_revenue_USD_billion": 29.591,
+      "Q3_FY2026_revenue_yoy_pct": 86,
+      "Q3_FY2026_AI_semiconductor_revenue_USD_billion": 16.7,
+      "Q3_FY2026_AI_semiconductor_revenue_yoy_pct": 221,
+      "Q4_FY2026_AI_semiconductor_revenue_guidance_USD_billion": 21.7,
+      "Q4_FY2026_AI_semiconductor_revenue_guidance_yoy_pct": 236,
+      "OpenAI_custom_accelerator_deployment": "10GW、2026年後半開始、2029年末までの完了を目標。",
+      "five_year_revenue_guidance": "not provided"
+    }
+  },
+  "falsification_contract": {
+    "NVDA_growth_path": "5年のうち1年だけissuer FY2028 growth outlook 70%を使用し、残り4年は前回canonical growth anchor 16.83136944%を維持する。これを5年等価CAGRへ変換する。",
+    "NVDA_equivalent_five_year_revenue_CAGR_pct": 25.93236461,
+    "NVDA_equivalent_CAGR_formula": "((1+0.70)*(1+0.1683136944)^4)^(1/5)-1",
+    "AVGO_growth_anchor_pct": 18.83753816,
+    "bear": {"growth_multiplier": 0.5, "FCF_margin_change_percentage_points": -5, "diluted_share_count_CAGR_pct": 1.0},
+    "base": {"growth_multiplier": 1.0, "FCF_margin_change_percentage_points": 0, "diluted_share_count_CAGR_pct": 0.0},
+    "bull": {"growth_multiplier": 1.5, "FCF_margin_change_percentage_points": 2, "diluted_share_count_CAGR_pct": -1.0},
+    "terminal_price_to_FCF_grid_x": [25, 35, 45],
+    "terminal_price_formula": "year5 FCF per diluted share * terminal Price/FCF",
+    "five_year_price_IRR_formula": "(terminal price/current price)^(1/5)-1",
+    "dividends": "excluded",
+    "taxes": "excluded",
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "results": {
+    "bear": {
+      "NVDA": {"revenue_CAGR_pct": 12.96618231, "IRR_pct_at_25x": -2.64237792, "IRR_pct_at_35x": 4.13472273, "IRR_pct_at_45x": 9.50260702},
+      "AVGO": {"revenue_CAGR_pct": 9.41876908, "IRR_pct_at_25x": -5.70310557, "IRR_pct_at_35x": 0.86093668, "IRR_pct_at_45x": 6.06006549},
+      "NVDA_minus_AVGO_IRR_percentage_points": {"25x": 3.06072765, "35x": 3.27378605, "45x": 3.44254153}
+    },
+    "base": {
+      "NVDA": {"revenue_CAGR_pct": 25.93236461, "IRR_pct_at_25x": 12.44060897, "IRR_pct_at_35x": 20.26764201, "IRR_pct_at_45x": 26.46713790},
+      "AVGO": {"revenue_CAGR_pct": 18.83753816, "IRR_pct_at_25x": 5.95036926, "IRR_pct_at_35x": 13.32561427, "IRR_pct_at_45x": 19.16726601},
+      "NVDA_minus_AVGO_IRR_percentage_points": {"25x": 6.49023971, "35x": 6.94202773, "45x": 7.29987189}
+    },
+    "bull": {
+      "NVDA": {"revenue_CAGR_pct": 38.89854692, "IRR_pct_at_25x": 26.44459229, "IRR_pct_at_35x": 35.24644787, "IRR_pct_at_45x": 42.21806370},
+      "AVGO": {"revenue_CAGR_pct": 28.25630724, "IRR_pct_at_25x": 16.52912631, "IRR_pct_at_35x": 24.64076257, "IRR_pct_at_45x": 31.06568188},
+      "NVDA_minus_AVGO_IRR_percentage_points": {"25x": 9.91546598, "35x": 10.60568529, "45x": 11.15238182}
+    },
+    "grid_summary": {"scenarios": 9, "NVDA_wins": 9, "AVGO_wins": 0, "base_case_35x_IRR_NVDA_pct": 20.26764201, "base_case_35x_IRR_AVGO_pct": 13.32561427, "base_case_NVDA_minus_AVGO_percentage_points": 6.94202773}
+  },
+  "benchmark_comparison": {
+    "benchmark": "docs/research/results/nvda_avgo_guidance_anchored_fcf_irr_20260908/summary.json",
+    "benchmark_result": "前回はNVDA 16.83136944%、AVGO 18.83753816%の5年成長アンカーでAVGOが9/9勝ち、base 35xで+1.74958409 percentage points。",
+    "falsification_result": "NVDAのissuer FY2028 70% outlookを1年だけ反映した等価5年CAGR 25.93236461%を使うとNVDAが9/9勝ち、base 35xで+6.94202773 percentage points。",
+    "interpretation": "AVGO 9/9優位は、最新のissuer-supplied NVDA growth outlookを入れると完全反転する。したがってAVGOを相対上位とする前回のgrowth-anchored rankingは頑健ではない。"
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "仮説は棄却。NVDAのFY2028約70%売上成長見通しを1年だけ反映する保守的な二段階成長stressでも、同じFCF margin/share-count/terminal multiple契約でNVDAが9/9を取り返し、base 35xでAVGOを6.9420 percentage points上回る。前回AVGO 9/9を資本配分順位として利用してはいけない。",
+    "portfolio_weight_authority_changed": false,
+    "reusable_decision_artifact_added": true,
+    "valuation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false
+  },
+  "limitations": [
+    "FY2028約70%成長はNVIDIAの近接会社見通しであり、5年間70%成長するという意味ではない。本研究では1年だけ70%を使い、残り4年を前回anchorへ戻している。",
+    "BroadcomはQ4 FY2026 AI semiconductor revenue 21.7B USDとOpenAI 10GW multi-year deploymentを開示しているが、5年売上CAGR guidanceは開示していない。AVGO側の長期成長を過小評価している可能性がある。",
+    "Dividends、taxes、future acquisition financingは除外。FCF marginとshare-count stressは前回canonical contractを維持。",
+    "相対順位が成長仮定で9/9から0/9へ完全反転するため、単一の5年IRR gridをportfolio weight authorityにしてはいけない。"
+  ],
+  "next_high_value_hypothesis": "NVDAのFY2028約70%成長見通しとAVGOのOpenAI 10GW・AI semiconductor revenue guidanceを、年別の売上backlog/顧客設備投資/供給能力に変換したfade modelへ落とすと、両社の5年FCF IRR順位はどの成長持続率で反転するか。"
+}
