@@ -1,0 +1,148 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_management_ai_outlook_falsifies_legacy_anchor_20260908",
+  "status": "REJECT",
+  "as_of": "2026-09-08",
+  "hypothesis": "The existing canonical Broadcom FY2027 company-growth comparator of 18.83753816% remains decision-useful after management's latest AI semiconductor outlook.",
+  "capital_allocation_importance": "The 18.83753816% comparator has been reused in NVDA/AVGO FCF-IRR work. If it materially understates management-backed near-term AI revenue, relative valuation and capital-allocation conclusions can be biased against AVGO even when the model is internally consistent.",
+  "decision_rule": {
+    "USE": "Keep 18.83753816% if the management-backed FY2027 company-growth lower-bound proxy is within 5 percentage points of it under flat non-AI revenue.",
+    "CONDITION": "Keep only as a conservative stress input if the gap is above 5 but no more than 10 percentage points, and the gap is no more than 10 points under a 20% non-AI contraction.",
+    "REJECT": "Reject as a current decision comparator if the gap exceeds 10 percentage points under flat non-AI revenue or remains above 10 points under a 20% non-AI contraction.",
+    "UNVERIFIED": "Do not decide if the FY2026 AI baseline, management FY2027 AI outlook, or canonical comparator identity cannot be verified."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 / Q4 FY2026 outlook",
+      "facts_usd_billions": {
+        "q3_ai_semiconductor_revenue": 16.7,
+        "q4_ai_semiconductor_revenue_guidance": 21.7,
+        "q4_total_revenue_guidance": 34.8,
+        "fy2026_ai_semiconductor_revenue_using_q1_q3_actual_plus_q4_guidance": 57.6,
+        "fy2026_total_revenue_using_q1_q3_actual_plus_q4_guidance": 105.889
+      },
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 earnings conference call",
+      "fact": "Broadcom management stated that it had secured supply to support approximately 115 billion USD of FY2027 AI semiconductor revenue and had line of sight to approximately 230 billion USD in FY2028.",
+      "primary_event_url": "https://investors.broadcom.com/events/event-details/q3-2026-broadcom-earnings-conference-call",
+      "corroborating_source_url": "https://www.reuters.com/business/broadcom-forecasts-quarterly-revenue-below-estimates-2026-09-02/",
+      "source_note": "The official Broadcom event page provides the earnings-call webcast but no machine-readable transcript. The numeric management statement is corroborated by Reuters reporting of the call; no silent substitution is used."
+    },
+    {
+      "canonical_artifact": "docs/research/results/avgo_non_ai_zero_growth_stress_20260908/summary.json",
+      "facts": {
+        "legacy_fy2027_company_growth_comparator_pct": 18.83753816,
+        "fy2026_total_revenue_usd_billions": 105.889,
+        "fy2026_ai_semiconductor_revenue_usd_billions": 57.6,
+        "fy2026_non_ai_revenue_usd_billions": 48.289
+      }
+    }
+  ],
+  "method": {
+    "legacy_fy2027_company_growth_comparator_pct": 18.83753816,
+    "fy2026_total_revenue_usd_billions": 105.889,
+    "fy2026_ai_semiconductor_revenue_usd_billions": 57.6,
+    "fy2026_non_ai_revenue_usd_billions": 48.289,
+    "management_fy2027_ai_semiconductor_outlook_usd_billions": 115.0,
+    "management_fy2028_ai_semiconductor_outlook_usd_billions": 230.0,
+    "management_implied_fy2027_ai_growth_pct": 99.65277778,
+    "primary_case": "Hold FY2027 non-AI revenue flat at the canonical FY2026 level and add management's 115 billion USD FY2027 AI semiconductor outlook. This is a lower-bound company-revenue proxy only; it is not issuer company-revenue guidance.",
+    "stress_non_ai_growth_pct": [0.0, -10.0, -20.0, -30.0, -50.0],
+    "formula": "FY2027 company revenue proxy = 115 + 48.289 * (1 + non-AI growth); company growth = proxy / 105.889 - 1.",
+    "missing_data_policy": "No GW-to-revenue conversion, no unpublished customer economics, no inferred FY2027 software/semiconductor split, and no assumption that 230 billion USD of FY2028 AI revenue is guaranteed."
+  },
+  "results": {
+    "flat_non_ai_case": {
+      "fy2027_company_revenue_proxy_usd_billions": 163.289,
+      "implied_fy2027_company_growth_pct": 54.20770807,
+      "gap_vs_legacy_comparator_percentage_points": 35.37016991
+    },
+    "stress_cases": [
+      {
+        "non_ai_growth_pct": 0.0,
+        "implied_fy2027_company_growth_pct": 54.20770807,
+        "gap_vs_legacy_percentage_points": 35.37016991
+      },
+      {
+        "non_ai_growth_pct": -10.0,
+        "implied_fy2027_company_growth_pct": 49.64736658,
+        "gap_vs_legacy_percentage_points": 30.80982842
+      },
+      {
+        "non_ai_growth_pct": -20.0,
+        "implied_fy2027_company_growth_pct": 45.08702509,
+        "gap_vs_legacy_percentage_points": 26.24948693
+      },
+      {
+        "non_ai_growth_pct": -30.0,
+        "implied_fy2027_company_growth_pct": 40.52668360,
+        "gap_vs_legacy_percentage_points": 21.68914544
+      },
+      {
+        "non_ai_growth_pct": -50.0,
+        "implied_fy2027_company_growth_pct": 31.40600062,
+        "gap_vs_legacy_percentage_points": 12.56846246
+      }
+    ],
+    "fy2028_context_flat_non_ai": {
+      "fy2028_company_revenue_proxy_usd_billions": 278.289,
+      "implied_fy2028_company_growth_vs_fy2027_proxy_pct": 70.42727924,
+      "management_fy2028_ai_semiconductor_outlook_usd_billions": 230.0
+    },
+    "interpretation": "The legacy 18.83753816% FY2027 company-growth comparator is materially stale relative to the latest management AI outlook. Even if total non-AI revenue contracts 50%, the company-revenue proxy implied by 115 billion USD of AI semiconductor revenue is 31.40600062%, 12.56846246 percentage points above the legacy comparator."
+  },
+  "benchmark_comparison": {
+    "benchmark": {
+      "name": "legacy canonical near-term company-growth comparator",
+      "fy2027_growth_pct": 18.83753816,
+      "source": "avgo_non_ai_zero_growth_stress_20260908"
+    },
+    "alternative": {
+      "name": "management-AI-outlook plus explicit non-AI stress",
+      "flat_non_ai_fy2027_company_growth_pct": 54.20770807,
+      "minus_20pct_non_ai_fy2027_company_growth_pct": 45.08702509,
+      "minus_50pct_non_ai_fy2027_company_growth_pct": 31.40600062
+    },
+    "conclusion": "The simple management-outlook proxy dominates the stale comparator as a current near-term sensitivity input because the old comparator understates implied company growth by more than the predeclared 10-point rejection threshold across all tested non-AI stress cases."
+  },
+  "risk_metrics": {
+    "time_series_metrics": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time forward fundamental falsification study, not a return-series backtest. Volatility, Sharpe, maximum drawdown and Expected Shortfall do not measure the tested hypothesis.",
+    "material_risks": [
+      "The 115 billion USD and 230 billion USD figures are management forward outlooks, not realized revenue.",
+      "Supply availability, memory constraints, customer deployment timing and cancellations can cause actual AI revenue to differ materially.",
+      "The company-revenue proxy assumes explicit non-AI growth scenarios rather than issuer company-level guidance.",
+      "Broadcom's leverage remains a separate capital-allocation risk and is not removed by higher revenue growth."
+    ]
+  },
+  "decision": {
+    "status": "REJECT",
+    "reject": "Do not use 18.83753816% as the current canonical FY2027 AVGO company-growth comparator in NVDA/AVGO relative-valuation decisions.",
+    "retain_only_for": "Historical reproducibility of prior studies or explicitly labeled low-growth stress tests.",
+    "replacement_contract": "For current near-term work, use management FY2027 AI semiconductor outlook as a separate observed forward input and keep non-AI growth explicit as a sensitivity variable. Do not collapse the result into a new single company-growth default until issuer company-level guidance or a validated component bridge exists.",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical negative decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_duplicated": false
+  },
+  "deleted_or_avoided": {
+    "deleted_code": [],
+    "avoided_new_defaults": [
+      "No replacement single AVGO company-growth default was created.",
+      "No GW or infrastructure transaction amount was converted into Broadcom revenue.",
+      "No duplicate valuation calculation was added to finBI or another finance repository."
+    ]
+  },
+  "remaining_uncertainty": "Broadcom has not published machine-readable company-level FY2027 or FY2028 revenue guidance corresponding to the 115/230 billion USD AI semiconductor outlook. The management outlook is therefore suitable as a component-level forward input, not as guaranteed realized revenue or a standalone portfolio-weight rule.",
+  "next_hypothesis": "Using management's FY2027 115 billion USD and FY2028 230 billion USD AI semiconductor outlook as point-in-time component inputs, a two-stage AVGO FCF model with explicit non-AI downside and margin compression still produces a higher risk-adjusted expected return than the current NVDA canonical comparator after terminal-multiple stress."
+}
