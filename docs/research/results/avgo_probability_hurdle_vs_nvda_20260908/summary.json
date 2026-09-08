@@ -1,0 +1,164 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_probability_hurdle_vs_nvda_20260908",
+  "as_of": "2026-09-08",
+  "status": "REJECT",
+  "hypothesis": "Under the existing AVGO downside contract, an equal-weight 0% / 10% post-FY2028 total-revenue-growth distribution is sufficient for AVGO to match or exceed the NVIDIA canonical base-case five-year price IRR.",
+  "capital_allocation_importance": "The prior deterministic 7.83910862% post-FY2028 AVGO growth assumption was rejected as evidence-backed because dated customer deployment visibility ends in 2029. A probability-weighted comparison can avoid pretending FY2030-FY2031 growth is known, but only if the probability hurdle required to beat NVDA is explicit rather than invented.",
+  "precommitted_decision_rule": {
+    "USE": "The equal-weight 0% / 10% distribution produces AVGO expected IRR at least 1 percentage point above NVDA at 25x, 35x, and 45x terminal Price/FCF.",
+    "CONDITION": "The expected-return difference is mixed across multiples or all three differences are within +/-1 percentage point.",
+    "REJECT": "The equal-weight distribution leaves AVGO at least 1 percentage point below NVDA at all three terminal multiples.",
+    "UNVERIFIED": "The canonical AVGO stress outputs, NVIDIA comparator, or current source identity cannot be verified."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "canonical_inputs": {
+    "source_artifact": "docs/research/results/avgo_management_outlook_fcf_stress_20260908/summary.json",
+    "evidence_horizon_artifact": "docs/research/results/avgo_post2028_demand_visibility_20260908/summary.json",
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "AVGO_contract": {
+      "FY2027_AI_semiconductor_outlook_USD_billion": 115.0,
+      "FY2028_AI_semiconductor_outlook_USD_billion": 230.0,
+      "FY2026_non_AI_revenue_proxy_USD_billion": 48.289,
+      "non_AI_growth_vs_FY2026_pct": -20.0,
+      "FCF_margin_pct": 39.22135931,
+      "diluted_share_count_CAGR_pct": 1.0,
+      "terminal_Price_to_FCF_grid_x": [25, 35, 45]
+    },
+    "NVDA_canonical_base_IRR_pct": {
+      "25x": 12.44060897,
+      "35x": 20.26764201,
+      "45x": 26.46713790
+    },
+    "AVGO_post_FY2028_growth_scenarios": {
+      "downside_0pct_IRR": {
+        "25x": 7.46261770,
+        "35x": 14.94313090,
+        "45x": 20.86816157
+      },
+      "upside_10pct_IRR": {
+        "25x": 13.78709934,
+        "35x": 21.70786207,
+        "45x": 27.98159770
+      }
+    }
+  },
+  "primary_evidence": [
+    {
+      "source": "Broadcom Q3 FY2026 results and Q4 guidance",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "fact": "Q3 AI semiconductor revenue was 16.7B USD, up 221% year over year; Q4 AI semiconductor revenue guidance was 21.7B USD, up 236% year over year."
+    },
+    {
+      "source": "Broadcom / OpenAI official announcement",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/openai-and-broadcom-announce-strategic-collaboration-deploy-10",
+      "fact": "10GW deployment is targeted to start in 2H 2026 and complete by end of 2029."
+    },
+    {
+      "source": "Broadcom / Meta official announcement",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-announces-extended-partnership-meta-deploy-technology",
+      "fact": "The multi-year, multi-generation MTIA partnership is explicitly planned through 2029."
+    },
+    {
+      "source": "Broadcom / Apollo / Blackstone official announcement",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-apollo-and-blackstone-establish-landmark-strategic",
+      "fact": "The AI XPV Platform targets more than 20GW of Broadcom XPU/networking-enabled compute capacity through 2028; 35B USD is infrastructure transaction value, not Broadcom revenue."
+    }
+  ],
+  "method": {
+    "type": "Probability-hurdle valuation comparison using already-validated canonical scenario outputs.",
+    "why_no_forecast_probability_is_invented": "No public point-in-time evidence verified in this run supplies an empirical probability for FY2030-FY2031 AVGO growth. Therefore 50/50 is used only as a neutral robustness benchmark, not as a claim that either scenario has 50% real-world probability.",
+    "benchmark_distribution": {
+      "post_FY2028_growth_0pct_probability": 0.5,
+      "post_FY2028_growth_10pct_probability": 0.5
+    },
+    "formula_expected_IRR": "0.5 * IRR(growth=0%) + 0.5 * IRR(growth=10%)",
+    "formula_required_upside_probability": "(NVDA_IRR - AVGO_IRR_0pct) / (AVGO_IRR_10pct - AVGO_IRR_0pct)",
+    "simple_benchmark": "NVDA canonical base-case IRR at the same terminal Price/FCF multiple.",
+    "alternative": "Report the implied minimum probability on the 10% AVGO growth scenario instead of asserting a probability forecast."
+  },
+  "measured_result": {
+    "equal_weight_expected_AVGO_IRR_pct": {
+      "25x": 10.62485852,
+      "35x": 18.32549649,
+      "45x": 24.42487964
+    },
+    "AVGO_minus_NVDA_percentage_points": {
+      "25x": -1.81575045,
+      "35x": -1.94214552,
+      "45x": -2.04225827
+    },
+    "required_probability_on_10pct_growth_scenario_to_match_NVDA_pct": {
+      "25x": 78.70986989,
+      "35x": 78.70987000,
+      "45x": 78.70986999
+    },
+    "winner_count_under_equal_weight_distribution": {
+      "AVGO": 0,
+      "NVDA": 3
+    },
+    "decision": "REJECT"
+  },
+  "sensitivity_of_probability_hurdle": [
+    {
+      "downside_growth_pct": 0,
+      "upside_growth_pct": 10,
+      "required_upside_probability_pct": 78.70986999
+    },
+    {
+      "downside_growth_pct": 0,
+      "upside_growth_pct": 15,
+      "required_upside_probability_pct": 52.95658167
+    },
+    {
+      "downside_growth_pct": 0,
+      "upside_growth_pct": 20,
+      "required_upside_probability_pct": 40.07158725
+    },
+    {
+      "downside_growth_pct": 5,
+      "upside_growth_pct": 10,
+      "required_upside_probability_pct": 57.01013921
+    }
+  ],
+  "benchmark_comparison": {
+    "benchmark": "NVDA canonical base-case five-year price IRR.",
+    "simple_probability_benchmark": "AVGO 50% weight on 0% post-FY2028 growth and 50% weight on 10% growth.",
+    "result": "The equal-weight AVGO expected IRR is 1.81575045 to 2.04225827 percentage points below NVDA across 25x, 35x, and 45x. AVGO needs about 78.71% probability on the 10% growth branch, versus 21.29% on the 0% branch, merely to match NVDA under this binary support.",
+    "interpretation": "The probability-weighted model does not rescue AVGO without a strong prior that FY2029-FY2031 total revenue growth will be near 10% rather than 0%. Current dated customer announcements do not cover FY2030-FY2031, so that 78.71% probability cannot be promoted to an evidence-backed input."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time forward fundamental scenario comparison, not a realized return-series backtest.",
+    "material_risks": [
+      "The 115B / 230B USD AI semiconductor figures are management outlook, not realized revenue.",
+      "The 0% and 10% scenario supports are canonical sensitivity points, not an empirical forecast distribution.",
+      "Public customer deployment commitments verified here end by 2029, leaving FY2030-FY2031 demand probability unobserved.",
+      "FCF margin compression, dilution, and non-AI decline remain model stresses rather than issuer guidance.",
+      "NVDA comparator also contains forward assumptions and is not a realized-return benchmark."
+    ]
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "Under the neutral 50/50 robustness benchmark, AVGO remains more than 1 percentage point below NVDA at all three common terminal multiples, satisfying the precommitted REJECT rule. Matching NVDA requires about 78.71% weight on the 10% post-FY2028 growth branch, a probability not supported by dated FY2030-FY2031 customer evidence.",
+    "portfolio_implication": "Do not overweight AVGO relative to NVDA using a probability-weighted story unless the assumed probability of sustained post-FY2028 growth is stated explicitly and supported. Treat 78.71% as a conviction hurdle for the 0%/10% binary support, not as a forecast probability.",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical negative decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "consumer_duplication": false,
+    "deleted_code": [],
+    "usage_rule": "Keep scenario probabilities explicit. Never silently assign an empirical probability to FY2030-FY2031 AVGO growth until point-in-time evidence supports it."
+  },
+  "remaining_uncertainty": "The actual FY2030-FY2031 growth distribution is not observable from current dated customer commitments. Future contracts, renewals, product generations, cancellations, capacity additions, or pricing could materially change the probability hurdle.",
+  "next_hypothesis": "Using historical Broadcom annual revenue downside and forecast-error base rates from issuer filings, rather than a neutral 50/50 benchmark, produces an empirical prior that places at least 78.71% probability on a post-FY2028 growth outcome equivalent to 10% versus 0%."
+}
