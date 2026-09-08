@@ -1,0 +1,113 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_q4_segment_interval_ai_requirement_20260908",
+  "status": "CONDITION",
+  "as_of": "2026-09-08",
+  "hypothesis": "Using only issuer-disclosed Broadcom FY2026 facts and the full accounting-feasible range for the undisclosed Q4 segment mix, FY2027 company revenue growth of 18.83753816% can still be achieved with AI semiconductor growth below 30% across every feasible Q4 mix, if Q1-Q3 observed growth rates for non-AI semiconductor and infrastructure software are carried forward for one year.",
+  "decision_rule": {
+    "USE": "Use as a robust near-term growth anchor only if required FY2027 AI semiconductor growth remains below 30% across the full Q4 feasible segment interval and the result does not depend materially on extrapolating Q1-Q3 non-AI bucket growth.",
+    "CONDITION": "Retain as a near-term sensitivity anchor if required AI growth is below 30% across the full Q4 accounting interval, but one-year extrapolation of Q1-Q3 non-AI bucket growth remains an assumption.",
+    "REJECT": "Reject if any accounting-feasible Q4 mix requires AI semiconductor growth of 30% or more, or if the conclusion requires a fabricated point estimate for Q4 segment mix.",
+    "UNVERIFIED": "Use if issuer-reported total revenue, AI revenue, or the prior canonical three-bucket growth facts cannot be identified."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 / Q4 FY2026 outlook",
+      "facts_usd_billions": {
+        "q4_total_revenue_guidance": 34.8,
+        "q4_ai_semiconductor_revenue_guidance": 21.7,
+        "q4_residual_non_ai_total": 13.1
+      },
+      "q4_total_revenue_yoy_pct": 93.0,
+      "q4_ai_semiconductor_yoy_pct": 236.0,
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "canonical_artifact": "docs/research/results/avgo_three_bucket_growth_decomposition_20260908/summary.json",
+      "facts": {
+        "q1_q3_fy2026_ai_semiconductor_usd_billions": 35.9,
+        "q1_q3_fy2026_non_ai_semiconductor_usd_billions": 12.463,
+        "q1_q3_fy2026_infrastructure_software_usd_billions": 22.726,
+        "q1_q3_non_ai_semiconductor_growth_pct": 3.32968625,
+        "q1_q3_infrastructure_software_growth_pct": 13.14348302
+      }
+    }
+  ],
+  "method": {
+    "target_fy2027_company_growth_pct": 18.83753816,
+    "fy2026_total_revenue_usd_billions": 105.889,
+    "fy2026_ai_semiconductor_usd_billions": 57.6,
+    "q4_accounting_identity": "Q4 non-AI semiconductor + Q4 infrastructure software = 34.8 - 21.7 = 13.1 billion USD.",
+    "q4_interval": {
+      "q4_infrastructure_software_usd_billions": [0.0, 13.1],
+      "q4_non_ai_semiconductor_usd_billions": [13.1, 0.0],
+      "interpretation": "This is the broadest non-negative accounting-feasible interval. No unpublished segment mix is inferred."
+    },
+    "fy2027_non_ai_assumptions": {
+      "non_ai_semiconductor_growth_pct": 3.32968625,
+      "infrastructure_software_growth_pct": 13.14348302,
+      "source": "Observed Q1-Q3 FY2026 versus Q1-Q3 FY2025 growth from the prior canonical three-bucket artifact.",
+      "scope": "One-year sensitivity assumption only; not issuer guidance and not a multi-year forecast."
+    },
+    "required_ai_growth_formula": "required AI growth = (FY2027 target revenue - FY2027 non-AI semiconductor - FY2027 infrastructure software) / FY2026 AI semiconductor revenue - 1",
+    "missing_data_policy": "Do not choose a point estimate for Q4 software or non-AI semiconductor revenue. Evaluate both endpoints of the full feasible interval; the required AI growth is linear in the Q4 mix, so endpoint evaluation bounds the entire interval."
+  },
+  "results": {
+    "fy2027_target_revenue_usd_billions": 125.8358807822424,
+    "required_ai_growth_pct_interval": {
+      "minimum": 25.73457944,
+      "maximum": 27.96653669,
+      "width_percentage_points": 2.23195725
+    },
+    "endpoint_cases": [
+      {
+        "case": "all Q4 residual assigned to non-AI semiconductor",
+        "q4_non_ai_semiconductor_usd_billions": 13.1,
+        "q4_infrastructure_software_usd_billions": 0.0,
+        "fy2026_non_ai_semiconductor_usd_billions": 25.563,
+        "fy2026_infrastructure_software_usd_billions": 22.726,
+        "required_fy2027_ai_semiconductor_growth_pct": 27.96653669
+      },
+      {
+        "case": "all Q4 residual assigned to infrastructure software",
+        "q4_non_ai_semiconductor_usd_billions": 0.0,
+        "q4_infrastructure_software_usd_billions": 13.1,
+        "fy2026_non_ai_semiconductor_usd_billions": 12.463,
+        "fy2026_infrastructure_software_usd_billions": 35.826,
+        "required_fy2027_ai_semiconductor_growth_pct": 25.73457944
+      }
+    ],
+    "all_feasible_q4_mixes_below_30_pct_required_ai_growth": true
+  },
+  "benchmark_comparison": {
+    "prior_two_bucket_required_ai_growth_pct_interval": [25.59637831, 26.07141398],
+    "three_bucket_full_q4_interval_required_ai_growth_pct_interval": [25.73457944, 27.96653669],
+    "interpretation": "Separating non-AI semiconductor from infrastructure software widens the required AI growth range materially, especially on the upper side, but the entire accounting-feasible interval remains below 30%.",
+    "upper_bound_increase_vs_prior_percentage_points": 1.89512271
+  },
+  "capital_allocation_implication": "Broadcom's 18.83753816% FY2027 company-growth comparator survives the Q4 segment-mix uncertainty under a one-year continuation of observed non-AI bucket growth: AI semiconductor growth of roughly 25.7% to 28.0% is sufficient across the full non-negative Q4 accounting interval. This supports retaining 18.83753816% only as a near-term CONDITION sensitivity anchor. It does not justify a multi-year AVGO growth assumption or a portfolio-weight change.",
+  "risk_and_validation": {
+    "time_series_risk_metrics": "not applicable; this is a forward fundamental boundary study, not a return backtest",
+    "model_risk": "The result depends on carrying Q1-Q3 observed non-AI semiconductor and infrastructure software growth forward for one year.",
+    "data_risk": "Q4 segment mix remains undisclosed; this artifact avoids a fabricated point estimate by bounding the entire accounting-feasible interval.",
+    "comparison_to_current_q4_ai_guidance": "Current Q4 FY2026 AI semiconductor revenue guidance is +236% year over year, far above the 25.7% to 28.0% FY2027 growth required by this sensitivity, but current growth is not assumed to persist."
+  },
+  "implementation": {
+    "reusable_allocation_rule_added": false,
+    "valuation_model_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "portfolio_weight_authority_changed": false,
+    "decision_artifact_only": true
+  },
+  "limitations": [
+    "Broadcom has not disclosed Q4 FY2026 semiconductor-solutions and infrastructure-software guidance separately.",
+    "The full accounting interval includes economically extreme Q4 mixes; it is intentionally broad to avoid hidden assumptions.",
+    "Q1-Q3 non-AI bucket growth rates are observed historical growth, not FY2027 issuer guidance.",
+    "The result supports only a one-year sensitivity anchor; it does not validate FY2028-FY2030 company growth.",
+    "OpenAI and other multi-year AI deployment evidence is not converted into revenue without an issuer-disclosed revenue-recognition schedule."
+  ],
+  "next_hypothesis": "Can Broadcom's FY2027-FY2030 AI semiconductor growth be bounded from issuer-disclosed deployment capacity and customer commitments without converting gigawatts directly into revenue, so the NVDA/AVGO two-sided five-year growth boundary can use year-specific intervals instead of flat growth anchors?"
+}
