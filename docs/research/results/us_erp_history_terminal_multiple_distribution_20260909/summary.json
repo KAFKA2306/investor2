@@ -1,0 +1,114 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "us_erp_history_terminal_multiple_distribution_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09T06:09:51+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "1960-2025のannual implied ERP + risk-free seriesをpoint-in-timeで再構成し、terminal FCF growth 3%で得るPrice/FCF distributionを使うと、既存25xはdownsideではなくhistorically high-multiple側に位置し、AVGO/NVDA相対結論も維持される。",
+  "decision_rule": {
+    "USE": "25xがhistorical 75th percentileを上回り、historical median/75th percentileの両方でAVGO 50/50 mean scenarioの5年price IRRがNVDA baseを下回る。",
+    "CONDITION": "25xは75th percentileを上回るがAVGO/NVDA相対順位がmedianまたは75th percentileで反転する。",
+    "REJECT": "25xが75th percentile以下、またはhistorical bandで既存の相対結論が一貫しない。",
+    "UNVERIFIED": "year、risk-free rate、implied ERP、terminal growth、canonical valuation dependencyのidentityが不足する。"
+  },
+  "source": {
+    "provider": "Aswath Damodaran, NYU Stern",
+    "dataset": "Historical Implied Equity Risk Premiums for the US",
+    "dataset_date": "January 2026",
+    "source_url": "https://pages.stern.nyu.edu/adamodar/New_Home_Page/datafile/histimpl.html",
+    "period_requested": "1960-2025",
+    "period_used": "1961-2025",
+    "observations": 65,
+    "identity_note": "1960は公開表でimplied ERPが空欄のため推測で補完せず除外した。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_erp_anchored_terminal_multiple_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "method": {
+    "required_return_proxy": "T.Bond Rate + Implied ERP (FCFE)",
+    "terminal_growth_pct": 3.0,
+    "multiple_formula": "Price/FCF = 1 / (required_return_proxy - terminal_growth)",
+    "look_ahead_control": "各年のT.Bond RateとImplied ERPをその年の観測値として使用し、欠損した1960 ERPは補完しない。",
+    "not_a_fair_value_model": "market beta 1の市場wide stress calibrationであり、company-specific FCFE fair valueではない。"
+  },
+  "historical_distribution_1961_2025": {
+    "required_return_proxy_pct": {
+      "mean": 9.92676923,
+      "median": 8.86,
+      "p25": 7.98,
+      "p75": 11.37
+    },
+    "price_to_fcf_at_3pct_growth_x": {
+      "p25": 11.94743130,
+      "median": 17.06484642,
+      "p75": 20.08032129,
+      "p90": 22.21258569,
+      "max": 44.05286344
+    },
+    "existing_25x_percentile_rank_pct": 93.84615385,
+    "years_at_or_above_25x": 4,
+    "share_years_at_or_above_25x_pct": 6.15384615,
+    "years_at_or_above_25x_list": [1961, 1998, 2020, 2021]
+  },
+  "current_2026_context": {
+    "risk_free_rate_pct": 4.75,
+    "implied_erp_pct": 4.14,
+    "required_return_proxy_pct": 8.89,
+    "price_to_fcf_at_3pct_growth_x": 16.97792869,
+    "historical_percentile_rank_pct": 47.69230769
+  },
+  "five_year_price_irr_sensitivity_pct": {
+    "historical_p25_multiple": {
+      "multiple_x": 11.94743130,
+      "NVDA_base": -2.67456641,
+      "AVGO_post_FY2028_growth_0pct": -7.89260078,
+      "AVGO_post_FY2028_growth_10pct": -2.47181755,
+      "AVGO_50_50_mean": -5.18220917,
+      "AVGO_mean_minus_NVDA_pp": -2.50764276
+    },
+    "historical_median_multiple": {
+      "multiple_x": 17.06484642,
+      "NVDA_base": 4.51819852,
+      "AVGO_post_FY2028_growth_0pct": -1.08547086,
+      "AVGO_post_FY2028_growth_10pct": 4.73593138,
+      "AVGO_50_50_mean": 1.82523026,
+      "AVGO_mean_minus_NVDA_pp": -2.69296826
+    },
+    "historical_p75_multiple": {
+      "multiple_x": 20.08032129,
+      "NVDA_base": 7.97558614,
+      "AVGO_post_FY2028_growth_0pct": 2.18655136,
+      "AVGO_post_FY2028_growth_10pct": 8.20052144,
+      "AVGO_50_50_mean": 5.19353640,
+      "AVGO_mean_minus_NVDA_pp": -2.78204973
+    },
+    "existing_25x": {
+      "NVDA_base": 12.81307588,
+      "AVGO_post_FY2028_growth_0pct": 6.76468251,
+      "AVGO_post_FY2028_growth_10pct": 13.04808867,
+      "AVGO_50_50_mean": 9.90638559,
+      "AVGO_mean_minus_NVDA_pp": -2.90669029
+    }
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "25xはhistorical 75th percentile 20.08032129xを上回り、1961-2025分布の約93.85 percentileに位置する。historical medianと75th percentileの両方でAVGO 50/50 mean 5y price IRRはNVDA baseを約2.69-2.78 percentage points下回る。",
+    "usage_rule": "AVGO/NVDA valuationで25xをgeneric downside terminal multipleと呼ばない。少なくともhistorical p25/median/p75のERP-anchored 3% growth bandとcurrent point-in-time ERP-anchored multipleを併記し、25xはexplicit high-multiple sensitivityとして扱う。",
+    "portfolio_action": "このartifactは売買・注文・portfolio weight変更を実行しない。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized-return strategy backtestではなくvaluation calibration studyのため。"
+  },
+  "limitations": [
+    "Damodaran implied ERPはモデル推計であり政府統計の直接観測値ではない。",
+    "required-return proxyはmarket beta 1を仮定しcompany-specific beta、leverage、business riskを含まない。",
+    "annual dataなのでintrayear valuation distributionは表さない。",
+    "Price/FCF formulaはrepository既存の簡略cash-flow-yield contractに従い、full FCFE modelではない。"
+  ],
+  "next_hypothesis": "AVGO/NVDAそれぞれのcompany-specific betaとnet debt/cashをpoint-in-timeで反映したcost-of-equity / capital-structure adjusted terminal bandでも、AVGO 50/50 expected 5y returnがNVDA baseを下回るか。"
+}
