@@ -1,0 +1,101 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_two_sided_growth_boundary_20260908",
+  "status": "REJECT",
+  "hypothesis": "前回保存したNVDAのFY2028後4年break-even成長率8.46348996%は、AVGOのnext-TTM後4年成長率を10%-20%の感応度範囲で動かしても大きく変わらず、単一の再利用可能な監視閾値として扱える。",
+  "decision_rule": {
+    "use_if": "AVGO post-next-TTM growthを10%-20%で動かしたときNVDA break-even post-FY2028 growthのレンジが3 percentage points以下。",
+    "condition_if": "同レンジが3 points超5 points以下。",
+    "reject_if": "同レンジが5 points超。",
+    "unverified_if": "current price、TTM revenue、FCF margin、diluted shares、NVDA FY2028 outlook、AVGO near-term guidanceのidentity/as-ofが揃わない。"
+  },
+  "capital_allocation_importance": "前回の8.46348996%を単一監視値として使うと、AVGO側の長期成長不確実性を隠してNVDA/AVGOの相対順位を過度に単純化する。二社の資本配分では片側だけでなく両社のfadeを同時に見る必要がある。",
+  "canonical_inputs": {
+    "source_artifact": "docs/research/results/nvda_avgo_fade_boundary_20260908/summary.json",
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "NVDA": {"price": 230.19, "TTM_revenue_USD_billion": 302.97, "TTM_FCF_margin_pct": 41.88071426, "latest_diluted_shares_billion": 24.285, "year1_growth_pct": 70.0},
+    "AVGO": {"price": 357.835, "TTM_revenue_USD_billion": 89.104, "TTM_FCF_margin_pct": 44.22135931, "latest_diluted_shares_billion": 4.887, "year1_next_TTM_growth_pct": 18.83753816}
+  },
+  "primary_sources": {
+    "NVDA_Q2_FY2027_results": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVDA_Q2_FY2027_earnings_call": "https://investor.nvidia.com/files/content_files/TRANSCRIPT_-NVIDIA-Corp-NVDA-US-Q2-2027-Earnings-Call-26-August-2026-5_00-PM-ET.pdf",
+    "AVGO_Q3_FY2026_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "AVGO_OpenAI_10GW_collaboration": "https://investors.broadcom.com/news-releases/news-release-details/openai-and-broadcom-announce-strategic-collaboration-deploy-10"
+  },
+  "point_in_time_evidence": {
+    "NVDA_Q2_FY2027_revenue_USD_billion": 96.221,
+    "NVDA_Q2_FY2027_revenue_yoy_pct": 106,
+    "NVDA_FY2028_revenue_growth_outlook_pct": 70,
+    "AVGO_Q3_FY2026_revenue_USD_billion": 29.591,
+    "AVGO_Q3_FY2026_revenue_yoy_pct": 86,
+    "AVGO_Q4_FY2026_revenue_guidance_USD_billion": 34.8,
+    "AVGO_Q4_FY2026_revenue_guidance_yoy_pct": 93,
+    "AVGO_Q3_FY2026_AI_semiconductor_revenue_USD_billion": 16.7,
+    "AVGO_Q3_FY2026_AI_semiconductor_revenue_yoy_pct": 221,
+    "AVGO_Q4_FY2026_AI_semiconductor_revenue_guidance_USD_billion": 21.7,
+    "AVGO_Q4_FY2026_AI_semiconductor_revenue_guidance_yoy_pct": 236,
+    "AVGO_OpenAI_deployment_GW": 10,
+    "AVGO_OpenAI_deployment_start": "H2 2026",
+    "AVGO_OpenAI_deployment_complete_target": "end of 2029",
+    "AVGO_long_term_company_revenue_guidance": "not provided"
+  },
+  "method": {
+    "NVDA_growth_path": "year1 = 70%; years2-5 = unknown constant x",
+    "AVGO_growth_path": "year1 = canonical next-TTM growth 18.83753816%; years2-5 = sensitivity y",
+    "AVGO_post_next_TTM_growth_sensitivity_pct": [0, 5, 10, 15, 18.83753816, 20, 25, 30],
+    "FCF_margin": "held at current TTM issuer-reconstructed margin",
+    "diluted_share_count": "held constant",
+    "terminal_price_to_FCF_x": 35,
+    "terminal_price_formula": "year5 FCF per diluted share * 35",
+    "five_year_price_IRR_formula": "(terminal price/current price)^(1/5)-1",
+    "break_even_definition": "for each AVGO post-next-TTM growth y, solve NVDA post-FY2028 growth x where five-year price IRRs are equal",
+    "dividends": "excluded",
+    "taxes": "excluded",
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "results": {
+    "previous_single_NVDA_break_even_post_FY2028_growth_pct": 8.46348996,
+    "sensitivity": [
+      {"AVGO_post_next_TTM_growth_pct": 0, "AVGO_five_year_price_IRR_pct": -1.28908793, "NVDA_break_even_post_FY2028_growth_pct": -8.72960545},
+      {"AVGO_post_next_TTM_growth_pct": 5, "AVGO_five_year_price_IRR_pct": 2.63999069, "NVDA_break_even_post_FY2028_growth_pct": -4.16608572},
+      {"AVGO_post_next_TTM_growth_pct": 10, "AVGO_five_year_price_IRR_pct": 6.53181171, "NVDA_break_even_post_FY2028_growth_pct": 0.39743401},
+      {"AVGO_post_next_TTM_growth_pct": 15, "AVGO_five_year_price_IRR_pct": 10.38839959, "NVDA_break_even_post_FY2028_growth_pct": 4.96095374},
+      {"AVGO_post_next_TTM_growth_pct": 18.83753816, "AVGO_five_year_price_IRR_pct": 13.32561427, "NVDA_break_even_post_FY2028_growth_pct": 8.46348996},
+      {"AVGO_post_next_TTM_growth_pct": 20, "AVGO_five_year_price_IRR_pct": 14.21158577, "NVDA_break_even_post_FY2028_growth_pct": 9.52447346},
+      {"AVGO_post_next_TTM_growth_pct": 25, "AVGO_five_year_price_IRR_pct": 18.00303439, "NVDA_break_even_post_FY2028_growth_pct": 14.08799319},
+      {"AVGO_post_next_TTM_growth_pct": 30, "AVGO_five_year_price_IRR_pct": 21.76426359, "NVDA_break_even_post_FY2028_growth_pct": 18.65151292}
+    ],
+    "focus_range_AVGO_post_growth_pct": [10, 20],
+    "focus_range_NVDA_break_even_pct": [0.39743401, 9.52447346],
+    "focus_range_width_percentage_points": 9.12703945
+  },
+  "benchmark_comparison": {
+    "simple_benchmark": "前回はAVGOの18.83753816%を5年間固定し、NVDAのFY2028後break-even成長率を8.46348996%という単一値で保存した。",
+    "alternative": "AVGOのyear1のみ18.83753816%を維持し、years2-5を0%-30%で動かす二社同時fade感応度。",
+    "result": "AVGO years2-5が10%ならNVDA break-evenは0.39743401%、20%なら9.52447346%。10%-20%だけでも9.12703945 points動くため、単一8.46348996%閾値は頑健ではない。"
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "事前REJECT条件の5 pointsを超え、AVGO 10%-20%感応度でNVDA break-evenが9.12703945 points動いた。8.46348996%を単独のcapital-allocation監視閾値として再利用しない。",
+    "portfolio_weight_authority_changed": false,
+    "reusable_valuation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "negative_decision_artifact_added": true
+  },
+  "risk_interpretation": {
+    "time_series_risk_metrics": "not applicable: forward valuation sensitivity study, not a return backtest",
+    "model_risk": "dominant; relative ranking depends on both companies' post-guidance growth paths",
+    "balance_sheet_condition": "prior canonical evidence records AVGO net debt 35.444B USD and NVDA net cash 23.220B USD excluding marketable equity securities; this study does not equalize leverage risk"
+  },
+  "limitations": [
+    "AVGO years2-5の0%-30%はissuer guidanceではなく感応度レンジ。OpenAI 10GWとAI semiconductor growthは強い需要証拠だが、年別全社売上へ直接変換できる契約金額は開示されていない。",
+    "NVDA FY2028約70%はissuer outlookだがFY2029以降は未知。",
+    "FCF margin、diluted shares、35x terminal Price-to-FCFを固定。dividend、tax、future acquisition financingを除外。",
+    "したがって本研究は勝者を決めず、前回の単一break-even閾値をREJECTするnegative evidenceである。"
+  ],
+  "next_high_value_hypothesis": "BroadcomのAI semiconductor revenueをQ1-Q4 FY2026の実績・guidance、OpenAI 10GWの2026H2-2029 deployment、non-AI semiconductorとinfrastructure softwareへ分解し、AVGO years2-5の全社売上成長率に一次情報で上限・下限を付けられるか。"
+}
