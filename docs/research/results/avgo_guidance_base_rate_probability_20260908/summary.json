@@ -1,0 +1,83 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_guidance_base_rate_probability_20260908",
+  "as_of": "2026-09-08",
+  "status": "REJECT",
+  "hypothesis": "Broadcom historical issuer guidance accuracy provides an empirical prior strong enough to justify at least 78.70986999% probability on the 10% rather than 0% post-FY2028 AVGO growth branch.",
+  "capital_allocation_importance": "The canonical AVGO versus NVDA comparison requires 78.70986999% probability on the 10% post-FY2028 growth branch merely to match NVDA. This run tests whether Broadcom's own historical guidance record can legitimately supply that conviction instead of inventing a probability.",
+  "precommitted_decision_rule": {
+    "USE": "A directly comparable issuer-history base rate supports at least 78.70986999% probability for the required multi-year growth outcome.",
+    "CONDITION": "Issuer history is directionally supportive but horizon or identity differs materially from the FY2029-FY2031 growth event.",
+    "REJECT": "Issuer history cannot validly support the 78.70986999% multi-year growth probability, or a naive mapping would conflate short-horizon guidance accuracy with long-horizon growth persistence.",
+    "UNVERIFIED": "Point-in-time guidance or realized revenue identity cannot be verified from issuer sources."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "canonical_input": {
+    "source_artifact": "docs/research/results/avgo_probability_hurdle_vs_nvda_20260908/summary.json",
+    "required_probability_on_10pct_growth_scenario_pct": 78.70986999
+  },
+  "issuer_history": [
+    {"fiscal_period":"Q4 FY2020","guidance_USD_million":6400,"actual_USD_million":6467,"actual_minus_guidance_pct":1.046875},
+    {"fiscal_period":"Q4 FY2021","guidance_USD_million":7350,"actual_USD_million":7407,"actual_minus_guidance_pct":0.77551020},
+    {"fiscal_period":"Q4 FY2022","guidance_USD_million":8900,"actual_USD_million":8930,"actual_minus_guidance_pct":0.33707865},
+    {"fiscal_period":"Q4 FY2023","guidance_USD_million":9270,"actual_USD_million":9295,"actual_minus_guidance_pct":0.26968716},
+    {"fiscal_period":"Q4 FY2024","guidance_USD_million":14000,"actual_USD_million":14054,"actual_minus_guidance_pct":0.38571429},
+    {"fiscal_period":"Q4 FY2025","guidance_USD_million":17400,"actual_USD_million":18015,"actual_minus_guidance_pct":3.53448276}
+  ],
+  "measured_result": {
+    "sample_count": 6,
+    "quarters_actual_at_or_above_guidance": 6,
+    "hit_rate_pct": 100.0,
+    "mean_actual_minus_guidance_pct": 1.05822468,
+    "median_actual_minus_guidance_pct": 0.58061224,
+    "minimum_actual_minus_guidance_pct": 0.26968716,
+    "decision": "REJECT"
+  },
+  "benchmark_comparison": {
+    "benchmark": "78.70986999% probability hurdle from the canonical 0%/10% AVGO post-FY2028 growth comparison.",
+    "simple_alternative": "Naively use Broadcom's Q4 revenue-guidance hit rate as the probability prior.",
+    "result": "Broadcom realized revenue met or exceeded the Q3-issued Q4 revenue guidance in all six verified FY2020-FY2025 observations, but that 100% one-quarter guidance hit rate is not the same event as sustaining at least 10% total-revenue CAGR through FY2029-FY2031.",
+    "interpretation": "The historical record supports short-horizon execution credibility, not a 78.71% probability of three-year post-outlook growth persistence. Mapping the hit rate directly would be a horizon and target-identity error."
+  },
+  "method": {
+    "point_in_time": true,
+    "look_ahead_control": "Each guidance value is taken from the issuer's Q3 release before the corresponding Q4 result; actual revenue is taken from the later issuer Q4/FY release.",
+    "transaction_costs": "NOT_APPLICABLE",
+    "simple_strategy_comparison": "Compare the canonical 78.71% hurdle with a naive issuer-guidance hit-rate prior, then reject the mapping if event horizon/identity differs.",
+    "no_silent_mapping": "A one-quarter revenue-guidance beat is not converted into a probability for a three-year CAGR event."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time forecast-calibration study, not a realized return-series backtest."
+  },
+  "primary_sources": [
+    "Broadcom Q3 FY2020 and Q4 FY2020 results",
+    "Broadcom Q3 FY2021 and Q4 FY2021 results",
+    "Broadcom Q3 FY2022 and Q4 FY2022 results",
+    "Broadcom Q3 FY2023 and Q4 FY2023 results",
+    "Broadcom Q3 FY2024 and Q4 FY2024 results",
+    "Broadcom Q3 FY2025 and Q4 FY2025 results"
+  ],
+  "decision": {
+    "status": "REJECT",
+    "reason": "The verified issuer history is impressively accurate at a one-quarter horizon, but it does not observe the FY2029-FY2031 multi-year event required by the valuation model. Therefore it cannot supply the 78.70986999% probability without an invalid horizon/identity substitution.",
+    "portfolio_implication": "Do not upgrade AVGO relative to NVDA by treating Broadcom's historical quarterly guidance hit rate as the probability of sustained post-FY2028 growth. Keep the 78.71% figure as a required conviction hurdle, not an empirical prior.",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical negative decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "consumer_duplication": false,
+    "deleted_code": [],
+    "usage_rule": "Never substitute short-horizon guidance hit rates for long-horizon growth probabilities unless target identity and horizon are comparable."
+  },
+  "remaining_uncertainty": "A valid empirical prior requires comparable multi-year Broadcom growth transitions or a broader, explicitly comparable cohort of custom-AI/semiconductor growth regimes; six one-quarter guidance observations cannot identify the FY2029-FY2031 probability distribution.",
+  "next_hypothesis": "A point-in-time historical base rate of Broadcom three-year forward revenue CAGR following high-growth regimes, compared with semiconductor peers, can bound the probability that FY2029-FY2031 total-revenue CAGR remains at least 10%."
+}
