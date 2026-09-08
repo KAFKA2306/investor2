@@ -1,0 +1,98 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_ai_mix_growth_anchor_20260908",
+  "status": "CONDITION",
+  "hypothesis": "Broadcomの既存canonical全社成長アンカー18.83753816%は、FY2026のAI半導体/非AI売上構成へ分解しても翌年1年間については現実的な範囲にあり、NVDA/AVGO二社感応度のAVGO側近接アンカーとして条件付きで再利用できる。",
+  "decision_rule": {
+    "use_if": "会社一次情報が2027-2029の年別売上または契約金額を示し、分解後に必要なAI成長率を複数年直接支持する。",
+    "condition_if": "FY2026実績/guideから分解した必要AI成長率が現在のAI成長率を大幅に下回り、2026H2-2029の実需deployment証拠もあるが、年別revenue scheduleは未開示。",
+    "reject_if": "18.83753816%全社成長を満たすために必要なAI成長率が現行Q4 guidance成長率以上になる、または非AI売上が縮小前提でしか成立しない。",
+    "unverified_if": "FY2026 total revenue、AI semiconductor revenue、FY2025 total revenue、as-of、unitのいずれかが一次情報で固定できない。"
+  },
+  "capital_allocation_importance": "前回REJECTした単一NVDA break-evenはAVGO長期成長仮定に敏感だった。AVGOの18.83753816%をAIと非AIへ分解すると、少なくとも翌年の近接比較にどの程度無理があるかを直接判定でき、NVDA/AVGO相対valuationのモデルリスクを減らせる。",
+  "primary_sources": {
+    "AVGO_Q1_FY2026_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial",
+    "AVGO_Q2_FY2026_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial",
+    "AVGO_Q3_FY2026_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "AVGO_FY2025_results": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+    "OpenAI_Broadcom_10GW": "https://openai.com/index/openai-and-broadcom-announce-strategic-collaboration/"
+  },
+  "canonical_comparator": {
+    "source_artifact": "docs/research/results/nvda_avgo_two_sided_growth_boundary_20260908/summary.json",
+    "AVGO_post_next_TTM_growth_pct": 18.83753816
+  },
+  "point_in_time_inputs": {
+    "as_of": "2026-09-08",
+    "currency": "USD",
+    "FY2025_total_revenue_USD_billion": 63.887,
+    "FY2026_Q1_total_revenue_USD_billion": 19.311,
+    "FY2026_Q2_total_revenue_USD_billion": 22.187,
+    "FY2026_Q3_total_revenue_USD_billion": 29.591,
+    "FY2026_Q4_total_revenue_guidance_USD_billion": 34.8,
+    "FY2026_Q1_AI_semiconductor_revenue_USD_billion": 8.4,
+    "FY2026_Q2_AI_semiconductor_revenue_USD_billion": 10.8,
+    "FY2026_Q3_AI_semiconductor_revenue_USD_billion": 16.7,
+    "FY2026_Q4_AI_semiconductor_revenue_guidance_USD_billion": 21.7,
+    "FY2026_AI_yoy_pct_by_quarter": [106, 143, 221, 236],
+    "OpenAI_deployment_GW": 10,
+    "OpenAI_deployment_start": "H2 2026",
+    "OpenAI_deployment_complete_target": "end of 2029"
+  },
+  "method": {
+    "FY2026_total_revenue_USD_billion": "Q1 actual + Q2 actual + Q3 actual + Q4 company guidance",
+    "FY2026_AI_revenue_USD_billion": "Q1 actual + Q2 actual + Q3 actual + Q4 company guidance",
+    "FY2026_non_AI_revenue_USD_billion": "FY2026 total - FY2026 AI",
+    "FY2025_AI_revenue_estimate": "各FY2026四半期AI revenueを各社公表y/y倍率で割り戻して合計。公表値が0.1B/整数%に丸められているため推定値として扱う。",
+    "FY2025_AI_revenue_rounding_interval": "各FY2026 AI revenueを+/-0.05B、y/y percentageを+/-0.5 pointの丸め区間として逆算した保守的interval。",
+    "FY2025_non_AI_revenue": "FY2025 total revenue - FY2025 AI estimate",
+    "FY2026_non_AI_growth": "FY2026 non-AI / FY2025 non-AI - 1",
+    "required_next_year_AI_growth": "FY2027 total growthを18.83753816%、non-AI growthをFY2026 implied rateと置き、FY2027 total = FY2026 AI*(1+g_AI)+FY2026 nonAI*(1+g_nonAI)からg_AIを解く",
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "results": {
+    "FY2026_total_revenue_USD_billion": 105.889,
+    "FY2026_total_revenue_growth_vs_FY2025_pct": 65.74420461,
+    "FY2026_AI_semiconductor_revenue_USD_billion": 57.6,
+    "FY2026_AI_revenue_mix_pct": 54.39658510,
+    "FY2026_non_AI_revenue_USD_billion": 48.289,
+    "FY2025_AI_revenue_mid_estimate_USD_billion": 20.18293989,
+    "FY2025_AI_revenue_rounding_interval_USD_billion": [20.07109523, 20.29521939],
+    "FY2025_non_AI_revenue_mid_estimate_USD_billion": 43.70406011,
+    "FY2026_non_AI_growth_mid_estimate_pct": 10.49087861,
+    "FY2026_non_AI_growth_rounding_interval_pct": [10.20883913, 10.77547035],
+    "required_next_year_AI_growth_for_18_83753816_total_growth_mid_pct": 25.83496599,
+    "required_next_year_AI_growth_rounding_interval_pct": [25.59637831, 26.07141398],
+    "Q4_FY2026_AI_growth_guidance_pct": 236,
+    "required_AI_growth_vs_Q4_guidance_ratio": 0.10947019
+  },
+  "benchmark_comparison": {
+    "simple_benchmark": "AVGOの18.83753816%をyears2-5にそのまま置く前回canonical comparator。",
+    "alternative": "FY2026売上をAI半導体と非AIへ分解し、翌年に18.83753816%全社成長を達成するために必要なAI成長率を逆算する。",
+    "result": "非AIがFY2026 implied growth約10.2%-10.8%を維持する場合、必要なAI成長率は約25.6%-26.1%。これはQ4 FY2026 AI semiconductor growth guidance +236%の約11%水準で、翌年1年間の18.84%全社成長は近接anchorとしては十分に実現可能な範囲。ただし2028-2030の年別売上契約は未開示。"
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "FY2027相当の近接1年間について18.83753816%全社成長は、必要AI成長率約25.6%-26.1%と現在のAI growth run-rateを大きく下回るため棄却できない。一方、OpenAI 10GWは2029までの実需証拠だが契約金額・年別revenue scheduleが開示されておらず、years2-5へ同じ18.84%を延長する根拠には不足する。",
+    "portfolio_weight_authority_changed": false,
+    "reusable_valuation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "decision_artifact_added": true
+  },
+  "risk_interpretation": {
+    "time_series_risk_metrics": "not applicable: issuer fundamental decomposition, not a return backtest",
+    "model_risk": "FY2025 AI revenue is reconstructed from rounded company-reported FY2026 revenue/yoy figures; the interval is explicitly carried instead of silently treating the midpoint as exact.",
+    "concentration_risk": "FY2026 AI semiconductor revenue is approximately 54.4% of total revenue, so future company growth increasingly depends on AI accelerator/networking demand and customer deployment timing.",
+    "balance_sheet_condition": "prior canonical evidence records AVGO net debt; this study changes only the growth-anchor evidence, not leverage risk."
+  },
+  "limitations": [
+    "Q4 FY2026 total revenue and AI semiconductor revenue are company guidance, not realized results.",
+    "FY2025 AI revenue is reverse-engineered from rounded FY2026 company-reported revenue/yoy values; midpoint and interval are both stored.",
+    "OpenAI 10GW disclosure gives capacity and deployment timing but not Broadcom contract value or annual revenue recognition schedule.",
+    "Non-AI growth is a residual that includes infrastructure software and non-AI semiconductor products; it is not a separately guided company metric.",
+    "Therefore 18.83753816% may be reused only as a near-term AVGO sensitivity anchor, not as a verified FY2027-FY2030 long-term forecast."
+  ],
+  "next_high_value_hypothesis": "BroadcomのFY2026 semiconductor solutionsとinfrastructure software、AI semiconductorを四半期別に分解し、AI以外のsemiconductorとsoftwareを別々に成長させた場合でも、FY2027全社18.83753816%の必要AI成長率が30%未満に収まるか。またOpenAI 10GWの2026H2-2029 deploymentを使ってFY2028-FY2030の下限を付けられるか。"
+}
