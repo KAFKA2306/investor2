@@ -1,0 +1,115 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_retained_fcf_deleveraging_capacity_20260909",
+  "status": "CONDITION",
+  "as_of": "2026-09-09",
+  "hypothesis": "Broadcom は現行配当の支払いを維持したまま free cash flow が25%減少しても、現在の net debt 35.444B USD を2年以内の annualized retained free cash flow でカバーできるため、leverage は NVDA/AVGO 資本配分で単独REJECT理由ではなく明示的な条件として扱うべきである。",
+  "capital_allocation_importance": "既存研究では AVGO の net debt 35.444B USD と NVDA の net cash 23.220B USD を相対valuationの未解決riskとして保持しているが、AVGOが配当後にどの程度deleveraging可能かを実測していない。負債額だけでなく、issuer-reported FCFと実際のcash dividends paidから返済余力を測ることで、leverageが構造的制約か管理可能な条件かを分離する。",
+  "decision_rule": {
+    "USE": "25% FCF stressでも net debt / annualized retained FCF <= 1.5x、かつ2.0xに達するFCF低下率が40%以上。",
+    "CONDITION": "25% FCF stressで net debt / annualized retained FCF <= 2.0x だが、2.0xに達するFCF低下率が20%-40%。",
+    "REJECT": "25% FCF stressで net debt / annualized retained FCF > 2.0x。",
+    "UNVERIFIED": "net debt、FY2026 first-three-quarter FCF、またはcash dividends paidのsource/period/unitを検証できない。"
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "canonical_inputs": {
+    "currency": "USD",
+    "AVGO_net_debt_USD_billion": 35.444,
+    "AVGO_first_three_quarters_FY2026_free_cash_flow_USD_billion": 31.937,
+    "AVGO_first_three_quarters_FY2026_cash_dividends_paid_USD_billion": 9.278,
+    "cash_dividends_paid_components_USD_billion": [3.086, 3.092, 3.100],
+    "annualization_factor": 1.3333333333333333,
+    "benchmark_net_debt_to_TTM_FCF_x": 0.89952542,
+    "NVDA_net_cash_excluding_marketable_equity_securities_USD_billion": 23.220
+  },
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q1 FY2026",
+      "facts": "Free cash flow 8.010B USD; cash dividend paid on December 31, 2025 was 3.086B USD.",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial-results"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q2 FY2026",
+      "facts": "Free cash flow 10.262B USD; cash dividend paid on March 31, 2026 was 3.092B USD.",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial-results"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026",
+      "facts": "Free cash flow approximately 13.7B USD; canonical first-three-quarter FCF total is 31.937B USD. Cash dividend paid on June 30, 2026 was 3.1B USD.",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial-results"
+    },
+    {
+      "source_artifact": "docs/research/results/nvda_avgo_ttm_fcf_yield_parity_20260908/summary.json",
+      "facts": "AVGO net debt 35.444B USD; AVGO TTM FCF 39.403B USD; NVDA net cash excluding marketable equity securities 23.220B USD."
+    }
+  ],
+  "method": {
+    "observed_nine_month_retained_FCF": "first-three-quarter FCF - cash dividends paid",
+    "annualized_FCF": "31.937 * 4 / 3",
+    "annualized_dividends": "9.278 * 4 / 3",
+    "annualized_retained_FCF": "annualized FCF - annualized dividends",
+    "deleveraging_years": "net debt / annualized retained FCF",
+    "stress": "annualized FCFを25%減らし、cash dividend run-rateは不変とする。",
+    "break_even": "net debt / retained FCF = 2.0x となるFCF低下率を逆算する。",
+    "fallback": "none",
+    "missing_value_imputation": "none",
+    "interpretation_limit": "全retained FCFを債務返済へ回す能力を測るcapacity studyであり、management forecastではない。"
+  },
+  "results": {
+    "observed": {
+      "annualized_FCF_USD_billion": 42.58266667,
+      "annualized_cash_dividends_USD_billion": 12.37066667,
+      "annualized_retained_FCF_USD_billion": 30.21200000,
+      "cash_dividend_payout_of_FCF_pct": 29.05094405,
+      "net_debt_to_annualized_retained_FCF_x": 1.17317622
+    },
+    "FCF_minus_25pct_stress": {
+      "annualized_FCF_USD_billion": 31.93700000,
+      "annualized_cash_dividends_USD_billion": 12.37066667,
+      "annualized_retained_FCF_USD_billion": 19.56633333,
+      "cash_dividend_payout_of_FCF_pct": 38.73459206,
+      "net_debt_to_annualized_retained_FCF_x": 1.81147890
+    },
+    "break_even": {
+      "FCF_decline_pct_for_net_debt_to_retained_FCF_to_reach_2x": 29.33118327,
+      "interpretation": "現行cash dividend run-rateを固定すると、annualized FCFが約29.33%低下した時点でnet debtがretained FCFの2年分になる。25% stressではまだ1.8115年分。"
+    }
+  },
+  "benchmark_comparison": {
+    "benchmark": "net debt / TTM FCF = 0.89952542x。配当支払いを無視するためdeleveraging capacityを楽観的に見る。",
+    "simple_alternative": "issuer-reported first-three-quarter FY2026 FCFから実際のcash dividends paidを差し引き、annualized retained FCFでnet debtを割る。",
+    "observed_alternative_x": 1.17317622,
+    "stress_alternative_x": 1.81147890,
+    "conclusion": "配当を考慮するとcoverageは0.90xから1.17xへ悪化し、25% FCF stressでは1.81xまで悪化する。一方、25% stressでも2年を下回るため現状leverageだけでAVGOを排除する根拠にはならない。ただし約29.33%超のFCF低下では2年を超えるため、leverageは継続監視条件である。"
+  },
+  "risk_metrics": {
+    "time_series_metrics": "NOT_APPLICABLE",
+    "reason": "forward cash-generation capacity studyでありrealized return strategyではないためvolatility、Sharpe、maximum drawdown、Expected Shortfallは仮説を測らない。",
+    "material_risks": [
+      "9か月実績の単純annualizationは季節性を無視する。",
+      "配当run-rateを固定しており将来増配を仮定しない。",
+      "buyback、M&A、working capital、debt maturity、interest expense、tax、追加借入をdeleveraging用途から分離している。",
+      "全retained FCFを債務返済に使う前提はcapacity上限であり実際のcapital allocation方針ではない。",
+      "AVGOはNVDAよりbalance-sheet leverageが高いという相対risk自体は残る。"
+    ]
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "25% FCF stressでもnet debt / annualized retained FCFは1.81147890xで2.0xを下回るが、2.0xに達するFCF低下率は29.33118327%で20%-40%の事前CONDITION帯に入る。",
+    "portfolio_implication": "AVGOのnet debtを単独REJECT理由にしない。一方、FCFが約30%以上低下するstressではcurrent dividend run-rateを維持したdeleveraging capacityが2年超へ悪化するため、FCF conversion、配当、M&A/買戻し、net debtを同時に監視する。NVDAのnet cashは相対的なbalance-sheet優位として維持する。",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "consumer_financial_calculation_duplicated": false
+  },
+  "next_high_value_hypothesis": "Broadcomのdebt maturity scheduleとcash interestをpoint-in-timeで組み込み、FCF -25%かつrefinancing rate上昇stressでもdividend維持後のinterest coverageとnet-debt reductionが十分かをNVIDIAのnet-cash alternativeと比較する。"
+}
