@@ -1,0 +1,115 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_treasury_tenor_robustness_20260909",
+  "status": "CONDITION",
+  "as_of": "2026-09-09T06:02:13+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGO/NVDAの5年forward valuationでrisk-free tenorを5年・10年・30年に変えても相対順位は維持される一方、絶対5年IRRは2 percentage points以上動くため、10年Treasury単独を唯一のrate anchorにせずtenor sensitivityを併記すべきである。",
+  "decision_rule_precommitted": {
+    "USE": "5年・10年・30年の全tenorでAVGO 50/50 mean scenarioとNVDA baseの順位が同じで、かつ5年と30年のAVGO mean IRR差が2 percentage points未満。",
+    "CONDITION": "相対順位は全tenorで同じだが、5年と30年のAVGO mean IRR差が2 percentage points以上。",
+    "REJECT": "tenor変更でAVGO/NVDA相対順位が反転する。",
+    "UNVERIFIED": "同日Treasury curve、ERP、canonical valuation identityのいずれかが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_erp_anchored_terminal_multiple_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "market_inputs": {
+    "date": "2026-09-01",
+    "source": "U.S. Department of the Treasury Daily Treasury Par Yield Curve Rates",
+    "source_url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_yield_curve&field_tdr_date_value=2026",
+    "treasury_5y_pct": 4.55,
+    "treasury_10y_pct": 4.79,
+    "treasury_30y_pct": 5.27,
+    "implied_equity_risk_premium_pct": 4.14,
+    "erp_source": "Aswath Damodaran monthly implied ERP, 2026-09-01",
+    "erp_source_url": "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/home.htm"
+  },
+  "method": {
+    "required_return_proxy": "Treasury tenor yield + implied ERP 4.14%, market beta 1 stress proxy",
+    "terminal_growth_pct": 3.0,
+    "terminal_price_to_fcf": "1 / (required return - terminal growth)",
+    "comparison": "same canonical AVGO/NVDA current prices, terminal FCF/share and 5-year horizon; only risk-free tenor changes"
+  },
+  "terminal_multiple_by_tenor": {
+    "5y": {
+      "required_return_pct": 8.69,
+      "price_to_fcf_x": 17.57469244
+    },
+    "10y": {
+      "required_return_pct": 8.93,
+      "price_to_fcf_x": 16.86340641
+    },
+    "30y": {
+      "required_return_pct": 9.41,
+      "price_to_fcf_x": 15.60062402
+    }
+  },
+  "five_year_price_irr_pct": {
+    "5y_treasury": {
+      "NVDA_base": 5.13540343,
+      "AVGO_post_FY2028_growth_0pct": -0.50135696,
+      "AVGO_post_FY2028_growth_10pct": 5.35442205,
+      "AVGO_50_50_mean_scenario": 2.42653255,
+      "AVGO_mean_minus_NVDA_pp": -2.70887088
+    },
+    "10y_treasury": {
+      "NVDA_base": 4.27027049,
+      "AVGO_post_FY2028_growth_0pct": -1.32010641,
+      "AVGO_post_FY2028_growth_10pct": 4.48748686,
+      "AVGO_50_50_mean_scenario": 1.58369023,
+      "AVGO_mean_minus_NVDA_pp": -2.68658026
+    },
+    "30y_treasury": {
+      "NVDA_base": 2.65966268,
+      "AVGO_post_FY2028_growth_0pct": -2.84103914,
+      "AVGO_post_FY2028_growth_10pct": 2.87020035,
+      "AVGO_50_50_mean_scenario": 0.01458060,
+      "AVGO_mean_minus_NVDA_pp": -2.64508207
+    }
+  },
+  "result": {
+    "relative_ranking_same_all_tenors": true,
+    "NVDA_beats_AVGO_mean_all_tenors": true,
+    "AVGO_mean_5y_minus_30y_pp": 2.41195194,
+    "NVDA_base_5y_minus_30y_pp": 2.47574075,
+    "relative_spread_range_pp": {
+      "min": -2.70887088,
+      "max": -2.64508207,
+      "width": 0.06378881
+    },
+    "decision": "CONDITION"
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "10年Treasuryをrisk-free anchorにするERP-anchored 3% terminal growth case",
+    "alternatives": [
+      "5年投資horizonに合わせた5年Treasury",
+      "長期金利stressとして30年Treasury"
+    ],
+    "interpretation": "risk-free tenorを変えてもNVDA base > AVGO 50/50 meanの相対順位は不変で、relative spreadは0.06378881ptしか動かない。一方、AVGO meanの絶対5年IRRは5年Treasuryと30年Treasuryで2.41195194pt動く。"
+  },
+  "usage_rule": "AVGO/NVDAの相対順位確認には10年Treasury anchorを簡略化として使用可能だが、絶対expected returnやcapital allocation hurdleを提示する場合は少なくとも5年・10年・30年Treasury tenor sensitivityを併記する。単一tenorのIRRを確定的な期待収益率として扱わない。",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized return strategyではなくterminal valuation sensitivity studyのため。"
+  },
+  "limitations": [
+    "required return proxyはmarket beta 1でありAVGO/NVDA固有betaを反映しない。",
+    "ERP 4.14%はDamodaranの市場推計であり直接観測可能な市場価格ではない。",
+    "terminal growth 3%は感応度条件であり予測値ではない。",
+    "Treasury curveはnominal par yieldでありterm premiumとinflation expectationを分離していない。",
+    "transaction cost、tax、slippageは売買戦略ではないため適用していない。"
+  ],
+  "implementation": {
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "duplicated_financial_calculation_cross_repo": false
+  },
+  "next_hypothesis": "AVGOとNVDAのmarket betaを同一point-in-time price seriesから推定し、beta-adjusted required returnに置き換えてもNVDA baseの相対優位が維持されるか。"
+}
