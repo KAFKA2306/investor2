@@ -1,0 +1,166 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_dilution_adjusted_fcf_per_share_20260909",
+  "status": "REJECT",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGOの複数年diluted-share-adjusted FCF per share成長がNVDAを少なくとも既存terminal growth hurdleの72.0688bp以上上回るなら、現在四半期のAVGO FCF quality優位には株主1株当たりでも持続性の証拠がある。上回らなければ、短期優位を長期relative growth premiumの根拠には使わない。",
+  "capital_allocation_importance": "前回canonicalではAVGOのcurrent-quarter SBC-adjusted FCF growth/marginがNVDAを上回った。しかし株主価値は会社全体のFCFだけでなく希薄化後1株当たりFCFで決まる。複数年でNVDAに劣るなら、AVGOの短期cash-conversion優位をterminal growthへ延長すると資本配分を誤る可能性がある。",
+  "decision_rule": {
+    "USE": "AVGOの2年FCF per diluted share CAGRがNVDAを0.7206882899 percentage points以上上回る。",
+    "CONDITION": "AVGOとNVDAの2年FCF per diluted share CAGR差が-0.7206882899pt以上+0.7206882899pt未満。",
+    "REJECT": "AVGOの2年FCF per diluted share CAGRがNVDAを0.7206882899pt以上下回る。",
+    "UNVERIFIED": "比較可能なissuer-reported FCFまたはsplit-adjusted diluted weighted-average sharesが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_sbc_adjusted_fcf_quality_20260909/summary.json",
+    "docs/research/results/avgo_nvda_terminal_growth_hurdle_translation_20260909/summary.json"
+  ],
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Fourth Quarter and Fiscal Year 2025 Financial Results",
+      "publication_date": "2025-12-11",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+      "facts": "FY2025 FCF 26.914B USD, FY2024 FCF 19.414B USD; GAAP diluted weighted-average shares FY2025 4.853B, FY2024 4.778B; FY2025 repurchase-program cash 2.450B USD, FY2024 7.176B USD."
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Fourth Quarter and Fiscal Year 2024 Financial Results",
+      "publication_date": "2024-12-12",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2024",
+      "facts": "FY2024 FCF 19.414B USD, FY2023 FCF 17.633B USD; later split-adjusted GAAP diluted weighted-average shares FY2024 4.778B and FY2023 4.272B. These later comparative figures are used instead of the pre-split FY2023 release."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Fourth Quarter and Fiscal 2026 Financial Results",
+      "publication_date": "2026-02-25",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+      "facts": "FY2026 FCF 96.575B USD, FY2025 FCF 60.724B USD; diluted weighted-average shares FY2026 24.514B, FY2025 24.804B."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Fourth Quarter and Fiscal 2025 Financial Results",
+      "publication_date": "2025-02-26",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2025",
+      "facts": "FY2025 FCF 60.724B USD, FY2024 FCF 26.947B USD; split-adjusted diluted weighted-average shares FY2025 24.804B, FY2024 24.936B."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Form 10-K for fiscal 2026",
+      "publication_date": "2026-02-25",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+      "facts": "NVIDIA repurchased 282M shares for 40.4B USD in FY2026."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Form 10-K for fiscal 2025",
+      "publication_date": "2025-02-26",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000023/nvda-20250126.htm",
+      "facts": "NVIDIA repurchased 310M shares for 34.0B USD in FY2025 and states that the repurchase program aims to offset dilution from employee share issuance."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Form 10-K for fiscal 2024",
+      "publication_date": "2024-02-21",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581024000029/nvda-20240128.htm",
+      "facts": "NVIDIA repurchased 21M pre-split shares for 9.7B USD in FY2024."
+    }
+  ],
+  "method": {
+    "look_ahead": "None within each issuer fiscal-year observation. Only fiscal-year results published by the as-of date are used.",
+    "split_handling": "Use later issuer-reported comparative diluted weighted-average share counts after 10-for-1 splits so all years are on a comparable share basis. Do not compare Broadcom FY2023 pre-split 427M directly with post-split 4.7B figures.",
+    "fcf_per_diluted_share": "issuer-reported fiscal-year free cash flow / GAAP diluted weighted-average shares",
+    "two_year_cagr": "(latest FCF per diluted share / earliest FCF per diluted share)^(1/2)-1",
+    "share_count_cagr": "(latest diluted weighted-average shares / earliest diluted weighted-average shares)^(1/2)-1",
+    "benchmark": "issuer-reported total FCF CAGR, which ignores dilution",
+    "alternative": "FCF per diluted share CAGR, which incorporates the net effect of equity issuance, awards and repurchases through diluted weighted-average shares"
+  },
+  "results": {
+    "AVGO": {
+      "series": [
+        {"fiscal_year": "FY2023", "fcf_b_usd": 17.633, "diluted_weighted_avg_shares_b": 4.272, "fcf_per_diluted_share_usd": 4.127574906367041},
+        {"fiscal_year": "FY2024", "fcf_b_usd": 19.414, "diluted_weighted_avg_shares_b": 4.778, "fcf_per_diluted_share_usd": 4.0632063624947685},
+        {"fiscal_year": "FY2025", "fcf_b_usd": 26.914, "diluted_weighted_avg_shares_b": 4.853, "fcf_per_diluted_share_usd": 5.545847929116011}
+      ],
+      "fy23_to_fy24_total_fcf_growth_pct": 10.100379969375606,
+      "fy23_to_fy24_diluted_share_growth_pct": 11.844569288389506,
+      "fy23_to_fy24_fcf_per_share_growth_pct": -1.5594760926804785,
+      "fy24_to_fy25_total_fcf_growth_pct": 38.63191511280519,
+      "fy24_to_fy25_diluted_share_growth_pct": 1.5696944328170925,
+      "fy24_to_fy25_fcf_per_share_growth_pct": 36.4894478485438,
+      "two_year_total_fcf_cagr_pct": 23.545240822146107,
+      "two_year_diluted_share_cagr_pct": 6.583388605315776,
+      "two_year_fcf_per_share_cagr_pct": 15.9141611453554,
+      "repurchase_program_cash_b_usd": {"FY2024": 7.176, "FY2025": 2.45},
+      "repurchase_cash_as_pct_of_fcf": {"FY2024": 36.96301637993201, "FY2025": 9.103069034703129}
+    },
+    "NVDA": {
+      "series": [
+        {"fiscal_year": "FY2024", "fcf_b_usd": 26.947, "diluted_weighted_avg_shares_b": 24.936, "fcf_per_diluted_share_usd": 1.0806464549246069},
+        {"fiscal_year": "FY2025", "fcf_b_usd": 60.724, "diluted_weighted_avg_shares_b": 24.804, "fcf_per_diluted_share_usd": 2.448153523625222},
+        {"fiscal_year": "FY2026", "fcf_b_usd": 96.575, "diluted_weighted_avg_shares_b": 24.514, "fcf_per_diluted_share_usd": 3.9395855429550464}
+      ],
+      "fy24_to_fy25_total_fcf_growth_pct": 125.34604965302258,
+      "fy24_to_fy25_diluted_share_growth_pct": -0.5293551491819093,
+      "fy24_to_fy25_fcf_per_share_growth_pct": 126.54527875132127,
+      "fy25_to_fy26_total_fcf_growth_pct": 59.03925960081682,
+      "fy25_to_fy26_diluted_share_growth_pct": -1.169166263505883,
+      "fy25_to_fy26_fcf_per_share_growth_pct": 60.920690019526,
+      "two_year_total_fcf_cagr_pct": 89.31156565510101,
+      "two_year_diluted_share_cagr_pct": -0.8497767883851037,
+      "two_year_fcf_per_share_cagr_pct": 90.934079140756,
+      "repurchase_program_cash_b_usd": {"FY2024": 9.7, "FY2025": 34.0, "FY2026": 40.4},
+      "repurchase_cash_as_pct_of_fcf": {"FY2024": 35.99658589082272, "FY2025": 55.99104143337066, "FY2026": 41.832772456639916}
+    },
+    "AVGO_minus_NVDA": {
+      "two_year_total_fcf_cagr_percentage_points": -65.76632483295491,
+      "two_year_fcf_per_share_cagr_percentage_points": -75.0199179954006,
+      "relative_to_terminal_hurdle_percentage_points": -75.7406062853006,
+      "dilution_effect_on_relative_growth_percentage_points": -9.25359316244569
+    }
+  },
+  "benchmark_and_alternatives": {
+    "benchmark_total_fcf": "AVGO total FCF 2-year CAGR is 23.55% versus NVDA 89.31%, already a -65.77pt AVGO gap.",
+    "alternative_per_share": "After diluted-share adjustment, AVGO FCF/share 2-year CAGR is 15.91% versus NVDA 90.93%, widening the AVGO deficit to -75.02pt.",
+    "dilution_interpretation": "AVGO diluted weighted-average shares rose at a 6.58% 2-year CAGR, while NVDA shares fell at a 0.85% CAGR. Dilution therefore worsens AVGO's relative FCF-growth evidence by about 9.25pt compared with total-FCF growth.",
+    "buyback_interpretation": "Both issuers used repurchases, but the net diluted-share result differs. AVGO's FY2024 share count expanded materially despite 7.176B USD of repurchases, consistent with acquisition/equity issuance effects; NVDA's diluted share count declined in both annual transitions while repurchases were substantial."
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "AVGO does not exceed NVDA in multi-year FCF per diluted share growth. It trails by 75.02 percentage points, far beyond the 0.720688pt hurdle required for USE. The current-quarter AVGO FCF-quality advantage therefore fails the requested multi-year shareholder-level persistence test.",
+    "usage_rule": "Do not use the current-quarter AVGO FCF growth/margin advantage as evidence for a positive AVGO-vs-NVDA terminal growth premium. Keep the +72.0688bp terminal growth figure as a break-even hurdle only. For future relative valuation, require point-in-time forward evidence or longer realized per-share FCF persistence before assigning AVGO a terminal growth premium.",
+    "portfolio_implication": "The existing NVDA-over-AVGO relative valuation ranking is not weakened by this test. Multi-year per-share cash generation currently favors NVDA strongly, even after accounting for each issuer's net dilution/buyback effect through diluted weighted-average shares."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a multi-year fundamental persistence test, not a realized trading strategy."
+  },
+  "limitations": [
+    "Broadcom and NVIDIA fiscal years do not end on the same dates, so macro and AI-demand exposure windows are not identical.",
+    "Broadcom FY2024 includes the VMware acquisition period; the large diluted-share increase reflects structural acquisition financing and is not a pure recurring SBC signal.",
+    "Diluted weighted-average shares are an accounting-period denominator, not period-end shares outstanding. They are nevertheless appropriate for a per-share earnings/cash-generation sensitivity and capture net dilution more directly than SBC expense alone.",
+    "Issuer-reported FCF definitions are not guaranteed to be perfectly comparable between companies.",
+    "Two annual transitions are enough to reject the claimed multi-year AVGO advantage in the observed sample, but not enough to forecast terminal growth directly.",
+    "Repurchase cash amounts are contextual evidence; FCF per diluted share is the decision metric, avoiding a separate bespoke adjustment that could double-count buybacks."
+  ],
+  "implementation": {
+    "artifact_type": "canonical negative decision evidence for relative FCF persistence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "No growth-conditioned terminal-multiple model was created from the rejected persistence hypothesis.",
+    "No one-off script or collector was retained.",
+    "No separate buyback-adjusted FCF metric was invented; diluted weighted-average shares already capture the net per-share effect and avoid double counting.",
+    "No calculation was duplicated into finBI or another consumer repository."
+  ],
+  "next_hypothesis": "Test whether NVDA's large multi-year FCF-per-share growth advantage remains after normalizing for the exceptional AI revenue-growth regime and estimating a point-in-time forward 2-year FCF-per-share deceleration path from issuer guidance and realized quarterly conversion, rather than extrapolating the historical 90.93% CAGR."
+}
