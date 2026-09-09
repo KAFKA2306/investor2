@@ -1,0 +1,142 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_forward_fcf_share_deceleration_20260910",
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "NVDAの過去2年FCF/share CAGR優位をそのまま外挿せず、最新issuer guidanceを成長seed、最新YoY diluted-share growthを希薄化seedとして2年の対称deceleration scenarioを作っても、NVDAのforward FCF/share CAGRがAVGOを既存terminal growth hurdle 72.0688bp以上上回る。",
+  "capital_allocation_importance": "前回は実績2年でNVDAのFCF/share CAGRがAVGOを75.02pt上回ったが、AI投資急拡大期の異常成長をそのまま将来へ延長できない。最新guidanceへ成長率をリセットしてもNVDA優位が残るかを確認し、相対valuationで過去成長の外挿を避ける。",
+  "decision_rule": {
+    "USE": "50% decayと25% decayの両方でNVDA minus AVGO 2-year FCF/share CAGRが0.7206882899pt以上。",
+    "CONDITION": "両方でNVDAが上回るが、少なくとも一方の差が0.7206882899pt未満。",
+    "REJECT": "対称deceleration scenarioでNVDAの優位が0.7206882899pt以上を維持できない、またはAVGOが逆転する。",
+    "UNVERIFIED": "issuer guidance、current FCF、または比較可能なYoY diluted weighted-average sharesが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_dilution_adjusted_fcf_per_share_20260909/summary.json",
+    "docs/research/results/avgo_nvda_terminal_growth_hurdle_translation_20260909/summary.json"
+  ],
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Third Quarter Fiscal Year 2026 Financial Results",
+      "publication_date": "2026-09-02",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "facts": "Q3 FY2026 revenue 29.591B USD, FCF 13.665B USD, GAAP diluted weighted-average shares 4.887B versus 4.860B in Q3 FY2025, Q4 FY2026 revenue guidance 34.8B USD / +93% YoY."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Second Quarter Fiscal 2027 Financial Results",
+      "publication_date": "2026-08-26",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
+      "facts": "Q2 FY2027 revenue 96.221B USD, FCF 21.341B USD, diluted weighted-average shares 24.285B versus 24.532B in Q2 FY2026, Q3 FY2027 revenue guidance 108.0B USD."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Fourth Quarter and Fiscal 2026 Financial Results",
+      "publication_date": "2026-02-25",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-fourth-quarter-and-fiscal-2026",
+      "facts": "Q3 FY2026 revenue 57.006B USD, used only as the prior-year denominator for the Q3 FY2027 guidance growth calculation."
+    }
+  ],
+  "method": {
+    "look_ahead": "None. Only issuer information available by 2026-09-10 is used.",
+    "guidance_growth_seed": "AVGO uses issuer-stated Q4 FY2026 revenue growth guidance +93%. NVDA uses 108.0B / 57.006B - 1 = 89.4537417114% for Q3 FY2027 versus Q3 FY2026.",
+    "dilution_seed": "Latest YoY GAAP diluted weighted-average share growth: AVGO 4.887/4.860-1 = +0.55555556%; NVDA 24.285/24.532-1 = -1.00684820%.",
+    "fcf_conversion": "Hold each issuer's current reported FCF margin constant. Therefore projected FCF grows at the scenario revenue-growth rate; projected shares grow at the current YoY diluted-share rate.",
+    "baseline_50pct_decay": "Year 1 revenue growth equals the guidance seed; Year 2 revenue growth equals 50% of the Year 1 seed.",
+    "alternative_25pct_decay": "Year 1 revenue growth equals the guidance seed; Year 2 revenue growth equals 25% of the Year 1 seed.",
+    "forward_fcf_per_share": "current FCF * cumulative revenue growth / (current diluted shares * cumulative diluted-share growth)",
+    "two_year_cagr": "(year2 FCF/share / current FCF/share)^(1/2)-1",
+    "interpretation": "These are deterministic guide-anchored stress scenarios, not issuer forecasts or fair-value estimates."
+  },
+  "inputs": {
+    "terminal_growth_hurdle_percentage_points": 0.7206882899,
+    "AVGO": {
+      "current_revenue_b_usd": 29.591,
+      "current_fcf_b_usd": 13.665,
+      "current_fcf_margin_pct": 46.1795816295,
+      "current_diluted_shares_b": 4.887,
+      "prior_year_diluted_shares_b": 4.860,
+      "diluted_share_growth_yoy_pct": 0.5555555556,
+      "guidance_growth_seed_pct": 93.0,
+      "current_fcf_per_share_usd": 2.7961939840
+    },
+    "NVDA": {
+      "current_revenue_b_usd": 96.221,
+      "current_fcf_b_usd": 21.341,
+      "current_fcf_margin_pct": 22.1791500816,
+      "current_diluted_shares_b": 24.285,
+      "prior_year_diluted_shares_b": 24.532,
+      "diluted_share_growth_yoy_pct": -1.0068481983,
+      "guidance_growth_seed_pct": 89.4537417114,
+      "current_fcf_per_share_usd": 0.8787729051
+    }
+  },
+  "results": {
+    "baseline_50pct_decay": {
+      "AVGO_year2_growth_pct": 46.5,
+      "NVDA_year2_growth_pct": 44.7268708557,
+      "AVGO_year2_fcf_per_share_usd": 7.8189798003,
+      "NVDA_year2_fcf_per_share_usd": 2.4587745755,
+      "AVGO_two_year_fcf_per_share_cagr_pct": 67.2212236508,
+      "NVDA_two_year_fcf_per_share_cagr_pct": 67.2711442809,
+      "NVDA_minus_AVGO_percentage_points": 0.0499206301
+    },
+    "alternative_25pct_decay": {
+      "AVGO_year2_growth_pct": 23.25,
+      "NVDA_year2_growth_pct": 22.3634354278,
+      "AVGO_year2_fcf_per_share_usd": 6.5780836886,
+      "NVDA_year2_fcf_per_share_usd": 2.0788406619,
+      "AVGO_two_year_fcf_per_share_cagr_pct": 53.3790518387,
+      "NVDA_two_year_fcf_per_share_cagr_pct": 53.8056440048,
+      "NVDA_minus_AVGO_percentage_points": 0.4265921661
+    },
+    "historical_benchmark": {
+      "AVGO_two_year_fcf_per_share_cagr_pct": 15.9141611454,
+      "NVDA_two_year_fcf_per_share_cagr_pct": 90.9340791408,
+      "NVDA_minus_AVGO_percentage_points": 75.0199179954
+    }
+  },
+  "benchmark_and_alternatives": {
+    "benchmark": "Observed historical 2-year FCF/share CAGR gap was +75.02pt for NVDA, but this exceptional AI-growth regime is not extrapolated.",
+    "baseline": "With symmetric 50% Year-2 decay from current guidance seeds and current YoY dilution, NVDA leads by only 0.0499pt.",
+    "alternative": "With more severe symmetric 25% Year-2 decay, NVDA leads by only 0.4266pt.",
+    "hurdle_comparison": "Both guide-anchored gaps are below the 0.720688pt terminal-growth hurdle."
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "The hypothesis that NVDA retains at least a 72.0688bp forward FCF/share growth advantage after guide-anchored normalization is not supported. The 50% and 25% symmetric decay scenarios produce only +4.99bp and +42.66bp NVDA advantages, respectively.",
+    "usage_rule": "Do not use NVDA's historical 90.93% FCF/share CAGR as forward evidence. Keep the existing NVDA-over-AVGO valuation ranking separate from this growth-persistence question. Treat current guide-anchored forward FCF/share growth as approximately tied unless independent multi-quarter evidence creates a gap above the 72.0688bp hurdle.",
+    "portfolio_implication": "This test weakens the argument that NVDA's historical FCF/share growth advantage should independently support a higher terminal-growth assumption. It does not reverse the existing relative valuation ranking because the scenario is not a fair-value model and both issuers still have distinct margins, business mix, debt and valuation risks."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental scenario test, not a realized trading strategy."
+  },
+  "limitations": [
+    "A single next-quarter YoY revenue guidance rate is used as a Year-1 growth seed; neither issuer provided a two-year revenue or FCF forecast.",
+    "Holding current FCF margin constant is a transparent benchmark, not a claim that margins will remain unchanged.",
+    "Persisting the latest YoY diluted-share growth rate is a simple dilution benchmark and may differ materially from future buybacks, SBC or acquisition financing.",
+    "Broadcom and NVIDIA fiscal calendars differ.",
+    "The symmetric decay rule is intentionally simple. Asymmetric decay can change the ranking, so the result rejects a strong NVDA-forward-growth claim rather than establishing an AVGO advantage."
+  ],
+  "implementation": {
+    "artifact_type": "canonical negative decision evidence for guide-anchored forward FCF/share persistence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "No growth-conditioned terminal multiple model was created from the rejected hypothesis.",
+    "No persistent forecast script, collector or workflow was retained.",
+    "No calculation was duplicated into finBI or another consumer repository."
+  ],
+  "next_hypothesis": "Test whether AVGO and NVDA current valuation ranking remains stable when the terminal-growth differential is constrained to the guide-anchored near-tie range observed here, while debt and current market price are held at the same point-in-time as the canonical valuation."
+}
