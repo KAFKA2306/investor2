@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_near_tie_growth_valuation_robustness_20260910",
+  "status": "USE",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "直前のguide-anchored 2年FCF/share研究で観測したAVGO/NVDAのnear-tie growth差を、AVGOに有利なterminal-growth premiumとして丸ごと与える厳しい感度分析でも、canonical 5年valuationのNVDA-over-AVGO expected-return rankingは維持される。",
+  "capital_allocation_importance": "直前研究はNVDAの過去+90.93% FCF/share CAGRをforward evidenceとしてREJECTし、最新guidance起点ではNVDA優位が約5-43bpまで縮小した。growth差がほぼ消えた状態でも相対valuation順位が残るかを確認し、NVDA優位が過去成長外挿だけに依存していないか検証する。",
+  "decision_rule": {
+    "USE": "直前研究のAVGOに最も有利なnear-tie上限42.6592bpをAVGO terminal-growth premiumとして与えてもAVGO 50/50 expected 5年price IRRがNVDA baseを上回らない。",
+    "CONDITION": "4.9921bpではNVDA優位だが42.6592bpではAVGOが逆転する。",
+    "REJECT": "4.9921bpの小さいpremiumでもAVGOが逆転し、canonical rankingがnear-tie growth assumptionに脆弱。",
+    "UNVERIFIED": "canonical 5年IRR、required-return proxy、terminal-growth identity、または直前near-tie growth rangeが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_forward_fcf_share_deceleration_20260910/summary.json",
+    "docs/research/results/avgo_nvda_relative_terminal_premium_hurdle_20260909/summary.json",
+    "docs/research/results/avgo_nvda_terminal_growth_hurdle_translation_20260909/summary.json"
+  ],
+  "method": {
+    "look_ahead": "None. Only canonical artifacts available by 2026-09-10 are used.",
+    "benchmark": "Equal terminal growth / equal terminal Price/FCF. Canonical 25x case: NVDA base 5-year price IRR 12.8130758769%, AVGO 50/50 expected 9.9063855872%.",
+    "near_tie_inputs_bp": [4.99206301, 42.65921661],
+    "stress_direction": "Conservative for the existing NVDA ranking: although the preceding two-year scenarios show NVDA ahead by 4.99-42.66bp, this test reverses the sign and grants the full observed gap to AVGO as a terminal-growth premium.",
+    "required_return_proxy_pct": 8.89,
+    "NVDA_terminal_growth_pct": 3.0,
+    "relative_multiple_identity": "AVGO/NVDA terminal multiple ratio = (k - g_NVDA) / (k - g_AVGO).",
+    "AVGO_IRR_reprice": "stressed_AVGO_IRR = (1 + canonical_AVGO_equal_multiple_IRR) * relative_multiple_ratio^(1/5) - 1.",
+    "scope": "Robustness sensitivity only. A two-year guide-anchored FCF/share growth gap is not asserted to equal a perpetual terminal-growth gap.",
+    "transaction_costs": "NOT_APPLICABLE. This is a point-in-time forward valuation sensitivity, not a trading-strategy backtest."
+  },
+  "inputs": {
+    "canonical_NVDA_base_5y_price_IRR_pct": 12.813075876896708,
+    "canonical_AVGO_50_50_expected_5y_price_IRR_pct": 9.906385587226318,
+    "canonical_equal_multiple_AVGO_minus_NVDA_percentage_points": -2.9066902896703883,
+    "break_even_AVGO_growth_premium_bp": 72.0688289929345,
+    "guide_anchored_near_tie_NVDA_minus_AVGO_bp": {
+      "50pct_decay": 4.99206301,
+      "25pct_decay": 42.65921661
+    }
+  },
+  "results": {
+    "equal_growth_benchmark": {
+      "AVGO_to_NVDA_terminal_multiple_ratio": 1.0,
+      "AVGO_5y_price_IRR_pct": 9.906385587226318,
+      "AVGO_minus_NVDA_percentage_points": -2.9066902896703883
+    },
+    "AVGO_favorable_4_99206301bp_terminal_premium_stress": {
+      "AVGO_terminal_growth_pct": 3.0499206301,
+      "AVGO_to_NVDA_terminal_multiple_ratio": 1.0085479369265584,
+      "AVGO_5y_price_IRR_pct": 10.09364098857304,
+      "AVGO_minus_NVDA_percentage_points": -2.7194348883236685
+    },
+    "AVGO_favorable_42_65921661bp_terminal_premium_stress": {
+      "AVGO_terminal_growth_pct": 3.4265921661,
+      "AVGO_to_NVDA_terminal_multiple_ratio": 1.0780816990181532,
+      "AVGO_5y_price_IRR_pct": 11.57149707541243,
+      "AVGO_minus_NVDA_percentage_points": -1.2415788014842777
+    },
+    "break_even_reference": {
+      "AVGO_growth_premium_bp": 72.0688289929345,
+      "AVGO_terminal_growth_pct": 3.720688289929345,
+      "AVGO_to_NVDA_terminal_multiple_ratio": 1.1394166825972842,
+      "AVGO_minus_NVDA_percentage_points": 0.0
+    },
+    "headroom_from_AVGO_favorable_near_tie_upper_bound_to_break_even_bp": 29.4096123829345
+  },
+  "benchmark_and_alternatives": {
+    "benchmark": "Equal terminal growth leaves AVGO 50/50 expected IRR 2.90669029pt below NVDA base.",
+    "small_near_tie_stress": "Even after reversing the observed +4.99bp NVDA two-year lead into a +4.99bp AVGO terminal-growth premium, AVGO still trails by 2.71943489pt.",
+    "upper_near_tie_stress": "Even after reversing the observed +42.66bp NVDA two-year lead into a +42.66bp AVGO terminal-growth premium, AVGO still trails by 1.24157880pt.",
+    "break_even": "AVGO needs +72.0688bp terminal-growth premium under the same identity. The AVGO-favorable near-tie upper bound remains 29.4096bp short."
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "The existing NVDA-over-AVGO expected-return ranking survives an intentionally AVGO-favorable stress that converts the full 4.99-42.66bp guide-anchored near-tie range into AVGO terminal-growth premium. At the strongest 42.6592bp stress, AVGO 50/50 expected IRR rises to 11.5715% but remains 1.2416pt below NVDA base 12.8131%.",
+    "usage_rule": "Do not use NVDA's historical +90.93% FCF/share CAGR as forward support. For the current canonical valuation, treat 0-42.6592bp AVGO terminal-growth premium as insufficient to reverse the ranking; require independent evidence above the 72.0688bp break-even hurdle or updated prices/fundamentals before changing the relative expected-return conclusion.",
+    "portfolio_implication": "The current NVDA-over-AVGO valuation ranking is not dependent on extrapolating NVDA's exceptional historical FCF/share growth. It remains intact even when the recent guide-anchored near-tie evidence is tilted fully in AVGO's favor."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time valuation robustness sensitivity, not a realized return strategy."
+  },
+  "limitations": [
+    "The 4.99-42.66bp values are two-year guide-anchored FCF/share CAGR gaps, not forecasts of perpetual terminal growth. They are deliberately reused only as a conservative sensitivity bound.",
+    "The canonical 5-year valuation still contains AVGO 50/50 growth scenarios and a common terminal-multiple framework; this test isolates only the effect of a near-tie terminal-growth differential.",
+    "Prices, issuer guidance, FCF margins, diluted shares, debt and cash can change and require point-in-time refresh.",
+    "The required-return proxy 8.89% is a market-wide stress proxy rather than a full company-specific WACC."
+  ],
+  "implementation": {
+    "artifact_type": "canonical relative-valuation robustness decision evidence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "No forecast model was created from the rejected historical NVDA FCF/share growth extrapolation.",
+    "No duplicate valuation calculation was added to finBI or another consumer repository.",
+    "No one-off script, collector or workflow was retained."
+  ],
+  "next_hypothesis": "Refresh AVGO and NVDA point-in-time market prices at the same timestamp and recompute the 72.0688bp break-even hurdle; test whether the ranking remains robust after both the near-tie growth constraint and current price movement are applied together."
+}
