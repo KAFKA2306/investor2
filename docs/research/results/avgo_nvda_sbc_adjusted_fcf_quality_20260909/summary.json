@@ -1,0 +1,107 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_sbc_adjusted_fcf_quality_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "Broadcomの現在のfree cash flow成長率とmarginのNVDA比優位がstock-based compensationを控除すると消えるなら、既存の+72.0688bp terminal FCF growth hurdleに対する短期fundamental supportは質が低い。控除後も成長率とmarginの両方でAVGO優位が残るなら、SBCによる見かけだけではないquality evidenceとして採用する。",
+  "capital_allocation_importance": "前回canonicalではAVGOがreported FCF growthとFCF marginでNVDAを上回ったが、FCFはstock-based compensationを現金支出として差し引かない。AVGOの優位が従業員への株式報酬で作られた見かけなら、NVDAに対する相対valuationの方向的supportを弱める必要がある。",
+  "decision_rule": {
+    "USE": "SBC控除後もAVGOがNVDAをadjusted FCF growthとadjusted FCF marginの両方で上回り、adjusted FCF margin差が10 percentage points以上残る。",
+    "CONDITION": "SBC控除後も2指標のうち1つだけAVGO優位、またはmargin差が0以上10pt未満。",
+    "REJECT": "SBC控除後にAVGOがadjusted FCF growthとadjusted FCF marginの両方でNVDAを上回れない。",
+    "UNVERIFIED": "比較四半期のissuer-reported FCF、revenue、stock-based compensationのいずれかが欠ける。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_forward_fundamental_hurdle_20260909/summary.json"
+  ],
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Third Quarter Fiscal Year 2026 Financial Results",
+      "publication_date": "2026-09-02",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "facts": "Q3 FY2026 revenue 29.591B USD, FCF 13.665B USD, total SBC 2.019B USD; Q3 FY2025 revenue 15.952B USD, FCF 7.024B USD, total SBC 2.322B USD."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Second Quarter Fiscal 2027 Financial Results",
+      "publication_date": "2026-08-26",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+      "facts": "Q2 FY2027 revenue 96.221B USD, FCF 21.341B USD, SBC 2.027B USD; Q2 FY2026 revenue 46.743B USD, FCF 13.450B USD, SBC 1.624B USD. NVIDIA states that beginning FY2027 its non-GAAP measures no longer exclude SBC."
+    }
+  ],
+  "method": {
+    "look_ahead": "None. Only issuer data publicly available by 2026-09-09 are used.",
+    "sbc_adjusted_fcf": "issuer-reported free cash flow - issuer-reported stock-based compensation expense",
+    "sbc_adjusted_fcf_margin": "sbc-adjusted FCF / revenue",
+    "sbc_adjusted_fcf_growth": "current-quarter sbc-adjusted FCF / prior-year comparable-quarter sbc-adjusted FCF - 1",
+    "scope": "Economic-quality sensitivity. SBC is treated as a shareholder economic cost for this sensitivity even though it is non-cash in the cash-flow statement. This does not replace GAAP cash flow or issuer-reported FCF."
+  },
+  "results": {
+    "AVGO": {
+      "reported_fcf_b_usd": 13.665,
+      "stock_based_compensation_b_usd": 2.019,
+      "sbc_as_pct_of_reported_fcf": 14.774972557628982,
+      "sbc_adjusted_fcf_b_usd": 11.646,
+      "sbc_adjusted_fcf_margin_pct": 39.356561116555705,
+      "prior_year_sbc_adjusted_fcf_b_usd": 4.702,
+      "sbc_adjusted_fcf_yoy_pct": 147.68183751595063
+    },
+    "NVDA": {
+      "reported_fcf_b_usd": 21.341,
+      "stock_based_compensation_b_usd": 2.027,
+      "sbc_as_pct_of_reported_fcf": 9.49814910266623,
+      "sbc_adjusted_fcf_b_usd": 19.314,
+      "sbc_adjusted_fcf_margin_pct": 20.07254133713015,
+      "prior_year_sbc_adjusted_fcf_b_usd": 11.826,
+      "sbc_adjusted_fcf_yoy_pct": 63.31811263318115
+    },
+    "AVGO_minus_NVDA": {
+      "sbc_adjusted_fcf_margin_percentage_points": 19.284019779425556,
+      "sbc_adjusted_fcf_growth_percentage_points": 84.36372488276949,
+      "sbc_burden_as_pct_of_fcf_percentage_points": 5.276823454962752
+    }
+  },
+  "benchmark_and_alternatives": {
+    "benchmark_reported_fcf": "Prior canonical comparison used issuer-reported FCF. AVGO reported FCF margin 46.18% vs NVDA 22.18%, and reported FCF YoY growth 94.55% vs 58.67%.",
+    "alternative_sbc_adjusted_fcf": "After deducting SBC, AVGO adjusted FCF margin is 39.36% vs NVDA 20.07%, a +19.28pt AVGO gap. Adjusted FCF YoY growth is 147.68% vs 63.32%, a +84.36pt AVGO gap.",
+    "quality_penalty": "SBC consumes 14.77% of AVGO reported FCF vs 9.50% for NVDA, so AVGO carries the larger SBC burden; however this penalty is not large enough to reverse either growth or margin ranking."
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "The predeclared USE criteria are met. SBC deduction reduces AVGO FCF margin from the reported level but AVGO still exceeds NVDA by 19.28 percentage points, above the 10pt threshold, and adjusted FCF growth also remains materially higher. The prior short-horizon AVGO quality signal is therefore not explained away by SBC alone.",
+    "usage_rule": "Use SBC-adjusted FCF growth and margin as a mandatory quality sensitivity whenever AVGO/NVDA FCF conversion is cited. Do not replace issuer-reported FCF with this metric and do not convert the current-quarter advantage into a terminal growth premium without multi-year persistence evidence.",
+    "portfolio_implication": "The current NVDA-over-AVGO canonical valuation ranking is unchanged. This result strengthens the credibility of AVGO's short-horizon FCF-conversion evidence but does not prove the +72.0688bp terminal growth premium."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental quality sensitivity, not a realized trading strategy."
+  },
+  "limitations": [
+    "SBC is a non-cash expense in the period and subtracting it from FCF is an economic-owner sensitivity, not a GAAP cash-flow measure.",
+    "Broadcom and NVIDIA fiscal quarters are close but not identical.",
+    "Issuer-reported FCF definitions differ and are not guaranteed to be perfectly comparable.",
+    "Quarterly SBC can be affected by vesting, hiring and award timing; one quarter cannot establish long-run dilution economics.",
+    "This test addresses FCF quality, not the unresolved 2-3 year persistence of relative FCF growth."
+  ],
+  "implementation": {
+    "artifact_type": "canonical relative-valuation FCF-quality sensitivity",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "No new terminal-growth model was created.",
+    "No one-off collector or workflow was retained.",
+    "No FCF calculation was duplicated in finBI or another consumer repository.",
+    "Reported FCF was not silently replaced by SBC-adjusted FCF."
+  ],
+  "next_hypothesis": "Test whether AVGO's dilution-adjusted per-share FCF growth, using point-in-time diluted share count and SBC over multiple fiscal years, still exceeds NVDA enough to support the relative-growth hurdle after shareholder dilution rather than only current-quarter SBC expense."
+}
