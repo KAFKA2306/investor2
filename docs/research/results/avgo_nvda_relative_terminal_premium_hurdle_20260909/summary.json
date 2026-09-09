@@ -1,0 +1,107 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_relative_terminal_premium_hurdle_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "現在のcanonical AVGO/NVDA 5年valuationで、AVGO 50/50 growth caseがNVDA base caseに追いつくために必要なrelative terminal Price/FCF premiumを直接解けば、現在trailing relative multipleと不安定なhistorical medianだけでは逆転条件を満たさず、資本配分判断に再利用できる明確なbreak-even hurdleを作れる。",
+  "capital_allocation_importance": "equal terminal multipleではAVGO 50/50 expected 5年price IRRがNVDA baseを約2.91 percentage points下回る一方、過去のAVGO/NVDA relative Price/FCFは大きく変動している。relative multipleを恣意的に選ぶ代わりに、NVDAと同等になるために最低限必要なAVGO terminal premiumを先に固定する。",
+  "decision_rule": {
+    "USE": "break-even relative terminal multipleをcanonical inputsから一意に計算でき、current trailing ratioとhistorical medianがともにbreak-even未満である。",
+    "CONDITION": "break-evenは計算できるが、current trailing ratioまたはhistorical medianのどちらかがbreak-even以上で、relative multiple assumptionだけで順位が容易に反転する。",
+    "REJECT": "equal-multiple benchmarkでもAVGO 50/50 caseがNVDA以上で、relative premium hurdleが資本配分上の追加情報を与えない。",
+    "UNVERIFIED": "canonical price、5年IRR、relative multiple identityのいずれかが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json",
+    "docs/research/results/avgo_nvda_historical_relative_fcf_multiple_20260909/summary.json",
+    "docs/research/results/avgo_nvda_historical_erp_terminal_multiple_distribution_20260909/summary.json"
+  ],
+  "method": {
+    "benchmark": "equal terminal Price/FCF for AVGO and NVDA",
+    "benchmark_multiple_grid": "25x / 35x / 45x. Because both companies' terminal prices scale linearly with the common multiple, the relative break-even premium is invariant to the common grid level under the current canonical contract.",
+    "canonical_NVDA_base_5y_price_IRR_pct_at_25x": 12.813075876896708,
+    "canonical_AVGO_50_50_mean_5y_price_IRR_pct_at_25x": 9.906385587226318,
+    "break_even_formula": "required_AVGO_to_NVDA_terminal_multiple_ratio = ((1 + NVDA_IRR) / (1 + AVGO_50_50_mean_IRR))^5",
+    "look_ahead": "No future realized price or FCF is introduced; this is a point-in-time decision boundary using existing canonical forward scenarios.",
+    "transaction_costs": "NOT_APPLICABLE. This is a forward valuation decision boundary, not a trading-strategy backtest."
+  },
+  "results": {
+    "required_AVGO_to_NVDA_terminal_multiple_ratio": 1.1394166825972842,
+    "required_AVGO_terminal_premium_pct": 13.941668259728424,
+    "current_trailing_relative_multiple": 1.05807215,
+    "current_trailing_premium_pct": 5.807215,
+    "current_trailing_shortfall_vs_break_even_percentage_points": 8.134453259728414,
+    "historical_relative_multiple_median": 1.12656694,
+    "historical_median_premium_pct": 12.656694,
+    "historical_median_shortfall_vs_break_even_percentage_points": 1.284974259728422,
+    "historical_relative_multiple_low": 0.31454807,
+    "historical_relative_multiple_high": 1.38353574,
+    "sensitivity_at_25x_common_NVDA_terminal_multiple": {
+      "equal_ratio_1_0": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": 9.906385587226318,
+        "AVGO_minus_NVDA_percentage_points": -2.9066902896703883
+      },
+      "current_trailing_ratio_1_05807215": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": 11.154226902511756,
+        "AVGO_minus_NVDA_percentage_points": -1.6588489743849522
+      },
+      "historical_median_ratio_1_12656694": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": 12.557470912502833,
+        "AVGO_minus_NVDA_percentage_points": -0.25560496439387403
+      },
+      "break_even_ratio_1_1394166826": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": 12.813075876896708,
+        "AVGO_minus_NVDA_percentage_points": 0.0
+      },
+      "historical_high_ratio_1_38353574": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": 17.279202004542338,
+        "AVGO_minus_NVDA_percentage_points": 4.466126127645631
+      },
+      "historical_low_ratio_0_31454807": {
+        "AVGO_50_50_mean_5y_price_IRR_pct": -12.791195959191148,
+        "AVGO_minus_NVDA_percentage_points": -25.604271836087854
+      }
+    }
+  },
+  "benchmark_and_alternatives": {
+    "equal_terminal_multiple": "AVGO 50/50 mean trails NVDA by 2.90669029 percentage points at the 25x common multiple.",
+    "current_trailing_relative_multiple": "A 5.807215% AVGO premium narrows but does not close the gap; AVGO still trails by 1.65884897 percentage points.",
+    "historical_median_relative_multiple": "A 12.656694% AVGO premium nearly closes the gap but remains below the required 13.94166826% premium; AVGO still trails by 0.25560496 percentage points.",
+    "historical_high_relative_multiple": "The observed 38.353574% AVGO premium would reverse the ranking, but prior research rejected a single historical relative-multiple anchor because the three annual observations had 48.388283% coefficient of variation."
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "The canonical break-even terminal premium is 13.94166826%. Current trailing relative Price/FCF implies only a 5.807215% AVGO premium and the historical median implies 12.656694%, so neither clears the hurdle. A higher premium can reverse the ranking, but it must be independently justified rather than selected from the unstable historical range.",
+    "usage_rule": "For AVGO/NVDA relative capital-allocation work, do not choose a company-specific terminal multiple first and then read the answer. Treat AVGO/NVDA terminal Price/FCF ratio 1.13941668x as the current break-even hurdle for the canonical AVGO 50/50 growth case versus NVDA base. AVGO relative valuation only overtakes if an independently supported terminal premium exceeds this hurdle or fundamentals change.",
+    "portfolio_implication": "Current trailing relative valuation and the historical median relative multiple are not sufficient to overturn NVDA's canonical 5-year expected-return advantage. AVGO requires at least a 13.94% terminal Price/FCF premium over NVDA under the current 50/50 growth mix."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized return strategyではなくpoint-in-time forward valuation decision boundaryのため。"
+  },
+  "limitations": [
+    "13.94166826%は現在のcanonical growth scenarios、FCF margins、share assumptions、current pricesに依存し、fundamentalsまたは価格更新時には再計算が必要。",
+    "AVGO 50/50 expected IRRは2つのscenario IRRの既存canonical arithmetic meanであり、完全な確率分布modelではない。",
+    "historical relative Price/FCFは3 annual cyclesのみで不安定であり、break-even以上のpremiumが過去に観測されたこと自体は将来premiumの根拠にならない。",
+    "Price/FCF definitions and capital structures are not perfectly harmonized across AVGO and NVDA."
+  ],
+  "implementation": {
+    "artifact_type": "canonical valuation decision boundary",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "unstable historical high relative multipleを暗黙のbull caseとしてcanonical化しない。",
+    "finBI等consumer repositoryへbreak-even計算を複製しない。",
+    "one-off scriptや専用workflowを追加しない。"
+  ],
+  "next_hypothesis": "AVGO/NVDAと半導体peerについて、point-in-time forward FCF growthを使った単純growth-conditioned relative multipleが、equal multipleと1.13941668x break-even hurdleを基準に、walk-forward OOSで実際の将来relative multipleまたはvaluation calibration errorを改善するか。"
+}
