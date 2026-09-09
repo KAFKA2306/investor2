@@ -43,7 +43,7 @@
       "AVGO_50_50_equal_growth": 592.8522306125802
     },
     "AVGO_favorable_terminal_multiple_ratio": 1.0780816990181532,
-    "AVGO_favorable_terminal_value_usd_per_share": 639.1446072236804,
+    "AVGO_favorable_terminal_value_usd_per_share": 639.1431400455125,
     "formula": "break_even_AVGO_price = AVGO_terminal_value_under_42.65921661bp / (1 + current_NVDA_base_IRR)^5; break_even_AVGO_to_NVDA_price_ratio = break_even_AVGO_price / current_NVDA_price.",
     "look_ahead": "No future realized price or FCF is used. Only observed IEX prices and already-canonical forward valuation assumptions are used.",
     "transaction_costs": "NOT_APPLICABLE. This is a point-in-time valuation decision boundary, not a realized trading strategy.",
