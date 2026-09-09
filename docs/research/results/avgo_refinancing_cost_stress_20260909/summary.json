@@ -1,0 +1,84 @@
+{
+  "research_id": "avgo_refinancing_cost_stress_20260909",
+  "status": "CONDITION",
+  "hypothesis": "Broadcomの2026-08-02時点gross debtとQ3 FY2026の実績FCF・interest expenseを使うと、FCF -25%かつ全gross debtの借換金利+200bpという保守的stressでもFCF/interest coverageが8x以上を維持するため、refinancing costだけをAVGOの単独REJECT理由にはしない。ただし+400bp stressで8xを下回るなら単一の安全判定にはせず監視条件として扱う。",
+  "pre_registered_decision_rule": {
+    "USE": "+200bpと+400bpの両方でFCF -25%後のFCF/interest coverageが8x以上。",
+    "CONDITION": "+200bpでは8x以上だが+400bpでは8x未満、またはQ3 annualizationを使うため通期安定性が未確認。",
+    "REJECT": "+200bp stressでcoverageが5x未満。",
+    "UNVERIFIED": "source/identity/period/unit/as-ofのいずれかが欠ける。"
+  },
+  "canonical_point_in_time_inputs": {
+    "as_of": "2026-08-02",
+    "currency": "USD",
+    "unit": "billion",
+    "q3_fcf": 13.665,
+    "q3_interest_expense": 0.778,
+    "short_term_debt": 2.252,
+    "long_term_debt": 57.167,
+    "gross_debt": 59.419,
+    "cash_and_cash_equivalents": 23.975,
+    "source": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000076/avgo-08022026x8kxex99.htm"
+  },
+  "benchmark": {
+    "name": "q3_run_rate_current_interest_cost",
+    "annualized_fcf": 54.660,
+    "annualized_interest_expense": 3.112,
+    "fcf_to_interest_coverage_x": 17.56426735
+  },
+  "alternative_stress_200bp": {
+    "fcf_decline_pct": 25.0,
+    "refinancing_rate_increase_bp": 200,
+    "refinancing_scope": "entire current gross debt",
+    "stressed_annualized_fcf": 40.995,
+    "incremental_annual_interest": 1.188380,
+    "stressed_annual_interest": 4.300380,
+    "fcf_to_interest_coverage_x": 9.53287849,
+    "result": "PASS_8X"
+  },
+  "alternative_stress_400bp": {
+    "fcf_decline_pct": 25.0,
+    "refinancing_rate_increase_bp": 400,
+    "refinancing_scope": "entire current gross debt",
+    "stressed_annualized_fcf": 40.995,
+    "incremental_annual_interest": 2.376760,
+    "stressed_annual_interest": 5.488760,
+    "fcf_to_interest_coverage_x": 7.46890008,
+    "result": "BELOW_8X"
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "current Q3 run-rate coverageは17.56426735x。FCF -25%かつ全gross debtに+200bpを課す保守的stressでも9.53287849xで8xを上回る。一方、+400bpでは7.46890008xまで低下し、事前USE条件の8xを下回るためCONDITIONとする。",
+    "portfolio_implication": "AVGOのrefinancing costだけを単独REJECT理由にしない。ただしgross debt 59.419B USDに対する金利上昇感応度をvaluation/risk判断で明示し、+400bp級のstressやFCF低下が重なる場合は再評価する。NVDAのnet-cash優位は別のbalance-sheet advantageとして維持する。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "relevant_risk_measures": [
+      "FCF to interest coverage",
+      "gross debt",
+      "refinancing-rate sensitivity",
+      "FCF stress",
+      "maturity schedule"
+    ]
+  },
+  "limitations": [
+    "Q3 FY2026単独のFCFとinterest expenseを4倍するrun-rate stressであり、通期予測ではない。",
+    "gross debt全額が同時に+200bp/+400bpで借り換わると仮定する保守的感応度で、実際のmaturity timingを再現していない。",
+    "interest expenseには既存債務の固定・変動金利構成やヘッジの詳細を分離していない。",
+    "2026-06 tender後のexact fiscal-year maturity bucketsはQ3 10-Q未確認のため、このartifactはmaturity coverage authorityではない。",
+    "FCFはBroadcom定義のnon-GAAP measureであり、会社開示上もdiscretionary residual cash flowそのものではない。"
+  ],
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_type": "canonical research decision artifact",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "consumer_side_duplicate_calculation": false
+  },
+  "next_high_value_hypothesis": "Broadcomの2026-08-02 Q3 10-Qが公開されたらpost-tender exact maturity scheduleとfixed/floating debt mixを同一as-ofで取り込み、maturity-weighted +200bp refinancing stressでも2030年までのliquidity coverageとinterest coverageが同時に十分かを再検証する。"
+}
