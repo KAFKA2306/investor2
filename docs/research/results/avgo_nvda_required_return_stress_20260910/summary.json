@@ -2,21 +2,24 @@
   "schema_version": "research-result.v1",
   "research_id": "avgo_nvda_required_return_stress_20260910",
   "status": "USE",
-  "as_of": "2026-09-09T18:00:01.468161Z",
+  "as_of": "2026-09-09T19:59:59.811418Z",
   "owner_repository": "KAFKA2306/investor2",
   "hypothesis": "AVGO terminal net debt=0とAVGO-favorable terminal-growth premium 42.65921661bpを維持したままrequired-return proxyを8.89%から±200bp動かしても、NVDA > AVGOの5年expected-return rankingは維持される。",
   "capital_allocation_relevance": "前回のprice×growth joint boundaryがrequired-return前提に依存しすぎるなら再評価価格を固定的に使えない。金利・割引率ショックに対する境界の感応度を先に定量化する。",
   "precommit_rule": {
-    "use": "required-return proxy 6.89%-10.89%の全stressでNVDA expected IRR > AVGO expected IRR、かつ42.65921661bp stress時のAVGO break-even priceがcurrent price 364.245 USD未満。",
+    "use": "required-return proxy 6.89%-10.89%の全stressでNVDA expected IRR > AVGO expected IRR、かつ42.65921661bp stress時のAVGO break-even priceがcurrent price 364.335 USD未満。",
     "condition": "±100bpでは順位維持するが±200bpのどこかで逆転する。",
     "reject": "±100bp内でAVGO expected IRR >= NVDA expected IRRになる。",
-    "unverified": "canonical price、terminal FCF/share、net cash/debt、growth premium、required-return identityのいずれかが不足する。"
+    "unverified": "canonical fundamentals、production price、net cash/debt、growth premium、required-return identityのいずれかが不足する。"
   },
   "dependencies": {
     "joint_boundary_artifact": "docs/research/results/avgo_nvda_price_growth_joint_boundary_20260910/summary.json",
     "capital_structure_artifact": "docs/research/results/avgo_nvda_ev_fcf_capital_structure_20260910/summary.json",
-    "nvda_price_usd": 224.21,
-    "avgo_price_usd": 364.245,
+    "nvda_price_usd": 223.77,
+    "avgo_price_usd": 364.335,
+    "price_source": "Alpaca IEX latest trade",
+    "nvda_price_timestamp_utc": "2026-09-09T19:59:59.811418Z",
+    "avgo_price_timestamp_utc": "2026-09-09T19:59:58.126009Z",
     "nvda_terminal_fcf_per_share_usd": 16.548643092357057,
     "avgo_terminal_fcf_per_share_usd": 23.847321804158277,
     "nvda_terminal_net_cash_per_share_usd": 0.9561457689932056,
@@ -41,20 +44,20 @@
     "transaction_cost": "NOT_APPLICABLE"
   },
   "stress_results": [
-    {"required_return_pct": 6.89, "nvda_5y_expected_irr_pct": 22.849982563664, "avgo_5y_expected_irr_pct": 22.721183922145, "avgo_minus_nvda_pct_points": -0.128798641519, "avgo_break_even_price_usd": 362.339586935048, "avgo_change_to_break_even_pct": -0.523113032424, "required_avgo_growth_premium_bp_at_current_price": 44.470970384512},
-    {"required_return_pct": 7.89, "nvda_5y_expected_irr_pct": 17.364639919705, "avgo_5y_expected_irr_pct": 16.650592516049, "avgo_minus_nvda_pct_points": -0.714047403656, "avgo_break_even_price_usd": 353.29866065488, "avgo_change_to_break_even_pct": -3.005213344073, "required_avgo_growth_premium_bp_at_current_price": 56.072709392478},
-    {"required_return_pct": 8.89, "nvda_5y_expected_irr_pct": 13.086299576941, "avgo_5y_expected_irr_pct": 12.028246715409, "avgo_minus_nvda_pct_points": -1.058052861532, "avgo_break_even_price_usd": 347.52122010872, "avgo_change_to_break_even_pct": -4.591354690189, "required_avgo_growth_premium_bp_at_current_price": 67.743659792593},
-    {"required_return_pct": 9.89, "nvda_5y_expected_irr_pct": 9.603192471442, "avgo_5y_expected_irr_pct": 8.324813827001, "avgo_minus_nvda_pct_points": -1.278378644441, "avgo_break_even_price_usd": 343.492559510058, "avgo_change_to_break_even_pct": -5.697385136362, "required_avgo_growth_premium_bp_at_current_price": 79.483740333109},
-    {"required_return_pct": 10.89, "nvda_5y_expected_irr_pct": 6.680644586081, "avgo_5y_expected_irr_pct": 5.252598972723, "avgo_minus_nvda_pct_points": -1.428045613358, "avgo_break_even_price_usd": 340.509776851273, "avgo_change_to_break_even_pct": -6.51627974268, "required_avgo_growth_premium_bp_at_current_price": 91.292869889405}
+    {"required_return_pct": 6.89, "nvda_5y_expected_irr_pct": 22.898256709233, "avgo_5y_expected_irr_pct": 22.715120272996, "avgo_minus_nvda_pct_points": -0.183136436237, "avgo_break_even_price_usd": 361.628515090565, "avgo_change_to_break_even_pct": -0.74285613774, "required_avgo_growth_premium_bp_at_current_price": 45.232030376909},
+    {"required_return_pct": 7.89, "nvda_5y_expected_irr_pct": 17.410758588946, "avgo_5y_expected_irr_pct": 16.644828814596, "avgo_minus_nvda_pct_points": -0.76592977435, "avgo_break_even_price_usd": 352.6053311393, "avgo_change_to_break_even_pct": -3.219473523186, "required_avgo_growth_premium_bp_at_current_price": 57.029039954422},
+    {"required_return_pct": 8.89, "nvda_5y_expected_irr_pct": 13.130737063815, "avgo_5y_expected_irr_pct": 12.02271140389, "avgo_minus_nvda_pct_points": -1.108025659924, "avgo_break_even_price_usd": 346.839228507775, "avgo_change_to_break_even_pct": -4.802111104402, "required_avgo_growth_premium_bp_at_current_price": 68.89510803705},
+    {"required_return_pct": 9.89, "nvda_5y_expected_irr_pct": 9.646261264435, "avgo_5y_expected_irr_pct": 8.319461501965, "avgo_minus_nvda_pct_points": -1.32679976247, "avgo_break_even_price_usd": 342.818473937673, "avgo_change_to_break_even_pct": -5.905698344196, "required_avgo_growth_premium_bp_at_current_price": 80.830153552528},
+    {"required_return_pct": 10.89, "nvda_5y_expected_irr_pct": 6.722564958056, "avgo_5y_expected_irr_pct": 5.247398445709, "avgo_minus_nvda_pct_points": -1.475166512347, "avgo_break_even_price_usd": 339.841544828551, "avgo_change_to_break_even_pct": -6.722784023344, "required_avgo_growth_premium_bp_at_current_price": 92.834095555441}
   ],
   "critical_boundary": {
-    "required_return_pct_where_42_65921661bp_ties_current_prices": 6.733296623135,
-    "change_from_base_required_return_bp": -215.6703376865,
-    "interpretation": "required-return proxyが8.89%から約215.67bp低下して6.7333%付近まで下がると、AVGO-favorable 42.65921661bp stressとcurrent pricesの組み合わせで初めてtieに到達する。±200bp stress内ではまだNVDA優位だが、低金利方向の余裕は小さい。"
+    "required_return_pct_where_42_65921661bp_ties_current_prices": 6.671128144382,
+    "change_from_base_required_return_bp": -221.8871855618,
+    "interpretation": "required-return proxyが8.89%から約221.89bp低下して6.6711%付近まで下がると、AVGO-favorable 42.65921661bp stressとcurrent production pricesの組み合わせで初めてtieに到達する。±200bp stress内ではまだNVDA優位だが、低金利方向の余裕は約21.9bpしかない。"
   },
   "result": {
     "status": "USE",
-    "finding": "required-return proxyを±200bp動かしてもNVDA > AVGOは維持された。ただし-200bpの6.89%ではIRR差は0.12880pt、AVGO break-even priceは362.3396 USDでcurrent 364.245 USDとの差は0.5231%まで縮む。critical boundaryは6.7333%であり、低金利方向では順位が脆くなる。"
+    "finding": "required-return proxyを±200bp動かしてもNVDA > AVGOは維持された。-200bpの6.89%ではIRR差は0.18314pt、AVGO break-even priceは361.6285 USDでcurrent 364.335 USDとの差は0.7429%。critical boundaryは6.6711%であり、低金利方向では順位が脆くなる。"
   },
   "risk_metrics": {
     "volatility": "NOT_APPLICABLE",
@@ -63,13 +66,13 @@
     "expected_shortfall": "NOT_APPLICABLE",
     "reason": "realized trading strategyではなくpoint-in-time valuation rate-sensitivity test。"
   },
-  "decision_rule": "AVGO terminal net debt=0かつgrowth premium 42.65921661bpのstressでは、required-return proxyが6.89%-10.89%ならNVDA > AVGOを維持する。ただしrequired returnが約6.7333%以下へ低下、AVGO priceが各rate-specific break-even以下へ低下、またはfundamentals/priceが更新された場合は再計算する。",
+  "decision_rule": "AVGO terminal net debt=0かつgrowth premium 42.65921661bpのstressでは、required-return proxyが6.89%-10.89%ならNVDA > AVGOを維持する。ただしrequired returnが約6.6711%以下へ低下、AVGO priceが各rate-specific break-even以下へ低下、またはfundamentals/priceが更新された場合は再計算する。",
   "limitations": [
     "required-return proxy 8.89%はTreasury yieldそのものではなくcanonical valuation parameter。Treasury 5年4.61%はrate contextとしてのみ使用する。",
     "rate shock時に企業固有risk premium、beta、capital structure、growthが同時に変わらない単純stressであり、完全なWACC modelではない。",
     "terminal net debt=0はAVGOに有利なrobustness upper boundであり予測ではない。",
     "42.65921661bp growth premiumは会社予想ではなく既存forward-FCF/share研究から得たrobustness upper bound。",
-    "current pricesは2026-09-09T18:00:01Z canonical Alpaca IEX snapshot。"
+    "Alpaca IEX quoteは20:00 UTC直後にclosing conditionを含みspreadが不安定だったため、latest tradeをproduction priceとして使用した。"
   ],
   "implementation": {
     "artifact_only": true,
@@ -79,5 +82,5 @@
     "new_workflow": false,
     "cross_repo_duplicate_financial_logic": false
   },
-  "next_hypothesis": "required-return低下側で境界が6.7333%まで近づくため、risk-free rateだけでなくequity risk premiumとbetaを一次情報・市場データから分離し、AVGO/NVDAのcompany-specific cost of equityを同一as-ofで推定しても相対順位が維持されるかを検証する。"
+  "next_hypothesis": "required-return低下側で6.6711%に境界があるため、risk-free rateとcompany-specific equity risk premium/betaを分離した同一as-of cost-of-equity stressでもNVDA > AVGOが維持されるかを検証する。"
 }
