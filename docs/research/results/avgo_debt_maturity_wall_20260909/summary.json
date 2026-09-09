@@ -1,0 +1,102 @@
+{
+  "research_id": "avgo_debt_maturity_wall_20260909",
+  "status": "CONDITION",
+  "hypothesis": "Broadcomの2026-05-03 point-in-time debt maturity scheduleでは、2030年までの累積元本返済額は同日時点cashだけでも概ねカバーでき、cashとFCFを各25% stressしても配当維持後の1年retained FCFを加えれば1.25x以上を維持するため、近中期maturity wallはAVGOを単独REJECTする理由ではない。ただし2026-06 tender後のexact current maturity scheduleが未取得ならcurrent-state authorityにはしない。",
+  "pre_registered_decision_rule": {
+    "USE": "同一as-ofのcashが2026 remainder-2030累積maturityを1.0x以上カバーし、cash -25% + FCF -25%・current dividend維持後1年retained FCFでも1.25x以上なら、当該as-ofのnear-term maturity wallを単独REJECT理由にしない。",
+    "CONDITION": "USE条件を満たすが、より新しいdebt issuance/tender/repayment後のexact maturity scheduleが未検証ならcurrent-state判断には条件付きでのみ利用する。",
+    "REJECT": "stress coverageが1.25x未満、またはcash-only coverageが1.0x未満。",
+    "UNVERIFIED": "source/identity/period/unit/as-ofのいずれかが欠ける。"
+  },
+  "canonical_point_in_time_inputs": {
+    "as_of": "2026-05-03",
+    "currency": "USD",
+    "unit": "billion",
+    "cash_and_cash_equivalents": 19.628,
+    "future_scheduled_principal_payments": {
+      "2026_remainder": 2.252,
+      "2027": 0.493,
+      "2028": 5.127,
+      "2029": 4.655,
+      "2030": 6.406,
+      "thereafter": 47.787,
+      "total": 66.720
+    },
+    "q1_q2_fcf": 18.272,
+    "q1_q2_cash_dividends_paid": 6.178,
+    "annualized_fcf": 36.544,
+    "annualized_cash_dividends": 12.356,
+    "annualized_retained_fcf": 24.188,
+    "two_quarter_interest_expense": 1.577,
+    "sources": [
+      "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial",
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial"
+    ]
+  },
+  "benchmark": {
+    "name": "cash_only_vs_2026_remainder_through_2030_maturities",
+    "cumulative_maturities_billion": 18.933,
+    "cash_coverage_x": 1.03670839,
+    "result": "PASS"
+  },
+  "alternative_stress": {
+    "cash_haircut_pct": 25.0,
+    "fcf_decline_pct": 25.0,
+    "dividend_run_rate": "unchanged",
+    "stressed_cash_billion": 14.721,
+    "stressed_annualized_fcf_billion": 27.408,
+    "stressed_annualized_retained_fcf_billion": 15.052,
+    "cash_plus_one_year_stressed_retained_fcf_billion": 29.773,
+    "coverage_vs_2026_remainder_through_2030_maturities_x": 1.57286220,
+    "result": "PASS"
+  },
+  "observed_update_after_as_of": {
+    "q3_2026_balance_sheet_as_of": "2026-08-02",
+    "cash_and_cash_equivalents_billion": 23.975,
+    "short_term_debt_billion": 2.252,
+    "long_term_debt_billion": 57.167,
+    "q3_interest_expense_billion": 0.778,
+    "three_quarter_interest_expense_billion": 2.355,
+    "june_2026_tender": "Broadcom conducted cash tender offers for selected notes due 2030-2038 and increased the consideration cap to USD 3.0B. Exact post-tender fiscal-year maturity buckets were not located in the current run.",
+    "sources": [
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-results-and-upsize-offers-purchase-cash"
+    ]
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "2026-05-03 point-in-timeではcash 19.628Bが2030年までの累積scheduled principal 18.933Bを1.03670839xカバーする。cashとFCFを各25% stressし、current dividend run-rateを維持しても、stressed cash + 1年retained FCFは29.773Bで1.57286220xを維持し事前閾値1.25xを上回る。一方、2026-06のtender後のexact fiscal-year maturity bucketsをcurrent-stateで再取得できていないため、現在のmaturity authorityとしてはCONDITIONに留める。",
+    "portfolio_implication": "AVGOの近中期debt maturity wallを単独REJECT理由にしない。current-state判断ではQ3 cash/debtとpost-tender exact maturity scheduleを再取得してから確定する。NVDAのnet-cash優位は別のbalance-sheet advantageとして維持する。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "relevant_risk_measures": [
+      "cash coverage of scheduled principal",
+      "stressed cash + retained FCF coverage",
+      "maturity concentration",
+      "interest expense",
+      "refinancing/tender changes"
+    ]
+  },
+  "limitations": [
+    "2026-05-03のmaturity scheduleと同日cashを使うpoint-in-time研究であり、2026-08-02のcurrent maturity bucketsではない。",
+    "2026-06 tender後のexact fiscal-year maturity scheduleを推測で補完していない。",
+    "FCFはinterest cash outflowを既に含むため、interest expenseをretained FCFから二重控除していない。",
+    "cashとFCFを各25% stressする単純stressであり、M&A、buyback、増配、tax、working capital、追加借入を予測しない。",
+    "2030年より後の47.787B USD maturity tailはこのnear-term coverage判定の対象外。"
+  ],
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_type": "canonical research decision artifact",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "consumer_side_duplicate_calculation": false
+  },
+  "next_high_value_hypothesis": "Broadcomの2026-08-02時点post-tender exact maturity scheduleを取得し、Q3 cash 23.975B、Q1-Q3 FCF/dividend、current interest expenseと+200bp refinancing stressを同一as-of contractで入れても、2030年までのmaturity coverageが1.25x以上を維持するか。"
+}
