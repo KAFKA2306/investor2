@@ -4,11 +4,11 @@
 
 - ARK official source: https://www.ark-invest.com/big-ideas-2026
 - canonical mapping: https://github.com/KAFKA2306/investor2/issues/111
-- checked_at: `2026-09-08T18:04:53+00:00`
+- checked_at: `2026-09-09T17:59:14+00:00`
 
 | Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
-| The Great Acceleration | [KAFKA2306/investor2](https://github.com/KAFKA2306/investor2) | yes | yes | yes | yes | no | no | yes |
+| The Great Acceleration | [KAFKA2306/investor2](https://github.com/KAFKA2306/investor2) | yes | yes | yes | yes | yes | no | yes |
 | AI Infrastructure | [KAFKA2306/semiconductor-earnings-model](https://github.com/KAFKA2306/semiconductor-earnings-model) | yes | yes | yes | yes | yes | no | yes |
 | The AI Consumer Operating System | [KAFKA2306/finAnalist](https://github.com/KAFKA2306/finAnalist) | yes | yes | no | yes | yes | no | yes |
 | AI Productivity | [KAFKA2306/econalert](https://github.com/KAFKA2306/econalert) | yes | yes | yes | yes | yes | no | yes |
