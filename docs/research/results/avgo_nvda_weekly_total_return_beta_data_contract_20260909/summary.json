@@ -1,0 +1,109 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_weekly_total_return_beta_data_contract_20260909",
+  "status": "UNVERIFIED",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "現在利用可能なcanonical production market-data pathだけで、AVGO/NVDAの3-5年weekly total-return betaをpoint-in-time / walk-forwardで再現し、Vasicek-style shrinkageをraw betaとBlume adjustmentに対して公正に比較できる。",
+  "capital_allocation_importance": "直前研究ではbeta windowだけでAVGO/NVDAのterminal discount-rate rankingが大きく変動した。次のbeta modelを採用する前に、splitとdividendを正しく反映したweekly total-return identityを固定しないと、架空のcorporate-action returnがbeta、required return、valuation、portfolio判断へ混入する。",
+  "decision_rule": {
+    "USE": "split・dividend調整済みweekly total-return seriesをPIT provenance付きで取得でき、walk-forward OOSでVasicek-style shrinkageがraw weekly betaとBlume adjustmentの両方よりbeta forecast RMSE/MAEを改善する。",
+    "CONDITION": "有効なweekly total-return seriesは取得でき、Vasicekが改善するが銘柄またはwindowで頑健でない。",
+    "REJECT": "有効なweekly total-return seriesで直接比較した結果、Vasicekが単純benchmarkを上回らない。",
+    "UNVERIFIED": "split adjustment、dividend adjustment、source identity、period、as-ofのいずれかをcanonical production pathで確定できない。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_company_beta_terminal_band_20260909/summary.json",
+    "docs/research/results/avgo_nvda_shrunk_beta_capital_structure_20260909/summary.json"
+  ],
+  "production_market_data_probe": {
+    "provider": "Alpaca",
+    "feed": "IEX",
+    "symbols": ["AVGO", "NVDA", "SPY"],
+    "timeframe": "1Week",
+    "requested_start": "2021-09-01",
+    "requested_end": "2026-09-01",
+    "records_per_symbol": 261,
+    "observed_return_identity": "raw weekly price bars",
+    "required_return_identity": "split-and-dividend-adjusted weekly total return",
+    "connector_adjustment_parameter_exposed": false,
+    "underlying_alpaca_api_adjustment_support": ["raw", "split", "dividend", "all"],
+    "underlying_alpaca_api_default_adjustment": "raw",
+    "alpaca_adjustment_docs": "https://docs.alpaca.markets/reference/stockbars-1"
+  },
+  "corporate_action_identity_check": {
+    "AVGO": {
+      "pre_split_week_timestamp": "2024-07-08",
+      "pre_split_close_usd": 1698.62,
+      "post_split_week_timestamp": "2024-07-15",
+      "post_split_close_usd": 157.47,
+      "raw_close_to_close_return_pct": -90.72953339,
+      "issuer_event": "10-for-1 forward stock split completed 2024-07-12; split-adjusted trading began 2024-07-15",
+      "issuer_source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2024-financial"
+    },
+    "NVDA": {
+      "pre_split_week_timestamp": "2024-06-03",
+      "pre_split_close_usd": 1208.42,
+      "post_split_week_timestamp": "2024-06-10",
+      "post_split_close_usd": 131.97,
+      "raw_close_to_close_return_pct": -89.07912812,
+      "issuer_event": "10-for-1 forward stock split completed 2024-06-07; split-adjusted trading began 2024-06-10",
+      "issuer_source_url": "https://investor.nvidia.com/financial-info/stock-split-information/default.aspx"
+    }
+  },
+  "benchmark_comparison": {
+    "existing_benchmark": "canonical monthly raw price-return beta and Blume-adjusted beta",
+    "existing_benchmark_limitation": "既存artifact自身がAlpaca IEX monthly price returnはtotal returnではないと明記している。",
+    "candidate_weekly_raw_series": "5年間261週/銘柄を取得できたが、AVGOとNVDAの10-for-1 splitが約-90%の架空returnとして残るためbeta推定へ使用不可。",
+    "simple_alternative_split_only_manual_adjustment": "REJECTED_AS_INPUT_CONTRACT",
+    "simple_alternative_reason": "splitだけ手作業で直してもdividendを含まずweekly total returnにならない。source-side adjustment identityも失われる。",
+    "required_alternative": "source-side adjustment=allまたは同等に検証可能なsplit+dividend-adjusted total-return series",
+    "oos_model_comparison_performed": false
+  },
+  "measured_result": {
+    "weekly_records_retrieved": 783,
+    "AVGO_artificial_split_return_pct": -90.72953339,
+    "NVDA_artificial_split_return_pct": -89.07912812,
+    "valid_weekly_total_return_series_available_through_current_connector": false,
+    "vasicek_oos_beta_rmse": "UNVERIFIED",
+    "vasicek_oos_beta_mae": "UNVERIFIED",
+    "raw_weekly_beta_oos_error": "UNVERIFIED",
+    "blume_weekly_beta_oos_error": "UNVERIFIED"
+  },
+  "decision": {
+    "status": "UNVERIFIED",
+    "reason": "current production connectorから取得できた5年weekly barsはrawで、AVGO/NVDAの10-for-1 splitを架空の約-90% returnとして含む。さらにdividend-adjusted total returnではない。現在のconnector schemaではsource-side adjustment=allを要求できないため、PIT weekly total-return betaとVasicek walk-forward OOS比較を正しく実行できない。欠損identityを手作業や既存monthly値でsilent fallbackしない。",
+    "usage_rule": "このweekly raw seriesからcompany beta、cost of equity、terminal discount rate、fair value、portfolio weightを生成しない。split+dividend-adjusted seriesをcanonical provenance付きで取得できるまで既存beta研究を上書きしない。",
+    "portfolio_action": "売買・注文・portfolio weight変更は実行しない。"
+  },
+  "risk_metrics": {
+    "beta_forecast_rmse": "UNVERIFIED",
+    "beta_forecast_mae": "UNVERIFIED",
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "今回はbeta modelのdata-contract gateであり、valid total-return input成立前にreturn/risk metricを計算しない。"
+  },
+  "implementation": {
+    "artifact_type": "data-contract blocker evidence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "raw weekly barsをsplit-adjusted/total-returnと誤認してbeta modelへ入力しない。",
+    "AVGO/NVDAのsplitだけをone-off手作業補正してdividend欠損を隠さない。",
+    "取得不能時に既存monthly betaへsilent fallbackしない。",
+    "finBI等consumer repositoryへ未検証beta計算を複製しない。"
+  ],
+  "limitations": [
+    "Alpaca underlying historical bars API自体はadjustment=allを持つが、このrunで利用可能なconnector schemaにはadjustment引数がない。",
+    "IEX price barsはtotal-return indexではない。",
+    "SPYもprice seriesであり、配当込みmarket total returnではない。",
+    "weekly total-return identityが成立していないためindustry prior構築やVasicek posterior計算へ進んでいない。"
+  ],
+  "next_hypothesis": "AVGO/NVDA/SPYと事前固定した半導体peerについて、source-side split+dividend adjustment付き3-5年weekly total-return seriesをcanonical PIT inputとして取得できれば、industry priorを使うVasicek-style shrinkageはraw weekly betaとBlume adjustmentよりwalk-forward OOS beta forecast RMSE/MAEを低下させるか。"
+}
