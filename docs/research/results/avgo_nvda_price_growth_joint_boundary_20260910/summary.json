@@ -1,0 +1,105 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_price_growth_joint_boundary_20260910",
+  "status": "USE",
+  "as_of": "2026-09-09T18:00:01.468161Z",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGOのterminal net debt=0という最大deleveraging stressを維持した状態でpriceとterminal-growth premiumのjoint break-even boundaryを解けば、現在のAVGO-favorable growth range内ではNVDA-over-AVGO expected-return rankingが維持され、再評価条件を価格またはgrowthのどちらかで直接表現できる。",
+  "precommit_rule": {
+    "use": "AVGO-favorable growth upper bound 42.65921661bpでもbreak-even AVGO priceがcurrent canonical priceを3%以上下回り、current canonical priceで必要なgrowth premiumが42.65921661bpを上回る。",
+    "reject": "42.65921661bp以下でcurrent canonical priceがbreak-evenに到達する、または同growth upper boundでbreak-even priceがcurrent canonical price以上になる。",
+    "unverified": "price、terminal FCF/share、required-return proxy、terminal net debt stress、またはperiod/unit/identityがcanonical artifactから再取得できない。"
+  },
+  "dependencies": {
+    "deleveraging_artifact": "docs/research/results/avgo_deleveraging_robustness_20260910/summary.json",
+    "capital_structure_artifact": "docs/research/results/avgo_nvda_ev_fcf_capital_structure_20260910/summary.json",
+    "price_as_of": "2026-09-09T18:00:01.468161Z",
+    "nvda_price_usd": 224.21,
+    "avgo_price_usd": 364.245,
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_terminal_fcf_per_share_usd": 23.847321804158277,
+    "avgo_terminal_net_debt_usd_billion": 0,
+    "required_return_proxy_pct": 8.89,
+    "nvda_terminal_growth_pct": 3.0,
+    "avgo_favorable_growth_upper_bound_bp": 42.65921661,
+    "ev_fcf_base_multiple": 25.0
+  },
+  "method": {
+    "description": "NVDA expected IRRを固定し、AVGO terminal net debt=0の上限stressで各terminal-growth premiumに対応するGordon-style relative multipleを25x EV/FCFへ乗じ、AVGO terminal equity value/shareを計算する。break-even current price = terminal equity value/share / (1 + NVDA expected IRR)^5。current price側では逆に必要relative multipleを解き、growth premiumへ変換する。",
+    "relative_multiple_identity": "ratio = (k - g_NVDA) / (k - g_AVGO)",
+    "break_even_price_identity": "P_AVGO,BE = terminal_equity_value_AVGO / (1 + IRR_NVDA)^5",
+    "growth_boundary_identity": "g_AVGO = k - (k - g_NVDA) / required_relative_multiple",
+    "note": "terminal net debt=0は予測ではなくAVGOに有利なrobustness upper-bound stress。issuer-defined FCFは純粋なFCFFではないため完全なEV/FCFF DCF authorityではない。"
+  },
+  "benchmark": {
+    "name": "zero terminal net debt, equal terminal growth",
+    "growth_premium_bp": 0,
+    "avgo_break_even_price_usd": 322.35146967546154,
+    "avgo_change_from_current_pct": -11.501470253411428,
+    "avgo_current_price_5y_expected_irr_pct": 10.356318619999993,
+    "avgo_minus_nvda_irr_pct_points": -2.729980956940836
+  },
+  "alternative": {
+    "name": "zero terminal net debt, AVGO-favorable growth upper bound",
+    "growth_premium_bp": 42.65921661,
+    "avgo_terminal_growth_pct": 3.4265921661,
+    "relative_terminal_multiple_ratio": 1.0780816990181532,
+    "avgo_break_even_price_usd": 347.5212201087203,
+    "avgo_change_from_current_pct": -4.59135469018922,
+    "avgo_current_price_5y_expected_irr_pct": 12.028246715408564,
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_minus_nvda_irr_pct_points": -1.058052861532266
+  },
+  "joint_boundary": {
+    "current_avgo_price_usd": 364.245,
+    "required_growth_premium_bp_at_current_price": 67.74365979259338,
+    "required_avgo_terminal_growth_pct_at_current_price": 3.677436597925934,
+    "required_relative_terminal_multiple_ratio_at_current_price": 1.129962274925305,
+    "growth_gap_vs_observed_upper_bound_bp": 25.08444318259338,
+    "surface_points": [
+      {"growth_premium_bp": 0, "break_even_avgo_price_usd": 322.35146967546154, "price_change_from_current_pct": -11.501470253411428},
+      {"growth_premium_bp": 20, "break_even_avgo_price_usd": 333.68192555157617, "price_change_from_current_pct": -8.390801369524315},
+      {"growth_premium_bp": 42.65921661, "break_even_avgo_price_usd": 347.5212201087203, "price_change_from_current_pct": -4.59135469018922},
+      {"growth_premium_bp": 60, "break_even_avgo_price_usd": 358.9130730412984, "price_change_from_current_pct": -1.4638298284675444},
+      {"growth_premium_bp": 67.74365979259338, "break_even_avgo_price_usd": 364.245, "price_change_from_current_pct": 0},
+      {"growth_premium_bp": 72.06882899, "break_even_avgo_price_usd": 367.29264220588834, "price_change_from_current_pct": 0.8367011780225697}
+    ]
+  },
+  "comparison_to_fixed_net_debt_boundary": {
+    "fixed_net_debt_break_even_price_usd_at_42_65921661bp": 343.59973664978094,
+    "zero_net_debt_break_even_price_usd_at_42_65921661bp": 347.5212201087203,
+    "deleveraging_price_boundary_improvement_usd": 3.921483458939353,
+    "fixed_net_debt_required_growth_premium_bp_at_current_price": 73.29576290639794,
+    "zero_net_debt_required_growth_premium_bp_at_current_price": 67.74365979259338,
+    "deleveraging_growth_hurdle_reduction_bp": 5.552103113804558,
+    "interpretation": "完全deleveragingはAVGOの再評価境界を改善するが、current priceと42.65921661bp growth upper boundの組み合わせではなおNVDA優位。"
+  },
+  "result": {
+    "status": "USE",
+    "finding": "AVGO terminal net debt=0まで与えても、42.65921661bp growth upper boundではbreak-even priceは347.52122011 USDでcurrent canonical price 364.245 USDを4.59135%下回る。current priceでtieに必要なgrowth premiumは67.74365979bpで、observed upper boundより25.08444bp高い。priceとgrowthの共同境界を再評価トリガーとして再利用できる。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time valuation decision boundary。"
+  },
+  "decision_rule": "AVGO terminal net debt=0 stressの下でも、growth premium <=42.65921661bpかつAVGO price >347.52122011 USDなら現在のcanonical expected-return rankingはNVDA > AVGOとして扱う。AVGO priceが約347.52 USD以下へ低下する、または独立fundamental evidenceでgrowth premiumが約67.74366bp以上へ上がる、またはNVDA price/fundamentals/required returnが更新された場合に再計算する。これは売買シグナルではなく再研究境界。",
+  "limitations": [
+    "current priceは2026-09-09T18:00:01Zのcanonical Alpaca IEX snapshotであり、このrunではfresh snapshot取得がupstream timeout/502で失敗したため新しい価格へ無言fallbackしていない。",
+    "42.65921661bpはforward FCF/share deceleration研究から得たAVGO-favorable robustness upper boundであり会社予想ではない。",
+    "terminal net debt=0はAVGOに有利な上限stressであり予測ではない。",
+    "issuer-defined FCFは純粋なFCFFではないためEV/FCFはcapital-structure stressとして使う。",
+    "価格、fundamentals、required return、terminal multipleが更新されればboundaryは再計算が必要。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "AVGO/NVDAのjoint boundaryを単一point-in-time値で終わらせず、required-return proxyを金利ショックで変化させた2次元stressに拡張し、rate上昇・低下時にも347.52 USD近辺の再評価境界がmaterially維持されるかを検証する。"
+}
