@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_ev_fcf_capital_structure_20260910",
+  "status": "USE",
+  "as_of": "2026-09-09T18:00:01.468161Z",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGO/NVDAの現在fundamentalsとAVGO-favorable terminal-growth premium 42.65921661bpを固定し、最新issuer balance sheetのnet cash/debtをEV/FCF型の資本構成stressへ入れてもNVDA > AVGOの5年expected-return順位と相対価格境界が維持される。",
+  "precommit_rule": {
+    "use": "保守的net debt定義でAVGO-favorable stress後もNVDA expected IRR > AVGO expected IRR、かつAVGO break-even priceが現在価格を下回る。",
+    "reject": "資本構成調整だけでAVGO expected IRR >= NVDA expected IRRになる。",
+    "unverified": "cash/debt/period/unit/share basisの一次情報が揃わない。"
+  },
+  "dependencies": {
+    "price_boundary_artifact": "docs/research/results/avgo_nvda_price_boundary_20260910/summary.json",
+    "price_as_of": "2026-09-09T18:00:01.468161Z",
+    "nvda_price_usd": 224.21,
+    "avgo_price_usd": 364.245,
+    "nvda_price_fcf_5y_irr_pct": 13.03410083,
+    "avgo_price_fcf_5y_irr_pct_equal_growth": 10.35631862,
+    "avgo_favorable_terminal_growth_premium_bp": 42.65921661,
+    "avgo_favorable_terminal_multiple_ratio": 1.0780817,
+    "required_return_proxy_pct": 8.89,
+    "nvda_terminal_growth_pct": 3.0
+  },
+  "primary_sources": {
+    "avgo": {
+      "source": "SEC EDGAR, Broadcom Inc. FY2026 Q3 earnings exhibit filed 2026-09-02",
+      "period_end": "2026-08-02",
+      "currency": "USD",
+      "unit": "million",
+      "cash_and_cash_equivalents": 23975,
+      "short_term_debt": 2252,
+      "long_term_debt": 57167,
+      "total_debt": 59419,
+      "net_debt": 35444,
+      "diluted_weighted_average_shares_million": 4887,
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000076/avgo-08022026x8kxex99.htm"
+    },
+    "nvda": {
+      "source": "NVIDIA Q2 FY2027 results / SEC 10-Q",
+      "period_end": "2026-07-26",
+      "currency": "USD",
+      "unit": "million",
+      "cash_and_cash_equivalents": 22443,
+      "marketable_debt_securities": 34143,
+      "marketable_equity_securities_excluded_from_primary_net_cash": 42783,
+      "short_term_debt": 1000,
+      "long_term_debt": 32366,
+      "total_debt": 33366,
+      "primary_liquid_assets": 56586,
+      "net_debt": -23220,
+      "diluted_weighted_average_shares_million": 24285,
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+    }
+  },
+  "method": {
+    "note": "既存25x Price/FCF terminal equity valueからterminal FCF/shareを逆算し、同じ25xをEV/FCF型stressへ適用。terminal equity value = terminal EV - current net debt/share。AVGO-favorable stressでは25xに1.07808170を乗じる。issuer-defined FCFは純粋なFCFFではないため、これはcapital-structure robustness stressであり理論上の完全なEV/FCFF valuationではない。",
+    "nvda_terminal_fcf_per_share_usd": 16.548643092357057,
+    "avgo_terminal_fcf_per_share_usd": 23.847321804158277,
+    "nvda_net_debt_per_diluted_share_usd": -0.9561457689932056,
+    "avgo_net_debt_per_diluted_share_usd": 7.252711274810722
+  },
+  "benchmark": {
+    "name": "equal EV/FCF 25x, conservative net debt",
+    "nvda_terminal_equity_value_per_share_usd": 414.6722230787417,
+    "avgo_terminal_equity_value_per_share_usd": 588.9303338291462,
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_5y_expected_price_irr_pct": 10.086500169288492,
+    "avgo_minus_nvda_pct_points": -2.999799407652338
+  },
+  "alternative": {
+    "name": "AVGO-favorable +42.65921661bp terminal-growth equivalent applied to EV multiple",
+    "avgo_terminal_multiple_ratio": 1.0780817,
+    "avgo_terminal_equity_value_per_share_usd": 635.4813195020398,
+    "avgo_5y_expected_price_irr_pct": 11.774268914109998,
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_minus_nvda_pct_points": -1.312030662830832
+  },
+  "break_even": {
+    "required_avgo_to_nvda_ev_terminal_multiple_ratio": 1.1421275173527312,
+    "equivalent_avgo_terminal_growth_pct": 3.7329576290639794,
+    "equivalent_avgo_growth_premium_bp": 73.29576290639794,
+    "avgo_break_even_price_usd_at_nvda_224_21": 343.59973664978094,
+    "avgo_change_from_current_pct": -5.667960672135253,
+    "break_even_avgo_to_nvda_price_ratio": 1.5324906857400693
+  },
+  "comparison_to_price_fcf_boundary": {
+    "price_fcf_break_even_avgo_price_usd": 346.37832879,
+    "price_fcf_break_even_growth_premium_bp": 67.13318484,
+    "ev_fcf_break_even_avgo_price_usd": 343.59973664978094,
+    "ev_fcf_break_even_growth_premium_bp": 73.29576290639794,
+    "interpretation": "資本構成を入れるとAVGOのbreak-evenは約2.78 USD低下し、必要growth premiumは約6.16bp上昇する。NVDA優位は弱まらず、むしろ強まる。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time valuation robustness test。"
+  },
+  "decision_rule": "AVGO/NVDA相対評価ではPrice/FCFだけでなく、最新issuer balance sheetのnet cash/debtを反映したcapital-structure stressを確認する。2026-09-09価格stateと42.65921661bp AVGO-favorable stressではNVDA > AVGOを維持する。AVGOが約343.60 USD以下、またはfundamentals/capital structureが更新された場合に再計算する。",
+  "limitations": [
+    "issuer-defined FCFは純粋なFCFFではないためEV/FCFはcapital-structure stressとして使い、完全なDCF authorityにはしない。",
+    "AVGOとNVDAのbalance-sheet period endは約1週間ずれる。",
+    "marketable equity securitiesは価格変動が大きいためNVDA primary net cashから除外した。含める場合はNVDA側がさらに有利になる。",
+    "net debt/shareには各社の最新四半期 diluted weighted-average sharesを使い、期末actual shares outstandingではない。",
+    "terminal net debtをcurrent levelで固定したstressであり、5年後のdeleveraging/buyback/M&Aを予測していない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "AVGOの高いnet debtが今後2-3年のFCFでどの程度減少し得るかをissuer maturity scheduleとinterest expenseを用いたpoint-in-time deleveraging pathで検証し、それでもEV/FCF相対順位が維持されるか。"
+}
