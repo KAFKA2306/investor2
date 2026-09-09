@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_price_boundary_20260910",
+  "status": "USE",
+  "as_of": "2026-09-09T18:00:01.468161Z",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "現在fundamentalsとAVGO-favorable terminal-growth premium 42.65921661bpを固定した場合、AVGOがNVDAと同じ5年expected price IRRになる市場価格境界を直接解けば、再評価に必要なAVGO価格またはAVGO/NVDA価格比をcanonical decision boundaryとして利用できる。",
+  "capital_allocation_importance": "直前研究ではAVGOに42.65921661bpのterminal-growth premiumを与えてもNVDAのexpected-return優位が残った。次の判断に必要なのは、仮説を追加することではなく、どの価格までAVGOが相対的に安くなれば順位が逆転するかを価格だけで即時判定できる境界である。",
+  "decision_rule": {
+    "USE": "現在価格がbreak-even境界よりAVGO割高側にあり、境界が一意に計算できる。境界を再評価トリガーとして保存する。",
+    "CONDITION": "現在価格がbreak-even境界の±1%以内にある。",
+    "REJECT": "現在価格がすでにAVGO割安側へ境界を超えており、既存NVDA-over-AVGO rankingが維持されない。",
+    "UNVERIFIED": "price、timestamp、feed、currency、canonical terminal valueまたはgrowth stressのidentityが欠ける。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_sep09_price_neartie_robustness_20260910/summary.json",
+    "docs/research/results/avgo_nvda_near_tie_growth_valuation_robustness_20260910/summary.json"
+  ],
+  "production_market_data": {
+    "provider": "Alpaca market data",
+    "feed": "IEX",
+    "currency": "USD",
+    "NVDA": {
+      "latest_trade_timestamp_utc": "2026-09-09T18:00:01.158790Z",
+      "latest_trade_price": 224.21,
+      "latest_quote_timestamp_utc": "2026-09-09T18:00:01.468161Z",
+      "bid": 224.20,
+      "ask": 224.23
+    },
+    "AVGO": {
+      "latest_trade_timestamp_utc": "2026-09-09T17:59:59.298033Z",
+      "latest_trade_price": 364.245,
+      "latest_quote_timestamp_utc": "2026-09-09T18:00:00.372551Z",
+      "bid": 363.87,
+      "ask": 364.37
+    }
+  },
+  "method": {
+    "benchmark": "Current production IEX prices with existing canonical fundamentals and equal-growth NVDA base valuation.",
+    "simple_alternative": "Give AVGO the full prior near-tie upper-bound terminal-growth premium 42.65921661bp and solve only for the market price that equalizes 5-year expected price IRR.",
+    "canonical_terminal_values_usd_per_share": {
+      "NVDA_base": 413.7160772504295,
+      "AVGO_50_50_equal_growth": 592.8522306125802
+    },
+    "AVGO_favorable_terminal_multiple_ratio": 1.0780816990181532,
+    "AVGO_favorable_terminal_value_usd_per_share": 639.1446072236804,
+    "formula": "break_even_AVGO_price = AVGO_terminal_value_under_42.65921661bp / (1 + current_NVDA_base_IRR)^5; break_even_AVGO_to_NVDA_price_ratio = break_even_AVGO_price / current_NVDA_price.",
+    "look_ahead": "No future realized price or FCF is used. Only observed IEX prices and already-canonical forward valuation assumptions are used.",
+    "transaction_costs": "NOT_APPLICABLE. This is a point-in-time valuation decision boundary, not a realized trading strategy.",
+    "missing_data_policy": "No fallback to stale close, another feed, inferred currency, or unverified terminal value."
+  },
+  "results": {
+    "current": {
+      "NVDA_price_usd": 224.21,
+      "AVGO_price_usd": 364.245,
+      "AVGO_to_NVDA_price_ratio": 1.62457071495473,
+      "NVDA_base_5y_expected_price_IRR_pct": 13.03410082680354,
+      "AVGO_42_65921661bp_5y_expected_price_IRR_pct": 11.90278792987769,
+      "AVGO_minus_NVDA_percentage_points": -1.1313128969258512
+    },
+    "break_even_boundary": {
+      "AVGO_price_usd_if_NVDA_fixed": 346.37832878527706,
+      "AVGO_to_NVDA_price_ratio": 1.5448834966561573,
+      "AVGO_price_change_required_from_current_pct": -4.905124631696511,
+      "NVDA_price_usd_if_AVGO_fixed": 235.77506057148952,
+      "NVDA_price_change_required_from_current_pct": 5.158137715306865
+    },
+    "quote_mid_sanity_check": {
+      "NVDA_mid_usd": 224.215,
+      "AVGO_mid_usd": 364.12,
+      "current_AVGO_to_NVDA_price_ratio": 1.6239769863746851,
+      "break_even_AVGO_price_usd_if_NVDA_mid_fixed": 346.38605320276025,
+      "AVGO_change_required_pct": -4.870357793375746
+    }
+  },
+  "benchmark_and_alternatives": {
+    "current_state": "At latest IEX trades, AVGO remains 1.13131290 percentage points below NVDA on 5-year expected price IRR even after granting AVGO the full 42.65921661bp terminal-growth premium.",
+    "price_boundary": "With NVDA fixed at 224.21 USD, AVGO must fall to 346.37832879 USD, or about 4.9051%, for expected IRRs to tie under the same growth stress.",
+    "relative_boundary": "The canonical relative-price trigger is AVGO/NVDA = 1.54488350x. The current ratio is 1.62457071x, so AVGO remains on the expensive side of the tie boundary.",
+    "symmetric_interpretation": "If AVGO stayed at 364.245 USD instead, NVDA would have to rise to 235.77506057 USD, about 5.1581%, to reach the same relative boundary."
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "The break-even price boundary is identifiable and current AVGO price remains about 4.91% above the AVGO price required to tie NVDA under the deliberately AVGO-favorable 42.65921661bp growth stress.",
+    "usage_rule": "For the recorded fundamentals and growth-stress contract, treat AVGO/NVDA market price ratio 1.54488350x as the point-in-time re-evaluation boundary. At a fixed NVDA price of 224.21 USD this corresponds to AVGO 346.3783 USD. Recalculate when prices or canonical fundamentals change; do not reuse the numeric boundary as a permanent constant.",
+    "portfolio_implication": "Current NVDA-over-AVGO expected-return ranking is maintained. No trade, order, portfolio-weight authority, or automatic allocation change is made. The boundary is a research trigger for re-evaluation only."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time forward valuation boundary rather than a realized return series."
+  },
+  "limitations": [
+    "IEX is not consolidated SIP.",
+    "42.65921661bp is a robustness stress, not an issuer forecast.",
+    "The boundary changes immediately with either stock price or any canonical fundamental/terminal-value input.",
+    "The calculation holds the existing AVGO 50/50 terminal-value contract fixed and does not model a full return distribution.",
+    "A price crossing is a re-evaluation trigger, not an automatic buy/sell signal."
+  ],
+  "implementation": {
+    "artifact_type": "canonical point-in-time relative-price decision boundary",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "Do not add a watcher, trading rule, or order execution path.",
+    "Do not copy the valuation calculation into finBI or another consumer repository.",
+    "Do not treat 346.3783 USD or 1.54488350x as permanent constants after price or fundamental updates.",
+    "Do not restore rejected historical FCF/share growth extrapolation."
+  ],
+  "next_hypothesis": "AVGO/NVDA price boundary is now explicit; next test whether the boundary remains materially stable after incorporating net cash/debt and enterprise-value-to-FCF rather than price-to-FCF, because AVGO and NVDA capital structures differ and price-only valuation may overstate comparability."
+}
