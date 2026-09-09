@@ -1,0 +1,123 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_historical_erp_terminal_multiple_distribution_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09T17:58:52+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "1961-2025の米国T.Bond Rate + implied equity risk premiumをpoint-in-time年次系列として使い、terminal FCF growth 3%に対応するPrice/FCF分布を作ると、既存25x terminal multipleは歴史分布の90th percentileを上回る一方、現在のERP-anchored multipleは中央50%帯に入り、25xをdownside anchorとして扱うのは楽観的である。",
+  "decision_rule": {
+    "USE": "25xがhistorical 90th percentile以上で、current ERP-anchored 3% growth multipleがhistorical 25th-75th percentile内にある。",
+    "CONDITION": "上記2条件のどちらか一方だけを満たす。",
+    "REJECT": "25xがhistorical 75th percentile未満で、current anchorも中央50%帯から外れる。",
+    "UNVERIFIED": "annual T.Bond Rate、implied ERP、year identityまたはcanonical valuation inputsが不足する。"
+  },
+  "primary_source": {
+    "name": "Aswath Damodaran Historical Implied Equity Risk Premiums",
+    "url": "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/histimpl.html",
+    "vintage": "January 2026",
+    "period": "1961-2025",
+    "observations": 65,
+    "fields": ["T.Bond Rate", "Implied ERP (FCFE)"],
+    "identity": "required_return_proxy = T.Bond Rate + Implied ERP (FCFE)"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_erp_anchored_terminal_multiple_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "valuation_identity": {
+    "terminal_growth_pct": 3.0,
+    "definition": "Price/FCF = 1 / (required_return_proxy - terminal_growth)",
+    "scope": "market-wide stress calibration; not company-specific fair value or FCFE DCF"
+  },
+  "historical_distribution": {
+    "required_return_proxy_pct": {
+      "mean": 9.92676923,
+      "p25": 7.98,
+      "median": 8.86,
+      "p75": 11.37,
+      "min": 5.27,
+      "max": 19.71
+    },
+    "price_to_fcf_at_3pct_growth_x": {
+      "mean": 16.93676100,
+      "p25": 11.94743130,
+      "median": 17.06484642,
+      "p75": 20.08032129,
+      "p90": 22.21258600,
+      "min": 5.98444019,
+      "max": 44.05286344
+    },
+    "years_at_or_above_25x": 4,
+    "years_below_25x": 61,
+    "share_years_at_or_above_25x_pct": 6.15384615,
+    "empirical_percentile_of_25x_pct": 93.84615385,
+    "years_at_or_above_25x_list": [1961, 1998, 2020, 2021]
+  },
+  "current_state": {
+    "date": "2026-09-01",
+    "risk_free_rate_pct": 4.75,
+    "implied_equity_risk_premium_pct": 4.14,
+    "required_return_proxy_pct": 8.89,
+    "price_to_fcf_at_3pct_growth_x": 16.97792869,
+    "within_historical_interquartile_range": true,
+    "distance_vs_historical_median_x": -0.08691773
+  },
+  "benchmark_and_alternatives": {
+    "benchmark_25x": {
+      "NVDA_base_5y_price_irr_pct": 12.81307588,
+      "AVGO_50_50_mean_5y_price_irr_pct": 9.90638559,
+      "AVGO_minus_NVDA_pp": -2.90669029
+    },
+    "historical_p25_11_94743130x": {
+      "NVDA_base_5y_price_irr_pct": -2.67456641,
+      "AVGO_50_50_mean_5y_price_irr_pct": -5.18220917,
+      "AVGO_minus_NVDA_pp": -2.50764276
+    },
+    "historical_median_17_06484642x": {
+      "NVDA_base_5y_price_irr_pct": 4.51819853,
+      "AVGO_50_50_mean_5y_price_irr_pct": 1.82523026,
+      "AVGO_minus_NVDA_pp": -2.69296826
+    },
+    "historical_p75_20_08032129x": {
+      "NVDA_base_5y_price_irr_pct": 7.97558614,
+      "AVGO_50_50_mean_5y_price_irr_pct": 5.19353641,
+      "AVGO_minus_NVDA_pp": -2.78204973
+    },
+    "current_16_97792869x": {
+      "NVDA_base_5y_price_irr_pct": 4.41151079,
+      "AVGO_50_50_mean_5y_price_irr_pct": 1.72129139,
+      "AVGO_minus_NVDA_pp": -2.69021939
+    }
+  },
+  "result": {
+    "status": "USE",
+    "multiple_condition_pass": true,
+    "current_anchor_condition_pass": true,
+    "reason": "25x exceeds the historical 90th percentile of 22.212586x and was reached or exceeded in only 4 of 65 annual observations, while the current 16.97792869x anchor is almost identical to the historical median 17.06484642x and lies inside the interquartile range.",
+    "capital_allocation_implication": "Keep 25x/35x/45x only as optimistic terminal-multiple sensitivities, not downside anchors. For AVGO/NVDA capital-allocation work, require the rate+ERP 3% growth anchor and the historical p25/median/p75 distribution alongside the optimistic grid. Across the entire historical interquartile multiple range, NVDA remains ahead of the AVGO 50/50 mean case by about 2.51-2.78 percentage points in 5-year price IRR."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくterminal valuation calibrationの歴史分布研究のため。"
+  },
+  "limitations": [
+    "Damodaran implied ERPは推計値であり観測可能な市場価格そのものではない。",
+    "annual year-end observations 65点であり、日次の金利分布ではない。",
+    "required_return_proxy = risk-free + ERPはmarket beta 1の単純proxyで、AVGO/NVDA固有betaやcapital structureを直接含まない。",
+    "3% terminal growthは既存canonical sensitivityとの整合用であり予測値ではない。",
+    "Price/FCFは既存issuer-reported FCF contractを使うstress calibrationで、厳密なFCFE modelではない。",
+    "1961-2025には異なるinflation、tax、accounting、market-structure regimeが混在するため、分布自体をforecast modelとして扱わない。"
+  ],
+  "implementation": {
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "duplicated_financial_calculation_cross_repo": false,
+    "canonical_artifact_only": true
+  },
+  "next_hypothesis": "AVGO/NVDAと半導体peerについて、forward FCF growthをpoint-in-timeで固定し、単純なgrowth-conditioned terminal multipleがequal-multipleおよびmarket-wide rate+ERP distribution benchmarkよりwalk-forward OOS valuation calibration errorを改善するか。"
+}
