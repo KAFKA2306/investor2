@@ -1,0 +1,146 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_historical_relative_fcf_multiple_20260909",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "status": "REJECT",
+  "hypothesis": "A point-in-time annual AVGO/NVDA Price/FCF ratio estimated immediately after each issuer's annual results is stable enough to replace the equal-terminal-multiple benchmark with a company-specific historical terminal-multiple anchor.",
+  "decision_rule": {
+    "use": "Use a historical relative terminal-multiple anchor only if the three annual AVGO/NVDA Price/FCF ratios remain within a narrow range around 1 and do not imply materially conflicting capital-allocation conclusions.",
+    "reject": "Reject a canonical historical relative-multiple anchor if the observed ratio crosses materially from discount to premium, has population coefficient of variation above 25%, or maps to conflicting AVGO-vs-NVDA probability hurdles.",
+    "unverified": "UNVERIFIED if release date, post-release market price, fiscal-year FCF, diluted share identity, currency, or split basis cannot be established."
+  },
+  "method": {
+    "price_identity": "First IEX daily close after each annual-results release, so the reported fiscal-year FCF was public before the valuation observation.",
+    "multiple_formula": "Price/FCF = post-release close * issuer-reported diluted weighted-average shares / issuer-reported fiscal-year free cash flow.",
+    "pairing": "Broadcom FY2023/FY2024/FY2025 annual releases are paired with NVIDIA FY2024/FY2025/FY2026 annual releases as the nearest annual disclosure cycles.",
+    "look_ahead": "No future FCF is used in each historical multiple observation."
+  },
+  "primary_and_production_data": {
+    "Broadcom": [
+      {
+        "fiscal_year": "FY2023",
+        "release_date": "2023-12-07",
+        "post_release_price_date": "2023-12-08",
+        "IEX_close_usd": 944.04,
+        "free_cash_flow_usd_bn": 17.633,
+        "diluted_weighted_average_shares_bn": 0.427,
+        "price_to_fcf_x": 22.86083366,
+        "source": "Broadcom FY2023 results; Alpaca IEX production daily bar"
+      },
+      {
+        "fiscal_year": "FY2024",
+        "release_date": "2024-12-12",
+        "post_release_price_date": "2024-12-13",
+        "IEX_close_usd": 224.83,
+        "free_cash_flow_usd_bn": 19.414,
+        "diluted_weighted_average_shares_bn": 4.778,
+        "price_to_fcf_x": 55.33314824,
+        "source": "Broadcom FY2024 results; Alpaca IEX production daily bar"
+      },
+      {
+        "fiscal_year": "FY2025",
+        "release_date": "2025-12-11",
+        "post_release_price_date": "2025-12-12",
+        "IEX_close_usd": 360.04,
+        "free_cash_flow_usd_bn": 26.914,
+        "diluted_weighted_average_shares_bn": 4.853,
+        "price_to_fcf_x": 64.92064056,
+        "source": "Broadcom FY2025 results; Alpaca IEX production daily bar"
+      }
+    ],
+    "NVIDIA": [
+      {
+        "fiscal_year": "FY2024",
+        "release_date": "2024-02-21",
+        "post_release_price_date": "2024-02-22",
+        "IEX_close_usd": 785.27,
+        "free_cash_flow_usd_bn": 26.947,
+        "diluted_weighted_average_shares_bn": 2.494,
+        "price_to_fcf_x": 72.67834564,
+        "source": "NVIDIA FY2024 results; Alpaca IEX production daily bar"
+      },
+      {
+        "fiscal_year": "FY2025",
+        "release_date": "2025-02-26",
+        "post_release_price_date": "2025-02-27",
+        "IEX_close_usd": 120.245,
+        "free_cash_flow_usd_bn": 60.724,
+        "diluted_weighted_average_shares_bn": 24.804,
+        "price_to_fcf_x": 49.11660925,
+        "source": "NVIDIA FY2025 results; Alpaca IEX production daily bar"
+      },
+      {
+        "fiscal_year": "FY2026",
+        "release_date": "2026-02-25",
+        "post_release_price_date": "2026-02-26",
+        "IEX_close_usd": 184.86,
+        "free_cash_flow_usd_bn": 96.575,
+        "diluted_weighted_average_shares_bn": 24.514,
+        "price_to_fcf_x": 46.92371773,
+        "source": "NVIDIA FY2026 results; Alpaca IEX production daily bar"
+      }
+    ]
+  },
+  "historical_relative_multiple": {
+    "AVGO_to_NVDA_ratio_by_cycle": [0.31454807, 1.12656694, 1.38353574],
+    "minimum": 0.31454807,
+    "median": 1.12656694,
+    "maximum": 1.38353574,
+    "population_mean": 0.94155025,
+    "population_std": 0.45560000,
+    "population_coefficient_of_variation": 0.48388283,
+    "range": 1.06898767,
+    "interpretation": "The relative multiple moved from a 68.55% AVGO discount to a 38.35% AVGO premium across the three annual disclosure cycles."
+  },
+  "benchmark_and_alternatives": {
+    "equal_terminal_multiple_benchmark": {
+      "AVGO_to_NVDA_terminal_ratio": 1.0,
+      "required_AVGO_10pct_growth_probability_pct": 96.25978682
+    },
+    "current_trailing_relative_multiple_sensitivity": {
+      "AVGO_to_NVDA_ratio": 1.05807215,
+      "required_AVGO_10pct_growth_probability_pct": 76.10409619,
+      "status": "CONDITION_ONLY"
+    },
+    "historical_median_relative_multiple": {
+      "AVGO_to_NVDA_ratio": 1.12656694,
+      "required_AVGO_10pct_growth_probability_pct": 53.97212320
+    },
+    "historical_low_ratio_case": {
+      "AVGO_to_NVDA_ratio": 0.31454807,
+      "required_AVGO_10pct_growth_probability_pct": 563.54663250
+    },
+    "historical_high_ratio_case": {
+      "AVGO_to_NVDA_ratio": 1.38353574,
+      "required_AVGO_10pct_growth_probability_pct": -16.60974554
+    }
+  },
+  "result": {
+    "status": "REJECT",
+    "reason": "The three point-in-time annual relative Price/FCF ratios are not stable: 0.3145x, 1.1266x, and 1.3835x, with coefficient of variation 48.39%. Using them as terminal anchors produces mutually incompatible AVGO growth-probability hurdles, from above 500% to below 0%.",
+    "capital_allocation_implication": "Do not replace the equal-terminal-multiple benchmark with a single historical AVGO/NVDA relative Price/FCF median or mean. Keep company-specific relative multiples as explicit sensitivity cases only until a broader regime-aware, point-in-time distribution demonstrates forecast value."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time valuation calibration study, not a realized-return strategy backtest."
+  },
+  "limitations": [
+    "Only three annual disclosure cycles are available in this compact validation, so the result rejects a stable canonical anchor rather than estimating a precise long-run distribution.",
+    "Broadcom's VMware acquisition materially changed business mix between the first and later observations, so regime change is a plausible economic cause of the unstable relative multiple.",
+    "Issuer-reported free cash flow definitions are not perfectly harmonized across Broadcom and NVIDIA.",
+    "Diluted weighted-average shares are used as the contemporaneous share-count identity; they are not exact end-of-day basic shares outstanding.",
+    "IEX prices are production market observations but are not SIP consolidated closes."
+  ],
+  "deleted_or_not_added": {
+    "new_terminal_multiple_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "consumer_repository_duplicate": false,
+    "one_off_script_retained": false
+  },
+  "next_research": "Test whether a regime-aware terminal multiple based on forward FCF growth and business mix has out-of-sample explanatory value across AVGO/NVDA and semiconductor peers; reject it unless it improves valuation calibration over the equal-multiple benchmark without look-ahead."
+}
