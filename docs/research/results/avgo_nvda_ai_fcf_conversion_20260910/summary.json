@@ -1,0 +1,100 @@
+{
+  "status": "USE",
+  "as_of": "2026-09-10",
+  "hypothesis": "Broadcom の直近 AI semiconductor 増収局面では、全社 FCF の YoY 増分 / AI semiconductor revenue の YoY 増分が NVIDIA の全社 FCF 増分 / Data Center revenue 増分を latest-quarter と cumulative-period の両方で上回り、AI 成長局面の cash-conversion cross-check として再利用できる。",
+  "capital_allocation_importance": "AVGO と NVDA の相対 valuation では terminal growth だけでなく、増収が実際の free cash flow に変換される効率が expected return の持続性を左右する。",
+  "precommit_rule": {
+    "USE": "AVGO の incremental FCF / AI-revenue ratio が NVDA を latest-quarter と cumulative-period の両方で 10 percentage points 以上上回り、AVGO の FCF margin が YoY で悪化しない。",
+    "CONDITION": "AVGO 優位が latest-quarter または cumulative-period の片方だけ、または差が 10pt 未満。",
+    "REJECT": "NVDA が両比較で AVGO 以上、または AVGO FCF margin が materially 悪化。",
+    "UNVERIFIED": "revenue / FCF / AI-or-Data-Center identity / period / unit の一次情報が不足。"
+  },
+  "sources": [
+    {
+      "company": "Broadcom",
+      "source": "issuer IR",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial",
+      "facts": "Q1 FY2026 revenue 19.311B USD, FCF 8.010B, AI semiconductor revenue 8.4B; Q1 FY2025 revenue 14.916B, FCF 6.013B, AI revenue 4.1B."
+    },
+    {
+      "company": "Broadcom",
+      "source": "issuer IR",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial",
+      "facts": "Q2 FY2026 revenue 22.187B USD, FCF 10.262B, AI semiconductor revenue 10.8B; Q2 FY2025 revenue 15.004B, FCF 6.411B, AI revenue over 4.4B. Calculation uses 4.4B, the disclosed lower-bound rounded figure, making the AVGO incremental-AI conversion estimate conservative."
+    },
+    {
+      "company": "Broadcom",
+      "source": "issuer IR",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "facts": "Q3 FY2026 revenue 29.591B USD, FCF 13.665B, AI semiconductor revenue 16.7B; Q3 FY2025 revenue 15.952B, FCF 7.024B, AI revenue 5.2B."
+    },
+    {
+      "company": "NVIDIA",
+      "source": "issuer IR",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-first-quarter-fiscal-2027",
+      "facts": "Q1 FY2027 revenue 81.615B USD, Data Center revenue 75.2B, FCF 48.554B; Q1 FY2026 revenue 44.062B, Data Center revenue 39.1B, FCF 26.135B."
+    },
+    {
+      "company": "NVIDIA",
+      "source": "issuer IR",
+      "url": "https://nvidianews.nvidia.com/news/nvidia-announces-financial-results-for-second-quarter-fiscal-2027",
+      "facts": "Q2 FY2027 revenue 96.221B USD, Data Center revenue 89.0B, FCF 21.341B; Q2 FY2026 revenue 46.743B, Data Center revenue 41.1B, FCF 13.450B."
+    }
+  ],
+  "method": {
+    "primary_metric": "(current-period FCF - prior-year FCF) / (current-period AI-or-Data-Center revenue - prior-year AI-or-Data-Center revenue)",
+    "benchmark_metric": "(current-period FCF - prior-year FCF) / (current-period total revenue - prior-year total revenue)",
+    "design": "point-in-time issuer-reported YoY delta comparison; no synthetic data, no future revenue extrapolation, no attribution of all FCF to AI",
+    "warning": "Broadcom AI semiconductor revenue and NVIDIA Data Center revenue are not identical product scopes. Whole-company FCF also contains non-AI businesses and working-capital timing. Therefore the ratio is a descriptive cash-conversion cross-check, not a causal AI-specific FCF margin or terminal forecast coefficient."
+  },
+  "results": {
+    "broadcom": {
+      "Q1_FY2026_incremental_fcf_per_incremental_ai_revenue": 0.46441860,
+      "Q2_FY2026_incremental_fcf_per_incremental_ai_revenue": 0.60171875,
+      "Q3_FY2026_incremental_fcf_per_incremental_ai_revenue": 0.57747826,
+      "H1_FY2026_incremental_fcf_per_incremental_ai_revenue": 0.54654206,
+      "H1_FY2026_incremental_fcf_per_incremental_total_revenue": 0.50509587,
+      "Q3_FY2026_incremental_fcf_per_incremental_total_revenue": 0.48691253,
+      "Q3_FY2026_fcf_margin": 0.46179582,
+      "Q3_FY2025_fcf_margin": 0.44032096,
+      "Q3_fcf_margin_yoy_change_pt": 2.14748534
+    },
+    "nvidia": {
+      "Q1_FY2027_incremental_fcf_per_incremental_data_center_revenue": 0.62102493,
+      "Q2_FY2027_incremental_fcf_per_incremental_data_center_revenue": 0.16473904,
+      "H1_FY2027_incremental_fcf_per_incremental_data_center_revenue": 0.36083333,
+      "H1_FY2027_incremental_fcf_per_incremental_total_revenue": 0.34826671,
+      "Q2_FY2027_incremental_fcf_per_incremental_total_revenue": 0.15948502,
+      "Q2_FY2027_fcf_margin": 0.22179150,
+      "Q2_FY2026_fcf_margin": 0.28774362,
+      "Q2_fcf_margin_yoy_change_pt": -6.59521189
+    },
+    "comparison": {
+      "latest_quarter_incremental_ai_or_dc_conversion_advantage_AVGO_minus_NVDA_pt": 41.27392212,
+      "cumulative_H1_incremental_ai_or_dc_conversion_advantage_AVGO_minus_NVDA_pt": 18.57087227,
+      "cumulative_H1_incremental_total_revenue_conversion_advantage_AVGO_minus_NVDA_pt": 15.68291619,
+      "precommit_threshold_pt": 10.0,
+      "precommit_pass": true
+    }
+  },
+  "interpretation": "AVGO は latest quarter と H1 cumulative の双方で、AI/Data-Center 増収に対する観測上の incremental FCF conversion が NVDA を 10pt 超上回った。total-revenue benchmark でも H1 で AVGO が約15.68pt上回るため、単に AI revenue denominator の定義差だけで結果が生じているとは考えにくい。NVDA Q2 FY2027 は receivables / inventory 増加など working-capital drag が大きく、単四半期値は低い。そのため H1 cumulative を主な再利用指標とする。",
+  "decision_rule": "AVGO の AI 成長を valuation へ反映するとき、観測済み H1 incremental FCF conversion 54.65% を capital-efficiency evidence として使える。ただし terminal FCF forecast に 54.65% を直接掛けない。次四半期以降も H1/TTM cumulative conversion と FCF margin を更新し、NVDA 比優位が 10pt 未満へ縮小、または AVGO FCF margin が悪化した場合は再評価する。",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategy ではなく fundamental cash-conversion research"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "research evaluation / decision artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_logic_copy": false
+  },
+  "remaining_uncertainty": "Broadcom AI semiconductor revenue と NVIDIA Data Center revenue の product scope は一致せず、全社 FCF は working capital・software・gaming 等の非対応要因も含む。特に NVIDIA Q2 FY2027 は operating working capital の大幅な吸収で FCF が低下しているため、TTM または複数四半期の累積比較が必要。",
+  "next_high_value_hypothesis": "NVIDIA の Q2 FY2027 FCF conversion 低下は構造的な margin deterioration ではなく working-capital build の一時要因であり、cash conversion cycle / receivables / inventory を正規化すると AVGO の H1 incremental-FCF advantage は materially 縮小する。"
+}
