@@ -1,0 +1,54 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "hypothesis": "NVIDIA's Q2 FY2027 receivables spike is accompanied by a material deterioration in credit-loss allowance or disclosed payment-performance evidence, indicating credit-quality deterioration rather than primarily longer contractual payment terms.",
+  "capital_allocation_relevance": "If the receivables build is already producing material expected credit losses, NVDA would warrant a stronger customer-financing risk penalty; if credit-loss evidence remains immaterial, the current evidence supports monitoring cash timing without inventing a valuation loss.",
+  "precommit_rule": {
+    "use_if": "The latest issuer filing reports a material allowance for credit losses, material change in that allowance, material bad-debt expense/write-offs, or specific payment-performance deterioration alongside the receivables spike.",
+    "reject_if": "The issuer reports allowance balances and changes as not material and provides no material bad-debt/write-off or customer-specific collection deterioration evidence, while identifying extended payment terms as a driver of receivables growth."
+  },
+  "canonical_real_data": {
+    "issuer": "NVIDIA Corporation",
+    "period_end": "2026-07-26",
+    "accounts_receivable_usd_billion": 63.059,
+    "credit_loss_allowance": "not material",
+    "credit_loss_allowance_change": "not material for the three and nine months ended July 26, 2026 and July 27, 2025",
+    "bad_debt_expense_or_reversals": "recorded in marketing and selling expenses; no material amount disclosed in the latest filing",
+    "customer_ar_concentration_pct": [22, 14, 13, 11, 10],
+    "top_five_ar_concentration_pct": 70,
+    "payment_terms_context": "Payment is generally due shortly after delivery, but certain investment-grade customers under large multi-quarter agreements receive extended payment terms; NVIDIA states this receivables increase partially offset operating-cash-flow growth."
+  },
+  "benchmark": "A material credit-quality deterioration requires issuer-reported material allowance/provision/write-off or customer-specific payment-performance evidence, not merely a larger receivables balance or longer contractual terms.",
+  "alternative_hypothesis": "The Q2 FY2027 receivables spike is currently better characterized as a working-capital/customer-financing timing exposure with concentrated counterparties, without observed material credit-loss deterioration.",
+  "result": {
+    "material_allowance_detected": false,
+    "material_allowance_change_detected": false,
+    "material_bad_debt_or_writeoff_detected": false,
+    "specific_collection_deterioration_disclosed": false,
+    "extended_payment_terms_disclosed": true,
+    "interpretation": "NVIDIA explicitly reports that allowance balances were not material as of July 26, 2026 and October 26, 2025, and that changes in the allowance were not material for the reported periods. The filing does not provide material bad-debt, write-off, or customer-specific collection deterioration evidence. The receivables spike therefore does not currently support a credit-loss valuation penalty, although its 70% top-five AR concentration and extended payment terms remain monitoring risks."
+  },
+  "decision_rule": "Do not convert the Q2 FY2027 receivables spike into an expected-credit-loss valuation penalty while issuer-reported allowance and changes remain not material and no material write-off/payment-performance deterioration is disclosed. Continue monitoring allowance materiality, bad-debt/write-offs, customer-specific collection commentary, AR concentration, and the receivables-persistence test. Reconsider if credit-loss evidence becomes material or the receivables growth test becomes persistent.",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time fundamental credit-quality research, not a realized trading strategy."
+  },
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "https://www.sec.gov/Archives/edgar/data/6951/000162828026058235/R13.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/R14.htm"
+  ],
+  "limitations": [
+    "NVIDIA reports the allowance and its changes as not material rather than providing a numeric allowance balance in the cited disclosure, so an exact allowance-to-AR ratio cannot be calculated without inventing a value.",
+    "Contract-level aging, past-due balances, customer-level default probabilities, and realized payment performance are not sufficiently disclosed for a probability-weighted expected-loss model.",
+    "A not-material allowance today does not prove that future losses cannot emerge if extended terms persist or customer credit quality changes."
+  ],
+  "supersedes_or_refines": [
+    "docs/research/results/nvda_receivables_persistence_20260910/summary.json",
+    "docs/research/results/avgo_nvda_receivables_credit_risk_20260910/summary.json"
+  ],
+  "next_hypothesis": "NVIDIA's extended payment terms create a material economic funding cost even without current credit losses; estimate the financing cost of the incremental receivables using observable risk-free/corporate funding rates and compare it with NVDA's incremental FCF and expected-return gap versus AVGO."
+}
