@@ -1,0 +1,102 @@
+{
+  "as_of": "2026-09-10",
+  "status": "REJECT",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "NVIDIA's AI-growth capital at risk, measured as accounts receivable plus inventory plus disclosed supply/capacity commitments and normalized by annualized H1 revenue, is materially heavier than Broadcom's by at least 25 percentage points.",
+  "precommit": {
+    "use_or_condition_if": "NVDA exceeds AVGO by at least 25 percentage points on the combined normalized benchmark and the direction is corroborated by either the balance-sheet-only or commitment-only benchmark.",
+    "reject_if": "The combined normalized spread is zero or negative, or the apparent premium depends only on a non-comparable commitment classification."
+  },
+  "sources": {
+    "nvda_10q": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+      "period_end": "2026-07-26",
+      "identity": "NVIDIA Corporation Form 10-Q",
+      "facts_used": [
+        "accounts_receivable_net_usd_billion=63.059",
+        "inventory_usd_billion=31.575",
+        "supply_and_capacity_commitments_usd_billion=279",
+        "h1_revenue_usd_billion=177.836"
+      ],
+      "commitment_definition_note": "Supply and capacity commitments support data center infrastructure systems, primarily memory and manufacturing facilities. NVIDIA states that certain agreements may be cancelable, rescheduled, or adjustable before firm orders are placed."
+    },
+    "avgo_10q": {
+      "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+      "period_end": "2026-05-03",
+      "identity": "Broadcom Inc. Form 10-Q",
+      "facts_used": [
+        "trade_accounts_receivable_net_usd_billion=10.830",
+        "inventory_usd_billion=4.328",
+        "purchase_commitments_usd_billion=128.110",
+        "h1_revenue_usd_billion=41.498"
+      ],
+      "commitment_definition_note": "Purchase commitments are unconditional commitments to purchase goods or services, primarily inventory, that are enforceable and legally binding and specify significant terms. Cancelable-without-penalty agreements are excluded."
+    }
+  },
+  "method": {
+    "annualized_revenue": "H1 revenue * 2",
+    "balance_sheet_capital_at_risk": "accounts receivable + inventory",
+    "commitment_capital_at_risk": "disclosed supply/capacity or purchase commitments",
+    "combined_gross_exposure": "accounts receivable + inventory + disclosed commitments",
+    "normalization": "each exposure / annualized H1 revenue",
+    "warning": "The commitment categories are not economically identical. The combined benchmark is a gross exposure diagnostic, not an expected-loss estimate and not a valuation deduction."
+  },
+  "observations": {
+    "nvda": {
+      "annualized_h1_revenue_usd_billion": 355.672,
+      "accounts_receivable_usd_billion": 63.059,
+      "inventory_usd_billion": 31.575,
+      "supply_capacity_commitments_usd_billion": 279.0,
+      "balance_sheet_capital_at_risk_usd_billion": 94.634,
+      "combined_gross_exposure_usd_billion": 373.634,
+      "balance_sheet_capital_at_risk_pct_annualized_revenue": 26.6068,
+      "commitment_pct_annualized_revenue": 78.4431,
+      "combined_gross_exposure_pct_annualized_revenue": 105.0502
+    },
+    "avgo": {
+      "annualized_h1_revenue_usd_billion": 82.996,
+      "accounts_receivable_usd_billion": 10.830,
+      "inventory_usd_billion": 4.328,
+      "purchase_commitments_usd_billion": 128.110,
+      "balance_sheet_capital_at_risk_usd_billion": 15.158,
+      "combined_gross_exposure_usd_billion": 143.268,
+      "balance_sheet_capital_at_risk_pct_annualized_revenue": 18.2636,
+      "commitment_pct_annualized_revenue": 154.3568,
+      "combined_gross_exposure_pct_annualized_revenue": 172.6204
+    },
+    "nvda_minus_avgo_percentage_points": {
+      "balance_sheet_only": 8.3432,
+      "commitment_only": -75.9137,
+      "combined_gross_exposure": -67.5702
+    }
+  },
+  "benchmark_and_alternatives": {
+    "primary": "Combined gross exposure normalized by annualized H1 revenue.",
+    "simple_alternative_1": "Balance-sheet-only AR + inventory normalized by annualized H1 revenue.",
+    "simple_alternative_2": "Disclosed commitment amount normalized by annualized H1 revenue."
+  },
+  "result": {
+    "decision": "REJECT",
+    "reason": "NVDA is only 8.34 percentage points heavier on the balance-sheet-only benchmark, below the 25 point materiality threshold. Once disclosed commitments are included, NVDA is 67.57 points lighter than AVGO on the gross normalized benchmark. Broadcom's disclosed purchase commitments are also contractually stronger in definition than NVIDIA's supply/capacity commitments, so the evidence does not support a claim that NVDA has the structurally heavier capital-at-risk burden.",
+    "decision_rule": "Do not apply an NVDA-specific valuation or expected-return penalty merely because its receivables and inventory are large. Track balance-sheet working capital separately from contractual commitments. Escalate to a valuation penalty only if a comparable expected-loss, non-cancelable commitment, write-down, or persistent cash-conversion disadvantage becomes material."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental capital-at-risk comparison, not a realized trading strategy."
+  },
+  "limitations": [
+    "The commitment definitions are asymmetric: Broadcom discloses enforceable legally binding purchase commitments, while NVIDIA states some supply/capacity arrangements may be cancelable, rescheduled, or adjustable before firm orders.",
+    "The Broadcom and NVIDIA fiscal period ends differ by roughly three months.",
+    "Gross commitments are not expected losses and should not be subtracted from equity value.",
+    "The benchmark does not assign probabilities to demand cancellation, inventory obsolescence, supplier remedies, customer default, or resale recovery.",
+    "Broadcom's June 8, 2026 AI-rack lease backstop of up to 29B USD is excluded from the primary comparison because it arose after the May 3 balance-sheet date and is a contingent credit exposure rather than a purchase commitment."
+  ],
+  "supersedes_or_refines": [
+    "docs/research/results/nvda_extended_terms_funding_cost_20260910/summary.json",
+    "docs/research/results/avgo_nvda_receivables_credit_risk_20260910/summary.json"
+  ],
+  "next_hypothesis": "Broadcom's 128.110B USD legally binding purchase commitments are economically offset by contracted AI demand strongly enough that commitment-to-revenue risk is lower than the gross ratio suggests; test commitment coverage using point-in-time RPO, customer contracts, revenue guidance, and cancellation terms without treating aggregate RPO as guaranteed AI revenue."
+}
