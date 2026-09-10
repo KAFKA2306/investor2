@@ -1,0 +1,96 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_growth_margin_cash_headroom_20260911",
+  "status": "REJECT",
+  "as_of": "2026-09-11",
+  "hypothesis": "同じ15%/20%/25%のAI成長減速シナリオで比較すると、NVDAはAVGOより低いvaluation hurdleを持つため、実現cash conversionを基準にしてもより大きいFCF-margin headroomを持つ。",
+  "decision_rule": {
+    "use_if": "NVDAのrealized FCF-margin benchmark minus required FCF marginが、15%/20%/25%の3シナリオすべてでAVGOの対応headroom以上。",
+    "condition_if": "NVDAが一部シナリオではAVGO以上のheadroomを持つが、全シナリオではない。",
+    "reject_if": "NVDAのheadroomが15%/20%/25%の3シナリオすべてでAVGOを下回る。",
+    "unverified_if": "NVIDIAのData Center revenue、FCF、canonical reverse-DCF target、またはAVGO canonical frontierのidentityが不足する。"
+  },
+  "capital_allocation_importance": "NVDAはAVGOより低いreverse-DCF hurdleだが、割安さだけではcash-generation余力は決まらない。両社の成長減速時に必要なFCF marginと実現cash conversionの差を比較し、NVDA優位がvaluationだけでなくcash conversionでも成立するかを検証する。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "nvda_reverse_dcf_artifact": "docs/research/results/nvda_avgo_reverse_dcf_reprice_20260911/summary.json",
+    "avgo_frontier_artifact": "docs/research/results/avgo_growth_margin_frontier_20260911/summary.json",
+    "nvda_ttm_fcf_usd_b": 126.886,
+    "nvda_baseline_implied_5y_fcf_growth_pct": 18.358999,
+    "nvda_year5_fcf_target_usd_b": 294.727136,
+    "nvda_q2_fy2027_total_revenue_usd_b": 96.221,
+    "nvda_q2_fy2027_data_center_revenue_usd_b": 89.0,
+    "nvda_q2_fy2027_non_data_center_residual_usd_b": 7.221,
+    "nvda_q2_fy2027_annualized_data_center_run_rate_usd_b": 356.0,
+    "nvda_q2_fy2027_annualized_non_data_center_run_rate_usd_b": 28.884,
+    "nvda_first_half_fy2027_fcf_usd_b": 69.895,
+    "nvda_first_half_fy2027_revenue_usd_b": 177.837,
+    "nvda_first_half_fy2027_fcf_margin_pct": 39.302845,
+    "avgo_current_fcf_margin_benchmark_pct": 46.179582,
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA official Q2 FY2027 financial results, 2026-08-26: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVIDIA Form 10-Q for quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "Broadcom Q3 FY2026 financial results and existing KAFKA2306/investor2 canonical AVGO frontier"
+  ],
+  "method": {
+    "nvda_identity": "year-5 Data Center revenue = annualized Q2 FY2027 Data Center revenue * (1 + assumed growth)^4; non-Data-Center revenue is held flat at the annualized Q2 residual; required FCF margin = canonical NVDA year-5 FCF target / year-5 total revenue.",
+    "nvda_cash_benchmark": "Use first-half FY2027 canonical FCF 69.895B USD divided by first-half revenue 177.837B USD = 39.302845%. This avoids treating volatile single-quarter working-capital moves as a durable margin estimate.",
+    "avgo_comparator": "Reuse the existing canonical AVGO required margins for AI CAGR 15%/20%/25% and compare them with Q3 FY2026 realized company-wide FCF margin 46.179582% as the latest point-in-time cash-conversion benchmark.",
+    "lookahead": "none; NVIDIA inputs are realized through Q2 FY2027 and AVGO comparator inputs were already canonical as of 2026-09-11.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time fundamental valuation/cash-conversion comparison, not a trading-strategy backtest."
+  },
+  "results": {
+    "nvda": {
+      "growth_15pct": {"required_fcf_margin_pct": 45.236142, "headroom_vs_h1_realized_margin_pt": -5.933297},
+      "growth_20pct": {"required_fcf_margin_pct": 38.421675, "headroom_vs_h1_realized_margin_pt": 0.881170},
+      "growth_25pct": {"required_fcf_margin_pct": 32.819494, "headroom_vs_h1_realized_margin_pt": 6.483351}
+    },
+    "avgo": {
+      "growth_15pct": {"required_fcf_margin_pct": 49.044564, "headroom_vs_q3_realized_margin_pt": -2.864982},
+      "growth_20pct": {"required_fcf_margin_pct": 43.098410, "headroom_vs_q3_realized_margin_pt": 3.081172},
+      "growth_25pct": {"required_fcf_margin_pct": 37.892702, "headroom_vs_q3_realized_margin_pt": 8.286880}
+    },
+    "relative_headroom_nvda_minus_avgo_pt": {
+      "growth_15pct": -3.068315,
+      "growth_20pct": -2.200002,
+      "growth_25pct": -1.803529
+    },
+    "nvda_q1_q2_cash_conversion_context": {
+      "q1_fy2027_fcf_margin_pct": 59.491515,
+      "q2_fy2027_fcf_margin_pct": 22.179150,
+      "note": "Q2 cash conversion fell sharply. NVIDIA Form 10-Q states first-half operating cash flow was partially offset by higher accounts receivable from extended payment terms on large multi-quarter agreements; inventories also increased materially."
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_valuation_benchmark": "NVDA baseline implied 5-year FCF growth hurdle 18.3590% is lower than AVGO 20.5117%.",
+    "alternative_hypothesis": "Despite the lower valuation hurdle, NVDA may have less near-term cash-conversion headroom because working-capital investment has reduced realized FCF margin.",
+    "alternative_result": "SUPPORTED: NVDA realized first-half FCF margin headroom is lower than AVGO latest-quarter headroom in all three matched growth scenarios."
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "NVDA requires a lower absolute FCF margin than AVGO at 15%/20%/25% growth, but its realized first-half FY2027 FCF margin is only 39.302845%. Relative to realized cash conversion, NVDA headroom is lower than AVGO by 3.0683pt, 2.2000pt and 1.8035pt respectively. Therefore the claim that NVDA's lower valuation hurdle also produces greater current cash-conversion margin of safety is rejected.",
+    "capital_allocation_implication": "Do not treat NVDA's lower reverse-DCF hurdle as automatically implying larger operating margin of safety versus AVGO. At 20% growth, NVDA needs 38.4217% FCF margin and has only +0.8812pt headroom versus first-half realized cash conversion, while AVGO has +3.0812pt. NVDA remains cheaper on valuation, but current cash-conversion headroom is weaker and should be monitored separately."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "negative relative decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "REJECT専用code/config/workflow/one-off scriptは作成していないため削除対象なし。"
+  },
+  "limitations": [
+    "NVDAはData Center revenue、AVGOはAI semiconductor revenueを成長driverとしており、事業scopeは完全には同一ではない。",
+    "NVDAのfirst-half FCF marginとAVGOのlatest-quarter FCF marginは観測窓が異なるため、relative headroomはcash-conversion diagnosticであって完全な同期間比較ではない。",
+    "NVDA Q2のcash conversionは売掛金・在庫の増加によるworking-capital影響を強く受けており、恒久的margin低下を意味しない。",
+    "Data Center / AI固有FCF marginは両社とも開示されていない。",
+    "15%/20%/25% growthはdecision sensitivityであり会社guidanceではない。"
+  ],
+  "next_high_value_hypothesis": "NVDAのQ2 FY2027 cash-conversion低下が一時的なworking-capital buildかを、accounts receivable days、inventory days、customer advances、purchase commitmentsのpoint-in-time推移で分解すると、20% growth時の+0.88pt FCF-margin headroomは回復可能と判断できるか。"
+}
