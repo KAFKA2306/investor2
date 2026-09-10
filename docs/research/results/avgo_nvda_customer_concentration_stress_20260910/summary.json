@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_customer_concentration_stress_20260910",
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "公開一次情報で確認できるaggregate customer concentrationだけでも、AVGOはNVDAよりmaterially大きいdownsideを持ち、対称な20% concentrated-customer revenue shockでAVGO-NVDAの5年expected IRR差を0.5pt以上悪化させる。",
+  "precommit_rule": {
+    "use": "対称な20% concentrated-customer revenue shockでAVGOの相対5年expected IRR差がbenchmarkより0.5pt以上悪化し、公開されたaggregate concentrationだけでmaterialな追加downsideを確認できる。",
+    "reject": "相対IRR差の悪化が0.5pt未満で、公開されたaggregate concentrationだけではAVGO固有のmaterialな追加downsideを支持しない。",
+    "unverified": "customer definition、period、revenue share、valuation dependencyのsource/identity/unit/as-ofが不足し、比較不能。"
+  },
+  "dependencies": {
+    "valuation_artifact": "docs/research/results/avgo_interest_savings_deleveraging_20260910/summary.json",
+    "avgo_price_usd": 364.335,
+    "nvda_price_usd": 223.77,
+    "avgo_terminal_equity_value_per_share_usd": 657.3525862614696,
+    "nvda_terminal_equity_value_per_share_usd": 414.6722230787417,
+    "benchmark_avgo_5y_expected_price_irr_pct": 12.52771403427877,
+    "benchmark_nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "benchmark_avgo_minus_nvda_pct_points": -0.6030230295807293,
+    "note": "AVGOに有利なpretax interest-savings upper-bound valuationをbaselineに使い、customer concentrationだけの追加効果を分離する。"
+  },
+  "primary_sources": {
+    "broadcom": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-06-09, period ended 2026-05-03",
+      "metric": "aggregate sales to top five end customers through all channels",
+      "revenue_share_pct": 45.0,
+      "comparison_period": "two fiscal quarters ended 2026-05-03",
+      "additional_context": "one semiconductor solutions distributor represented 42% of revenue, but distributor concentration is not treated as equivalent to end-customer demand concentration",
+      "source_url": "https://investors.broadcom.com/static-files/f6369ec9-58c2-4697-9ad9-be2ae658352b"
+    },
+    "nvidia": {
+      "source": "NVIDIA Form 10-Q filed 2026-08-26, period ended 2026-07-26",
+      "metric": "three largest disclosed direct customers in first half FY2027",
+      "direct_customer_revenue_shares_pct": [16.0, 15.0, 13.0],
+      "aggregate_disclosed_share_pct": 44.0,
+      "comparison_period": "first half FY2027",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+    },
+    "broadcom_ai_context": {
+      "source": "Broadcom Q3 FY2026 financial results, 2026-09-02",
+      "q3_total_revenue_usd_billion": 29.591,
+      "q3_ai_semiconductor_revenue_usd_billion": 16.7,
+      "q3_ai_semiconductor_revenue_share_pct": 56.43540265621304,
+      "note": "AI revenue mix is context only. The filing does not disclose the overlap between the top-five end-customer bucket and AI semiconductor revenue, so no overlap is guessed.",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    }
+  },
+  "method": {
+    "stress_definition": "Apply the same proportional revenue reduction to each issuer's disclosed concentrated-customer bucket, hold the rest of revenue unchanged, and assume terminal FCF/equity value changes proportionally with total revenue. This is a transparent sensitivity, not a forecast.",
+    "benchmark_customer_shock_pct": 20.0,
+    "avgo_revenue_haircut_pct_at_20pct_shock": 9.0,
+    "nvda_revenue_haircut_pct_at_20pct_shock": 8.8,
+    "comparability_warning": "AVGO reports top-five end customers through all channels, while NVDA reports direct customers. The customer definitions are not identical. Therefore the test answers only whether disclosed aggregate shares alone support a material AVGO-specific penalty; it does not estimate true single-customer loss probability or AI-customer overlap.",
+    "no_silent_assumptions": [
+      "Do not infer individual AVGO end-customer shares from the 45% aggregate.",
+      "Do not map Broadcom's 42% distributor directly to an economic end customer.",
+      "Do not infer overlap between Broadcom top-five end customers and AI semiconductor revenue.",
+      "Do not infer indirect-customer concentration for NVIDIA beyond issuer disclosures."
+    ]
+  },
+  "stress_results": {
+    "10pct_bucket_revenue_reduction": {
+      "avgo_total_revenue_factor": 0.955,
+      "nvda_total_revenue_factor": 0.956,
+      "avgo_5y_expected_price_irr_pct": 11.496226867822745,
+      "nvda_5y_expected_price_irr_pct": 12.117187575494825,
+      "avgo_minus_nvda_pct_points": -0.6209607076720802,
+      "incremental_gap_widening_vs_benchmark_pct_points": 0.0179376780913509
+    },
+    "20pct_bucket_revenue_reduction": {
+      "avgo_total_revenue_factor": 0.91,
+      "nvda_total_revenue_factor": 0.912,
+      "avgo_5y_expected_price_irr_pct": 10.42509329818493,
+      "nvda_5y_expected_price_irr_pct": 11.065604397346318,
+      "avgo_minus_nvda_pct_points": -0.6405110991613894,
+      "incremental_gap_widening_vs_benchmark_pct_points": 0.0374880695806601
+    },
+    "30pct_bucket_revenue_reduction": {
+      "avgo_total_revenue_factor": 0.865,
+      "nvda_total_revenue_factor": 0.868,
+      "avgo_5y_expected_price_irr_pct": 9.310710688010237,
+      "nvda_5y_expected_price_irr_pct": 9.97261741871862,
+      "avgo_minus_nvda_pct_points": -0.6619067307083837,
+      "incremental_gap_widening_vs_benchmark_pct_points": 0.0588837011276544
+    }
+  },
+  "result": {
+    "status": "REJECT",
+    "finding": "最新の比較可能な公開aggregate customer concentrationはAVGO top-five end customers約45%、NVDA disclosed top-three direct customers計44%で近い。対称な20% concentrated-bucket shockではAVGOのtotal revenue haircutは9.0%、NVDAは8.8%で、AVGO-NVDA expected-IRR差の追加悪化は0.0375ptに留まり、事前materiality閾値0.5ptを大幅に下回った。公開aggregate concentrationだけを根拠にAVGOへ大きな追加valuation penaltyを課す仮説はREJECT。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time fundamental concentration sensitivity。"
+  },
+  "decision_rule": "AVGO customer concentrationを相対valuationで追加penaltyに使う場合、top-five aggregate 45%だけを根拠にmaterialなAVGO-specific penaltyを置かない。個別end-customer share、AI revenueとのoverlap、契約commitment、deployment timingなど独立一次情報が得られた場合のみ再評価する。",
+  "limitations": [
+    "AVGO top-five end customersとNVDA direct customersは定義が異なるため完全なapples-to-apples比較ではない。",
+    "Broadcomの最新Q3 FY2026 8-KはAI semiconductor revenueを開示するが、top-five end-customer concentrationとのoverlapは開示しない。",
+    "NVIDIAはdirect customer concentrationを開示するが、indirect end-customer concentrationは推定を含み、同じ定義でAVGOと比較できない。",
+    "stressはconcentrated bucket全体が同率で減収する感応度であり、single-customer default/loss probabilityではない。",
+    "terminal FCF/equity valueをrevenueに比例させる単純stressであり、margin responseやcost mitigationを予測しない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "BroadcomのAI customer commitments、deployment timing、purchase/lease obligationsを一次情報でpoint-in-timeに固定し、公開aggregate customer concentrationでは捉えられないAI-specific demand downsideをcash-flow scenarioへ変換できるか。"
+}
