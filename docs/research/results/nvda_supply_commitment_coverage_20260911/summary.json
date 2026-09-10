@@ -1,0 +1,111 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_supply_commitment_coverage_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIAの279B USD supply/capacity commitmentsは、現行のData Center revenue run-rateとgross-profit/cash-generation capacityに対して過大ではなく、期限別にみればFY2027残期間だけがcash coverage上の主な制約である。",
+  "decision_rule": {
+    "use_if": "各主要期限バケットでno-growth Q2 FY2027 run-rateによるgross-profit coverageとreported-FCF coverageがともに1.0x以上。",
+    "condition_if": "gross-profit coverageは全主要期限で1.0x以上だが、少なくとも1期限でreported-FCF coverageが1.0x未満。",
+    "reject_if": "主要期限のいずれかでno-growth gross-profit coverageが1.0x未満、または後続開示がcommitment吸収能力の構造的不足を示す。",
+    "unverified_if": "commitmentの期限、Q2 revenue/gross margin、またはH1 FCF identityが不足する。"
+  },
+  "capital_allocation_importance": "前回研究ではNVDA H1 FY2027のcash-conversion headroomがworking-capital timingで大きく変わり得る一方、supply/capacity commitmentsが119B USDから279B USDへ増えたことが独立のdownside conditionとして残った。今回、279B USDを一括額ではなく期限別cash-generation capacityで評価する。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_artifact": "docs/research/results/nvda_working_capital_normalization_20260911/summary.json",
+    "q2_fy2027_revenue_usd_b": 96.221,
+    "q2_fy2027_gaap_gross_margin_pct": 75.0,
+    "fy2027_h1_revenue_usd_b": 177.837,
+    "fy2027_h1_fcf_usd_b": 69.895,
+    "fy2027_h1_reported_fcf_margin_pct": 39.302845,
+    "ar_normalized_h1_fcf_margin_pct": 47.773213,
+    "supply_capacity_commitments_usd_b": {
+      "remainder_fy2027": 92.0,
+      "fy2028": 87.0,
+      "fy2029": 88.0,
+      "fy2030": 6.0,
+      "fy2031": 5.0,
+      "fy2032_and_after": 1.0,
+      "total": 279.0
+    },
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "NVIDIA Q2 FY2027 financial results, 2026-08-26: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+  ],
+  "method": {
+    "point_in_time": "Use only issuer-reported information available through 2026-08-26 and existing canonical FCF identity. No future quarter is used.",
+    "no_growth_benchmark": "Hold Q2 FY2027 quarterly revenue 96.221B USD, GAAP gross margin 75.0%, and H1 FY2027 reported FCF margin 39.302845% constant. Use 2 quarters for remainder FY2027 and 4 quarters for FY2028/FY2029.",
+    "coverage": "coverage = period cash-generation capacity / same-period supply-and-capacity commitment. Gross-profit and FCF coverage are shown separately because supplier commitments are not equivalent to accounting expense or immediate cash payment.",
+    "alternative": "Repeat FCF coverage using the prior-study AR-normalized H1 FCF margin 47.773213% as a sensitivity only, not issuer-reported FCF.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time fundamental commitment-coverage diagnostic, not a trading-strategy backtest."
+  },
+  "results": {
+    "q2_run_rate": {
+      "quarterly_gross_profit_usd_b": 72.16575,
+      "quarterly_reported_fcf_capacity_usd_b": 37.817590,
+      "quarterly_ar_normalized_fcf_capacity_usd_b": 45.967863
+    },
+    "remainder_fy2027": {
+      "commitment_usd_b": 92.0,
+      "revenue_capacity_usd_b": 192.442,
+      "gross_profit_capacity_usd_b": 144.3315,
+      "reported_fcf_capacity_usd_b": 75.635180,
+      "gross_profit_coverage_x": 1.568821,
+      "reported_fcf_coverage_x": 0.822122,
+      "commitment_to_revenue_pct": 47.806612,
+      "ar_normalized_fcf_capacity_usd_b": 91.935727,
+      "ar_normalized_fcf_coverage_x": 0.999301
+    },
+    "fy2028": {
+      "commitment_usd_b": 87.0,
+      "revenue_capacity_usd_b": 384.884,
+      "gross_profit_capacity_usd_b": 288.663,
+      "reported_fcf_capacity_usd_b": 151.270361,
+      "gross_profit_coverage_x": 3.317966,
+      "reported_fcf_coverage_x": 1.738740,
+      "ar_normalized_fcf_coverage_x": 2.113465
+    },
+    "fy2029": {
+      "commitment_usd_b": 88.0,
+      "revenue_capacity_usd_b": 384.884,
+      "gross_profit_capacity_usd_b": 288.663,
+      "reported_fcf_capacity_usd_b": 151.270361,
+      "gross_profit_coverage_x": 3.280261,
+      "reported_fcf_coverage_x": 1.718981,
+      "ar_normalized_fcf_coverage_x": 2.089448
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "No-growth Q2 FY2027 run-rate using reported H1 FCF margin. This avoids assuming continued 100%+ Data Center growth.",
+    "alternative_hypothesis": "The apparent FY2027 cash shortfall is primarily working-capital timing rather than insufficient unit economics.",
+    "alternative_result": "SUPPORTED CONDITIONALLY: using the prior AR-normalized FCF sensitivity raises remainder-FY2027 FCF coverage from 0.8221x to 0.9993x, nearly 1.0x, but this cash normalization is not yet realized."
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "No-growth gross-profit capacity covers the major commitment buckets: 1.57x for remainder FY2027, 3.32x for FY2028 and 3.28x for FY2029. Reported FCF capacity also covers FY2028/FY2029 at 1.74x/1.72x, but remainder FY2027 is only 0.82x. AR-normalized sensitivity reaches 0.9993x but is not realized cash. The 279B USD headline therefore overstates near-term concentration when treated as one lump sum, while the FY2027 cash-timing constraint remains material.",
+    "capital_allocation_implication": "Do not treat 279B USD as an immediate one-period liability. Monitor remainder-FY2027 commitment coverage separately. Maintain CONDITION until reported cash conversion or commitment rescheduling/cancellation brings near-term FCF coverage to at least 1.0x; FY2028/FY2029 no-growth coverage is currently above 1.0x."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "supply-commitment coverage decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "No dedicated code/config/workflow/one-off script created; no cleanup required."
+  },
+  "limitations": [
+    "Supply/capacity commitments are contractual commitments, not equivalent to accounting COGS or a single-date cash payment; coverage ratios are capacity diagnostics, not solvency ratios.",
+    "NVIDIA states some supplier agreements may be cancelable, rescheduled or adjustable before firm orders, so 279B USD is not uniformly firm in economic substance.",
+    "No-growth Q2 revenue/gross-margin/FCF-margin run-rates are deliberately simple sensitivities, not company guidance for FY2028/FY2029.",
+    "AR-normalized FCF is a sensitivity from the prior canonical study, not issuer-reported or guided cash flow.",
+    "Customer demand, product transitions, inventory provisions and supplier renegotiation costs can alter realized economics."
+  ],
+  "next_high_value_hypothesis": "NVIDIAのFY2027残期間92B USD supply/capacity commitmentsは、Q3 FY2027 company revenue guidanceとgross-margin guidanceを使うと、Q2横ばいbenchmarkより十分高いnear-term gross-profit coverageを持つか。またreported FCF conversionがどこまで回復すれば1.0x cash coverageへ到達するかをthreshold化する。"
+}
