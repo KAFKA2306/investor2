@@ -1,0 +1,93 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_reverse_dcf_reprice_20260911",
+  "status": "REJECT",
+  "as_of": "2026-09-09",
+  "hypothesis": "2026-09-04以降の市場再評価により、Broadcomのcash-flow valuation hurdleはNVIDIA以下へ逆転し、AVGOを相対的に安いAI semiconductor allocationとして再検討できる。",
+  "decision_rule": {
+    "use_if": "同一point-in-time basisでAVGOのTTM EV/FCFがNVDA以下、かつ9%/10%/11% discount rate × 20x/25x/30x terminal EV/FCFの9条件すべてでAVGOのimplied 5-year FCF growthがNVDA以下。",
+    "condition_if": "TTM EV/FCFまたはreverse-DCF gridの一部だけがNVDA以下へ逆転する。",
+    "reject_if": "AVGOのTTM EV/FCFがNVDAより高く、9条件すべてでAVGOのimplied 5-year FCF growthもNVDAより高い。"
+  },
+  "capital_allocation_importance": "Broadcom Q3 FY2026ではAI semiconductor revenueとFree Cash Flowが強く伸びたが、成長率の高さだけでは期待returnは決まらない。市場価格の再評価後もAVGOがNVDAより低いcash-flow hurdleになったかを確認し、NVDAからAVGOへ配分を移す『割安』根拠の有無を判定する。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "prior_artifact": "docs/research/results/nvda_avgo_reverse_dcf_20260906/summary.json",
+    "market_data": {
+      "source": "Alpaca Market Data API / IEX",
+      "date": "2026-09-09",
+      "currency": "USD",
+      "fallback": "none",
+      "completed_daily_close": {"NVDA": 223.77, "AVGO": 364.335},
+      "note": "2026-09-10 barは米国市場取引途中のため使用しない。"
+    },
+    "fundamentals": {
+      "NVDA": {"shares_outstanding_billions": 24.1, "cash_and_marketable_debt_securities_usd_b": 56.586, "debt_usd_b": 33.366, "ttm_free_cash_flow_usd_b": 126.886, "latest_quarter_fcf_usd_b": 21.341, "latest_quarter_fcf_yoy_pct": 58.6691},
+      "AVGO": {"diluted_weighted_average_shares_billions": 4.887, "shares_identity": "Q3 FY2026 GAAP diluted weighted-average shares; period-end sharesではないproxy", "cash_usd_b": 23.975, "short_term_debt_usd_b": 2.252, "long_term_debt_usd_b": 57.167, "ttm_free_cash_flow_usd_b": 39.403, "latest_quarter_fcf_usd_b": 13.665, "latest_quarter_fcf_yoy_pct": 94.5473, "q3_ai_semiconductor_revenue_yoy_pct": 221.0}
+    },
+    "fundamental_policy": "2026-09-04 canonical reverse-DCF artifactと同じfundamental identityを維持し、価格だけを2026-09-09 completed IEX closeへ更新する。"
+  },
+  "method": {
+    "valuation_benchmark": "TTM enterprise value / Free Cash Flow",
+    "reverse_dcf": "今後5年間一定のFCF growthを仮定し、各年FCFとyear-5 terminal valueを割り引いてcurrent enterprise valueに一致するgrowthを解く。",
+    "discount_rates_pct": [9.0, 10.0, 11.0],
+    "terminal_ev_fcf_multiples": [20.0, 25.0, 30.0],
+    "baseline": {"discount_rate_pct": 10.0, "terminal_ev_fcf": 25.0},
+    "time_series_risk_metrics": "NOT_APPLICABLE: point-in-time valuation comparisonでありtrading strategy backtestではない。"
+  },
+  "benchmark": {
+    "as_of": "2026-09-04",
+    "prices": {"NVDA": 230.19, "AVGO": 357.835},
+    "ttm_ev_fcf": {"NVDA": 43.538, "AVGO": 45.2804},
+    "baseline_implied_fcf_growth_pct": {"NVDA": 19.0723, "AVGO": 20.0636},
+    "baseline_avgo_minus_nvda_percentage_points": 0.9913
+  },
+  "results": {
+    "price_change_since_2026_09_04_pct": {"NVDA": -2.78900039, "AVGO": 1.81647966},
+    "enterprise_value_usd_b": {"NVDA": 5369.637, "AVGO_proxy": 1815.949145},
+    "ttm_ev_fcf": {"NVDA": 42.318593, "AVGO": 46.086571, "AVGO_premium_pct": 8.903835},
+    "reverse_dcf_grid": [
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 22.053371, "AVGO_implied_growth_pct": 24.284464, "AVGO_minus_NVDA_percentage_points": 2.231094},
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 17.283008, "AVGO_implied_growth_pct": 19.416166, "AVGO_minus_NVDA_percentage_points": 2.133159},
+      {"discount_rate_pct": 9.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 13.465337, "AVGO_implied_growth_pct": 15.521287, "AVGO_minus_NVDA_percentage_points": 2.055951},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 23.173126, "AVGO_implied_growth_pct": 25.424689, "AVGO_minus_NVDA_percentage_points": 2.251562},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 18.358999, "AVGO_implied_growth_pct": 20.511727, "AVGO_minus_NVDA_percentage_points": 2.152729},
+      {"discount_rate_pct": 10.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 14.506303, "AVGO_implied_growth_pct": 16.581116, "AVGO_minus_NVDA_percentage_points": 2.074812},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 20.0, "NVDA_implied_growth_pct": 24.292882, "AVGO_implied_growth_pct": 26.564913, "AVGO_minus_NVDA_percentage_points": 2.272031},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 25.0, "NVDA_implied_growth_pct": 19.434990, "AVGO_implied_growth_pct": 21.607289, "AVGO_minus_NVDA_percentage_points": 2.172299},
+      {"discount_rate_pct": 11.0, "terminal_ev_fcf": 30.0, "NVDA_implied_growth_pct": 15.547270, "AVGO_implied_growth_pct": 17.640944, "AVGO_minus_NVDA_percentage_points": 2.093674}
+    ],
+    "grid_cells_avgo_higher_hurdle": 9,
+    "grid_cells_total": 9,
+    "baseline": {"NVDA_implied_growth_pct": 18.358999, "AVGO_implied_growth_pct": 20.511727, "AVGO_minus_NVDA_percentage_points": 2.152729, "gap_change_vs_2026_09_04_percentage_points": 1.161429}
+  },
+  "alternative_hypothesis": {
+    "statement": "AVGOは割安ではなくても、より高い実現FCF成長によって高いvaluation hurdleを正当化できる可能性がある。",
+    "evidence": "Q3 FY2026 AVGO Free Cash Flowは前年同期比約95%増、AI semiconductor revenueは221%増。これは成長力を支持するが、相対割安を示さない。",
+    "status": "CONDITION"
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "2026-09-09時点でAVGOのTTM EV/FCFは46.0866xでNVDAの42.3186xを上回り、reverse-DCFの9/9条件すべてでもAVGOの必要5年FCF growthが高い。baseline hurdle差は2026-09-04の+0.9913ptから+2.1527ptへ拡大したため、市場再評価でAVGOがNVDAより割安へ逆転したという仮説は棄却する。",
+    "capital_allocation_implication": "NVDAからAVGOへの配分変更を『AVGOの方がcash-flow valuationで安い』ことを根拠に行わない。AVGOを採用するには、より高い20.51% baseline implied 5-year FCF growth hurdleをforward fundamentalsが正当化する追加証拠を要求する。"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "negative decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "REJECT専用のmodel/config/workflow/one-off scriptは作成していないため削除対象なし。"
+  },
+  "limitations": [
+    "AVGO equity valueはQ3 FY2026 GAAP diluted weighted-average sharesをproxyとして使い、period-end shares outstandingではない。",
+    "issuer-reported Free Cash Flowの定義は企業間で完全同一ではない可能性がある。",
+    "Alpaca IEX closeはconsolidated official closeではないが、両銘柄で同じfeedを使用し、prior canonical valuation studyともfeedを統一した。",
+    "reverse DCFは期待returnやprice targetではなく、現在価格が要求するFCF growthのsensitivityである。",
+    "REJECT対象は『AVGOがNVDAより相対的に安くなった』という仮説だけであり、AVGO投資そのものを棄却しない。"
+  ],
+  "next_high_value_hypothesis": "AVGOのQ3 FY2026 AI semiconductor revenue +221% YoYとFCF +95% YoYが、現在のbaseline implied 5-year FCF growth 20.51%をforward point-in-timeで上回る確率を、会社guidanceと過去guidance errorを使って制約すると、より高いvaluation hurdleを正当化できるか。"
+}
