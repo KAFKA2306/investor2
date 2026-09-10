@@ -1,0 +1,86 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_growth_margin_frontier_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "AVGOのyear-5 FCF target 100.155739B USDは、Q4 FY2026 guidance起点で非AI売上を横ばいとした場合、AI semiconductor revenue CAGR 20%でもFY2026に実現したFCF marginレンジ内で達成できる。",
+  "decision_rule": {
+    "use_if": "AI CAGR 20%で必要FCF marginがFY2026 Q1-Q3の最低実現値41.478950%以下、かつAI CAGR 15%でもQ1-Q3の最高実現値46.249606%以下。",
+    "condition_if": "AI CAGR 20%の必要FCF marginはFY2026 Q1-Q3実現レンジ内だが、AI CAGR 15%では同レンジ上限を超える。",
+    "reject_if": "AI CAGR 20%でも必要FCF marginがFY2026 Q1-Q3実現レンジ上限46.249606%を超える。"
+  },
+  "capital_allocation_importance": "AVGOのpremium valuationを成長率だけで評価すると、FCF margin維持との交換条件が見えない。AI成長率ごとに最低必要FCF marginを逆算すると、将来決算でvaluation supportが維持されているかを単一の再利用可能な境界で判定できる。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "prior_artifact": "docs/research/results/avgo_ai_growth_hurdle_decomposition_20260911/summary.json",
+    "year5_fcf_target_usd_b": 100.155739,
+    "q4_ai_annualized_run_rate_usd_b": 86.8,
+    "q4_non_ai_annualized_run_rate_usd_b": 52.4,
+    "fy2026_q1_fcf_margin_pct": 41.478950,
+    "fy2026_q2_fcf_margin_pct": 46.249606,
+    "fy2026_q3_fcf_margin_pct": 46.179582,
+    "sources": [
+      "Broadcom official Q1 FY2026 financial results, 2026-03-04",
+      "Broadcom official Q2 FY2026 financial results, 2026-06-03",
+      "Broadcom official Q3 FY2026 financial results, 2026-09-02",
+      "KAFKA2306/investor2 canonical avgo_ai_growth_hurdle_decomposition_20260911"
+    ],
+    "fallback": "none"
+  },
+  "method": {
+    "identity": "year-5 AI revenue = annualized Q4 AI guidance * (1 + assumed AI CAGR)^4; year-5 total revenue = year-5 AI revenue + annualized Q4 non-AI residual held flat; required FCF margin = canonical year-5 FCF target / year-5 total revenue.",
+    "benchmark": "FY2026 Q1-Q3 realized company-wide FCF margin range 41.478950%-46.249606%.",
+    "alternative": "Evaluate AI CAGR 15%, 20%, and 25% rather than a single growth path.",
+    "lookahead": "none; Q4 FY2026 inputs are company guidance and are explicitly not treated as realized actuals.",
+    "risk_metrics": "NOT_APPLICABLE: forward fundamental valuation boundary, not a trading-strategy backtest."
+  },
+  "results": {
+    "ai_cagr_15pct": {
+      "year5_ai_revenue_usd_b": 151.813742,
+      "year5_total_revenue_usd_b": 204.213742,
+      "required_fcf_margin_pct": 49.044564,
+      "gap_vs_fy2026_margin_max_pt": 2.794958,
+      "within_fy2026_q1_q3_realized_margin_range": false
+    },
+    "ai_cagr_20pct": {
+      "year5_ai_revenue_usd_b": 179.988480,
+      "year5_total_revenue_usd_b": 232.388480,
+      "required_fcf_margin_pct": 43.098410,
+      "gap_vs_fy2026_margin_min_pt": 1.619460,
+      "gap_vs_fy2026_margin_max_pt": -3.151196,
+      "within_fy2026_q1_q3_realized_margin_range": true
+    },
+    "ai_cagr_25pct": {
+      "year5_ai_revenue_usd_b": 211.914062,
+      "year5_total_revenue_usd_b": 264.314062,
+      "required_fcf_margin_pct": 37.892702,
+      "gap_vs_fy2026_margin_min_pt": -3.586248,
+      "within_fy2026_q1_q3_realized_margin_range": false,
+      "note": "必要marginが実績下限を下回る方向なのでvaluation supportには余裕がある。"
+    }
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "AI CAGR 20%では必要FCF margin 43.0984%で、FY2026 Q1-Q3実現レンジ41.4790%-46.2496%の内部に入る。一方、AI CAGR 15%では49.0446%が必要で実績上限を2.7950pt上回るためUSE条件を満たさない。AI CAGR 25%なら必要marginは37.8927%で実績下限より3.5862pt低い。",
+    "capital_allocation_implication": "AVGO valuation supportの実務的な境界は『AI CAGR約20%ならFCF margin約43.1%を維持』『AI CAGR15%まで減速するならFCF margin約49.0%が必要』である。したがって今後はAI成長率単独ではなく、同時点のFCF marginとの組み合わせでpremium valuationを判定する。"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "専用code/config/workflow/one-off scriptは作成していないため削除対象なし。"
+  },
+  "limitations": [
+    "Q4 FY2026 total revenue 34.8B USDとAI semiconductor revenue 21.7B USDは会社guidanceであり未実現。",
+    "非AI revenueはQ4 guidance残差13.1B USDを年率化し4年間横ばいとするscenarioで、会社guidanceではない。",
+    "FCF marginは全社指標でありAI semiconductor固有cash conversionではない。",
+    "15%/20%/25% AI CAGRはdecision sensitivityであり会社guidanceではない。",
+    "year-5 FCF targetは既存canonical reverse-DCFの価格・capital structure前提に依存する。"
+  ],
+  "next_high_value_hypothesis": "AVGOのgrowth-margin frontierをNVDAにも同じcanonical reverse-DCF前提で構築すると、同じAI成長減速シナリオでどちらがより大きいmargin of safetyを持つか。"
+}
