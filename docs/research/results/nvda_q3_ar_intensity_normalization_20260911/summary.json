@@ -1,0 +1,123 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_q3_ar_intensity_normalization_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIAのQ2末AR 63.059B USDについて、Q3 revenue guidance 108B USDの下でAR/revenueをQ1水準へ戻すための追加collectionは、FY2027残期間cash gap 7.105855B USDを上回る。",
+  "decision_rule": {
+    "use_if": "Q1 AR/revenue水準への正常化が7.105855B USD以上のAR releaseを生み、かつ後続reported cash flowで同等以上のcash conversionが確認される。",
+    "condition_if": "Q1水準への正常化で数学的には7.105855B USD以上をreleaseできるが、Q3 actual revenueまたはreported collectionが未確認。",
+    "reject_if": "Q1水準へ正常化してもAR releaseが7.105855B USD未満、またはQ2比率維持の単純代替より意思決定上有利でない。",
+    "unverified_if": "Q1/Q2 ending AR、Q1/Q2 revenue、Q3 guidance、またはcanonical cash gapを一次情報/canonical artifactで確認できない。"
+  },
+  "decision_context": {
+    "who": "NVIDIAのnear-term commitment riskを評価するportfolio/valuation consumer",
+    "before": "必要AR recoveryは7.105855B USDと判明していたが、売上規模に対してどの程度のAR正常化を意味するか未接続だった。",
+    "after": "Q3 revenue 108B USDならQ1 AR/revenueへの完全正常化は9.188020B USDをreleaseし、必要gapの129.309%を満たす。cash-gapだけを埋めるにはAR/revenue 51.808468%までの改善で足りる。",
+    "verification": "SECのQ1/Q2 point-in-time balancesとquarterly revenueを使い、Q3 guidanceに対するending AR、implied collection、cash coverageを再計算する。"
+  },
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_cash_bridge_artifact": "docs/research/results/nvda_h2_working_capital_cash_bridge_20260911/summary.json",
+    "prior_concentration_stress_artifact": "docs/research/results/nvda_ar_customer_concentration_stress_20260911/summary.json",
+    "q1_end_date": "2026-04-26",
+    "q1_ending_ar_usd_b": 40.71,
+    "q1_revenue_usd_b": 81.615,
+    "q2_end_date": "2026-07-26",
+    "q2_ending_ar_usd_b": 63.059,
+    "q2_revenue_usd_b": 96.221,
+    "q3_revenue_guidance_midpoint_usd_b": 108,
+    "canonical_cash_gap_usd_b": 7.105855,
+    "reported_h2_fcf_before_ar_release_usd_b": 84.894145,
+    "commitment_cash_coverage_target_usd_b": 92,
+    "quarter_day_count_for_dso_diagnostic": 91,
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q1 FY2027 Form 10-Q, quarter ended 2026-04-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "Canonical prior result: docs/research/results/nvda_h2_working_capital_cash_bridge_20260911/summary.json"
+  ],
+  "method": {
+    "point_in_time": "Use filings available by 2026-08-26 and canonical artifacts already merged before this run. Q3 actual and later cash-flow realization are not used.",
+    "main_measure": "Ending AR/revenue intensity = quarter-end net accounts receivable / quarterly revenue. Apply the Q1 intensity to Q3 guidance revenue to derive a Q1-normalized Q3 ending AR.",
+    "implied_collection": "Q3 implied cash collection from customers = Q2 ending AR + Q3 revenue - Q3 ending AR. The incremental cash versus holding ending AR flat equals the reduction in ending AR.",
+    "benchmark": "No normalization: hold Q3 ending AR at 63.059B USD, so collection equals Q3 revenue and no incremental cash closes the 7.105855B USD gap.",
+    "alternative": "Maintain Q2 AR/revenue intensity at Q3 guidance revenue; this grows ending AR and consumes cash. Separately solve the minimum ending AR that releases exactly 7.105855B USD.",
+    "leakage_and_costs": "No look-ahead to Q3 actual. Transaction cost, slippage, tax, Sharpe, volatility, maximum drawdown and Expected Shortfall are NOT_APPLICABLE because this is point-in-time fundamental cash-conversion research, not a trading strategy.",
+    "dso_note": "Ending-balance DSO uses 91 calendar days only as a diagnostic. It is not average-AR DSO and is not the primary decision measure."
+  },
+  "results": {
+    "observed": {
+      "q1_ar_to_revenue_pct": 49.880537,
+      "q2_ar_to_revenue_pct": 65.53559,
+      "deterioration_pt": 15.655053,
+      "q1_ending_balance_dso_days": 45.391288,
+      "q2_ending_balance_dso_days": 59.637387,
+      "dso_deterioration_days": 14.246098,
+      "q2_ar_increase_vs_q1_usd_b": 22.349
+    },
+    "no_normalization_benchmark": {
+      "q3_ending_ar_usd_b": 63.059,
+      "implied_q3_collection_usd_b": 108,
+      "incremental_cash_release_usd_b": 0,
+      "remaining_cash_gap_usd_b": 7.105855,
+      "commitment_cash_coverage_x": 0.922762
+    },
+    "maintain_q2_intensity_alternative": {
+      "q3_ending_ar_usd_b": 70.778437,
+      "implied_q3_collection_usd_b": 100.280563,
+      "incremental_ar_build_usd_b": 7.719437,
+      "interpretation": "Q3 revenue growth alone does not normalize cash conversion; maintaining Q2 intensity absorbs another 7.719437B USD in AR."
+    },
+    "restore_q1_intensity": {
+      "target_q3_ending_ar_usd_b": 53.87098,
+      "implied_q3_collection_usd_b": 117.18802,
+      "incremental_cash_release_usd_b": 9.18802,
+      "cash_gap_coverage_pct": 129.301,
+      "excess_release_over_gap_usd_b": 2.082165,
+      "h2_fcf_after_release_usd_b": 94.082165,
+      "commitment_cash_coverage_x": 1.022632,
+      "sufficient_mathematically": true
+    },
+    "exact_cash_gap_threshold": {
+      "target_q3_ending_ar_usd_b": 55.953145,
+      "target_ar_to_revenue_pct": 51.808468,
+      "target_ending_balance_dso_days": 47.145706,
+      "implied_q3_collection_usd_b": 115.105855,
+      "required_fraction_of_full_q1_normalization_pct": 77.338259,
+      "interpretation": "完全なQ1水準復帰は不要。Q2の65.535590%から51.808468%まで改善すれば7.105855B USDをreleaseできる。"
+    }
+  },
+  "benchmark_and_alternative": {
+    "no_normalization": "Ending AR据え置きでは追加cashは0でcoverageは0.922762x。",
+    "q2_intensity_maintenance": "売上が108B USDへ増えてもQ2 intensityを維持するとARは7.719437B USD増え、cash conversionはさらに悪化する。",
+    "q1_intensity_restoration": "Q1 intensityへ戻れば9.188020B USDをreleaseし、cash gapを2.082165B USD上回りcoverageは1.022632x。",
+    "minimum_threshold": "完全正常化の77.338259%で足り、必要ending AR/revenueは51.808468%。"
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "Q1 AR/revenue水準への正常化は9.188020B USDをreleaseし、7.105855B USD gapを129.301%カバーするため、数学的なbridgeは成立する。しかしQ3 revenueはguidanceであり、Q3 reported collectionはまだ存在しない。さらにQ2 intensityを維持するだけでは7.719437B USDの追加AR buildになるため、売上成長だけをcash recoveryとみなせない。",
+    "capital_allocation_implication": "FY2027 commitment riskの監視値を『7.106B USD回収』から『Q3 ending AR 55.953B USD以下、またはAR/revenue 51.808%以下』へ変換する。Q3 actualでこの閾値を満たすまでvaluation supportを確定しない。"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "AR intensity normalization threshold decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "専用code/config/workflow/one-off scriptは作成しておらず、削除対象なし。"
+  },
+  "limitations": [
+    "Ending AR/revenue is a point-in-time intensity measure and does not reveal invoice-level aging or customer payment schedules.",
+    "Implied collection assumes revenue and AR movements dominate the customer-cash bridge; acquisitions, FX, write-offs and gross-versus-net presentation can create differences.",
+    "Q3 revenue 108B USD is company guidance, not actual revenue.",
+    "The 7.105855B USD gap inherits Q3/Q4 revenue 108B USD each and treats the 92B USD commitment as an economic cash-coverage target rather than same-period contractual cash payment.",
+    "Q1 normalization is a sensitivity, not a forecast; reported Q3 cash flow is required for adoption."
+  ],
+  "next_high_value_hypothesis": "Q3 actualが出るまで新しい同一入力のAR sensitivityは増やさず、次は92B USD commitmentのcash-out timingを支払条件・inventory purchase obligations・supplier prepaymentsの開示から分解できるかを検証する。分解不能ならQ3 actual filingまで再開しない。"
+}
