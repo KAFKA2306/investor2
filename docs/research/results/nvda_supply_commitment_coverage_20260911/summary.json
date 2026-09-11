@@ -16,19 +16,19 @@
     "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
     "prior_artifact": "docs/research/results/nvda_working_capital_normalization_20260911/summary.json",
     "q2_fy2027_revenue_usd_b": 96.221,
-    "q2_fy2027_gaap_gross_margin_pct": 75.0,
+    "q2_fy2027_gaap_gross_margin_pct": 75,
     "fy2027_h1_revenue_usd_b": 177.837,
     "fy2027_h1_fcf_usd_b": 69.895,
     "fy2027_h1_reported_fcf_margin_pct": 39.302845,
     "ar_normalized_h1_fcf_margin_pct": 47.773213,
     "supply_capacity_commitments_usd_b": {
-      "remainder_fy2027": 92.0,
-      "fy2028": 87.0,
-      "fy2029": 88.0,
-      "fy2030": 6.0,
-      "fy2031": 5.0,
-      "fy2032_and_after": 1.0,
-      "total": 279.0
+      "remainder_fy2027": 92,
+      "fy2028": 87,
+      "fy2029": 88,
+      "fy2030": 6,
+      "fy2031": 5,
+      "fy2032_and_after": 1,
+      "total": 279
     },
     "fallback": "none"
   },
@@ -46,14 +46,14 @@
   "results": {
     "q2_run_rate": {
       "quarterly_gross_profit_usd_b": 72.16575,
-      "quarterly_reported_fcf_capacity_usd_b": 37.817590,
+      "quarterly_reported_fcf_capacity_usd_b": 37.81759,
       "quarterly_ar_normalized_fcf_capacity_usd_b": 45.967863
     },
     "remainder_fy2027": {
-      "commitment_usd_b": 92.0,
+      "commitment_usd_b": 92,
       "revenue_capacity_usd_b": 192.442,
       "gross_profit_capacity_usd_b": 144.3315,
-      "reported_fcf_capacity_usd_b": 75.635180,
+      "reported_fcf_capacity_usd_b": 75.63518,
       "gross_profit_coverage_x": 1.568821,
       "reported_fcf_coverage_x": 0.822122,
       "commitment_to_revenue_pct": 47.806612,
@@ -61,16 +61,16 @@
       "ar_normalized_fcf_coverage_x": 0.999301
     },
     "fy2028": {
-      "commitment_usd_b": 87.0,
+      "commitment_usd_b": 87,
       "revenue_capacity_usd_b": 384.884,
       "gross_profit_capacity_usd_b": 288.663,
       "reported_fcf_capacity_usd_b": 151.270361,
       "gross_profit_coverage_x": 3.317966,
-      "reported_fcf_coverage_x": 1.738740,
+      "reported_fcf_coverage_x": 1.73874,
       "ar_normalized_fcf_coverage_x": 2.113465
     },
     "fy2029": {
-      "commitment_usd_b": 88.0,
+      "commitment_usd_b": 88,
       "revenue_capacity_usd_b": 384.884,
       "gross_profit_capacity_usd_b": 288.663,
       "reported_fcf_capacity_usd_b": 151.270361,
@@ -105,7 +105,64 @@
     "NVIDIA states some supplier agreements may be cancelable, rescheduled or adjustable before firm orders, so 279B USD is not uniformly firm in economic substance.",
     "No-growth Q2 revenue/gross-margin/FCF-margin run-rates are deliberately simple sensitivities, not company guidance for FY2028/FY2029.",
     "AR-normalized FCF is a sensitivity from the prior canonical study, not issuer-reported or guided cash flow.",
-    "Customer demand, product transitions, inventory provisions and supplier renegotiation costs can alter realized economics."
+    "Customer demand, product transitions, inventory provisions and supplier renegotiation costs can alter realized economics.",
+    "Follow-up cash-timing review found no quantified firm/cancellable split or quarterly payment schedule for the 92B USD FY2027 remainder bucket; accounts payable and excess purchase-obligation balances cannot be mapped to it without double-counting risk."
   ],
-  "next_high_value_hypothesis": "NVIDIAのFY2027残期間92B USD supply/capacity commitmentsは、Q3 FY2027 company revenue guidanceとgross-margin guidanceを使うと、Q2横ばいbenchmarkより十分高いnear-term gross-profit coverageを持つか。またreported FCF conversionがどこまで回復すれば1.0x cash coverageへ到達するかをthreshold化する。"
+  "next_high_value_hypothesis": "このNVIDIA worklineはQ3 FY2027 actual、firm/cancellable split、supplier payment timing、または92B USD bucketのmaterial revisionまで停止する。新規候補選定では、現在のportfolio allocationに対して独立に判断を変え得る未検証仮説を比較する。",
+  "follow_up_cash_timing_decomposition": {
+    "as_of": "2026-09-11",
+    "hypothesis": "FY2027残期間92B USD supply/capacity commitmentsを、firm/noncancelable cash-outと変更可能なcapacity reservationへ一次開示だけで分解できる。",
+    "precommit_rule": {
+      "use_if": "issuer disclosure identifies the quantified firm/noncancelable amount and payment period, producing an auditable cash-out schedule narrower than the aggregate 92B USD bucket.",
+      "condition_if": "a partial quantified split or bounded payment schedule is disclosed, but some material amount remains unmapped.",
+      "reject_if": "a proposed balance-sheet proxy cannot be mapped to the 92B USD commitment population or creates double-counting risk.",
+      "unverified_if": "firm-order share, cancellable share, or payment timing is not quantified."
+    },
+    "source_revision": {
+      "filing": "NVIDIA Q2 FY2027 Form 10-Q filed 2026-08-26, accession 0001045810-26-000075",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+      "period_end": "2026-07-26"
+    },
+    "disclosed_remainder_fy2027_commitments_usd_b": {
+      "supply_and_capacity": 92,
+      "cloud_service_agreements": 3,
+      "equity_investments": 18,
+      "capital_expenditures": 7,
+      "total": 120
+    },
+    "observed_balance_sheet_context_usd_b": {
+      "accounts_payable": 15.059,
+      "excess_inventory_purchase_obligations_current_liability": 2.138,
+      "inventory_total": 31.575,
+      "raw_materials_inventory": 11.341,
+      "work_in_process_inventory": 13.377,
+      "finished_goods_inventory": 6.857,
+      "property_equipment_and_intangibles_acquired_but_unpaid_h1": 1.2
+    },
+    "disclosure_result": {
+      "firm_order_amount_usd_b": null,
+      "cancellable_or_reschedulable_amount_usd_b": null,
+      "quarterly_cash_payment_schedule": null,
+      "supplier_payment_terms": null,
+      "quantified_cancellation_cost": null,
+      "disclosed_statement": "Certain supplier agreements may be cancelable, rescheduled, or adjustable for business needs before firm orders; changes may result in additional costs.",
+      "mapping_result": "The filing does not map accounts payable, excess inventory purchase obligations, inventory, or unpaid capex to the 92B USD supply/capacity commitment bucket.",
+      "status": "UNVERIFIED"
+    },
+    "benchmark_and_alternative": {
+      "conservative_benchmark": "Continue treating 92B USD as an economic-capacity stress target, not a forecast of same-period cash payment.",
+      "rejected_proxy": "Do not substitute accounts payable 15.059B USD plus excess inventory purchase obligations 2.138B USD for firm cash-out. Their population and overlap with the 92B USD commitment bucket are undisclosed.",
+      "implication": "The prior 0.922762x reported-FCF coverage is a conservative diagnostic under the 92B target. It is not an issuer-reported liquidity or solvency ratio."
+    },
+    "verdict": {
+      "status": "UNVERIFIED",
+      "reason": "The filing quantifies the fiscal-year aggregate but not the firm/cancellable split or cash-payment dates. Balance-sheet items are real, but cannot be reconciled to the commitment population without unsupported assumptions.",
+      "decision_effect": "Do not reduce or increase the 92B USD near-term cash target using balance-sheet proxies. Maintain the parent artifact at CONDITION and avoid treating 0.922762x as a forecasted cash shortfall."
+    },
+    "implementation_and_stopping": {
+      "artifact_action": "Record the failed decomposition and rejected proxies in the existing canonical commitment-coverage artifact; do not create a second model or dataset.",
+      "removed_or_avoided": "Avoided a duplicate cash-timing model and unsupported AP-plus-purchase-obligation proxy.",
+      "restart_only_if": "NVIDIA files Q3 FY2027 actuals, quantifies firm versus cancellable supply commitments, discloses supplier payment timing, or materially revises the 92B USD FY2027 bucket."
+    }
+  }
 }
