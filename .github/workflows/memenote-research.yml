@@ -1,0 +1,65 @@
+name: Memenote research reproduction
+
+on:
+  pull_request:
+    paths:
+      - "scripts/verify_memenote_research.py"
+      - "tests/test_memenote_research.py"
+      - "data/research/memenote/**"
+      - "docs/research/results/alphazerobeta_2024/raw/prices.csv"
+      - "docs/research/results/alphazerobeta_2024/source_manifest.json"
+      - "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/**"
+      - ".github/workflows/memenote-research.yml"
+      - "pyproject.toml"
+      - "uv.lock"
+  push:
+    branches: [main]
+    paths:
+      - "scripts/verify_memenote_research.py"
+      - "tests/test_memenote_research.py"
+      - "data/research/memenote/**"
+      - "docs/research/results/alphazerobeta_2024/raw/prices.csv"
+      - "docs/research/results/alphazerobeta_2024/source_manifest.json"
+      - "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/**"
+      - ".github/workflows/memenote-research.yml"
+      - "pyproject.toml"
+      - "uv.lock"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v9.0.0
+        with:
+          version: "0.11.32"
+      - name: Install locked dependencies
+        run: uv sync --locked --only-group dev
+      - name: Run focused regression tests
+        run: uv run --no-sync pytest -q tests/test_memenote_research.py
+      - name: Rebuild machine-readable verdict
+        run: |
+          uv run --no-sync python scripts/verify_memenote_research.py --output /tmp/memenote-research.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('/tmp/memenote-research.json').read_text())
+          print(json.dumps({
+              'hypothesis_results': report['hypothesis_results'],
+              'relative_strength': {
+                  'allocation_verdict': report['relative_strength']['allocation_verdict'],
+                  'parameter_dependence_verdict': report['relative_strength']['parameter_dependence_verdict'],
+                  'simple_vs_log_top_k_rank_agreement': report['relative_strength']['simple_vs_log_top_k_rank_agreement'],
+              },
+              'price_external_feature_ablation': report['price_external_feature_ablation'],
+          }, indent=2, sort_keys=True))
+          PY
