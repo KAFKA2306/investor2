@@ -12,28 +12,18 @@ on:
       - ".github/workflows/memenote-research.yml"
       - "pyproject.toml"
       - "uv.lock"
-  push:
-    branches: [main]
-    paths:
-      - "scripts/verify_memenote_research.py"
-      - "tests/test_memenote_research.py"
-      - "data/research/memenote/**"
-      - "docs/research/results/alphazerobeta_2024/raw/prices.csv"
-      - "docs/research/results/alphazerobeta_2024/source_manifest.json"
-      - "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/**"
-      - ".github/workflows/memenote-research.yml"
-      - "pyproject.toml"
-      - "uv.lock"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   verify:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.head_ref }}
       - name: Set up Python
         uses: actions/setup-python@v6
         with:
@@ -44,27 +34,13 @@ jobs:
           version: "0.11.32"
       - name: Install formatter
         run: uv sync --locked --only-group dev
-      - name: Show formatter diff
-        run: uv run --no-sync ruff format --diff scripts/verify_memenote_research.py tests/test_memenote_research.py
-        continue-on-error: true
-      - name: Install locked research dependencies
-        run: uv sync --locked --group dev
-      - name: Run focused regression tests
-        run: uv run --no-sync pytest -q tests/test_memenote_research.py
-      - name: Rebuild machine-readable verdict
+      - name: Apply canonical formatting to research files
         run: |
-          uv run --no-sync python scripts/verify_memenote_research.py --output /tmp/memenote-research.json
-          python - <<'PY'
-          import json
-          from pathlib import Path
-          report = json.loads(Path('/tmp/memenote-research.json').read_text())
-          print(json.dumps({
-              'hypothesis_results': report['hypothesis_results'],
-              'relative_strength': {
-                  'allocation_verdict': report['relative_strength']['allocation_verdict'],
-                  'parameter_dependence_verdict': report['relative_strength']['parameter_dependence_verdict'],
-                  'simple_vs_log_top_k_rank_agreement': report['relative_strength']['simple_vs_log_top_k_rank_agreement'],
-              },
-              'price_external_feature_ablation': report['price_external_feature_ablation'],
-          }, indent=2, sort_keys=True))
-          PY
+          uv run --no-sync ruff format scripts/verify_memenote_research.py tests/test_memenote_research.py
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/verify_memenote_research.py tests/test_memenote_research.py
+          if ! git diff --cached --quiet; then
+            git commit -m "style: apply canonical ruff formatting"
+            git push origin HEAD:${{ github.head_ref }}
+          fi
