@@ -22,9 +22,7 @@ import pandas as pd
 ROOT = Path(__file__).parents[1]
 CATALOG_PATH = ROOT / "data/research/memenote/hypothesis_catalog.json"
 PRICE_PATH = ROOT / "docs/research/results/alphazerobeta_2024/raw/prices.csv"
-PRICE_MANIFEST_PATH = (
-    ROOT / "docs/research/results/alphazerobeta_2024/source_manifest.json"
-)
+PRICE_MANIFEST_PATH = ROOT / "docs/research/results/alphazerobeta_2024/source_manifest.json"
 FUNDING_PATH = (
     ROOT
     / "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/0c4f7b0dfacea01cf9efd0935f08330fa6839d9d987a4b332a56fad180fda61e.json"
@@ -64,9 +62,7 @@ def load_prices(
     expected_hash = str(manifest["normalized_prices_sha256"])
     actual_hash = sha256_file(path)
     if actual_hash != expected_hash:
-        raise ValueError(
-            f"price snapshot hash mismatch: expected {expected_hash}, got {actual_hash}"
-        )
+        raise ValueError(f"price snapshot hash mismatch: expected {expected_hash}, got {actual_hash}")
 
     frame = pd.read_csv(path, parse_dates=["Date"])
     required_columns = {"Code", "Date", "Close", "Volume"}
@@ -131,10 +127,7 @@ def target_schedule(
     schedule: dict[pd.Timestamp, pd.Series] = {}
     for signal_date in month_end_signal_dates(prices.index, valid.index[0]):
         position = prices.index.get_loc(signal_date)
-        if (
-            not isinstance(position, (int, np.integer))
-            or position + 1 >= len(prices.index)
-        ):
+        if not isinstance(position, (int, np.integer)) or position + 1 >= len(prices.index):
             continue
         execution_date = prices.index[int(position) + 1]
         row = scores.loc[signal_date].dropna()
@@ -159,10 +152,7 @@ def equal_weight_schedule(
     schedule: dict[pd.Timestamp, pd.Series] = {}
     for signal_date in month_end_signal_dates(prices.index, score.index[0]):
         position = prices.index.get_loc(signal_date)
-        if (
-            not isinstance(position, (int, np.integer))
-            or position + 1 >= len(prices.index)
-        ):
+        if not isinstance(position, (int, np.integer)) or position + 1 >= len(prices.index):
             continue
         schedule[prices.index[int(position) + 1]] = target.copy()
     return schedule
@@ -227,15 +217,9 @@ def metrics(
     volatility = float(returns.std(ddof=1))
     annualized_return = mean * 252.0
     annualized_volatility = volatility * math.sqrt(252.0)
-    sharpe = (
-        annualized_return / annualized_volatility
-        if annualized_volatility > 0
-        else 0.0
-    )
+    sharpe = annualized_return / annualized_volatility if annualized_volatility > 0 else 0.0
     downside = returns.loc[returns < 0]
-    downside_vol = (
-        float(downside.std(ddof=1)) * math.sqrt(252.0) if len(downside) > 1 else 0.0
-    )
+    downside_vol = float(downside.std(ddof=1)) * math.sqrt(252.0) if len(downside) > 1 else 0.0
     sortino = annualized_return / downside_vol if downside_vol > 0 else 0.0
     wealth = (1.0 + returns).cumprod()
     cumulative_return = float(wealth.iloc[-1] - 1.0)
@@ -334,10 +318,7 @@ def ranking_agreement(
 
 
 def parameter_dependence_verdict(sensitivity: dict[str, Any]) -> str:
-    test_returns = [
-        float(payload["test"]["strategy"]["cumulative_return"])
-        for payload in sensitivity.values()
-    ]
+    test_returns = [float(payload["test"]["strategy"]["cumulative_return"]) for payload in sensitivity.values()]
     spread = max(test_returns) - min(test_returns)
     return "USE" if spread >= 0.03 else "REJECT"
 
@@ -410,12 +391,8 @@ def _evaluate_ols(
 
 def funding_ablation(frame: pd.DataFrame) -> dict[str, Any]:
     data = frame.copy()
-    data["price_momentum_1d"] = np.log(
-        data["index_close"] / data["index_close"].shift(1)
-    )
-    data["target_next_return"] = np.log(
-        data["index_close"].shift(-1) / data["index_close"]
-    )
+    data["price_momentum_1d"] = np.log(data["index_close"] / data["index_close"].shift(1))
+    data["target_next_return"] = np.log(data["index_close"].shift(-1) / data["index_close"])
     data = data.dropna().reset_index(drop=True)
     if len(data) < 60:
         return {
@@ -465,9 +442,7 @@ def funding_ablation(frame: pd.DataFrame) -> dict[str, Any]:
         augmented_stats,
     )
 
-    validation_improvement = 1.0 - (
-        validation_augmented["mse"] / validation_baseline["mse"]
-    )
+    validation_improvement = 1.0 - (validation_augmented["mse"] / validation_baseline["mse"])
     test_improvement = 1.0 - test_augmented["mse"] / test_baseline["mse"]
     if validation_improvement >= 0.02 and test_improvement >= 0.02:
         verdict = "USE"
@@ -509,10 +484,7 @@ def build_report() -> dict[str, Any]:
     centered = centered_log_strength(prices, PRIMARY_LOOKBACK).dropna(how="any")
     sum_zero_error = float(centered.sum(axis=1).abs().max())
     agreement = ranking_agreement(prices, PRIMARY_LOOKBACK)
-    sensitivity = {
-        str(lookback): compare_allocation(prices, lookback, "log")
-        for lookback in LOOKBACK_SENSITIVITY
-    }
+    sensitivity = {str(lookback): compare_allocation(prices, lookback, "log") for lookback in LOOKBACK_SENSITIVITY}
     primary = sensitivity[str(PRIMARY_LOOKBACK)]
     allocation_status = allocation_verdict(primary)
     parameter_status = parameter_dependence_verdict(sensitivity)
@@ -522,9 +494,7 @@ def build_report() -> dict[str, Any]:
         "memenote_log_relative_strength_v1": {
             "status": allocation_status,
             "explanatory_indicator": "USE",
-            "incremental_log_transform_edge": (
-                "REJECT" if agreement == 1.0 else "CONDITION"
-            ),
+            "incremental_log_transform_edge": ("REJECT" if agreement == 1.0 else "CONDITION"),
             "regime_classifier": "BLOCKED",
             "timing_signal": "BLOCKED",
             "reason": (
@@ -535,10 +505,7 @@ def build_report() -> dict[str, Any]:
         },
         "memenote_regime_parameter_dependence_v1": {
             "status": parameter_status,
-            "reason": (
-                "verdict uses the spread across predeclared 21/63/126-session OOS "
-                "lookbacks"
-            ),
+            "reason": ("verdict uses the spread across predeclared 21/63/126-session OOS lookbacks"),
         },
         "memenote_btc_funding_incremental_v1": {
             "status": funding["status"],
@@ -583,8 +550,7 @@ def build_report() -> dict[str, Any]:
             "top_k": TOP_K,
             "trading_cost_bps_per_traded_notional": TRADING_COST_BPS,
             "signal_execution": (
-                "month-end close signal, rebalance after the next session return; "
-                "no same-bar look-ahead"
+                "month-end close signal, rebalance after the next session return; no same-bar look-ahead"
             ),
             "max_abs_centered_strength_sum": sum_zero_error,
             "simple_vs_log_top_k_rank_agreement": agreement,
@@ -596,20 +562,13 @@ def build_report() -> dict[str, Any]:
         "price_external_feature_ablation": funding,
         "strategy_reproduction_contract": {
             "signal_timestamp": "close(t)",
-            "earliest_execution": (
-                "after return(t,t+1); target weights become active for subsequent "
-                "returns"
-            ),
+            "earliest_execution": ("after return(t,t+1); target weights become active for subsequent returns"),
             "price": "frozen adjusted close when available",
-            "position_sizing": (
-                "equal weight among top-k for the reproduced allocation test"
-            ),
+            "position_sizing": ("equal weight among top-k for the reproduced allocation test"),
             "cost": f"{TRADING_COST_BPS} bps per traded notional",
             "leverage": "none",
             "missing_data": "fail closed",
-            "article_specific_stop_take_profit": (
-                "UNSPECIFIED/BLOCKED unless source provides exact rules"
-            ),
+            "article_specific_stop_take_profit": ("UNSPECIFIED/BLOCKED unless source provides exact rules"),
         },
         "hypothesis_results": hypothesis_results,
         "catalog_hypothesis_count": len(catalog.get("hypotheses", [])),
@@ -627,9 +586,7 @@ def main() -> None:
         if args.output is None or not args.output.exists():
             raise SystemExit("--check requires an existing --output file")
         if args.output.read_text(encoding="utf-8") != rendered:
-            raise SystemExit(
-                f"stale memenote research output: regenerate {args.output}"
-            )
+            raise SystemExit(f"stale memenote research output: regenerate {args.output}")
         return
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

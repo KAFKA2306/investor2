@@ -16,13 +16,9 @@ def test_frozen_price_snapshot_matches_manifest() -> None:
 
 def test_log_relative_strength_is_sum_zero_and_ranking_equivalent() -> None:
     prices = MODULE.load_prices()
-    centered = MODULE.centered_log_strength(
-        prices, MODULE.PRIMARY_LOOKBACK
-    ).dropna(how="any")
+    centered = MODULE.centered_log_strength(prices, MODULE.PRIMARY_LOOKBACK).dropna(how="any")
     assert centered.sum(axis=1).abs().max() < 1e-12
-    assert MODULE.ranking_agreement(
-        prices, MODULE.PRIMARY_LOOKBACK
-    ) == pytest.approx(1.0)
+    assert MODULE.ranking_agreement(prices, MODULE.PRIMARY_LOOKBACK) == pytest.approx(1.0)
 
 
 def test_signal_uses_next_session_and_charges_turnover() -> None:
@@ -39,10 +35,7 @@ def test_signal_uses_next_session_and_charges_turnover() -> None:
     )
     first_execution = min(schedule)
     assert result.loc[first_execution, "turnover"] == pytest.approx(1.0)
-    assert (
-        result.loc[first_execution, "net_return"]
-        < result.loc[first_execution, "gross_return"]
-    )
+    assert result.loc[first_execution, "net_return"] < result.loc[first_execution, "gross_return"]
 
 
 def test_funding_ablation_is_chronological_or_explicitly_blocked() -> None:
