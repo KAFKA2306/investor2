@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 """Reproduce testable memenote ideas on frozen investor2 evidence.
 
-This module deliberately separates three things that the source articles can easily
-blur together in casual use: a mathematically useful indicator, a tradable rule,
-and an incremental predictive feature.  It reuses checked-in market snapshots and
-does not create a second market-data authority.
+This module separates an explanatory indicator, a tradable rule, and an
+incremental predictive feature. It reuses checked-in market snapshots and does
+not create a second market-data authority.
 """
 
 from __future__ import annotations
@@ -13,8 +12,9 @@ import argparse
 import hashlib
 import json
 import math
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -22,7 +22,9 @@ import pandas as pd
 ROOT = Path(__file__).parents[1]
 CATALOG_PATH = ROOT / "data/research/memenote/hypothesis_catalog.json"
 PRICE_PATH = ROOT / "docs/research/results/alphazerobeta_2024/raw/prices.csv"
-PRICE_MANIFEST_PATH = ROOT / "docs/research/results/alphazerobeta_2024/source_manifest.json"
+PRICE_MANIFEST_PATH = (
+    ROOT / "docs/research/results/alphazerobeta_2024/source_manifest.json"
+)
 FUNDING_PATH = (
     ROOT
     / "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/0c4f7b0dfacea01cf9efd0935f08330fa6839d9d987a4b332a56fad180fda61e.json"
@@ -54,12 +56,17 @@ def load_json(path: Path) -> dict[str, Any]:
     return payload
 
 
-def load_prices(path: Path = PRICE_PATH, manifest_path: Path = PRICE_MANIFEST_PATH) -> pd.DataFrame:
+def load_prices(
+    path: Path = PRICE_PATH,
+    manifest_path: Path = PRICE_MANIFEST_PATH,
+) -> pd.DataFrame:
     manifest = load_json(manifest_path)
     expected_hash = str(manifest["normalized_prices_sha256"])
     actual_hash = sha256_file(path)
     if actual_hash != expected_hash:
-        raise ValueError(f"price snapshot hash mismatch: expected {expected_hash}, got {actual_hash}")
+        raise ValueError(
+            f"price snapshot hash mismatch: expected {expected_hash}, got {actual_hash}"
+        )
 
     frame = pd.read_csv(path, parse_dates=["Date"])
     required_columns = {"Code", "Date", "Close", "Volume"}
@@ -69,7 +76,10 @@ def load_prices(path: Path = PRICE_PATH, manifest_path: Path = PRICE_MANIFEST_PA
     if missing:
         raise ValueError(f"missing frozen universe members: {missing}")
 
-    selected = frame.loc[frame["Code"].isin(CROSS_ASSET_UNIVERSE), ["Code", "Date", "Close"]]
+    selected = frame.loc[
+        frame["Code"].isin(CROSS_ASSET_UNIVERSE),
+        ["Code", "Date", "Close"],
+    ]
     prices = selected.pivot(index="Date", columns="Code", values="Close").sort_index()
     prices = prices.loc[:, list(CROSS_ASSET_UNIVERSE)].dropna(how="any")
     if prices.empty or (prices <= 0).any().any():
@@ -77,7 +87,11 @@ def load_prices(path: Path = PRICE_PATH, manifest_path: Path = PRICE_MANIFEST_PA
     return prices
 
 
-def raw_strength(prices: pd.DataFrame, lookback: int, method: str) -> pd.DataFrame:
+def raw_strength(
+    prices: pd.DataFrame,
+    lookback: int,
+    method: str,
+) -> pd.DataFrame:
     ratio = prices / prices.shift(lookback)
     if method == "log":
         return np.log(ratio)
@@ -91,7 +105,10 @@ def centered_log_strength(prices: pd.DataFrame, lookback: int) -> pd.DataFrame:
     return strength.sub(strength.mean(axis=1), axis=0)
 
 
-def month_end_signal_dates(index: pd.DatetimeIndex, first_valid: pd.Timestamp) -> list[pd.Timestamp]:
+def month_end_signal_dates(
+    index: pd.DatetimeIndex,
+    first_valid: pd.Timestamp,
+) -> list[pd.Timestamp]:
     eligible = index[index >= first_valid]
     if eligible.empty:
         return []
@@ -110,11 +127,14 @@ def target_schedule(
     valid = scores.dropna(how="any")
     if valid.empty:
         raise ValueError("no valid signal observations")
-    signal_dates = month_end_signal_dates(prices.index, valid.index[0])
+
     schedule: dict[pd.Timestamp, pd.Series] = {}
-    for signal_date in signal_dates:
+    for signal_date in month_end_signal_dates(prices.index, valid.index[0]):
         position = prices.index.get_loc(signal_date)
-        if not isinstance(position, (int, np.integer)) or position + 1 >= len(prices.index):
+        if (
+            not isinstance(position, (int, np.integer))
+            or position + 1 >= len(prices.index)
+        ):
             continue
         execution_date = prices.index[int(position) + 1]
         row = scores.loc[signal_date].dropna()
@@ -127,7 +147,11 @@ def target_schedule(
     return schedule
 
 
-def equal_weight_schedule(prices: pd.DataFrame, *, lookback: int) -> dict[pd.Timestamp, pd.Series]:
+def equal_weight_schedule(
+    prices: pd.DataFrame,
+    *,
+    lookback: int,
+) -> dict[pd.Timestamp, pd.Series]:
     score = raw_strength(prices, lookback, "log").dropna(how="any")
     if score.empty:
         raise ValueError("no valid baseline observations")
@@ -135,7 +159,10 @@ def equal_weight_schedule(prices: pd.DataFrame, *, lookback: int) -> dict[pd.Tim
     schedule: dict[pd.Timestamp, pd.Series] = {}
     for signal_date in month_end_signal_dates(prices.index, score.index[0]):
         position = prices.index.get_loc(signal_date)
-        if not isinstance(position, (int, np.integer)) or position + 1 >= len(prices.index):
+        if (
+            not isinstance(position, (int, np.integer))
+            or position + 1 >= len(prices.index)
+        ):
             continue
         schedule[prices.index[int(position) + 1]] = target.copy()
     return schedule
@@ -176,8 +203,7 @@ def simulate(
             }
         )
 
-    result = pd.DataFrame(rows).set_index("date")
-    return result
+    return pd.DataFrame(rows).set_index("date")
 
 
 def _worst_compounded(returns: pd.Series, window: int) -> float | None:
@@ -187,7 +213,11 @@ def _worst_compounded(returns: pd.Series, window: int) -> float | None:
     return float(values.min())
 
 
-def metrics(result: pd.DataFrame, start: str, end: str) -> dict[str, float | int | None | str]:
+def metrics(
+    result: pd.DataFrame,
+    start: str,
+    end: str,
+) -> dict[str, float | int | None | str]:
     window = result.loc[start:end].copy()
     if window.empty:
         raise ValueError(f"empty evaluation window {start}..{end}")
@@ -197,9 +227,15 @@ def metrics(result: pd.DataFrame, start: str, end: str) -> dict[str, float | int
     volatility = float(returns.std(ddof=1))
     annualized_return = mean * 252.0
     annualized_volatility = volatility * math.sqrt(252.0)
-    sharpe = annualized_return / annualized_volatility if annualized_volatility > 0 else 0.0
+    sharpe = (
+        annualized_return / annualized_volatility
+        if annualized_volatility > 0
+        else 0.0
+    )
     downside = returns.loc[returns < 0]
-    downside_vol = float(downside.std(ddof=1)) * math.sqrt(252.0) if len(downside) > 1 else 0.0
+    downside_vol = (
+        float(downside.std(ddof=1)) * math.sqrt(252.0) if len(downside) > 1 else 0.0
+    )
     sortino = annualized_return / downside_vol if downside_vol > 0 else 0.0
     wealth = (1.0 + returns).cumprod()
     cumulative_return = float(wealth.iloc[-1] - 1.0)
@@ -229,7 +265,11 @@ def metrics(result: pd.DataFrame, start: str, end: str) -> dict[str, float | int
     }
 
 
-def compare_allocation(prices: pd.DataFrame, lookback: int, method: str) -> dict[str, Any]:
+def compare_allocation(
+    prices: pd.DataFrame,
+    lookback: int,
+    method: str,
+) -> dict[str, Any]:
     strategy = simulate(
         prices,
         target_schedule(prices, lookback=lookback, method=method),
@@ -243,7 +283,11 @@ def compare_allocation(prices: pd.DataFrame, lookback: int, method: str) -> dict
     return {
         "validation": {
             "strategy": metrics(strategy, VALIDATION_START, VALIDATION_END),
-            "baseline_equal_weight": metrics(baseline, VALIDATION_START, VALIDATION_END),
+            "baseline_equal_weight": metrics(
+                baseline,
+                VALIDATION_START,
+                VALIDATION_END,
+            ),
         },
         "test": {
             "strategy": metrics(strategy, TEST_START, TEST_END),
@@ -271,7 +315,11 @@ def allocation_verdict(comparison: dict[str, Any]) -> str:
     return "REJECT"
 
 
-def ranking_agreement(prices: pd.DataFrame, lookback: int, top_k: int = TOP_K) -> float:
+def ranking_agreement(
+    prices: pd.DataFrame,
+    lookback: int,
+    top_k: int = TOP_K,
+) -> float:
     simple = raw_strength(prices, lookback, "simple")
     log = raw_strength(prices, lookback, "log")
     valid = simple.dropna(how="any")
@@ -318,7 +366,11 @@ def load_funding_frame(path: Path = FUNDING_PATH) -> pd.DataFrame:
     return frame[["date", "index_close", "funding_rate_sum"]].reset_index(drop=True)
 
 
-def _design_matrix(frame: pd.DataFrame, columns: Iterable[str], stats: dict[str, tuple[float, float]]) -> np.ndarray:
+def _design_matrix(
+    frame: pd.DataFrame,
+    columns: Iterable[str],
+    stats: dict[str, tuple[float, float]],
+) -> np.ndarray:
     normalized: list[np.ndarray] = [np.ones(len(frame), dtype=float)]
     for column in columns:
         mean, std = stats[column]
@@ -326,7 +378,10 @@ def _design_matrix(frame: pd.DataFrame, columns: Iterable[str], stats: dict[str,
     return np.column_stack(normalized)
 
 
-def _fit_ols(train: pd.DataFrame, columns: tuple[str, ...]) -> tuple[np.ndarray, dict[str, tuple[float, float]]]:
+def _fit_ols(
+    train: pd.DataFrame,
+    columns: tuple[str, ...],
+) -> tuple[np.ndarray, dict[str, tuple[float, float]]]:
     stats: dict[str, tuple[float, float]] = {}
     for column in columns:
         mean = float(train[column].mean())
@@ -355,8 +410,12 @@ def _evaluate_ols(
 
 def funding_ablation(frame: pd.DataFrame) -> dict[str, Any]:
     data = frame.copy()
-    data["price_momentum_1d"] = np.log(data["index_close"] / data["index_close"].shift(1))
-    data["target_next_return"] = np.log(data["index_close"].shift(-1) / data["index_close"])
+    data["price_momentum_1d"] = np.log(
+        data["index_close"] / data["index_close"].shift(1)
+    )
+    data["target_next_return"] = np.log(
+        data["index_close"].shift(-1) / data["index_close"]
+    )
     data = data.dropna().reset_index(drop=True)
     if len(data) < 60:
         return {
@@ -381,12 +440,34 @@ def funding_ablation(frame: pd.DataFrame) -> dict[str, Any]:
     augmented_columns = ("price_momentum_1d", "funding_rate_sum")
     baseline_beta, baseline_stats = _fit_ols(train, baseline_columns)
     augmented_beta, augmented_stats = _fit_ols(train, augmented_columns)
-    validation_baseline = _evaluate_ols(validation, baseline_columns, baseline_beta, baseline_stats)
-    validation_augmented = _evaluate_ols(validation, augmented_columns, augmented_beta, augmented_stats)
-    test_baseline = _evaluate_ols(test, baseline_columns, baseline_beta, baseline_stats)
-    test_augmented = _evaluate_ols(test, augmented_columns, augmented_beta, augmented_stats)
+    validation_baseline = _evaluate_ols(
+        validation,
+        baseline_columns,
+        baseline_beta,
+        baseline_stats,
+    )
+    validation_augmented = _evaluate_ols(
+        validation,
+        augmented_columns,
+        augmented_beta,
+        augmented_stats,
+    )
+    test_baseline = _evaluate_ols(
+        test,
+        baseline_columns,
+        baseline_beta,
+        baseline_stats,
+    )
+    test_augmented = _evaluate_ols(
+        test,
+        augmented_columns,
+        augmented_beta,
+        augmented_stats,
+    )
 
-    validation_improvement = 1.0 - validation_augmented["mse"] / validation_baseline["mse"]
+    validation_improvement = 1.0 - (
+        validation_augmented["mse"] / validation_baseline["mse"]
+    )
     test_improvement = 1.0 - test_augmented["mse"] / test_baseline["mse"]
     if validation_improvement >= 0.02 and test_improvement >= 0.02:
         verdict = "USE"
@@ -403,7 +484,11 @@ def funding_ablation(frame: pd.DataFrame) -> dict[str, Any]:
         "rows": len(data),
         "date_start": str(data["date"].iloc[0].date()),
         "date_end": str(data["date"].iloc[-1].date()),
-        "split_rows": {"train": len(train), "validation": len(validation), "test": len(test)},
+        "split_rows": {
+            "train": len(train),
+            "validation": len(validation),
+            "test": len(test),
+        },
         "validation": {
             "price_only": validation_baseline,
             "price_plus_funding": validation_augmented,
@@ -424,7 +509,6 @@ def build_report() -> dict[str, Any]:
     centered = centered_log_strength(prices, PRIMARY_LOOKBACK).dropna(how="any")
     sum_zero_error = float(centered.sum(axis=1).abs().max())
     agreement = ranking_agreement(prices, PRIMARY_LOOKBACK)
-
     sensitivity = {
         str(lookback): compare_allocation(prices, lookback, "log")
         for lookback in LOOKBACK_SENSITIVITY
@@ -438,17 +522,23 @@ def build_report() -> dict[str, Any]:
         "memenote_log_relative_strength_v1": {
             "status": allocation_status,
             "explanatory_indicator": "USE",
-            "incremental_log_transform_edge": "REJECT" if agreement == 1.0 else "CONDITION",
+            "incremental_log_transform_edge": (
+                "REJECT" if agreement == 1.0 else "CONDITION"
+            ),
             "regime_classifier": "BLOCKED",
             "timing_signal": "BLOCKED",
             "reason": (
-                "sum-zero explanatory representation is reproduced; allocation value is judged only by frozen OOS periods; "
-                "the source does not specify deterministic regime or entry/exit rules"
+                "sum-zero explanatory representation is reproduced; allocation value "
+                "is judged only by frozen OOS periods; the source does not specify "
+                "deterministic regime or entry/exit rules"
             ),
         },
         "memenote_regime_parameter_dependence_v1": {
             "status": parameter_status,
-            "reason": "verdict uses the spread across predeclared 21/63/126-session OOS lookbacks",
+            "reason": (
+                "verdict uses the spread across predeclared 21/63/126-session OOS "
+                "lookbacks"
+            ),
         },
         "memenote_btc_funding_incremental_v1": {
             "status": funding["status"],
@@ -456,7 +546,10 @@ def build_report() -> dict[str, Any]:
         },
         "memenote_strategy_rule_reproduction_v1": {
             "status": "BLOCKED",
-            "reason": "exact article-specific entry/exit rules are not independently available; discretionary details are not invented",
+            "reason": (
+                "exact article-specific entry/exit rules are not independently "
+                "available; discretionary details are not invented"
+            ),
         },
     }
 
@@ -481,11 +574,18 @@ def build_report() -> dict[str, Any]:
                 "GLD": "gold proxy",
                 "TLT": "long-duration US Treasury proxy",
             },
-            "unavailable_in_frozen_price_snapshot": ["USDJPY", "Japan equities", "BTC spot"],
+            "unavailable_in_frozen_price_snapshot": [
+                "USDJPY",
+                "Japan equities",
+                "BTC spot",
+            ],
             "lookback_sessions": PRIMARY_LOOKBACK,
             "top_k": TOP_K,
             "trading_cost_bps_per_traded_notional": TRADING_COST_BPS,
-            "signal_execution": "month-end close signal, rebalance after the next session return; no same-bar look-ahead",
+            "signal_execution": (
+                "month-end close signal, rebalance after the next session return; "
+                "no same-bar look-ahead"
+            ),
             "max_abs_centered_strength_sum": sum_zero_error,
             "simple_vs_log_top_k_rank_agreement": agreement,
             "primary_oos": primary,
@@ -496,13 +596,20 @@ def build_report() -> dict[str, Any]:
         "price_external_feature_ablation": funding,
         "strategy_reproduction_contract": {
             "signal_timestamp": "close(t)",
-            "earliest_execution": "after return(t,t+1); target weights become active for subsequent returns",
+            "earliest_execution": (
+                "after return(t,t+1); target weights become active for subsequent "
+                "returns"
+            ),
             "price": "frozen adjusted close when available",
-            "position_sizing": "equal weight among top-k for the reproduced allocation test",
+            "position_sizing": (
+                "equal weight among top-k for the reproduced allocation test"
+            ),
             "cost": f"{TRADING_COST_BPS} bps per traded notional",
             "leverage": "none",
             "missing_data": "fail closed",
-            "article_specific_stop_take_profit": "UNSPECIFIED/BLOCKED unless source provides exact rules",
+            "article_specific_stop_take_profit": (
+                "UNSPECIFIED/BLOCKED unless source provides exact rules"
+            ),
         },
         "hypothesis_results": hypothesis_results,
         "catalog_hypothesis_count": len(catalog.get("hypotheses", [])),
@@ -520,7 +627,9 @@ def main() -> None:
         if args.output is None or not args.output.exists():
             raise SystemExit("--check requires an existing --output file")
         if args.output.read_text(encoding="utf-8") != rendered:
-            raise SystemExit(f"stale memenote research output: regenerate {args.output}")
+            raise SystemExit(
+                f"stale memenote research output: regenerate {args.output}"
+            )
         return
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)
