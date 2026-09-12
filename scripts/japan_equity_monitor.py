@@ -187,7 +187,12 @@ def html_to_text(raw_html: str) -> str:
 
 
 def signed_number(value: str) -> float | None:
-    normalized = value.replace(",", "").replace("＋", "+").replace("▲", "-").replace("△", "-")
+    normalized = (
+        value.replace(",", "")
+        .replace("＋", "+")
+        .replace("▲", "-")
+        .replace("△", "-")
+    )
     matches = re.findall(r"[-+]?\d+(?:\.\d+)?", normalized)
     return float(matches[-1]) if matches else None
 
@@ -246,7 +251,10 @@ def fetch_shashi(session: requests.Session, code: str, *, timeout: int) -> dict[
     url = f"https://the-shashi.com/tse/{code}/current/"
     response = session.get(url, timeout=timeout)
     response.raise_for_status()
-    return {"source_url": url, "metrics": parse_shashi_text(html_to_text(response.text))}
+    metrics = parse_shashi_text(html_to_text(response.text))
+    if not any(value is not None for value in metrics.values()):
+        raise ValueError("The社史 metric blocks were not found; refusing an empty successful parse")
+    return {"source_url": url, "metrics": metrics}
 
 
 def parse_kabutan_events(raw_html: str, code: str) -> list[dict[str, str]]:
@@ -370,7 +378,7 @@ def collect(
 
 
 def default_output_path(retrieved_at: str) -> Path:
-    stamp = retrieved_at.replace("-", "").replace(":", "")
+    stamp = retrieved_at.replace("-", "").replace(":", "").replace("Z", "Z")
     return DEFAULT_OUTPUT_DIR / f"japan_yen_equity_monitor_{stamp}.json"
 
 
