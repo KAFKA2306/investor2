@@ -1,0 +1,59 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_dynamic_defensive_timing_family_20260908",
+  "status": "REJECT",
+  "hypothesis": "事前観測可能な単純な市場状態シグナルでGLD比率を動的に20%/30%へ切り替える方が、固定SMH/GLD配分より再現性のあるrisk-adjusted returnとtail-risk改善を得られる。",
+  "decision_gate": {
+    "adopt_if": "少なくとも1つの独立したpoint-in-time signalが、固定80/20と固定70/30の両方に対してSharpeを上回り、Maximum Drawdownと95% Expected Shortfallも悪化させない。",
+    "reject_if": "検証済みの複数signalがそれぞれ自身の事前gateを通過せず、固定配分を一貫して置換できない。",
+    "result": "FAIL"
+  },
+  "capital_allocation_relevance": "固定比率の微調整ではなく動的timingに本当に再利用価値があるかをfamily単位で判定し、根拠の弱いsignal探索を打ち切る。",
+  "canonical_source_revalidation": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "query": {"symbols": ["SMH", "GLD", "BIL", "DBC"], "start": "2020-06-01", "end": "2026-09-01", "timeframe": "1Month", "feed": "iex", "currency": "USD"},
+    "records_returned": {"SMH": 75, "GLD": 75, "BIL": 75, "DBC": 75},
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "confirmed": ["SMH 2:1 forward split ex-date 2023-05-05", "SMH cash dividends", "BIL cash dividends", "DBC cash distributions"],
+    "fallback": "none"
+  },
+  "validated_signals": {
+    "smh_3m_realized_volatility_switch": {
+      "source_artifact": "docs/research/results/smh_realized_volatility_gold_switch_20260907/summary.json",
+      "evaluation_period": "2021-05 through 2026-08",
+      "months": 64,
+      "dynamic": {"cagr": 0.3012359157, "annualized_volatility": 0.2527528690, "sharpe": 1.1745422823, "maximum_drawdown": -0.3124247569, "expected_shortfall_95_monthly": -0.1137499153},
+      "fixed_80_20": {"cagr": 0.3182965842, "annualized_volatility": 0.2749897574, "sharpe": 1.1483291090, "maximum_drawdown": -0.3420463564, "expected_shortfall_95_monthly": -0.1279458005},
+      "fixed_70_30": {"cagr": 0.3062335414, "annualized_volatility": 0.2460732999, "sharpe": 1.2160667122, "maximum_drawdown": -0.3124247569, "expected_shortfall_95_monthly": -0.1137499153},
+      "verdict": "REJECT: fixed70/30 beats dynamic on Sharpe and volatility while matching drawdown and ES95."
+    },
+    "smh_gld_6m_correlation_switch": {
+      "source_artifact": "docs/research/results/smh_gld_correlation_switch_20260907/summary.json",
+      "evaluation_period": "2022-02 through 2026-08",
+      "months": 55,
+      "dynamic": {"cagr": 0.34482298220555574, "annualized_volatility": 0.27914514338207297, "sharpe": 1.2078767598874465, "maximum_drawdown": -0.26133376876863335, "expected_shortfall_95_monthly": -0.1326028670092211},
+      "fixed_80_20": {"cagr": 0.34624680618027726, "annualized_volatility": 0.28745247048129025, "sharpe": 1.1844193332477473, "maximum_drawdown": -0.27527793304098824, "expected_shortfall_95_monthly": -0.1326028670092211},
+      "fixed_70_30": {"cagr": 0.3349924144826655, "annualized_volatility": 0.2568994245666044, "sharpe": 1.2612799846813711, "maximum_drawdown": -0.2572643438782449, "expected_shortfall_95_monthly": -0.11722073954498097},
+      "verdict": "REJECT: fixed70/30 beats dynamic on Sharpe, volatility, Maximum Drawdown, and ES95."
+    }
+  },
+  "family_decision": {
+    "status": "REJECT",
+    "reason": "2つの異なるpoint-in-time market-state signalはいずれも固定70/30を置換できなかった。動的化そのものに再利用価値があるという仮説を支持しない。",
+    "reuse_rule": "SMH自身の短期実現ボラティリティまたはSMH/GLD短期相関だけを使う20%/30%切替ruleは新規allocation authorityへ採用しない。新しいdynamic ruleは、既存固定配分を明確に置換できる外生情報と独立OOS設計がある場合だけ再検討する。"
+  },
+  "implementation": {
+    "allocation_rule_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "optimizer_added": false,
+    "one_off_script_added": false,
+    "artifact_only": true
+  },
+  "limitations": [
+    "2つのsignalは評価開始月が異なるため、raw metric同士を同一sampleの直接rankingには使わない。family判定は各signalが自身の事前gateを通過したかで行う。",
+    "2020-2026の単一市場期間であり、独立した将来OOSではない。",
+    "税とbid-ask spreadは含まない。transaction costは各source artifactの10bp contractに従う。"
+  ],
+  "next_high_value_hypothesis": "固定weightの微調整や内生market-state signal探索を増やさず、外生のpoint-in-time macroまたはfundamental情報が既存60/20/10/10や80/DBC20を独立OOSで置換できるかを検証する。"
+}
