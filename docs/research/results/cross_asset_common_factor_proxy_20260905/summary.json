@@ -1,0 +1,42 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-05",
+  "hypothesis": "株式と社債・長期国債を単純に横断配分するだけで、株式単独より高いrisk-adjusted returnを得られる",
+  "paper": {
+    "title": "Common Risk Factors in the Returns on Stocks, Bonds (and Options), Redux",
+    "authors": ["Zhongtian Chen", "Nikolai Roussanov", "Xiaoliang Wang", "Dongchen Zou"],
+    "nber": "w35579",
+    "issue_date": "2026-08",
+    "scope_note": "論文のlatent common-factor model自体ではなく、cross-market hedgingを売買可能ETFの単純配分へ落とせるかを検証したproxy test"
+  },
+  "data": {
+    "source": "Alpaca Market Data IEX",
+    "currency": "USD",
+    "frequency": "monthly",
+    "period": "2025-01 through 2026-08",
+    "observations_prices": 20,
+    "observations_returns": 19,
+    "symbols": ["SPY", "LQD", "HYG", "TLT"],
+    "fallback": "none",
+    "important_limit": "IEX close barsであり分配金込みtotal returnとは確認していない"
+  },
+  "correlation": {
+    "SPY_LQD": 0.3550,
+    "SPY_HYG": 0.7945,
+    "SPY_TLT": 0.0877
+  },
+  "results": {
+    "SPY": {"cagr": 0.1654, "volatility": 0.1340, "sharpe": 1.2124, "maximum_drawdown": -0.0671, "expected_shortfall_95_monthly": -0.0583},
+    "60_SPY_40_LQD": {"cagr": 0.0952, "volatility": 0.0879, "sharpe": 1.0791, "maximum_drawdown": -0.0464, "expected_shortfall_95_monthly": -0.0412},
+    "60_SPY_40_HYG": {"cagr": 0.0983, "volatility": 0.0893, "sharpe": 1.0957, "maximum_drawdown": -0.0477, "expected_shortfall_95_monthly": -0.0411},
+    "60_SPY_40_TLT": {"cagr": 0.0827, "volatility": 0.0921, "sharpe": 0.9087, "maximum_drawdown": -0.0529, "expected_shortfall_95_monthly": -0.0496},
+    "50_SPY_25_LQD_25_TLT": {"cagr": 0.0701, "volatility": 0.0802, "sharpe": 0.8855, "maximum_drawdown": -0.0453, "expected_shortfall_95_monthly": -0.0436}
+  },
+  "decision": {
+    "verdict": "REJECT",
+    "rejected_claim": "asset-class labelsだけを使った単純な株式・社債・国債横断配分を、論文のhigh-Sharpe cross-market hedgingのproduction proxyとして採用すること",
+    "reason": "全ての単純cross-asset portfolioがSPY単独のSharpe 1.2124を下回った。riskは低下したがreturn低下が大きく、複雑化を正当化しない。",
+    "not_rejected": "論文のcharacteristics-conditioned latent factor model、optionsを含むjoint mean-variance portfolio、長期total-return dataでの再現性",
+    "do_not_use_for": ["production portfolio weights", "expected return forecast", "論文自体の反証"]
+  }
+}
