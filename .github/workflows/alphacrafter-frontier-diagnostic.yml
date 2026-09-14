@@ -1,0 +1,158 @@
+name: AlphaCrafter frontier diagnostic
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  execute-256:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+      MAX_ASSETS: "256"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+      - name: Materialize private J-Quants cache
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphazerobeta-japan /tmp/huggingface-personal-cache
+          python scripts/alphazerobeta_jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --request-interval 15
+      - name: Resolve frozen validation dates
+        run: |
+          ROOT=/tmp/jquants-free
+          ROOT="$ROOT" python - <<'PY' >> "$GITHUB_ENV"
+          import json
+          import os
+          from pathlib import Path
+          import pandas as pd
+
+          root = Path(os.environ['ROOT'])
+          manifest = json.loads((root / 'manifest.json').read_text())
+          actual_end = pd.Timestamp(manifest['actual_date_range']['end'])
+          test_end = actual_end
+          test_start = test_end - pd.DateOffset(months=6) + pd.Timedelta(days=1)
+          universe_cutoff = test_start - pd.DateOffset(months=3)
+          benchmark = pd.read_parquet(root / 'benchmark.parquet')
+          dates = pd.to_datetime(benchmark['Date'], errors='raise').dt.tz_localize(None)
+          eligible = dates[dates <= universe_cutoff]
+          if eligible.empty:
+              raise SystemExit('no benchmark date on/before universe cutoff')
+          print(f"SNAPSHOT_ROOT={root}")
+          print(f"TEST_START={test_start.date()}")
+          print(f"TEST_END={test_end.date()}")
+          print(f"UNIVERSE_CUTOFF={universe_cutoff.date()}")
+          print(f"UNIVERSE_MASTER_DATE={eligible.max().date()}")
+          PY
+      - name: Materialize cutoff-date PIT master
+        run: |
+          sleep 15
+          python scripts/alphazerobeta_jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output "$SNAPSHOT_ROOT/universe.parquet" \
+            --request-interval 15
+      - name: Prepare 256-asset PIT panel
+        run: |
+          mkdir -p /tmp/alphazerobeta-japan
+          python scripts/alphazerobeta_japan_free_prepare.py \
+            --market-snapshot-dir "$SNAPSHOT_ROOT" \
+            --market-regions jp \
+            --output /tmp/alphazerobeta-japan/panel.npz \
+            --max-assets 256 \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+      - name: Execute AlphaZeroBeta two-fold primary and ablation
+        shell: bash
+        run: |
+          set -euo pipefail
+          for fold in 0 1; do
+            seed=$((2306 + fold))
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/primary-fold${fold}.json" \
+              --test-start "$TEST_START" --test-end "$TEST_END" --fold-index "$fold" \
+              --device cpu --seed "$seed" --iterations 10 --horizon 200 \
+              --hidden-size 512 --agent-window 100 \
+              --transaction-cost-bps 15 --borrow-fee-bps 30 \
+              --lambda-corr 0.5 --lambda-turnover 0.001 --reward-semantics paper
+            python scripts/alphazerobeta_japan_free_train.py \
+              --dataset /tmp/alphazerobeta-japan/panel.npz \
+              --output "/tmp/alphazerobeta-japan/ablation-fold${fold}.json" \
+              --test-start "$TEST_START" --test-end "$TEST_END" --fold-index "$fold" \
+              --device cpu --seed "$seed" --iterations 10 --horizon 200 \
+              --hidden-size 512 --agent-window 100 \
+              --transaction-cost-bps 15 --borrow-fee-bps 30 \
+              --lambda-corr 0 --lambda-turnover 0.001 --reward-semantics paper
+          done
+      - name: Compare AlphaZeroBeta OOS evidence
+        run: |
+          python scripts/alphazerobeta_compare.py \
+            --dataset /tmp/alphazerobeta-japan/panel.npz \
+            --primary-weights /tmp/alphazerobeta-japan/primary-fold0.weights.npz /tmp/alphazerobeta-japan/primary-fold1.weights.npz \
+            --ablation-weights /tmp/alphazerobeta-japan/ablation-fold0.weights.npz /tmp/alphazerobeta-japan/ablation-fold1.weights.npz \
+            --output /tmp/alphazerobeta-japan/comparison.json \
+            --transaction-cost-bps 15 --borrow-fee-bps 30
+      - name: Execute AlphaCrafter matched representative
+        run: |
+          python scripts/alphacrafter_jquants_frontier.py \
+            --dataset /tmp/alphazerobeta-japan/panel.npz \
+            --dataset-manifest /tmp/alphazerobeta-japan/panel.npz.manifest.json \
+            --output /tmp/alphazerobeta-japan/alphacrafter-result.json \
+            --test-start "$TEST_START" \
+            --test-end "$TEST_END" \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 30
+      - name: Verify matched contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          root = Path('/tmp/alphazerobeta-japan')
+          manifest = json.loads((root / 'panel.npz.manifest.json').read_text())
+          azb = json.loads((root / 'comparison.json').read_text())
+          alpha = json.loads((root / 'alphacrafter-result.json').read_text())
+          checks = {
+              'asset_count_256': alpha['shared_contract']['asset_count'] == 256 == len(manifest['selected_codes']),
+              'selected_codes': alpha['shared_contract']['selected_codes'] == manifest['selected_codes'],
+              'universe_cutoff': alpha['shared_contract']['universe_cutoff'] == manifest['universe_cutoff'],
+              'transaction_cost': alpha['shared_contract']['transaction_cost_bps_per_side'] == azb['cost_assumptions']['transaction_cost_bps_per_side'],
+              'borrow_fee': alpha['shared_contract']['borrow_fee_bps_per_year'] == azb['cost_assumptions']['borrow_fee_bps_per_year'],
+              'folds': alpha['shared_contract']['walk_forward']['used_fold_indices'] == [0, 1],
+              'observations': alpha['aggregate_oos_metrics']['observations'] == azb['primary_lambda_corr_0_5']['observations'],
+          }
+          print(json.dumps({'checks': checks, 'alphazerobeta': azb['primary_lambda_corr_0_5'], 'alphacrafter': alpha['aggregate_oos_metrics']}, indent=2, sort_keys=True))
+          if not all(checks.values()):
+              raise SystemExit(f'matched contract failed: {checks}')
+          PY
+      - name: Upload derived evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alphacrafter-frontier-diagnostic
+          if-no-files-found: warn
+          path: |
+            /tmp/alphazerobeta-japan/panel.npz.manifest.json
+            /tmp/alphazerobeta-japan/primary-fold*.json
+            /tmp/alphazerobeta-japan/ablation-fold*.json
+            /tmp/alphazerobeta-japan/comparison.json
+            /tmp/alphazerobeta-japan/alphacrafter-result.json

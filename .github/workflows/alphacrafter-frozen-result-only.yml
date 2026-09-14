@@ -1,0 +1,110 @@
+name: AlphaCrafter frozen result readback
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  execute-alpha-only:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+      FROZEN_AS_OF: "2026-08-23"
+      EXPECTED_SOURCE_START: "2024-05-31"
+      EXPECTED_SOURCE_END: "2026-05-29"
+      TEST_START: "2025-11-30"
+      TEST_END: "2026-05-29"
+      UNIVERSE_CUTOFF: "2025-08-30"
+      UNIVERSE_MASTER_DATE: "2025-08-29"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install dependencies and verify code
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests pytest
+          python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+          python -m py_compile src/research/tradability.py scripts/alphazerobeta_japan_tradable_prepare.py scripts/alphacrafter_jquants_tradable_frontier.py
+          pytest -q tests/test_tradability.py tests/test_alphacrafter_frontier.py
+      - name: Materialize exact frozen source
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alphacrafter-frozen /tmp/huggingface-personal-cache
+          python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of "$FROZEN_AS_OF" \
+            --request-interval 15 \
+            --require-cache-complete
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          m = json.loads(Path('/tmp/jquants-free/manifest.json').read_text())
+          assert m['actual_date_range'] == {'start': os.environ['EXPECTED_SOURCE_START'], 'end': os.environ['EXPECTED_SOURCE_END']}
+          assert m['observed_market_days'] == 486
+          assert m['ticker_count'] == 4640
+          assert m['price_rows'] == 2050816
+          print(json.dumps({'actual_date_range': m['actual_date_range'], 'observed_market_days': m['observed_market_days'], 'ticker_count': m['ticker_count'], 'price_rows': m['price_rows']}, sort_keys=True))
+          PY
+      - name: Materialize exact cutoff PIT master
+        run: |
+          sleep 15
+          python scripts/jquants_pit_master_ephemeral.py \
+            --date "$UNIVERSE_MASTER_DATE" \
+            --output /tmp/jquants-free/universe.parquet \
+            --request-interval 15
+      - name: Build survivorship-safe 256 panel
+        run: |
+          mkdir -p /tmp/alphacrafter-frozen
+          python scripts/alphazerobeta_japan_tradable_prepare.py \
+            --market-snapshot-dir /tmp/jquants-free \
+            --market-regions jp \
+            --output /tmp/alphacrafter-frozen/panel.npz \
+            --max-assets 256 \
+            --universe-cutoff "$UNIVERSE_CUTOFF"
+          python - <<'PY'
+          import json, os
+          from pathlib import Path
+          m = json.loads(Path('/tmp/alphacrafter-frozen/panel.npz.manifest.json').read_text())
+          assert m['shape']['N'] == 256
+          assert m['date_end'] == os.environ['TEST_END']
+          assert m['universe_cutoff'] == os.environ['UNIVERSE_CUTOFF']
+          assert m['universe_master_dates'] == [os.environ['UNIVERSE_MASTER_DATE']]
+          assert m['tradability']['incomplete_market_days'] > 0
+          print(json.dumps({'shape': m['shape'], 'date_start': m['date_start'], 'date_end': m['date_end'], 'tradability': m['tradability'], 'dataset_sha256': m['dataset_sha256']}, sort_keys=True))
+          PY
+      - name: Execute frozen AlphaCrafter representative
+        run: |
+          python scripts/alphacrafter_jquants_tradable_frontier.py \
+            --dataset /tmp/alphacrafter-frozen/panel.npz \
+            --dataset-manifest /tmp/alphacrafter-frozen/panel.npz.manifest.json \
+            --output /tmp/alphacrafter-frozen/alphacrafter-result.json \
+            --test-start "$TEST_START" \
+            --test-end "$TEST_END" \
+            --transaction-cost-bps 15 \
+            --borrow-fee-bps 30
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          p = json.loads(Path('/tmp/alphacrafter-frozen/alphacrafter-result.json').read_text())
+          print(json.dumps({'execution_status': p['execution_status'], 'reproduction_state': p['reproduction_state'], 'aggregate_oos_metrics': p['aggregate_oos_metrics'], 'folds': p['folds'], 'shared_contract': p['shared_contract'], 'economic_gate': p.get('economic_gate')}, sort_keys=True))
+          PY
+      - name: Upload AlphaCrafter frozen evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: alphacrafter-frozen-result-only
+          if-no-files-found: error
+          path: |
+            /tmp/alphacrafter-frozen/panel.npz.manifest.json
+            /tmp/alphacrafter-frozen/alphacrafter-result.json
