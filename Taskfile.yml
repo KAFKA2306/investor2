@@ -37,6 +37,14 @@ tasks:
     desc: Resolve the newest accepted external snapshot for REUSE_KEY
     cmds:
       - python3 scripts/snapshot_store.py latest --reuse-key "{{.REUSE_KEY}}"
+  market:japan-yen:fetch:
+    desc: Fetch the 15-stock J-Quants-free Japan yen-beneficiary monitor without catalog registration
+    cmds:
+      - uv run --no-sync python scripts/japan_equity_monitor.py
+  market:japan-yen:snapshot:
+    desc: Fetch and register a verified Japan yen-beneficiary external snapshot
+    cmds:
+      - uv run --no-sync python scripts/japan_equity_monitor.py --register
   dashboard:dev:
     cmds:
       - bun --hot src/dashboard/server.ts
