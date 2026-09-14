@@ -7,19 +7,7 @@ permissions:
   contents: read
 
 jobs:
-  quality-changed:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-      - uses: oven-sh/setup-bun@v2.2.0
-        with:
-          bun-version: "1.3.13"
-      - run: bun ci
-      - run: bun run quality:changed
-
-  typecheck-ts:
+  biome:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -27,9 +15,11 @@ jobs:
         with:
           bun-version: "1.3.13"
       - run: bun ci
-      - run: bun run typecheck
+      - run: >-
+          bun x biome check --config-path=config/biome.json
+          src/decision/decision_ledger.ts tests/decision_ledger.test.ts
 
-  tests:
+  oxlint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -37,10 +27,6 @@ jobs:
         with:
           bun-version: "1.3.13"
       - run: bun ci
-      - run: bun run test
-
-  snapshot-audit:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v7
-      - run: python3 scripts/snapshot_store.py audit
+      - run: >-
+          bun x oxlint
+          src/decision/decision_ledger.ts tests/decision_ledger.test.ts
