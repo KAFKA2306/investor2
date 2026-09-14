@@ -1,0 +1,175 @@
+name: Alpha-discovery Priority 1 ablation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - "src/research/alpha_discovery_priority1.py"
+      - "scripts/alpha_discovery_priority1_jquants.py"
+      - "tests/test_alpha_discovery_priority1.py"
+      - "docs/research/contracts/alpha_discovery_priority1_jquants_256.json"
+      - ".github/workflows/alpha-discovery-priority1.yml"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: alpha-discovery-priority1-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install focused test dependencies
+        run: python -m pip install numpy pytest ruff
+      - name: Verify implementation
+        run: |
+          python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py
+          ruff check src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py tests/test_alpha_discovery_priority1.py
+          pytest -q tests/test_alpha_discovery_priority1.py
+
+  execute-real-data:
+    if: >-
+      github.event.pull_request.head.repo.full_name == github.repository &&
+      github.actor != 'github-actions[bot]'
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      JQUANTS_API_KEY: ${{ secrets.JQUANTS_API_KEY }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      HF_DATASET_REPO: k4fka/investor2-jquants-free-cache
+      HF_HOME: /tmp/huggingface-personal-cache
+      PYTHONPATH: .
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Require owner cache credentials
+        run: |
+          test -n "$JQUANTS_API_KEY"
+          test -n "$HF_TOKEN"
+      - name: Install execution dependencies
+        run: |
+          python -m pip install jquants-api-client huggingface-hub cryptography numpy pandas pyarrow pydantic requests
+      - name: Materialize frozen J-Quants Free snapshot
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alpha-discovery-priority1 /tmp/huggingface-personal-cache
+          python scripts/jquants_private_hf_cache.py \
+            --output-dir /tmp/jquants-free \
+            --hf-repo-id "$HF_DATASET_REPO" \
+            --as-of 2026-08-24 \
+            --request-interval 15 \
+            --require-cache-complete
+      - name: Verify frozen source window
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          manifest = json.loads(Path('/tmp/jquants-free/manifest.json').read_text())
+          contract = json.loads(Path('docs/research/contracts/alpha_discovery_priority1_jquants_256.json').read_text())
+          source = contract['dataset']
+          expected = {'start': source['source_window'][0], 'end': source['source_window'][1]}
+          if manifest['as_of'] != source['source_as_of']:
+              raise SystemExit(f"source as-of drifted: {manifest['as_of']} != {source['source_as_of']}")
+          if manifest['actual_date_range'] != expected:
+              raise SystemExit(f"source window drifted: {manifest['actual_date_range']} != {expected}")
+          PY
+      - name: Materialize frozen PIT universe master
+        run: |
+          python scripts/jquants_pit_master_ephemeral.py \
+            --date 2025-08-29 \
+            --output /tmp/jquants-free/universe.parquet \
+            --request-interval 15
+      - name: Prepare shared top-256 PIT panel
+        run: |
+          mkdir -p /tmp/alpha-discovery-priority1
+          python scripts/jquants_japan_panel.py \
+            --market-snapshot-dir /tmp/jquants-free \
+            --market-regions jp \
+            --output /tmp/alpha-discovery-priority1/panel.npz \
+            --max-assets 256 \
+            --universe-cutoff 2025-08-30
+      - name: Execute frozen matched ablation
+        run: |
+          python scripts/alpha_discovery_priority1_jquants.py \
+            --dataset /tmp/alpha-discovery-priority1/panel.npz \
+            --dataset-manifest /tmp/alpha-discovery-priority1/panel.npz.manifest.json \
+            --contract docs/research/contracts/alpha_discovery_priority1_jquants_256.json \
+            --output /tmp/alpha-discovery-priority1/result.json \
+            --plot /tmp/alpha-discovery-priority1/result.svg
+      - name: Prepare review evidence
+        run: |
+          target=docs/research/results/alpha_discovery_priority1
+          rm -rf "$target"
+          mkdir -p "$target"
+          cp /tmp/alpha-discovery-priority1/result.json "$target/result.json"
+          cp /tmp/alpha-discovery-priority1/result.svg "$target/result.svg"
+          cp /tmp/alpha-discovery-priority1/panel.npz.manifest.json "$target/dataset-manifest.json"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          target = Path('docs/research/results/alpha_discovery_priority1')
+          result = json.loads((target / 'result.json').read_text())
+          arms = result['ablation']['arms']
+          summary = {
+              'schema_version': 'investor2.alpha-discovery-priority1-summary.v1',
+              'research_date': result['research_date'],
+              'code_revision': result['code_revision'],
+              'contract_sha256': result['contract']['sha256'],
+              'dataset_sha256': result['dataset']['sha256'],
+              'effective_split': result['effective_split'],
+              'winner_by_primary': result['ablation']['winner_by_primary'],
+              'mechanism_verdict_vs_baseline': result['ablation']['mechanism_verdict_vs_baseline'],
+              'arms': {
+                  key: {
+                      'validation_evaluator_calls': value['validation_evaluator_calls'],
+                      'unique_structural_candidates_evaluated': value['unique_structural_candidates_evaluated'],
+                      'unique_semantic_schemas_evaluated': value['unique_semantic_schemas_evaluated'],
+                      'unique_oos_survivors': value['unique_oos_survivors'],
+                      'median_finalist_oos_sharpe': value['median_finalist_oos_sharpe'],
+                      'best_finalist_oos_sharpe': value['best_finalist_oos_sharpe'],
+                      'validation_calls_per_unique_survivor': value['validation_calls_per_unique_survivor'],
+                  }
+                  for key, value in arms.items()
+              },
+              'frontier_verdict': None,
+          }
+          (target / 'summary.json').write_text(json.dumps(summary, indent=2, sort_keys=True) + '\n')
+          print(json.dumps(summary, sort_keys=True))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: alpha-discovery-priority1-evidence
+          path: docs/research/results/alpha_discovery_priority1
+          if-no-files-found: error
+      - name: Persist evidence on PR branch
+        run: |
+          set -euo pipefail
+          target=docs/research/results/alpha_discovery_priority1
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$target"
+          if git diff --cached --quiet; then
+            echo "No evidence changes"
+          else
+            git commit -m "research: persist priority1 alpha-discovery evidence"
+            git push origin HEAD:"${GITHUB_HEAD_REF}"
+          fi
+      - name: Delete plaintext working copies
+        if: always()
+        run: |
+          rm -rf /tmp/jquants-free /tmp/alpha-discovery-priority1 /tmp/huggingface-personal-cache
