@@ -2,11 +2,11 @@
   "schema_version": "research-result.v1",
   "research_id": "smh_mean_variance_decision_boundary_20260907",
   "status": "CONDITION",
-  "hypothesis": "同一73か月・10bpコスト条件で得られた半導体portfolio候補を平均分散効用 U = mu - 0.5 * lambda * sigma^2 で比較すると、risk aversion lambdaに応じてSMH100、SMH80%/DBC20%、SMH60%/GLD20%/BIL20%の3領域へ意思決定境界を整理でき、SMH80%/GLD20%とSMH80%/BIL20%はどのlambda>=0でも最上位にならない。",
+  "hypothesis": "同一73か月・10bpコスト条件で得られた半導体portfolio候補を平均分散効用 U = mu - 0.5 * lambda * sigma^2 で比較すると、risk aversion lambdaに応じた再利用可能な意思決定境界を整理できる。SMH60%/GLD20%/BIL10%/DBC10%を加えると、既存のSMH80%/DBC20%とSMH60%/GLD20%/BIL20%の間に新しい上位領域が形成される。",
   "decision_rule": {
     "condition_if": "canonical after-cost return/volatilityから解析的に求めた上位portfolioの切替境界が一意に得られ、既存Pareto結果と矛盾しないが、lambda自体を実投資家の選好へpoint-in-time calibrationしていない。",
-    "reject_if": "解析的な効用上位が既存Pareto関係と矛盾する、またはGLD20/BIL20が上位境界を形成する。",
-    "use_scope": "研究候補を比較するためのdecision boundaryとして再利用する。実際のportfolio weight authorityにはしない。"
+    "reject_if": "解析的な効用上位が既存Pareto関係と矛盾する、または新候補が非空の上位領域を形成しない。",
+    "use_scope": "研究候補を比較するdecision boundaryとして再利用する。実際のportfolio weight authorityにはしない。"
   },
   "canonical_inputs": {
     "owner_repository": "KAFKA2306/investor2",
@@ -21,7 +21,8 @@
       "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
       "docs/research/results/smh_dbc_sleeve_20260907/summary.json",
       "docs/research/results/smh_gold_bil_tail_efficiency_20260907/summary.json",
-      "docs/research/results/smh_diversifier_pareto_frontier_20260907/summary.json"
+      "docs/research/results/smh_diversifier_pareto_frontier_20260907/summary.json",
+      "docs/research/results/smh_balanced_dbc_sleeve_20260907/summary.json"
     ]
   },
   "method": {
@@ -29,46 +30,45 @@
     "utility": "U(lambda) = annualized arithmetic return - 0.5 * lambda * annualized_variance",
     "boundary": "2 * (mu_A - mu_B) / (variance_A - variance_B)",
     "lambda_domain": "lambda >= 0",
-    "tail_risk_check": "mean-variance utilityとは別に既存Maximum Drawdownと95% Expected Shortfallを併記し、varianceだけでtail riskを隠さない。"
+    "tail_risk_check": "mean-variance utilityとは別にMaximum Drawdownと95% Expected Shortfallを併記し、varianceだけでtail riskを隠さない。"
   },
   "portfolio_metrics": {
     "SMH100": {"CAGR": 0.37530837, "Vol": 0.32365256, "Sharpe": 1.15208655, "MaxDD": -0.39971504, "ES95": -0.15631567, "annualized_arithmetic_return": 0.37287576},
     "SMH80_DBC20": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD": -0.30800081, "ES95": -0.12434810, "annualized_arithmetic_return": 0.33470213},
     "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343, "annualized_arithmetic_return": 0.32691132},
     "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619, "annualized_arithmetic_return": 0.30379220},
+    "SMH60_GLD20_BIL10_DBC10": {"CAGR": 0.28600889, "Vol": 0.19982201, "Sharpe": 1.36828504, "MaxDD": -0.25580880, "ES95": -0.09617546, "annualized_arithmetic_return": 0.27341347},
     "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161, "annualized_arithmetic_return": 0.25796096}
   },
   "analytic_boundaries": {
     "SMH100_to_SMH80_DBC20": 2.08569822,
-    "SMH80_DBC20_to_SMH60_GLD20_BIL20": 5.38240765,
+    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409336,
+    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51806266,
     "upper_envelope": [
       {"lambda": "0 <= lambda < 2.08569822", "preferred": "SMH100"},
-      {"lambda": "2.08569822 < lambda < 5.38240765", "preferred": "SMH80_DBC20"},
-      {"lambda": "lambda > 5.38240765", "preferred": "SMH60_GLD20_BIL20"}
+      {"lambda": "2.08569822 < lambda < 4.34409336", "preferred": "SMH80_DBC20"},
+      {"lambda": "4.34409336 < lambda < 103.51806266", "preferred": "SMH60_GLD20_BIL10_DBC10"},
+      {"lambda": "lambda > 103.51806266", "preferred": "SMH60_GLD20_BIL20"}
     ],
     "tie_points": [
       {"lambda": 2.08569822, "portfolios": ["SMH100", "SMH80_DBC20"]},
-      {"lambda": 5.38240765, "portfolios": ["SMH80_DBC20", "SMH60_GLD20_BIL20"]}
+      {"lambda": 4.34409336, "portfolios": ["SMH80_DBC20", "SMH60_GLD20_BIL10_DBC10"]},
+      {"lambda": 103.51806266, "portfolios": ["SMH60_GLD20_BIL10_DBC10", "SMH60_GLD20_BIL20"]}
     ],
     "never_upper_envelope": ["SMH80_GLD20", "SMH80_BIL20"]
   },
-  "utility_examples": {
-    "lambda_2": {"SMH100": 0.26812478, "SMH80_DBC20": 0.26655628, "SMH80_GLD20": 0.25778315, "SMH80_BIL20": 0.23669213, "SMH60_GLD20_BIL20": 0.21833067},
-    "lambda_5": {"SMH100": 0.11099831, "SMH80_DBC20": 0.16433752, "SMH80_GLD20": 0.15409090, "SMH80_BIL20": 0.13604203, "SMH60_GLD20_BIL20": 0.15888523},
-    "lambda_10": {"SMH100": -0.15087914, "SMH80_DBC20": -0.00602709, "SMH80_GLD20": -0.01872952, "SMH80_BIL20": -0.03170814, "SMH60_GLD20_BIL20": 0.05980951}
-  },
   "finding": {
-    "summary": "同じ実測sampleでは、returnを強く重視するlambda<2.0857ではSMH100、中程度のvariance penaltyである2.0857<lambda<5.3824ではSMH80/DBC20、より強いvariance penaltyであるlambda>5.3824ではSMH60/GLD20/BIL20が平均分散効用の上位になる。GLD20とBIL20は比較候補として残るが、この候補集合の上位境界を形成しない。",
-    "capital_allocation_implication": "次の研究では任意のweight微調整を増やす前に、candidateが既存3領域のどれを置換するのかを明示する。60/20/10/10等の中間配分はDBC領域とdefensive領域の境界を実質的に改善する直接証拠がある場合だけ採用候補にする。",
-    "production_action": "portfolio weight authorityは変更しない。研究比較contractへmean-variance decision boundaryを追加する。"
+    "summary": "新しい60/20/10/10候補は、既存のSMH80/DBC20と60/20/20の間に広い平均分散上位領域を形成した。旧60/20/20が最上位になるのはlambda>103.5181まで後退する。一方、同じ73か月を用いた事後境界であり、年次Sharpeも主要2benchmarkに対して各3勝3敗なので恒久defaultにはしない。",
+    "capital_allocation_implication": "固定weight候補の比較ではSMH100、SMH80/DBC20、SMH60/GLD20/BIL10/DBC10、SMH60/GLD20/BIL20を現在のupper-envelope benchmarkとする。これ以上のweight微調整は、既存領域を実質的に置換する事前仮説がない限り行わない。",
+    "production_action": "portfolio weight authorityは変更しない。研究比較contractだけを更新する。"
   },
   "limitations": [
     "同じ2020-07〜2026-08の73月次returnを用いた事後的な境界で、独立out-of-sampleではない。",
     "lambdaは平均分散効用上の抽象的なvariance penaltyであり、ユーザーの実際のrisk toleranceを測定・推定した値ではない。",
-    "return distributionの歪度・尖度を効用式へ直接入れていないため、Maximum DrawdownとES95を別指標として必ず併記する。",
+    "return distributionの歪度・尖度を効用式へ直接入れていないため、Maximum Drawdownと95% Expected Shortfallを別指標として必ず併記する。",
     "税とbid-ask spreadは含まない。",
     "2026年は8月までの部分年。"
   ],
-  "reusable_decision": "半導体portfolio候補はSMH100、SMH80/DBC20、SMH60/GLD20/BIL20の既存上位領域を基準に評価する。新しい固定weight案は、少なくとも1つのrisk-aversion領域で現在の上位portfolioを置き換え、かつMaximum Drawdown/ES95を許容範囲に保てなければ採用しない。",
-  "next_hypothesis": "SMH60%/GLD20%/BIL10%/DBC10%は、平均分散効用のDBC領域と60/20/20防御領域の切替境界を改善し、かつMaximum DrawdownとES95を悪化させすぎずに既存upper envelopeの一部を置換できるか。"
+  "reusable_decision": "半導体portfolio候補はSMH100、SMH80/DBC20、SMH60/GLD20/BIL10/DBC10、SMH60/GLD20/BIL20の現在の上位領域を基準に評価する。新しい固定weight案は、少なくとも1つのrisk-aversion領域で現在の上位portfolioを置き換え、かつMaximum Drawdown/95% Expected Shortfallを許容範囲に保てなければ採用しない。",
+  "next_hypothesis": "固定weightの微調整をこれ以上増やさず、各月時点で公表済みの米国実質金利とインフレ情報だけを使ってGLD/BIL/DBCのdefensive sleeveを選ぶ単純walk-forward ruleは、SMH80/DBC20とSMH60/GLD20/BIL10/DBC10をtransaction cost込みのCAGR、Sharpe、Maximum Drawdown、95% Expected Shortfallで上回るか。"
 }
