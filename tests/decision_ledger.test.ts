@@ -1,8 +1,8 @@
 import { describe, expect, test } from "bun:test";
 import {
+  appendHumanDecisionRecord,
   DecisionLedgerEntrySchema,
   HumanDecisionRecordSchema,
-  appendHumanDecisionRecord,
   projectDecision,
   projectDecisionScorecard,
 } from "../src/decision/decision_ledger";
@@ -138,7 +138,9 @@ describe("canonical decision ledger", () => {
   test("binds snapshot, human decision, plan, and review to exact identities", () => {
     const parsed = DecisionLedgerEntrySchema.parse(entry());
     expect(parsed.decision.snapshot_ref.commit).toBe(SNAPSHOT_COMMIT);
-    expect(parsed.review?.outcome_evaluation_plan_ref).toBe(parsed.plan.plan_id);
+    expect(parsed.review?.outcome_evaluation_plan_ref).toBe(
+      parsed.plan.plan_id,
+    );
     expect(projectDecision(parsed)).toMatchObject({
       decision_id: "decision-1",
       status: "resolved",

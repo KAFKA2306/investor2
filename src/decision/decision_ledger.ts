@@ -1,15 +1,18 @@
 import { z } from "zod";
 import {
-  DecisionReviewSchema,
-  DecisionSnapshotSchema,
   type DecisionReview,
+  DecisionReviewSchema,
   type DecisionSnapshot,
+  DecisionSnapshotSchema,
 } from "./decision_snapshot";
 
-const TimestampSchema = z.string().min(1).refine(
-  (value) => Number.isFinite(Date.parse(value)),
-  "must be a parseable ISO-8601 timestamp",
-);
+const TimestampSchema = z
+  .string()
+  .min(1)
+  .refine(
+    (value) => Number.isFinite(Date.parse(value)),
+    "must be a parseable ISO-8601 timestamp",
+  );
 
 const CommitShaSchema = z
   .string()
@@ -424,7 +427,9 @@ export const projectDecisionScorecard = (
   ) {
     if (weightedDelta >= policyOwner.aggregate.positive_value_threshold) {
       verdict = "POSITIVE_VALUE";
-    } else if (weightedDelta <= policyOwner.aggregate.negative_value_threshold) {
+    } else if (
+      weightedDelta <= policyOwner.aggregate.negative_value_threshold
+    ) {
       verdict = "NEGATIVE_VALUE";
     } else {
       verdict = "NO_DEMONSTRATED_VALUE";
