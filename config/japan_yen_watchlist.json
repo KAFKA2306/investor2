@@ -1,0 +1,20 @@
+{
+  "schema_version": "investor2.japan-yen-watchlist.v1",
+  "records": [
+    {"ticker": "7453.T", "name": "良品計画（無印良品）"},
+    {"ticker": "9843.T", "name": "ニトリHD"},
+    {"ticker": "3038.T", "name": "神戸物産"},
+    {"ticker": "7581.T", "name": "サイゼリヤ"},
+    {"ticker": "2782.T", "name": "セリア"},
+    {"ticker": "2726.T", "name": "パルグループHD"},
+    {"ticker": "2698.T", "name": "キャンドゥ"},
+    {"ticker": "2820.T", "name": "やまみ"},
+    {"ticker": "7564.T", "name": "ワークマン"},
+    {"ticker": "8227.T", "name": "しまむら"},
+    {"ticker": "2670.T", "name": "ABCマート"},
+    {"ticker": "9201.T", "name": "JAL"},
+    {"ticker": "9202.T", "name": "ANA"},
+    {"ticker": "4290.T", "name": "プレステージ・インターナショナル"},
+    {"ticker": "7191.T", "name": "イントラスト"}
+  ]
+}
