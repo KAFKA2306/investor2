@@ -11,16 +11,16 @@
       "fund": "ARKK",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 46
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
           "value": 100.01
         }
@@ -42,18 +42,18 @@
       "fund": "ARKQ",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 38
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
-          "value": 99.99
+          "value": 100.0
         }
       },
       "relation": "autonomous_technology_and_robotics_mandate"
@@ -71,18 +71,18 @@
       "fund": "ARKW",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 43
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
-          "value": 100.02
+          "value": 99.99
         }
       },
       "relation": "next_generation_internet_mandate_proxy"
@@ -98,18 +98,18 @@
       "fund": "ARKG",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 33
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
-          "value": 100.0
+          "value": 100.01
         }
       },
       "relation": "genomic_revolution_mandate_proxy"
@@ -129,16 +129,16 @@
       "fund": "ARKF",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 41
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
           "value": 100.0
         }
@@ -158,18 +158,18 @@
       "fund": "ARKX",
       "holdings_snapshot_audit": {
         "holding_row_count": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "holdings",
           "value": 35
         },
         "portfolio_weight_total": {
-          "mirror_sha256": "1b959fe4754deda0c74af19f95093521f0f78c79c28717305bc332cd72a19005",
-          "mirror_snapshot_id": "ddec9491b013a3592f10",
-          "period": "2026-09-23",
+          "mirror_sha256": "86fe48f2789a7988e5c64d1ab7e5c44abc70d7449d24361ee44b6a5e25b5669a",
+          "mirror_snapshot_id": "8bfb18b2681348d0c214",
+          "period": "2026-09-24",
           "unit": "percent",
-          "value": 100.0
+          "value": 100.03
         }
       },
       "relation": "space_and_defense_mandate_proxy"
