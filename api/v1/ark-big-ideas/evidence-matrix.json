@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/04906bb3d515503cd529748a99c4e0df235b5a0f6b8f9303f7aafedc9eb626a8.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/2c3f7c944d6bc92c0f85d4d09cc94c514d8279bc8e6015f02c3a75abcad90ce1.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "04906bb3d515503cd529748a99c4e0df235b5a0f6b8f9303f7aafedc9eb626a8",
-        "mirror_snapshot_id": "dbb23befd408901365bb",
+        "mirror_sha256": "2c3f7c944d6bc92c0f85d4d09cc94c514d8279bc8e6015f02c3a75abcad90ce1",
+        "mirror_snapshot_id": "4d38c38a2b29bb05eb45",
         "row_count": 18
       },
       "status": "ready",
@@ -88,10 +88,10 @@
       "logical_repo": "energy-supply",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/0147710d517867c8b472755bed7e562f5f06c71860d052ab9ba51a20f322dfbe.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/92d4d1cd5d73ecf168b56d7c31c2be6de2aa0949b3731e6e6b5c638dc8e94be5.json",
         "feed_id": "energy-supply-metrics",
-        "mirror_sha256": "0147710d517867c8b472755bed7e562f5f06c71860d052ab9ba51a20f322dfbe",
-        "mirror_snapshot_id": "09bc6a0ff8bc119e4578",
+        "mirror_sha256": "92d4d1cd5d73ecf168b56d7c31c2be6de2aa0949b3731e6e6b5c638dc8e94be5",
+        "mirror_snapshot_id": "9ed7dd997ad9d655a18b",
         "row_count": 4
       },
       "status": "ready",
@@ -148,10 +148,10 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/f1971306bc9ece2aca211ad74a0fc42cf48aa3e502cfd6dc47e8894569bce46a.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/243d6b0ef1efce6ecec32635f8d02510f1b307d2113ed732599cdbf79c147de8.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "f1971306bc9ece2aca211ad74a0fc42cf48aa3e502cfd6dc47e8894569bce46a",
-        "mirror_snapshot_id": "fbfc2c7da99d0b5ee79c",
+        "mirror_sha256": "243d6b0ef1efce6ecec32635f8d02510f1b307d2113ed732599cdbf79c147de8",
+        "mirror_snapshot_id": "e0145a7a5f105ea2bd0f",
         "row_count": 299
       },
       "status": "ready",
@@ -164,10 +164,10 @@
       "logical_repo": "tokenized-assets",
       "projection": {
         "adapter": "tokenized_assets_issuer",
-        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/c8fc353b490a1595ede0647cc7502923834e581c2bc769c9d02d392a0c494b31.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/75b38025994c209784a4f894ca545b14e1a8d1cac92099aa145d893be07814de.json",
         "feed_id": "tokenized-assets-issuer",
-        "mirror_sha256": "c8fc353b490a1595ede0647cc7502923834e581c2bc769c9d02d392a0c494b31",
-        "mirror_snapshot_id": "5f2724d7a274c682fbe6",
+        "mirror_sha256": "75b38025994c209784a4f894ca545b14e1a8d1cac92099aa145d893be07814de",
+        "mirror_snapshot_id": "af77a151a8422a2b28d7",
         "row_count": 16
       },
       "status": "ready",
@@ -212,10 +212,10 @@
       "logical_repo": "autonomous-logistics",
       "projection": {
         "adapter": "autonomous_logistics_events",
-        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/10c1bed4dc7eee4fd161ad045296e6b4f859ad4f6185f1c5b1ea56db8382cf50.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/c22b1788fdc590351d7b08b9b26ea3c13f33f47bb52ef9a832be21587512cfba.json",
         "feed_id": "autonomous-logistics-events",
-        "mirror_sha256": "10c1bed4dc7eee4fd161ad045296e6b4f859ad4f6185f1c5b1ea56db8382cf50",
-        "mirror_snapshot_id": "e2a849b8e45b7925dcdd",
+        "mirror_sha256": "c22b1788fdc590351d7b08b9b26ea3c13f33f47bb52ef9a832be21587512cfba",
+        "mirror_snapshot_id": "076a6689fa7483e64f62",
         "row_count": 33
       },
       "status": "ready",
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/9f79f71de7fc8da22ee99a7eba45409e44a73d899cd92347031138e0459b9647.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/022790f5c86f5838d5cc34c188acd3b833c219f23daa27463b4275f08a76ba78.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "9f79f71de7fc8da22ee99a7eba45409e44a73d899cd92347031138e0459b9647",
-        "mirror_snapshot_id": "f0c72fc2d698c92acfde",
+        "mirror_sha256": "022790f5c86f5838d5cc34c188acd3b833c219f23daa27463b4275f08a76ba78",
+        "mirror_snapshot_id": "bf469dd424a060a3a8cf",
         "row_count": 13
       },
       "status": "accumulating",
