@@ -22,11 +22,61 @@ def sha256_file(path: Path) -> str:
     return digest.hexdigest()
 
 
+def read_objects(path: Path) -> list[dict[str, Any]]:
+    text = path.read_text(encoding="utf-8")
+    decoder = json.JSONDecoder()
+    position = 0
+    values: list[dict[str, Any]] = []
+
+    while position < len(text):
+        while position < len(text) and text[position].isspace():
+            position += 1
+        if position >= len(text):
+            break
+        try:
+            value, position = decoder.raw_decode(text, position)
+        except json.JSONDecodeError as exc:
+            raise ProjectionSourceError(f"{path} contains invalid JSON: {exc}") from exc
+        if not isinstance(value, dict):
+            raise ProjectionSourceError(f"{path} must contain JSON objects")
+        values.append(value)
+
+    if not values:
+        raise ProjectionSourceError(f"{path} must contain at least one JSON object")
+    return values
+
+
 def read_object(path: Path) -> dict[str, Any]:
-    value = json.loads(path.read_text(encoding="utf-8"))
-    if not isinstance(value, dict):
-        raise ProjectionSourceError(f"{path} must contain a JSON object")
-    return value
+    values = read_objects(path)
+    if len(values) != 1:
+        raise ProjectionSourceError(f"{path} must contain exactly one JSON object")
+    return values[0]
+
+
+def normalize_result_status(value: dict[str, Any]) -> str:
+    for candidate in (
+        value.get("status"),
+        value.get("verdict"),
+        value.get("decision"),
+    ):
+        normalized = _status_from_value(candidate)
+        if normalized is not None:
+            return normalized
+    return "UNSPECIFIED"
+
+
+def _status_from_value(value: Any) -> str | None:
+    if isinstance(value, str) and value.strip():
+        text = value.strip().upper()
+        if text.startswith("NOT_CONFIRMED"):
+            return "NOT_CONFIRMED"
+        return text
+    if isinstance(value, dict):
+        for key in ("status", "verdict", "decision", "result"):
+            normalized = _status_from_value(value.get(key))
+            if normalized is not None:
+                return normalized
+    return None
 
 
 def load_snapshot_rows(root: Path) -> list[dict[str, Any]]:
@@ -130,22 +180,40 @@ def load_oos_result_rows(root: Path) -> list[dict[str, Any]]:
 
     rows: list[dict[str, Any]] = []
     for path in sorted(set(paths)):
-        value = read_object(path)
-        result_id = path.relative_to(root).as_posix()
-        verdict = value.get("verdict")
-        research_question = value.get("research_question") or value.get("study") or ""
-        as_of = value.get("as_of") or value.get("publication_month") or ""
-        rows.append(
-            {
-                "result_id": result_id,
-                "path": result_id,
-                "verdict": str(verdict) if verdict is not None else "UNSPECIFIED",
-                "research_question": str(research_question),
-                "as_of": str(as_of),
-                "artifact_sha256": sha256_file(path),
-                "raw_json": canonical_json(value),
-            }
-        )
+        relative_path = path.relative_to(root).as_posix()
+        values = read_objects(path)
+        artifact_sha256 = sha256_file(path)
+
+        for fragment_index, value in enumerate(values, start=1):
+            result_id = (
+                relative_path
+                if len(values) == 1
+                else f"{relative_path}#{fragment_index}"
+            )
+            research_question = (
+                value.get("research_question")
+                or value.get("study")
+                or value.get("hypothesis")
+                or ""
+            )
+            as_of = (
+                value.get("as_of")
+                or value.get("research_date")
+                or value.get("publication_month")
+                or ""
+            )
+            rows.append(
+                {
+                    "result_id": result_id,
+                    "path": relative_path,
+                    "fragment_index": fragment_index,
+                    "verdict": normalize_result_status(value),
+                    "research_question": str(research_question),
+                    "as_of": str(as_of),
+                    "artifact_sha256": artifact_sha256,
+                    "raw_json": canonical_json(value),
+                }
+            )
 
     _require_rows("OOS results", rows)
     _require_unique("result_id", rows, key="result_id")
