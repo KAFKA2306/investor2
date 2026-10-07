@@ -4,6 +4,7 @@ This is a disposable analytical projection over investor2's canonical research e
 
 ```text
 canonical JSON / NDJSON
+  -> Python 3.12 canonical snapshot audit
   ├─ data/input_ledger/snapshot_catalog.ndjson
   ├─ data/hypothesis_lab/hypotheses/*.json
   ├─ docs/research/results/**/summary.json
@@ -21,6 +22,8 @@ canonical JSON / NDJSON
 ## Authority boundary
 
 The JSON/NDJSON files above remain canonical. Iceberg is derived state for cross-run analysis only.
+
+The Docker stack uses a small Python 3.12 audit service before the Spark service because the upstream Spark image currently carries an older Python runtime. Spark never bypasses the canonical evidence audit.
 
 The projection:
 
