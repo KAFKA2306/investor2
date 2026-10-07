@@ -9,9 +9,7 @@ from pathlib import Path
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
-
-from analytics.projection_sources import load_projection_rows
+from projection_sources import load_projection_rows
 
 
 CATALOG = "research"
