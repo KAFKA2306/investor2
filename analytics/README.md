@@ -26,7 +26,10 @@ The projection:
 
 - never writes facts back to the canonical ledgers
 - preserves raw JSON and source hashes for hypotheses, OOS results, and benchmark contracts
+- expands legacy concatenated OOS JSON objects into individually identified projection rows
+- normalizes top-level and nested research outcome status into one queryable verdict column
 - preserves snapshot provenance as canonical JSON text
+- runs the canonical snapshot-store audit before projection and fails closed on missing/mutated/provenance-invalid evidence
 - fails closed on duplicate snapshot point-in-time coordinates or non-accepted snapshot status
 - requires exact row/key parity after Iceberg read-back
 - requires Iceberg snapshot metadata for every table
