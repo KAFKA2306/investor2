@@ -4,10 +4,9 @@ import argparse
 import json
 from pathlib import Path
 
+from analytics.projection_sources import load_projection_rows
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
-
-from analytics.projection_sources import load_projection_rows
 
 
 CATALOG = "research"
