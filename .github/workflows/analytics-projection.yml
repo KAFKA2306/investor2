@@ -46,6 +46,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Audit canonical external snapshots
+        run: python scripts/snapshot_store.py audit
+
       - name: Verify canonical projection input contract
         run: python -m unittest discover -s tests -p 'test_analytics_projection_sources.py' -v
 
