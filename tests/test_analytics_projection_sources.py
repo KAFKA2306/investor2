@@ -16,10 +16,7 @@ def write_json(path: Path, value: object) -> None:
 def write_snapshot_catalog(root: Path, rows: list[dict[str, object]]) -> None:
     path = root / "data/input_ledger/snapshot_catalog.ndjson"
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(
-        "".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows),
-        encoding="utf-8",
-    )
+    path.write_text("".join(json.dumps(row, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8")
 
 
 def snapshot(snapshot_id: str = "snap-1") -> dict[str, object]:
@@ -79,20 +76,9 @@ class ProjectionSourceTests(unittest.TestCase):
 
             rows = load_projection_rows(root)
 
-            self.assertEqual(
-                set(rows),
-                {
-                    "input_snapshots",
-                    "hypotheses",
-                    "oos_results",
-                    "benchmark_contracts",
-                },
-            )
+            self.assertEqual(set(rows), {"input_snapshots", "hypotheses", "oos_results", "benchmark_contracts"})
             self.assertEqual(rows["input_snapshots"][0]["snapshot_id"], "snap-1")
-            self.assertIn(
-                '"source_urls":["https://example.com"]',
-                rows["input_snapshots"][0]["provenance_json"],
-            )
+            self.assertIn('"source_urls":["https://example.com"]', rows["input_snapshots"][0]["provenance_json"])
             self.assertEqual(rows["hypotheses"][0]["falsifier_count"], 1)
             self.assertEqual(rows["oos_results"][0]["verdict"], "REJECT")
             self.assertEqual(rows["benchmark_contracts"][0]["row_count"], 10)
@@ -103,18 +89,10 @@ class ProjectionSourceTests(unittest.TestCase):
             self.make_fixture(root)
             path = root / "docs/research/results/concatenated/summary.json"
             path.parent.mkdir(parents=True, exist_ok=True)
-            path.write_text(
-                '{"verdict":{"status":"REJECT"}}'
-                '{"decision":{"status":"CONDITION"}}',
-                encoding="utf-8",
-            )
+            path.write_text('{"verdict":{"status":"REJECT"}}{"decision":{"status":"CONDITION"}}', encoding="utf-8")
 
             rows = load_projection_rows(root)["oos_results"]
-            concatenated = [
-                row
-                for row in rows
-                if row["path"] == "docs/research/results/concatenated/summary.json"
-            ]
+            concatenated = [row for row in rows if row["path"] == "docs/research/results/concatenated/summary.json"]
 
             self.assertEqual(
                 [row["result_id"] for row in concatenated],
@@ -123,14 +101,8 @@ class ProjectionSourceTests(unittest.TestCase):
                     "docs/research/results/concatenated/summary.json#2",
                 ],
             )
-            self.assertEqual(
-                [row["verdict"] for row in concatenated],
-                ["REJECT", "CONDITION"],
-            )
-            self.assertEqual(
-                [row["fragment_index"] for row in concatenated],
-                [1, 2],
-            )
+            self.assertEqual([row["verdict"] for row in concatenated], ["REJECT", "CONDITION"])
+            self.assertEqual([row["fragment_index"] for row in concatenated], [1, 2])
 
     def test_snapshot_projection_fails_closed_on_nonaccepted_status(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
