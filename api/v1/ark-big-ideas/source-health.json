@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "9e37aafc09849522c60910ac274a3660467a43df891ef8f880bffa556c5a5d63",
+      "sha256": "f15c58deddd9c58e3e429af86f1b3e645f94ecea21ec88ef85838b8f4f9752e5",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "78db1bcc8727233e8039677b6518905dcd3412ecd35f9bef5efb6b89f9135baf",
+      "sha256": "395e44840ae12a6564f67d628d2c8dcfeba83c6c484543d63a7d8a27a8fc8348",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -181,7 +181,7 @@
       ]
     },
     {
-      "bytes": 1625,
+      "bytes": 1618,
       "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
       "current_repo": "KAFKA2306/option",
       "issue_url": "https://github.com/KAFKA2306/option/issues/16",
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "7408189769442e61a0b575fa103612d04a6e8e8646b3d6725b929e9dd7949bc3",
+      "sha256": "033c33dc1c4d1807ea886cf8b57aeef95044743b1263f29173bc749d28d615f7",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "23f24cb475ed1d6cf5a181efe66fdc4918e0b86bcd67f89a030d2c685be647e2",
+      "sha256": "f1d6ab7ef81b6a448474c62917487aba325b2da77d4f23d8b26006b1abe1bc25",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
@@ -271,7 +271,7 @@
       "live_check": "ok",
       "logical_repo": "autonomous-logistics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/autonomous-logistics/main/api/v1/autonomous-logistics/events.json",
-      "sha256": "b18c2abfcc9b265a262944384f5a44702f640012ac82f4b7f27e828c48a5d74f",
+      "sha256": "5c339c258151954e06166f517e141e336e038203f36f963e9fcbf5b57422b393",
       "status": "ready",
       "theme": "Autonomous Logistics",
       "top_level_keys": [
