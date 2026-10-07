@@ -149,7 +149,7 @@ class ProjectionSourceTests(unittest.TestCase):
 
             with self.assertRaisesRegex(
                 ProjectionSourceError,
-                "duplicate reuse_key \+ observed_at",
+                r"duplicate reuse_key \+ observed_at",
             ):
                 load_projection_rows(root)
 
