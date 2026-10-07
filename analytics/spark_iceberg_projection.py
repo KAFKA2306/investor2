@@ -2,8 +2,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import subprocess
-import sys
 from pathlib import Path
 
 from pyspark.sql import SparkSession
@@ -132,11 +130,6 @@ def main() -> None:
     args = parse_args()
     root = Path(args.root)
 
-    subprocess.run(
-        [sys.executable, str(root / "scripts/snapshot_store.py"), "audit"],
-        cwd=root,
-        check=True,
-    )
     rows_by_table = load_projection_rows(root)
 
     spark = SparkSession.builder.appName("investor2-research-projection").getOrCreate()
