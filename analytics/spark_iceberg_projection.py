@@ -4,7 +4,6 @@ import argparse
 import json
 from pathlib import Path
 
-from analytics.projection_sources import load_projection_rows
 from pyspark.sql import SparkSession
 from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
 
@@ -120,6 +119,8 @@ def write_and_verify(
 
 
 def main() -> None:
+    from analytics.projection_sources import load_projection_rows
+
     args = parse_args()
     root = Path(args.root)
 
