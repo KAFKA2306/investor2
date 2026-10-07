@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -53,6 +54,7 @@ SCHEMAS = {
         [
             StructField("result_id", StringType(), False),
             StructField("path", StringType(), False),
+            StructField("fragment_index", IntegerType(), False),
             StructField("verdict", StringType(), False),
             StructField("research_question", StringType(), False),
             StructField("as_of", StringType(), False),
@@ -131,6 +133,12 @@ def write_and_verify(
 def main() -> None:
     args = parse_args()
     root = Path(args.root)
+
+    subprocess.run(
+        [sys.executable, str(root / "scripts/snapshot_store.py"), "audit"],
+        cwd=root,
+        check=True,
+    )
     rows_by_table = load_projection_rows(root)
 
     spark = SparkSession.builder.appName("investor2-research-projection").getOrCreate()
@@ -146,8 +154,7 @@ def main() -> None:
         """
         SELECT COUNT(*) AS count
         FROM research.evidence.oos_results
-        WHERE UPPER(verdict) IN ('REJECT', 'REJECTED', 'NOT_CONFIRMED')
-           OR LOWER(verdict) LIKE 'not_confirmed:%'
+        WHERE verdict IN ('REJECT', 'REJECTED', 'NOT_CONFIRMED', 'FAIL', 'FAILED')
         """
     ).first()["count"]
 
