@@ -5,15 +5,9 @@ import json
 from pathlib import Path
 
 from pyspark.sql import SparkSession
-from pyspark.sql.types import (
-    IntegerType,
-    LongType,
-    StringType,
-    StructField,
-    StructType,
-)
+from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
 
-from projection_sources import load_projection_rows
+from analytics.projection_sources import load_projection_rows
 
 
 CATALOG = "research"
@@ -108,20 +102,14 @@ def write_and_verify(
     expected_count = len(rows)
     actual_count = persisted.count()
     if actual_count != expected_count:
-        raise RuntimeError(
-            f"{table} count mismatch: expected {expected_count}, got {actual_count}"
-        )
+        raise RuntimeError(f"{table} count mismatch: expected {expected_count}, got {actual_count}")
 
     expected_keys = sorted(str(row[key]) for row in rows)
-    actual_keys = sorted(
-        str(row[key]) for row in persisted.select(key).orderBy(key).collect()
-    )
+    actual_keys = sorted(str(row[key]) for row in persisted.select(key).orderBy(key).collect())
     if actual_keys != expected_keys:
         raise RuntimeError(f"{table} key read-back mismatch")
 
-    iceberg_snapshots = spark.sql(
-        f"SELECT snapshot_id, operation FROM {table}.snapshots"
-    ).collect()
+    iceberg_snapshots = spark.sql(f"SELECT snapshot_id, operation FROM {table}.snapshots").collect()
     if not iceberg_snapshots:
         raise RuntimeError(f"{table} has no Iceberg snapshot metadata")
 
@@ -142,10 +130,7 @@ def main() -> None:
     spark.sparkContext.setLogLevel("WARN")
     spark.sql("CREATE NAMESPACE IF NOT EXISTS research.evidence")
 
-    results = {
-        name: write_and_verify(spark, name, rows)
-        for name, rows in rows_by_table.items()
-    }
+    results = {name: write_and_verify(spark, name, rows) for name, rows in rows_by_table.items()}
 
     rejected_oos = spark.sql(
         """
