@@ -105,13 +105,9 @@ def load_snapshot_rows(root: Path) -> list[dict[str, Any]]:
         }
         missing = sorted(required - value.keys())
         if missing:
-            raise ProjectionSourceError(
-                f"{path}:{line_number} missing snapshot fields: {missing}"
-            )
+            raise ProjectionSourceError(f"{path}:{line_number} missing snapshot fields: {missing}")
         if value["status"] != "accepted":
-            raise ProjectionSourceError(
-                f"{path}:{line_number} contains non-accepted snapshot status"
-            )
+            raise ProjectionSourceError(f"{path}:{line_number} contains non-accepted snapshot status")
 
         rows.append(
             {
