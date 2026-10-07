@@ -40,7 +40,7 @@ tasks:
   analytics:check:
     desc: Verify canonical research evidence and rebuild the disposable Spark/Iceberg projection
     cmds:
-      - python3 -m unittest tests.test_analytics_projection_sources
+      - python3 -m unittest discover -s tests -p 'test_analytics_projection_sources.py' -v
       - |
         set -eu
         trap 'docker compose -f compose.analytics.yaml down -v' EXIT
