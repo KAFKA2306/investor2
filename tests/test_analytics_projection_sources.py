@@ -94,6 +94,41 @@ class ProjectionSourceTests(unittest.TestCase):
             self.assertEqual(rows["oos_results"][0]["verdict"], "REJECT")
             self.assertEqual(rows["benchmark_contracts"][0]["row_count"], 10)
 
+    def test_oos_projection_expands_concatenated_json_and_normalizes_status(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.make_fixture(root)
+            path = root / "docs/research/results/concatenated/summary.json"
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(
+                '{"verdict":{"status":"REJECT"}}'
+                '{"decision":{"status":"CONDITION"}}',
+                encoding="utf-8",
+            )
+
+            rows = load_projection_rows(root)["oos_results"]
+            concatenated = [
+                row
+                for row in rows
+                if row["path"] == "docs/research/results/concatenated/summary.json"
+            ]
+
+            self.assertEqual(
+                [row["result_id"] for row in concatenated],
+                [
+                    "docs/research/results/concatenated/summary.json#1",
+                    "docs/research/results/concatenated/summary.json#2",
+                ],
+            )
+            self.assertEqual(
+                [row["verdict"] for row in concatenated],
+                ["REJECT", "CONDITION"],
+            )
+            self.assertEqual(
+                [row["fragment_index"] for row in concatenated],
+                [1, 2],
+            )
+
     def test_snapshot_projection_fails_closed_on_nonaccepted_status(self) -> None:
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
