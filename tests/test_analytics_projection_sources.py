@@ -150,10 +150,7 @@ class ProjectionSourceTests(unittest.TestCase):
             second = snapshot("snap-2")
             write_snapshot_catalog(root, [snapshot(), second])
 
-            with self.assertRaisesRegex(
-                ProjectionSourceError,
-                r"duplicate reuse_key \+ observed_at",
-            ):
+            with self.assertRaisesRegex(ProjectionSourceError, r"duplicate reuse_key \+ observed_at"):
                 load_projection_rows(root)
 
 
