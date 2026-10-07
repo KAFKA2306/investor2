@@ -185,23 +185,9 @@ def load_oos_result_rows(root: Path) -> list[dict[str, Any]]:
         artifact_sha256 = sha256_file(path)
 
         for fragment_index, value in enumerate(values, start=1):
-            result_id = (
-                relative_path
-                if len(values) == 1
-                else f"{relative_path}#{fragment_index}"
-            )
-            research_question = (
-                value.get("research_question")
-                or value.get("study")
-                or value.get("hypothesis")
-                or ""
-            )
-            as_of = (
-                value.get("as_of")
-                or value.get("research_date")
-                or value.get("publication_month")
-                or ""
-            )
+            result_id = relative_path if len(values) == 1 else f"{relative_path}#{fragment_index}"
+            research_question = value.get("research_question") or value.get("study") or value.get("hypothesis") or ""
+            as_of = value.get("as_of") or value.get("research_date") or value.get("publication_month") or ""
             rows.append(
                 {
                     "result_id": result_id,
