@@ -79,12 +79,15 @@ class ProjectionSourceTests(unittest.TestCase):
 
             rows = load_projection_rows(root)
 
-            self.assertEqual(set(rows), {
-                "input_snapshots",
-                "hypotheses",
-                "oos_results",
-                "benchmark_contracts",
-            })
+            self.assertEqual(
+                set(rows),
+                {
+                    "input_snapshots",
+                    "hypotheses",
+                    "oos_results",
+                    "benchmark_contracts",
+                },
+            )
             self.assertEqual(rows["input_snapshots"][0]["snapshot_id"], "snap-1")
             self.assertIn(
                 '"source_urls":["https://example.com"]',
