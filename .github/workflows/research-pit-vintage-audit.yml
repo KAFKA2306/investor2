@@ -127,7 +127,7 @@ jobs:
           python scripts/snapshot_store.py audit > artifacts/snapshot-catalog-audit.json
 
       - name: Upload empirical evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: french-factor-evidence
           path: |

@@ -209,7 +209,7 @@ jobs:
         run: python scripts/snapshot_store.py audit
       - name: Upload pull-request evidence
         if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@v6
         with:
           name: ark-big-ideas-evidence
           path: |
