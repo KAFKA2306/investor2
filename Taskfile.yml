@@ -37,6 +37,16 @@ tasks:
     desc: Resolve the newest accepted external snapshot for REUSE_KEY
     cmds:
       - python3 scripts/snapshot_store.py latest --reuse-key "{{.REUSE_KEY}}"
+  analytics:check:
+    desc: Verify canonical research evidence and rebuild the disposable Spark/Iceberg projection
+    cmds:
+      - python3 scripts/snapshot_store.py audit
+      - python3 -m unittest discover -s tests -p 'test_analytics_projection_sources.py' -v
+      - |
+        set -eu
+        trap 'docker compose -f compose.analytics.yaml down -v' EXIT
+        docker compose -f compose.analytics.yaml run --rm spark
+
   dashboard:dev:
     cmds:
       - bun --hot src/dashboard/server.ts

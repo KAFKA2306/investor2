@@ -1,0 +1,63 @@
+name: Spark Iceberg Research Projection
+
+on:
+  pull_request:
+    paths:
+      - 'analytics/**'
+      - 'compose.analytics.yaml'
+      - 'data/input_ledger/snapshot_catalog.ndjson'
+      - 'data/hypothesis_lab/hypotheses/**'
+      - 'data/benchmarks/**'
+      - 'docs/research/results/**'
+      - 'docs/research/post_publication_momentum_oos.json'
+      - 'tests/test_analytics_projection_sources.py'
+      - 'Taskfile.yml'
+      - '.github/workflows/analytics-projection.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'analytics/**'
+      - 'compose.analytics.yaml'
+      - 'data/input_ledger/snapshot_catalog.ndjson'
+      - 'data/hypothesis_lab/hypotheses/**'
+      - 'data/benchmarks/**'
+      - 'docs/research/results/**'
+      - 'docs/research/post_publication_momentum_oos.json'
+      - 'tests/test_analytics_projection_sources.py'
+      - 'Taskfile.yml'
+      - '.github/workflows/analytics-projection.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: investor2-research-projection-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  projection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: '3.12'
+
+      - name: Audit canonical external snapshots
+        run: python scripts/snapshot_store.py audit
+
+      - name: Verify canonical projection input contract
+        run: python -m unittest discover -s tests -p 'test_analytics_projection_sources.py' -v
+
+      - name: Validate Docker Compose
+        run: docker compose -f compose.analytics.yaml config >/dev/null
+
+      - name: Project canonical research evidence with Spark into Iceberg
+        run: docker compose -f compose.analytics.yaml run --rm spark
+
+      - name: Remove disposable analytical warehouse
+        if: always()
+        run: docker compose -f compose.analytics.yaml down -v

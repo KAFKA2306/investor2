@@ -78,11 +78,25 @@
 ```bash
 task setup               # locked dependencies + prek
 task check               # canonical non-mutating quality gate
+task analytics:check     # canonical evidence -> Spark -> disposable Iceberg projection
 task run:newalphasearch  # frozen real-data hypothesis validation
 task dashboard:dev       # local evidence dashboard
 ```
 
 実行入口は `Taskfile.yml` を正準とします。別名CLIや並行pipelineは、実際の運用コストを下げる場合を除いて追加しません。
+
+### Spark / Iceberg analytical projection
+
+外部snapshot、仮説、OOS結果、benchmark contractを横断比較するため、正準JSON/NDJSONから **Apache Spark → Apache Iceberg** のローカル分析projectionを再構築できます。
+
+```text
+canonical research evidence
+  -> Spark
+  -> Iceberg research.evidence.*
+  -> cross-run analysis
+```
+
+Icebergは正本ではありません。projectionからcanonical ledgerへ書き戻さず、必要なときに `task analytics:check` で再生成します。詳細は [analytics/README.md](analytics/README.md) を参照してください。
 
 ## Research rules
 

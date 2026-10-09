@@ -1,0 +1,42 @@
+services:
+  audit:
+    image: python:3.12-slim
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace:ro
+    command: ["python", "scripts/snapshot_store.py", "audit"]
+
+  spark:
+    image: apache/spark:4.1.3-python3
+    user: "0:0"
+    working_dir: /workspace
+    environment:
+      PYTHONPATH: /workspace
+    depends_on:
+      audit:
+        condition: service_completed_successfully
+    volumes:
+      - ./:/workspace:ro
+      - research-warehouse:/warehouse
+      - spark-ivy:/root/.ivy2
+    entrypoint: ["/opt/spark/bin/spark-submit"]
+    command:
+      - --master
+      - local[2]
+      - --packages
+      - org.apache.iceberg:iceberg-spark-runtime-4.1_2.13:1.12.0
+      - --conf
+      - spark.sql.extensions=org.apache.iceberg.spark.extensions.IcebergSparkSessionExtensions
+      - --conf
+      - spark.sql.catalog.research=org.apache.iceberg.spark.SparkCatalog
+      - --conf
+      - spark.sql.catalog.research.type=hadoop
+      - --conf
+      - spark.sql.catalog.research.warehouse=file:///warehouse
+      - /workspace/analytics/spark_iceberg_projection.py
+      - --root
+      - /workspace
+
+volumes:
+  research-warehouse:
+  spark-ivy:
