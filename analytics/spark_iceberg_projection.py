@@ -5,13 +5,7 @@ import json
 from pathlib import Path
 
 from pyspark.sql import SparkSession
-from pyspark.sql.types import (
-    IntegerType,
-    LongType,
-    StringType,
-    StructField,
-    StructType,
-)
+from pyspark.sql.types import IntegerType, LongType, StringType, StructField, StructType
 
 
 CATALOG = "research"
