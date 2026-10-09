@@ -1,0 +1,93 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_sep08_close_hurdle_20260909",
+  "status": "USE",
+  "as_of": "2026-09-08T20:00:00Z",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "2026-09-08のIEX日次終値でAVGO/NVDAを再評価しても、AVGOがNVDAと同等になるために必要なpost-FY2028 10%成長scenario確率は95%以上を維持し、直前のintraday 96.25978682%から1 percentage point未満しか動かない。",
+  "capital_allocation_importance": "直前artifactは場中価格を使ったpoint-in-time判断だった。終値でも同じ高い要求確信度が残るなら、AVGO相対caseの厳しさは一時的なintraday noiseではなく日次確定価格でも維持される。",
+  "decision_rule": {
+    "USE": "終値ベース必要確率が95%以上、かつ直前intraday artifactとの差が1 percentage point未満。",
+    "CONDITION": "終値ベース必要確率が90%以上95%未満、またはintradayとの差が1以上5 percentage points未満。",
+    "REJECT": "終値ベース必要確率が90%未満、または価格確定で相対判断がmaterialに緩和する。",
+    "UNVERIFIED": "終値timestamp、symbol、currency、canonical terminal-value contractのいずれかを確認できない。"
+  },
+  "canonical_dependency": "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json",
+  "production_market_data": {
+    "provider": "Alpaca market data",
+    "feed": "IEX",
+    "currency": "USD",
+    "session_date": "2026-09-08",
+    "NVDA_close": 225.82,
+    "AVGO_close": 368.665,
+    "NVDA_change_vs_2026_09_04_close_pct": -1.89843173,
+    "AVGO_change_vs_2026_09_04_close_pct": 3.02653458
+  },
+  "method": {
+    "fundamentals": "直前canonical artifactの2026-09-04 fundamentals、growth paths、terminal Price/FCF gridを固定し、current priceだけを2026-09-08 IEX daily closeへ更新する。",
+    "reprice_formula": "new_IRR = ((old_price * (1 + old_IRR)^5) / new_price)^(1/5) - 1",
+    "probability_hurdle_formula": "p = (NVDA_IRR - AVGO_0pct_IRR) / (AVGO_10pct_IRR - AVGO_0pct_IRR)",
+    "benchmark": "直前intraday required probability 96.25978682%",
+    "transaction_costs": "NOT_APPLICABLE。売買戦略ではなくpoint-in-time forward valuation sensitivity。"
+  },
+  "results": {
+    "25x": {
+      "NVDA_base_5y_price_IRR_pct": 12.87246224,
+      "AVGO_0pct_growth_5y_price_IRR_pct": 6.82369524,
+      "AVGO_10pct_growth_5y_price_IRR_pct": 13.11057448,
+      "AVGO_50_50_expected_IRR_pct": 9.96713486,
+      "AVGO_50_50_minus_NVDA_pp": -2.90532738,
+      "required_probability_pct": 96.21255281
+    },
+    "35x": {
+      "NVDA_base_5y_price_IRR_pct": 20.72955675,
+      "AVGO_0pct_growth_5y_price_IRR_pct": 14.25973281,
+      "AVGO_10pct_growth_5y_price_IRR_pct": 20.98424406,
+      "AVGO_50_50_expected_IRR_pct": 17.62198843,
+      "AVGO_50_50_minus_NVDA_pp": -3.10756832,
+      "required_probability_pct": 96.21255296
+    },
+    "45x": {
+      "NVDA_base_5y_price_IRR_pct": 26.95286319,
+      "AVGO_0pct_growth_5y_price_IRR_pct": 20.14953602,
+      "AVGO_10pct_growth_5y_price_IRR_pct": 27.22067899,
+      "AVGO_50_50_expected_IRR_pct": 23.68510750,
+      "AVGO_50_50_minus_NVDA_pp": -3.26775569,
+      "required_probability_pct": 96.21255294
+    },
+    "representative_required_probability_pct": 96.21255290,
+    "change_vs_prior_intraday_percentage_points": -0.04723392
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "終値ベース必要確率96.21255290%は95% gateを上回り、直前intraday 96.25978682%との差は-0.04723392 percentage pointsに留まった。AVGO 50/50 expected IRRは25x/35x/45xの全てでNVDA baseを約2.91-3.27pt下回る。",
+    "usage_rule": "AVGO/NVDA相対valuationを次の価格更新まで使う場合、2026-09-08 IEX終値ではAVGOの10%成長scenarioに約96.21%の確信度が必要というclose-confirmed stateを採用する。価格更新時は再計算する。",
+    "portfolio_action": "売買・注文・portfolio weight変更は実行しない。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized strategy return seriesではなくforward valuation repricing。"
+  },
+  "implementation": {
+    "artifact_type": "canonical point-in-time close-confirmation decision artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "場中価格だけを根拠にAVGO相対caseが厳しいと断定する不確実性を解消した。",
+    "同じrepricing計算をfinBI等consumer repositoryへ複製しない。",
+    "終値欠損を前営業日や別feedへsilent fallbackしない。"
+  ],
+  "limitations": [
+    "IEX feedはSIPではない。",
+    "fundamentalsとterminal assumptionsは直前canonical artifactを固定しており、本研究はfundamental revisionではない。",
+    "価格更新で必要確率は変化するため恒久値ではない。"
+  ],
+  "next_hypothesis": "同一terminal multipleを両社へ与える仮定を外し、AVGO/NVDAそれぞれのpoint-in-time historical FCF multiple distributionを使っても、現在価格でNVDAの相対expected return優位が維持されるか。"
+}
