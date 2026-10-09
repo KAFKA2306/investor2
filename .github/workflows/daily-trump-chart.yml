@@ -44,7 +44,7 @@ jobs:
           assert {p.name for p in out.iterdir()} == {"summary.json", "trump_daily_transactions.png"}
           assert (out / "trump_daily_transactions.png").stat().st_size > 0
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: trump-daily-chart-${{ github.sha }}
           path: generated/trump-daily-chart
