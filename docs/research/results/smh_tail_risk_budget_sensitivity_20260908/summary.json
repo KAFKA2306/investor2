@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_tail_risk_budget_sensitivity_20260908",
+  "status": "REJECT",
+  "hypothesis": "SMH60%/GLD20%/BIL20%が唯一の実行可能なdefensive benchmarkという結論は、Maximum Drawdown上限を30%から31%、95% Expected Shortfall上限を10%から12.5%へ modest に緩和しても維持される。",
+  "capital_allocation_importance": "前研究の60/20/20採用理由が特定のrisk budget閾値に強く依存するなら、これを一般的なdefensive benchmarkとして扱うと資本配分を誤る。hard capを明示した意思決定と、より緩いrisk budgetでのreturn優先判断を分離するために閾値感度を確認する。",
+  "decision_rule": {
+    "use_if": "30%/10%から31%/12.5%へ両capを緩和しても、SMH60/GLD20/BIL20だけが実行可能、または実行可能集合の中でCAGRとSharpeの両方で優位を維持する。",
+    "reject_if": "31%/12.5%で別候補が実行可能になり、SMH60/GLD20/BIL20より高いCAGRを持つ。",
+    "unverified_if": "source/period/unit/cost条件が前研究と一致しない。"
+  },
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/smh_tail_risk_budget_gate_20260908/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period": "2020-07 through 2026-08",
+    "monthly_returns": 73,
+    "currency": "USD",
+    "transaction_cost_bps": 10,
+    "fallback": "none"
+  },
+  "candidate_metrics": {
+    "SMH100": {"CAGR": 0.37530837, "Vol": 0.32365256, "Sharpe": 1.15208655, "MaxDD_abs": 0.39971504, "ES95_abs": 0.15631567},
+    "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD_abs": 0.34201565, "ES95_abs": 0.12792343},
+    "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD_abs": 0.32749770, "ES95_abs": 0.12476619},
+    "SMH80_DBC20": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD_abs": 0.30800081, "ES95_abs": 0.12434810},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD_abs": 0.26652533, "ES95_abs": 0.09636161}
+  },
+  "sensitivity_scenarios": [
+    {
+      "name": "strict",
+      "MaxDD_limit_abs": 0.28,
+      "ES95_limit_abs": 0.10,
+      "feasible": ["SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH60_GLD20_BIL20"
+    },
+    {
+      "name": "canonical",
+      "MaxDD_limit_abs": 0.30,
+      "ES95_limit_abs": 0.10,
+      "feasible": ["SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH60_GLD20_BIL20"
+    },
+    {
+      "name": "drawdown_only_relaxed",
+      "MaxDD_limit_abs": 0.31,
+      "ES95_limit_abs": 0.10,
+      "feasible": ["SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH60_GLD20_BIL20"
+    },
+    {
+      "name": "tail_only_relaxed",
+      "MaxDD_limit_abs": 0.30,
+      "ES95_limit_abs": 0.125,
+      "feasible": ["SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH60_GLD20_BIL20"
+    },
+    {
+      "name": "both_modestly_relaxed",
+      "MaxDD_limit_abs": 0.31,
+      "ES95_limit_abs": 0.125,
+      "feasible": ["SMH80_DBC20", "SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH80_DBC20"
+    },
+    {
+      "name": "broader_relaxation",
+      "MaxDD_limit_abs": 0.33,
+      "ES95_limit_abs": 0.125,
+      "feasible": ["SMH80_BIL20", "SMH80_DBC20", "SMH60_GLD20_BIL20"],
+      "highest_CAGR_feasible": "SMH80_DBC20"
+    }
+  ],
+  "boundary": {
+    "SMH80_DBC20_becomes_feasible_when": "MaxDD limit >= 30.800081% AND ES95 limit >= 12.434810%",
+    "CAGR_gain_vs_60_20_20_percentage_points": 8.090382,
+    "Sharpe_difference_DBC_minus_60_20_20": -0.01365726,
+    "interpretation": "両方のcapをわずかに緩めて31%/12.5%にすると80/DBC20が実行可能になり、Sharpeは0.0137低いがCAGRは8.09pt高い。したがって60/20/20の選択は一般的なdefensive優位ではなく、特に厳しいtail-risk budgetの条件付き結論である。"
+  },
+  "benchmark_comparison": {
+    "primary_benchmark": "SMH80_DBC20",
+    "alternative": "SMH60_GLD20_BIL20",
+    "at_30_10": "60/20/20のみ実行可能",
+    "at_31_12_5": "両方実行可能。CAGR最大化なら80/DBC20、Sharpe最大化なら60/20/20。",
+    "decision_implication": "risk capが30%/10%から31%/12.5%へ変わるだけで、制約付きCAGR最大化の選択が60/20/20から80/DBC20へ反転する。"
+  },
+  "finding": {
+    "decision": "REJECT",
+    "summary": "60/20/20が唯一のdefensive benchmarkという結論はrisk-budget relaxationに頑健ではない。31% MaxDD / 12.5% ES95では80/DBC20もcapを満たし、CAGRが8.09pt高いため、制約付きreturn最大化では80/DBC20が選ばれる。",
+    "capital_allocation_implication": "60/20/20はMaxDD 30%かつES95 10%という厳格なhard capを明示する場合のCONDITION benchmarkに限定する。一般的なdefensive defaultへ昇格させない。31%/12.5%以上を許容する意思決定では80/DBC20を必ず比較対象に残す。"
+  },
+  "implementation": {
+    "reusable_allocation_rule_added": false,
+    "portfolio_weight_authority_changed": false,
+    "new_model_added": false,
+    "new_collector_added": false,
+    "new_workflow_added": false,
+    "duplicate_financial_calculation_added": false,
+    "negative_decision_artifact_added": true
+  },
+  "limitations": [
+    "感度分析は同じ2020-07〜2026-08の73月次sampleに基づき、独立OOSではない。",
+    "risk budget閾値そのものに普遍的な正解はなく、投資家の損失許容度や負債構造に依存する。",
+    "税、bid-ask spread、実際の配当再投資日は含まない。",
+    "2016年以降の長期total-return robustnessはBILの2017年reverse splitと分配金を正確に処理したcanonical再構築が必要で、今回の閾値感度とは分離した。"
+  ],
+  "next_hypothesis": "BILの2017年reverse splitとSMH/BIL/DBCの全cash distributionsを正確に反映した2016年以降のSIP canonical total returnで、SMH60/GLD20/BIL20がMaxDD 30%・ES95 10%を維持するか。"
+}
