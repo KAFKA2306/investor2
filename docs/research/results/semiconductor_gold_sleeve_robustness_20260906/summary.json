@@ -1,0 +1,60 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gold_sleeve_robustness_20260906",
+  "status": "CONDITION",
+  "hypothesis": "SMH80%/GLD20%のSMH80%/SGOV20%に対する優位は、2024-08..2026-08の少数の金急騰月だけで作られたものではなく、実データのleave-one-month-outおよび上位GLD月除外でもSharpeとCAGRの優位が残る。",
+  "decision_rule": {
+    "condition_if": "24か月すべてのleave-one-month-outでGLD sleeveのSharpeとCAGRがSGOV sleeveを上回り、GLD上位5か月を順に除外しても同じ優位が残る。",
+    "reject_if": "いずれかのleave-one-month-outでSharpeまたはCAGRがSGOV以下、またはGLD上位月除外で優位が消える。"
+  },
+  "source": {
+    "canonical_total_return_artifact": "docs/research/results/semiconductor_gold_risk_sleeve_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period": "2024-08-01..2026-08-31",
+    "currency": "USD",
+    "fallback": "none"
+  },
+  "method": {
+    "portfolios": ["SMH80_GLD20", "SMH80_SGOV20"],
+    "returns": "canonical artifactの月次total returnを再利用",
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps_per_two_sided_turnover": 10,
+    "robustness_tests": ["leave-one-month-out 24通り", "GLD月次return上位1..5か月を累積除外"],
+    "risk_free_rate_for_sharpe": 0
+  },
+  "baseline_10bp": {
+    "SMH80_GLD20": {"cagr": 0.496357, "volatility": 0.285313, "sharpe": 1.566379, "maximum_drawdown": -0.139522, "expected_shortfall_95": -0.103566},
+    "SMH80_SGOV20": {"cagr": 0.420529, "volatility": 0.285428, "sharpe": 1.377551, "maximum_drawdown": -0.140521, "expected_shortfall_95": -0.106600}
+  },
+  "leave_one_month_out": {
+    "cases": 24,
+    "sharpe_diff_GLD_minus_SGOV": {"min": 0.150177, "median": 0.185693, "mean": 0.189879, "max": 0.269775, "positive_cases": 24},
+    "cagr_diff_GLD_minus_SGOV": {"min": 0.060160, "median": 0.074113, "mean": 0.076021, "max": 0.102239, "positive_cases": 24},
+    "maximum_drawdown_diff_GLD_minus_SGOV": {"min": 0.001001, "positive_cases": 24},
+    "expected_shortfall_diff_GLD_minus_SGOV": {"min": -0.010855, "note": "2025-03除外時のみES優位が崩れるためtail優位は強い結論にしない"}
+  },
+  "exclude_top_GLD_months": [
+    {"excluded_count": 1, "sharpe_diff": 0.165673, "cagr_diff": 0.060160},
+    {"excluded_count": 2, "sharpe_diff": 0.141226, "cagr_diff": 0.045177},
+    {"excluded_count": 3, "sharpe_diff": 0.106042, "cagr_diff": 0.032743},
+    {"excluded_count": 4, "sharpe_diff": 0.064340, "cagr_diff": 0.019859},
+    {"excluded_count": 5, "sharpe_diff": 0.028169, "cagr_diff": 0.006539}
+  ],
+  "top_GLD_months": [
+    {"month": "2026-01", "return": 0.125356},
+    {"month": "2025-09", "return": 0.117666},
+    {"month": "2026-08", "return": 0.099739},
+    {"month": "2025-03", "return": 0.094064},
+    {"month": "2026-02", "return": 0.084668}
+  ],
+  "decision": {
+    "condition": "20% gold sleeveを半導体集中portfolioのrisk-control候補として維持する。少数の金急騰月だけでSharpe/CAGR優位が作られたという反証には耐えた。",
+    "why_not_use": "元標本が24か月と短く、leave-one-outは独立OOSではない。Expected Shortfall優位は1ケースで崩れるため、tail hedgeの恒久性や20%固定weightは未確認。"
+  },
+  "prohibited_inference": [
+    "20%を恒久的な最適weightとして扱わない。",
+    "金が将来の半導体drawdownでも必ずhedgeすると推定しない。",
+    "leave-one-outを独立した長期out-of-sample検証と同一視しない。"
+  ]
+}
