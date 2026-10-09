@@ -1,0 +1,47 @@
+{
+  "as_of": "2026-09-05",
+  "verdict": "REJECT",
+  "hypothesis": "AVGOの直近AI semiconductor revenue成長率がNVDAのData Center revenue成長率より高いことを、そのままAVGOの会社全体EPS成長優位と5年成長率優位の根拠に使える。",
+  "acceptance_rule": "同じ前年同期比で、AVGOのAI semiconductor revenue成長率がNVDAのData Center revenue成長率を上回り、かつAVGOの会社公表non-GAAP diluted EPS成長率もNVDAを上回るなら採用候補。AI売上の順位とEPSの順位が逆ならREJECT。",
+  "observations": {
+    "AVGO_Q3_FY2026": {
+      "total_revenue_usd_billion": 29.591,
+      "total_revenue_yoy_pct": 86,
+      "ai_semiconductor_revenue_usd_billion": 16.7,
+      "ai_semiconductor_revenue_yoy_pct": 221,
+      "non_gaap_diluted_eps_usd": 3.32,
+      "non_gaap_diluted_eps_yoy_pct": 96,
+      "free_cash_flow_usd_billion": 13.7,
+      "free_cash_flow_margin_pct": 46
+    },
+    "NVDA_Q2_FY2027": {
+      "total_revenue_usd_billion": 96.221,
+      "total_revenue_yoy_pct": 106,
+      "data_center_revenue_usd_billion": 89.0,
+      "data_center_revenue_yoy_pct": 117,
+      "non_gaap_diluted_eps_usd": 2.22,
+      "non_gaap_diluted_eps_yoy_pct": 120,
+      "gaap_gross_margin_pct": 75.0
+    }
+  },
+  "comparison": {
+    "reported_ai_or_data_center_growth_leader": "AVGO",
+    "company_total_revenue_growth_leader": "NVDA",
+    "company_non_gaap_eps_growth_leader": "NVDA",
+    "AVGO_minus_NVDA_ai_or_data_center_growth_pct_points": 104,
+    "AVGO_minus_NVDA_total_revenue_growth_pct_points": -20,
+    "AVGO_minus_NVDA_non_gaap_eps_growth_pct_points": -24
+  },
+  "decision": "AVGOは開示されたAI semiconductor revenueでは前年比221%とNVDA Data Centerの117%を上回る一方、会社全体売上成長は86%対106%、会社公表non-GAAP diluted EPS成長は96%対120%でNVDAが上回った。したがって、セグメントAI売上成長率の大小を会社全体EPS成長率や5年成長率へ直接変換しない。相対valuationでは会社固有の売上構成、margin、税率、株式数を別々にモデル化する。",
+  "do_not_use": [
+    "AVGO AI semiconductor revenueとNVDA Data Center revenueは会社定義が異なるため、同一セグメント指標として扱わない。",
+    "単一四半期の前年比成長率を5年EPS CAGRへ外挿しない。",
+    "会社公表non-GAAP EPSを企業間で完全に同一のnormalized earningsとみなさない。",
+    "この結果をNVDAの買い推奨またはAVGOの売り推奨に使わない。"
+  ],
+  "primary_sources": [
+    "Broadcom Q3 FY2026 official investor relations release, published 2026-09-02",
+    "NVIDIA Q2 FY2027 official investor relations release, published 2026-08-26"
+  ],
+  "next_research": "NVDAとAVGOについて、point-in-timeの会社全体売上をAI関連とその他に分解し、gross/operating margin、税率、希薄化株式数まで会社固有に置いたbear/base/bull 5年EPSを構築し、現在価格からの5年IRR順位を比較する。"
+}
