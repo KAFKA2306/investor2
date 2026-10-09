@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/01369d8920f225a44029321a2bd5da273cda15505a525fff5862ef71da91de68.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/42da201e530b7ad154f1d9e73cc298c8352b4f2a93ab6d6612131e7af50a27ac.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "01369d8920f225a44029321a2bd5da273cda15505a525fff5862ef71da91de68",
-        "mirror_snapshot_id": "54f0499ba6ad1451d719",
+        "mirror_sha256": "42da201e530b7ad154f1d9e73cc298c8352b4f2a93ab6d6612131e7af50a27ac",
+        "mirror_snapshot_id": "fb397f28cf6424d6b3d5",
         "row_count": 18
       },
       "status": "ready",
@@ -148,11 +148,11 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/f19c4c3870c815320b2b594ef4308f964a691ca0445fecedfcec94097be74c68.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/ff4e197b0c56a2062399badf0b0efcfca45f33d7ec90fe691cd7fa7ca9580c19.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "f19c4c3870c815320b2b594ef4308f964a691ca0445fecedfcec94097be74c68",
-        "mirror_snapshot_id": "45881b28fee4eb46ea81",
-        "row_count": 313
+        "mirror_sha256": "ff4e197b0c56a2062399badf0b0efcfca45f33d7ec90fe691cd7fa7ca9580c19",
+        "mirror_snapshot_id": "f445123435af2e9fe4fb",
+        "row_count": 314
       },
       "status": "ready",
       "theme": "Bitcoin / Derivatives"
@@ -164,10 +164,10 @@
       "logical_repo": "tokenized-assets",
       "projection": {
         "adapter": "tokenized_assets_issuer",
-        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/f19c3251539a67333623d6cb6048a972577d4061fe8a758b89f89518358d907d.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/a47ed85c513251e31013f7c9e98f0b70baf003a0cbb69ed13115857477eeef7f.json",
         "feed_id": "tokenized-assets-issuer",
-        "mirror_sha256": "f19c3251539a67333623d6cb6048a972577d4061fe8a758b89f89518358d907d",
-        "mirror_snapshot_id": "fba980f7c9163c94036b",
+        "mirror_sha256": "a47ed85c513251e31013f7c9e98f0b70baf003a0cbb69ed13115857477eeef7f",
+        "mirror_snapshot_id": "3bf5fb7eec0d1837ef9d",
         "row_count": 16
       },
       "status": "ready",
@@ -212,10 +212,10 @@
       "logical_repo": "autonomous-logistics",
       "projection": {
         "adapter": "autonomous_logistics_events",
-        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/cadbff51d23da096552f538b82abed39bee53b67c4c89979ffac7142d41aa607.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/autonomous-logistics-events/44078efb1377083b038212f6189b094e4e892d8cf7b01de2a3db78b54d4174c3.json",
         "feed_id": "autonomous-logistics-events",
-        "mirror_sha256": "cadbff51d23da096552f538b82abed39bee53b67c4c89979ffac7142d41aa607",
-        "mirror_snapshot_id": "fb14a88fae48ac8e6e8b",
+        "mirror_sha256": "44078efb1377083b038212f6189b094e4e892d8cf7b01de2a3db78b54d4174c3",
+        "mirror_snapshot_id": "177e70168acc3846a963",
         "row_count": 33
       },
       "status": "ready",
@@ -228,10 +228,10 @@
       "logical_repo": "space-launches",
       "projection": {
         "adapter": "space_launches_monthly",
-        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/72fecac12aca2ae33effea80652c354727b200d7b7003bb9c5d04d174239a483.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/d6b2fe5ed60a9a8f03aa7ea90573a1055780b4c33ec63d4c75960750ce741bec.json",
         "feed_id": "space-launches-monthly-cadence",
-        "mirror_sha256": "72fecac12aca2ae33effea80652c354727b200d7b7003bb9c5d04d174239a483",
-        "mirror_snapshot_id": "f4b6287cc5412e44e484",
+        "mirror_sha256": "d6b2fe5ed60a9a8f03aa7ea90573a1055780b4c33ec63d4c75960750ce741bec",
+        "mirror_snapshot_id": "33a45cb913480e42c894",
         "row_count": 34
       },
       "status": "ready",
