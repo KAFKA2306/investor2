@@ -1,0 +1,143 @@
+name: EDINET-Bench logistic reproduction
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - scripts/edinet_bench_logistic.py
+      - tests/test_edinet_bench_logistic.py
+      - docs/paper/edinet_bench.md
+      - docs/research/paper_family_frontier.json
+      - docs/research/results/edinet_bench_logistic/**
+      - README.md
+      - docs/paper/benchmark_comparison.md
+      - .github/workflows/edinet-bench-logistic.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Install bounded contract dependencies
+        run: python -m pip install ruff==0.15.5 pytest==9.0.2 numpy==2.2.6 pandas==2.2.3
+      - name: Verify reproduction implementation
+        run: |
+          ruff format --check scripts/edinet_bench_logistic.py tests/test_edinet_bench_logistic.py
+          ruff check scripts/edinet_bench_logistic.py tests/test_edinet_bench_logistic.py
+          python -m py_compile scripts/edinet_bench_logistic.py
+          pytest -q tests/test_edinet_bench_logistic.py
+
+  reproduce:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+    needs: contract
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - id: existing
+        name: Detect completed reproduction
+        run: |
+          if test -f docs/research/results/edinet_bench_logistic/summary.json; then
+            echo "ready=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ready=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install frozen reproduction environment
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          python -m pip install \
+            datasets==3.5.0 \
+            scikit-learn==1.6.0 \
+            pandas==2.2.3 \
+            numpy==2.2.6 \
+            pyarrow==19.0.1
+      - name: Execute official summary-only logistic baselines
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          python scripts/edinet_bench_logistic.py \
+            --output docs/research/results/edinet_bench_logistic/summary.json
+      - name: Promote baseline evidence into canonical family registry
+        if: steps.existing.outputs.ready != 'true'
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          registry_path = Path('docs/research/paper_family_frontier.json')
+          lines = registry_path.read_text(encoding='utf-8').splitlines()
+          matched = 0
+          for index, line in enumerate(lines):
+              if '"family_id":"edinet-bench"' not in line:
+                  continue
+              stripped = line.strip()
+              has_comma = stripped.endswith(',')
+              family = json.loads(stripped[:-1] if has_comma else stripped)
+              family['representative'] = (
+                  'official summary-only logistic baseline pinned to SakanaAI/EDINET-Bench '
+                  'commit 797fbb5 and dataset revision cf0bc74'
+              )
+              family['reproduction_state'] = 'BASELINE_REPRODUCED'
+              family['head_to_head'] = 'NOT_RUN'
+              family['canonical_reproduction']['artifact'] = (
+                  'docs/research/results/edinet_bench_logistic/summary.json'
+              )
+              family['verdict'] = None
+              rendered = json.dumps(family, ensure_ascii=False, separators=(',', ':'))
+              lines[index] = '    ' + rendered + (',' if has_comma else '')
+              matched += 1
+          if matched != 1:
+              raise AssertionError(f'expected exactly one edinet-bench registry row, got {matched}')
+          registry_path.write_text('\n'.join(lines) + '\n', encoding='utf-8')
+          PY
+          python scripts/paper_family_frontier.py validate
+          python scripts/paper_family_frontier.py render --write
+          python scripts/paper_family_frontier.py readme --write
+      - name: Verify persisted evidence contract
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          summary = json.loads(Path('docs/research/results/edinet_bench_logistic/summary.json').read_text())
+          assert summary['schema_version'] == 'investor2.edinet-bench-logistic-reproduction.v1'
+          assert summary['execution_status'] == 'completed'
+          assert summary['upstream']['repository_commit'] == '797fbb50051c14b97ee2fd88595b0a3c12432058'
+          assert summary['upstream']['dataset_revision'] == 'cf0bc74fb85cce99878f15426f8cf3ba750d0cba'
+          assert summary['tasks']['fraud_detection']['train_rows'] == 865
+          assert summary['tasks']['fraud_detection']['test_rows'] == 224
+          assert summary['tasks']['earnings_forecast']['train_rows'] == 549
+          assert summary['tasks']['earnings_forecast']['test_rows'] == 451
+          assert summary['frontier'] == {
+              'head_to_head': 'NOT_RUN',
+              'reproduction_state': 'BASELINE_REPRODUCED',
+              'verdict': None,
+          }
+          PY
+          python scripts/paper_family_frontier.py validate
+          python scripts/paper_family_frontier.py render --check
+          python scripts/paper_family_frontier.py readme --check
+      - name: Persist derived evidence on the PR branch
+        if: github.event_name == 'pull_request' && steps.existing.outputs.ready != 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/research/results/edinet_bench_logistic/summary.json \
+            docs/research/paper_family_frontier.json \
+            docs/paper/benchmark_comparison.md \
+            README.md
+          git commit -m "research: persist EDINET-Bench logistic evidence"
+          git push origin HEAD:${{ github.head_ref }}
