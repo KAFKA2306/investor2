@@ -1,0 +1,103 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_balanced_dbc_sleeve_20260907",
+  "status": "CONDITION",
+  "hypothesis": "SMH60%/GLD20%/BIL10%/DBC10%は、同一73か月・10bp条件でSMH60%/GLD20%/BIL20%よりCAGRとSharpeを改善し、Maximum Drawdownと95% Expected Shortfallを悪化させず、既存の平均分散upper envelopeの一部を置き換える。",
+  "decision_rule": {
+    "condition_if": "候補が既存upper envelope上で非空のlambda領域を形成し、SMH60/GLD20/BIL20よりCAGRとSharpeを改善し、Maximum Drawdownと95% Expected Shortfallを悪化させない。ただし独立out-of-sample未実施ならlive defaultにはしない。",
+    "reject_if": "候補がupper envelopeを形成しない、CAGRまたはSharpeが改善しない、またはMaximum Drawdownか95% Expected Shortfallが悪化する。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "assets": ["SMH", "GLD", "BIL", "DBC"],
+    "currency": "USD",
+    "period": "2020-07 through 2026-08",
+    "monthly_prices": 74,
+    "monthly_returns": 73,
+    "transaction_cost_bps": 10,
+    "fallback": "none",
+    "source_artifacts": [
+      "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+      "docs/research/results/smh_dbc_sleeve_20260907/summary.json",
+      "docs/research/results/smh_mean_variance_decision_boundary_20260907/summary.json"
+    ]
+  },
+  "method": {
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "annualization": 12,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05 applied to May 2023 holding-period return",
+    "dividend_method": "cash dividends with ex-date in month added to month-end holding-period return; month-end reinvestment approximation"
+  },
+  "reproduction_control": {
+    "SMH80_DBC20_recomputed": {
+      "CAGR": 0.34772295,
+      "Vol": 0.26104759,
+      "Sharpe": 1.28214985,
+      "MaxDD": -0.30800081,
+      "ES95": -0.12434810
+    },
+    "matches_existing_canonical_to_8dp": true
+  },
+  "candidate_metrics": {
+    "SMH60_GLD20_BIL10_DBC10": {
+      "CAGR": 0.28600889,
+      "Vol": 0.19982201,
+      "Sharpe": 1.36828504,
+      "MaxDD": -0.25580880,
+      "ES95": -0.09617546,
+      "annualized_arithmetic_return": 0.27341347
+    }
+  },
+  "benchmarks": {
+    "SMH80_DBC20": {"CAGR": 0.34772295, "Vol": 0.26104759, "Sharpe": 1.28214985, "MaxDD": -0.30800081, "ES95": -0.12434810, "annualized_arithmetic_return": 0.33470213},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161, "annualized_arithmetic_return": 0.25796096}
+  },
+  "comparison_vs_SMH60_GLD20_BIL20": {
+    "cagr_delta": 0.01918976,
+    "volatility_delta": 0.00074843,
+    "sharpe_delta": 0.07247793,
+    "max_drawdown_improvement": 0.01071653,
+    "es95_improvement": 0.00018615,
+    "finding": "BIL 10%をDBC 10%へ置換すると、volatilityは0.0748 percentage points上がったが、CAGRは1.9190 points、Sharpeは0.0725改善し、Maximum Drawdownは1.0717 points、95% Expected Shortfallは0.0186 points改善した。"
+  },
+  "mean_variance_update": {
+    "utility": "U(lambda) = annualized arithmetic return - 0.5 * lambda * annualized_variance",
+    "SMH100_to_SMH80_DBC20": 2.08569822,
+    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409336,
+    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51806266,
+    "upper_envelope": [
+      {"lambda": "0 <= lambda < 2.08569822", "preferred": "SMH100"},
+      {"lambda": "2.08569822 < lambda < 4.34409336", "preferred": "SMH80_DBC20"},
+      {"lambda": "4.34409336 < lambda < 103.51806266", "preferred": "SMH60_GLD20_BIL10_DBC10"},
+      {"lambda": "lambda > 103.51806266", "preferred": "SMH60_GLD20_BIL20"}
+    ]
+  },
+  "yearly_sharpe": {
+    "SMH60_GLD20_BIL10_DBC10": {"2021": 3.02680465, "2022": -0.63602685, "2023": 1.99936247, "2024": 2.07044530, "2025": 2.30381819, "2026_YTD": 1.73875408},
+    "vs_SMH60_GLD20_BIL20": {"wins": 3, "losses": 3, "wins_years": [2021, 2022, 2026], "losses_years": [2023, 2024, 2025]},
+    "vs_SMH80_DBC20": {"wins": 3, "losses": 3, "wins_years": [2023, 2024, 2025], "losses_years": [2021, 2022, 2026]}
+  },
+  "finding": {
+    "summary": "60/20/10/10は60/20/20よりCAGR、Sharpe、Maximum Drawdown、95% Expected Shortfallを同時に改善し、既存upper envelopeに広い中間防御領域を新設した。ただし年次Sharpeは60/20/20にも80/DBC20にも3勝3敗で、同じ73か月を使った事後比較でもあるため恒久defaultにはしない。",
+    "decision": "CONDITION",
+    "capital_allocation_implication": "半導体集中portfolioのdefensive benchmarkでは60/20/10/10を60/20/20と80/DBC20の間の再利用可能候補として含める。portfolio weight authorityは変更しない。"
+  },
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_type": "decision/evaluation artifact",
+    "do_not_duplicate": ["market-data collector", "optimizer", "dynamic timing rule"]
+  },
+  "limitations": [
+    "同じ2020-07〜2026-08の73月次returnを用いた事後比較で、独立out-of-sampleではない。",
+    "開始点はCOVID-19急落後で、2020年3月と2008年金融危機を含まない。",
+    "税とbid-ask spreadは含まない。",
+    "BILは0-3 month Treasury ETF proxyであり、他の短期国債ETFと同一商品ではない。",
+    "2026年は8月までの部分年。"
+  ],
+  "next_high_value_hypothesis": "固定weightの微調整をこれ以上増やさず、各月時点で公表済みの米国実質金利とインフレ情報だけを使ってGLD/BIL/DBCのdefensive sleeveを選ぶ単純walk-forward ruleは、SMH80/DBC20とSMH60/GLD20/BIL10/DBC10をtransaction cost込みのCAGR、Sharpe、Maximum Drawdown、95% Expected Shortfallで上回るか。"
+}
