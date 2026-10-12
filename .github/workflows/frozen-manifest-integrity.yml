@@ -42,7 +42,7 @@ jobs:
             data/benchmarks/industry_prediction_frozen_split.json \
             --report build/frozen-manifest-audit.json
       - name: Upload audit evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: frozen-manifest-audit
           path: build/frozen-manifest-audit.json
