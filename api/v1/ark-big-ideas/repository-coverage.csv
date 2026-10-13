@@ -1,14 +1,14 @@
 theme,canonical_repo,real_data,primary_source_provenance,reproducible,scheduled_workflow,latest_workflow_passed,public_view,investor2_integration,evidence_commit
-The Great Acceleration,KAFKA2306/investor2,true,true,true,true,false,false,true,
+The Great Acceleration,KAFKA2306/investor2,true,true,true,true,true,false,true,
 AI Infrastructure,KAFKA2306/semiconductor-earnings-model,true,true,true,true,true,false,true,"""a9584d8cba17d9619316ca3ab54de51728cc236e"""
-The AI Consumer Operating System,KAFKA2306/finAnalist,true,true,false,true,true,false,true,"""b4444c6bafe96b12038bb2b3d0ac770add26adf2"""
+The AI Consumer Operating System,KAFKA2306/finAnalist,true,true,false,true,true,false,true,"""333f809697a69b2d89d01900ba9840c04223c2b9"""
 AI Productivity,KAFKA2306/econalert,true,true,true,true,true,false,true,"""c725ffef7677ba63b566dd4c9a1a28ee00435d31"""
-Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""766aae9591a805d93660fd5f2223b689d5673b17"", ""6eb13fe969ca8e8832847ffba2df4e631e2dae20""]"
-Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""f811ce8bef87a6c432d778212bed76cc115073dc"""
+Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""b8eead1328536ab18713e32171fa9608a3e4e645"", ""e4241015b4851c867d6bbed5535df2fcf2c4d22f""]"
+Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""a3820deffaafc78d5d200f904bb996e5d703873a"""
 DeFi Applications,KAFKA2306/skew,true,true,false,true,false,false,true,"""1e5c2173bfde72a0b0d381eea1347ba0af09f07b"""
 Multiomics,KAFKA2306/multiomics,true,true,false,true,false,false,true,"""71eab6abc8d44efe522aa9346554af6c349a0a5f"""
-Reusable Rockets,KAFKA2306/trahist,true,true,true,true,true,false,true,"""351fbb57c9aba84622537baecfd1b15fd512200d"""
-Robotics,KAFKA2306/factory,true,true,true,true,false,false,true,"""3e9ecea0ea6d07a264db993c3332098181773d93"""
-Distributed Energy,KAFKA2306/oil + KAFKA2306/uranium,true,true,false,true,true,false,true,"[""379372f3c5c3f0524e82de77846d65e18989da77"", ""c137acc2d8ec0448f0a5ccd4ef60fd9a6f2134eb""]"
-Autonomous Vehicles,KAFKA2306/autonomous-vehicles,true,true,false,true,true,false,true,"""3f405cc785cca47b3f65737815cf78bafc218c47"""
+Reusable Rockets,KAFKA2306/trahist,true,true,true,true,true,false,true,"""74cfb1b3f800d829deabcdd02c221db9bfd44ea7"""
+Robotics,KAFKA2306/factory,true,true,true,true,true,false,true,"""73e52bb29e9510416646287fea0366a806cb7dc1"""
+Distributed Energy,KAFKA2306/oil + KAFKA2306/uranium,true,true,false,true,true,false,true,"[""379372f3c5c3f0524e82de77846d65e18989da77"", ""f6b51c7b0b9d5895b57172662d9a7a3514134ada""]"
+Autonomous Vehicles,KAFKA2306/autonomous-vehicles,true,true,false,true,false,false,true,"""3f405cc785cca47b3f65737815cf78bafc218c47"""
 Autonomous Logistics,KAFKA2306/autonomous-logistics,true,true,true,true,false,false,true,"""d8701f9e91f418ca3a72a7be5a86d560e99566ea"""
