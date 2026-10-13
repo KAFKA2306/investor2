@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/finding-the-limit-examining-the-risk-to-return-ratio-in-private-market-performances",
-      "article_url": "https://insight.factset.com/finding-the-limit-examining-the-risk-to-return-ratio-in-private-market-performances",
-      "author": "insight@factset.com (Edward McCormick)",
-      "guid": "https://insight.factset.com/finding-the-limit-examining-the-risk-to-return-ratio-in-private-market-performances",
-      "published_at": "2026-09-30T16:14:50Z",
-      "title": "Finding the Limit: Examining the Risk-to-Return Ratio in Private Market Performances"
-    },
-    {
       "article_id": "https://insight.factset.com/total-nonfarm-payrolls-for-september-2026-are-projected-to-rise-by-90000",
       "article_url": "https://insight.factset.com/total-nonfarm-payrolls-for-september-2026-are-projected-to-rise-by-90000",
       "author": "media_request@factset.com (John Butters)",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
       "published_at": "2026-10-09T16:51:38Z",
       "title": "S&P 500 Likely to Report Earnings Growth Above 35% for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "article_url": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "published_at": "2026-10-12T16:00:02Z",
+      "title": "S&P 500 Energy Sector Earnings Preview: Q3 2026"
     }
   ],
   "feed_title": "FactSet Insight",
