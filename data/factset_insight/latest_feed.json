@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/sp-500-earnings-season-preview-q3-2026",
-      "article_url": "https://insight.factset.com/sp-500-earnings-season-preview-q3-2026",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/sp-500-earnings-season-preview-q3-2026",
-      "published_at": "2026-10-02T17:33:50Z",
-      "title": "S&P 500 Earnings Season Preview: Q3 2026"
-    },
-    {
-      "article_id": "https://insight.factset.com/record-high-number-of-sp-500-companies-issuing-positive-eps-guidance-for-q3",
-      "article_url": "https://insight.factset.com/record-high-number-of-sp-500-companies-issuing-positive-eps-guidance-for-q3",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/record-high-number-of-sp-500-companies-issuing-positive-eps-guidance-for-q3",
-      "published_at": "2026-10-05T16:00:02Z",
-      "title": "Record-High Number of S&P 500 Companies Issuing Positive EPS Guidance for Q3"
-    },
-    {
       "article_id": "https://insight.factset.com/u.s.-etf-monthly-summary-september-2026-results",
       "article_url": "https://insight.factset.com/u.s.-etf-monthly-summary-september-2026-results",
       "author": "risk.acl@factset.com (Lois Gregson)",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
       "published_at": "2026-10-13T16:00:01Z",
       "title": "S&P 500 Utilities Sector Earnings Preview: Q3 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "article_url": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "published_at": "2026-10-14T16:23:04Z",
+      "title": "From Investment Intent to Portfolio: The Rise of Conversational Portfolio Construction"
+    },
+    {
+      "article_id": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "article_url": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "author": "Ony Adeneke",
+      "guid": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "published_at": "2026-10-14T22:14:59Z",
+      "title": "Balancing Hyperscale Demand and Ratepayer Protections in Wyoming"
     }
   ],
   "feed_title": "FactSet Insight",
