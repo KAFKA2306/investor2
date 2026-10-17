@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/u.s.-etf-monthly-summary-september-2026-results",
-      "article_url": "https://insight.factset.com/u.s.-etf-monthly-summary-september-2026-results",
-      "author": "risk.acl@factset.com (Lois Gregson)",
-      "guid": "https://insight.factset.com/u.s.-etf-monthly-summary-september-2026-results",
-      "published_at": "2026-10-05T20:40:44Z",
-      "title": "U.S. ETF Monthly Summary: September 2026 Results"
-    },
-    {
-      "article_id": "https://insight.factset.com/watch-q3-sp-500-earnings-season-preview-1",
-      "article_url": "https://insight.factset.com/watch-q3-sp-500-earnings-season-preview-1",
-      "author": "insight@factset.com (FactSet Insight)",
-      "guid": "https://insight.factset.com/watch-q3-sp-500-earnings-season-preview-1",
-      "published_at": "2026-10-06T16:26:40Z",
-      "title": "Watch: Q3 S&P 500 Earnings Season Preview"
-    },
-    {
       "article_id": "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
       "article_url": "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
       "author": "insight@factset.com (Patrick Starling)",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
       "published_at": "2026-10-14T22:14:59Z",
       "title": "Balancing Hyperscale Demand and Ratepayer Protections in Wyoming"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "published_at": "2026-10-16T17:03:12Z",
+      "title": "S&P 500 Earnings Season Update: October 16, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "article_url": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "author": "Lucas Caminiti",
+      "guid": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "published_at": "2026-10-16T21:45:00Z",
+      "title": "Modeling Iron-Air Battery Arbitrage in U.S. Power Markets"
     }
   ],
   "feed_title": "FactSet Insight",
