@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
-      "article_url": "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
-      "author": "insight@factset.com (Patrick Starling)",
-      "guid": "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
-      "published_at": "2026-10-06T18:42:02Z",
-      "title": "Convincing Is Not the Same as Accurate: What Financial Institutions Must Demand from AI"
-    },
-    {
       "article_id": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
       "article_url": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
       "author": "media_request@factset.com (John Butters)",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
       "published_at": "2026-10-16T21:45:00Z",
       "title": "Modeling Iron-Air Battery Arbitrage in U.S. Power Markets"
+    },
+    {
+      "article_id": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "article_url": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "published_at": "2026-10-19T16:00:01Z",
+      "title": "Are “Magnificent 7” Companies Still Top Contributors to S&P 500 Earnings Growth for Q3?"
     }
   ],
   "feed_title": "FactSet Insight",
