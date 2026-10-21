@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
-      "article_url": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
-      "published_at": "2026-10-07T16:00:00Z",
-      "title": "Analysts Increased EPS Estimates for S&P 500 Companies for 2nd Straight Quarter"
-    },
-    {
       "article_id": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
       "article_url": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
       "author": "Reed Callan",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
       "published_at": "2026-10-19T16:00:01Z",
       "title": "Are “Magnificent 7” Companies Still Top Contributors to S&P 500 Earnings Growth for Q3?"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "published_at": "2026-10-20T16:00:00Z",
+      "title": "U.S. Mergers & Acquisitions Monthly Review: September 2026"
     }
   ],
   "feed_title": "FactSet Insight",
