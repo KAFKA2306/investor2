@@ -106,8 +106,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2024-10-28",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-overviews-search-october-2024/",
               "unit": "users",
@@ -123,8 +123,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2024-12-27",
               "source_url": "https://about.fb.com/news/2024/12/our-year-in-review-metas-2024-highlights/",
               "unit": "users",
@@ -140,8 +140,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2025-03-19",
               "source_url": "https://about.fb.com/news/2025/03/europe-meet-your-newest-assistant-meta-ai/",
               "unit": "users",
@@ -157,8 +157,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2025-04-24",
               "source_url": "https://blog.google/company-news/inside-google/message-ceo/alphabet-earnings-q1-2025/",
               "unit": "users",
@@ -174,8 +174,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2025-10-01",
               "source_url": "https://about.fb.com/news/2025/10/improving-your-recommendations-apps-ai-meta/",
               "unit": "users",
@@ -191,8 +191,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "consumer_subscribers",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2026-02-27",
               "source_url": "https://openai.com/index/scaling-ai-for-everyone/",
               "unit": "subscribers",
@@ -208,8 +208,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2026-05-19",
               "source_url": "https://blog.google/products-and-platforms/products/search/ai-mode-us-insights/",
               "unit": "users",
@@ -225,8 +225,8 @@
               "feed_id": "ai-consumer-metrics",
               "logical_repo": "ai-consumer",
               "metric_id": "monthly_active_users",
-              "mirror_sha256": "37c6af018fc395939a580b13051794c971f8515f022a19f20f3286e7031f8c1a",
-              "mirror_snapshot_id": "8a46114910ec797aa04e",
+              "mirror_sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+              "mirror_snapshot_id": "4898cadc2040aaddf571",
               "period": "2026-06-03",
               "source_url": "https://blog.google/products-and-platforms/products/search/new-controls-website-owners/",
               "unit": "users",
@@ -309,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 324,
+          "derivatives_metric_rows": 325,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -352,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 333,
+      "evidence_row_count": 334,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -385,8 +385,8 @@
             "feed_id": "tokenized-assets-issuer",
             "logical_repo": "tokenized-assets",
             "metric_id": "circulation_usdc",
-            "mirror_sha256": "cc2139d280b8ad725e1738a58ab9739d37c8049b1e6fb0ea8a02a3fcaa3079e3",
-            "mirror_snapshot_id": "df09bba1352d6a21183a",
+            "mirror_sha256": "510b4d2c7b5bb9c9004f6a6d3677b60bfe56a8b3de2560dfa6a9c6285829a3bf",
+            "mirror_snapshot_id": "17ddaf7302283ececb38",
             "period": "2026-03-11",
             "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20March%2026.pdf",
             "unit": "USDC",
@@ -402,8 +402,8 @@
             "feed_id": "tokenized-assets-issuer",
             "logical_repo": "tokenized-assets",
             "metric_id": "circulation_usdc",
-            "mirror_sha256": "cc2139d280b8ad725e1738a58ab9739d37c8049b1e6fb0ea8a02a3fcaa3079e3",
-            "mirror_snapshot_id": "df09bba1352d6a21183a",
+            "mirror_sha256": "510b4d2c7b5bb9c9004f6a6d3677b60bfe56a8b3de2560dfa6a9c6285829a3bf",
+            "mirror_snapshot_id": "17ddaf7302283ececb38",
             "period": "2026-06-30",
             "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20June%2026.pdf",
             "unit": "USDC",
@@ -641,7 +641,7 @@
           "early_mean": 13.0,
           "first_period": "2024-01",
           "latest_period": "2026-10",
-          "recent_mean": 12.5,
+          "recent_mean": 12.666666666666666,
           "window": 6
         },
         "research_implication": {
@@ -705,21 +705,6 @@
         "observation": {
           "evidence_row_count": 12,
           "latest_observations": [
-            {
-              "dimensions": {
-                "status": "Operational"
-              },
-              "entity": "Global nuclear fleet",
-              "fact_class": "observed",
-              "feed_id": "nuclear-capacity",
-              "logical_repo": "nuclear-power",
-              "metric_id": "net_electrical_capacity",
-              "mirror_sha256": "2590027876ed0f237d330f51df0b681597ffb10bc1fb04283afec36f6f177703",
-              "mirror_snapshot_id": "e7beb250f138cca8a374",
-              "period": "2026-10-19T20:34:09.475967+00:00",
-              "unit": "MW",
-              "value": 379611.0
-            },
             {
               "dimensions": {
                 "status": "Under Construction"
@@ -824,6 +809,23 @@
               "period": "2026-10-19T20:34:09.475967+00:00",
               "unit": "reactors",
               "value": 220
+            },
+            {
+              "dimensions": {
+                "geography": "US48",
+                "reported_period": "daily actual"
+              },
+              "entity": "U.S. Energy Information Administration / US48 electricity demand",
+              "fact_class": "observed",
+              "feed_id": "energy-supply-metrics",
+              "logical_repo": "energy-supply",
+              "metric_id": "electricity_demand",
+              "mirror_sha256": "3dfbbb9c2adbef4d949e1171b6d4161807024f65dd71739b1702b93ebd1de7ec",
+              "mirror_snapshot_id": "78ab2190031d1606f33e",
+              "period": "2026-10-20",
+              "source_url": "https://www.eia.gov/opendata/bulk/EBA.zip",
+              "unit": "megawatthours",
+              "value": 10761056.437
             }
           ]
         },
