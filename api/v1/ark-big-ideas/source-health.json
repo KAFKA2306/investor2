@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "a72acc44ddc0659219bb7d558c8a2d18da6fefcd0c03557be63b460171a6f011",
+      "sha256": "7c1756a790cc163dcdb474446f42fa88231242f7c43ffc8a148825d5d72498f9",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "d35c1a4af9db3b210cfc77f4dcf4f76c4082fd842d8b04a6cd551b8cb1541360",
+      "sha256": "0e800906ef0f2d5eb5a6023bcb56bbb1a5b2f21220f3bf5a5fce9519bf6d7ec8",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "143ed338e81f8a488c5585c017b7a82e8b4566225f382b6adb4988ae3cdaea5d",
+      "sha256": "9761d4f640a741fb94b245a6c11920304a8acc546169ca6eb3f1c905598a386a",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "510b4d2c7b5bb9c9004f6a6d3677b60bfe56a8b3de2560dfa6a9c6285829a3bf",
+      "sha256": "3ce487bb32dd3a1e9a626bc203cf8006bd77044496525b9f0f3a531e2018e01d",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
@@ -288,7 +288,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "26789849915f0cd585dd7f8e8e19e926450da749181b94167ac906b3ad301e2e",
+      "sha256": "c83c2b6ba10c1c98f2e4c73f5c5583a9192fa1226b200a05c2cc47344b2672ab",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
