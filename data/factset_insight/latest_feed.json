@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
-      "article_url": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
-      "author": "Reed Callan",
-      "guid": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
-      "published_at": "2026-10-09T00:22:04Z",
-      "title": "Renewable Natural Gas Production Growth in the U.S."
-    },
-    {
       "article_id": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
       "article_url": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
       "author": "media_request@factset.com (John Butters)",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
       "published_at": "2026-10-20T16:00:00Z",
       "title": "U.S. Mergers & Acquisitions Monthly Review: September 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "article_url": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "published_at": "2026-10-21T15:25:18Z",
+      "title": "Why AI Makes Your Portfolio Optimization Engine More Important, Not Less"
     }
   ],
   "feed_title": "FactSet Insight",
