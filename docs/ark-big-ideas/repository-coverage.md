@@ -4,7 +4,7 @@
 
 - ARK official source: https://www.ark-invest.com/big-ideas-2026
 - canonical mapping: https://github.com/KAFKA2306/investor2/issues/111
-- checked_at: `2026-10-27T19:38:31+00:00`
+- checked_at: `2026-10-28T19:52:37+00:00`
 
 | Theme | Canonical repository | Real data | Primary-source provenance | Reproducible | Scheduled workflow | Latest workflow passed | Public domain view | investor2 integration |
 |---|---|---:|---:|---:|---:|---:|---:|---:|
