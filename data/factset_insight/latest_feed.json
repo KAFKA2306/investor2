@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
-      "article_url": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
-      "published_at": "2026-10-13T16:00:01Z",
-      "title": "S&P 500 Utilities Sector Earnings Preview: Q3 2026"
-    },
-    {
       "article_id": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
       "article_url": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
       "author": "Georgi Mitov",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/sp-500-reporting-second-highest-net-profit-margin-in-more-than-15-years-for-q3-2026",
       "published_at": "2026-10-26T16:00:00Z",
       "title": "S&P 500 Reporting Second-Highest Net Profit Margin in More Than 15 Years for Q3 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "article_url": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "author": "insight@factset.com (Colin Devereaux)",
+      "guid": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "published_at": "2026-10-28T16:00:03Z",
+      "title": "Back to the Future: Tracking LP Portfolio Composition Over 20 Years"
     }
   ],
   "feed_title": "FactSet Insight",
