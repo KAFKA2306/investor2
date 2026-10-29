@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
-      "article_url": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
-      "author": "Georgi Mitov",
-      "guid": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
-      "published_at": "2026-10-14T16:23:04Z",
-      "title": "From Investment Intent to Portfolio: The Rise of Conversational Portfolio Construction"
-    },
-    {
       "article_id": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
       "article_url": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
       "author": "Ony Adeneke",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
       "published_at": "2026-10-28T16:00:03Z",
       "title": "Back to the Future: Tracking LP Portfolio Composition Over 20 Years"
+    },
+    {
+      "article_id": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "article_url": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "published_at": "2026-10-28T21:59:24Z",
+      "title": "When No Portfolio Satisfies the Mandate: Using AI to Diagnose Optimization Infeasibility"
     }
   ],
   "feed_title": "FactSet Insight",
