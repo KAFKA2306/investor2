@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "a030ccd9042cd3b49ea82aaa3b78d06615443b3efc758ce0fdbd33f793619766",
+      "sha256": "ac18f001dafa87dde1f415ecdd763e390a101529ce03a3ee22e88d146e95da70",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "ffefbf3035dd0b5e1ae5ab0101d71b59b6a79564e989d3b3964d8374d6b6682d",
+      "sha256": "c6c385be59fde41c9129caea22e11b64f274ebcef3c253e6b36e36b12062ce58",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "ffdbed30016141641bf7cc4e8eeb4235335eeaf870e2cc46e4b3f4f34c330fb8",
+      "sha256": "edcbe9f7890feec6f271b11f6f9bfea19dcbdaeca56fba5c5cdd838b4f536e9c",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "471f15d4b2a262d0f05f275d2e98faff5692fd5a74f43d4d8c733de73d44cc90",
+      "sha256": "c65f6c837b365334d4eb77414bd33c9ccbd83c8899281c5ee4bb07b0b809b382",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
