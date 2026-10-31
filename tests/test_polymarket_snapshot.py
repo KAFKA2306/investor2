@@ -42,17 +42,18 @@ def _market(*, market_id: str = "123") -> GammaMarket:
 def test_collect_snapshot_preserves_point_in_time_market_and_quotes(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", lambda **_: [_market()])
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_midpoint_if_available",
-        lambda token_id, **_: Decimal("0.64") if token_id.startswith("yes-token") else Decimal("0.36"),
-    )
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_spread_if_available",
-        lambda _token_id, **_: Decimal("0.02"),
-    )
+    def fake_fetch_markets(**_: Any) -> list[GammaMarket]:
+        return [_market()]
+
+    def fake_midpoint(token_id: str, **_: Any) -> Decimal:
+        return Decimal("0.64") if token_id.startswith("yes-token") else Decimal("0.36")
+
+    def fake_spread(_token_id: str, **_: Any) -> Decimal:
+        return Decimal("0.02")
+
+    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", fake_fetch_markets)
+    monkeypatch.setattr(polymarket_snapshot, "fetch_midpoint_if_available", fake_midpoint)
+    monkeypatch.setattr(polymarket_snapshot, "fetch_spread_if_available", fake_spread)
 
     snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
 
@@ -75,11 +76,10 @@ def test_discover_live_markets_skips_markets_without_live_order_book(
 ) -> None:
     disabled = _market().model_copy(update={"accepting_orders": False})
     no_quotes = _market(market_id="no-quotes").model_copy(update={"best_bid": None})
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_markets",
-        lambda **_: [disabled, no_quotes, _market()],
-    )
+    def fake_fetch_markets(**_: Any) -> list[GammaMarket]:
+        return [disabled, no_quotes, _market()]
+
+    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", fake_fetch_markets)
 
     markets = polymarket_snapshot.discover_live_markets(
         min_liquidity=1000.0,
@@ -94,21 +94,18 @@ def test_discover_live_markets_skips_markets_without_live_order_book(
 def test_collect_snapshot_skips_market_without_complete_clob_quote(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_markets",
-        lambda **_: [_market(market_id="sparse"), _market(market_id="quoted")],
-    )
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_midpoint_if_available",
-        lambda token_id, **_: None if token_id == "yes-token-sparse" else Decimal("0.5"),
-    )
-    monkeypatch.setattr(
-        polymarket_snapshot,
-        "fetch_spread_if_available",
-        lambda _token_id, **_: Decimal("0.02"),
-    )
+    def fake_fetch_markets(**_: Any) -> list[GammaMarket]:
+        return [_market(market_id="sparse"), _market(market_id="quoted")]
+
+    def fake_midpoint(token_id: str, **_: Any) -> Decimal | None:
+        return None if token_id == "yes-token-sparse" else Decimal("0.5")
+
+    def fake_spread(_token_id: str, **_: Any) -> Decimal:
+        return Decimal("0.02")
+
+    monkeypatch.setattr(polymarket_snapshot, "fetch_markets", fake_fetch_markets)
+    monkeypatch.setattr(polymarket_snapshot, "fetch_midpoint_if_available", fake_midpoint)
+    monkeypatch.setattr(polymarket_snapshot, "fetch_spread_if_available", fake_spread)
 
     snapshot = polymarket_snapshot.collect_snapshot(max_markets=1, min_liquidity=1000.0)
 
