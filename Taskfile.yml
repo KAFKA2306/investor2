@@ -64,7 +64,6 @@ tasks:
   quality:changed:
     desc: Format/lint ratchet for files changed from main plus local changes
     cmds:
-      - uv run --no-sync ruff format --diff scripts/japan_equity_monitor.py
       - bun run quality:changed
   lint:all:
     desc: Report the full legacy lint backlog without changing files
