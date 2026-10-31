@@ -21,10 +21,7 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_WATCHLIST = ROOT / "config/japan_yen_watchlist.json"
 DEFAULT_OUTPUT_DIR = ROOT / "data/snapshots"
 DEFAULT_TIMEOUT_SECONDS = 20
-DEFAULT_USER_AGENT = (
-    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-    "AppleWebKit/537.36 Chrome/153 Safari/537.36"
-)
+DEFAULT_USER_AGENT = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/153 Safari/537.36"
 DISCLOSURE_KEYWORDS = (
     "決算",
     "業績修正",
@@ -188,12 +185,7 @@ def html_to_text(raw_html: str) -> str:
 
 
 def signed_number(value: str) -> float | None:
-    normalized = (
-        value.replace(",", "")
-        .replace("＋", "+")
-        .replace("▲", "-")
-        .replace("△", "-")
-    )
+    normalized = value.replace(",", "").replace("＋", "+").replace("▲", "-").replace("△", "-")
     matches = re.findall(r"[-+]?\d+(?:\.\d+)?", normalized)
     return float(matches[-1]) if matches else None
 
