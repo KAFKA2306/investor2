@@ -54,8 +54,9 @@ jobs:
           for name, minimum in {'certifi': '2026.10.18', 'filelock': '4.2.1', 'fsspec': '2026.6.0', 'pillow': '13.0.0', 'urllib3': '2.8.0'}.items():
               versions = packages.get(name, set())
               assert versions, name
-              from packaging.version import Version
-              assert all(Version(v) >= Version(minimum) for v in versions), (name, versions)
+              def version_parts(value):
+                  return tuple(int(part) for part in value.split('.'))
+              assert all(version_parts(v) >= version_parts(minimum) for v in versions), (name, versions)
           PY
       - name: Commit only resolved dependency files to existing branch
         run: |
