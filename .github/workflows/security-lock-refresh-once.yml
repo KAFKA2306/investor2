@@ -1,0 +1,69 @@
+name: One-time dependency lock remediation for issue 429
+
+on:
+  push:
+    branches:
+      - fix/issue-429-security-locks-20261101
+    paths:
+      - .github/workflows/security-lock-refresh-once.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.repository == 'KAFKA2306/investor2'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0
+        with:
+          python-version: '3.12'
+      - uses: oven-sh/setup-bun@0c5077e51419868618aeaa5fe8019c62421857d6
+        with:
+          bun-version: '1.3.6'
+      - uses: astral-sh/setup-uv@c771a70e6277c0a99b617c7a806ffedaca235ff9
+        with:
+          version: '0.11.32'
+      - name: Refresh vulnerable Bun dependencies
+        run: |
+          bun add 'adm-zip@^0.6.1' 'hono@^4.12.25' 'js-yaml@^4.3.2'
+          bun install --frozen-lockfile
+      - name: Refresh vulnerable Python dependencies
+        run: |
+          uv lock --upgrade-package certifi --upgrade-package filelock --upgrade-package fsspec --upgrade-package pillow --upgrade-package urllib3
+          uv lock --check
+      - name: Check patched dependency floors
+        run: |
+          python - <<'PY'
+          import json
+          import tomllib
+          from pathlib import Path
+
+          pkg = json.loads(Path('package.json').read_text())
+          for name, expected in {'adm-zip': '^0.6.1', 'hono': '^4.12.25', 'js-yaml': '^4.3.2'}.items():
+              assert pkg['dependencies'][name] == expected, (name, pkg['dependencies'][name])
+          lock = tomllib.loads(Path('uv.lock').read_text())
+          packages = {}
+          for package in lock['package']:
+              packages.setdefault(package['name'], set()).add(package['version'])
+          for name, minimum in {'certifi': '2026.10.18', 'filelock': '4.2.1', 'fsspec': '2026.6.0', 'pillow': '13.0.0', 'urllib3': '2.8.0'}.items():
+              versions = packages.get(name, set())
+              assert versions, name
+              from packaging.version import Version
+              assert all(Version(v) >= Version(minimum) for v in versions), (name, versions)
+          PY
+      - name: Commit only resolved dependency files to existing branch
+        run: |
+          git diff --check
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json bun.lock uv.lock
+          git diff --cached --check
+          git diff --cached --quiet && { echo 'No dependency changes'; exit 1; }
+          git commit -m 'fix: refresh vulnerable dependency locks for issue 429'
+          git push origin HEAD:refs/heads/fix/issue-429-security-locks-20261101
