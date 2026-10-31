@@ -16,41 +16,117 @@
     "fallback": "none"
   },
   "method": {
-    "portfolios": ["SMH80_GLD20", "SMH80_SGOV20"],
-    "returns": "canonical artifactの月次total returnを再利用",
+    "portfolios": [
+      "SMH80_GLD20",
+      "SMH80_SGOV20"
+    ],
+    "returns": "canonical artifactの月末価格と当月分配金から24か月のtotal returnを再計算。各月の固定比率80/20、月末driftに対する2-sided turnoverの10bpコストを控除",
     "rebalance": "monthly fixed weight",
     "transaction_cost_bps_per_two_sided_turnover": 10,
-    "robustness_tests": ["leave-one-month-out 24通り", "GLD月次return上位1..5か月を累積除外"],
+    "robustness_tests": [
+      "leave-one-month-out 24通り",
+      "GLD月次return上位1..5か月を累積除外"
+    ],
     "risk_free_rate_for_sharpe": 0
   },
   "baseline_10bp": {
-    "SMH80_GLD20": {"cagr": 0.496357, "volatility": 0.285313, "sharpe": 1.566379, "maximum_drawdown": -0.139522, "expected_shortfall_95": -0.103566},
-    "SMH80_SGOV20": {"cagr": 0.420529, "volatility": 0.285428, "sharpe": 1.377551, "maximum_drawdown": -0.140521, "expected_shortfall_95": -0.106600}
+    "SMH80_GLD20": {
+      "cagr": 0.49637537,
+      "volatility": 0.2853288,
+      "sharpe": 1.56634891,
+      "maximum_drawdown": -0.13953173,
+      "expected_shortfall_95": -0.10357179
+    },
+    "SMH80_SGOV20": {
+      "cagr": 0.4205495,
+      "volatility": 0.28544525,
+      "sharpe": 1.37753535,
+      "maximum_drawdown": -0.14053057,
+      "expected_shortfall_95": -0.10660585
+    }
   },
   "leave_one_month_out": {
     "cases": 24,
-    "sharpe_diff_GLD_minus_SGOV": {"min": 0.150177, "median": 0.185693, "mean": 0.189879, "max": 0.269775, "positive_cases": 24},
-    "cagr_diff_GLD_minus_SGOV": {"min": 0.060160, "median": 0.074113, "mean": 0.076021, "max": 0.102239, "positive_cases": 24},
-    "maximum_drawdown_diff_GLD_minus_SGOV": {"min": 0.001001, "positive_cases": 24},
-    "expected_shortfall_diff_GLD_minus_SGOV": {"min": -0.010855, "note": "2025-03除外時のみES優位が崩れるためtail優位は強い結論にしない"}
+    "sharpe_diff_GLD_minus_SGOV": {
+      "min": 0.149874,
+      "median": 0.185328,
+      "mean": 0.189526,
+      "max": 0.26937,
+      "positive_cases": 24
+    },
+    "cagr_diff_GLD_minus_SGOV": {
+      "min": 0.060011,
+      "median": 0.073988,
+      "mean": 0.075889,
+      "max": 0.102088,
+      "positive_cases": 24
+    },
+    "maximum_drawdown_diff_GLD_minus_SGOV": {
+      "min": 0.000999,
+      "positive_cases": 24
+    },
+    "expected_shortfall_diff_GLD_minus_SGOV": {
+      "min": -0.010855,
+      "positive_cases": 22,
+      "negative_months": [
+        "2025-03",
+        "2026-07"
+      ],
+      "note": "2025-03と2026-07を除外した2ケースでES優位が崩れる。tail優位は強い結論にしない"
+    }
   },
   "exclude_top_GLD_months": [
-    {"excluded_count": 1, "sharpe_diff": 0.165673, "cagr_diff": 0.060160},
-    {"excluded_count": 2, "sharpe_diff": 0.141226, "cagr_diff": 0.045177},
-    {"excluded_count": 3, "sharpe_diff": 0.106042, "cagr_diff": 0.032743},
-    {"excluded_count": 4, "sharpe_diff": 0.064340, "cagr_diff": 0.019859},
-    {"excluded_count": 5, "sharpe_diff": 0.028169, "cagr_diff": 0.006539}
+    {
+      "excluded_count": 1,
+      "sharpe_diff": 0.165278,
+      "cagr_diff": 0.060011
+    },
+    {
+      "excluded_count": 2,
+      "sharpe_diff": 0.140776,
+      "cagr_diff": 0.045008
+    },
+    {
+      "excluded_count": 3,
+      "sharpe_diff": 0.105607,
+      "cagr_diff": 0.032581
+    },
+    {
+      "excluded_count": 4,
+      "sharpe_diff": 0.063957,
+      "cagr_diff": 0.019711
+    },
+    {
+      "excluded_count": 5,
+      "sharpe_diff": 0.027827,
+      "cagr_diff": 0.006406
+    }
   ],
   "top_GLD_months": [
-    {"month": "2026-01", "return": 0.125356},
-    {"month": "2025-09", "return": 0.117666},
-    {"month": "2026-08", "return": 0.099739},
-    {"month": "2025-03", "return": 0.094064},
-    {"month": "2026-02", "return": 0.084668}
+    {
+      "month": "2026-01",
+      "return": 0.125356
+    },
+    {
+      "month": "2025-09",
+      "return": 0.117666
+    },
+    {
+      "month": "2026-08",
+      "return": 0.099739
+    },
+    {
+      "month": "2025-03",
+      "return": 0.094064
+    },
+    {
+      "month": "2026-02",
+      "return": 0.084668
+    }
   ],
   "decision": {
     "condition": "20% gold sleeveを半導体集中portfolioのrisk-control候補として維持する。少数の金急騰月だけでSharpe/CAGR優位が作られたという反証には耐えた。",
-    "why_not_use": "元標本が24か月と短く、leave-one-outは独立OOSではない。Expected Shortfall優位は1ケースで崩れるため、tail hedgeの恒久性や20%固定weightは未確認。"
+    "why_not_use": "元標本が24か月と短く、leave-one-outは独立OOSではない。Expected Shortfall優位は2025-03・2026-07を除外した2ケースで崩れるため、tail hedgeの恒久性や20%固定weightは未確認。"
   },
   "prohibited_inference": [
     "20%を恒久的な最適weightとして扱わない。",
