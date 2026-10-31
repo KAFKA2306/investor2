@@ -67,14 +67,15 @@
   },
   "mean_variance_update": {
     "utility": "U(lambda) = annualized arithmetic return - 0.5 * lambda * annualized_variance",
-    "SMH100_to_SMH80_DBC20": 2.08569822,
-    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409336,
-    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51806266,
+    "boundary_precision": "Calculated from published 8-decimal annualized_arithmetic_return and Vol values; full-precision upstream crossings may differ slightly.",
+    "SMH100_to_SMH80_DBC20": 2.08569807,
+    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409338,
+    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51865165,
     "upper_envelope": [
-      {"lambda": "0 <= lambda < 2.08569822", "preferred": "SMH100"},
-      {"lambda": "2.08569822 < lambda < 4.34409336", "preferred": "SMH80_DBC20"},
-      {"lambda": "4.34409336 < lambda < 103.51806266", "preferred": "SMH60_GLD20_BIL10_DBC10"},
-      {"lambda": "lambda > 103.51806266", "preferred": "SMH60_GLD20_BIL20"}
+      {"lambda": "0 <= lambda < 2.08569807", "preferred": "SMH100"},
+      {"lambda": "2.08569807 < lambda < 4.34409338", "preferred": "SMH80_DBC20"},
+      {"lambda": "4.34409338 < lambda < 103.51865165", "preferred": "SMH60_GLD20_BIL10_DBC10"},
+      {"lambda": "lambda > 103.51865165", "preferred": "SMH60_GLD20_BIL20"}
     ]
   },
   "yearly_sharpe": {
