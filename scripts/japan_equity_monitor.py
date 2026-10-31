@@ -12,7 +12,7 @@ from dataclasses import dataclass
 from datetime import UTC, date, datetime
 from html.parser import HTMLParser
 from pathlib import Path
-from typing import Any
+from typing import Any, override
 from urllib.parse import quote
 
 import requests
@@ -42,6 +42,7 @@ class TextExtractor(HTMLParser):
         super().__init__()
         self.parts: list[str] = []
 
+    @override
     def handle_data(self, data: str) -> None:
         value = html.unescape(data).strip()
         if value:
