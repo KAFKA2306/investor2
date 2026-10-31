@@ -121,9 +121,7 @@ def column_quality(frame: pd.DataFrame) -> pd.DataFrame:
 
 def ticker_stats(prices: pd.DataFrame) -> pd.DataFrame:
     ordered = prices.sort_values(["Code", "Date"]).copy()
-    ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(
-        _log_diff
-    )
+    ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(_log_diff)
     grouped = ordered.groupby("Code", observed=True)
     base = grouped.agg(
         observations=("Date", "size"),
@@ -139,18 +137,10 @@ def ticker_stats(prices: pd.DataFrame) -> pd.DataFrame:
         return_std=("log_return", _population_std),
         return_skew=("log_return", "skew"),
     )
-    kurt = (
-        grouped["log_return"]
-        .apply(_kurtosis_excess)
-        .rename("return_kurtosis_excess")
-    )
+    kurt = grouped["log_return"].apply(_kurtosis_excess).rename("return_kurtosis_excess")
     quantiles = grouped["log_return"].quantile([0.01, 0.05, 0.50, 0.95, 0.99]).unstack()
     quantiles.columns = ["return_p01", "return_p05", "return_median", "return_p95", "return_p99"]
-    abs10 = (
-        grouped["log_return"]
-        .apply(_abs_return_gt_10pct_rate)
-        .rename("abs_return_gt_10pct_rate")
-    )
+    abs10 = grouped["log_return"].apply(_abs_return_gt_10pct_rate).rename("abs_return_gt_10pct_rate")
     result = base.join(kurt).join(quantiles).join(abs10).reset_index()
     result["date_start"] = pd.to_datetime(result["date_start"]).dt.strftime("%Y-%m-%d")
     result["date_end"] = pd.to_datetime(result["date_end"]).dt.strftime("%Y-%m-%d")
@@ -166,9 +156,7 @@ def full_market_stats(snapshot_dir: Path) -> tuple[dict[str, object], pd.DataFra
     del raw
 
     ordered = prices.sort_values(["Code", "Date"]).copy()
-    ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(
-        _log_diff
-    )
+    ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(_log_diff)
     returns = ordered.dropna(subset=["log_return"])
     grouped_returns = returns.groupby("Date", observed=True)["log_return"]
     daily = grouped_returns.agg(
