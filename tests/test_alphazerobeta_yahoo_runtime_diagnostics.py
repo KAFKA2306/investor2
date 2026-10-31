@@ -18,11 +18,10 @@ def test_repair_runtime_fails_fast_with_structured_scipy_diagnostic(
         return ModuleSpec(name, loader=None)
 
     monkeypatch.setattr(market_snapshot_builder.importlib.util, "find_spec", fake_find_spec)
-    monkeypatch.setattr(
-        market_snapshot_builder,
-        "package_version",
-        lambda name: None if name == "scipy" else "test-version",
-    )
+    def fake_package_version(name: str) -> str | None:
+        return None if name == "scipy" else "test-version"
+
+    monkeypatch.setattr(market_snapshot_builder, "package_version", fake_package_version)
 
     with pytest.raises(RuntimeError, match="scipy is required"):
         market_snapshot_builder.require_repair_runtime()
