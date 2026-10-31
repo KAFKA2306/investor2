@@ -13,6 +13,26 @@ from src.research.market_snapshot import MarketSnapshot, load_manifest, load_pri
 
 QUANTILES = (0.01, 0.05, 0.25, 0.50, 0.75, 0.95, 0.99)
 
+def _log_diff(values: pd.Series) -> pd.Series:
+    return np.log(values).diff()
+
+
+def _zero_volume_rate(values: pd.Series) -> float:
+    return float((values == 0).mean())
+
+
+def _population_std(values: pd.Series) -> float:
+    return float(values.std(ddof=0))
+
+
+def _kurtosis_excess(values: pd.Series) -> float:
+    return float(values.kurt()) if values.count() >= 4 else np.nan
+
+
+def _abs_return_gt_10pct_rate(values: pd.Series) -> float:
+    return float((values.dropna().abs() > np.log(1.10)).mean()) if values.notna().any() else np.nan
+
+
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -102,7 +122,7 @@ def column_quality(frame: pd.DataFrame) -> pd.DataFrame:
 def ticker_stats(prices: pd.DataFrame) -> pd.DataFrame:
     ordered = prices.sort_values(["Code", "Date"]).copy()
     ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(
-        lambda values: np.log(values).diff()
+        _log_diff
     )
     grouped = ordered.groupby("Code", observed=True)
     base = grouped.agg(
@@ -113,22 +133,22 @@ def ticker_stats(prices: pd.DataFrame) -> pd.DataFrame:
         close_median=("Close", "median"),
         volume_mean=("Volume", "mean"),
         volume_median=("Volume", "median"),
-        zero_volume_rate=("Volume", lambda values: float((values == 0).mean())),
+        zero_volume_rate=("Volume", _zero_volume_rate),
         return_observations=("log_return", "count"),
         return_mean=("log_return", "mean"),
-        return_std=("log_return", lambda values: float(values.std(ddof=0))),
+        return_std=("log_return", _population_std),
         return_skew=("log_return", "skew"),
     )
     kurt = (
         grouped["log_return"]
-        .apply(lambda values: float(values.kurt()) if values.count() >= 4 else np.nan)
+        .apply(_kurtosis_excess)
         .rename("return_kurtosis_excess")
     )
     quantiles = grouped["log_return"].quantile([0.01, 0.05, 0.50, 0.95, 0.99]).unstack()
     quantiles.columns = ["return_p01", "return_p05", "return_median", "return_p95", "return_p99"]
     abs10 = (
         grouped["log_return"]
-        .apply(lambda values: float((values.dropna().abs() > np.log(1.10)).mean()) if values.notna().any() else np.nan)
+        .apply(_abs_return_gt_10pct_rate)
         .rename("abs_return_gt_10pct_rate")
     )
     result = base.join(kurt).join(quantiles).join(abs10).reset_index()
@@ -147,7 +167,7 @@ def full_market_stats(snapshot_dir: Path) -> tuple[dict[str, object], pd.DataFra
 
     ordered = prices.sort_values(["Code", "Date"]).copy()
     ordered["log_return"] = ordered.groupby("Code", observed=True)["Close"].transform(
-        lambda values: np.log(values).diff()
+        _log_diff
     )
     returns = ordered.dropna(subset=["log_return"])
     grouped_returns = returns.groupby("Date", observed=True)["log_return"]
@@ -155,7 +175,7 @@ def full_market_stats(snapshot_dir: Path) -> tuple[dict[str, object], pd.DataFra
         cross_section_count="count",
         cross_section_mean="mean",
         cross_section_median="median",
-        cross_section_std=lambda values: float(values.std(ddof=0)),
+        cross_section_std=_population_std,
     )
     daily["cross_section_iqr"] = grouped_returns.quantile(0.75) - grouped_returns.quantile(0.25)
 
