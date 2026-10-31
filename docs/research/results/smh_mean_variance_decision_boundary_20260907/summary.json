@@ -29,6 +29,7 @@
     "annualized_arithmetic_return": "canonical Sharpe * canonical annualized volatility。canonical Sharpeはrisk-free rate 0%なので mu / sigma = Sharpe をそのまま逆算する。",
     "utility": "U(lambda) = annualized arithmetic return - 0.5 * lambda * annualized_variance",
     "boundary": "2 * (mu_A - mu_B) / (variance_A - variance_B)",
+    "boundary_precision": "Calculated from published 8-decimal annualized_arithmetic_return and Vol values; full-precision upstream crossings may differ slightly.",
     "lambda_domain": "lambda >= 0",
     "tail_risk_check": "mean-variance utilityとは別にMaximum Drawdownと95% Expected Shortfallを併記し、varianceだけでtail riskを隠さない。"
   },
@@ -41,19 +42,19 @@
     "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161, "annualized_arithmetic_return": 0.25796096}
   },
   "analytic_boundaries": {
-    "SMH100_to_SMH80_DBC20": 2.08569822,
-    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409336,
-    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51806266,
+    "SMH100_to_SMH80_DBC20": 2.08569807,
+    "SMH80_DBC20_to_SMH60_GLD20_BIL10_DBC10": 4.34409338,
+    "SMH60_GLD20_BIL10_DBC10_to_SMH60_GLD20_BIL20": 103.51865165,
     "upper_envelope": [
-      {"lambda": "0 <= lambda < 2.08569822", "preferred": "SMH100"},
-      {"lambda": "2.08569822 < lambda < 4.34409336", "preferred": "SMH80_DBC20"},
-      {"lambda": "4.34409336 < lambda < 103.51806266", "preferred": "SMH60_GLD20_BIL10_DBC10"},
-      {"lambda": "lambda > 103.51806266", "preferred": "SMH60_GLD20_BIL20"}
+      {"lambda": "0 <= lambda < 2.08569807", "preferred": "SMH100"},
+      {"lambda": "2.08569807 < lambda < 4.34409338", "preferred": "SMH80_DBC20"},
+      {"lambda": "4.34409338 < lambda < 103.51865165", "preferred": "SMH60_GLD20_BIL10_DBC10"},
+      {"lambda": "lambda > 103.51865165", "preferred": "SMH60_GLD20_BIL20"}
     ],
     "tie_points": [
-      {"lambda": 2.08569822, "portfolios": ["SMH100", "SMH80_DBC20"]},
-      {"lambda": 4.34409336, "portfolios": ["SMH80_DBC20", "SMH60_GLD20_BIL10_DBC10"]},
-      {"lambda": 103.51806266, "portfolios": ["SMH60_GLD20_BIL10_DBC10", "SMH60_GLD20_BIL20"]}
+      {"lambda": 2.08569807, "portfolios": ["SMH100", "SMH80_DBC20"]},
+      {"lambda": 4.34409338, "portfolios": ["SMH80_DBC20", "SMH60_GLD20_BIL10_DBC10"]},
+      {"lambda": 103.51865165, "portfolios": ["SMH60_GLD20_BIL10_DBC10", "SMH60_GLD20_BIL20"]}
     ],
     "never_upper_envelope": ["SMH80_GLD20", "SMH80_BIL20"]
   },
