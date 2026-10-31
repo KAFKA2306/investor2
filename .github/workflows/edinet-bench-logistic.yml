@@ -15,14 +15,14 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   contract:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7
-      - uses: actions/setup-python@v6
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # pinned
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
       - name: Install bounded contract dependencies
@@ -40,11 +40,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # pinned
         with:
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
           fetch-depth: 0
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
       - id: existing
@@ -129,15 +129,3 @@ jobs:
           python scripts/paper_family_frontier.py validate
           python scripts/paper_family_frontier.py render --check
           python scripts/paper_family_frontier.py readme --check
-      - name: Persist derived evidence on the PR branch
-        if: github.event_name == 'pull_request' && steps.existing.outputs.ready != 'true'
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add \
-            docs/research/results/edinet_bench_logistic/summary.json \
-            docs/research/paper_family_frontier.json \
-            docs/paper/benchmark_comparison.md \
-            README.md
-          git commit -m "research: persist EDINET-Bench logistic evidence"
-          git push origin HEAD:${{ github.head_ref }}
