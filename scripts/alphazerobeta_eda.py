@@ -13,6 +13,7 @@ from src.research.market_snapshot import MarketSnapshot, load_manifest, load_pri
 
 QUANTILES = (0.01, 0.05, 0.25, 0.50, 0.75, 0.95, 0.99)
 
+
 def _log_diff(values: pd.Series) -> pd.Series:
     return np.log(values).diff()
 
@@ -31,7 +32,6 @@ def _kurtosis_excess(values: pd.Series) -> float:
 
 def _abs_return_gt_10pct_rate(values: pd.Series) -> float:
     return float((values.dropna().abs() > np.log(1.10)).mean()) if values.notna().any() else np.nan
-
 
 
 def parse_args() -> argparse.Namespace:
