@@ -17,11 +17,11 @@
     "NVDA_Q2_FY2027": {
       "total_revenue_usd_billion": 96.221,
       "total_revenue_yoy_pct": 106,
-      "data_center_revenue_usd_billion": 89.0,
+      "data_center_revenue_usd_billion": 89,
       "data_center_revenue_yoy_pct": 117,
       "non_gaap_diluted_eps_usd": 2.22,
       "non_gaap_diluted_eps_yoy_pct": 120,
-      "gaap_gross_margin_pct": 75.0
+      "gaap_gross_margin_pct": 75
     }
   },
   "comparison": {
@@ -40,8 +40,18 @@
     "この結果をNVDAの買い推奨またはAVGOの売り推奨に使わない。"
   ],
   "primary_sources": [
-    "Broadcom Q3 FY2026 official investor relations release, published 2026-09-02",
-    "NVIDIA Q2 FY2027 official investor relations release, published 2026-08-26"
+    {
+      "company": "Broadcom",
+      "period": "Q3 FY2026",
+      "published": "2026-09-02",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "company": "NVIDIA",
+      "period": "Q2 FY2027",
+      "published": "2026-08-26",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/"
+    }
   ],
   "next_research": "NVDAとAVGOについて、point-in-timeの会社全体売上をAI関連とその他に分解し、gross/operating margin、税率、希薄化株式数まで会社固有に置いたbear/base/bull 5年EPSを構築し、現在価格からの5年IRR順位を比較する。"
 }
