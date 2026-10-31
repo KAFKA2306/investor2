@@ -176,12 +176,16 @@ def build_asset_features(group: pd.DataFrame) -> pd.DataFrame:
     return frame.replace([np.inf, -np.inf], np.nan)
 
 
+def _population_std(values: pd.Series) -> float:
+    return float(values.std(ddof=0))
+
+
 def cross_sectional_zscore(panel: pd.DataFrame, feature_columns: list[str]) -> pd.DataFrame:
     result = panel.copy()
     for column in feature_columns:
         grouped = result.groupby("Date", observed=True)[column]
         mean = grouped.transform("mean")
-        std = grouped.transform(lambda values: values.std(ddof=0)).replace(0.0, np.nan)
+        std = grouped.transform(_population_std).replace(0.0, np.nan)
         result[column] = ((result[column] - mean) / std).fillna(0.0)
     return result
 
