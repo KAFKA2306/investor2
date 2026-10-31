@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
-      "article_url": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
-      "author": "Ony Adeneke",
-      "guid": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
-      "published_at": "2026-10-14T22:14:59Z",
-      "title": "Balancing Hyperscale Demand and Ratepayer Protections in Wyoming"
-    },
-    {
-      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
-      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
-      "published_at": "2026-10-16T17:03:12Z",
-      "title": "S&P 500 Earnings Season Update: October 16, 2026"
-    },
-    {
       "article_id": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
       "article_url": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
       "author": "Lucas Caminiti",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
       "published_at": "2026-10-28T21:59:24Z",
       "title": "When No Portfolio Satisfies the Mandate: Using AI to Diagnose Optimization Infeasibility"
+    },
+    {
+      "article_id": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "article_url": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "author": "Banu Nadarajah",
+      "guid": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "published_at": "2026-10-30T15:02:21Z",
+      "title": "Metals & Mining: Global Drill Results Monitor"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "published_at": "2026-10-30T18:08:03Z",
+      "title": "S&P 500 Earnings Season Update: October 30, 2026"
     }
   ],
   "feed_title": "FactSet Insight",

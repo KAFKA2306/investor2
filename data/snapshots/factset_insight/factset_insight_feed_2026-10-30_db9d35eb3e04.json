@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "article_url": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "author": "Lucas Caminiti",
+      "guid": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "published_at": "2026-10-16T21:45:00Z",
+      "title": "Modeling Iron-Air Battery Arbitrage in U.S. Power Markets"
+    },
+    {
+      "article_id": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "article_url": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "published_at": "2026-10-19T16:00:01Z",
+      "title": "Are “Magnificent 7” Companies Still Top Contributors to S&P 500 Earnings Growth for Q3?"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
+      "published_at": "2026-10-20T16:00:00Z",
+      "title": "U.S. Mergers & Acquisitions Monthly Review: September 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "article_url": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
+      "published_at": "2026-10-21T15:25:18Z",
+      "title": "Why AI Makes Your Portfolio Optimization Engine More Important, Not Less"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-23-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-23-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-23-2026",
+      "published_at": "2026-10-23T17:03:49Z",
+      "title": "S&P 500 Earnings Season Update: October 23, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-reporting-second-highest-net-profit-margin-in-more-than-15-years-for-q3-2026",
+      "article_url": "https://insight.factset.com/sp-500-reporting-second-highest-net-profit-margin-in-more-than-15-years-for-q3-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-reporting-second-highest-net-profit-margin-in-more-than-15-years-for-q3-2026",
+      "published_at": "2026-10-26T16:00:00Z",
+      "title": "S&P 500 Reporting Second-Highest Net Profit Margin in More Than 15 Years for Q3 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "article_url": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "author": "insight@factset.com (Colin Devereaux)",
+      "guid": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "published_at": "2026-10-28T16:00:03Z",
+      "title": "Back to the Future: Tracking LP Portfolio Composition Over 20 Years"
+    },
+    {
+      "article_id": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "article_url": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "published_at": "2026-10-28T21:59:24Z",
+      "title": "When No Portfolio Satisfies the Mandate: Using AI to Diagnose Optimization Infeasibility"
+    },
+    {
+      "article_id": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "article_url": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "author": "Banu Nadarajah",
+      "guid": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "published_at": "2026-10-30T15:02:21Z",
+      "title": "Metals & Mining: Global Drill Results Monitor"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "published_at": "2026-10-30T18:08:03Z",
+      "title": "S&P 500 Earnings Season Update: October 30, 2026"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}
