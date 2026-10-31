@@ -76,6 +76,7 @@ def test_discover_live_markets_skips_markets_without_live_order_book(
 ) -> None:
     disabled = _market().model_copy(update={"accepting_orders": False})
     no_quotes = _market(market_id="no-quotes").model_copy(update={"best_bid": None})
+
     def fake_fetch_markets(**_: Any) -> list[GammaMarket]:
         return [disabled, no_quotes, _market()]
 
