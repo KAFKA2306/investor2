@@ -214,6 +214,16 @@ def make_sparse_weight_path(
     return weights
 
 
+class UnpricedHeldAsset(AssertionError):
+    def __init__(self, row: int, asset: int) -> None:
+        self.row = row
+        self.asset = asset
+        super().__init__(
+            f"unpriced held asset at realization row {row}, asset index {asset}; "
+            "obtain an official suspension/delisting price before reporting OOS performance"
+        )
+
+
 def returns_for_sparse_valuation(
     weights: np.ndarray, returns: np.ndarray, *, start: int, end: int
 ) -> np.ndarray:
@@ -227,10 +237,7 @@ def returns_for_sparse_valuation(
     unpriced = held & ~np.isfinite(realized)
     if np.any(unpriced):
         day, asset = np.argwhere(unpriced)[0]
-        raise AssertionError(
-            f"unpriced held asset at realization row {start + 1 + int(day)}, asset index {int(asset)}; "
-            "obtain an official suspension/delisting price before reporting OOS performance"
-        )
+        raise UnpricedHeldAsset(start + 1 + int(day), int(asset))
     return np.where(np.isfinite(observed), observed, 0.0)
 
 
