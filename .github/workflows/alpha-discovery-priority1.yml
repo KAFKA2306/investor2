@@ -102,6 +102,55 @@ jobs:
             --output /tmp/alpha-discovery-priority1/panel.npz \
             --max-assets 256 \
             --universe-cutoff 2025-08-30
+      - name: Diagnose PIT OOS availability without changing frozen data
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          import numpy as np
+          import pandas as pd
+
+          from scripts.alphazerobeta_prepare import normalize_price_frame, normalize_benchmark_frame
+          from src.research.market_snapshot import MarketSnapshot, load_benchmark, load_prices
+
+          contract = json.loads(Path("docs/research/contracts/alpha_discovery_priority1_jquants_256.json").read_text())
+          manifest = json.loads(Path("/tmp/alpha-discovery-priority1/panel.npz.manifest.json").read_text())
+          split = contract["split"]
+          start = pd.Timestamp(split["untouched_oos_calendar_start"])
+          end = pd.Timestamp(split["untouched_oos_calendar_end"])
+          codes = set(map(str, manifest["selected_codes"]))
+          snapshot = MarketSnapshot(Path("/tmp/jquants-free"))
+          prices = normalize_price_frame(load_prices(snapshot, regions=["jp"]))
+          selected = prices.loc[prices["Code"].isin(codes)]
+          counts = selected.loc[selected["Date"].between(start, end)].groupby("Date")["Code"].nunique()
+          benchmark = normalize_benchmark_frame(load_benchmark(snapshot))
+          dates = benchmark.loc[
+              benchmark["Date"].between(start, end) & benchmark["BenchmarkReturn"].notna(), "Date"
+          ].drop_duplicates().sort_values()
+          coverage = counts.reindex(pd.DatetimeIndex(dates), fill_value=0)
+          with np.load("/tmp/alpha-discovery-priority1/panel.npz", allow_pickle=False) as panel:
+              panel_dates = panel["dates"].astype(str)
+          monthly = {}
+          for month, values in coverage.groupby(coverage.index.to_period("M")):
+              monthly[str(month)] = {
+                  "benchmark_days": int(len(values)),
+                  "all_selected_present_days": int((values == len(codes)).sum()),
+                  "minimum_present": int(values.min()),
+                  "maximum_present": int(values.max()),
+              }
+          print(json.dumps({
+              "diagnostic": "pit-oos-availability-v1",
+              "selected_assets": len(codes),
+              "panel_first": str(panel_dates[0]) if len(panel_dates) else None,
+              "panel_last": str(panel_dates[-1]) if len(panel_dates) else None,
+              "oos_benchmark_days": int(len(coverage)),
+              "oos_days_with_all_selected_prices": int((coverage == len(codes)).sum()),
+              "oos_days_with_any_selected_prices": int((coverage > 0).sum()),
+              "monthly": monthly,
+              "note": "Counts describe raw price availability, not feature completeness or research PASS.",
+          }, sort_keys=True))
+          PY
       - name: Execute frozen matched ablation
         run: |
           python scripts/alpha_discovery_priority1_jquants.py \
