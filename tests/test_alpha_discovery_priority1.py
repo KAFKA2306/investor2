@@ -1,12 +1,18 @@
 from __future__ import annotations
 
 import numpy as np
+import pandas as pd
+import pytest
+
+from scripts.alphazerobeta_prepare import build_asset_features, cross_sectional_zscore
 
 from src.research.alpha_discovery_priority1 import (
     CandidateSpec,
     ast_fingerprint,
     build_candidate_pool,
     materialize_candidate,
+    make_sparse_weight_path,
+    returns_for_sparse_valuation,
     run_ablation,
     select_candidates,
     semantic_signature,
@@ -114,3 +120,57 @@ def test_small_end_to_end_ablation_keeps_budgets_equal() -> None:
     assert all(int(dict(payload)["validation_evaluator_calls"]) == 6 for payload in arms.values())
     assert all(int(dict(payload)["finalist_count"]) == 2 for payload in arms.values())
     assert result["winner_by_primary"]
+
+
+def test_sparse_standardization_does_not_turn_missing_data_into_a_trade_signal() -> None:
+    panel = pd.DataFrame({
+        "Date": pd.to_datetime(["2026-01-05"] * 3),
+        "Code": ["A", "B", "C"],
+        "momentum_5": [1.0, 3.0, np.nan],
+    })
+    sparse = cross_sectional_zscore(panel, ["momentum_5"], preserve_missing=True)
+    dense = cross_sectional_zscore(panel, ["momentum_5"])
+    assert np.isnan(sparse.loc[2, "momentum_5"])
+    assert dense.loc[2, "momentum_5"] == 0.0
+    np.testing.assert_allclose(sparse.loc[:1, "momentum_5"], [-1.0, 1.0])
+
+
+def test_missing_trading_session_does_not_create_a_multiday_return() -> None:
+    days = pd.to_datetime(["2026-01-05", "2026-01-06", "2026-01-07"])
+    prices = pd.DataFrame({"Date": days, "Close": [100.0, np.nan, 120.0], "Volume": [100, np.nan, 100]})
+    features = build_asset_features(prices)
+    assert np.isnan(features.loc[days[2], "asset_return"])
+    assert np.isnan(features.loc[days[2], "momentum_5"])
+
+
+def test_sparse_positions_use_only_observed_decision_day_data() -> None:
+    scores = np.tile([1.0, 2.0, 3.0, 4.0], (5, 1))
+    observed = np.full((5, 4), 0.01)
+    observed[1, 3] = np.nan
+    first = make_sparse_weight_path(
+        scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
+    )
+    changed_future = observed.copy()
+    changed_future[2, 0] = 999.0
+    second = make_sparse_weight_path(
+        scores, changed_future, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
+    )
+    np.testing.assert_array_equal(first[1], second[1])
+    assert first[1, 3] == 0.0
+    assert first[1, 2] > 0.0
+
+
+def test_sparse_valuation_fails_closed_on_missing_held_asset() -> None:
+    scores = np.tile([1.0, 2.0, 3.0, 4.0], (5, 1))
+    observed = np.full((5, 4), 0.01)
+    weights = make_sparse_weight_path(
+        scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
+    )
+    observed[2, 3] = np.nan
+    with pytest.raises(AssertionError, match="unpriced held asset"):
+        returns_for_sparse_valuation(weights, observed, start=1, end=4)
+    observed[2, 3] = 0.01
+    observed[2, 1] = np.nan
+    valued = returns_for_sparse_valuation(weights, observed, start=1, end=4)
+    assert valued[2, 1] == 0.0
+    assert np.isfinite(valued).all()
