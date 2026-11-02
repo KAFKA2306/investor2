@@ -189,6 +189,4 @@ def test_corporate_action_gate_uses_published_last_trading_day_without_backdatin
     assert np.isnan(features[1:, 0]).all()
     assert np.isfinite(features[:, 1]).all()
     with pytest.raises(AssertionError, match="invalid PIT"):
-        apply_known_delisting_gate(
-            dates, codes, features, [{**event, "published_on": "2026-03-12"}]
-        )
+        apply_known_delisting_gate(dates, codes, features, [{**event, "published_on": "2026-03-12"}])
