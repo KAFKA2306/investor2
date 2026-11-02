@@ -6,6 +6,7 @@ import hashlib
 import json
 import os
 import subprocess
+import sys
 from html import escape
 from pathlib import Path
 from typing import Any
@@ -13,7 +14,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-from src.research.alpha_discovery_priority1 import run_ablation
+from src.research.alpha_discovery_priority1 import UnpricedHeldAsset, run_ablation
 
 
 def sha256_file(path: Path) -> str:
@@ -106,12 +107,37 @@ def write_plot(path: Path, result: dict[str, Any]) -> None:
     path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
+def run_with_price_diagnostics(
+    *, dates: pd.DatetimeIndex, codes: np.ndarray, **kwargs: Any
+) -> dict[str, Any]:
+    try:
+        return run_ablation(**kwargs)
+    except UnpricedHeldAsset as exc:
+        returns = np.asarray(kwargs["returns"], dtype=np.float64)
+        observed = np.flatnonzero(np.isfinite(returns[:, exc.asset]))
+        before = observed[observed < exc.row]
+        after = observed[observed > exc.row]
+        evidence = {
+            "error": "unpriced-held-asset",
+            "date": str(dates[exc.row].date()),
+            "code": str(codes[exc.asset]),
+            "row": exc.row,
+            "asset_index": exc.asset,
+            "last_observed_return_date": str(dates[before[-1]].date()) if before.size else None,
+            "next_observed_return_date": str(dates[after[0]].date()) if after.size else None,
+            "valuation_policy": "fail-closed; no fabricated price, no future-dependent trade decision",
+        }
+        print(json.dumps(evidence, sort_keys=True), file=sys.stderr)
+        raise
+
+
 def main() -> None:
     args = parse_args()
     contract = json.loads(args.contract.read_text(encoding="utf-8"))
     manifest = json.loads(args.dataset_manifest.read_text(encoding="utf-8"))
     with np.load(args.dataset, allow_pickle=False) as data:
         dates_raw = data["dates"].astype(str)
+        codes = data["codes"].astype(str)
         feature_names = data["feature_names"].astype(str).tolist()
         features = data["features"].astype(np.float64)
         returns = data["returns"].astype(np.float64)
@@ -119,6 +145,8 @@ def main() -> None:
 
     if features.shape[:2] != returns.shape:
         raise AssertionError("features and returns do not align")
+    if len(codes) != features.shape[1]:
+        raise AssertionError("code count does not match asset tensor")
     if features.shape[2] != len(feature_names):
         raise AssertionError("feature names do not match feature tensor")
     expected_assets = int(dict(contract["dataset"])["max_assets"])
@@ -141,7 +169,9 @@ def main() -> None:
 
     budget = dict(contract["budget"])
     portfolio = dict(contract["portfolio"])
-    ablation = run_ablation(
+    ablation = run_with_price_diagnostics(
+        dates=dates,
+        codes=codes,
         feature_names=feature_names,
         feature_tensor=features,
         returns=returns,
