@@ -8,6 +8,7 @@ import os
 import subprocess
 from html import escape
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -54,7 +55,7 @@ def _effective_range(dates: pd.DatetimeIndex, bounds: tuple[int, int]) -> dict[s
     return {"start": str(dates[start].date()), "end": str(dates[end - 1].date())}
 
 
-def write_plot(path: Path, result: dict[str, object]) -> None:
+def write_plot(path: Path, result: dict[str, Any]) -> None:
     arm_results = dict(dict(result["ablation"])["arms"])
     labels = [
         ("baseline", "Baseline"),
