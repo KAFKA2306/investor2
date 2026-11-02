@@ -1114,7 +1114,7 @@
         ],
         "validation_calls_per_unique_survivor": 12.0,
         "validation_evaluator_calls": 24,
-        "wall_clock_seconds": 3.4849343470000065
+        "wall_clock_seconds": 3.496664611
       },
       "baseline": {
         "arm": "baseline",
@@ -1930,7 +1930,7 @@
         ],
         "validation_calls_per_unique_survivor": 8.0,
         "validation_evaluator_calls": 24,
-        "wall_clock_seconds": 3.5770346909999944
+        "wall_clock_seconds": 3.535183525000008
       },
       "semantic_schema": {
         "arm": "semantic_schema",
@@ -3123,7 +3123,7 @@
         ],
         "validation_calls_per_unique_survivor": 12.0,
         "validation_evaluator_calls": 24,
-        "wall_clock_seconds": 3.491958570999998
+        "wall_clock_seconds": 3.4905929219999905
       }
     },
     "best_primary_value": 3,
@@ -3340,7 +3340,7 @@
     ]
   },
   "claim_boundary": "This is a mechanism-level matched ablation on a fixed deterministic candidate generator. It does not reproduce AlphaAgent or AlphaSchema end-to-end and cannot by itself produce a BEAT/TIE/LOSE paper-family verdict.",
-  "code_revision": "6e741ade895d5d8111026a3a34600895cdc23c46",
+  "code_revision": "01a7d2cc69743c740c0bd9b850ef85710f68b7d7",
   "contract": {
     "path": "docs/research/contracts/alpha_discovery_priority1_jquants_256.json",
     "sha256": "33109f5ae3ba123227ba3d3cd538ffb32e61c45419175c5149df2a866435adbc"
