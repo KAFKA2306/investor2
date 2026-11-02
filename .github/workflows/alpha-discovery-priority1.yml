@@ -33,6 +33,7 @@ jobs:
         run: |
           python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py
           ruff check src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py tests/test_alpha_discovery_priority1.py
+          ruff format --diff src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py
           pytest -q tests/test_alpha_discovery_priority1.py
 
   execute-real-data:
