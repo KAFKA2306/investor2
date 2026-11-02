@@ -45,7 +45,12 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--start", help="Optional inclusive panel start date")
     parser.add_argument("--end", help="Optional inclusive panel end date")
     parser.add_argument("--sparse-panel", action="store_true", help="Preserve PIT missing assets as NaN")
-    parser.add_argument("--min-active-assets", type=int, default=2, help="Minimum assets with fully observed features per sparse-panel date")
+    parser.add_argument(
+        "--min-active-assets",
+        type=int,
+        default=2,
+        help="Minimum assets with fully observed features per sparse-panel date",
+    )
     return parser.parse_args()
 
 
