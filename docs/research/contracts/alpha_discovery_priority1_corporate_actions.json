@@ -1,0 +1,42 @@
+{
+  "schema_version": "investor2.pit-corporate-action-exclusion.v1",
+  "policy": "For a public JPX decision known by the last trading day, no new OOS position is formed at that day's close. Existing realized returns up to the last trading day remain intact. Successor stocks are not automatically inserted into the frozen 256-stock universe. No synthetic delisting price or future survivorship filtering.",
+  "events": [
+    {
+      "code": "71630",
+      "name": "住信SBIネット銀行",
+      "published_on": "2025-08-28",
+      "last_trading_day": "2025-09-24",
+      "delisting_day": "2025-09-25",
+      "reason": "cash buyout and share consolidation",
+      "source_url": "https://www.jpx.co.jp/news/1023/20250828-12.html"
+    },
+    {
+      "code": "96130",
+      "name": "NTTデータグループ",
+      "published_on": "2025-08-29",
+      "last_trading_day": "2025-09-25",
+      "delisting_day": "2025-09-26",
+      "reason": "cash buyout and share consolidation",
+      "source_url": "https://www.jpx.co.jp/news/1023/20250829-12.html"
+    },
+    {
+      "code": "55950",
+      "name": "QPS研究所",
+      "published_on": "2025-11-04",
+      "last_trading_day": "2025-11-26",
+      "delisting_day": "2025-11-27",
+      "reason": "share transfer to QPS Holdings (464A), 1:1; successor not auto-included",
+      "source_url": "https://www2.jpx.co.jp/disc/55950/140120251104586504.pdf"
+    },
+    {
+      "code": "97190",
+      "name": "SCSK",
+      "published_on": "2026-02-09",
+      "last_trading_day": "2026-03-11",
+      "delisting_day": "2026-03-12",
+      "reason": "cash buyout and share consolidation",
+      "source_url": "https://www.jpx.co.jp/english/news/1023/20260209-11.html"
+    }
+  ]
+}

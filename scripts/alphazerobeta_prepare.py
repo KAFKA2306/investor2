@@ -44,6 +44,13 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--start", help="Optional inclusive panel start date")
     parser.add_argument("--end", help="Optional inclusive panel end date")
+    parser.add_argument("--sparse-panel", action="store_true", help="Preserve PIT missing assets as NaN")
+    parser.add_argument(
+        "--min-active-assets",
+        type=int,
+        default=2,
+        help="Minimum assets with fully observed features per sparse-panel date",
+    )
     return parser.parse_args()
 
 
@@ -180,13 +187,16 @@ def _population_std(values: pd.Series) -> float:
     return float(values.std(ddof=0))
 
 
-def cross_sectional_zscore(panel: pd.DataFrame, feature_columns: list[str]) -> pd.DataFrame:
+def cross_sectional_zscore(
+    panel: pd.DataFrame, feature_columns: list[str], *, preserve_missing: bool = False
+) -> pd.DataFrame:
     result = panel.copy()
     for column in feature_columns:
         grouped = result.groupby("Date", observed=True)[column]
         mean = grouped.transform("mean")
         std = grouped.transform(_population_std).replace(0.0, np.nan)
-        result[column] = ((result[column] - mean) / std).fillna(0.0)
+        standardized = (result[column] - mean) / std
+        result[column] = standardized if preserve_missing else standardized.fillna(0.0)
     return result
 
 
@@ -197,7 +207,14 @@ def main() -> None:
     codes = choose_universe(prices, cutoff, args.max_assets)
     selected = prices[prices["Code"].isin(codes)].copy()
     pieces = []
+    benchmark_calendar = pd.DatetimeIndex(
+        benchmark.loc[benchmark["BenchmarkReturn"].notna(), "Date"].drop_duplicates().sort_values()
+    )
     for code, group in selected.groupby("Code", observed=True):
+        # Reindex before rolling windows: missing sessions must not become
+        # multi-session returns. No forward/backward fill is permitted.
+        if args.sparse_panel:
+            group = group.set_index("Date").reindex(benchmark_calendar).rename_axis("Date").reset_index()
         feature_frame = build_asset_features(group).reset_index()
         feature_frame["Code"] = str(code)
         pieces.append(feature_frame)
@@ -207,21 +224,35 @@ def main() -> None:
     if args.end:
         panel = panel[panel["Date"] <= pd.Timestamp(args.end)]
     feature_columns = [column for column in panel.columns if column not in {"Date", "Code", "asset_return"}]
-    panel = cross_sectional_zscore(panel, feature_columns)
-    counts = panel.groupby("Date", observed=True)["Code"].nunique()
-    common_dates = counts[counts == len(codes)].index.sort_values()
-    panel = panel[panel["Date"].isin(common_dates)].dropna(subset=feature_columns + ["asset_return"])
-    counts = panel.groupby("Date", observed=True)["Code"].nunique()
-    common_dates = counts[counts == len(codes)].index.sort_values()
-    panel = panel[panel["Date"].isin(common_dates)]
-    bench = benchmark.set_index("Date").reindex(common_dates)
-    valid_dates = bench["BenchmarkReturn"].dropna().index
-    panel = panel[panel["Date"].isin(valid_dates)]
-    common_dates = pd.DatetimeIndex(valid_dates)
+    panel = cross_sectional_zscore(panel, feature_columns, preserve_missing=args.sparse_panel)
+    if args.sparse_panel:
+        if not 2 <= args.min_active_assets <= len(codes):
+            raise AssertionError("min-active-assets must be between 2 and selected asset count")
+        # Daily availability uses only information available at that date.
+        complete = panel.dropna(subset=feature_columns + ["asset_return"])
+        counts = complete.groupby("Date", observed=True)["Code"].nunique()
+        common_dates = counts[counts >= args.min_active_assets].index.sort_values()
+        valid_benchmark = benchmark.set_index("Date")["BenchmarkReturn"].dropna().index
+        common_dates = pd.DatetimeIndex(common_dates.intersection(valid_benchmark))
+        panel = panel[panel["Date"].isin(common_dates)]
+    else:
+        counts = panel.groupby("Date", observed=True)["Code"].nunique()
+        common_dates = counts[counts == len(codes)].index.sort_values()
+        panel = panel[panel["Date"].isin(common_dates)].dropna(subset=feature_columns + ["asset_return"])
+        counts = panel.groupby("Date", observed=True)["Code"].nunique()
+        common_dates = counts[counts == len(codes)].index.sort_values()
+        panel = panel[panel["Date"].isin(common_dates)]
+        bench = benchmark.set_index("Date").reindex(common_dates)
+        valid_dates = bench["BenchmarkReturn"].dropna().index
+        panel = panel[panel["Date"].isin(valid_dates)]
+        common_dates = pd.DatetimeIndex(valid_dates)
     if len(common_dates) < 252:
         raise AssertionError(f"only {len(common_dates)} aligned trading days; need at least 252")
     code_order = sorted(codes)
     panel = panel.set_index(["Date", "Code"]).sort_index()
+    if args.sparse_panel:
+        full_index = pd.MultiIndex.from_product([common_dates, code_order], names=["Date", "Code"])
+        panel = panel.reindex(full_index)
     features = np.stack(
         [panel.loc[(common_dates, code), feature_columns].to_numpy(dtype=np.float32) for code in code_order], axis=1
     )
@@ -247,6 +278,10 @@ def main() -> None:
             **source_metadata,
             "universe_cutoff": str(cutoff.date()),
             "selection_rule": "top mean price*volume on/before cutoff, minimum available-history gate",
+            "panel_missing_policy": "sparse_nan_no_fill" if args.sparse_panel else "complete_case",
+            "min_active_assets": args.min_active_assets if args.sparse_panel else len(codes),
+            "missing_return_cells": int(np.isnan(returns).sum()),
+            "missing_feature_cells": int(np.isnan(features).sum()),
             "selected_codes": code_order,
             "date_start": str(common_dates[0].date()),
             "date_end": str(common_dates[-1].date()),

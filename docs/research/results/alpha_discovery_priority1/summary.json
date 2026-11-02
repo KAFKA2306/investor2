@@ -1,0 +1,59 @@
+{
+  "arms": {
+    "ast_originality": {
+      "best_finalist_oos_sharpe": 1.351164891164917,
+      "median_finalist_oos_sharpe": -6.097990404641106,
+      "unique_oos_survivors": 2,
+      "unique_semantic_schemas_evaluated": 21,
+      "unique_structural_candidates_evaluated": 24,
+      "validation_calls_per_unique_survivor": 12.0,
+      "validation_evaluator_calls": 24
+    },
+    "baseline": {
+      "best_finalist_oos_sharpe": 1.351164891164917,
+      "median_finalist_oos_sharpe": -2.6110354110911755,
+      "unique_oos_survivors": 3,
+      "unique_semantic_schemas_evaluated": 14,
+      "unique_structural_candidates_evaluated": 17,
+      "validation_calls_per_unique_survivor": 8.0,
+      "validation_evaluator_calls": 24
+    },
+    "semantic_schema": {
+      "best_finalist_oos_sharpe": 1.351164891164917,
+      "median_finalist_oos_sharpe": -6.105097322128757,
+      "unique_oos_survivors": 2,
+      "unique_semantic_schemas_evaluated": 24,
+      "unique_structural_candidates_evaluated": 24,
+      "validation_calls_per_unique_survivor": 12.0,
+      "validation_evaluator_calls": 24
+    }
+  },
+  "code_revision": "01a7d2cc69743c740c0bd9b850ef85710f68b7d7",
+  "contract_sha256": "33109f5ae3ba123227ba3d3cd538ffb32e61c45419175c5149df2a866435adbc",
+  "dataset_sha256": "64d615d29885e0e50401e01dbd195dfd5e969bdfdfbd1ed60c98540975d9f89f",
+  "effective_split": {
+    "train": {
+      "end": "2025-08-29",
+      "start": "2024-08-30"
+    },
+    "untouched_oos": {
+      "end": "2026-05-29",
+      "start": "2025-12-01"
+    },
+    "validation": {
+      "end": "2025-11-28",
+      "start": "2025-09-01"
+    }
+  },
+  "frontier_verdict": null,
+  "mechanism_verdict_vs_baseline": {
+    "ast_originality": "WORSE_PRIMARY",
+    "baseline": "REFERENCE",
+    "semantic_schema": "WORSE_PRIMARY"
+  },
+  "research_date": "2026-08-26",
+  "schema_version": "investor2.alpha-discovery-priority1-summary.v1",
+  "winner_by_primary": [
+    "baseline"
+  ]
+}

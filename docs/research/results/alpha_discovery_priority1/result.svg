@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<rect width="1200" height="720" fill="#ffffff"/>
+<style>text{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;fill:#111827}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#4b5563}.label{font-size:17px;font-weight:600}.metric{font-size:14px;fill:#374151}.value{font-size:22px;font-weight:700}.axis{stroke:#9ca3af;stroke-width:1}.bar{fill:#4b5563}</style>
+<text x="60" y="58" class="title">Priority 1: originality / semantic control</text>
+<text x="60" y="88" class="sub">Primary: unique untouched-OOS survivors per 24 validation evaluator calls</text>
+<line x1="100" y1="500" x2="1100" y2="500" class="axis"/>
+<rect x="210" y="200.0" width="160" height="300.0" class="bar"/>
+<text x="290" y="188.0" text-anchor="middle" class="value">3</text>
+<text x="290" y="535" text-anchor="middle" class="label">Baseline</text>
+<text x="290" y="562" text-anchor="middle" class="metric">structural unique: 17/24</text>
+<text x="290" y="584" text-anchor="middle" class="metric">semantic unique: 14/24</text>
+<text x="290" y="606" text-anchor="middle" class="metric">best OOS Sharpe: 1.351</text>
+<rect x="540" y="300.0" width="160" height="200.0" class="bar"/>
+<text x="620" y="288.0" text-anchor="middle" class="value">2</text>
+<text x="620" y="535" text-anchor="middle" class="label">AST originality</text>
+<text x="620" y="562" text-anchor="middle" class="metric">structural unique: 24/24</text>
+<text x="620" y="584" text-anchor="middle" class="metric">semantic unique: 21/24</text>
+<text x="620" y="606" text-anchor="middle" class="metric">best OOS Sharpe: 1.351</text>
+<rect x="870" y="300.0" width="160" height="200.0" class="bar"/>
+<text x="950" y="288.0" text-anchor="middle" class="value">2</text>
+<text x="950" y="535" text-anchor="middle" class="label">Semantic schema</text>
+<text x="950" y="562" text-anchor="middle" class="metric">structural unique: 24/24</text>
+<text x="950" y="584" text-anchor="middle" class="metric">semantic unique: 24/24</text>
+<text x="950" y="606" text-anchor="middle" class="metric">best OOS Sharpe: 1.351</text>
+<text x="60" y="665" class="sub">Winner(s) by frozen primary metric: baseline</text>
+<text x="60" y="693" class="sub">Mechanism evidence only; no paper-family BEAT/TIE/LOSE verdict is implied.</text>
+</svg>
