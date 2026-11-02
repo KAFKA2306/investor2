@@ -135,14 +135,16 @@ def apply_known_delisting_gate(
         # future announcements to block an earlier session.
         block = (dates >= last_trade) & (dates >= published)
         features[block, int(matches[0]), :] = np.nan
-        applied.append({
-            "code": code,
-            "published_on": str(published.date()),
-            "last_trading_day": str(last_trade.date()),
-            "delisting_day": str(delisted.date()),
-            "masked_decision_days": int(block.sum()),
-            "source_url": source,
-        })
+        applied.append(
+            {
+                "code": code,
+                "published_on": str(published.date()),
+                "last_trading_day": str(last_trade.date()),
+                "delisting_day": str(delisted.date()),
+                "masked_decision_days": int(block.sum()),
+                "source_url": source,
+            }
+        )
     return applied
 
 
@@ -197,9 +199,7 @@ def main() -> None:
     corporate_actions = json.loads(args.corporate_actions.read_text(encoding="utf-8"))
     if corporate_actions.get("schema_version") != "investor2.pit-corporate-action-exclusion.v1":
         raise AssertionError("unknown PIT corporate-action policy")
-    applied_actions = apply_known_delisting_gate(
-        dates, codes, features, list(corporate_actions["events"])
-    )
+    applied_actions = apply_known_delisting_gate(dates, codes, features, list(corporate_actions["events"]))
     split = dict(contract["split"])
     train = _bounds(dates, str(split["train_calendar_start"]), str(split["validation_calendar_start"]))
     validation = _bounds(
