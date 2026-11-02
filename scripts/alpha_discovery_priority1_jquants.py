@@ -99,7 +99,7 @@ def write_plot(path: Path, result: dict[str, Any]) -> None:
         [
             f'<text x="60" y="665" class="sub">Winner(s) by frozen primary metric: {escape(winners)}</text>',
             '<text x="60" y="693" class="sub">Mechanism evidence only; no paper-family BEAT/TIE/LOSE verdict is implied.</text>',
-            '</svg>',
+            "</svg>",
         ]
     )
     path.parent.mkdir(parents=True, exist_ok=True)
