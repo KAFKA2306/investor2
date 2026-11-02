@@ -10,6 +10,7 @@ on:
       - "scripts/jquants_japan_panel.py"
       - "tests/test_alpha_discovery_priority1.py"
       - "docs/research/contracts/alpha_discovery_priority1_jquants_256.json"
+      - "docs/research/contracts/alpha_discovery_priority1_corporate_actions.json"
       - ".github/workflows/alpha-discovery-priority1.yml"
 
 permissions:
@@ -179,6 +180,7 @@ jobs:
             --dataset /tmp/alpha-discovery-priority1/panel.npz \
             --dataset-manifest /tmp/alpha-discovery-priority1/panel.npz.manifest.json \
             --contract docs/research/contracts/alpha_discovery_priority1_jquants_256.json \
+            --corporate-actions docs/research/contracts/alpha_discovery_priority1_corporate_actions.json \
             --output /tmp/alpha-discovery-priority1/result.json \
             --plot /tmp/alpha-discovery-priority1/result.svg
       - name: Prepare review evidence

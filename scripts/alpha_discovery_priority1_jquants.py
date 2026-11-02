@@ -30,6 +30,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--dataset", required=True, type=Path)
     parser.add_argument("--dataset-manifest", required=True, type=Path)
     parser.add_argument("--contract", required=True, type=Path)
+    parser.add_argument("--corporate-actions", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--plot", required=True, type=Path)
     return parser.parse_args()
@@ -107,6 +108,44 @@ def write_plot(path: Path, result: dict[str, Any]) -> None:
     path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
+def apply_known_delisting_gate(
+    dates: pd.DatetimeIndex, codes: np.ndarray, features: np.ndarray, events: list[dict[str, str]]
+) -> list[dict[str, str | int]]:
+    """Stop forming positions at the known last-trading-day close, using dated exchange notices."""
+    applied: list[dict[str, str | int]] = []
+    seen: set[str] = set()
+    for event in events:
+        code = str(event["code"])
+        if code in seen:
+            raise AssertionError(f"duplicate corporate-action code: {code}")
+        seen.add(code)
+        published = pd.Timestamp(str(event["published_on"]))
+        last_trade = pd.Timestamp(str(event["last_trading_day"]))
+        delisted = pd.Timestamp(str(event["delisting_day"]))
+        source = str(event["source_url"])
+        if not published <= last_trade < delisted:
+            raise AssertionError(f"invalid PIT corporate-action dates for {code}")
+        if not source.startswith(("https://www.jpx.co.jp/", "https://www2.jpx.co.jp/")):
+            raise AssertionError(f"corporate action needs official JPX source: {code}")
+        matches = np.flatnonzero(codes == code)
+        if len(matches) != 1:
+            raise AssertionError(f"corporate-action code missing or duplicated in frozen universe: {code}")
+        # The decision is made after today's close for next-day realization.
+        # Do not form a new position on the last trading day, and never use
+        # future announcements to block an earlier session.
+        block = (dates >= last_trade) & (dates >= published)
+        features[block, int(matches[0]), :] = np.nan
+        applied.append({
+            "code": code,
+            "published_on": str(published.date()),
+            "last_trading_day": str(last_trade.date()),
+            "delisting_day": str(delisted.date()),
+            "masked_decision_days": int(block.sum()),
+            "source_url": source,
+        })
+    return applied
+
+
 def run_with_price_diagnostics(*, dates: pd.DatetimeIndex, codes: np.ndarray, **kwargs: Any) -> dict[str, Any]:
     try:
         return run_ablation(**kwargs)
@@ -155,6 +194,12 @@ def main() -> None:
         raise AssertionError(f"universe cutoff drifted: {manifest.get('universe_cutoff')} != {expected_cutoff}")
 
     dates = pd.DatetimeIndex(pd.to_datetime(dates_raw.tolist()))
+    corporate_actions = json.loads(args.corporate_actions.read_text(encoding="utf-8"))
+    if corporate_actions.get("schema_version") != "investor2.pit-corporate-action-exclusion.v1":
+        raise AssertionError("unknown PIT corporate-action policy")
+    applied_actions = apply_known_delisting_gate(
+        dates, codes, features, list(corporate_actions["events"])
+    )
     split = dict(contract["split"])
     train = _bounds(dates, str(split["train_calendar_start"]), str(split["validation_calendar_start"]))
     validation = _bounds(
@@ -193,6 +238,12 @@ def main() -> None:
         "execution_status": "COMPLETED",
         "issues": [194, 222],
         "claim_boundary": contract["claim_boundary"],
+        "corporate_action_exclusions": {
+            "policy": "No new position at a publicly announced last-trading-day close; no successor substitution",
+            "source_path": str(args.corporate_actions),
+            "source_sha256": sha256_file(args.corporate_actions),
+            "events": applied_actions,
+        },
         "contract": {
             "path": str(args.contract),
             "sha256": sha256_file(args.contract),

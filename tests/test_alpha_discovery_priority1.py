@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from scripts.alpha_discovery_priority1_jquants import apply_known_delisting_gate
 from scripts.alphazerobeta_prepare import build_asset_features, cross_sectional_zscore
 from src.research.alpha_discovery_priority1 import (
     CandidateSpec,
@@ -169,3 +170,25 @@ def test_sparse_valuation_fails_closed_on_missing_held_asset() -> None:
     valued = returns_for_sparse_valuation(weights, observed, start=1, end=4)
     assert valued[2, 1] == 0.0
     assert np.isfinite(valued).all()
+
+
+def test_corporate_action_gate_uses_published_last_trading_day_without_backdating() -> None:
+    dates = pd.DatetimeIndex(pd.to_datetime(["2026-03-10", "2026-03-11", "2026-03-12"]))
+    codes = np.asarray(["97190", "12340"])
+    features = np.ones((3, 2, 2), dtype=np.float64)
+    event = {
+        "code": "97190",
+        "published_on": "2026-02-09",
+        "last_trading_day": "2026-03-11",
+        "delisting_day": "2026-03-12",
+        "source_url": "https://www.jpx.co.jp/english/news/1023/20260209-11.html",
+    }
+    applied = apply_known_delisting_gate(dates, codes, features, [event])
+    assert applied[0]["masked_decision_days"] == 2
+    assert np.isfinite(features[0, 0]).all()
+    assert np.isnan(features[1:, 0]).all()
+    assert np.isfinite(features[:, 1]).all()
+    with pytest.raises(AssertionError, match="invalid PIT"):
+        apply_known_delisting_gate(
+            dates, codes, features, [{**event, "published_on": "2026-03-12"}]
+        )
