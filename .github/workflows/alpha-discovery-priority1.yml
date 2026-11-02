@@ -34,6 +34,7 @@ jobs:
       - name: Verify implementation
         run: |
           python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py scripts/alphazerobeta_prepare.py
+          ruff format --diff src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py tests/test_alpha_discovery_priority1.py || true
           ruff check src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py scripts/alphazerobeta_prepare.py tests/test_alpha_discovery_priority1.py
           pytest -q tests/test_alpha_discovery_priority1.py
 
