@@ -177,6 +177,63 @@ def _duplicates(values: list[str]) -> int:
     return len(values) - len(set(values))
 
 
+def make_sparse_weight_path(
+    scores: np.ndarray,
+    observed_returns: np.ndarray,
+    *,
+    start: int,
+    end: int,
+    n_long: int,
+    n_short: int,
+    beta: float,
+    gamma: float,
+) -> np.ndarray:
+    """Choose positions using only scores and observed returns at decision time t."""
+    values = np.asarray(scores, dtype=np.float64)
+    observed = np.asarray(observed_returns, dtype=np.float64)
+    if values.shape != observed.shape or values.ndim != 2:
+        raise ValueError("scores and observed returns must be aligned [T,N]")
+    if n_long < 0 or n_short < 0 or n_long + n_short > values.shape[1]:
+        raise ValueError("invalid long/short counts")
+    if not 0 <= start < end <= values.shape[0]:
+        raise ValueError("invalid evaluation bounds")
+    weights = np.zeros_like(values)
+    long_gross = beta * (1.0 + gamma) / 2.0
+    short_gross = beta * (1.0 - gamma) / 2.0
+    for t in range(start, end - 1):
+        eligible = np.flatnonzero(np.isfinite(values[t]) & np.isfinite(observed[t]))
+        if eligible.size < n_long + n_short:
+            raise AssertionError(
+                f"only {eligible.size} observable assets at decision row {t}; need {n_long + n_short}"
+            )
+        ordered = eligible[np.argsort(values[t, eligible], kind="mergesort")]
+        if n_short:
+            weights[t, ordered[:n_short]] = -short_gross / n_short
+        if n_long:
+            weights[t, ordered[-n_long:]] = long_gross / n_long
+    return weights
+
+
+def returns_for_sparse_valuation(
+    weights: np.ndarray, returns: np.ndarray, *, start: int, end: int
+) -> np.ndarray:
+    """Zero-fill only unheld missing returns; refuse to price an unobserved held asset."""
+    observed = np.asarray(returns, dtype=np.float64)
+    path = np.asarray(weights, dtype=np.float64)
+    if path.shape != observed.shape:
+        raise ValueError("weights and returns must align")
+    held = np.abs(path[start : end - 1]) > 0
+    realized = observed[start + 1 : end]
+    unpriced = held & ~np.isfinite(realized)
+    if np.any(unpriced):
+        day, asset = np.argwhere(unpriced)[0]
+        raise AssertionError(
+            f"unpriced held asset at realization row {start + 1 + int(day)}, asset index {int(asset)}; "
+            "obtain an official suspension/delisting price before reporting OOS performance"
+        )
+    return np.where(np.isfinite(observed), observed, 0.0)
+
+
 def evaluate_arm(
     *,
     arm: str,
@@ -231,16 +288,32 @@ def evaluate_arm(
     for finalist in finalist_rows:
         candidate_id = str(finalist["candidate_id"])
         factor = oriented_by_id[candidate_id]
-        weights = make_weight_path(
-            factor,
-            n_long=n_long,
-            n_short=n_short,
-            beta=beta,
-            gamma=gamma,
-        )
+        if np.isfinite(factor).all() and np.isfinite(returns).all():
+            weights = make_weight_path(
+                factor,
+                n_long=n_long,
+                n_short=n_short,
+                beta=beta,
+                gamma=gamma,
+            )
+            valuation_returns = returns
+        else:
+            weights = make_sparse_weight_path(
+                factor,
+                returns,
+                start=oos_start,
+                end=oos_end,
+                n_long=n_long,
+                n_short=n_short,
+                beta=beta,
+                gamma=gamma,
+            )
+            valuation_returns = returns_for_sparse_valuation(
+                weights, returns, start=oos_start, end=oos_end
+            )
         portfolio_metrics, _ = evaluate_weights(
             weights,
-            returns,
+            valuation_returns,
             benchmark,
             oos_start,
             oos_end,
