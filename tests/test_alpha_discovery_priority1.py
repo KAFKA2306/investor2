@@ -5,7 +5,6 @@ import pandas as pd
 import pytest
 
 from scripts.alphazerobeta_prepare import build_asset_features, cross_sectional_zscore
-
 from src.research.alpha_discovery_priority1 import (
     CandidateSpec,
     ast_fingerprint,
