@@ -143,8 +143,26 @@ jobs:
                   "minimum_present": int(values.min()),
                   "maximum_present": int(values.max()),
               }
+          oos_prices = selected.loc[selected["Date"].between(start, end)]
+          missing_codes = []
+          for code in sorted(codes):
+              observed_dates = pd.DatetimeIndex(
+                  oos_prices.loc[oos_prices["Code"] == code, "Date"].drop_duplicates()
+              )
+              missing_dates = pd.DatetimeIndex(dates).difference(observed_dates)
+              if len(missing_dates):
+                  full_dates = selected.loc[selected["Code"] == code, "Date"]
+                  missing_codes.append({
+                      "code": code,
+                      "missing_oos_days": int(len(missing_dates)),
+                      "first_missing_oos": str(missing_dates.min().date()),
+                      "last_observed_price": str(full_dates.max().date()) if len(full_dates) else None,
+                  })
+          missing_codes.sort(key=lambda item: (-item["missing_oos_days"], item["code"]))
           print(json.dumps({
               "diagnostic": "pit-oos-availability-v1",
+              "missing_codes": missing_codes[:20],
+              "total_missing_codes": len(missing_codes),
               "selected_assets": len(codes),
               "panel_first": str(panel_dates[0]) if len(panel_dates) else None,
               "panel_last": str(panel_dates[-1]) if len(panel_dates) else None,
