@@ -28,7 +28,7 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install focused test dependencies
-        run: python -m pip install numpy pytest ruff
+        run: python -m pip install numpy pandas pytest ruff
       - name: Verify implementation
         run: |
           python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py
@@ -101,7 +101,9 @@ jobs:
             --market-regions jp \
             --output /tmp/alpha-discovery-priority1/panel.npz \
             --max-assets 256 \
-            --universe-cutoff 2025-08-30
+            --universe-cutoff 2025-08-30 \
+            --sparse-panel \
+            --min-active-assets 64
       - name: Diagnose PIT OOS availability without changing frozen data
         run: |
           python - <<'PY'
