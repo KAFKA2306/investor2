@@ -6,6 +6,8 @@ on:
     paths:
       - "src/research/alpha_discovery_priority1.py"
       - "scripts/alpha_discovery_priority1_jquants.py"
+      - "scripts/alphazerobeta_prepare.py"
+      - "scripts/jquants_japan_panel.py"
       - "tests/test_alpha_discovery_priority1.py"
       - "docs/research/contracts/alpha_discovery_priority1_jquants_256.json"
       - ".github/workflows/alpha-discovery-priority1.yml"
@@ -31,8 +33,8 @@ jobs:
         run: python -m pip install numpy pandas pytest ruff
       - name: Verify implementation
         run: |
-          python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py
-          ruff check src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py tests/test_alpha_discovery_priority1.py
+          python -m py_compile src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py scripts/alphazerobeta_prepare.py
+          ruff check src/research/alpha_discovery_priority1.py scripts/alpha_discovery_priority1_jquants.py scripts/alphazerobeta_prepare.py tests/test_alpha_discovery_priority1.py
           pytest -q tests/test_alpha_discovery_priority1.py
 
   execute-real-data:
