@@ -1,0 +1,90 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_ar_customer_concentration_stress_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIAのFY2027残期間cash gap 7.106B USDは、Q2末の上位5 direct customersのARがすべてFY2027中に回収されないstressでも、残り30%のARだけで数学的には埋められる。",
+  "decision_rule": {
+    "use_if": "上位5社ARを全額FY2027中回収不能とするstressでも、残余ARから必要な回収率が、prior canonical benchmarkであるH1 AR cash outflowの必要回収率28.897335%以下で、かつ後続reported cash flowで同等以上の回収が確認できる。",
+    "condition_if": "上位5社ARを全額FY2027中回収不能とするstressでも残余ARだけでcash gapを埋められるが、必要回収率がprior benchmarkを上回る、または後続reported cash realizationが未確認。",
+    "reject_if": "上位5社ARを全額FY2027中回収不能とするstressで、残余AR全額を回収しても7.105855B USD cash gapを埋められない。",
+    "unverified_if": "Q2 ending AR、上位顧客AR集中度、payment-term disclosure、またはcanonical cash gapが一次情報/canonical artifactで確認できない。"
+  },
+  "capital_allocation_importance": "前回研究ではH2 revenue 216B USDを前提に1.0x commitment cash coverageまで7.105855B USD不足し、H1 AR cash outflowの28.897335%正常化が最小仮定のbridgeと分かった。今回は顧客集中と最長1年のextended payment termsが、そのAR bridgeを実質的に不可能にするかをstressする。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_cash_bridge_artifact": "docs/research/results/nvda_h2_working_capital_cash_bridge_20260911/summary.json",
+    "cash_gap_usd_b": 7.105855,
+    "q2_ending_accounts_receivable_usd_b": 63.059,
+    "top5_direct_customer_ar_shares_pct": [22, 14, 13, 11, 10],
+    "top5_combined_ar_share_pct": 70,
+    "non_top5_ar_share_pct": 30,
+    "prior_required_recovery_as_pct_of_h1_ar_outflow": 28.897335,
+    "payment_terms": "Payment is generally due shortly after delivery; certain investment-grade customer purchases may receive 90 days to one year for large data center builds.",
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "Canonical prior result: docs/research/results/nvda_h2_working_capital_cash_bridge_20260911/summary.json"
+  ],
+  "method": {
+    "point_in_time": "Use issuer information available as of 2026-08-26 and canonical artifacts merged before this run. No Q3 actual or later cash-flow realization is used.",
+    "stress_definition": "Treat the largest direct-customer AR balances cumulatively as unavailable for collection during the remaining FY2027 period. This is deliberately harsher than the disclosure, which does not state that those customers are all on extended terms.",
+    "recovery_pool": "For each stress level, recoverable AR pool = 63.059B USD * (1 - cumulative frozen customer share).",
+    "required_collection_rate": "required rate = 7.105855B USD / recoverable AR pool.",
+    "benchmark": "Compare the stressed required collection rate with the prior canonical 28.897335% recovery requirement measured against H1 AR cash outflow. Also test hard feasibility: remaining AR pool must be at least 7.105855B USD.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time working-capital concentration stress, not a trading-strategy backtest."
+  },
+  "results": {
+    "cash_gap_as_pct_of_q2_ending_ar": 11.268582,
+    "maximum_ar_share_that_can_be_frozen_if_all_remaining_ar_were_collected_pct": 88.731418,
+    "cumulative_frozen_customer_stress": [
+      {"frozen_top_customers": 1, "frozen_ar_share_pct": 22.0, "recoverable_ar_pool_usd_b": 49.18602, "required_collection_pct_of_recoverable_pool": 14.4469, "recoverable_pool_to_cash_gap_x": 6.9219},
+      {"frozen_top_customers": 2, "frozen_ar_share_pct": 36.0, "recoverable_ar_pool_usd_b": 40.35776, "required_collection_pct_of_recoverable_pool": 17.607159, "recoverable_pool_to_cash_gap_x": 5.679508},
+      {"frozen_top_customers": 3, "frozen_ar_share_pct": 49.0, "recoverable_ar_pool_usd_b": 32.16009, "required_collection_pct_of_recoverable_pool": 22.095258, "recoverable_pool_to_cash_gap_x": 4.525858},
+      {"frozen_top_customers": 4, "frozen_ar_share_pct": 60.0, "recoverable_ar_pool_usd_b": 25.2236, "required_collection_pct_of_recoverable_pool": 28.171455, "recoverable_pool_to_cash_gap_x": 3.549692},
+      {"frozen_top_customers": 5, "frozen_ar_share_pct": 70.0, "recoverable_ar_pool_usd_b": 18.9177, "required_collection_pct_of_recoverable_pool": 37.561939, "recoverable_pool_to_cash_gap_x": 2.662269}
+    ],
+    "top5_all_frozen": {
+      "frozen_ar_share_pct": 70.0,
+      "recoverable_non_top5_ar_pool_usd_b": 18.9177,
+      "required_collection_usd_b": 7.105855,
+      "required_collection_pct_of_non_top5_pool": 37.561939,
+      "non_top5_pool_to_cash_gap_x": 2.662269,
+      "difference_vs_prior_required_recovery_rate_pt": 8.664604,
+      "mathematically_feasible": true
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "Prior cash-bridge result required 28.897335% of H1 AR cash outflow to reverse. That result did not account for customer concentration.",
+    "top1_frozen": "With the largest 22% AR customer frozen, the remaining pool is 49.18602B USD and only 14.446900% of it must be collected.",
+    "top3_frozen": "With the largest three customers, 49% of AR, frozen, the remaining pool is 32.16009B USD and 22.095258% must be collected.",
+    "top5_frozen": "With all disclosed top-five customers, 70% of AR, frozen, the remaining 18.9177B USD pool still covers the 7.105855B USD gap 2.662269x, but 37.561939% of that residual pool must be collected.",
+    "interpretation": "Customer concentration alone does not make the AR bridge mathematically impossible, even under the extreme assumption that none of the disclosed top-five balances contributes cash before FY2027 year-end. However the required collection intensity becomes 8.664604pt higher than the prior recovery-rate benchmark and actual aging/term allocation by customer is undisclosed."
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "The hard-feasibility test passes: even freezing all top-five disclosed customer balances leaves 18.9177B USD of non-top-five AR, 2.662269x the 7.105855B USD cash gap. But the residual pool must convert 37.561939%, above the prior 28.897335% benchmark, and the issuer does not disclose which customers have 90-day-to-one-year terms or the aging distribution. No reported H2 collection has yet occurred.",
+    "capital_allocation_implication": "Do not treat customer concentration as proof that NVIDIA cannot close the FY2027 cash-coverage gap. The decision threshold is now sharper: under an extreme top-five-frozen stress, at least 7.105855B USD, or 37.561939% of non-top-five Q2 AR, must be collected. Maintain CONDITION until subsequent reported cash flow shows sufficient collection or the 92B USD commitment/cash-timing assumption changes."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "customer-concentration AR recovery stress decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "No dedicated code/config/workflow/one-off script created; no cleanup required."
+  },
+  "limitations": [
+    "The SEC filing discloses customer shares of ending AR, not which customers generated the H1 24.590B USD AR cash-flow outflow.",
+    "The filing does not disclose customer identities, invoice aging, or which balances have 90-day-to-one-year extended terms.",
+    "Freezing all top-five AR balances through FY2027 year-end is a deliberate stress scenario, not company guidance or a forecast.",
+    "The 7.105855B USD cash gap inherits the prior assumptions that Q3 and Q4 revenue are 108B USD each and that the 92B USD commitment is an economic cash-coverage target rather than a same-period contractual cash payment.",
+    "Recoverable AR pool is a balance-sheet capacity diagnostic; collection of the entire pool is neither assumed nor forecast."
+  ],
+  "next_high_value_hypothesis": "NVIDIAのQ2末AR 63.059B USDについて、Q1末との増加額とQ2 revenueを使ってincremental DSO / AR buildを分解し、Q3 revenue guidance 108B USDの下でAR/revenueがQ1水準へ戻るために必要なQ3 cash collectionを逆算すると、7.106B USD thresholdを同時に満たせるか。"
+}

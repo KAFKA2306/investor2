@@ -1,0 +1,92 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "sndk_buyback_cash_yield_20260906",
+  "status": "REJECT",
+  "hypothesis": "2026-09-04終値時点で、SandiskのFY2026 Adjusted Free Cash Flow利回りは同日の米国3か月国債利回りを上回り、現在のcash generationだけでも140億ドルの自社株買いを支持する。",
+  "decision_rule": {
+    "use_if": "FY2026 Adjusted Free Cash Flow / 2026-09-04 market capitalization が2026-09-04の米国3か月国債利回り以上であり、headline Free Cash Flowを使わなくても結論が成立する。",
+    "reject_if": "会社がcore underlying cash flowとして示すAdjusted Free Cash Flow利回りが米国3か月国債利回りを下回る。"
+  },
+  "canonical_sources": {
+    "issuer_model_owner": "KAFKA2306/semiconductor-earnings-model:data/financial_analysis/sandisk-long-term-financial-model-2026.json",
+    "market_price": {
+      "provider": "Alpaca Market Data API",
+      "feed": "IEX",
+      "symbol": "SNDK",
+      "currency": "USD",
+      "date": "2026-09-04",
+      "close": 1739.915,
+      "fallback": "none"
+    },
+    "sec_10k": {
+      "filing_date": "2026-08-17",
+      "period_end": "2026-07-03",
+      "shares_outstanding_as_of_2026_08_07": 146419001,
+      "cash_and_cash_equivalents_usd_billion": 4.762,
+      "marketable_equity_securities_usd_billion": 1.777,
+      "total_debt_usd_billion": 0.0
+    },
+    "issuer_fy2026": {
+      "revenue_usd_billion": 20.248,
+      "free_cash_flow_usd_billion": 11.494,
+      "adjusted_free_cash_flow_usd_billion": 8.743,
+      "adjusted_free_cash_flow_definition": "Free cash flow plus activity related to Flash Ventures, net less the impact of NBM prepayments and deposits"
+    },
+    "issuer_capital_return": {
+      "share_repurchase_authorization_usd_billion": 14.0,
+      "announced": "2026-08-05",
+      "funding_wording": "expected to be funded by operating cash flows",
+      "long_term_excess_cash_return_target_pct": 100
+    },
+    "treasury_benchmark": {
+      "publisher": "U.S. Department of the Treasury",
+      "date": "2026-09-04",
+      "maturity": "3 Mo",
+      "yield_pct": 3.91
+    }
+  },
+  "method": {
+    "market_capitalization": "2026-09-04 SNDK close * shares outstanding as of 2026-08-07",
+    "primary_cash_yield": "FY2026 Adjusted Free Cash Flow / market capitalization",
+    "alternative_cash_yield": "FY2026 Free Cash Flow / market capitalization",
+    "benchmark": "same-date U.S. 3-month Treasury par yield",
+    "no_growth_scenario": "FY2026 revenue held constant and issuer long-term adjusted FCF margin of approximately 50% applied only as a sensitivity, not as an issuer FY2026 estimate"
+  },
+  "results": {
+    "market_capitalization_usd_billion": 254.756616,
+    "price_to_fy2026_free_cash_flow": 22.1643,
+    "fy2026_free_cash_flow_yield_pct": 4.5118,
+    "price_to_fy2026_adjusted_free_cash_flow": 29.1384,
+    "fy2026_adjusted_free_cash_flow_yield_pct": 3.4319,
+    "treasury_3m_yield_pct": 3.91,
+    "adjusted_fcf_yield_minus_treasury_pct_point": -0.4781,
+    "adjusted_fcf_needed_to_match_treasury_usd_billion": 9.960984,
+    "adjusted_fcf_growth_needed_to_match_treasury_pct": 13.931,
+    "buyback_authorization_as_pct_market_cap": 5.4954,
+    "shares_repurchaseable_at_2026_09_04_close_million": 8.04637,
+    "mechanical_share_count_reduction_pct": 5.4954,
+    "mechanical_per_share_adjusted_fcf_accretion_if_aggregate_fcf_unchanged_pct": 5.815,
+    "fy2026_adjusted_fcf_margin_pct": 43.1796,
+    "sensitivity_50pct_margin_on_fy2026_revenue": {
+      "adjusted_fcf_usd_billion": 10.124,
+      "cash_yield_pct": 3.9740
+    }
+  },
+  "benchmark_and_alternative": {
+    "primary": "Adjusted Free Cash Flow yield 3.43% vs 3-month Treasury 3.91%: current core cash generation alone does not clear the risk-free yield benchmark.",
+    "alternative": "Headline Free Cash Flow yield is 4.51% and would clear the Treasury benchmark, but the issuer explicitly adjusts NBM payment effects when describing core underlying cash flow; therefore this alternative changes the conclusion and must not silently replace the primary measure."
+  },
+  "finding": {
+    "summary": "REJECT. 2026-09-04価格ではFY2026 Adjusted Free Cash Flow利回り3.43%が同日の米国3か月国債3.91%を下回るため、現在のcore cash generationだけを根拠に140億ドルの自社株買いを割安な資本還元と判断できない。",
+    "scope": "自社株買いそのもの、Sandisk株、またはFY2028-FY2030の会社公表成長モデルを棄却しない。成長・margin expansionが実現すれば判断は変わり得る。",
+    "reusable_decision": "SNDKのcapital-return評価ではheadline Free Cash Flowだけで自社株買いを正当化せず、Adjusted Free Cash Flow yieldと同日短期国債利回りを並列表示する。",
+    "production_action": "portfolio weight authorityやbuyback-positive signalは追加しない"
+  },
+  "limitations": [
+    "株価はAlpaca IEX closeでありNasdaq consolidated closeではない。",
+    "時価総額は2026-08-07発行済株式数と2026-09-04価格を組み合わせた近似で、その間の実際の自己株取得を反映しない。",
+    "米国3か月国債との比較はcash-yield hurdleであり、equity risk premiumや将来成長を含む企業価値評価の代替ではない。",
+    "issuer long-term modelのmid-to-high teens revenue growthは数値化せず、FY2027 revenueも推測しない。"
+  ],
+  "next_hypothesis": "SandiskのFY2027各四半期で、実際のAdjusted Free Cash Flowと発行済株式数をpoint-in-time追跡し、140億ドル買戻しが実際に一株当たりAdjusted Free Cash Flowを増やす速度が、株価上昇による買戻し効率低下を上回るか。"
+}

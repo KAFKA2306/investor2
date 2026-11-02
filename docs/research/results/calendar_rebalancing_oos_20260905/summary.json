@@ -1,0 +1,83 @@
+{
+  "research_date": "2026-09-05",
+  "status": "REJECT",
+  "paper": {
+    "title": "The Unintended Consequences of Rebalancing",
+    "authors": ["Campbell R. Harvey", "Michele G. Mazzoleni", "Alessandro Melone"],
+    "series": "NBER Working Paper 33554",
+    "doi": "10.3386/w33554",
+    "issue_date": "2025-03",
+    "revision_date": "2026-01",
+    "paper_sample": "1997-09-10 to 2023-03-17",
+    "paper_claim": "A 60/40 calendar-rebalancing signal negatively predicts next-day equity-minus-bond returns near month-end. A one-standard-deviation decrease in the Calendar signal is associated with about +17 bp equity return and -2.4 bp bond return over the next trading day."
+  },
+  "hypothesis": "A simple point-in-time 60/40 calendar drift signal retains economically useful month-end predictability in the untouched 2026 post-revision period and beats a simpler month-end equity-minus-bond benchmark after execution cost.",
+  "acceptance_rule": "USE or CONDITION only if the signal has the paper-consistent negative slope and produces positive after-cost event returns while improving return and at least two of volatility, maximum drawdown and Expected Shortfall versus a simple final-business-day long SPY/short BND benchmark. Otherwise REJECT the trading implementation. This run does not reject the paper's market-impact mechanism itself.",
+  "data": {
+    "source": "Alpaca Market Data, IEX daily bars",
+    "symbols": ["SPY", "BND"],
+    "currency": "USD",
+    "period": "2025-12-31 to 2026-08-31",
+    "events": 8,
+    "missing_value_policy": "No forward fill, interpolation or alternate-feed fallback.",
+    "proxy_limitations": "SPY and BND are executable ETF proxies, whereas the paper's main regressions use S&P 500 and 10-year Treasury note futures."
+  },
+  "method": {
+    "target_portfolio": "60% SPY / 40% BND",
+    "signal_time": "Close of the trading day immediately before the final business day of each month.",
+    "signal": "Equity weight drift from 60%, computed from close-to-close SPY and BND returns since the previous month-end reset. Positive means equities are overweight.",
+    "signal_strategy": "On the final business day, take -sign(weight drift) exposure to the SPY-minus-BND daily return spread.",
+    "simple_benchmark": "Always long the SPY-minus-BND return spread on the final business day of each month.",
+    "cost_sensitivity": ["0 bp", "5 bp total drag per event", "10 bp total drag per event"]
+  },
+  "event_inputs": [
+    {"signal_date":"2026-01-29","equity_weight_deviation":0.003617,"final_day_spy_return":-0.003120,"final_day_bnd_return":-0.000404,"final_day_spread":-0.002716},
+    {"signal_date":"2026-02-26","equity_weight_deviation":-0.003391,"final_day_spy_return":-0.004584,"final_day_bnd_return":0.002133,"final_day_spread":-0.006717},
+    {"signal_date":"2026-03-30","equity_weight_deviation":-0.014383,"final_day_spy_return":0.028638,"final_day_bnd_return":0.002041,"final_day_spread":0.026597},
+    {"signal_date":"2026-04-29","equity_weight_deviation":0.022258,"final_day_spy_return":0.009584,"final_day_bnd_return":0.001226,"final_day_spread":0.008358},
+    {"signal_date":"2026-05-28","equity_weight_deviation":0.012019,"final_day_spy_return":0.002200,"final_day_bnd_return":0.000681,"final_day_spread":0.001519},
+    {"signal_date":"2026-06-29","equity_weight_deviation":-0.005792,"final_day_spy_return":0.007815,"final_day_bnd_return":-0.004138,"final_day_spread":0.011953},
+    {"signal_date":"2026-07-30","equity_weight_deviation":0.001688,"final_day_spy_return":0.006958,"final_day_bnd_return":-0.002210,"final_day_spread":0.009168},
+    {"signal_date":"2026-08-28","equity_weight_deviation":0.006819,"final_day_spy_return":-0.003133,"final_day_bnd_return":-0.001037,"final_day_spread":-0.002096}
+  ],
+  "results": {
+    "predictive_relation": {
+      "ols_slope_next_day_spread_on_weight_deviation": -0.410378,
+      "correlation": -0.433116,
+      "r_squared": 0.187590,
+      "interpretation": "Direction is consistent with the paper, but the sample contains only eight post-revision month-end events."
+    },
+    "signal_strategy": {
+      "mean_event_return_before_cost": 0.002200,
+      "hit_rate": 0.5,
+      "cumulative_return_before_cost": 0.017222,
+      "cumulative_return_after_5bp_per_event": 0.013169,
+      "cumulative_return_after_10bp_per_event": 0.009129,
+      "event_return_volatility": 0.009032,
+      "maximum_drawdown": -0.023839,
+      "expected_shortfall_95": -0.015951
+    },
+    "simple_final_day_long_spy_short_bnd": {
+      "mean_event_return": 0.005758,
+      "cumulative_return": 0.046594,
+      "event_return_volatility": 0.010678,
+      "maximum_drawdown": -0.006717,
+      "expected_shortfall_95": -0.006717
+    }
+  },
+  "verdict_reason": "The 2026 post-revision data preserve the paper-consistent negative relation between 60/40 equity drift and the final-day equity-minus-bond spread, but the sign strategy does not beat the simple benchmark. The signal strategy earns about 1.72% cumulatively before costs and 0.91% after a 10 bp/event drag, versus about 4.66% for always being long the final-day SPY-minus-BND spread. It also has materially worse maximum drawdown and 95% Expected Shortfall. Under the repository rule that added complexity must beat a simple alternative, the trading implementation is rejected.",
+  "decision_use": "Do not add a calendar-rebalancing front-running strategy to portfolio authority. The paper remains useful as execution-risk evidence: avoid assuming that a fixed, publicly predictable month-end rebalance is costless, and test randomized or wider execution windows before institutional-scale rebalancing.",
+  "do_not_use_for": [
+    "Claiming the original paper is false",
+    "Live front-running of institutional orders",
+    "Assuming SPY/BND exactly replicate futures-based paper coefficients",
+    "Inferring statistical significance from eight events",
+    "Executing trades"
+  ],
+  "sources": [
+    "https://www.nber.org/papers/w33554",
+    "https://d1e00ek4ebabms.cloudfront.net/production/uploaded-files/w33554-c27954c3-8c17-44f5-a26f-1800436b6ebf.pdf"
+  ],
+  "implementation": "Negative evidence only. No strategy code, collector, model or workflow is added.",
+  "next_test": "Test the decision-relevant execution question rather than the rejected front-running rule: for the portfolio's actual rebalance sizes, compare fixed month-end execution with randomized execution over the final five trading days using executable bid/ask data and market-impact assumptions; adopt only if the randomized schedule lowers realized implementation shortfall without materially increasing allocation drift."
+}

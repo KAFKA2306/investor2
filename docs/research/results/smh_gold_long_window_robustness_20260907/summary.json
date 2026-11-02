@@ -1,0 +1,104 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gold_long_window_robustness_20260907",
+  "status": "REJECT",
+  "hypothesis": "SMH 70% / GLD 30% は、SMH 80% / GLD 20% より、2020年から2026年の複数相場局面でもSharpe・Maximum Drawdown・95% Expected Shortfallを一貫して改善し、30% gold sleeveを半導体集中ポートフォリオのdefault defensive allocationとして採用できる。",
+  "decision_gate": {
+    "use_or_condition": "10bpの月次リバランスコスト込みで、70/30のSharpeがfull periodと事前固定した3 subperiodすべてで80/20以上、24か月rolling windowの90%以上で80/20以上、Maximum Drawdownと95% Expected Shortfallが悪化せず、full-period CAGRが80/20の85%以上であること。",
+    "reject": "いずれかの事前固定subperiodでSharpeが80/20を下回る、または24か月rolling windowの90%未満しかSharpe優位を維持できないこと。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "assets": ["SMH", "GLD"],
+    "currency": "USD",
+    "close_period": "2020-07-01..2026-08-31",
+    "return_period": "2020-08-01..2026-08-31",
+    "frequency": "monthly",
+    "monthly_return_observations": 73,
+    "fallback": "none",
+    "adjustments": {
+      "SMH_forward_split": {
+        "ex_date": "2023-05-05",
+        "ratio": "2:1",
+        "source": "Alpaca Corporate Actions API"
+      },
+      "SMH_cash_dividends_included": [
+        {"ex_date": "2020-12-21", "rate_usd": 1.5022},
+        {"ex_date": "2021-12-20", "rate_usd": 1.5733},
+        {"ex_date": "2022-12-19", "rate_usd": 2.4010},
+        {"ex_date": "2023-12-18", "rate_usd": 1.0427},
+        {"ex_date": "2024-12-23", "rate_usd": 1.0713},
+        {"ex_date": "2025-12-22", "rate_usd": 1.1047}
+      ],
+      "GLD_cash_dividends": "none returned for requested period"
+    }
+  },
+  "method": {
+    "returns": "month-end close-to-close return; SMH 2023-05 transition is corrected for the 2:1 split; verified SMH cash dividends are added in their ex-date month",
+    "rebalance": "monthly to fixed target weights",
+    "transaction_cost_bps_per_two_sided_turnover": 10,
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "historical 95% Expected Shortfall = mean of worst ceil(5% * n) monthly returns",
+    "lookahead": "weights and evaluation gates are fixed ex ante; no return-based optimization",
+    "missing_data": "no interpolation, no forward fill, no alternate feed"
+  },
+  "portfolios": {
+    "benchmark": {"SMH": 0.80, "GLD": 0.20},
+    "gold_heavy": {"SMH": 0.70, "GLD": 0.30},
+    "risk_reference": {"SMH": 1.00, "GLD": 0.00}
+  },
+  "results_10bp": {
+    "full_period": {
+      "SMH100": {"cagr": 0.375308, "volatility": 0.323653, "sharpe": 1.152087, "maximum_drawdown": -0.399715, "expected_shortfall_95": -0.156316},
+      "SMH80_GLD20": {"cagr": 0.336710, "volatility": 0.262907, "sharpe": 1.243395, "maximum_drawdown": -0.342034, "expected_shortfall_95": -0.127939},
+      "SMH70_GLD30": {"cagr": 0.315586, "volatility": 0.234820, "sharpe": 1.294467, "maximum_drawdown": -0.312410, "expected_shortfall_95": -0.113742},
+      "gold_heavy_cagr_ratio_vs_80_20": 0.937262
+    },
+    "2020_08_to_2022_12": {
+      "SMH100": {"cagr": 0.097048, "volatility": 0.321312, "sharpe": 0.443957, "maximum_drawdown": -0.399715, "expected_shortfall_95": -0.156822},
+      "SMH80_GLD20": {"cagr": 0.078137, "volatility": 0.261284, "sharpe": 0.414647, "maximum_drawdown": -0.342034, "expected_shortfall_95": -0.129169},
+      "SMH70_GLD30": {"cagr": 0.067128, "volatility": 0.232845, "sharpe": 0.391863, "maximum_drawdown": -0.312410, "expected_shortfall_95": -0.115334}
+    },
+    "2023_01_to_2024_12": {
+      "SMH100": {"cagr": 0.552628, "volatility": 0.263508, "sharpe": 1.820949, "maximum_drawdown": -0.134591, "expected_shortfall_95": -0.066525},
+      "SMH80_GLD20": {"cagr": 0.481906, "volatility": 0.215097, "sharpe": 1.957783, "maximum_drawdown": -0.106558, "expected_shortfall_95": -0.057087},
+      "SMH70_GLD30": {"cagr": 0.446231, "volatility": 0.192589, "sharpe": 2.034407, "maximum_drawdown": -0.092396, "expected_shortfall_95": -0.052365}
+    },
+    "2025_01_to_2026_08": {
+      "SMH100": {"cagr": 0.650259, "volatility": 0.386137, "sharpe": 1.497795, "maximum_drawdown": -0.176426, "expected_shortfall_95": -0.176426},
+      "SMH80_GLD20": {"cagr": 0.613148, "volatility": 0.307666, "sharpe": 1.725064, "maximum_drawdown": -0.139522, "expected_shortfall_95": -0.139522},
+      "SMH70_GLD30": {"cagr": 0.590689, "volatility": 0.271979, "sharpe": 1.864164, "maximum_drawdown": -0.121059, "expected_shortfall_95": -0.121059}
+    }
+  },
+  "rolling_24_month": {
+    "windows": 50,
+    "gold_heavy_higher_sharpe_windows": 42,
+    "gold_heavy_higher_sharpe_rate": 0.84,
+    "gold_heavy_no_worse_max_drawdown_windows": 50,
+    "gold_heavy_no_worse_expected_shortfall_windows": 50,
+    "gold_heavy_all_three_gates_windows": 42,
+    "gold_heavy_all_three_gates_rate": 0.84,
+    "sharpe_loss_windows_concentrated_in": "2020-08..2024-02 rolling origins, especially windows dominated by 2021-2022"
+  },
+  "cost_sensitivity_full_period": {
+    "0bp": {"SMH80_GLD20_sharpe": 1.244502, "SMH70_GLD30_sharpe": 1.296102},
+    "5bp": {"SMH80_GLD20_sharpe": 1.243948, "SMH70_GLD30_sharpe": 1.295284},
+    "10bp": {"SMH80_GLD20_sharpe": 1.243395, "SMH70_GLD30_sharpe": 1.294467},
+    "20bp": {"SMH80_GLD20_sharpe": 1.242288, "SMH70_GLD30_sharpe": 1.292830}
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "70/30はfull periodでは80/20よりSharpe、Maximum Drawdown、Expected Shortfallを改善し、24か月rolling windowの84%でもSharpe優位だった。しかし事前固定した2020-08..2022-12ではSharpeが0.3919で80/20の0.4146を下回り、rolling gateの90%にも届かなかった。30% goldを常時defaultとして20% goldより一貫して優位とする強い仮説は成立しない。",
+    "capital_allocation_implication": "gold sleeve自体の防御効果は複数cycleで確認できるが、30%を固定defaultに昇格させない。20%と30%の選択はrisk budgetまたは事前定義したregime条件を別研究で検証する。",
+    "do_not_implement": ["30% GLD default target weight", "automatic gold-heavy rebalance rule", "new optimizer", "duplicate market-data collector"]
+  },
+  "remaining_uncertainty": [
+    "common history is limited by the chosen ETF set and starts in 2020",
+    "monthly close and dividend treatment is a total-return approximation rather than a fund-provider total-return index",
+    "taxes and realized bid/ask execution are excluded",
+    "the result concerns a semiconductor-heavy portfolio sleeve and is not a global portfolio optimum"
+  ],
+  "next_high_value_hypothesis": "固定30% goldではなく、事前観測可能なrate/inflation regimeで20%と30% gold sleeveを切り替える単純ルールは、固定20%/30%の両方をwalk-forward・cost込みで上回るか。"
+}

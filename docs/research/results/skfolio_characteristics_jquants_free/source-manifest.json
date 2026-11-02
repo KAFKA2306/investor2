@@ -1,0 +1,96 @@
+{
+  "actual_date_range": {
+    "end": "2026-06-05",
+    "start": "2024-06-05"
+  },
+  "as_of": "2026-08-28",
+  "benchmark": {
+    "code": "13060",
+    "exact_topix": false,
+    "label": "NEXT FUNDS TOPIX ETF proxy",
+    "rows": 488
+  },
+  "cache": {
+    "access_contract": "owner-only personal cache; do not share, add collaborators, or make public",
+    "api_requests": 0,
+    "cache_complete_after_run": true,
+    "cache_hits": 523,
+    "cache_misses": 0,
+    "encryption": {
+      "aad": "exact HF shard path",
+      "algorithm": "AES-256-GCM",
+      "key_derivation": "SHA-256(domain || JQUANTS_API_KEY)",
+      "key_persisted": false
+    },
+    "expected_weekday_shards": 523,
+    "plaintext_jquants_rows_on_hf": false,
+    "prefix": "personal-cache/v1/daily",
+    "repo_id": "k4fka/investor2-jquants-free-cache",
+    "uploaded_shards": 0,
+    "visibility": "private"
+  },
+  "external_distribution": "none; private personal storage only",
+  "files": [
+    {
+      "path": "benchmark.parquet",
+      "sha256": "7ee32e88f89cbab0d9ae6a8818f1cbf8b1db519f1ed686c109e2db6f6b133b9c",
+      "size_bytes": 38900
+    },
+    {
+      "path": "prices/jp/part-2024.parquet",
+      "sha256": "4de7931a5fd2a6f723e2d5fa1cd4fef112401e766d4fb2eab309c957fee88810",
+      "size_bytes": 19341311
+    },
+    {
+      "path": "prices/jp/part-2025.parquet",
+      "sha256": "db6485499f3563d4267118f4ba6bd6666b3e102c2091f904cb3d4f07be85b3ff",
+      "size_bytes": 32492887
+    },
+    {
+      "path": "prices/jp/part-2026.parquet",
+      "sha256": "a572f9cd46f1381e33f1cb21ae5ccaf5a35c5f8161731f099e97c475f45b9b4f",
+      "size_bytes": 14383108
+    }
+  ],
+  "materialized_at_utc": "2026-08-27T18:08:37.067744+00:00",
+  "minimum_request_interval_seconds": 15.0,
+  "nominal_free_window": {
+    "delay_weeks": 12,
+    "end": "2026-06-05",
+    "history_years": 2,
+    "start": "2024-06-05"
+  },
+  "observed_market_days": 488,
+  "plan": "Free",
+  "price_columns": [
+    "Date",
+    "Code",
+    "O",
+    "H",
+    "L",
+    "C",
+    "UL",
+    "LL",
+    "Vo",
+    "Va",
+    "AdjFactor",
+    "AdjO",
+    "AdjH",
+    "AdjL",
+    "AdjC",
+    "AdjVo",
+    "MktCap",
+    "ExRT",
+    "Ticker",
+    "AdjClose",
+    "Volume"
+  ],
+  "price_rows": 2059313,
+  "rate_limit_cooldown_seconds": 70.0,
+  "raw_retention": "encrypted owner-only private HF cache; plaintext only in the current runner working directory",
+  "raw_scope": "all equity daily-bar rows returned by J-Quants for every visible market date in the Free window",
+  "request_count": 0,
+  "schema_version": "investor2.jquants-personal-hf-cache.v1",
+  "source": "J-Quants API v2 with owner-only encrypted private HF cache",
+  "ticker_count": 4642
+}

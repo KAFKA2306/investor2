@@ -1,0 +1,150 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_shrunk_beta_capital_structure_20260909",
+  "status": "REJECT",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "raw rolling betaをBlume型shrinkageで1へ縮小し、最新のnet debt/cashとmarket-cap leverageを確認すると、AVGO/NVDAのcompany-specific discount-rate sensitivityは12/24/35か月windowで同じ相対順位へ安定する。",
+  "capital_allocation_importance": "直前研究ではraw betaのwindow選択だけでNVDA優位からAVGO優位へ順位が反転した。shrinkageと資本構成を加えても順位が安定しないなら、単一company betaをterminal discount rateへ固定してportfolio判断へ使えない。",
+  "decision_rule": {
+    "USE": "Blume-adjusted betaで12/24/35か月の相対順位が全て一致し、beta=1 benchmarkより意思決定値がmaterialに改善する。",
+    "CONDITION": "順位は概ね安定するが1 windowだけ反転する、または資本構成差がmaterialで追加調整が必要。",
+    "REJECT": "Blume shrinkage後もwindowで相対順位が反転し、資本構成差もその不安定性を解消するほどmaterialでない。",
+    "UNVERIFIED": "raw beta、risk-free、ERP、terminal growth、balance-sheet debt/cash、price/share identityのいずれかが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_company_beta_terminal_band_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "method": {
+    "shrinkage": "Blume regression tendency adjustment: adjusted beta = 0.343 + 0.677 * raw beta",
+    "research_basis": "Marshall E. Blume, Betas and Their Regression Tendencies, Journal of Finance 30(3), 1975. Vasicek 1973もbeta estimation errorに対するcross-sectional shrinkageを提示。今回は追加cross-sectionを作らず、Blumeの単純adjustmentだけをalternativeとして検証した。",
+    "required_return_formula": "required return = 4.75% risk-free + adjusted beta * 4.14% implied ERP",
+    "terminal_growth_pct": 3.0,
+    "terminal_multiple_formula": "Price/FCF = 1 / (required return - terminal growth)",
+    "benchmark": "beta=1 market-wide ERP anchor and prior raw 12/24/35m company-beta sensitivity",
+    "capital_structure_check": "latest issuer balance-sheet debt and cash-like assetsをcurrent market equityと比較する。equity betaは既にmarket leverageを含むため、同じdebtを機械的に二重加算しない。",
+    "missing_data_policy": "欠損を推測で補完しない。"
+  },
+  "raw_beta_input": {
+    "12m": {"AVGO": 2.68499201, "NVDA": 1.39551514},
+    "24m": {"AVGO": 1.73853196, "NVDA": 1.60737328},
+    "35m": {"AVGO": 1.56854719, "NVDA": 1.92063365}
+  },
+  "blume_adjusted_beta": {
+    "12m": {"AVGO": 2.16073959, "NVDA": 1.28776375},
+    "24m": {"AVGO": 1.51998614, "NVDA": 1.43119171},
+    "35m": {"AVGO": 1.40490645, "NVDA": 1.64326898}
+  },
+  "capital_structure_point_in_time": {
+    "AVGO": {
+      "balance_sheet_date": "2026-08-02",
+      "cash_and_cash_equivalents_usd_b": 23.975,
+      "short_term_debt_usd_b": 2.252,
+      "long_term_debt_usd_b": 57.167,
+      "gross_debt_usd_b": 59.419,
+      "net_debt_usd_b": 35.444,
+      "issuer_diluted_weighted_average_shares_b": 4.887,
+      "market_price_usd": 369.685,
+      "approx_market_equity_usd_b": 1806.650595,
+      "gross_debt_to_market_equity_pct": 3.28890380,
+      "net_debt_to_market_equity_pct": 1.96186247,
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    "NVDA": {
+      "balance_sheet_date": "2026-07-26",
+      "cash_and_cash_equivalents_usd_b": 22.443,
+      "marketable_debt_securities_usd_b": 34.143,
+      "short_term_debt_usd_b": 1.000,
+      "long_term_debt_usd_b": 32.366,
+      "gross_debt_usd_b": 33.366,
+      "net_debt_after_cash_and_marketable_debt_securities_usd_b": -23.220,
+      "issuer_diluted_weighted_average_shares_b": 24.285,
+      "market_price_usd": 226.415,
+      "approx_market_equity_usd_b": 5498.488275,
+      "gross_debt_to_market_equity_pct": 0.60682134,
+      "net_debt_to_market_equity_pct": -0.42229789,
+      "source_url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+    }
+  },
+  "terminal_discount_sensitivity": {
+    "12m": {
+      "AVGO_required_return_pct": 13.69546191,
+      "NVDA_required_return_pct": 10.08134192,
+      "AVGO_terminal_price_to_fcf_x": 9.34975982,
+      "NVDA_terminal_price_to_fcf_x": 14.12161721,
+      "NVDA_base_5y_price_irr_pct": 0.63483199,
+      "AVGO_0pct_growth_5y_price_irr_pct": -12.29997803,
+      "AVGO_10pct_growth_5y_price_irr_pct": -7.13858154,
+      "AVGO_50_50_mean_5y_price_irr_pct": -9.71927978,
+      "AVGO_mean_minus_NVDA_pp": -10.35411177
+    },
+    "24m": {
+      "AVGO_required_return_pct": 11.04274261,
+      "NVDA_required_return_pct": 10.67513368,
+      "AVGO_terminal_price_to_fcf_x": 12.43356960,
+      "NVDA_terminal_price_to_fcf_x": 13.02908902,
+      "NVDA_base_5y_price_irr_pct": -0.97285709,
+      "AVGO_0pct_growth_5y_price_irr_pct": -7.15494514,
+      "AVGO_10pct_growth_5y_price_irr_pct": -1.69074878,
+      "AVGO_50_50_mean_5y_price_irr_pct": -4.42284696,
+      "AVGO_mean_minus_NVDA_pp": -3.44998986
+    },
+    "35m": {
+      "AVGO_required_return_pct": 10.56631269,
+      "NVDA_required_return_pct": 11.55313358,
+      "AVGO_terminal_price_to_fcf_x": 13.21647731,
+      "NVDA_terminal_price_to_fcf_x": 11.69162144,
+      "NVDA_base_5y_price_irr_pct": -3.09495493,
+      "AVGO_0pct_growth_5y_price_irr_pct": -6.01408927,
+      "AVGO_10pct_growth_5y_price_irr_pct": -0.48275029,
+      "AVGO_50_50_mean_5y_price_irr_pct": -3.24841978,
+      "AVGO_mean_minus_NVDA_pp": -0.15346485
+    }
+  },
+  "benchmark_comparison": {
+    "beta_1_AVGO_minus_NVDA_pp": -2.69021939,
+    "raw_beta_spreads_pp": {"12m": -12.40716302, "24m": -3.68444562, "35m": 0.61234138},
+    "blume_adjusted_spreads_pp": {"12m": -10.35411177, "24m": -3.44998986, "35m": -0.15346485},
+    "raw_rank_flip_at_35m": true,
+    "blume_rank_flip_removed": true,
+    "spread_stability_is_sufficient": false,
+    "reason": "Blume adjustmentで35mの符号反転は消えたが、NVDA優位幅は12m -10.35pt、24m -3.45pt、35m -0.15ptと依然大きくwindow依存する。35mは実質同等で単一discount-rate rankingを強く支持しない。"
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "Blume shrinkageはraw betaの極端さを弱め、35mでのAVGO優位 +0.6123ptをNVDA優位 -0.1535ptへ戻した。しかしwindow別の相対spreadは-10.3541ptから-0.1535ptまで残り、単一company-specific betaをcanonical terminal discount rateへ固定できるほど安定しなかった。AVGOはnet debt、NVDAはnet cashだが、gross debt/market equityは約3.29%対0.61%で、現在のmarket equityに対するbalance-sheet leverageはraw betaの大きなwindow instabilityを説明・解消する規模ではない。",
+    "usage_rule": "Blume-adjusted betaをcanonical discount rate、fair value、売買シグナル、portfolio-weight authorityにしない。既存beta=1 ERP anchorとraw/company-beta sensitivityを残し、次研究では長期weekly/total-return betaまたはindustry/fundamental priorをout-of-sampleで比較する。",
+    "portfolio_action": "売買・注文・portfolio weight変更は実行しない。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "estimation_risk": "raw betaの35m confidence intervalとR-squaredはdependency artifactを参照。",
+    "reason": "realized-return strategyではなくvaluation discount-rate calibrationの検証。"
+  },
+  "implementation": {
+    "artifact_type": "negative decision evidence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "Blume-adjusted betaを新しいcanonical cost-of-equity modelとして実装しない。",
+    "debtを既存equity betaへ機械的に二重加算するHamada-style leverage adjustmentを作らない。",
+    "finBI等consumerへ同じbeta計算を複製しない。"
+  ],
+  "limitations": [
+    "Blume係数0.343/0.677は歴史的cross-sectional regressionであり、2026年半導体企業向けに再推定した係数ではない。",
+    "Alpaca IEX monthly price returnはtotal returnではない。",
+    "SPYは市場全体そのものではない。",
+    "market equityはlatest priceとquarterly diluted weighted-average sharesの近似で、期末発行済株式数ではない。",
+    "NVDAのcash-like assetsはcash + marketable debt securitiesを用い、marketable equity securitiesはnet cashに含めていない。",
+    "AVGOのVMware買収後のbusiness mix変化をbeta priorは直接扱わない。"
+  ],
+  "next_hypothesis": "AVGO/NVDAについて3-5年のweekly total-return betaをpoint-in-timeで推定し、industry priorへのVasicek-style shrinkageをwalk-forwardで行うと、12/24/35m raw betaよりout-of-sample realized beta forecast errorが小さく、terminal discount-rate rankingが安定するか。"
+}

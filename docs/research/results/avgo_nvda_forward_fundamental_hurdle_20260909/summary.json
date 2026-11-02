@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_forward_fundamental_hurdle_20260909",
+  "status": "CONDITION",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "Broadcomの現在のissuer-reported成長率、free cash flow conversion、次四半期guidanceがNVIDIAを十分上回っているなら、既存canonical valuationで必要なAVGOのNVDA比+72.0688bp terminal FCF growth premiumには方向的なfundamental supportがある。ただし3-5年の持続性を一次情報で確認できない限りterminal premium自体は採用しない。",
+  "capital_allocation_importance": "既存canonicalではAVGO 50/50 growth caseがNVDA baseに追いつくため、AVGO terminal FCF growthがNVDAを約72bp上回る必要がある。短期fundamentalsがその方向すら支持しないならAVGO premium仮説は棄却できる。支持する場合でも、短期の高成長を永久成長率へ無言で外挿しないための条件を明示する。",
+  "decision_rule": {
+    "USE": "AVGOがcurrent FCF growth、FCF margin、next-quarter guided revenue growthの3指標でNVDAを上回り、かつissuer一次情報から3年以上の持続性を直接検証できる。",
+    "CONDITION": "AVGOが3つの短期direct indicatorsをすべて上回るが、3年以上のFCF growth premium持続性はissuer一次情報で直接検証できない。",
+    "REJECT": "AVGOが3つの短期direct indicatorsのいずれかでNVDAを上回れず、+72bp terminal growth premiumを支持する方向的根拠が崩れる。",
+    "UNVERIFIED": "両社の同期間issuer revenue、FCF、guidanceのいずれかが欠ける。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_terminal_growth_hurdle_translation_20260909/summary.json"
+  ],
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "document": "Third Quarter Fiscal Year 2026 Financial Results",
+      "publication_date": "2026-09-02",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "facts": "Q3 revenue 29.591B USD vs 15.952B, FCF 13.665B vs 7.024B, Q4 revenue guidance 34.8B USD / +93% YoY, AI semiconductor revenue 16.7B USD / +221% YoY."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Second Quarter Fiscal 2027 Financial Results",
+      "publication_date": "2026-08-26",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+      "facts": "Q2 revenue 96.221B USD vs 46.743B, FCF 21.341B vs 13.450B, Q3 revenue guidance 108.0B USD."
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "document": "Third Quarter Fiscal 2026 Financial Results",
+      "publication_date": "2025-11-19",
+      "url": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2026/",
+      "facts": "Q3 FY2026 revenue 57.006B USD, used only as the prior-year denominator for current Q3 FY2027 guidance YoY comparison."
+    }
+  ],
+  "method": {
+    "canonical_terminal_growth_hurdle_bp": 72.0688289929345,
+    "comparison_period": "latest reported quarter available as of 2026-09-09 plus each issuer's next-quarter revenue guidance",
+    "look_ahead": "None. Only issuer data publicly available by 2026-09-09 are used.",
+    "current_fcf_growth": "reported quarter FCF / prior-year comparable quarter FCF - 1",
+    "current_fcf_margin": "reported quarter FCF / reported quarter revenue",
+    "guided_revenue_growth": "issuer next-quarter revenue guidance / prior-year comparable reported revenue - 1; Broadcom directly states +93% YoY and NVIDIA is calculated from 108.0B / 57.006B.",
+    "scope": "Directional falsification of the +72bp terminal-growth-premium hypothesis. It is not a 3-5 year forecast model and does not extrapolate current growth rates into terminal growth."
+  },
+  "results": {
+    "AVGO": {
+      "current_revenue_yoy_pct": 85.50025075225678,
+      "current_fcf_yoy_pct": 94.54726651480637,
+      "current_fcf_margin_pct": 46.179581629549524,
+      "next_quarter_guided_revenue_yoy_pct": 93.0,
+      "AI_semiconductor_revenue_yoy_pct": 221.0
+    },
+    "NVDA": {
+      "current_revenue_yoy_pct": 105.85114348672526,
+      "current_fcf_yoy_pct": 58.66914498141264,
+      "current_fcf_margin_pct": 22.179150081583025,
+      "next_quarter_guided_revenue_yoy_pct": 89.45374171139879,
+      "data_center_revenue_yoy_pct": 117.0
+    },
+    "AVGO_minus_NVDA": {
+      "current_revenue_growth_percentage_points": -20.350892734468488,
+      "current_fcf_growth_percentage_points": 35.878121533393724,
+      "current_fcf_margin_percentage_points": 24.0004315479665,
+      "next_quarter_guided_revenue_growth_percentage_points": 3.5462582886012086
+    },
+    "short_horizon_direct_indicators_favoring_AVGO": 3,
+    "short_horizon_direct_indicators_tested": 3,
+    "three_plus_year_issuer_fcf_growth_premium_directly_verified": false
+  },
+  "benchmark_and_alternatives": {
+    "benchmark": "NVDA as the current canonical relative-valuation base case. Current revenue growth is higher at NVDA: 105.85% vs AVGO 85.50%.",
+    "alternative_fcf_growth": "AVGO FCF grows 94.55% YoY vs NVDA 58.67%, a +35.88pt AVGO differential.",
+    "alternative_fcf_conversion": "AVGO current FCF margin is 46.18% vs NVDA 22.18%, a +24.00pt AVGO differential.",
+    "alternative_forward_revenue": "AVGO Q4 guidance implies +93.0% YoY vs NVDA Q3 guidance about +89.45% YoY, a +3.55pt AVGO differential.",
+    "growth_mix_check": "AVGO AI semiconductor revenue grows +221% YoY vs NVDA Data Center +117% YoY, but these segment definitions are not identical and are not used as a formal decision criterion."
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "AVGO exceeds NVDA on all three preselected short-horizon direct indicators: FCF growth, FCF margin, and next-quarter guided revenue YoY growth. This provides directional support that the +72bp terminal FCF growth hurdle is not contradicted by current fundamentals. However, neither issuer provides a directly comparable 3-5 year FCF growth commitment that verifies persistence, and current total revenue growth still favors NVDA by 20.35pt. Short-term acceleration therefore cannot be promoted to a terminal premium.",
+    "usage_rule": "Keep AVGO/NVDA terminal growth premium at the existing break-even hurdle only as a decision boundary. Do not assign AVGO a terminal premium from current quarter growth. Re-evaluate when multi-year issuer evidence, realized forward FCF paths, or a point-in-time OOS model can demonstrate persistence.",
+    "portfolio_implication": "Current fundamentals remove a simple objection that AVGO lacks any growth/conversion evidence for the +72bp hurdle, but they do not justify changing the canonical NVDA-over-AVGO relative valuation ranking or portfolio weights."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental valuation-assumption test, not a realized trading strategy."
+  },
+  "limitations": [
+    "The fiscal calendars differ: Broadcom Q3 FY2026 ended 2026-08-02; NVIDIA Q2 FY2027 ended 2026-07-26. The periods are close but not identical.",
+    "Broadcom and NVIDIA define and reconcile free cash flow separately; both are issuer-reported non-GAAP measures and may not be perfectly comparable.",
+    "Quarterly growth is strongly affected by AI infrastructure cycle timing and cannot identify a perpetual growth-rate difference.",
+    "AVGO total revenue currently grows slower than NVDA despite stronger FCF growth, FCF margin, next-quarter guided YoY revenue growth, and AI segment growth.",
+    "No issuer-primary source available as of 2026-09-09 directly commits to an AVGO-over-NVDA FCF growth differential for 3-5 years."
+  ],
+  "implementation": {
+    "artifact_type": "canonical relative-valuation fundamental hurdle evidence",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "Current quarterly growth rates are not extrapolated into terminal growth.",
+    "No new terminal-multiple model is created.",
+    "No one-off collector or workflow is retained.",
+    "No duplicate calculation is added to finBI or another consumer repository."
+  ],
+  "next_hypothesis": "Use point-in-time realized forward FCF growth for AVGO, NVDA and relevant semiconductor/AI-infrastructure peers to test whether current FCF growth and conversion predict 2-3 year forward relative FCF growth out of sample. Adopt a growth-conditioned terminal premium only if it beats the equal-premium benchmark OOS."
+}

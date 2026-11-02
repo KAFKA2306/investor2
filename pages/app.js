@@ -378,6 +378,8 @@ async function init() {
     refreshModuleFilter();
     applyFilters();
     await selectArtifact(requestedPath);
+  } else if (state.filtered.length > 0) {
+    await selectArtifact(state.filtered[0].path);
   }
 }
 

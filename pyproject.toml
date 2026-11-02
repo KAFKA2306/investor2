@@ -20,12 +20,13 @@ dependencies = [
     "japanize-matplotlib",
     "matplotlib-fontja",
     "scikit-learn",
+    "skfolio==1.0.0",
 ]
 
 [dependency-groups]
 dev = [
     "prek==0.4.11",
-    "pyrefly==1.1.1",
+    "pyrefly==1.4.0",
     "pytest",
     "ruff",
 ]

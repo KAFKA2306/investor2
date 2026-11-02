@@ -1,0 +1,68 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gold_sgov_capital_efficiency_20260906",
+  "status": "REJECT",
+  "hypothesis": "SMH60%/GLD20%/SGOV20%を過去6か月の実現volatilityだけでSMH80%/GLD20%と同じriskへ月次scaleし、SOFR+50bp fundingと10bp turnover costを含めても、翌月OOSでSMH80%/GLD20%をSharpe・return・Maximum Drawdown・95% Expected Shortfallのすべてで安定して上回る。",
+  "decision_rule": {
+    "use_if": "全OOS期間と2025/2026時間分割の双方で、scaled strategyがbenchmarkよりSharpeとCAGRが高く、Maximum Drawdownと95% Expected Shortfallが悪化しない。",
+    "reject_if": "いずれかの時間分割でSharpeまたはCAGRがbenchmark以下、またはMaximum Drawdown/95% Expected Shortfallが悪化する。"
+  },
+  "source": {
+    "asset_total_return_canonical": "docs/research/results/semiconductor_gold_risk_sleeve_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "funding_rate": "Federal Reserve Bank of New York SOFR Index via FRED SOFRINDEX",
+    "funding_source_url": "https://fred.stlouisfed.org/data/SOFRINDEX",
+    "period": "2024-08..2026-08",
+    "retrieved_as_of": "2026-09-06",
+    "fallback": "none"
+  },
+  "method": {
+    "signal": "各月tの直前6か月のtotal-return実現volatilityから、SMH60/GLD20/SGOV20のgross exposureをSMH80/GLD20のvolatilityへ合わせ、翌月t+1だけ適用するwalk-forward。",
+    "leverage_cap": 1.5,
+    "funding": "gross exposureが1を超える部分に当月SOFR Index実現return + 50bp/年を課す。",
+    "transaction_cost": "10bp × two-sided asset turnover。初期配分コストは除外。",
+    "oos_period": "2025-03..2026-08",
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "historical 95% ES = worst ceil(5%*n) monthly returns average"
+  },
+  "full_oos": {
+    "scaled": {"n": 18, "cagr": 0.74599253, "volatility": 0.31033041, "sharpe": 1.97922346, "maximum_drawdown": -0.13654462, "expected_shortfall_95": -0.13654462},
+    "benchmark_SMH80_GLD20": {"n": 18, "cagr": 0.71817641, "volatility": 0.31745624, "sharpe": 1.88750476, "maximum_drawdown": -0.13952759, "expected_shortfall_95": -0.13952759},
+    "unscaled_SMH60_GLD20_SGOV20": {"n": 18, "cagr": 0.55095693, "volatility": 0.23897110, "sharpe": 1.97949717, "maximum_drawdown": -0.10357165, "expected_shortfall_95": -0.10357165},
+    "leverage_mean": 1.32414911,
+    "leverage_min": 1.24264923,
+    "leverage_max": 1.38113399,
+    "transaction_cost_sum_fraction": 0.00111315
+  },
+  "time_split": {
+    "2025": {
+      "scaled": {"n": 10, "cagr": 0.77263311, "volatility": 0.22025305, "sharpe": 2.75614521, "maximum_drawdown": -0.00923098, "expected_shortfall_95": -0.04512479},
+      "benchmark": {"n": 10, "cagr": 0.69705381, "volatility": 0.22035392, "sharpe": 2.54869357, "maximum_drawdown": -0.01256887, "expected_shortfall_95": -0.05451770}
+    },
+    "2026_01_08": {
+      "scaled": {"n": 8, "cagr": 0.71325413, "volatility": 0.41412309, "sharpe": 1.50478942, "maximum_drawdown": -0.13654462, "expected_shortfall_95": -0.13654462},
+      "benchmark": {"n": 8, "cagr": 0.74494976, "volatility": 0.42654467, "sharpe": 1.51492246, "maximum_drawdown": -0.13952759, "expected_shortfall_95": -0.13952759}
+    }
+  },
+  "funding_spread_sensitivity_6m": {
+    "0": {"cagr": 0.74870131, "sharpe": 1.98440701, "maximum_drawdown": -0.13641630},
+    "50": {"cagr": 0.74599253, "sharpe": 1.97922346, "maximum_drawdown": -0.13654462},
+    "100": {"cagr": 0.74328759, "sharpe": 1.97403963, "maximum_drawdown": -0.13667294}
+  },
+  "lookback_sensitivity_50bp_funding": {
+    "3": {"n": 21, "scaled_sharpe": 1.78653692, "benchmark_sharpe": 1.67815850, "scaled_cagr": 0.60539869, "benchmark_cagr": 0.57803076},
+    "6": {"n": 18, "scaled_sharpe": 1.97922346, "benchmark_sharpe": 1.88750476, "scaled_cagr": 0.74599253, "benchmark_cagr": 0.71817641},
+    "9": {"n": 15, "scaled_sharpe": 2.08008999, "benchmark_sharpe": 2.03101645, "scaled_cagr": 0.84403246, "benchmark_cagr": 0.83109514},
+    "12": {"n": 12, "scaled_sharpe": 1.87914055, "benchmark_sharpe": 1.84655944, "scaled_cagr": 0.82046528, "benchmark_cagr": 0.80624055}
+  },
+  "decision": {
+    "reject": "walk-forward capital-efficiency ruleとしては採用しない。全OOSでは優位だが、2026年1-8月でSharpe 1.5048 < 1.5149、CAGR 71.33% < 74.49%となり事前条件を満たさない。",
+    "retain": "SMH60/GLD20/SGOV20の低risk構造とgold sleeveのCONDITIONは維持する。固定weightまたはleveraged production targetへは昇格しない。"
+  },
+  "prohibited_inference": [
+    "全OOS Sharpeだけを根拠にleverage ruleをproduction採用しない。",
+    "SOFR+50bpを個人投資家の実際の信用取引・先物・CFD funding costと同一視しない。",
+    "18か月OOSで恒久的なcapital efficiencyを推定しない。"
+  ]
+}

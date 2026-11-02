@@ -1,0 +1,67 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "hypothesis": "NVIDIA's accounts receivable growth persistently outpaces revenue growth across multiple quarters, indicating a structural customer-financing trend rather than a one-quarter timing effect.",
+  "capital_allocation_relevance": "If persistent, the receivables build would justify a higher monitoring burden for cash-conversion and customer-financing risk; if not persistent, a structural valuation penalty would be premature.",
+  "precommit_rule": {
+    "use_if": "Accounts receivable growth exceeds revenue growth by at least 5 percentage points in at least 3 of the latest 4 sequential quarters and the AR/revenue ratio does not decline across the window.",
+    "reject_if": "Fewer than 3 of the latest 4 sequential quarters meet that condition, especially if the AR/revenue ratio declined before a latest-quarter spike."
+  },
+  "canonical_real_data": {
+    "currency": "USD",
+    "unit": "billions except ratios and days",
+    "quarters": [
+      {"period": "Q2 FY2026", "quarter_end": "2025-07-27", "revenue": 46.743, "accounts_receivable": 27.808, "ar_to_quarter_revenue": 0.5949126072, "ending_ar_days_proxy": 54.28577541},
+      {"period": "Q3 FY2026", "quarter_end": "2025-10-26", "revenue": 57.006, "accounts_receivable": 33.391, "ar_to_quarter_revenue": 0.5857453601, "ending_ar_days_proxy": 53.44926411},
+      {"period": "Q4 FY2026", "quarter_end": "2026-01-25", "revenue": 68.127, "accounts_receivable": 38.466, "ar_to_quarter_revenue": 0.5646219561, "ending_ar_days_proxy": 51.52175349},
+      {"period": "Q1 FY2027", "quarter_end": "2026-04-26", "revenue": 81.615, "accounts_receivable": 40.710, "ar_to_quarter_revenue": 0.4988053667, "ending_ar_days_proxy": 45.51598971},
+      {"period": "Q2 FY2027", "quarter_end": "2026-07-26", "revenue": 96.221, "accounts_receivable": 63.059, "ar_to_quarter_revenue": 0.6553558994, "ending_ar_days_proxy": 59.80122582}
+    ],
+    "sequential_growth_spreads_ar_minus_revenue_pp": [
+      {"period": "Q3 FY2026", "spread_pp": -1.879272469},
+      {"period": "Q4 FY2026", "spread_pp": -4.309766554},
+      {"period": "Q1 FY2027", "spread_pp": -13.96459456},
+      {"period": "Q2 FY2027", "spread_pp": 37.00183939}
+    ],
+    "latest_yoy": {
+      "accounts_receivable_growth_pct": 126.7656789,
+      "revenue_growth_pct": 105.8511435,
+      "ar_minus_revenue_growth_pp": 20.91453545,
+      "ar_to_revenue_ratio_change_pp": 6.04432922
+    }
+  },
+  "benchmark": "Persistent customer-financing trend requires at least 3 of the latest 4 sequential quarters with AR growth exceeding revenue growth by >=5pp.",
+  "alternative_hypothesis": "Q2 FY2027 is a discrete working-capital/payment-terms step-up rather than an already-established multi-quarter structural trend.",
+  "result": {
+    "qualifying_sequential_quarters": 1,
+    "quarters_tested": 4,
+    "persistent_trend_condition_met": false,
+    "interpretation": "Only Q2 FY2027 shows a large positive AR-growth minus revenue-growth spread. In the three preceding sequential quarters, AR growth lagged revenue growth and the AR/revenue ratio declined from 59.49% to 49.88% before jumping to 65.54%. The persistent-trend hypothesis is therefore rejected on currently available point-in-time data."
+  },
+  "decision_rule": "Do not apply a structural customer-financing or credit-risk valuation penalty from the current receivables history alone. Continue to monitor the same sequential test. Reconsider if at least 3 of 4 latest quarters show AR growth > revenue growth by >=5pp or comparable credit-loss/payment-performance evidence deteriorates.",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time fundamental working-capital research, not a realized trading strategy."
+  },
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000209/nvda-20250727.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581025000230/nvda-20251026.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000021/nvda-20260125.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+    "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+  ],
+  "limitations": [
+    "Ending AR days proxy uses quarter-end AR divided by quarterly revenue and is not a company-reported DSO metric.",
+    "Extended payment terms are disclosed, but contract-level maturity, customer-level default probability, and expected credit loss are not sufficiently disclosed for a probability-weighted valuation penalty.",
+    "The latest Q2 FY2027 spike may persist in future quarters; this artifact rejects persistence as already established, not the possibility that it develops later."
+  ],
+  "supersedes_or_refines": [
+    "docs/research/results/avgo_nvda_receivables_credit_risk_20260910/summary.json",
+    "docs/research/results/avgo_nvda_factoring_neutral_dso_20260910/summary.json"
+  ],
+  "next_hypothesis": "NVIDIA's Q2 FY2027 receivables spike is matched by a deterioration in credit-loss allowance, write-offs, or disclosed payment-performance evidence rather than only longer contractual payment terms."
+}

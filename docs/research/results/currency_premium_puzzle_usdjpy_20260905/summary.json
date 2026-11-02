@@ -1,0 +1,90 @@
+{
+  "status": "CONDITION",
+  "research_date": "2026-09-05",
+  "paper": {
+    "title": "A Currency Premium Puzzle",
+    "authors": ["Tarek Alexander Hassan", "Thomas Mertens", "Jingye Wang"],
+    "series": "NBER Working Paper 35572",
+    "issue_date": "2026-08",
+    "doi": "10.3386/w35572",
+    "url": "https://www.nber.org/papers/w35572"
+  },
+  "hypothesis": "USD-JPYの金利差が大きい局面でも、翌月の為替変化はUIPが要求するほどUSD安にならず、金利差の一部がcurrency excess returnとして残る。",
+  "decision_gate": {
+    "condition": "単純UIP予測がzero-change benchmarkをRMSEで上回らず、かつ金利差+為替変化で定義したUSDJPY carry proxyが5bp/月コスト後も正のSharpeを持つこと",
+    "reject": "UIP予測がzero-change benchmarkを明確に上回る、またはcost込みcarry proxyが非正のSharpeになること"
+  },
+  "data": {
+    "period": "2022-01 to 2026-05",
+    "observations": 53,
+    "frequency": "monthly",
+    "fx": {
+      "series": "EXJPUS",
+      "source": "Board of Governors of the Federal Reserve System via FRED",
+      "unit": "JPY per USD",
+      "url": "https://fred.stlouisfed.org/series/EXJPUS"
+    },
+    "us_rate": {
+      "series": "IR3TIB01USM156N",
+      "source": "OECD Main Economic Indicators via FRED",
+      "unit": "percent per annum",
+      "url": "https://fred.stlouisfed.org/series/IR3TIB01USM156N"
+    },
+    "jp_rate": {
+      "series": "IR3TIB01JPM156N",
+      "source": "OECD Main Economic Indicators via FRED",
+      "unit": "percent per annum",
+      "url": "https://fred.stlouisfed.org/series/IR3TIB01JPM156N"
+    },
+    "missing_data_policy": "no interpolation, no forward fill, no alternate-feed fallback"
+  },
+  "method": {
+    "rate_differential": "US 3M interbank rate minus Japan 3M interbank rate",
+    "fx_response": "12 * 100 * log(S[t+1]/S[t]), where S is JPY per USD",
+    "uip_prediction": "annualized FX response = -rate differential",
+    "alternative_benchmark": "annualized FX response = 0",
+    "carry_proxy": "monthly spot USD return in JPY + annualized interest differential / 12",
+    "transaction_cost_sensitivity_bps_per_month": [0, 5, 10]
+  },
+  "results": {
+    "average_rate_differential_pct": 3.7771,
+    "average_annualized_fx_response_pct": 7.6203,
+    "average_annualized_rate_plus_fx_pct": 11.3973,
+    "corr_rate_diff_next_fx": -0.2478,
+    "ols_fx_on_rate_diff": {
+      "intercept": 28.0507,
+      "slope": -5.4091,
+      "uip_theoretical_slope": -1.0
+    },
+    "forecast_rmse_annualized_pct": {
+      "uip": 32.5999,
+      "zero_fx_change": 31.7892
+    },
+    "carry_proxy": {
+      "0bp": {"cagr": 0.1205, "volatility": 0.0889, "sharpe": 1.3300, "max_drawdown": -0.1030, "expected_shortfall_95_monthly": -0.0500, "cumulative_return": 0.6528},
+      "5bp": {"cagr": 0.1139, "volatility": 0.0889, "sharpe": 1.2625, "max_drawdown": -0.1044, "expected_shortfall_95_monthly": -0.0505, "cumulative_return": 0.6100},
+      "10bp": {"cagr": 0.1072, "volatility": 0.0889, "sharpe": 1.1950, "max_drawdown": -0.1058, "expected_shortfall_95_monthly": -0.0510, "cumulative_return": 0.5682}
+    },
+    "subperiods": {
+      "2022_2023": {"n": 24, "avg_rate_diff_pct": 3.7153, "avg_annualized_fx_pct": 12.1103, "avg_rate_plus_fx_pct": 15.8257, "rmse_uip": 36.7704, "rmse_zero": 35.9096},
+      "2024_2026_05": {"n": 29, "avg_rate_diff_pct": 3.8282, "avg_annualized_fx_pct": 3.9043, "avg_rate_plus_fx_pct": 7.7325, "rmse_uip": 28.6937, "rmse_zero": 27.9231}
+    }
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "supported_claim": "2022-2026のUSDJPYでは、単純UIPはzero-change benchmarkより予測誤差が大きく、正の金利差は為替変化で完全には相殺されなかった。currency premium puzzleの限定的な実データ支持として扱う。",
+    "do_not_use_for": [
+      "USDJPY carryの常時売買ルール",
+      "他通貨への一般化",
+      "論文の構造モデルの完全再現",
+      "forward/CIP basisを無視した為替ヘッジ判断"
+    ]
+  },
+  "remaining_uncertainty": [
+    "検証対象がUSDJPYの1通貨ペアのみ",
+    "期間が2022年以降で円安局面を多く含む",
+    "interbank rateとspot FXによるbounded replicationで、forward rate/CIP basisは未使用",
+    "税・証拠金・実執行spreadは未反映"
+  ],
+  "next_high_value_hypothesis": "複数G10通貨をpoint-in-timeで横断し、forward/CIP basisと実取引コストを含めても、高金利通貨のexcess returnがUIP benchmarkを上回るか。"
+}

@@ -1,0 +1,108 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_eps_growth_quality_20260907",
+  "status": "REJECT",
+  "as_of": "2026-09-07",
+  "hypothesis": "AVGOの直近GAAP EPS成長率がNVDAを大きく上回っている主因は、より速い売上成長であり、約11 percentage points/年の5年EPS成長率ハードルを支える持続的なトップライン証拠として扱える。",
+  "decision_rule": {
+    "use_if": "AVGOの売上成長率がNVDAを上回り、AVGO対NVDAの相対EPS成長差の大半が売上成長差で説明され、希薄化や一時的なmargin正常化への依存が小さい。",
+    "reject_if": "AVGOの売上成長率がNVDAを下回り、相対EPS成長差が主としてGAAP margin拡大で説明される。",
+    "unverified_if": "revenue、GAAP net income、diluted weighted-average sharesの比較可能な同四半期YoYが揃わない。"
+  },
+  "canonical_context": {
+    "owner_repository": "KAFKA2306/investor2",
+    "valuation_hurdle_artifact": "docs/research/results/nvda_avgo_relative_growth_hurdle_20260907/summary.json",
+    "required_relative_eps_cagr_hurdle": "同一terminal P/Eなら、AVGOはNVDAより約10.4-11.8 percentage points/年、実用上約11 points/年高い5年GAAP EPS CAGRが必要。"
+  },
+  "primary_sources": {
+    "NVIDIA_Q2_FY2027": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVIDIA_Q2_FY2027_SEC_10Q": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "Broadcom_Q3_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "NVIDIA_Q3_FY2026_comparator": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2026/",
+    "Broadcom_Q4_FY2025_comparator": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025"
+  },
+  "reported_inputs": {
+    "NVDA": {
+      "period": "Q2 FY2027 vs Q2 FY2026",
+      "revenue_usd_million": {"current": 96221, "prior_year": 46743},
+      "gaap_operating_income_usd_million": {"current": 63734, "prior_year": 28440},
+      "gaap_net_income_usd_million": {"current": 59688, "prior_year": 26422},
+      "diluted_weighted_average_shares_million": {"current": 24285, "prior_year": 24532},
+      "gaap_diluted_eps_usd": {"current": 2.46, "prior_year": 1.08},
+      "next_quarter_revenue_guidance_usd_million": 108000,
+      "prior_year_comparable_quarter_revenue_usd_million": 57006
+    },
+    "AVGO": {
+      "period": "Q3 FY2026 vs Q3 FY2025",
+      "revenue_usd_million": {"current": 29591, "prior_year": 15952},
+      "gaap_operating_income_usd_million": {"current": 15955, "prior_year": 5887},
+      "gaap_net_income_usd_million": {"current": 13088, "prior_year": 4140},
+      "diluted_weighted_average_shares_million": {"current": 4887, "prior_year": 4860},
+      "gaap_diluted_eps_usd": {"current": 2.68, "prior_year": 0.85},
+      "next_quarter_revenue_guidance_usd_million": 34800,
+      "prior_year_comparable_quarter_revenue_usd_million": 18015
+    }
+  },
+  "derived_metrics": {
+    "NVDA": {
+      "revenue_yoy_pct": 105.8511,
+      "gaap_operating_margin_pct": {"current": 66.2371, "prior_year": 60.8433, "change_pp": 5.3938},
+      "gaap_net_margin_pct": {"current": 62.0322, "prior_year": 56.5261, "change_pp": 5.5061},
+      "diluted_share_count_yoy_pct": -1.0068,
+      "reported_gaap_eps_yoy_pct": 127.7778,
+      "next_quarter_revenue_guidance_yoy_pct": 89.4537
+    },
+    "AVGO": {
+      "revenue_yoy_pct": 85.5003,
+      "gaap_operating_margin_pct": {"current": 53.9184, "prior_year": 36.9045, "change_pp": 17.0140},
+      "gaap_net_margin_pct": {"current": 44.2297, "prior_year": 25.9529, "change_pp": 18.2768},
+      "diluted_share_count_yoy_pct": 0.5556,
+      "reported_gaap_eps_yoy_pct": 215.2941,
+      "next_quarter_revenue_guidance_yoy_pct": 93.1724
+    },
+    "relative_AVGO_minus_NVDA": {
+      "reported_revenue_growth_pp": -20.3509,
+      "reported_eps_growth_pp": 87.5163,
+      "next_quarter_revenue_guidance_growth_pp": 3.7186,
+      "operating_margin_expansion_difference_pp": 11.6202,
+      "net_margin_expansion_difference_pp": 12.7707,
+      "diluted_share_growth_difference_pp": 1.5624
+    }
+  },
+  "log_growth_decomposition": {
+    "identity": "EPS = revenue * net_margin / diluted_shares。log差分で revenue、net margin、share count の寄与を加法分解する。",
+    "AVGO_own_eps_growth_log_share": {
+      "revenue": 0.5394,
+      "net_margin": 0.4654,
+      "diluted_shares": -0.0048
+    },
+    "NVDA_own_eps_growth_log_share": {
+      "revenue": 0.8751,
+      "net_margin": 0.1127,
+      "diluted_shares": 0.0123
+    },
+    "relative_AVGO_minus_NVDA_log_growth_contribution": {
+      "revenue": -0.104097,
+      "net_margin": 0.440163,
+      "diluted_shares": -0.015660,
+      "total_relative_log_eps_growth": 0.320406,
+      "interpretation": "AVGOのNVDAに対する相対EPS成長優位は売上成長ではなくmargin拡大で成立している。売上成長差とshare count差は相対優位を減らしている。"
+    }
+  },
+  "benchmark_comparison": {
+    "simple_top_line_hypothesis": "REJECT。実績売上成長はAVGO 85.50%に対してNVDA 105.85%でAVGOが20.35 points遅い。",
+    "forward_top_line_screen": "次四半期会社guidanceのYoY売上成長はAVGO 93.17%、NVDA 89.45%でAVGOが3.72 points上回るが、既存の約11 points/年EPS成長率ハードルより小さい。単一四半期の売上guidanceは5年CAGRの代替ではない。",
+    "margin_evidence": "AVGOのGAAP net marginは25.95%から44.23%へ18.28 points拡大し、NVDAの56.53%から62.03%への5.51 points拡大を大きく上回る。相対EPS優位の主要因はこのmargin差。",
+    "share_count_evidence": "AVGOのdiluted sharesは0.56%増加、NVDAは1.01%減少。share countはAVGOの相対EPS優位を支えていない。"
+  },
+  "finding": "AVGOの直近GAAP EPS成長率はNVDAを大きく上回るが、その相対優位はより速い売上成長から生じていない。実績売上成長はAVGOがNVDAを20.35 points下回り、次四半期売上guidanceでもAVGOの優位は3.72 pointsにとどまる。log分解では相対EPS成長差を支えるのは主としてGAAP net margin拡大で、share countもAVGOには逆風。したがって直近EPS成長差を約11 points/年の5年成長ハードルを満たす持続的トップライン証拠として外挿する仮説をREJECTする。",
+  "reusable_decision": "AVGOの5年EPS trajectoryを構築する際、直近+215% GAAP EPS成長をbase caseへ外挿しない。AVGOがNVDAより約11 points/年高い5年EPS CAGRを維持できるかは、独立したrevenue growth pathとGAAP margin pathを分けて検証する。marginは現在の急拡大を自動継続させない。",
+  "implementation_action": "新しいforecast engineやcollectorは追加しない。このREJECT artifactのみをdecision evidenceとして保存し、次の研究ではrevenue pathとmargin pathを明示的に分離する。",
+  "limitations": [
+    "Q2 FY2027 NVDAとQ3 FY2026 AVGOという各社最新四半期のYoY比較であり、暦四半期は完全一致しない。",
+    "log分解は会計恒等式に基づく記述的分解で、margin変化の因果要因を識別しない。",
+    "BroadcomのQ4 FY2026 guidanceはnon-GAAP operating marginのみで、GAAP operating margin guidanceは会社がreconciliation困難として提示していない。",
+    "単一四半期の実績・guidanceから5年CAGRを推定しない。"
+  ],
+  "next_hypothesis": "AVGOのGAAP marginを直近の急拡大から保守的に正常化し、NVDAとAVGOの売上成長を会社guidanceから段階的に減速させる明示的なbear/base/bull 5年trajectoryでは、AVGOのbase caseはNVDAより約11 points/年高いGAAP EPS CAGRハードルを維持できるか。"
+}

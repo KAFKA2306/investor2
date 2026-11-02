@@ -1,0 +1,110 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "hypothesis": "AVGO の H1 incremental FCF conversion advantage は、AVGO と NVDA の operating working-capital cash-flow timing を同一方法で除いても 10 percentage points 以上残る。",
+  "capital_allocation_importance": "前回の raw H1 comparison は AVGO +18.57pt だったが、NVDA は大規模な receivables / inventory build を明示している。これが一時的 cash-flow timing なら raw FCF conversion を構造的な資本効率差として valuation に使うと誤る。",
+  "precommit_rule": {
+    "USE": "symmetric working-capital normalization 後も AVGO の H1 conversion advantage が 10pt 以上残る。",
+    "CONDITION": "AVGO advantage が 0pt 超 10pt 未満。",
+    "REJECT": "exact total-revenue benchmark で AVGO advantage が 0pt 以下、または raw 10pt 超 advantage が消える。",
+    "UNVERIFIED": "SEC cash-flow identity / period / unit が一致しない。"
+  },
+  "sources": [
+    {
+      "company": "Broadcom",
+      "source": "SEC Form 10-Q",
+      "period": "two fiscal quarters ended 2026-05-03 and 2025-05-04",
+      "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm"
+    },
+    {
+      "company": "NVIDIA",
+      "source": "SEC Form 10-Q",
+      "period": "six months ended 2026-07-26 and 2025-07-27",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+    }
+  ],
+  "method": {
+    "reported_fcf": "cash from operations - capex; NVIDIA は issuer FCF definition に合わせ principal payments on property/equipment/intangibles も控除",
+    "working_capital_normalized_fcf": "reported FCF - SEC cash-flow statement の changes in operating assets and liabilities contribution",
+    "primary_benchmark": "incremental normalized FCF / incremental total revenue。両社で exact issuer/SEC values が得られ product-scope mismatch を避ける。",
+    "secondary_cross_check": "AVGO AI semiconductor revenue と NVDA Data Center revenue を分母にするが、AVGO prior Q2 AI revenue は 'over 4.4B' のため 4.4B lower-bound を使う descriptive sensitivity とし primary decision には使わない。",
+    "warning": "working-capital normalization は timing diagnostic であり、receivables/inventory を経済的に無価値とみなす調整ではない。"
+  },
+  "inputs_usd_billion": {
+    "broadcom": {
+      "current_h1_cfo": 18.753,
+      "prior_h1_cfo": 12.668,
+      "current_h1_capex": 0.481,
+      "prior_h1_capex": 0.244,
+      "current_h1_reported_fcf": 18.272,
+      "prior_h1_reported_fcf": 12.424,
+      "current_h1_operating_asset_liability_contribution": -5.677,
+      "prior_h1_operating_asset_liability_contribution": -4.261,
+      "current_h1_normalized_fcf": 23.949,
+      "prior_h1_normalized_fcf": 16.685,
+      "incremental_normalized_fcf": 7.264,
+      "current_h1_total_revenue": 41.498,
+      "prior_h1_total_revenue": 29.920,
+      "incremental_total_revenue": 11.578
+    },
+    "nvidia": {
+      "current_h1_cfo": 74.421,
+      "prior_h1_cfo": 42.779,
+      "current_h1_capex_and_intangibles": 4.434,
+      "prior_h1_capex_and_intangibles": 3.122,
+      "current_h1_principal_payments": 0.092,
+      "prior_h1_principal_payments": 0.073,
+      "current_h1_reported_fcf": 69.895,
+      "prior_h1_reported_fcf": 39.584,
+      "current_h1_operating_asset_liability_contribution": -27.164,
+      "prior_h1_operating_asset_liability_contribution": -2.368,
+      "current_h1_normalized_fcf": 97.059,
+      "prior_h1_normalized_fcf": 41.952,
+      "incremental_normalized_fcf": 55.107,
+      "current_h1_total_revenue": 177.836,
+      "prior_h1_total_revenue": 90.805,
+      "incremental_total_revenue": 87.031
+    }
+  },
+  "results": {
+    "raw_total_revenue_conversion": {
+      "AVGO": 0.50509587,
+      "NVDA": 0.34827820,
+      "AVGO_minus_NVDA_pt": 15.68176718
+    },
+    "working_capital_normalized_total_revenue_conversion": {
+      "AVGO": 0.62739679,
+      "NVDA": 0.63318817,
+      "AVGO_minus_NVDA_pt": -0.57913873,
+      "raw_gap_compression_pt": 16.26090591
+    },
+    "secondary_ai_or_data_center_cross_check": {
+      "AVGO_normalized_incremental_fcf_per_incremental_ai_revenue": 0.67887850,
+      "NVDA_normalized_incremental_fcf_per_incremental_data_center_revenue": 0.65603571,
+      "AVGO_minus_NVDA_pt": 2.28427904,
+      "note": "AVGO prior Q2 AI revenue uses disclosed lower-bound 4.4B, so this is not the primary exact benchmark."
+    },
+    "precommit_pass": false
+  },
+  "interpretation": "raw total-revenue conversion では AVGO が 15.68pt 上回ったが、両社を同じ方法で working-capital normalization すると AVGO 62.74%、NVDA 63.32%となり、AVGO advantage は -0.58ptへ反転した。AI/Data-Center cross-check でも AVGO advantage は 2.28ptに縮小し、10pt threshold を下回る。NVDA は SEC で、H1 operating cash flow が large multi-quarter agreements の extended payment terms に伴う accounts receivable 増加で部分的に抑制されたと明記している。",
+  "decision_rule": "前回の raw H1 +18.57pt advantage を構造的な AVGO capital-efficiency premium として valuation に使わない。AVGO/NVDA cash-conversion 比較では raw FCF と symmetric working-capital-normalized FCF を併記し、10pt超の優位が normalized cumulative benchmark でも残る場合だけ structural evidence に昇格する。",
+  "supersedes_decision_rule_from": "docs/research/results/avgo_nvda_ai_fcf_conversion_20260910/summary.json",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategy ではなく fundamental cash-conversion normalization research"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "research evaluation / negative decision artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_logic_copy": false
+  },
+  "remaining_uncertainty": "normalization は working-capital timing を取り除く diagnostic であり、extended payment terms の信用コスト、inventory obsolescence、factoring economics は別途評価が必要。Broadcom は receivables factoring も利用しているため、cash conversion quality の比較には financing-adjusted working capital が次の論点になる。",
+  "next_high_value_hypothesis": "Broadcom の non-recourse receivables factoring を financing として戻し、NVIDIA の extended customer payment terms と同一経済基準で調整すると、両社の cash-conversion / capital-efficiency ranking はどう変わるか。"
+}

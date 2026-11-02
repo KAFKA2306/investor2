@@ -1,0 +1,26 @@
+{
+  "schema_version": "investor2.input-source-registry.v1",
+  "sources": {
+    "factset_insight_rss": {
+      "enabled": true,
+      "adapter": "factset_insight_rss_materialization",
+      "primary_source": "FactSet Insight publisher RSS metadata",
+      "snapshot_required_provenance": [
+        "tool",
+        "operation",
+        "query_or_scope",
+        "retrieved_at",
+        "source_urls"
+      ],
+      "canonical_timestamp_rule": "Retain the RSS item publication timestamp separately from repository retrieval time; do not infer missing publication timestamps.",
+      "revision_pinning_rule": "Materialize only normalized RSS metadata as content-addressed JSON and pin accepted snapshots by SHA-256; article bodies are not stored in public Git history.",
+      "retry_policy": "Fail closed on network, malformed XML, empty feeds, duplicate identities, or missing required title/link/publication fields; never replace a valid snapshot with an empty or partial synthetic feed.",
+      "rate_limit_policy": "Fetch the publisher RSS at the scheduled daily cadence and do not refetch unchanged accepted content solely to create another snapshot row.",
+      "schema_expectations": "investor2.factset-insight-feed.v1",
+      "failure_mode": "fail-closed",
+      "evidence_role": "publisher-authored-research-context",
+      "public_repository_policy": "Public Git history may contain RSS metadata, titles, authors, publication timestamps, article URLs, hashes, and derived summaries. Do not store or republish full FactSet article bodies.",
+      "source_url": "https://insight.factset.com/rss.xml"
+    }
+  }
+}

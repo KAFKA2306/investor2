@@ -1,0 +1,38 @@
+{
+  "research_id": "nvda_5y_irr_20260904",
+  "ticker": "NVDA",
+  "information_cutoff": "2026-09-04",
+  "status": "UNVERIFIED",
+  "hypothesis": "At the 2026-09-04 market price, NVIDIA can deliver at least a 10% annualized 5-year price IRR under a base case of issuer-reported non-GAAP TTM EPS, 15% annual EPS growth, and a 20x terminal P/E.",
+  "reason_for_status_change": "NVIDIA changed its non-GAAP definition beginning Q1 FY2027 to include stock-based compensation expense. The original TTM non-GAAP EPS summed quarters reported under different definitions, so the normalized EPS input is not a single comparable basis.",
+  "invalidated_input": {
+    "previous_company_non_gaap_ttm_eps": 7.01,
+    "previous_base_case_price_irr_5y": 0.04134875,
+    "do_not_use": true,
+    "reason": "Mixed-basis non-GAAP TTM EPS. Q4 FY2026 was originally reported under the old definition and later shown as 1.59 in the Q1 FY2027 comparative table under the new definition, while the old artifact used 1.62. A complete four-quarter restatement on one basis is not available in the artifact."
+  },
+  "comparable_gaap_reference": {
+    "ttm_diluted_eps": 7.91,
+    "quarters": [
+      {"period": "Q3 FY2026", "gaap_diluted_eps": 1.30},
+      {"period": "Q4 FY2026", "gaap_diluted_eps": 1.76},
+      {"period": "Q1 FY2027", "gaap_diluted_eps": 2.39},
+      {"period": "Q2 FY2027", "gaap_diluted_eps": 2.46}
+    ],
+    "market_price_usd": 230.19,
+    "base_case": {"eps_growth": 0.15, "terminal_pe": 20, "price_irr_5y": 0.06689541},
+    "required_eps_growth_for_10pct_price_irr_at_20x": 0.18568324,
+    "note": "This GAAP calculation is a comparable-basis reference, not a replacement forecast."
+  },
+  "decision": "Do not use the prior mixed-basis non-GAAP 5-year IRR grid for capital allocation. Rebuild a non-GAAP valuation only after obtaining or reconstructing four quarters on one consistent accounting definition. Until then, use GAAP TTM for comparable-basis scenario work.",
+  "primary_sources": [
+    "NVIDIA Q4 FY2026 official investor relations release",
+    "NVIDIA Q1 FY2027 official investor relations release",
+    "NVIDIA Q2 FY2027 official investor relations release"
+  ],
+  "limitations": [
+    "GAAP TTM avoids the non-GAAP definition break but still does not normalize unusual items.",
+    "Scenario IRR excludes dividends and is not a traded time-series strategy.",
+    "The result applies to the 2026-09-04 price."
+  ]
+}

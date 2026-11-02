@@ -1,0 +1,101 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_ai_margin_break_even_constraint_20260910",
+  "status": "CONDITION",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "BroadcomのAI semiconductor gross marginには、FY2027 purchase commitments 52.674B USDをQ4 FY2026 AI revenue run-rateで粗利カバーするためのbreak-even 60.68%を下回る一次情報整合的なケースが存在する。",
+  "why_it_matters": "前研究の1.139x GAAP gross-profit coverageはconsolidated gross marginをAI semiconductorへ適用したproxyであり、semiconductor marginが実際にbreak-evenを下回るならpurchase commitmentsのdownsideを過小評価する。",
+  "precommit_rule": {
+    "use": "issuer開示だけからAIまたはsemiconductor gross marginの上限が60.68%未満と制約できる。",
+    "condition": "issuer開示から60.68%未満のケースが排除できず、同時に60.68%以上のケースも排除できない。",
+    "reject": "issuer開示だけからsemiconductor gross marginの下限が60.68%以上と制約できる。",
+    "unverified": "segment revenue、consolidated gross profit、purchase commitmentsまたはQ4 AI guidanceの一次情報が不足する。"
+  },
+  "dependencies": {
+    "prior_artifact": "docs/research/results/avgo_fy27_commitment_cash_coverage_20260910/summary.json"
+  },
+  "primary_sources": {
+    "broadcom_q3_fy2026_10q": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-09-10, period ended 2026-08-02",
+      "source_url": "https://investors.broadcom.com/static-files/96641754-401f-4090-a4ab-210728c83a28",
+      "q3_semiconductor_revenue_usd_billion": 20.839,
+      "q3_infrastructure_software_revenue_usd_billion": 8.752,
+      "q3_total_revenue_usd_billion": 29.591,
+      "q3_gaap_gross_profit_usd_billion": 20.456,
+      "issuer_margin_statement": "Semiconductor solutions has a lower gross margin than infrastructure software; higher semiconductor mix partially offset consolidated gross-margin benefit from revenue growth. The filing also states that custom AI accelerators, networking and other AI-related products are expected to compress or lower future gross margin."
+    },
+    "broadcom_q3_fy2026_results": {
+      "source": "Broadcom Inc. Q3 FY2026 results published 2026-09-02",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "q3_ai_semiconductor_revenue_usd_billion": 16.7,
+      "q4_ai_semiconductor_revenue_guidance_usd_billion": 21.7
+    },
+    "broadcom_q3_fy2026_10q_commitments": {
+      "purchase_commitments_due_fy2027_usd_billion": 52.674
+    }
+  },
+  "method": {
+    "q4_ai_annualized_run_rate_usd_billion": 86.8,
+    "break_even_ai_gross_margin_pct": 60.68433179723502,
+    "q3_consolidated_gaap_gross_margin_pct": 69.12912709945591,
+    "q3_ai_share_of_semiconductor_revenue_pct": 80.13820240894477,
+    "identity": "consolidated gross profit = semiconductor revenue * semiconductor gross margin + infrastructure software revenue * infrastructure software gross margin",
+    "missing_data_policy": "Neither software-segment nor semiconductor-segment gross margin is inferred as a point estimate. Only algebraic bounds and threshold conditions are reported."
+  },
+  "benchmark_and_alternatives": {
+    "prior_consolidated_margin_proxy": {
+      "gross_margin_pct": 69.12912709945591,
+      "coverage_x": 1.1391594016464996,
+      "interpretation": "Upper-biased proxy for semiconductor economics because Broadcom states semiconductor solutions has lower gross margin than infrastructure software."
+    },
+    "algebraic_semiconductor_margin_bound": {
+      "assumption": "Infrastructure software gross margin is constrained only to the economically possible interval 0% to 100%; no unreported segment margin is guessed.",
+      "semiconductor_gross_margin_lower_bound_pct": 56.16392341283171,
+      "semiconductor_gross_margin_upper_bound_pct": 98.16209990882481,
+      "coverage_at_lower_bound_x": 0.9255094642961977,
+      "result": "BOUND_CROSSES_BREAK_EVEN"
+    },
+    "software_margin_threshold_test": {
+      "software_gross_margin_that_implies_semiconductor_break_even_pct": 89.23665558471426,
+      "interpretation": "If Q3 infrastructure software gross margin exceeded 89.24%, the algebraically implied average semiconductor-solutions gross margin would be below the 60.68% purchase-commitment break-even. Broadcom does not disclose the software segment gross margin, so this condition cannot be resolved from current primary data."
+    }
+  },
+  "validation": {
+    "point_in_time": true,
+    "synthetic_data_used": false,
+    "silent_fallback_used": false,
+    "look_ahead": "No FY2027 realized revenue or margin is assumed. Q4 FY2026 issuer guidance is annualized only as the same transparent sensitivity used by the prior canonical artifact.",
+    "benchmark": "Prior consolidated GAAP margin proxy at 69.13%.",
+    "alternative": "Segment-mix algebraic bound using only disclosed revenue, consolidated gross profit and the 0%-100% feasible range for software gross margin."
+  },
+  "result": {
+    "status": "CONDITION",
+    "finding": "Broadcom explicitly states semiconductor solutions has lower gross margin than infrastructure software and that AI product mix can compress future gross margin. With Q3 disclosed segment revenue and consolidated gross profit, the filing-consistent algebraic range for average semiconductor gross margin spans 56.16%-98.16%, which crosses the 60.68% break-even. A software gross margin above 89.24% would mathematically imply semiconductor gross margin below break-even, but software segment gross margin is not disclosed. Therefore the prior 1.139x consolidated-margin gross-profit coverage is not sufficient evidence that FY2027 commitments are fully covered, while the current filing also cannot prove that semiconductor margin is below break-even."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time fundamental segment-margin constraint research, not a realized trading strategy."
+  },
+  "decision_rule": "Keep FY2027 purchase commitments at CONDITION and do not promote them to fully covered using consolidated gross margin alone. Do not impose a standalone valuation penalty from this margin constraint either. Re-evaluate when Broadcom discloses semiconductor/AI margin economics, when segment mix plus additional primary disclosures tighten the lower bound above 60.68%, or when realized Q4/FY2027 cash conversion provides a directly comparable coverage measure.",
+  "limitations": [
+    "Broadcom does not disclose semiconductor-solutions gross margin, infrastructure-software gross margin, or AI-specific gross margin as point estimates.",
+    "The 56.16%-98.16% algebraic range is a feasibility bound, not a forecast distribution.",
+    "The 89.24% software-margin threshold is a mathematical condition, not an estimate of VMware or infrastructure-software gross margin.",
+    "AI semiconductor revenue is 80.14% of Q3 semiconductor-solutions revenue, but AI-specific economics may differ from the remaining semiconductor portfolio.",
+    "Annualized Q4 AI guidance remains a run-rate sensitivity rather than FY2027 guidance."
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "BroadcomのQ1-Q4 realized segment mix、consolidated gross margin、AI revenueをwalk-forwardで使い、AI mix上昇時のincremental gross-margin responseからsemiconductor/AI marginの識別可能な範囲を狭めると、60.68% break-evenの上下どちらに寄るか。"
+}

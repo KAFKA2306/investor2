@@ -1,0 +1,47 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_nongaap_definition_break_20260907",
+  "status": "REJECT",
+  "hypothesis": "NVIDIAのQ3 FY2026からQ2 FY2027までの会社公表non-GAAP diluted EPSをそのまま合算したTTM EPSは、同一会計定義のnormalized earningsとして5年IRR評価に再利用できる。",
+  "decision_rule": {
+    "use_if": "4四半期のnon-GAAP diluted EPSが同じ除外項目定義で報告または同一基準にrestatementされている。",
+    "reject_if": "期間途中でnon-GAAP定義が変わり、4四半期すべてを同一基準へ揃えられない。"
+  },
+  "observed": {
+    "definition_change": "NVIDIAはQ1 FY2027からstock-based compensation expenseをnon-GAAP financial measuresに含めると公式発表した。",
+    "q4_fy2026_original_non_gaap_eps_used_by_old_artifact": 1.62,
+    "q4_fy2026_comparative_non_gaap_eps_in_q1_fy2027_release": 1.59,
+    "old_mixed_basis_ttm_non_gaap_eps": 7.01,
+    "result": "同じQ4 FY2026でも定義変更後の比較表では値が変わるため、旧artifactの4四半期単純合算は単一の会計基準ではない。"
+  },
+  "comparable_gaap_reference": {
+    "NVDA_ttm_gaap_eps": 7.91,
+    "AVGO_ttm_gaap_eps": 7.83,
+    "prices_usd_2026_09_04": {"NVDA": 230.19, "AVGO": 357.835},
+    "base_case_15pct_growth_20x_terminal_pe_irr_pct": {"NVDA": 6.69, "AVGO": -2.52},
+    "required_eps_growth_for_10pct_price_irr_at_20x_pct": {"NVDA": 18.57, "AVGO": 29.77}
+  },
+  "verdict": {
+    "status": "REJECT",
+    "reason": "NVIDIAのnon-GAAP定義がTTM期間途中で変わり、旧4四半期値を同じnormalized earningsとして合算できない。旧NVDA absolute non-GAAP IRR gridをUNVERIFIEDへ降格し、NVDA/AVGO相対比較からnon-GAAP根拠を削除した。GAAP基準の相対順位は9/9シナリオでNVDA優位のため、相対モデル自体のREJECT結論は維持する。"
+  },
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "updated_artifacts": [
+      "docs/research/results/nvda_5y_irr_20260904/summary.json",
+      "docs/research/results/nvda_avgo_relative_irr_20260905/summary.json"
+    ],
+    "rule": "issuer non-GAAPをTTM valuationへ使う場合は、全4四半期のdefinition comparabilityを先に確認する。定義変更を跨ぎ同一基準restatementがない場合はUNVERIFIED。"
+  },
+  "sources": [
+    "NVIDIA Q4 FY2026 official investor relations release",
+    "NVIDIA Q1 FY2027 official investor relations release",
+    "NVIDIA Q2 FY2027 official investor relations release",
+    "Broadcom Q3 FY2026 official investor relations release"
+  ],
+  "remaining_uncertainty": [
+    "NVIDIAが全4四半期を新non-GAAP定義で再表示する追加資料が確認できれば再構築可能。",
+    "GAAPは定義比較性を保つが、事業のnormalized earning powerそのものを完全に表すわけではない。"
+  ],
+  "next_hypothesis": "NVDAとAVGOの5年IRR差を同一growth仮定ではなく、各社のpoint-in-time revenue guidance、operating margin、share countから個別にEPSへ落とすbear/base/bull modelで比較すると、現在のGAAP earnings-yield順位を覆すか。"
+}

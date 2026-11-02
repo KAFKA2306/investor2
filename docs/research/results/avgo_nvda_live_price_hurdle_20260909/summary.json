@@ -1,0 +1,144 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_live_price_hurdle_20260909",
+  "status": "USE",
+  "as_of": "2026-09-08T16:03:06Z",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "2026-09-04のcanonical fundamentalsとterminal Price/FCF契約を固定したまま最新の実市場価格だけを差し替えると、AVGOがNVDAと同等になるために必要なpost-FY2028 10%成長scenarioの確率は90%以上へ上昇し、AVGO相対caseは価格面から大幅に厳しくなる。",
+  "capital_allocation_importance": "直前のcanonical研究では、AVGOのpost-FY2028 10%成長scenarioに必要な確率は78.70986999%だった。その後の相対株価変動だけで必要確信度が大きく変わるなら、古い価格で計算した相対期待収益率を現在の資本配分へ流用してはいけない。",
+  "decision_rule": {
+    "USE": "最新価格へ再評価した必要確率が90%以上、かつ2026-09-04 canonical hurdleから10 percentage points以上上昇する。",
+    "CONDITION": "必要確率が80%以上90%未満、または上昇幅が5以上10 percentage points未満。",
+    "REJECT": "必要確率が80%未満、または価格更新で相対判断が実質的に変わらない。",
+    "UNVERIFIED": "価格timestamp、symbol identity、currency、canonical terminal-value contractのいずれかを確認できない。"
+  },
+  "canonical_dependencies": {
+    "AVGO_stress_artifact": "docs/research/results/avgo_management_outlook_fcf_stress_20260908/summary.json",
+    "probability_hurdle_artifact": "docs/research/results/avgo_probability_hurdle_vs_nvda_20260908/summary.json",
+    "NVDA_comparator_artifact": "docs/research/results/nvda_avgo_fy2028_growth_falsification_20260908/summary.json",
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "NVDA_price": 230.19,
+    "AVGO_price": 357.835,
+    "prior_required_probability_for_AVGO_10pct_growth_scenario": 0.7870986999
+  },
+  "production_market_data": {
+    "provider": "Alpaca market data",
+    "feed": "IEX",
+    "currency": "USD",
+    "NVDA": {
+      "latest_trade_timestamp_utc": "2026-09-08T16:03:04.424702Z",
+      "latest_trade_price": 226.415,
+      "latest_quote_timestamp_utc": "2026-09-08T16:03:06.631269Z",
+      "bid": 226.41,
+      "ask": 226.44,
+      "previous_daily_close_2026_09_04": 230.19,
+      "price_change_vs_canonical_pct": -1.6399496068465247
+    },
+    "AVGO": {
+      "latest_trade_timestamp_utc": "2026-09-08T16:03:01.337427Z",
+      "latest_trade_price": 369.685,
+      "latest_quote_timestamp_utc": "2026-09-08T16:03:01.647030Z",
+      "bid": 369.63,
+      "ask": 369.9,
+      "previous_daily_close_2026_09_04": 357.835,
+      "price_change_vs_canonical_pct": 3.3115821537859746
+    }
+  },
+  "method": {
+    "fundamental_inputs": "2026-09-04 canonical AVGO/NVDA revenue, FCF margin, diluted shares, growth paths, terminal Price/FCF gridを固定する。最新情報として変更するのはcurrent priceのみ。",
+    "terminal_value_policy": "既存artifactで暗黙に確定しているyear5 terminal priceを保持し、current priceだけを差し替えて5年price IRRを再計算する。",
+    "reprice_formula": "new_IRR = ((old_price * (1 + old_IRR)^5) / new_price)^(1/5) - 1",
+    "probability_hurdle_formula": "p = (NVDA_IRR - AVGO_0pct_IRR) / (AVGO_10pct_IRR - AVGO_0pct_IRR)",
+    "benchmark": "2026-09-04 canonical required probability 78.70986999%",
+    "simple_alternative": "同じfundamentalsを維持し、最新の実市場価格だけへpoint-in-time再評価する。",
+    "transaction_costs": "NOT_APPLICABLE。売買戦略のbacktestではなく、現在価格を入力とするforward valuation sensitivityであり注文も実行しない。",
+    "missing_data_policy": "価格欠損を前日値や他feedで無言補完しない。"
+  },
+  "results": {
+    "repriced_NVDA_canonical_base_IRR_pct": {
+      "25x": 12.813075876896708,
+      "35x": 20.66603647824037,
+      "45x": 26.88606860581164
+    },
+    "repriced_AVGO_post_FY2028_0pct_growth_IRR_pct": {
+      "25x": 6.764682505908914,
+      "35x": 14.196612174780743,
+      "45x": 20.08316167319597
+    },
+    "repriced_AVGO_post_FY2028_10pct_growth_IRR_pct": {
+      "25x": 13.048088668543723,
+      "35x": 20.91740858808897,
+      "45x": 27.150398319763447
+    },
+    "AVGO_10pct_minus_NVDA_percentage_points": {
+      "25x": 0.23501279164701572,
+      "35x": 0.25137210984860214,
+      "45x": 0.26432971395180527
+    },
+    "AVGO_50_50_expected_IRR_pct": {
+      "25x": 9.906385587226318,
+      "35x": 17.557010381434857,
+      "45x": 23.616779996479707
+    },
+    "AVGO_50_50_minus_NVDA_percentage_points": {
+      "25x": -2.9066902896703883,
+      "35x": -3.1090260968055117,
+      "45x": -3.269288609331933
+    },
+    "required_probability_for_AVGO_10pct_growth_scenario": {
+      "25x": 0.9625978672133988,
+      "35x": 0.9625978687063268,
+      "45x": 0.9625978685629285,
+      "representative": 0.9625978681608847,
+      "representative_percent": 96.25978681608847
+    },
+    "hurdle_change_vs_2026_09_04_percentage_points": 17.549916826088463
+  },
+  "benchmark_comparison": {
+    "prior_hurdle_percent": 78.70986999,
+    "repriced_hurdle_percent": 96.25978681608847,
+    "change_percentage_points": 17.549916826088463,
+    "interpretation": "NVDAがcanonical priceから約1.64%下落しAVGOが約3.31%上昇したため、fundamentalsを一切変えなくてもAVGOの10%成長scenarioに必要な確信度は約78.71%から約96.26%へ上昇した。AVGO 10% scenario単独ではNVDAを約0.24-0.26pt上回るだけで、50/50 benchmarkではAVGOが約2.91-3.27pt下回る。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "これはpoint-in-timeのforward valuation repricingであり、realized strategy return seriesを生成するbacktestではない。",
+    "material_risks": [
+      "intraday priceは変動するため、本artifactは記録したtimestampのpoint-in-time判断である。",
+      "AVGO 115B/230B USDはmanagement outlookで実績ではない。",
+      "NVDA comparatorにもforward growth assumptionが含まれる。",
+      "terminal Price/FCF、FCF margin、share dilution、non-AI downsideのmodel riskは価格更新では解消しない。"
+    ]
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "repriced hurdle 96.25978682%は90% gateを上回り、2026-09-04 canonical 78.70986999%から17.54991683pt上昇したため事前USE条件を満たす。",
+    "usage_rule": "AVGO/NVDA relative valuationを現在の資本配分判断に使う場合、2026-09-04価格ベースの78.70986999% hurdleを再利用しない。本artifactのpoint-in-time price stateでは必要確率96.25978682%を用いる。ただし価格更新時には再計算する。",
+    "portfolio_implication": "既存fundamentalsを固定したままでも現在価格ではAVGO相対caseの要求確信度が極めて高い。AVGO overweightを古い価格ベースのprobability hurdleで正当化しない。",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical point-in-time decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "2026-09-04価格をcurrent priceとして扱うsilent stale-price fallbackを禁止する。",
+    "同じprice-repricing計算をfinBI等consumer repositoryへ複製しない。",
+    "intraday専用collectorやworkflowを追加しない。"
+  ],
+  "limitations": [
+    "IEX feedは全米統合SIPではないため、記録したquote/tradeはIEX market dataである。symbol、timestamp、currencyを明示し、SIP価格として扱わない。",
+    "本研究はfundamental estimate revisionではなくprice-only repricingである。",
+    "価格はtimestamp以降も動くため96.25978682%は恒久値ではない。"
+  ],
+  "next_hypothesis": "現在価格でAVGOの10%成長scenario probability hurdleが96.26%まで上がったため、AVGOとNVDAのterminal multipleを同一に固定する仮定を外し、両社の過去5年のpoint-in-time FCF multiple distributionを使ったmarket-implied multiple stressでもNVDA優位が維持されるか。"
+}

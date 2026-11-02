@@ -1,0 +1,107 @@
+{
+  "status": "USE",
+  "hypothesis": "Broadcom's June 2026 cash tender did not alter principal due through 2030, and using 2026-08-02 cash plus current retained-FCF capacity shows the through-2030 maturity wall is not a standalone capital-allocation blocker.",
+  "capital_allocation_importance": "Prior research treated the 2026-05-03 through-2030 maturity schedule as potentially stale after the June tender. If the tender changed near-term maturities materially, the liquidity conclusion could be invalid. This study resolves that uncertainty directly from issuer tender results.",
+  "decision_rule": {
+    "USE": "accepted principal for notes due 2030 or earlier is zero, 2026-08-02 cash / unchanged through-2030 scheduled principal is at least 1.25x, and a cash -25% plus FCF -25% stress with current dividend run-rate keeps cash plus one-year retained FCF coverage at least 1.50x",
+    "CONDITION": "the tender leaves through-2030 principal unchanged but one of the two coverage thresholds is not met",
+    "REJECT": "the tender increases or otherwise invalidates the through-2030 maturity burden or stressed coverage is below 1.0x",
+    "UNVERIFIED": "issuer tender acceptance by maturity or a same-period cash/FCF input cannot be verified"
+  },
+  "sources": [
+    {
+      "type": "issuer",
+      "identity": "Broadcom Inc. June 17, 2026 cash tender results",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-results-and-upsize-offers-purchase-cash",
+      "as_of": "2026-06-17"
+    },
+    {
+      "type": "issuer",
+      "identity": "Broadcom Inc. Q3 FY2026 results",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "period_end": "2026-08-02"
+    },
+    {
+      "type": "canonical",
+      "identity": "investor2 avgo_debt_maturity_wall_20260909",
+      "path": "docs/research/results/avgo_debt_maturity_wall_20260909/summary.json"
+    },
+    {
+      "type": "canonical",
+      "identity": "investor2 avgo_retained_fcf_deleveraging_capacity_20260909",
+      "path": "docs/research/results/avgo_retained_fcf_deleveraging_capacity_20260909/summary.json"
+    }
+  ],
+  "verified_tender_result": {
+    "accepted_principal_usd_billion": {
+      "2037_4.926_percent_notes": 1.843836,
+      "2038_4.900_percent_notes": 1.050537,
+      "2030_5.050_percent_notes": 0.0,
+      "2032_5.200_percent_notes": 0.0,
+      "2031_5.150_percent_notes": 0.0,
+      "2032_4.900_percent_notes": 0.0
+    },
+    "accepted_total_pre_guaranteed_delivery_usd_billion": 2.894373,
+    "through_2030_tender_reduction_usd_billion": 0.0,
+    "interpretation": "The June tender reduced long-dated 2037 and 2038 notes only. The previously verified scheduled principal due through 2030 is therefore not reduced or otherwise changed by this tender."
+  },
+  "through_2030_maturity_contract": {
+    "scheduled_principal_usd_billion": {
+      "2026_remainder": 2.252,
+      "2027": 0.493,
+      "2028": 5.127,
+      "2029": 4.655,
+      "2030": 6.406
+    },
+    "cumulative_through_2030_usd_billion": 18.933
+  },
+  "current_inputs": {
+    "cash_and_cash_equivalents_2026_08_02_usd_billion": 23.975,
+    "q1_q3_fcf_usd_billion": 31.937,
+    "q1_q3_cash_dividends_paid_usd_billion": 9.278,
+    "annualized_fcf_usd_billion": 42.58266667,
+    "annualized_cash_dividends_usd_billion": 12.37066667,
+    "annualized_retained_fcf_usd_billion": 30.212
+  },
+  "benchmark_and_alternatives": {
+    "prior_2026_05_03_cash_only_coverage_x": 1.03670839,
+    "current_2026_08_02_cash_only_coverage_x": 1.26630751,
+    "stress": {
+      "cash_decline_percent": 25.0,
+      "fcf_decline_percent": 25.0,
+      "dividend_run_rate_change_percent": 0.0,
+      "stressed_cash_usd_billion": 17.98125,
+      "stressed_retained_fcf_usd_billion": 19.56633333,
+      "stressed_cash_plus_one_year_retained_fcf_usd_billion": 37.54758333,
+      "coverage_x": 1.98318192
+    }
+  },
+  "result": {
+    "status": "USE",
+    "why": "The tender accepted no principal from the 2030 notes, so the through-2030 maturity total remains 18.933B USD with respect to the tender. Q3 cash alone covers that amount 1.26630751x, above the 1.25x threshold. Under cash -25% and FCF -25% with the current dividend run-rate maintained, cash plus one year of retained FCF covers it 1.98318192x, above the 1.50x threshold.",
+    "decision_artifact": "Treat Broadcom's through-2030 maturity wall as monitored but not a standalone reject condition. Keep long-dated debt, refinancing cost, FCF deterioration, dividends, buybacks and acquisitions as separate conditions."
+  },
+  "risk_metrics": {
+    "cash_only_maturity_coverage_x": 1.26630751,
+    "stressed_cash_plus_retained_fcf_coverage_x": 1.98318192,
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE"
+  },
+  "limitations": [
+    "The exact post-tender full maturity schedule beyond 2030 remains dependent on later filing detail; the tender clearly reduced 2037 and 2038 principal but this artifact does not reconstruct every long-dated bucket.",
+    "Q1-Q3 FCF and cash dividends are annualized; this is a capacity stress, not management guidance.",
+    "The stress assumes current cash dividends continue and does not reserve cash for acquisitions, buybacks or other strategic uses.",
+    "The result does not remove NVIDIA's relative net-cash balance-sheet advantage."
+  ],
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "canonical_artifact_only": true,
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "consumer_side_financial_calculation": false
+  },
+  "next_high_value_hypothesis": "Broadcom's long-dated debt concentration after the June tender, combined with maturity-weighted refinancing rates and FCF stress, does not materially reduce five-year equity value relative to NVIDIA's net-cash alternative when debt service is integrated into the same valuation contract."
+}

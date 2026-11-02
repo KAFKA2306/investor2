@@ -96,3 +96,19 @@ validation:
   semantic: Availability timing, target definition, split chronology, hypothesis versioning, seller-flow wording, decision snapshot immutability, and metric comparability.
   evidence: Source document IDs and URLs where available, MCP capture parameters, baselines, ablations, OOS results, robustness checks, and reproducibility records.
   publication: Evidence dashboard build and published artifacts identify the exact research commit, protocol version, hypothesis ID, and information cutoff.
+
+operational_model:
+  implementation_status: "Hypothesis registration, source capture, fixed OOS and human decision snapshot have separate owning state."
+  canonical_sources: ["docs/research/contracts/","docs/paper/","ontology/project.yaml"]
+  objects: ["Hypothesis","DataCapture","FinancialFact","Experiment","FrozenOOS","Ablation","DecisionSnapshot","Evidence"]
+  links:
+    - ["Hypothesis","USES","DataCapture"]
+    - ["Experiment","TESTS","Hypothesis"]
+    - ["Ablation","COMPARED_WITH","Experiment"]
+    - ["DecisionSnapshot","SUPPORTED_BY","Evidence"]
+  actions:
+    - id: "promote_verified_investment_hypothesis"
+      preconditions: "Protocol and information cutoff are frozen before results; exact capture, comparative baseline, leakage check, ablation and untouched OOS all satisfy versioned promotion gates."
+      recorded_effect: "Record a promote, reject or review verdict with source IDs, protocol hash, outcome and time; never treat backtests as execution evidence."
+      rollback_or_recovery: "Revoke eligibility or mark reproducibility required if source cutoff, protocol or OOS lineage fails."
+  outcome_metrics: ["candidate_frozen_oos_count","oos_pass_count","unreproduced_promotion_count","decision_snapshot_evidence_coverage"]

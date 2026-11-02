@@ -1,0 +1,128 @@
+{
+  "research_id": "smh_realized_volatility_gold_switch_20260907",
+  "status": "REJECT",
+  "hypothesis": "各月末までに観測可能なSMHの直近3か月実現ボラティリティが高いときだけGLDを30%、それ以外は20%とする単純ルールは、固定SMH 80% / GLD 20%と固定SMH 70% / GLD 30%の両方を翌月のwalk-forward・取引コスト込みSharpeで上回り、Maximum Drawdownと95% Expected Shortfallも悪化させない。",
+  "decision_gate": {
+    "required": [
+      "dynamic Sharpe > fixed 80/20 Sharpe",
+      "dynamic Sharpe > fixed 70/30 Sharpe",
+      "dynamic Maximum Drawdown is no worse than both fixed allocations",
+      "dynamic 95% Expected Shortfall is no worse than both fixed allocations"
+    ],
+    "result": "FAIL: dynamic Sharpe exceeded fixed 80/20 but remained below fixed 70/30."
+  },
+  "capital_allocation_relevance": "前回の長期検証ではGLD 30%はtail riskを改善したが全局面のdefaultにはできなかった。追加のmacro vintageに依存せず、SMH自身の事前観測可能な変動だけでGLD 20%と30%を切り替えられるかを検証した。",
+  "canonical_data": {
+    "market_data": "Alpaca Market Data API / IEX monthly bars for SMH and GLD",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "period_raw": "2020-07 through 2026-08",
+    "evaluation_period": "2021-05 through 2026-08",
+    "evaluation_months": 64,
+    "currency": "USD",
+    "smh_forward_split": {
+      "ex_date": "2023-05-05",
+      "ratio": "2:1"
+    },
+    "smh_cash_dividends": "2020-2025 Alpaca-confirmed cash dividends included in monthly total return",
+    "gld_cash_dividends": "none returned by the same Alpaca query",
+    "fallback": "none"
+  },
+  "point_in_time_method": {
+    "signal": "At month-end t, calculate the sample standard deviation of the latest 3 completed SMH monthly total returns and annualize by sqrt(12).",
+    "threshold": "Compare current realized volatility with the expanding median of realized-volatility observations available before month-end t. Require at least 6 prior realized-volatility observations.",
+    "allocation_for_next_month": "high volatility => SMH 70% / GLD 30%; otherwise SMH 80% / GLD 20%",
+    "look_ahead": "none; the signal at month-end t is applied only to month t+1",
+    "rebalance": "monthly fixed-weight rebalance",
+    "transaction_cost": "10 bp multiplied by two-sided turnover at each rebalance",
+    "risk_free_rate_for_sharpe": 0.0
+  },
+  "benchmarks": {
+    "fixed_80_20": "SMH 80% / GLD 20%",
+    "fixed_70_30": "SMH 70% / GLD 30%",
+    "alternative_reverse_rule": "high volatility => SMH 80% / GLD 20%; otherwise SMH 70% / GLD 30%"
+  },
+  "results_10bp": {
+    "dynamic_high_vol_gold_30": {
+      "cagr": 0.3012359157,
+      "annualized_volatility": 0.2527528690,
+      "sharpe": 1.1745422823,
+      "maximum_drawdown": -0.3124247569,
+      "expected_shortfall_95_monthly": -0.1137499153,
+      "cumulative_return": 3.0728544464
+    },
+    "fixed_80_20": {
+      "cagr": 0.3182965842,
+      "annualized_volatility": 0.2749897574,
+      "sharpe": 1.1483291090,
+      "maximum_drawdown": -0.3420463564,
+      "expected_shortfall_95_monthly": -0.1279458005,
+      "cumulative_return": 3.3658620562
+    },
+    "fixed_70_30": {
+      "cagr": 0.3062335414,
+      "annualized_volatility": 0.2460732999,
+      "sharpe": 1.2160667122,
+      "maximum_drawdown": -0.3124247569,
+      "expected_shortfall_95_monthly": -0.1137499153,
+      "cumulative_return": 3.1569783933
+    },
+    "reverse_rule": {
+      "cagr": 0.3220972473,
+      "annualized_volatility": 0.2688167135,
+      "sharpe": 1.1798627528,
+      "maximum_drawdown": -0.3420463564,
+      "expected_shortfall_95_monthly": -0.1279458005,
+      "cumulative_return": 3.4334124719
+    }
+  },
+  "signal_diagnostics": {
+    "months_gold_30": 37,
+    "months_gold_20": 27,
+    "allocation_switches": 15,
+    "rolling_24m_windows": 41,
+    "dynamic_sharpe_beats_fixed_80_20_windows": 23,
+    "dynamic_sharpe_beats_fixed_70_30_windows": 9,
+    "dynamic_sharpe_beats_both_fixed_windows": 9
+  },
+  "subperiod_sharpe_10bp": {
+    "2021-05_to_2022-12": {
+      "dynamic": -0.0615305539,
+      "fixed_80_20": -0.0880450903,
+      "fixed_70_30": -0.0751274162,
+      "reverse": -0.1011038289
+    },
+    "2023_to_2024": {
+      "dynamic": 1.9055662105,
+      "fixed_80_20": 1.9578038048,
+      "fixed_70_30": 2.0344414825,
+      "reverse": 2.0742421703
+    },
+    "2025_to_2026-08": {
+      "dynamic": 1.7595984912,
+      "fixed_80_20": 1.7250718424,
+      "fixed_70_30": 1.8641766402,
+      "reverse": 1.8101836572
+    }
+  },
+  "cost_sensitivity_sharpe": {
+    "0bp": {"dynamic": 1.1778488792, "fixed_80_20": 1.1494356678, "fixed_70_30": 1.2176932199, "reverse": 1.1828736430},
+    "5bp": {"dynamic": 1.1761958690, "fixed_80_20": 1.1488824026, "fixed_70_30": 1.2168799971, "reverse": 1.1813683659},
+    "10bp": {"dynamic": 1.1745422823, "fixed_80_20": 1.1483291090, "fixed_70_30": 1.2160667122, "reverse": 1.1798627528},
+    "20bp": {"dynamic": 1.1712333840, "fixed_80_20": 1.1472224369, "fixed_70_30": 1.2144399565, "reverse": 1.1768505223}
+  },
+  "decision": "SMHの直近3か月実現ボラティリティが高いときにGLDを20%から30%へ増やすこの単純ルールは採用しない。固定70/30よりSharpeが低く、24か月rollingでも両固定配分を上回ったのは9/41窓だけだった。",
+  "implementation": {
+    "portfolio_rule_added": false,
+    "optimizer_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "one_off_script_added": false,
+    "negative_evidence_only": true
+  },
+  "remaining_uncertainty": [
+    "評価開始は閾値の履歴を確保できる2021-05で、2008年金融危機などは含まない。",
+    "直近3か月とexpanding medianという単純仕様のみを検証した。閾値やlookbackを後付け最適化していない。",
+    "月次IEX barとcash dividendによるtotal-return再現で、ETF provider公式total-return indexではない。"
+  ],
+  "next_hypothesis": "金の比率切替を価格変動だけで予測するのではなく、SMHとGLDの直近相関が上昇して分散効果が弱い局面ではGLD比率を増やさない単純な事前相関ルールが、固定80/20と70/30をwalk-forward・cost込みで上回るか。"
+}

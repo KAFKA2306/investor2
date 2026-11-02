@@ -1,0 +1,100 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_fy27_commitment_cash_coverage_20260910",
+  "status": "CONDITION",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "BroadcomのFY2027支払予定purchase commitments 52.674B USDは、Q4 FY2026 AI semiconductor revenue run-rateのgross-profit/cash-generation capacityで十分に吸収でき、過大なinventory pre-commitmentではない。",
+  "why_it_matters": "purchase commitmentsをgross exposureだけで評価するとBroadcomのAI成長投資を過度に罰する一方、利益・現金創出力で吸収できなければ将来のinventory/capacity downsideを過小評価する。",
+  "precommit_rule": {
+    "use": "保守的なGAAP gross-margin proxyとFCF-margin proxyの双方でFY2027 commitments coverageが1.0x以上、かつgross-profit coverageが1.10x以上。",
+    "condition": "gross-profit proxyは1.0x以上だがcash-generation proxyは1.0x未満、またはAI固有marginが非開示でproxy依存が残る。",
+    "reject": "GAAP gross-profit proxyでもcoverageが1.0x未満。",
+    "unverified": "purchase commitments、Q4 AI guidance、marginまたはperiod identityの一次情報が不足する。"
+  },
+  "dependencies": {
+    "prior_artifact": "docs/research/results/avgo_commitment_demand_coverage_20260910/summary.json"
+  },
+  "primary_sources": {
+    "broadcom_q3_fy2026_results": {
+      "source": "Broadcom Inc. Q3 FY2026 results published 2026-09-02",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "q3_revenue_usd_billion": 29.591,
+      "q3_gaap_gross_margin_usd_billion": 20.456,
+      "q3_non_gaap_gross_margin_usd_billion": 22.191,
+      "q3_fcf_usd_billion": 13.665,
+      "q4_ai_semiconductor_revenue_guidance_usd_billion": 21.7
+    },
+    "broadcom_q3_fy2026_10q": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-09-10, period ended 2026-08-02",
+      "source_url": "https://investors.broadcom.com/static-files/96641754-401f-4090-a4ab-210728c83a28",
+      "purchase_commitments_due_fy2027_usd_billion": 52.674,
+      "purchase_commitment_scope": "Unconditional enforceable and legally binding purchase commitments, primarily inventory; agreements cancelable without penalty are excluded."
+    }
+  },
+  "method": {
+    "q4_ai_annualized_run_rate_usd_billion": 86.8,
+    "break_even_margin_to_cover_commitments_pct": 60.684331797235025,
+    "q3_gaap_gross_margin_pct": 69.12912709945591,
+    "q3_non_gaap_gross_margin_pct": 74.992396336724,
+    "q3_fcf_margin_pct": 46.179581629549524,
+    "note": "AI-specific gross margin and FCF margin are not disclosed. Consolidated Q3 margins are explicit sensitivity proxies, not estimates of AI segment margin."
+  },
+  "benchmark_and_alternatives": {
+    "gross_exposure_benchmark": {
+      "fy2027_purchase_commitments_usd_billion": 52.674,
+      "q4_ai_annualized_run_rate_usd_billion": 86.8,
+      "commitments_to_ai_run_rate_revenue_pct": 60.684331797235025
+    },
+    "gaap_gross_profit_proxy": {
+      "implied_annual_gross_profit_usd_billion": 60.00408232232773,
+      "coverage_x": 1.1391594016464999,
+      "result": "PASSES_GROSS_PROFIT_COVERAGE"
+    },
+    "non_gaap_gross_profit_proxy": {
+      "implied_annual_gross_profit_usd_billion": 65.09340002027643,
+      "coverage_x": 1.2357785628635842,
+      "result": "PASSES_GROSS_PROFIT_COVERAGE"
+    },
+    "fcf_margin_proxy": {
+      "implied_annual_fcf_usd_billion": 40.08387685444898,
+      "coverage_x": 0.7609803101045863,
+      "result": "FAILS_CASH_COVERAGE"
+    }
+  },
+  "validation": {
+    "point_in_time": true,
+    "synthetic_data_used": false,
+    "silent_fallback_used": false,
+    "look_ahead": "No FY2027 realized revenue or margin is assumed. Q4 FY2026 issuer guidance is annualized only as a transparent run-rate sensitivity.",
+    "missing_data_policy": "AI-specific gross margin, AI-specific FCF conversion, FY2027 AI revenue guidance and contract-to-purchase mapping are not inferred."
+  },
+  "result": {
+    "status": "CONDITION",
+    "finding": "FY2027 purchase commitments of 52.674B USD equal 60.68% of the annualized Q4 FY2026 AI semiconductor revenue run-rate. Applying Q3 consolidated GAAP gross margin yields 1.139x gross-profit coverage and non-GAAP gross margin yields 1.236x, but applying the observed Q3 consolidated FCF margin yields only 0.761x cash coverage. Because AI-specific margins and FY2027 revenue guidance are not disclosed, the commitments cannot yet be classified as fully economically covered."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time fundamental commitment-coverage research, not a realized trading strategy."
+  },
+  "decision_rule": "Do not apply a standalone valuation penalty to Broadcom's FY2027 purchase commitments while gross-profit coverage remains above 1.0x under the conservative GAAP consolidated-margin proxy. Do not classify the commitments as fully covered until AI-specific or semiconductor-specific cash economics, FY2027 revenue evidence, or matched contract coverage lifts cash-generation coverage to at least 1.0x. Re-evaluate if Q4/FY2027 AI run-rate weakens, gross margin falls below the 60.68% break-even level, or commitments increase materially.",
+  "limitations": [
+    "Broadcom does not disclose AI-specific gross margin or AI-specific FCF margin.",
+    "Infrastructure software has structurally different margin economics, so consolidated gross margin can overstate semiconductor gross margin.",
+    "Annualizing one quarter of Q4 AI revenue guidance is a run-rate sensitivity, not FY2027 guidance.",
+    "Purchase-commitment payment timing is not matched one-to-one with AI customer contract cash collection."
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "Broadcomのsemiconductor solutions gross marginまたはAI accelerator economicsを一次情報から制約し、60.68%のbreak-even gross marginを下回る現実的なケースがあるかを検証する。"
+}

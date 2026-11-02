@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
+      "article_url": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/analysts-increased-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter-1",
+      "published_at": "2026-10-07T16:00:00Z",
+      "title": "Analysts Increased EPS Estimates for S&P 500 Companies for 2nd Straight Quarter"
+    },
+    {
+      "article_id": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
+      "article_url": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
+      "author": "Reed Callan",
+      "guid": "https://insight.factset.com/renewable-natural-gas-production-growth-in-the-u.s",
+      "published_at": "2026-10-09T00:22:04Z",
+      "title": "Renewable Natural Gas Production Growth in the U.S."
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
+      "article_url": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-likely-to-report-earnings-growth-above-35-for-q3",
+      "published_at": "2026-10-09T16:51:38Z",
+      "title": "S&P 500 Likely to Report Earnings Growth Above 35% for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "article_url": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-energy-sector-earnings-preview-q3-2026",
+      "published_at": "2026-10-12T16:00:02Z",
+      "title": "S&P 500 Energy Sector Earnings Preview: Q3 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
+      "article_url": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-utilities-sector-earnings-preview-q3-2026",
+      "published_at": "2026-10-13T16:00:01Z",
+      "title": "S&P 500 Utilities Sector Earnings Preview: Q3 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "article_url": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/from-investment-intent-to-portfolio-the-rise-of-conversational-portfolio-construction",
+      "published_at": "2026-10-14T16:23:04Z",
+      "title": "From Investment Intent to Portfolio: The Rise of Conversational Portfolio Construction"
+    },
+    {
+      "article_id": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "article_url": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "author": "Ony Adeneke",
+      "guid": "https://insight.factset.com/balancing-hyperscale-demand-and-ratepayer-protections-in-wyoming",
+      "published_at": "2026-10-14T22:14:59Z",
+      "title": "Balancing Hyperscale Demand and Ratepayer Protections in Wyoming"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-16-2026",
+      "published_at": "2026-10-16T17:03:12Z",
+      "title": "S&P 500 Earnings Season Update: October 16, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "article_url": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "author": "Lucas Caminiti",
+      "guid": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
+      "published_at": "2026-10-16T21:45:00Z",
+      "title": "Modeling Iron-Air Battery Arbitrage in U.S. Power Markets"
+    },
+    {
+      "article_id": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "article_url": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+      "published_at": "2026-10-19T16:00:01Z",
+      "title": "Are “Magnificent 7” Companies Still Top Contributors to S&P 500 Earnings Growth for Q3?"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}

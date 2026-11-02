@@ -1,0 +1,128 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_weekly_total_return_reconstruction_contract_20260909",
+  "status": "CONDITION",
+  "as_of": "2026-09-09T11:00:10+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGO/NVDAのbeta研究で、同一production sourceのraw weekly barsとsplit/cash-dividend corporate actionsを結合すれば、corporate-action distortionを推測なしで除去でき、前回のweekly total-return data blockerを解消できる。",
+  "capital_allocation_importance": "直前研究ではbeta windowだけでAVGO/NVDAのterminal discount-rate rankingが反転した。split由来の約-90%架空returnや配当欠落を残すとbeta、required return、terminal valuation、資本配分順位まで汚染するため、OOS beta比較の前提となるtotal-return identityを固定する必要がある。",
+  "decision_rule": {
+    "USE": "raw weekly barsと同一sourceのcorporate actionsからsplit・cash dividendを完全に再構成でき、独立したadjusted-return benchmarkと一致したweekly total-return seriesをcanonical PIT inputとして固定できる。",
+    "CONDITION": "split cliffを全件corporate actionで説明でき、対象3銘柄のcash-dividend eventも取得できるが、再構成したweekly total-return series自体の独立benchmark照合が未完了。",
+    "REJECT": "split cliffをcorporate actionで説明できない、またはdividend event欠落のため推測補完が必要。",
+    "UNVERIFIED": "source、symbol identity、event date、split ratio、dividend rate、periodのいずれかを確定できない。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_weekly_total_return_beta_data_contract_20260909/summary.json",
+    "docs/research/results/avgo_nvda_company_beta_terminal_band_20260909/summary.json",
+    "docs/research/results/avgo_nvda_shrunk_beta_capital_structure_20260909/summary.json"
+  ],
+  "production_inputs": {
+    "weekly_bars": {
+      "provider": "Alpaca",
+      "feed": "IEX",
+      "symbols": ["AVGO", "NVDA", "SPY"],
+      "timeframe": "1Week",
+      "start": "2021-09-01",
+      "end": "2026-09-01",
+      "currency": "USD",
+      "records_per_symbol": 261,
+      "records_total": 783,
+      "return_identity": "raw weekly price bars"
+    },
+    "corporate_actions": {
+      "provider": "Alpaca",
+      "types": ["forward_split", "cash_dividend"],
+      "symbols": ["AVGO", "NVDA", "SPY"],
+      "start": "2021-09-01",
+      "end": "2026-09-01",
+      "required_fields": ["symbol", "corporate_action_type", "ex_date", "rate_or_split_ratio"],
+      "cash_dividend_events_available_for_all_symbols": true
+    }
+  },
+  "split_identity_checks": {
+    "AVGO": {
+      "raw_pre_split_week": "2024-07-08",
+      "raw_pre_split_close_usd": 1698.62,
+      "raw_post_split_week": "2024-07-15",
+      "raw_post_split_close_usd": 157.47,
+      "raw_close_to_close_return_pct": -90.72953339,
+      "matched_corporate_action": {
+        "type": "forward_split",
+        "old_rate": 1.0,
+        "new_rate": 10.0,
+        "ex_date": "2024-07-15",
+        "record_date": "2024-07-11",
+        "payable_date": "2024-07-12"
+      },
+      "identity_result": "MATCH"
+    },
+    "NVDA": {
+      "raw_pre_split_week": "2024-06-03",
+      "raw_pre_split_close_usd": 1208.42,
+      "raw_post_split_week": "2024-06-10",
+      "raw_post_split_close_usd": 131.97,
+      "raw_close_to_close_return_pct": -89.07912812,
+      "matched_corporate_action": {
+        "type": "forward_split",
+        "old_rate": 1.0,
+        "new_rate": 10.0,
+        "ex_date": "2024-06-10",
+        "record_date": "2024-06-07",
+        "payable_date": "2024-06-10"
+      },
+      "identity_result": "MATCH"
+    }
+  },
+  "benchmark_comparison": {
+    "benchmark": {
+      "name": "raw weekly close-to-close return",
+      "result": "REJECT_AS_BETA_INPUT",
+      "reason": "AVGO -90.72953339% と NVDA -89.07912812% のsplit由来架空returnが残る。"
+    },
+    "simple_alternative": {
+      "name": "split-only manual adjustment",
+      "result": "REJECT_AS_TOTAL_RETURN_INPUT",
+      "reason": "cash dividendを含まずtotal-return identityを満たさない。"
+    },
+    "candidate": {
+      "name": "Alpaca raw bars + Alpaca forward-split/cash-dividend corporate actions",
+      "result": "CONDITION",
+      "reason": "split eventはraw discontinuityと一致し、cash-dividend eventも3銘柄で取得可能。ただし再構成seriesの独立benchmark照合が未完了。"
+    }
+  },
+  "measured_result": {
+    "weekly_records_retrieved": 783,
+    "split_cliffs_observed": 2,
+    "split_cliffs_matched_to_corporate_actions": 2,
+    "split_identity_match_rate_pct": 100.0,
+    "cash_dividend_event_stream_available_for_AVGO_NVDA_SPY": true,
+    "prior_data_blocker": "RESOLVED_AT_EVENT_INPUT_LEVEL",
+    "canonical_weekly_total_return_series": "NOT_YET_VALIDATED",
+    "vasicek_oos_beta_rmse": "UNVERIFIED",
+    "vasicek_oos_beta_mae": "UNVERIFIED"
+  },
+  "risk_evaluation": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "本研究は売買戦略ではなくbeta入力系列のdata-contract検証。次段階の主要risk metricはwalk-forward beta forecast RMSE/MAE。"
+  },
+  "usage_rule": "raw weekly barsをbetaへ直接入力しない。splitだけの手補正も使わない。Alpaca corporate-action eventを明示的に適用したsplit+cash-dividend total-return seriesを構築し、独立adjusted benchmarkとの一致を確認した後だけweekly beta研究へ使用する。",
+  "implementation": {
+    "artifact_type": "canonical research decision evidence",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "consumer_side_financial_calculation_added": false
+  },
+  "limitations": [
+    "Alpaca stock-bars connectorはadjustment=allを直接露出しないため、corporate-action eventsを使う再構成経路が必要。",
+    "corporate-action eventが取得できることと、weekly total-return計算の正しさは同一ではない。再構成seriesは独立benchmarkで照合する必要がある。",
+    "IEX feedは全米統合SIPではない。beta研究では同一feed identityを維持する。",
+    "今回の判定はbeta modelの採用判定ではない。Vasicek/Blume/rawのOOS比較は未実施。"
+  ],
+  "next_highest_value_hypothesis": "Alpaca corporate actionsで再構成した3-5年weekly total-return seriesを独立adjusted benchmarkで検証した上で、semiconductor industry priorを使うVasicek-style shrinkageがraw weekly betaとBlume adjustmentよりwalk-forward OOS beta forecast RMSE/MAEを低下させる。"
+}

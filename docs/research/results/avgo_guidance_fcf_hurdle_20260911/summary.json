@@ -1,0 +1,93 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_guidance_fcf_hurdle_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "Broadcomの現在のAI semiconductor guidanceとFY2026の実現FCF marginを組み合わせると、現行valuationが要求するbaseline 5-year FCF growth 20.5117%を近い将来のcash-generation run-rateが十分に上回る。",
+  "decision_rule": {
+    "use_if": "exactに比較可能な直近AI semiconductor guidanceがすべて未達なく、Q4 FY2026 total-revenue guidanceにFY2026 Q1-Q3の最低実現FCF marginを適用した年率FCF run-rate growthが20.5117%を10pt以上上回り、5年持続性を裏付けるforward evidenceもある。",
+    "condition_if": "near-term conservative FCF run-rateはhurdleを10pt以上上回るが、5年持続性またはsegment-specific cash conversionが未検証。",
+    "reject_if": "conservative Q4 FCF run-rate growthが20.5117%以下、またはguidance historyにmaterialな未達がありnear-term supportも弱い。"
+  },
+  "capital_allocation_importance": "2026-09-09時点のAVGOはNVDAより高いcash-flow valuation hurdleを要求する。AVGOを相対的な割安さではなく成長で保有するには、少なくとも近い将来の実現cash generationが20.5117% hurdleを明確に上回る証拠が必要。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "prior_valuation_artifact": "docs/research/results/nvda_avgo_reverse_dcf_reprice_20260911/summary.json",
+    "baseline_implied_5y_fcf_growth_pct": 20.511727,
+    "ttm_free_cash_flow_usd_b": 39.403,
+    "q4_fy2026_total_revenue_guidance_usd_b": 34.8,
+    "fy2026_realized": {
+      "q1": {"revenue_usd_b": 19.311, "fcf_usd_b": 8.010, "fcf_margin_pct": 41.478950},
+      "q2": {"revenue_usd_b": 22.187, "fcf_usd_b": 10.262, "fcf_margin_pct": 46.252310},
+      "q3": {"revenue_usd_b": 29.591, "fcf_usd_b": 13.665, "fcf_margin_pct": 46.179582}
+    },
+    "ai_guidance_actual_pairs_usd_b": [
+      {"period": "Q3 FY2025", "guidance": 5.1, "actual": 5.2, "beat_pct": 1.960784},
+      {"period": "Q1 FY2026", "guidance": 8.2, "actual": 8.4, "beat_pct": 2.439024},
+      {"period": "Q2 FY2026", "guidance": 10.7, "actual": 10.8, "beat_pct": 0.934579},
+      {"period": "Q3 FY2026", "guidance": 16.0, "actual": 16.7, "beat_pct": 4.375000}
+    ],
+    "current_q4_ai_semiconductor_guidance_usd_b": 21.7,
+    "sources": [
+      "Broadcom official Q3 FY2025 financial results, 2025-09-04",
+      "Broadcom official Q4 FY2025 financial results, 2025-12-11",
+      "Broadcom official Q1 FY2026 financial results, 2026-03-04",
+      "Broadcom official Q2 FY2026 financial results, 2026-06-03",
+      "Broadcom official Q3 FY2026 financial results, 2026-09-02"
+    ],
+    "fallback": "none"
+  },
+  "method": {
+    "guidance_error": "(actual / prior-quarter guidance) - 1. Only exact numeric guidance/actual pairs are included; Q2 FY2025 actual was disclosed as 'over $4.4B' and is excluded from exact-error statistics.",
+    "fcf_stress": "Apply the minimum realized FY2026 Q1-Q3 FCF margin to Q4 FY2026 total-revenue guidance, annualize that single-quarter FCF run-rate, and compare with current TTM FCF and the canonical 20.5117% implied 5-year growth hurdle.",
+    "lookahead": "none: each forecast error uses guidance published before the realized quarter; Q4 FY2026 uses only current guidance and prior realized margins.",
+    "time_series_risk_metrics": "NOT_APPLICABLE: fundamental forward-hurdle diagnostic, not a trading-strategy backtest."
+  },
+  "benchmarks": {
+    "simple_benchmark": "current TTM FCF 39.403B USD with no forward growth",
+    "conservative_margin_benchmark": "minimum FY2026 Q1-Q3 realized FCF margin = 41.478950%",
+    "median_margin_alternative_pct": 46.179582,
+    "current_valuation_hurdle_pct": 20.511727
+  },
+  "results": {
+    "ai_guidance_exact_pairs": 4,
+    "ai_guidance_beats": 4,
+    "ai_guidance_misses": 0,
+    "ai_guidance_beat_mean_pct": 2.427347,
+    "ai_guidance_beat_median_pct": 2.199904,
+    "ai_guidance_beat_min_pct": 0.934579,
+    "ai_guidance_beat_max_pct": 4.375000,
+    "q4_fcf_margin_required_to_match_hurdle_pct": 34.112957,
+    "q4_conservative_fcf_proxy_usd_b": 14.434675,
+    "q4_conservative_annualized_fcf_run_rate_usd_b": 57.738698,
+    "q4_conservative_run_rate_growth_vs_ttm_pct": 46.533762,
+    "excess_over_valuation_hurdle_percentage_points": 26.022035,
+    "q4_median_margin_fcf_proxy_usd_b": 16.070494,
+    "q4_median_margin_annualized_fcf_run_rate_usd_b": 64.281978,
+    "q4_median_margin_run_rate_growth_vs_ttm_pct": 63.139806
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "exactに比較可能な直近4件のAI semiconductor guidanceは全件上振れし、Q4 revenue guidance 34.8B USDにFY2026 Q1-Q3の最低FCF margin 41.48%を適用しても年率FCF run-rateは57.739B USD、現TTM比+46.53%となり、20.51% valuation hurdleを+26.02pt上回る。ただしこれはQ4単一四半期のrun-rate stressであり、5年間のFCF growth持続性やAI semiconductor固有のcash conversionを証明しないためUSEには昇格しない。",
+    "capital_allocation_implication": "AVGOの高いvaluation hurdleにはnear-term cash-generation supportがあるため、単に20.51%という数字だけでREJECTしない。一方、NVDAより高いvaluationを正当化するにはFY2027以降のFCF成長持続性を追加検証する。"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "専用model/config/workflow/one-off scriptは作成していないため削除対象なし。"
+  },
+  "limitations": [
+    "AI guidanceのexact forecast/actual sampleは4件と小さい。",
+    "Q2 FY2025はactualが'over $4.4B'のためexact-error統計から除外した。",
+    "Q4 FCFは会社guidanceではなく、total-revenue guidanceに過去実現FCF marginを適用したtransparent sensitivity。",
+    "Q4単一四半期を年率化したrun-rateは5年間の持続可能成長率ではない。",
+    "AI semiconductor固有のFCF marginは非開示。"
+  ],
+  "next_high_value_hypothesis": "AVGOのFY2027以降の20.51% FCF growth hurdleを、AI semiconductor revenue growthのdeceleration pathとFCF margin mean-reversionを組み合わせた複数年reverse-operating modelで満たせるか。"
+}

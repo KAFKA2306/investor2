@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/technology-agentic-ai-and-the-claimed-200bn-cpu-market",
+      "article_url": "https://insight.factset.com/technology-agentic-ai-and-the-claimed-200bn-cpu-market",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/technology-agentic-ai-and-the-claimed-200bn-cpu-market",
+      "published_at": "2026-08-12T13:45:06Z",
+      "title": "Technology: Agentic AI and the Claimed +$200bn CPU Market"
+    },
+    {
+      "article_id": "https://insight.factset.com/stoxx-600-europe-delivers-one-of-its-strongest-q2-earnings-growth-rates-in-years-led-by-energy",
+      "article_url": "https://insight.factset.com/stoxx-600-europe-delivers-one-of-its-strongest-q2-earnings-growth-rates-in-years-led-by-energy",
+      "author": "StreetAccount European Macro Team",
+      "guid": "https://insight.factset.com/stoxx-600-europe-delivers-one-of-its-strongest-q2-earnings-growth-rates-in-years-led-by-energy",
+      "published_at": "2026-08-14T14:16:56Z",
+      "title": "STOXX 600: Europe Delivers One of Its Strongest Q2 Earnings Growth Rates in Years, Led by Energy"
+    },
+    {
+      "article_id": "https://insight.factset.com/insurance-ai-investments-emerge-so-far-as-qualitative-comments-vs-quantitative-drivers",
+      "article_url": "https://insight.factset.com/insurance-ai-investments-emerge-so-far-as-qualitative-comments-vs-quantitative-drivers",
+      "author": "Stewart Johnson",
+      "guid": "https://insight.factset.com/insurance-ai-investments-emerge-so-far-as-qualitative-comments-vs-quantitative-drivers",
+      "published_at": "2026-08-14T16:19:31Z",
+      "title": "Insurance: AI Investments Emerge (So Far) as Qualitative Comments vs Quantitative Drivers"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-residential-electricity-prices-on-the-rise",
+      "article_url": "https://insight.factset.com/u.s.-residential-electricity-prices-on-the-rise",
+      "author": "leo.kelser@factset.com (Leo Kelser)",
+      "guid": "https://insight.factset.com/u.s.-residential-electricity-prices-on-the-rise",
+      "published_at": "2026-08-18T17:44:59Z",
+      "title": "U.S. Residential Electricity Prices on the Rise"
+    },
+    {
+      "article_id": "https://insight.factset.com/unlocking-industry-momentum-in-diversified-firms",
+      "article_url": "https://insight.factset.com/unlocking-industry-momentum-in-diversified-firms",
+      "author": "Colin Smith",
+      "guid": "https://insight.factset.com/unlocking-industry-momentum-in-diversified-firms",
+      "published_at": "2026-08-19T15:00:00Z",
+      "title": "Unlocking Industry Momentum in Diversified Firms"
+    },
+    {
+      "article_id": "https://insight.factset.com/historical-lessons-how-new-tariffs-could-affect-financial-markets",
+      "article_url": "https://insight.factset.com/historical-lessons-how-new-tariffs-could-affect-financial-markets",
+      "author": "Kristina Bratanova-Cvetanova",
+      "guid": "https://insight.factset.com/historical-lessons-how-new-tariffs-could-affect-financial-markets",
+      "published_at": "2026-08-25T16:18:19Z",
+      "title": "Historical Lessons: How New Tariffs Could Affect Financial Markets"
+    },
+    {
+      "article_id": "https://insight.factset.com/ercot-prices-remain-steady-despite-record-load",
+      "article_url": "https://insight.factset.com/ercot-prices-remain-steady-despite-record-load",
+      "author": "Zachary Koverman",
+      "guid": "https://insight.factset.com/ercot-prices-remain-steady-despite-record-load",
+      "published_at": "2026-08-25T18:30:00Z",
+      "title": "ERCOT Prices Remain Steady Despite Record Load"
+    },
+    {
+      "article_id": "https://insight.factset.com/riding-the-waves-2-decades-of-lp-commitments-across-venture-capital-and-credit",
+      "article_url": "https://insight.factset.com/riding-the-waves-2-decades-of-lp-commitments-across-venture-capital-and-credit",
+      "author": "insight@factset.com (Colin Devereaux)",
+      "guid": "https://insight.factset.com/riding-the-waves-2-decades-of-lp-commitments-across-venture-capital-and-credit",
+      "published_at": "2026-08-26T15:25:29Z",
+      "title": "Riding the Waves: 2 Decades of LP Commitments Across Venture Capital and Credit"
+    },
+    {
+      "article_id": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "article_url": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "author": "Stewart Johnson",
+      "guid": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "published_at": "2026-08-28T15:27:41Z",
+      "title": "Insurance: It’s About Disclosure, Not Investment Quality"
+    },
+    {
+      "article_id": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "article_url": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "published_at": "2026-08-28T17:12:57Z",
+      "title": "“Mag 7” Companies Reported Earnings Growth Above 100% Boosted by Investment Gains"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}

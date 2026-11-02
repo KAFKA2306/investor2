@@ -1,0 +1,98 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_extended_terms_funding_cost_20260910",
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "NVIDIAのextended payment termsで増えたreceivablesの経済的funding costは、AVGO/NVDAの相対expected returnをmaterialに動かす。",
+  "precommit_rule": {
+    "use_or_condition": "保守的なexcess receivables推定と公的短期金利benchmarkを用い、annual funding costがannualized revenueの0.5%以上、または既存5年expected IRRを0.25pt以上低下させる場合。",
+    "reject": "上記のいずれも満たさない。",
+    "unverified": "AR、revenue、payment-terms、rate、shares、valuation dependencyのsource/period/unit/as-ofが揃わない。"
+  },
+  "primary_sources": {
+    "nvidia_q2_fy2027": {
+      "source": "NVIDIA Q2 FY2027 Form 10-Q / investor relations",
+      "period_end": "2026-07-26",
+      "currency": "USD",
+      "unit": "billion unless noted",
+      "q2_revenue": 96.221,
+      "q2_accounts_receivable": 63.059,
+      "q1_revenue": 81.615,
+      "q1_accounts_receivable": 40.710,
+      "q2_fy2026_revenue": 46.743,
+      "q2_fy2026_accounts_receivable": 27.808,
+      "note": "NVIDIAはlarge multi-quarter agreementsに伴い一部investment-grade customersへextended payment termsを提供し、accounts receivable増加がoperating cash flowの伸びを部分的に相殺したと開示。"
+    },
+    "rates": {
+      "source": "U.S. Treasury daily par yield curve / Federal Reserve H.15",
+      "date": "2026-07-24",
+      "one_year_treasury_pct": 3.95,
+      "bank_prime_pct": 6.75,
+      "note": "1-year Treasuryを低位のopportunity-cost benchmark、bank primeを高位の短期business-loan sensitivityとして使用。"
+    }
+  },
+  "dependencies": {
+    "valuation_artifact": "docs/research/results/avgo_interest_savings_deleveraging_20260910/summary.json",
+    "nvda_terminal_equity_value_per_share_usd": 414.6722230787417,
+    "nvda_current_price_usd": 223.77,
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "nvda_diluted_shares_billion": 24.285,
+    "terminal_multiple": 25.0
+  },
+  "method": {
+    "current_ar_to_quarterly_revenue": 0.6553558994398312,
+    "q1_ar_to_quarterly_revenue": 0.4988053666605404,
+    "q2_fy2026_ar_to_quarterly_revenue": 0.5949126072353079,
+    "excess_ar_vs_q1_ratio_usd_billion": 15.06344881455614,
+    "excess_ar_vs_year_ago_ratio_usd_billion": 5.815914019211434,
+    "note": "extended-payment-terms attributable ARはissuer未開示のため一点推定しない。Q1 ratio維持を高位stress、前年同期ratio維持を代替benchmarkとしてexcess ARを算出。各excess ARに3.95%と6.75%を適用。さらにそのannual funding costが5年間継続してterminal FCFを同額減らす厳しいstressで25x terminal valueに反映。"
+  },
+  "benchmark": {
+    "name": "year-ago AR/revenue ratio",
+    "excess_ar_usd_billion": 5.815914019211434,
+    "treasury_funding_cost_usd_billion": 0.22972860375885162,
+    "prime_funding_cost_usd_billion": 0.3925741962967718,
+    "treasury_irr_pct": 13.117830170047684,
+    "prime_irr_pct": 13.108677410346026,
+    "prime_irr_change_pct_points": -0.022059653513473165
+  },
+  "alternative_high_stress": {
+    "name": "Q1 AR/revenue ratio",
+    "excess_ar_usd_billion": 15.06344881455614,
+    "treasury_funding_cost_usd_billion": 0.5950062281749675,
+    "prime_funding_cost_usd_billion": 1.0167827949825394,
+    "prime_cost_pct_of_annualized_q2_revenue": 0.26417902406505325,
+    "treasury_irr_pct": 13.097295557241239,
+    "prime_irr_pct": 13.07356620713871,
+    "prime_irr_change_pct_points": -0.05717085672078959
+  },
+  "result": {
+    "status": "REJECT",
+    "finding": "最も厳しいQ1 ratio + 6.75% prime stressでもannual funding costは約1.017B USD、annualized Q2 revenueの約0.264%、5年expected IRR低下は約0.0572pt。事前materiality thresholdの0.5% revenue / 0.25pt IRRをいずれも下回る。extended payment termsのfunding cost単独では現在のAVGO/NVDA資本配分順位をmaterialに動かさない。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time funding-cost valuation sensitivity。"
+  },
+  "decision_rule": "NVIDIAのextended payment termsはworking-capital monitoring対象に残すが、現在観測されたAR spikeから推定したfunding costだけを理由にexpected-return valuation penaltyを付けない。AR persistence、credit loss、explicit financing subsidy、またはfunding spreadがmaterialに悪化した場合に再評価する。",
+  "limitations": [
+    "extended termsに直接帰属するreceivables金額は未開示。",
+    "Q1 ratioおよび前年同期ratioによるexcess ARは透明なsensitivityでありissuer estimateではない。",
+    "bank primeはNVIDIA自身の実際のfunding costではない。",
+    "funding costを5年間terminal FCFから毎年減らすstressは厳しい上限感応度であり会社予想ではない。",
+    "信用損失、価格条件、顧客別契約条件はこのfunding-cost testには含めない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "NVIDIAのQ2 FY2027 receivables spikeと同時に増加したinventoryおよび長期supply/capacity commitmentsを統合すると、working-capitalと契約コミットメントを合わせたcapital-at-riskはAVGOよりmaterialに大きいか。"
+}

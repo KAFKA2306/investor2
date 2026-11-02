@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "article_url": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "author": "Stewart Johnson",
+      "guid": "https://insight.factset.com/insurance-its-about-disclosure-not-investment-quality",
+      "published_at": "2026-08-28T15:27:41Z",
+      "title": "Insurance: It’s About Disclosure, Not Investment Quality"
+    },
+    {
+      "article_id": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "article_url": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/mag-7-companies-reported-earnings-growth-above-100-boosted-by-investment-gains",
+      "published_at": "2026-08-28T17:12:57Z",
+      "title": "“Mag 7” Companies Reported Earnings Growth Above 100% Boosted by Investment Gains"
+    },
+    {
+      "article_id": "https://insight.factset.com/low-gas-fired-generation-in-caiso-has-mixed-impacts-on-natgas-prices",
+      "article_url": "https://insight.factset.com/low-gas-fired-generation-in-caiso-has-mixed-impacts-on-natgas-prices",
+      "author": "Jacob Ball",
+      "guid": "https://insight.factset.com/low-gas-fired-generation-in-caiso-has-mixed-impacts-on-natgas-prices",
+      "published_at": "2026-09-02T14:00:02Z",
+      "title": "Low Gas-Fired Generation in CAISO has Mixed Impacts on Natgas Prices"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-july-2026",
+      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-july-2026",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-july-2026",
+      "published_at": "2026-09-02T19:29:06Z",
+      "title": "U.S. Mergers & Acquisitions Monthly Review: July 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/total-nonfarm-payrolls-for-august-2026-are-projected-to-rise-by-65000",
+      "article_url": "https://insight.factset.com/total-nonfarm-payrolls-for-august-2026-are-projected-to-rise-by-65000",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/total-nonfarm-payrolls-for-august-2026-are-projected-to-rise-by-65000",
+      "published_at": "2026-09-03T14:22:39Z",
+      "title": "Total Nonfarm Payrolls for August 2026 Are Projected to Rise By 65,000"
+    },
+    {
+      "article_id": "https://insight.factset.com/earnings-insight-infographic-q2-2026-by-the-numbers",
+      "article_url": "https://insight.factset.com/earnings-insight-infographic-q2-2026-by-the-numbers",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/earnings-insight-infographic-q2-2026-by-the-numbers",
+      "published_at": "2026-09-03T16:00:00Z",
+      "title": "Earnings Insight Infographic: Q2 2026 By the Numbers"
+    },
+    {
+      "article_id": "https://insight.factset.com/measuring-portfolio-decarbonization-applying-the-nzaoa-attribution-model-in-practice",
+      "article_url": "https://insight.factset.com/measuring-portfolio-decarbonization-applying-the-nzaoa-attribution-model-in-practice",
+      "author": "insight@factset.com (James Cardamone)",
+      "guid": "https://insight.factset.com/measuring-portfolio-decarbonization-applying-the-nzaoa-attribution-model-in-practice",
+      "published_at": "2026-09-03T17:31:47Z",
+      "title": "Measuring Portfolio Decarbonization: Applying the NZAOA Attribution Model in Practice"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-etf-monthly-summary-august-2026-results",
+      "article_url": "https://insight.factset.com/u.s.-etf-monthly-summary-august-2026-results",
+      "author": "risk.acl@factset.com (Lois Gregson)",
+      "guid": "https://insight.factset.com/u.s.-etf-monthly-summary-august-2026-results",
+      "published_at": "2026-09-04T13:05:15Z",
+      "title": "U.S. ETF Monthly Summary: August 2026 Results"
+    },
+    {
+      "article_id": "https://insight.factset.com/beyond-the-first-sign-of-a-softening-insurance-market",
+      "article_url": "https://insight.factset.com/beyond-the-first-sign-of-a-softening-insurance-market",
+      "author": "Stewart Johnson",
+      "guid": "https://insight.factset.com/beyond-the-first-sign-of-a-softening-insurance-market",
+      "published_at": "2026-09-04T15:05:40Z",
+      "title": "Beyond the First Sign of a Softening Insurance Market"
+    },
+    {
+      "article_id": "https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter",
+      "article_url": "https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter",
+      "published_at": "2026-09-04T17:09:25Z",
+      "title": "Analysts Increasing EPS Estimates for S&P 500 Companies For 2nd Straight Quarter"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_erp_anchored_terminal_multiple_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09T05:00:21+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "米国株式市場のpoint-in-time implied equity risk premiumを10年Treasuryに加えた要求収益率proxyでterminal Price/FCFを評価すると、既存25xはdownside anchorとして楽観的であり、rate-only stressより厳しいERP-anchored sensitivityを必須にすべきである。",
+  "decision_rule_precommitted": {
+    "USE": "current risk-free + implied ERPを使い、terminal FCF growth 0%-4%の全範囲でimplied Price/FCFが25x未満となり、4% growth caseでもAVGO 50/50 scenario 5y price IRRが25x benchmarkから2 percentage points以上低下する。",
+    "CONDITION": "multiple条件またはIRR条件のどちらか一方だけを満たす。",
+    "REJECT": "両条件とも満たさない。",
+    "UNVERIFIED": "risk-free rate、ERP、as-of、canonical valuation inputのidentityが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_rate_anchored_terminal_multiple_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "market_inputs": {
+    "current": {
+      "date": "2026-09-01",
+      "risk_free_rate_pct": 4.75,
+      "implied_equity_risk_premium_pct": 4.14,
+      "required_equity_return_proxy_pct": 8.89,
+      "erp_method": "Aswath Damodaran trailing-12-month adjusted-payout implied ERP",
+      "source_url": "https://pages.stern.nyu.edu/~adamodar/New_Home_Page/home.htm"
+    },
+    "historical_context": {
+      "period": "2016-2025",
+      "average_implied_erp_pct": 5.00,
+      "average_erp_plus_risk_free_pct": 7.84,
+      "source_url": "https://pages.stern.nyu.edu/~adamodar/pdfiles/blog/DataUpdate2for2026.pdf"
+    }
+  },
+  "valuation_identity": {
+    "definition": "zero-growth equity cash-flow yield proxy: Price/FCF = 1 / (required equity return - terminal FCF growth)",
+    "important_limit": "issuer-reported operating cash flow minus capital expenditure is used by the existing Price/FCF contract; this is not a full FCFE model. The required-return proxy assumes market beta 1 and is a stress calibration, not company-specific fair value."
+  },
+  "current_erp_anchored_terminal_multiple": {
+    "required_return_pct": 8.89,
+    "growth_0pct_x": 11.24859393,
+    "growth_2pct_x": 14.51378810,
+    "growth_3pct_x": 16.97792869,
+    "growth_4pct_x": 20.44989775,
+    "existing_25x_implied_perpetual_growth_pct": 4.89,
+    "all_0_to_4pct_cases_below_25x": true
+  },
+  "historical_required_return_context": {
+    "2016_2025_average_required_return_pct": 7.84,
+    "growth_3pct_x": 20.66115702,
+    "growth_4pct_x": 26.04166667,
+    "25x_implied_perpetual_growth_pct": 3.84,
+    "interpretation": "10年平均の要求収益率proxyまで下げると4% growthで25xを上回るため、25xが常に過大とは言わない。一方、3% terminal growthでは20.66xであり、25xは平均的な要求収益率環境でも高い永久成長を必要とする。"
+  },
+  "five_year_price_irr": {
+    "benchmark_25x": {
+      "NVDA_base_pct": 12.81307588,
+      "AVGO_post_FY2028_growth_0pct_pct": 6.76468251,
+      "AVGO_post_FY2028_growth_10pct_pct": 13.04808867,
+      "AVGO_50_50_mean_scenario_pct": 9.90638559
+    },
+    "current_required_return_growth_3pct_16_97792869x": {
+      "NVDA_base_pct": 4.41151079,
+      "AVGO_post_FY2028_growth_0pct_pct": -1.18643860,
+      "AVGO_post_FY2028_growth_10pct_pct": 4.62902139,
+      "AVGO_50_50_mean_scenario_pct": 1.72129139,
+      "AVGO_mean_minus_NVDA_pp": -2.69021939
+    },
+    "current_required_return_growth_4pct_20_44989775x": {
+      "NVDA_base_pct": 8.37014813,
+      "AVGO_post_FY2028_growth_0pct_pct": 2.55995919,
+      "AVGO_post_FY2028_growth_10pct_pct": 8.59590539,
+      "AVGO_50_50_mean_scenario_pct": 5.57793229,
+      "AVGO_50_50_expected_terminal_value_annualized_irr_pct": 5.74998025,
+      "AVGO_mean_minus_NVDA_pp": -2.79221584,
+      "AVGO_mean_change_vs_25x_pp": -4.32845330
+    },
+    "historical_average_required_return_growth_3pct_20_66115702x": {
+      "NVDA_base_pct": 8.59313386,
+      "AVGO_post_FY2028_growth_0pct_pct": 2.77098970,
+      "AVGO_post_FY2028_growth_10pct_pct": 8.81935564,
+      "AVGO_50_50_mean_scenario_pct": 5.79517267,
+      "AVGO_mean_minus_NVDA_pp": -2.79796119
+    }
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "既存25x terminal Price/FCF downside sensitivity",
+    "simple_alternative": "current risk-free + implied ERPのmarket-wide required-return proxyと0%-4% terminal FCF growthから作るPrice/FCF band",
+    "result": "current 0%-4% bandは11.24859393x-20.44989775xで25xを下回り、最も高い4% growth caseでもAVGO 50/50 mean 5y price IRRは25xより4.32845330pt低い。"
+  },
+  "result": {
+    "multiple_condition_pass": true,
+    "irr_condition_pass": true,
+    "decision": "USE"
+  },
+  "usage_rule": "AVGO/NVDA forward valuationでは25x/35x/45xとTreasury-only 1/y stressに加え、as-ofが一致するrisk-free + implied ERPを要求収益率proxyとして、少なくとも0%-4% terminal FCF growthのERP-anchored Price/FCF bandを必須感応度として併記する。単一のERP-anchored multipleをfair value、売買シグナル、portfolio weight authorityにしない。",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized security-return strategyではなくterminal valuation calibration studyのため。"
+  },
+  "limitations": [
+    "Damodaran implied ERPは市場推計であり政府統計ではない。ERPには単一の観測可能な正解値がない。",
+    "required return = risk-free + ERPはmarket beta 1の単純proxyであり、AVGO/NVDA固有beta、leverage、事業riskを反映しない。",
+    "Price/FCF contractのFCFは厳密なFCFEではないため、Gordon growth formulaとの対応はstress calibrationとしてのみ使う。",
+    "terminal growth 0%-4%は感応度レンジであり予測値ではない。4%でも25x未満というcurrent-state robustnessを検証する目的で使用する。",
+    "historical contextは2016-2025平均であり、年次分布全体のpercentile calibrationは次研究に残る。",
+    "transaction cost、tax、slippageは売買戦略ではないため適用していない。"
+  ],
+  "implementation": {
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "duplicated_financial_calculation_cross_repo": false
+  },
+  "next_hypothesis": "1960-2025のannual implied ERP + risk-free seriesをpoint-in-timeで再計算し、3% terminal growthに対応するPrice/FCF distributionの25th/50th/75th percentileを作ると、25xは歴史的にどのpercentileに位置し、現在のAVGO/NVDA相対順位はその分布全体でも維持されるか。"
+}

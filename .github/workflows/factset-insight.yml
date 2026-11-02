@@ -1,0 +1,232 @@
+name: Collect and deliver FactSet Insight RSS
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 0 * * *"
+  push:
+    branches:
+      - main
+    paths:
+      - "scripts/factset_insight_monitor.py"
+      - "scripts/factset_insight_delivery.py"
+      - "scripts/snapshot_store.py"
+      - "tests/test_factset_insight_monitor.py"
+      - "tests/test_factset_insight_delivery.py"
+      - "tests/test_snapshot_store.py"
+      - "data/input_ledger/source_registry.d/factset_insight_rss.json"
+      - "docs/data-sources/factset-insight.md"
+      - "docs/specs/agent-tasks/242.md"
+      - ".github/workflows/factset-insight.yml"
+  pull_request:
+    paths:
+      - "scripts/factset_insight_monitor.py"
+      - "scripts/factset_insight_delivery.py"
+      - "scripts/snapshot_store.py"
+      - "tests/test_factset_insight_monitor.py"
+      - "tests/test_factset_insight_delivery.py"
+      - "tests/test_snapshot_store.py"
+      - "data/factset_insight/delivery_state.json"
+      - "data/input_ledger/source_registry.d/factset_insight_rss.json"
+      - "docs/data-sources/factset-insight.md"
+      - "docs/specs/agent-tasks/242.md"
+      - ".github/workflows/factset-insight.yml"
+      - "data/input_ledger/**"
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: factset-insight-rss
+  cancel-in-progress: false
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    env:
+      OLLAMA_VERSION: "0.32.14"
+      LOCAL_MODEL: "qwen3:1.7b"
+      OLLAMA_CONTEXT_LENGTH: "32768"
+      OLLAMA_NO_CLOUD: "1"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
+        with:
+          python-version: "3.12"
+      - name: Run focused tests
+        run: |
+          python -m unittest tests.test_factset_insight_monitor tests.test_factset_insight_delivery
+          python - <<'PY'
+          from scripts.snapshot_store import load_registry
+
+          registry = load_registry()
+          assert 'factset_insight_rss' in registry['sources']
+          assert registry['sources']['factset_insight_rss']['failure_mode'] == 'fail-closed'
+          PY
+      - name: Fetch publisher RSS
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --retry 3 --retry-delay 5 --retry-all-errors \
+            --user-agent "KAFKA2306/investor2 FactSet Insight collector" \
+            "https://insight.factset.com/rss.xml" \
+            -o /tmp/factset-insight.xml
+      - name: Verify live RSS on pull requests
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/factset_insight_monitor.py snapshot \
+            --rss /tmp/factset-insight.xml \
+            --output-dir /tmp/factset-insight-output \
+            --latest-path /tmp/factset-insight-latest.json)"
+          test -f "$artifact_path"
+          python - <<'PY'
+          import json
+          from pathlib import Path
+
+          payload = json.loads(Path('/tmp/factset-insight-latest.json').read_text(encoding='utf-8'))
+          assert payload['schema_version'] == 'investor2.factset-insight-feed.v1'
+          assert payload['article_count'] > 0
+          assert all(article['article_url'].startswith('https://') for article in payload['articles'])
+          PY
+      - name: Materialize and register accepted RSS snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact_path="$(python scripts/factset_insight_monitor.py snapshot \
+            --rss /tmp/factset-insight.xml \
+            --output-dir data/snapshots/factset_insight \
+            --latest-path data/factset_insight/latest_feed.json)"
+
+          if latest_json="$(python scripts/snapshot_store.py latest --reuse-key factset/insight/rss 2>/dev/null)"; then
+            latest_artifact="$(python -c 'import json,sys; print(json.load(sys.stdin)["artifact_path"])' <<<"$latest_json")"
+            if [ "$latest_artifact" = "$artifact_path" ]; then
+              echo "FactSet RSS content unchanged; reusing accepted snapshot."
+              exit 0
+            fi
+          fi
+
+          observed_at="$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          provenance="$(OBSERVED_AT="$observed_at" python - <<'PY'
+          import json
+          import os
+
+          observed_at = os.environ['OBSERVED_AT']
+          print(json.dumps({
+              'tool': 'curl',
+              'operation': 'download FactSet Insight publisher RSS metadata',
+              'query_or_scope': 'current RSS window; all published items returned by the feed',
+              'retrieved_at': observed_at,
+              'source_urls': ['https://insight.factset.com/rss.xml'],
+          }, separators=(',', ':')))
+          PY
+          )"
+
+          python scripts/snapshot_store.py register \
+            --dataset-id factset_insight_feed \
+            --reuse-key factset/insight/rss \
+            --artifact-path "$artifact_path" \
+            --source factset_insight_rss \
+            --source-kind official_web \
+            --observed-at "$observed_at" \
+            --schema-version investor2.factset-insight-feed.v1 \
+            --provenance-json "$provenance"
+          python scripts/snapshot_store.py audit
+      - name: Commit changed accepted RSS snapshot
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json \
+             && [ -z "$(git status --porcelain --untracked-files=all data/snapshots/factset_insight data/factset_insight/latest_feed.json)" ]; then
+            echo "No accepted FactSet RSS data change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/input_ledger/snapshot_catalog.ndjson data/snapshots/factset_insight data/factset_insight/latest_feed.json
+          git commit -m "data: refresh FactSet Insight RSS"
+          git push
+      - name: Detect pending FactSet delivery
+        id: delivery
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          output="$(python scripts/factset_insight_monitor.py monitor \
+            --feed-json data/factset_insight/latest_feed.json \
+            --state data/factset_insight/delivery_state.json)"
+          if [ "$output" = "[SILENT]" ]; then
+            echo "has_pending=false" >> "$GITHUB_OUTPUT"
+            echo "[SILENT]"
+          else
+            printf '%s\n' "$output"
+            echo "has_pending=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Install pinned Ollama
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl -fsSL "https://github.com/ollama/ollama/releases/download/v${OLLAMA_VERSION}/install.sh" -o /tmp/ollama-install.sh
+          echo "25f64b810b947145095956533e1bdf56eacea2673c55a7e586be4515fc882c9f  /tmp/ollama-install.sh" | sha256sum -c -
+          OLLAMA_VERSION="${OLLAMA_VERSION}" sh /tmp/ollama-install.sh
+          ollama --version
+      - name: Start verified local-only Ollama
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo systemctl stop ollama || true
+          sleep 1
+          if curl -fsS http://127.0.0.1:11434/api/version >/dev/null 2>&1; then
+            echo "installer-managed Ollama still owns localhost:11434" >&2
+            exit 1
+          fi
+          nohup env OLLAMA_CONTEXT_LENGTH="${OLLAMA_CONTEXT_LENGTH}" OLLAMA_NO_CLOUD="${OLLAMA_NO_CLOUD}" OLLAMA_HOST=127.0.0.1:11434 ollama serve >/tmp/ollama-server.log 2>&1 &
+          echo $! >/tmp/ollama.pid
+          for i in $(seq 1 60); do
+            if curl -fsS http://127.0.0.1:11434/api/version >/tmp/ollama-version.json; then
+              break
+            fi
+            sleep 1
+          done
+          test -s /tmp/ollama-version.json
+          server_pid="$(cat /tmp/ollama.pid)"
+          tr '\0' '\n' < "/proc/${server_pid}/environ" | grep -E '^OLLAMA_(CONTEXT_LENGTH|NO_CLOUD|HOST)=' | sort | tee /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_CONTEXT_LENGTH=32768' /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_NO_CLOUD=1' /tmp/ollama-server-env.txt
+          grep -Fx 'OLLAMA_HOST=127.0.0.1:11434' /tmp/ollama-server-env.txt
+          ollama pull "${LOCAL_MODEL}"
+          ollama list
+      - name: Deliver pending FactSet articles
+        if: github.event_name != 'pull_request' && steps.delivery.outputs.has_pending == 'true'
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m scripts.factset_insight_delivery \
+            --feed-json data/factset_insight/latest_feed.json \
+            --state data/factset_insight/delivery_state.json \
+            --repository "$GITHUB_REPOSITORY" \
+            --issue-number 242 \
+            --github-token "$GITHUB_TOKEN" \
+            --model "$LOCAL_MODEL"
+      - name: Persist successful FactSet delivery acknowledgements
+        if: always() && github.event_name != 'pull_request'
+        shell: bash
+        run: |
+          if git diff --quiet -- data/factset_insight/delivery_state.json; then
+            echo "No FactSet delivery acknowledgement change; nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f data/factset_insight/delivery_state.json
+          git commit -m "data: acknowledge FactSet Insight delivery"
+          git pull --rebase origin main
+          git push

@@ -1,0 +1,94 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_ttm_fcf_growth_quality_20260907",
+  "status": "REJECT",
+  "hypothesis": "Broadcomの直近free cash flow成長優位は単四半期だけでなくTTMでもNVIDIAを上回り、AVGOの約4%高いTTM EV/FCFと約1.0 percentage point高い5年reverse-DCF implied FCF CAGR hurdleを正当化する持続的なcash-flow evidenceとして再利用できる。",
+  "decision_rule": {
+    "use_or_condition_if": "AVGOのTTM FCF growthがNVDAを少なくともbaseline reverse-DCF hurdle spread 0.9913 percentage points上回り、かつAVGOのTTM FCF marginが前年TTMから悪化しない。",
+    "reject_if": "AVGOのTTM FCF growthがNVDAを上回らない、または単四半期の優位がTTMで反転する。"
+  },
+  "as_of": "2026-09-07",
+  "canonical_context": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/nvda_avgo_reverse_dcf_20260906/summary.json",
+    "current_ttm_ev_fcf": {"NVDA": 43.538, "AVGO": 45.2804},
+    "baseline_reverse_dcf_implied_fcf_growth_pct": {"NVDA": 19.0723, "AVGO": 20.0636},
+    "baseline_hurdle_spread_percentage_points": 0.9913,
+    "prior_single_quarter_fcf_growth_pct": {"NVDA": 58.6691, "AVGO": 94.5473}
+  },
+  "primary_sources": [
+    "NVIDIA Q4/FY2025 earnings release",
+    "NVIDIA Q2 FY2026 earnings release",
+    "NVIDIA Q4/FY2026 earnings release",
+    "NVIDIA Q2 FY2027 earnings release",
+    "Broadcom Q4/FY2024 earnings release",
+    "Broadcom Q1 FY2025 earnings release",
+    "Broadcom Q2 FY2025 earnings release",
+    "Broadcom Q3 FY2025 earnings release",
+    "Broadcom Q4/FY2025 earnings release",
+    "Broadcom Q1 FY2026 earnings release",
+    "Broadcom Q2 FY2026 earnings release",
+    "Broadcom Q3 FY2026 earnings release"
+  ],
+  "method": {
+    "metric": "issuer-reported free cash flow; TTM constructed only from disclosed fiscal-period FCF without interpolation",
+    "NVDA_prior_ttm_fcf_usd_b": "FY2025 FCF 60.724 - H1 FY2025 FCF 28.418 + H1 FY2026 FCF 39.584 = 71.890",
+    "NVDA_current_ttm_fcf_usd_b": "FY2026 FCF 96.575 - H1 FY2026 FCF 39.584 + H1 FY2027 FCF 69.895 = 126.886",
+    "AVGO_prior_ttm_fcf_usd_b": "Q4 FY2024 5.482 + Q1 FY2025 6.013 + Q2 FY2025 6.411 + Q3 FY2025 7.024 = 24.930",
+    "AVGO_current_ttm_fcf_usd_b": "Q4 FY2025 7.466 + Q1 FY2026 8.010 + Q2 FY2026 10.262 + Q3 FY2026 13.665 = 39.403"
+  },
+  "results": {
+    "NVDA": {
+      "prior_ttm_fcf_usd_b": 71.89,
+      "current_ttm_fcf_usd_b": 126.886,
+      "ttm_fcf_growth_pct": 76.5002,
+      "prior_ttm_revenue_usd_b": 165.218,
+      "current_ttm_revenue_usd_b": 302.97,
+      "prior_ttm_fcf_margin_pct": 43.5122,
+      "current_ttm_fcf_margin_pct": 41.8807,
+      "fcf_margin_change_points": -1.6315
+    },
+    "AVGO": {
+      "prior_ttm_fcf_usd_b": 24.93,
+      "current_ttm_fcf_usd_b": 39.403,
+      "ttm_fcf_growth_pct": 58.0546,
+      "prior_ttm_revenue_usd_b": 59.926,
+      "current_ttm_revenue_usd_b": 89.104,
+      "prior_ttm_fcf_margin_pct": 41.6013,
+      "current_ttm_fcf_margin_pct": 44.2214,
+      "fcf_margin_change_points": 2.6201
+    },
+    "relative": {
+      "AVGO_minus_NVDA_ttm_fcf_growth_points": -18.4457,
+      "AVGO_minus_NVDA_latest_quarter_fcf_growth_points": 35.8782,
+      "ranking_flip": "latest quarter: AVGO > NVDA; TTM: NVDA > AVGO"
+    }
+  },
+  "finding": {
+    "summary": "AVGOは最新四半期FCF growthではNVDAを35.88 points上回るが、TTM FCF growthでは58.05%に対しNVDA 76.50%で18.45 points下回った。AVGOのTTM FCF marginは41.60%から44.22%へ改善したものの、より高いEV/FCFとreverse-DCF growth hurdleを正当化する持続的な相対FCF成長優位は確認できない。",
+    "decision": "REJECT",
+    "production_action": "AVGOの単四半期FCF +94.5%を5年valuationの擁護材料として単独使用しない。relative cash-flow allocation判断ではTTM FCF growthを最低限のquality gateに含める。"
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "latest-quarter FCF YoY",
+    "benchmark_result": "AVGO 94.55% > NVDA 58.67%",
+    "preferred_robustness_check": "TTM FCF YoY",
+    "robustness_result": "NVDA 76.50% > AVGO 58.05%",
+    "interpretation": "単四半期だけではrelative growth rankingが不安定。"
+  },
+  "risk_and_limitations": [
+    "FCF definitions are issuer-reported and may differ in detail between companies.",
+    "This is fundamental valuation evidence, not a historical trading strategy; Sharpe, Maximum Drawdown and Expected Shortfall are not decision-valid outputs for this test.",
+    "TTM growth is backward-looking and does not establish future five-year FCF CAGR.",
+    "NVIDIA TTM FCF margin declined despite faster FCF growth; Broadcom TTM FCF margin improved despite slower FCF growth, so growth and cash conversion must remain separate decision dimensions."
+  ],
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "reason": "Hypothesis rejected; persist only reusable negative evidence and a TTM quality gate."
+  },
+  "next_high_value_hypothesis": "Point-in-time quarterly reverse-DCF hurdleを各決算後に固定し、次の決算までの実現FCF growthでhurdle realizationをwalk-forward評価すると、NVDA/AVGOのlower-hurdle ruleはNVDA-onlyまたはequal-weightよりcost-adjusted returnとtail riskを改善するか。"
+}

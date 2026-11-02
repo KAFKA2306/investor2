@@ -1,0 +1,118 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_h2_working_capital_cash_bridge_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIAのFY2027残期間92B USD commitmentを1.0x cash coverするために不足する7.106B USDは、Q3/Q4 revenueを108B USDで据え置いても、H1で観測されたaccounts receivable cash outflowの一部正常化だけで埋められる。",
+  "decision_rule": {
+    "use_if": "必要cash gapがprior Q1-revenue-scaled AR normalization potential以下で、かつ後続reported cash flowで同等以上のAR回収またはFCF conversion改善が実現している。",
+    "condition_if": "必要cash gapがprior AR normalization potential以下だが、後続reported cash realizationはまだ観測されていない。",
+    "reject_if": "必要cash gapがprior AR normalization potentialを上回り、inventory/customer advances等の追加仮定なしでは1.0x coverageに届かない。",
+    "unverified_if": "92B USD commitment、Q3 guidance、reported H1 FCF margin、またはH1 working-capital cash-flow line itemsが一次情報で確認できない。"
+  },
+  "capital_allocation_importance": "前回研究でQ3/Q4を108B USDとした場合の1.0x cash coverage閾値はH2 FCF margin 42.5926%、reported H1 margin 39.3028%との差は3.2897ptと分かった。今回はその差額をworking-capital cash-flow line itemsへ分解し、追加成長ではなくcash conversionだけで埋められるかを判定する。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_threshold_artifact": "docs/research/results/nvda_fy2027_commitment_cash_threshold_20260911/summary.json",
+    "prior_working_capital_artifact": "docs/research/results/nvda_working_capital_normalization_20260911/summary.json",
+    "h2_revenue_base_usd_b": 216.0,
+    "fy2027_remainder_commitment_usd_b": 92.0,
+    "reported_h1_fcf_margin_pct": 39.302845,
+    "required_h2_fcf_margin_pct": 42.592593,
+    "h1_accounts_receivable_cash_flow_usd_b": -24.590,
+    "h1_inventory_cash_flow_usd_b": -10.204,
+    "h1_accounts_payable_cash_flow_usd_b": 4.125,
+    "h1_accrued_and_other_current_liabilities_cash_flow_usd_b": 8.015,
+    "h1_prepaid_and_other_assets_cash_flow_usd_b": -6.480,
+    "h1_other_long_term_liabilities_cash_flow_usd_b": 1.970,
+    "h1_customer_advances_additions_usd_b": 15.6,
+    "h1_customer_advances_revenue_recognized_usd_b": 13.0,
+    "h1_customer_advances_net_addition_usd_b": 2.6,
+    "prior_q1_scaled_ar_normalization_potential_usd_b": 15.063449,
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "NVIDIA Q2 FY2027 financial results, 2026-08-26: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+  ],
+  "method": {
+    "point_in_time": "Use issuer information available through 2026-08-26 and previously merged canonical threshold artifacts. No Q3 actual or later reported cash flow is used.",
+    "base_case": "Hold Q3 and Q4 revenue at 108B USD each, matching the prior canonical threshold study, so H2 revenue is 216B USD. Keep reported H1 FCF margin 39.302845% as the no-recovery benchmark.",
+    "cash_gap": "cash gap = 92B commitment - 216B * reported H1 FCF margin.",
+    "working_capital_bridge": "Compare the cash gap with H1 reported cash-flow effects from accounts receivable and inventories. Customer advances are treated separately using disclosed additions less revenue recognized; they are not silently netted into another line-item assumption.",
+    "alternative_hypotheses": "Test AR recovery only, inventory unwind only, customer-advance net addition only, and customer-advance net addition plus AR recovery. Compare with the prior Q1-revenue-scaled AR normalization potential of 15.063449B USD.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time fundamental cash-conversion threshold research, not a trading-strategy backtest."
+  },
+  "results": {
+    "reported_h2_fcf_at_h1_margin_usd_b": 84.894145,
+    "target_h2_fcf_for_1x_usd_b": 92.0,
+    "cash_gap_usd_b": 7.105855,
+    "margin_gap_pt": 3.289748,
+    "ar_only": {
+      "h1_ar_cash_outflow_usd_b": 24.590,
+      "required_recovery_usd_b": 7.105855,
+      "required_recovery_as_pct_of_h1_ar_outflow": 28.897335,
+      "prior_q1_scaled_ar_normalization_potential_usd_b": 15.063449,
+      "required_gap_as_pct_of_prior_ar_normalization_potential": 47.173394,
+      "sufficient_without_revenue_upside": true
+    },
+    "inventory_only": {
+      "h1_inventory_cash_outflow_usd_b": 10.204,
+      "required_unwind_usd_b": 7.105855,
+      "required_unwind_as_pct_of_h1_inventory_outflow": 69.637934,
+      "sufficient_if_realized": true
+    },
+    "customer_advances_only": {
+      "h1_customer_advances_net_addition_usd_b": 2.6,
+      "coverage_of_cash_gap_pct": 36.589526,
+      "remaining_gap_usd_b": 4.505855,
+      "sufficient": false
+    },
+    "customer_advances_plus_ar": {
+      "customer_advances_usd_b": 2.6,
+      "remaining_ar_recovery_required_usd_b": 4.505855,
+      "remaining_ar_recovery_as_pct_of_h1_ar_outflow": 18.323932,
+      "sufficient_if_realized": true
+    },
+    "observed_h1_cash_flow_context": {
+      "accounts_receivable_usd_b": -24.590,
+      "inventories_usd_b": -10.204,
+      "prepaid_and_other_assets_usd_b": -6.480,
+      "accounts_payable_usd_b": 4.125,
+      "accrued_and_other_current_liabilities_usd_b": 8.015,
+      "other_long_term_liabilities_usd_b": 1.970
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "No working-capital recovery: H2 FCF remains 84.894B USD at the H1 reported FCF margin, leaving a 7.106B USD shortfall and 0.9228x coverage.",
+    "ar_only": "A 7.106B USD AR recovery is sufficient. It equals 28.90% of the H1 AR cash outflow and 47.17% of the prior Q1-scaled AR normalization potential.",
+    "inventory_only": "Inventory alone could bridge the gap only if 69.64% of the H1 inventory cash outflow reverses; this is materially more demanding than the AR-only bridge.",
+    "customer_advances_only": "The H1 net customer-advance addition of 2.6B USD covers only 36.59% of the gap and is insufficient alone.",
+    "combined": "If another 2.6B USD customer-advance net addition occurred, only 4.506B USD of AR recovery would remain necessary, equal to 18.32% of the H1 AR cash outflow. This is a sensitivity, not a forecast."
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "The 7.106B USD cash gap is smaller than both the H1 AR cash outflow (24.590B USD) and the prior Q1-revenue-scaled AR normalization potential (15.063B USD). Therefore no Q4 revenue upside or inventory unwind is mathematically required if AR collection improves. However no Q3/Q4 reported cash realization exists yet, so the feasibility result cannot be upgraded to USE.",
+    "capital_allocation_implication": "Use 7.106B USD of H2 incremental cash conversion, or equivalently 3.2897pt of FCF-margin recovery at 216B USD H2 revenue, as the near-term decision threshold. Treat AR collection as the lowest-assumption bridge because only 28.90% of the H1 AR cash outflow must reverse; do not assume the recovery has occurred until reported cash flow confirms it."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "working-capital cash-bridge decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "No dedicated code/config/workflow/one-off script created; no cleanup required."
+  },
+  "limitations": [
+    "The 7.106B USD AR recovery is a required threshold, not company guidance or realized cash flow.",
+    "H1 cash-flow line items cover six months and cannot identify exactly which quarter or customer will reverse working capital.",
+    "Customer advances are disclosed within deferred revenue; the 2.6B USD net addition is additions less revenue recognized and is used only as a sensitivity, not as an independent cash-flow line-item forecast.",
+    "Supply/capacity commitments are not identical to same-period cash payments; the 92B USD amount is used consistently with the prior economic-capacity diagnostic.",
+    "Q3 revenue is company guidance and Q4 is a flat-Q3 benchmark, not realized revenue."
+  ],
+  "next_high_value_hypothesis": "NVIDIAのAR回収7.106B USDという閾値を、顧客集中度と90日から最長1年のextended payment termsに照らしてstressし、主要顧客の支払期間が長期化したままでもFY2027残期間cash coverage 1.0xを達成できるかを検証する。"
+}

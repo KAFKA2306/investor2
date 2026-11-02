@@ -1,0 +1,110 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_interest_savings_deleveraging_20260910",
+  "status": "USE",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGOがgross debtを全額返済し、現在観測されたcash interestまで完全に消える上限stressを与えても、5年expected IRRがNVDAを超えない。",
+  "precommit_rule": {
+    "use": "AVGOのgross debt全返済とcash interest完全解消を同時に与えてもNVDA expected IRR > AVGO expected IRRなら、deleveragingに伴うinterest savingsだけでは順位を逆転できないrobustness evidenceとしてUSE。",
+    "reject": "interest savingsを加えるだけでAVGO expected IRR >= NVDA expected IRRになる。",
+    "unverified": "cash interest、tax、share basis、price、terminal FCFのsource/period/unit/as-ofが揃わない。"
+  },
+  "dependencies": {
+    "capital_structure_artifact": "docs/research/results/avgo_nvda_ev_fcf_capital_structure_20260910/summary.json",
+    "deleveraging_artifact": "docs/research/results/avgo_deleveraging_robustness_20260910/summary.json",
+    "avgo_terminal_fcf_per_share_usd_before_interest_savings": 23.847321804158277,
+    "avgo_diluted_shares_billion": 4.887,
+    "avgo_favorable_terminal_multiple_ratio": 1.0780817,
+    "terminal_ev_fcf_multiple": 25.0,
+    "avgo_terminal_net_debt_usd_billion": 0.0,
+    "nvda_terminal_equity_value_per_share_usd": 414.6722230787417
+  },
+  "primary_sources": {
+    "broadcom_q3_fy2026": {
+      "source": "Broadcom Inc. Q3 FY2026 financial results / SEC filing, 2026-09-02",
+      "period_end": "2026-08-02",
+      "currency": "USD",
+      "unit": "million",
+      "nine_month_cash_paid_for_interest": 1988,
+      "nine_month_income_before_income_taxes": 33600,
+      "nine_month_provision_for_income_taxes": 3853,
+      "q3_total_debt": 59419,
+      "q3_cash_and_cash_equivalents": 23975,
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    "market_price": {
+      "source": "Alpaca IEX latest trade",
+      "as_of": "2026-09-09T19:59:59Z",
+      "currency": "USD",
+      "avgo_price": 364.335,
+      "nvda_price": 223.77
+    }
+  },
+  "method": {
+    "annualized_cash_interest_usd_billion": 2.6506666666666665,
+    "nine_month_gaap_effective_tax_rate": 0.11467261904761905,
+    "after_tax_interest_savings_usd_billion": 2.3467077777777776,
+    "after_tax_interest_savings_per_share_usd": 0.4801939385671737,
+    "pretax_interest_savings_per_share_usd": 0.5423913784871428,
+    "note": "9か月cash paid for interestを4/3倍して年率化。税引後stressは同期間GAAP effective tax rateを感応度として使う。実際のmarginal tax rateとはみなさない。さらに税負担を無視したpretax savingsをAVGOに有利な上限として比較する。gross debt全返済後はterminal net debt=0を維持する。issuer-defined FCFを使うため完全なEV/FCFF DCFではなくrobustness stress。"
+  },
+  "benchmark": {
+    "name": "terminal net debt=0, no incremental interest savings, AVGO-favorable terminal multiple",
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "avgo_5y_expected_price_irr_pct": 12.022711424295075,
+    "avgo_minus_nvda_pct_points": -1.108025639564425
+  },
+  "alternative": {
+    "name": "full gross-debt repayment plus after-tax current cash-interest savings",
+    "avgo_terminal_fcf_per_share_usd": 24.32751574272545,
+    "avgo_terminal_equity_value_per_share_usd": 655.6762382173554,
+    "avgo_5y_expected_price_irr_pct": 12.470262878869631,
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "avgo_minus_nvda_pct_points": -0.6604741849898677,
+    "irr_improvement_vs_no_interest_savings_pct_points": 0.447551454574556
+  },
+  "upper_bound": {
+    "name": "pretax interest savings, zero tax haircut",
+    "avgo_terminal_fcf_per_share_usd": 24.38971318264542,
+    "avgo_terminal_equity_value_per_share_usd": 657.3525862614696,
+    "avgo_5y_expected_price_irr_pct": 12.52771403427877,
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "avgo_minus_nvda_pct_points": -0.6030230295807293
+  },
+  "break_even": {
+    "avgo_terminal_equity_value_per_share_needed_usd": 675.1557599114863,
+    "avgo_terminal_fcf_per_share_needed_usd": 25.050263255984635,
+    "incremental_terminal_fcf_per_share_needed_usd": 1.202941451826358,
+    "incremental_annual_fcf_needed_usd_billion": 5.878774875075414,
+    "multiple_of_observed_annualized_after_tax_interest_savings": 2.5051158609285125
+  },
+  "result": {
+    "status": "USE",
+    "finding": "AVGOのgross debt全返済に加えて、観測cash interestの税引後年率2.347B USDをterminal FCFへ全額加えてもexpected IRRは12.4703%でNVDA 13.1307%を0.6605pt下回る。税を無視して2.651B USD全額を加える上限でも差は0.6030pt残る。interest savingsだけでtieするには年間5.879B USDの追加FCFが必要で、観測税引後interest savingsの約2.51倍。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time valuation robustness stress。"
+  },
+  "decision_rule": "AVGOのdeleveragingではnet debt減少だけでなくinterest savingsも再評価材料にする。ただし現在価格・fundamentals・AVGO-favorable terminal multipleの下では、gross debt全返済と現在cash interest完全解消を同時に与えてもNVDA優位。AVGO price、terminal FCF、interest burden、NVDA fundamentalsが更新された場合に再計算する。",
+  "limitations": [
+    "9か月cash interestの単純年率化はcapacity stressであり会社予想ではない。",
+    "同期間GAAP effective tax rateはmarginal tax rateではないため、税引後値は感応度として扱う。",
+    "pretax upper boundは税効果を無視したAVGO有利な上限である。",
+    "gross debt全返済には将来FCFの資本配分が必要で、配当・buyback・M&A・purchase commitmentsとの競合を予測していない。",
+    "issuer-defined FCFは純粋なFCFFではないため完全なEV/FCFF valuation authorityではない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "AVGOのdeleveragingとinterest savingsを最大限織り込んでも残る約0.60-0.66ptのexpected-IRR差について、AVGOのAI revenue concentrationとcustomer concentrationを一次情報でdownside scenario化し、NVDAとのexpected-return/risk差が拡大するかを検証する。"
+}

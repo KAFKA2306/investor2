@@ -1,0 +1,130 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_fy2027_commitment_cash_threshold_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIAのFY2027残期間92B USD supply/capacity commitmentsは、Q3 FY2027 company guidanceを使うとgross-profit capacityでは十分に吸収できるが、reported H1 FCF conversionのままではcash coverage 1.0xに届かず、FCF margin回復またはQ4増収が必要である。",
+  "decision_rule": {
+    "use_if": "Q3 guidance midpointをQ4まで横ばいとしたbase caseで、92B USD commitmentに対するreported H1 FCF marginベースのcash coverageが1.0x以上。",
+    "condition_if": "gross-profit coverageは1.0x以上で、cash coverage 1.0xに必要なFCF marginがreported H1 marginを上回るが、prior AR-normalized sensitivity以下。",
+    "reject_if": "Q3 guidance midpointをQ4まで横ばいとしてもgross-profit coverageが1.0x未満、またはcash coverage 1.0xに必要なFCF marginがprior AR-normalized sensitivityを上回る。",
+    "unverified_if": "Q3 revenue/gross-margin guidance、92B USD commitment、またはcanonical H1 FCF marginが不足する。"
+  },
+  "capital_allocation_importance": "前回研究で279B USD headlineを期限別に分解した結果、主要な未解決制約はFY2027残期間92B USDに集中した。今回は最新Q3 company guidanceを使い、1.0x cash coverageに必要なFCF marginとQ4 revenueの閾値を直接求める。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_artifact": "docs/research/results/nvda_supply_commitment_coverage_20260911/summary.json",
+    "remainder_fy2027_commitment_usd_b": 92.0,
+    "q2_fy2027_revenue_usd_b": 96.221,
+    "q3_fy2027_revenue_guidance_midpoint_usd_b": 108.0,
+    "q3_fy2027_revenue_guidance_range_pct": 2.0,
+    "q3_fy2027_gaap_gross_margin_guidance_pct": 74.0,
+    "q3_fy2027_gaap_gross_margin_guidance_range_bps": 50,
+    "fy2027_h1_reported_fcf_margin_pct": 39.302845,
+    "prior_ar_normalized_h1_fcf_margin_pct": 47.773213,
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q2 FY2027 financial results, 2026-08-26: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+  ],
+  "method": {
+    "point_in_time": "Use issuer information available through 2026-08-26 plus existing canonical FCF identities; no Q3 actual or later quarter actual is used.",
+    "base_case": "Use Q3 FY2027 revenue guidance midpoint 108.0B USD and GAAP gross-margin guidance 74.0%. For Q4, use the same 108.0B USD revenue as a deliberately simple flat benchmark because Q4 guidance is not yet available.",
+    "cash_threshold": "required FCF margin = 92B / (Q3 revenue + assumed Q4 revenue). Compare with reported H1 FCF margin and prior AR-normalized sensitivity.",
+    "q4_revenue_threshold": "Solve Q4 revenue = 92B / FCF margin - Q3 guidance midpoint. This shows the Q4 revenue required for 1.0x cash coverage at each FCF conversion assumption.",
+    "alternatives": "Compare Q4 revenue equal to Q2 actual, flat at Q3 guidance, and +10% from Q3 guidance; also test the +/-2% Q3 revenue guidance range and +/-50 bps gross-margin range.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time fundamental commitment/cash-conversion threshold research, not a trading-strategy backtest."
+  },
+  "results": {
+    "q3_guidance_sequential_growth_vs_q2_pct": 12.241610,
+    "base_q3_plus_q4_flat": {
+      "revenue_capacity_usd_b": 216.0,
+      "gross_profit_capacity_usd_b": 159.84,
+      "gross_profit_coverage_x": 1.737391,
+      "required_fcf_margin_for_1x_pct": 42.592593,
+      "reported_h1_fcf_margin_pct": 39.302845,
+      "reported_margin_shortfall_pt": 3.289748,
+      "reported_h1_fcf_coverage_x": 0.922762,
+      "ar_normalized_fcf_margin_pct": 47.773213,
+      "ar_normalized_margin_headroom_pt": 5.180620,
+      "ar_normalized_fcf_coverage_x": 1.121632
+    },
+    "q4_revenue_sensitivity": {
+      "q4_equal_q2_actual": {
+        "q4_revenue_usd_b": 96.221,
+        "h2_revenue_usd_b": 204.221,
+        "required_fcf_margin_for_1x_pct": 45.049236,
+        "gross_profit_coverage_x_at_74pct": 1.642647,
+        "reported_h1_fcf_coverage_x": 0.872442,
+        "ar_normalized_fcf_coverage_x": 1.060467
+      },
+      "q4_equal_q3_guidance": {
+        "q4_revenue_usd_b": 108.0,
+        "h2_revenue_usd_b": 216.0,
+        "required_fcf_margin_for_1x_pct": 42.592593,
+        "gross_profit_coverage_x_at_74pct": 1.737391,
+        "reported_h1_fcf_coverage_x": 0.922762,
+        "ar_normalized_fcf_coverage_x": 1.121632
+      },
+      "q4_plus_10pct_vs_q3": {
+        "q4_revenue_usd_b": 118.8,
+        "h2_revenue_usd_b": 226.8,
+        "required_fcf_margin_for_1x_pct": 40.564374,
+        "gross_profit_coverage_x_at_74pct": 1.824261,
+        "reported_h1_fcf_coverage_x": 0.968901,
+        "ar_normalized_fcf_coverage_x": 1.177714
+      }
+    },
+    "revenue_thresholds_for_1x_cash_coverage": {
+      "at_reported_h1_fcf_margin": {
+        "required_q4_revenue_usd_b": 126.079747,
+        "required_q4_growth_vs_q3_guidance_pct": 16.740506
+      },
+      "at_ar_normalized_fcf_margin": {
+        "required_q4_revenue_usd_b": 84.576539,
+        "required_q4_growth_vs_q3_guidance_pct": -21.688390
+      }
+    },
+    "q3_guidance_range_sensitivity": {
+      "q3_minus_2pct_and_q4_flat_required_fcf_margin_pct": 43.461829,
+      "q3_midpoint_and_q4_flat_required_fcf_margin_pct": 42.592593,
+      "q3_plus_2pct_and_q4_flat_required_fcf_margin_pct": 41.757444
+    },
+    "gross_margin_guidance_sensitivity_q3_q4_flat": {
+      "73_5pct_gross_profit_coverage_x": 1.725652,
+      "74_0pct_gross_profit_coverage_x": 1.737391,
+      "74_5pct_gross_profit_coverage_x": 1.749130
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "Prior no-growth Q2 run-rate produced remainder-FY2027 reported FCF coverage of 0.8221x. Replacing Q3 with company guidance and holding Q4 flat at Q3 guidance improves reported cash coverage to 0.9228x.",
+    "alternative_hypothesis": "Working-capital normalization, rather than further extraordinary revenue growth, is sufficient to cross 1.0x cash coverage.",
+    "alternative_result": "SUPPORTED CONDITIONALLY: prior AR-normalized FCF margin 47.7732% yields 1.1216x coverage in the Q3/Q4-flat case and remains above 1.0x even if Q4 revenue falls back to Q2 actual. However this normalized cash conversion is not yet reported cash."
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "Q3 guidance materially improves near-term coverage and gross-profit capacity remains 1.7374x in the midpoint/flat-Q4 base case. However reported H1 FCF conversion yields only 0.9228x cash coverage; 1.0x requires FCF margin 42.5926%, 3.2897pt above reported H1. Alternatively, holding reported H1 FCF margin requires Q4 revenue 126.080B USD, +16.7405% from the Q3 guidance midpoint. Prior AR-normalized sensitivity would clear 1.0x, but that cash recovery is not yet realized.",
+    "capital_allocation_implication": "Do not treat the 92B USD FY2027 commitment as fully cash-covered yet. Use 42.5926% H2 FCF margin as the base decision threshold if Q4 revenue is flat at the Q3 guidance midpoint. Upgrade only when reported cash conversion, realized revenue, or disclosed commitment reductions/rescheduling push coverage above 1.0x."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "near-term commitment cash-coverage threshold decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "No dedicated code/config/workflow/one-off script created; no cleanup required."
+  },
+  "limitations": [
+    "Q3 FY2027 revenue and gross margin are company guidance, not realized results.",
+    "Q4 FY2027 revenue is not guided yet; flat-Q3, Q2-reversion and +10% cases are sensitivities, not forecasts.",
+    "Supply/capacity commitments are not identical to accounting COGS or same-period cash payments; coverage is an economic capacity diagnostic.",
+    "AR-normalized FCF margin is a prior sensitivity and not issuer-reported cash flow.",
+    "The analysis does not assume cancellation/rescheduling of supplier commitments even though NVIDIA discloses that some arrangements can be adjusted before firm orders."
+  ],
+  "next_high_value_hypothesis": "NVIDIAのQ3 FY2027 actualが出る前に、92B USD commitmentの1.0x cash coverageを最も左右するworking-capital要因を分解し、AR回収・inventory build・customer advancesのどの組み合わせならH2 FCF margin 42.5926%を超えるかをcash bridgeとして検証する。"
+}

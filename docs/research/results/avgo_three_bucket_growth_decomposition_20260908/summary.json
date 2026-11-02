@@ -1,0 +1,101 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_three_bucket_growth_decomposition_20260908",
+  "status": "REJECT",
+  "as_of": "2026-09-08",
+  "hypothesis": "The prior Broadcom two-bucket decomposition can reuse roughly 10% non-AI growth as a proxy for non-AI semiconductor growth when evaluating the near-term company growth anchor.",
+  "decision_rule": {
+    "REJECT": "Reject the proxy if Q1-Q3 FY2026 non-AI semiconductor growth differs from combined non-AI growth by more than 5 percentage points, or if non-AI semiconductor growth is below 5% while combined non-AI growth exceeds 8%.",
+    "USE_OR_CONDITION": "Retain only if the three-bucket decomposition does not materially change the non-AI semiconductor growth interpretation."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q1 FY2026",
+      "facts_usd_billions": {
+        "semiconductor_solutions": 12.515,
+        "infrastructure_software": 6.796,
+        "ai_semiconductor": 8.4,
+        "prior_semiconductor_solutions": 8.212,
+        "prior_infrastructure_software": 6.704
+      },
+      "ai_yoy_pct": 106.0,
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q2 FY2026",
+      "facts_usd_billions": {
+        "semiconductor_solutions": 15.009,
+        "infrastructure_software": 7.178,
+        "ai_semiconductor": 10.8,
+        "prior_semiconductor_solutions": 8.408,
+        "prior_infrastructure_software": 6.596
+      },
+      "ai_yoy_pct": 143.0,
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026",
+      "facts_usd_billions": {
+        "semiconductor_solutions": 20.839,
+        "infrastructure_software": 8.752,
+        "ai_semiconductor": 16.7,
+        "prior_semiconductor_solutions": 9.166,
+        "prior_infrastructure_software": 6.786
+      },
+      "ai_yoy_pct": 221.0,
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    }
+  ],
+  "method": {
+    "period": "Q1-Q3 FY2026 versus Q1-Q3 FY2025",
+    "buckets": ["AI semiconductor", "non-AI semiconductor", "infrastructure software"],
+    "prior_ai_reconstruction": "prior AI revenue = current AI revenue / (1 + reported YoY growth)",
+    "non_ai_semiconductor": "semiconductor solutions revenue - AI semiconductor revenue",
+    "missing_data_policy": "No Q4 segment split is inferred. Q4 FY2026 total and AI guidance are not used to fabricate infrastructure-software or non-AI-semiconductor guidance.",
+    "rounding_caveat": "AI revenue and YoY growth are issuer-reported rounded figures, so reconstructed prior AI revenue is an estimate rather than an exact accounting identity."
+  },
+  "results_usd_billions": {
+    "q1_q3_fy2026": {
+      "ai_semiconductor": 35.9,
+      "non_ai_semiconductor": 12.463,
+      "infrastructure_software": 22.726
+    },
+    "q1_q3_fy2025_reconstructed": {
+      "ai_semiconductor": 13.72460656,
+      "non_ai_semiconductor": 12.06139344,
+      "infrastructure_software": 20.086
+    }
+  },
+  "growth_results_pct": {
+    "ai_semiconductor": 161.57398280,
+    "non_ai_semiconductor": 3.32968625,
+    "infrastructure_software": 13.14348302,
+    "combined_non_ai": 9.46144068,
+    "combined_non_ai_minus_non_ai_semiconductor_pp": 6.13175442
+  },
+  "benchmark_comparison": {
+    "prior_two_bucket_interpretation": "Combined non-AI growth near 10% was previously usable as a residual growth assumption.",
+    "three_bucket_result": "The combined non-AI figure hides materially different businesses: non-AI semiconductor grew only about 3.33% while infrastructure software grew about 13.14% in Q1-Q3 FY2026.",
+    "decision": "Do not reuse the combined non-AI growth rate as a proxy for non-AI semiconductor growth."
+  },
+  "capital_allocation_implication": "Broadcom's near-term company growth anchor must model AI semiconductor, non-AI semiconductor, and infrastructure software separately. Using one residual non-AI growth rate overstates the growth contribution of non-AI semiconductor and can understate the AI growth required to sustain a given company-wide growth target.",
+  "implementation": {
+    "reusable_allocation_rule_added": false,
+    "valuation_model_added": false,
+    "collector_added": false,
+    "workflow_added": false,
+    "portfolio_weight_authority_changed": false,
+    "negative_decision_artifact_only": true
+  },
+  "limitations": [
+    "Q4 FY2026 segment revenue guidance is not disclosed, so a full-year three-bucket FY2026 baseline is UNVERIFIED.",
+    "Prior-period AI revenue is reconstructed from rounded current AI revenue and rounded YoY percentages.",
+    "This is a fundamental decomposition, not a time-series portfolio backtest; volatility, Sharpe, maximum drawdown and Expected Shortfall are not applicable.",
+    "OpenAI 10GW deployment is evidence of multi-year demand but no annual Broadcom revenue-recognition schedule is publicly disclosed."
+  ],
+  "next_hypothesis": "Using only issuer-disclosed quarterly segment facts and explicit intervals for the undisclosed Q4 segment mix, can Broadcom FY2027 company revenue growth of 18.83753816% still be achieved with AI semiconductor growth below 30% across the entire feasible Q4 segment range?"
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_terminal_growth_hurdle_translation_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "現在のcanonical AVGO/NVDA break-even relative terminal Price/FCF ratio 1.13941668xを同一required-return proxyのGordon-style growth差へ変換すると、AVGOに必要なterminal FCF growth premiumは経済的に極端ではなく、CBOの2036 nominal GDP growth uncertainty range内に入るため、13.94% relative multiple premiumを『大きすぎて非現実的』とは扱えない。",
+  "capital_allocation_importance": "前回の13.94166826% terminal multiple premium hurdleは数値だけでは大きく見えるが、同じdiscount-rate contractの下で必要な永久成長率差が小さければAVGO逆転条件は見た目ほど遠くない。倍率を成長前提へ翻訳し、AVGO優位に必要な独立fundamental evidenceの大きさを明確化する。",
+  "decision_rule": {
+    "USE": "break-even ratioから逆算したAVGO terminal growthがrequired return未満で、かつCBO 2036 nominal GDP average-growth two-thirds uncertainty interval 2.7%-5.1%内にある。",
+    "CONDITION": "required return未満だがCBO interval上限5.1%を超える。",
+    "REJECT": "required growthがrequired return以上でGordon-style identityが成立しない、または経済的に解釈不能。",
+    "UNVERIFIED": "canonical break-even ratio、required-return proxy、NVDA terminal growth、CBO long-run nominal-growth rangeのいずれかが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_relative_terminal_premium_hurdle_20260909/summary.json",
+    "docs/research/results/avgo_nvda_historical_erp_terminal_multiple_distribution_20260909/summary.json"
+  ],
+  "primary_source": {
+    "name": "Congressional Budget Office, The Budget and Economic Outlook: 2026 to 2036",
+    "publication_date": "2026-02-11",
+    "url": "https://www.cbo.gov/publication/62105",
+    "fact": "CBO estimates an approximately two-thirds chance that average annual nominal GDP growth measured from end-2024 will be between 2.7% and 5.1% at end-2036.",
+    "usage": "macro plausibility reference only; not a forecast of AVGO or NVDA FCF growth"
+  },
+  "method": {
+    "required_return_proxy_pct": 8.89,
+    "NVDA_terminal_growth_pct": 3.0,
+    "break_even_AVGO_to_NVDA_terminal_multiple_ratio": 1.1394166825972842,
+    "identity": "relative_multiple = (k - g_NVDA) / (k - g_AVGO); therefore g_AVGO = k - (k - g_NVDA) / relative_multiple",
+    "scope": "Gordon-style market-wide stress translation under a common required-return proxy; not a company-specific DCF fair value model.",
+    "look_ahead": "No future realized prices or cash flows are introduced. Canonical point-in-time valuation inputs are combined with a contemporaneously available CBO macro projection.",
+    "transaction_costs": "NOT_APPLICABLE. This is a forward valuation assumption translation, not a trading-strategy backtest."
+  },
+  "results": {
+    "benchmark_equal_multiple_ratio": 1.0,
+    "benchmark_AVGO_terminal_growth_pct": 3.0,
+    "current_trailing_relative_multiple": 1.05807215,
+    "current_trailing_implied_AVGO_terminal_growth_pct": 3.32327187092109,
+    "current_trailing_implied_growth_premium_bp": 32.32718709210901,
+    "historical_median_relative_multiple": 1.12656694,
+    "historical_median_implied_AVGO_terminal_growth_pct": 3.6617265695725106,
+    "historical_median_implied_growth_premium_bp": 66.17265695725106,
+    "break_even_relative_multiple": 1.1394166825972842,
+    "break_even_implied_AVGO_terminal_growth_pct": 3.720688289929345,
+    "break_even_implied_growth_premium_bp": 72.0688289929345,
+    "historical_high_relative_multiple": 1.38353574,
+    "historical_high_implied_AVGO_terminal_growth_pct": 4.632791581227963,
+    "historical_high_implied_growth_premium_bp": 163.2791581227963,
+    "CBO_2036_nominal_GDP_average_growth_two_thirds_interval_pct": [2.7, 5.1],
+    "break_even_growth_inside_CBO_interval": true,
+    "distance_from_CBO_upper_bound_percentage_points": 1.379311710070655
+  },
+  "benchmark_and_alternatives": {
+    "equal_multiple": "同一3.0% terminal growthならrelative multipleは1.0xで、既存canonicalではAVGO 50/50 caseはNVDA baseを下回る。",
+    "current_trailing_ratio": "1.05807215xは同一8.89% required-return proxy下でAVGO terminal growth 3.32327187%、NVDA比+32.3272bpに相当し、break-evenには届かない。",
+    "historical_median_ratio": "1.12656694xはAVGO terminal growth 3.66172657%、NVDA比+66.1727bpに相当し、break-even 3.72068829%に約5.8962bp届かない。",
+    "break_even_ratio": "1.13941668xはAVGO terminal growth 3.72068829%、NVDA比+72.0688bpに相当する。",
+    "historical_high_ratio": "1.38353574xはAVGO terminal growth 4.63279158%、NVDA比+163.2792bpに相当するが、過去relative multiple自体は不安定なためforecast anchorには使わない。"
+  },
+  "decision": {
+    "status": "USE",
+    "reason": "13.94166826%のrelative terminal multiple premiumは、同一8.89% required-return proxyとNVDA 3% terminal growthの下ではAVGO terminal growth 3.72068829%、つまり+72.0688bpへ変換される。この値はCBOが2036について示すnominal GDP average-growth two-thirds interval 2.7%-5.1%内にあるため、multiple premiumの見た目だけを理由に非現実的とは判定できない。",
+    "usage_rule": "AVGO/NVDA相対valuationでは1.13941668x terminal multiple hurdleと同時に、等価なAVGO terminal FCF growth 3.72068829% / NVDA比+72.0688bpを表示する。AVGO逆転を支持するには、長期FCF growthがNVDAを約72bp上回る独立fundamental evidenceを要求する。",
+    "portfolio_implication": "現在trailing ratioが示す+32.33bpやhistorical medianが示す+66.17bpはbreak-even未満だが、必要差+72.07bpはmacro plausibility range内であり、AVGOを『terminal premiumが大きすぎる』という理由だけで除外しない。相対順位は長期FCF growth evidenceで再評価する。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized return strategyではなくpoint-in-time terminal valuation assumption translationのため。"
+  },
+  "limitations": [
+    "CBO nominal GDP rangeは米国経済全体のmacro uncertaintyであり、AVGOまたはNVDAのFCF growth予測ではない。",
+    "AVGO/NVDAはglobal businessesであり、US nominal GDPだけをterminal company growth上限として機械適用しない。",
+    "required-return proxy 8.89%はmarket-wide risk-free + implied ERPであり、company-specific beta、capital structure、tax、FCFE差を直接含まない。",
+    "Gordon-style identityはterminal multipleを成長率へ翻訳するstress toolで、企業固有fair value modelではない。",
+    "+72.0688bpがmacro-plausibleであることは、その差が実際に実現する確率を示さない。"
+  ],
+  "implementation": {
+    "artifact_type": "canonical valuation assumption translation",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_copy": false
+  },
+  "deleted_or_avoided": [
+    "13.94% terminal multiple premiumを数値の大きさだけで非現実的とみなす判断を削除する。",
+    "CBO nominal GDP rangeをAVGO/NVDAの直接forecastとして誤用しない。",
+    "finBI等consumer repositoryへ同じGordon-style計算を複製しない。",
+    "専用collector、workflow、one-off scriptを追加しない。"
+  ],
+  "next_hypothesis": "AVGOとNVDAのpoint-in-time issuer guidance、segment growth、FCF conversionを使い、AVGOがNVDAをterminal FCF growthで約72bp上回る根拠をforward 3-5年fundamentalsから支持できるか。支持できなければ1.13941668x premium hurdleは満たさない。"
+}

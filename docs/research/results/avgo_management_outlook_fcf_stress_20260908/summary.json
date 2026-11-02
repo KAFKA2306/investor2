@@ -1,0 +1,211 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_management_outlook_fcf_stress_20260908",
+  "status": "REJECT",
+  "as_of": "2026-09-08",
+  "hypothesis": "Broadcom の FY2027 115B USD / FY2028 230B USD AI semiconductor outlook を使えば、non-AI 売上 -20%、FCF margin -5 percentage points、diluted share count +1%/年、FY2028 後の売上成長 0% という明示的 downside stress でも、現在の NVIDIA canonical base case より5年価格 IRRが高い。",
+  "capital_allocation_importance": "直前の研究で旧 AVGO 成長アンカー 18.83753816% は REJECT された。一方、115B / 230B USD の AI outlook をそのまま強気材料として使うと、実現後の成長鈍化、FCF conversion、希薄化を無視して AVGO を過大評価する可能性がある。本研究は最新 outlook が厳しい downside を通過しても NVDA を上回るかを直接検証する。",
+  "decision_rule": {
+    "USE": "primary stress で AVGO が terminal Price/FCF 25x / 35x / 45x の3条件すべてで NVDA を1 percentage point以上上回る。",
+    "CONDITION": "勝者が terminal multiple で混在する、または3条件の差がすべて絶対値1 percentage point以内に収まる。",
+    "REJECT": "primary stress で AVGO が3条件すべてで NVDA を1 percentage point以上下回る。",
+    "UNVERIFIED": "115B / 230B USD outlook、canonical price/FCF inputs、または NVDA comparator identity を検証できない。"
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "canonical_inputs": {
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "AVGO": {
+      "price": 357.835,
+      "TTM_FCF_margin_pct": 44.22135931,
+      "latest_diluted_shares_billion": 4.887,
+      "FY2026_total_revenue_proxy_USD_billion": 105.889,
+      "FY2026_AI_semiconductor_revenue_proxy_USD_billion": 57.6,
+      "FY2026_non_AI_revenue_proxy_USD_billion": 48.289,
+      "management_FY2027_AI_semiconductor_outlook_USD_billion": 115.0,
+      "management_FY2028_AI_semiconductor_outlook_USD_billion": 230.0
+    },
+    "NVDA_comparator": {
+      "source_artifact": "docs/research/results/nvda_avgo_fy2028_growth_falsification_20260908/summary.json",
+      "description": "NVDA issuer FY2028 revenue growth outlook 70% を1年だけ含む canonical base case。TTM FCF margin と diluted shares は当該 artifact の base contract を維持。",
+      "IRR_pct_at_25x": 12.44060897,
+      "IRR_pct_at_35x": 20.26764201,
+      "IRR_pct_at_45x": 26.46713790
+    }
+  },
+  "primary_sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 / Q4 FY2026 guidance",
+      "facts": "Q3 revenue 29.591B USD、Q3 AI semiconductor revenue 16.7B USD (+221% YoY)、Q4 revenue guidance 34.8B USD、Q4 AI semiconductor revenue guidance 21.7B USD (+236% YoY)。",
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 earnings conference call",
+      "fact": "Broadcom management stated that it had secured supply to support approximately 115B USD of FY2027 AI semiconductor revenue and had line of sight to approximately 230B USD in FY2028.",
+      "primary_event_url": "https://investors.broadcom.com/events/event-details/q3-2026-broadcom-earnings-conference-call",
+      "corroborating_source_url": "https://www.reuters.com/business/broadcom-forecasts-quarterly-revenue-below-estimates-2026-09-02/",
+      "source_note": "Broadcom の公式 event page は webcast を提供するが機械可読 transcript は提供していない。115B / 230B USD の数値は Reuters の call reporting で照合し、一次 event と区別して保存する。"
+    },
+    {
+      "issuer": "NVIDIA Corporation",
+      "period": "Q2 FY2027",
+      "facts": "Q2 FY2027 revenue 96.221B USD (+106% YoY)。NVDA comparator の FY2028 70% growth outlook は既存 canonical artifact で一次 transcript に固定済み。",
+      "url": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+    }
+  ],
+  "method": {
+    "horizon": "5 model years from current price. FY2027 is year1, FY2028 is year2, FY2029-FY2031 are years3-5.",
+    "AVGO_primary_stress": {
+      "non_AI_growth_vs_FY2026_pct": -20.0,
+      "FY2027_non_AI_revenue_USD_billion": 38.6312,
+      "FY2027_total_revenue_proxy_USD_billion": 153.6312,
+      "FY2028_non_AI_revenue_USD_billion": 38.6312,
+      "FY2028_total_revenue_proxy_USD_billion": 268.6312,
+      "post_FY2028_total_revenue_CAGR_pct": 0.0,
+      "FCF_margin_change_percentage_points": -5.0,
+      "stressed_FCF_margin_pct": 39.22135931,
+      "diluted_share_count_CAGR_pct": 1.0,
+      "year5_diluted_shares_billion": 5.1362852604,
+      "terminal_Price_to_FCF_grid_x": [25, 35, 45],
+      "dividends": "excluded",
+      "taxes": "excluded",
+      "future_acquisition_financing": "excluded"
+    },
+    "formulas": {
+      "FY2027_total_revenue": "115 + 48.289 * (1 - 0.20)",
+      "FY2028_total_revenue": "230 + 48.289 * (1 - 0.20)",
+      "year5_revenue": "FY2028 total revenue * (1 + post-FY2028 total revenue CAGR)^3",
+      "year5_FCF": "year5 revenue * stressed FCF margin",
+      "year5_FCF_per_share": "year5 FCF / year5 diluted shares",
+      "terminal_price": "year5 FCF per share * terminal Price/FCF",
+      "five_year_price_IRR": "(terminal price / current price)^(1/5) - 1"
+    },
+    "sensitivity": {
+      "post_FY2028_total_revenue_CAGR_pct": [0, 5, 10, 15, 20],
+      "primary_margin_compression_percentage_points": 5,
+      "primary_non_AI_growth_pct": -20,
+      "primary_share_count_CAGR_pct": 1
+    },
+    "missing_data_policy": "115B / 230B USD を実績扱いしない。GW を revenue に変換しない。FY2029-FY2031 customer deployment を推測で埋めない。post-FY2028 growth は明示 sensitivity としてのみ置く。"
+  },
+  "results": {
+    "primary_stress": {
+      "post_FY2028_total_revenue_CAGR_pct": 0.0,
+      "AVGO_IRR_pct": {
+        "25x": 7.46261770,
+        "35x": 14.94313090,
+        "45x": 20.86816157
+      },
+      "NVDA_canonical_base_IRR_pct": {
+        "25x": 12.44060897,
+        "35x": 20.26764201,
+        "45x": 26.46713790
+      },
+      "AVGO_minus_NVDA_percentage_points": {
+        "25x": -4.97799127,
+        "35x": -5.32451111,
+        "45x": -5.59897633
+      },
+      "winner_count": {
+        "AVGO": 0,
+        "NVDA": 3
+      }
+    },
+    "post_FY2028_growth_sensitivity": [
+      {
+        "post_FY2028_total_revenue_CAGR_pct": 0,
+        "AVGO_IRR_pct_at_25x": 7.46261770,
+        "AVGO_IRR_pct_at_35x": 14.94313090,
+        "AVGO_IRR_pct_at_45x": 20.86816157,
+        "AVGO_minus_NVDA_pct_points_at_25x": -4.97799127,
+        "AVGO_minus_NVDA_pct_points_at_35x": -5.32451111,
+        "AVGO_minus_NVDA_pct_points_at_45x": -5.59897633
+      },
+      {
+        "post_FY2028_total_revenue_CAGR_pct": 5,
+        "AVGO_IRR_pct_at_25x": 10.65498786,
+        "AVGO_IRR_pct_at_35x": 18.35772314,
+        "AVGO_IRR_pct_at_45x": 24.45876749,
+        "AVGO_minus_NVDA_pct_points_at_25x": -1.78562111,
+        "AVGO_minus_NVDA_pct_points_at_35x": -1.90991887,
+        "AVGO_minus_NVDA_pct_points_at_45x": -2.00837041
+      },
+      {
+        "post_FY2028_total_revenue_CAGR_pct": 10,
+        "AVGO_IRR_pct_at_25x": 13.78709934,
+        "AVGO_IRR_pct_at_35x": 21.70786207,
+        "AVGO_IRR_pct_at_45x": 27.98159770,
+        "AVGO_minus_NVDA_pct_points_at_25x": 1.34649037,
+        "AVGO_minus_NVDA_pct_points_at_35x": 1.44022006,
+        "AVGO_minus_NVDA_pct_points_at_45x": 1.51445980
+      },
+      {
+        "post_FY2028_total_revenue_CAGR_pct": 15,
+        "AVGO_IRR_pct_at_25x": 16.86275478,
+        "AVGO_IRR_pct_at_35x": 24.99761505,
+        "AVGO_IRR_pct_at_45x": 31.44092921,
+        "AVGO_minus_NVDA_pct_points_at_25x": 4.42214581,
+        "AVGO_minus_NVDA_pct_points_at_35x": 4.72997304,
+        "AVGO_minus_NVDA_pct_points_at_45x": 4.97379131
+      },
+      {
+        "post_FY2028_total_revenue_CAGR_pct": 20,
+        "AVGO_IRR_pct_at_25x": 19.88536312,
+        "AVGO_IRR_pct_at_35x": 28.23062829,
+        "AVGO_IRR_pct_at_45x": 34.84059619,
+        "AVGO_minus_NVDA_pct_points_at_25x": 7.44475415,
+        "AVGO_minus_NVDA_pct_points_at_35x": 7.96298628,
+        "AVGO_minus_NVDA_pct_points_at_45x": 8.37345829
+      }
+    ],
+    "break_even": {
+      "post_FY2028_total_revenue_CAGR_pct_required_for_AVGO_to_match_NVDA": 7.83910862,
+      "multiple_invariance_note": "同じ terminal Price/FCF multiple を両社に適用するため、丸め誤差を除き 25x / 35x / 45x の break-even は同じ。",
+      "interpretation": "115B / 230B USD outlook を達成しても、non-AI -20%、FCF margin -5pt、shares +1%/年を同時に置くと、FY2029-FY2031 の total revenue が年率約7.84%以上伸びなければ current NVDA canonical base case に届かない。"
+    }
+  },
+  "benchmark_comparison": {
+    "benchmark": "NVDA canonical base case from nvda_avgo_fy2028_growth_falsification_20260908",
+    "simple_alternative": "AVGO management FY2027/FY2028 AI outlook + explicit downside stress + zero growth after FY2028",
+    "result": "Primary stress では AVGO が 25x / 35x / 45x のすべてで NVDA を約4.98-5.60 percentage points 下回る。10% post-FY2028 growth では逆に全3 multiple で約1.35-1.51 points 上回る。",
+    "conclusion": "最新 AI outlook だけでは AVGO の5年相対優位は確定しない。資本配分の主要監視値は FY2028 後の total revenue growth と FCF margin conversion であり、115B / 230B USD のheadline alone を portfolio ranking に使わない。"
+  },
+  "risk_metrics": {
+    "time_series_metrics": "NOT_APPLICABLE",
+    "reason": "本研究は point-in-time forward fundamental scenario comparison であり、return series を生成する backtest ではないため volatility、Sharpe、maximum drawdown、Expected Shortfall は仮説を測らない。",
+    "material_risks": [
+      "115B / 230B USD は management outlook であり realized revenue ではない。",
+      "AVGO AI growth は customer deployment timing、memory / supply availability、cancellation、custom accelerator mix に依存する。",
+      "5 percentage-point FCF margin compression と 1% annual share dilution は downside stress であり issuer guidance ではない。",
+      "NVDA comparator も forward growth assumption を含むため realized-return benchmark ではない。",
+      "Broadcom leverage は Price/FCF comparison では独立リスクとして残る。"
+    ]
+  },
+  "decision": {
+    "status": "REJECT",
+    "reason": "Primary downside stress では AVGO が同一 terminal multiple の3条件すべてで NVDA canonical base case を1 percentage point以上下回り、事前 REJECT 条件を満たした。115B / 230B USD outlook 自体を REJECT するのではなく、『この outlook を入れれば AVGO の5年相対優位が十分に頑健になる』という仮説を REJECT する。",
+    "portfolio_implication": "AVGO overweight を 115B / 230B USD headline だけで正当化しない。FY2028 後 total revenue CAGR 約7.84%、FCF margin、share dilution を明示してから NVDA と比較する。",
+    "portfolio_weight_authority_changed": false
+  },
+  "implementation": {
+    "artifact_type": "canonical negative decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_calculation_duplicated": false
+  },
+  "deleted_or_avoided": {
+    "deleted_code": [],
+    "avoided": [
+      "115B / 230B USD を新しい単一 AVGO company-growth default にしない。",
+      "GW / infrastructure transaction value を AVGO revenue に変換しない。",
+      "finBI や semiconductor-earnings-model に同じ valuation calculation を複製しない。",
+      "REJECT された ranking 専用の model / workflow / one-off script を追加しない。"
+    ]
+  },
+  "remaining_uncertainty": "最大の不確実性は FY2029-FY2031 の AVGO total revenue growth と FCF conversion。今回の 7.83910862% break-even は management outlook 115B / 230B USD が実現し、non-AI -20%、FCF margin -5pt、share dilution +1%/年という stress を同時に置いた条件付き境界であり、issuer guidance ではない。",
+  "next_hypothesis": "Broadcom の FY2029-FY2031 AI deployment timing と顧客コミットメントを一次情報で分解すると、post-FY2028 total revenue CAGR 7.83910862% を下回る downside probability は十分低いか。可能なら customer concentration と supply commitments を使って point-in-time probability-weighted AVGO expected return を構築し、NVDA と比較する。"
+}

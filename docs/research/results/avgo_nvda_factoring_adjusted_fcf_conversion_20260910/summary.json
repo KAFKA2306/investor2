@@ -1,0 +1,100 @@
+{
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "hypothesis": "Broadcom の non-recourse receivables factoring が AVGO の reported H1 FCF conversion advantage を materially 押し上げており、factoring proceeds を financing cash flow とみなして除くと NVDA 対比の advantage は 10 percentage points 以上縮小する。",
+  "capital_allocation_importance": "AVGO と NVDA の cash-conversion quality を比較するとき、Broadcom は receivables を第三者へ売却し、NVIDIA は一定の investment-grade customers に 90 days から one year の extended payment terms を提供して自社 balance sheet で receivables を保有する。reporting classification の違いをそのまま structural capital-efficiency difference と解釈すると資本配分判断を誤る可能性がある。",
+  "precommit_rule": {
+    "USE": "Broadcom factoring proceeds を financing として除くと AVGO の H1 incremental FCF / incremental total revenue advantage が 10pt 以上縮小する。",
+    "CONDITION": "advantage の縮小が 0pt 超 10pt 未満。",
+    "REJECT": "factoring reclassification で AVGO advantage が縮小しない、または拡大する。",
+    "UNVERIFIED": "factoring amount / period / cash-flow classification、または比較対象の revenue / FCF identity が一致しない。"
+  },
+  "sources": [
+    {
+      "company": "Broadcom",
+      "source": "SEC Form 10-Q",
+      "period": "two fiscal quarters ended 2026-05-03 and 2025-05-04",
+      "url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+      "facts": "non-recourse factoring proceeds are presented in operating cash flow; receivables sold were 2.350B USD in H1 FY2026 and 3.951B USD in H1 FY2025"
+    },
+    {
+      "company": "NVIDIA",
+      "source": "SEC Form 10-Q",
+      "period": "six months ended 2026-07-26 and 2025-07-27",
+      "url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+      "facts": "investment-grade customer payment terms can range from 90 days to one year; extended terms on large multi-quarter agreements increased receivables and reduced operating cash-flow timing"
+    },
+    {
+      "company": "Broadcom / NVIDIA",
+      "source": "canonical prior research artifact",
+      "path": "docs/research/results/avgo_nvda_working_capital_normalized_fcf_conversion_20260910/summary.json"
+    }
+  ],
+  "method": {
+    "reported_fcf": "cash from operations - capex; NVIDIA follows issuer FCF definition including principal payments on property/equipment/intangibles",
+    "financing_adjusted_avgo_fcf": "reported FCF - non-recourse factoring proceeds. This is a diagnostic reclassification that asks what reported cash conversion would look like if sold receivables were treated as financing rather than operating cash inflow.",
+    "nvidia_adjustment": "none in the financing-adjusted raw lens because NVIDIA disclosed extended payment terms but not an equivalent receivables sale amount. Missing counterfactual collection timing is not guessed.",
+    "timing_neutral_benchmark": "reuse the symmetric working-capital-normalized benchmark from the immediately prior canonical research, which removes operating asset/liability cash-flow timing from both companies.",
+    "warning": "factoring fees / effective financing cost are not separately disclosed in a form that supports a comparable exact adjustment, so no estimated fee is added back or deducted. Financing-adjusted raw FCF and working-capital-normalized FCF answer different questions and must not be blended."
+  },
+  "inputs_usd_billion": {
+    "broadcom": {
+      "current_h1_reported_fcf": 18.272,
+      "prior_h1_reported_fcf": 12.424,
+      "current_h1_factoring_proceeds": 2.350,
+      "prior_h1_factoring_proceeds": 3.951,
+      "current_h1_financing_adjusted_fcf": 15.922,
+      "prior_h1_financing_adjusted_fcf": 8.473,
+      "incremental_financing_adjusted_fcf": 7.449,
+      "incremental_total_revenue": 11.578
+    },
+    "nvidia": {
+      "current_h1_reported_fcf": 69.895,
+      "prior_h1_reported_fcf": 39.584,
+      "incremental_reported_fcf": 30.311,
+      "incremental_total_revenue": 87.031
+    }
+  },
+  "results": {
+    "reported_raw_total_revenue_conversion": {
+      "AVGO": 0.50509587,
+      "NVDA": 0.34827820,
+      "AVGO_minus_NVDA_pt": 15.68176718
+    },
+    "factoring_as_financing_total_revenue_conversion": {
+      "AVGO": 0.64337537,
+      "NVDA": 0.34827820,
+      "AVGO_minus_NVDA_pt": 29.50971674,
+      "change_in_AVGO_advantage_vs_reported_raw_pt": 13.82794956
+    },
+    "symmetric_working_capital_normalized_total_revenue_conversion": {
+      "AVGO": 0.62739679,
+      "NVDA": 0.63318817,
+      "AVGO_minus_NVDA_pt": -0.57913873,
+      "source": "prior canonical research"
+    },
+    "precommit_pass": false
+  },
+  "interpretation": "Broadcom factoring did not inflate the observed H1 incremental cash-conversion advantage. Because Broadcom factored fewer receivables in H1 FY2026 (2.350B USD) than in H1 FY2025 (3.951B USD), reclassifying factoring proceeds out of operating FCF raises the incremental AVGO conversion from 50.51% to 64.34% and expands the raw AVGO advantage from 15.68pt to 29.51pt. However, the symmetric working-capital-normalized benchmark remains approximately even at AVGO -0.58pt. Therefore neither reported raw FCF nor factoring-as-financing raw FCF should be promoted to structural capital-efficiency evidence; cash timing and financing structure materially change the apparent ranking.",
+  "decision_rule": "REJECT the claim that Broadcom factoring is the reason AVGO appeared to have superior H1 cash conversion. For AVGO/NVDA capital-efficiency decisions, do not penalize AVGO by assuming current factoring mechanically inflated the YoY incremental FCF result. Continue to use the symmetric working-capital-normalized cumulative benchmark as the primary structural diagnostic, and show factoring-as-financing only as a separate cash-quality sensitivity. Do not infer a financing cost or NVIDIA counterfactual receivables-sale benefit without disclosed data.",
+  "supersedes_or_refines": "docs/research/results/avgo_nvda_working_capital_normalized_fcf_conversion_20260910/summary.json",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategy ではなく financing-classification / fundamental cash-conversion research"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "research evaluation / negative decision artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_financial_logic_copy": false,
+    "one_off_script_retained": false
+  },
+  "remaining_uncertainty": "Broadcom の factoring discount / effective financing cost と sold receivables の contractual maturity profile、NVIDIA の extended-term receivables に対応する explicit funding / credit cost は exact comparison に必要だが開示から直接確定できない。さらに working-capital normalization は credit loss / inventory obsolescence risk を消すものではない。",
+  "next_high_value_hypothesis": "AVGO と NVDA の receivables growth を revenue growth と比較し、DSO / receivables-to-revenue と disclosed credit-loss allowances を point-in-time で正規化すると、NVIDIA の extended payment terms は material な customer-financing / credit-risk premium を要求するほど大きいか。"
+}

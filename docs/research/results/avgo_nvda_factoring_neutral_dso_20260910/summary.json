@@ -1,0 +1,81 @@
+{
+  "status": "CONDITION",
+  "hypothesis": "Broadcom の sold non-recourse receivables を balance sheet に戻す factoring-neutral DSO range を構築すると、NVIDIA - Broadcom の観測 DSO 差 12.53 日は 10 日未満まで縮小し得る。",
+  "precommit": {
+    "USE": "一次情報だけで構築した factoring-neutral range の全域で NVIDIA - Broadcom DSO 差が 10 日未満になる。",
+    "CONDITION": "range が 10 日閾値を跨ぎ、sold receivables の期中残高または残存期間不足で一点推定できない。",
+    "REJECT": "factoring-neutral range の全域で DSO 差が 10 日以上残る。",
+    "UNVERIFIED": "source / identity / period / unit が不足する。"
+  },
+  "as_of": "2026-09-10",
+  "sources": {
+    "canonical_prior_artifact": "docs/research/results/avgo_nvda_receivables_credit_risk_20260910/summary.json",
+    "avgo_form": "Broadcom Inc. Form 10-Q, two fiscal quarters ended 2026-05-03",
+    "avgo_sec_url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+    "nvda_form": "NVIDIA Corporation Form 10-Q, six months ended 2026-07-26",
+    "nvda_sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm"
+  },
+  "inputs": {
+    "days_in_half_year": 182,
+    "avgo_h1_revenue_usd_b": 41.498,
+    "avgo_average_reported_ar_usd_b": 8.9875,
+    "avgo_h1_nonrecourse_factoring_proceeds_usd_b": 2.350,
+    "nvda_h1_dso_days": 51.951095,
+    "reported_avgo_h1_dso_days": 39.416960,
+    "reported_nvda_minus_avgo_dso_days": 12.534136
+  },
+  "method": {
+    "formula": "DSO = average receivables / H1 revenue * 182",
+    "range_logic": "The filing discloses 2.350B USD of H1 factoring proceeds but not the average outstanding balance or residual maturity of sold receivables. Therefore no point estimate is inferred. Sensitivity adds 0%, 50%, and 100% of disclosed H1 sold receivables to average reported receivables. The 100% case is an intentionally conservative balance-sheet add-back sensitivity, not a claim that all H1 proceeds were outstanding simultaneously.",
+    "warning": "Factoring proceeds are a flow; DSO requires an average receivable stock. Flow-to-stock identity is not assumed."
+  },
+  "results": {
+    "zero_addback": {
+      "avgo_dso_days": 39.416960,
+      "nvda_minus_avgo_dso_days": 12.534135
+    },
+    "fifty_percent_addback": {
+      "added_average_receivables_usd_b": 1.175,
+      "avgo_dso_days": 44.570220,
+      "nvda_minus_avgo_dso_days": 7.380875
+    },
+    "full_disclosed_flow_addback_sensitivity": {
+      "added_average_receivables_usd_b": 2.350,
+      "avgo_dso_days": 49.723481,
+      "nvda_minus_avgo_dso_days": 2.227614
+    },
+    "threshold_crossed": true,
+    "ten_day_gap_not_robust_to_factoring_neutralization": true
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "Reported-balance DSO: AVGO 39.42 days versus NVDA 51.95 days, a 12.53-day gap.",
+    "alternative": "A factoring-neutral AVGO collection cycle can be materially longer because sold receivables are absent from reported balances. Even a 50% flow add-back sensitivity reduces the observed gap to 7.38 days."
+  },
+  "decision": {
+    "classification": "CONDITION",
+    "reason": "The reported 12.53-day NVIDIA DSO premium is not robust to plausible factoring-neutral sensitivities: a 50% add-back reduces it below the 10-day materiality threshold. However, Broadcom does not disclose the average outstanding sold-receivable stock or residual maturity, so a single factoring-neutral DSO cannot be identified from canonical data without inventing a flow-to-stock mapping.",
+    "rule": "Do not use the reported 12.53-day DSO gap as a standalone NVDA customer-financing premium. Show reported DSO together with the factoring-neutral sensitivity range. Reclassify only when Broadcom discloses enough sold-receivable stock/maturity information to identify a point estimate or when comparable credit-loss evidence becomes available."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "Point-in-time working-capital comparability research, not a realized trading strategy."
+  },
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_duplication": false
+  },
+  "limitations": [
+    "2.350B USD is H1 factoring proceeds, a flow, not average sold-receivable stock.",
+    "The filing does not disclose the average residual maturity of receivables sold during H1.",
+    "The 50% and 100% add-backs are transparent sensitivities, not estimated economic balances.",
+    "DSO remains a financing/collection diagnostic and is not a default probability or expected-loss estimate."
+  ],
+  "next_high_value_hypothesis": "Use issuer disclosures to compare AVGO and NVDA accounts-receivable growth against sequential revenue growth and operating cash flow over multiple quarters, testing whether receivable build persistently outruns revenue rather than relying on a single H1 DSO snapshot."
+}

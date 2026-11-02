@@ -1,0 +1,133 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_ai_incremental_margin_bridge_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "BroadcomのQ1-Q3 FY2026におけるAI semiconductor revenue増加とGAAP gross profit増加を四半期差分で制約すると、AI semiconductor incremental gross marginの下限を前研究の60.68% break-evenより上に狭められる。",
+  "why_it_matters": "前研究の単一四半期segment-mix boundは56.16%-98.16%と広く、FY2027 purchase commitments 52.674B USDのgross-profit coverage判断を確定できなかった。複数四半期のrealized AI revenueとgross profitを使ってbreak-evenの上下をより強く制約できれば、Broadcomのcapital-at-risk評価を改善できる。",
+  "precommit_rule": {
+    "use": "Q1->Q2、Q2->Q3、Q1->Q3の全てでincremental AI gross-margin lower boundが60.68%以上。",
+    "condition": "累積Q1->Q3 lower boundは60.68%以上だが、少なくとも1つの隣接四半期lower boundが60.68%未満、かつupper boundは60.68%超。",
+    "reject": "Q1->Q3 cumulative upper boundが60.68%未満。",
+    "unverified": "AI semiconductor revenue、total revenue、GAAP gross profitの一次情報がいずれかの四半期で不足する。"
+  },
+  "dependencies": {
+    "prior_artifact": "docs/research/results/avgo_ai_margin_break_even_constraint_20260910/summary.json",
+    "break_even_ai_gross_margin_pct": 60.68433179723502
+  },
+  "primary_sources": {
+    "broadcom_q1_fy2026_results": {
+      "source": "Broadcom Inc. Q1 FY2026 financial results published 2026-03-04",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-first-quarter-fiscal-year-2026-financial",
+      "ai_semiconductor_revenue_usd_billion": 8.4,
+      "total_revenue_usd_billion": 19.311,
+      "gaap_gross_profit_usd_billion": 13.157
+    },
+    "broadcom_q2_fy2026_results": {
+      "source": "Broadcom Inc. Q2 FY2026 financial results published 2026-06-03",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-second-quarter-fiscal-year-2026-financial",
+      "ai_semiconductor_revenue_usd_billion": 10.8,
+      "total_revenue_usd_billion": 22.187,
+      "gaap_gross_profit_usd_billion": 15.415
+    },
+    "broadcom_q3_fy2026_results": {
+      "source": "Broadcom Inc. Q3 FY2026 financial results published 2026-09-02",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "ai_semiconductor_revenue_usd_billion": 16.7,
+      "total_revenue_usd_billion": 29.591,
+      "gaap_gross_profit_usd_billion": 20.456
+    }
+  },
+  "method": {
+    "quarterly_derived": {
+      "Q1_FY2026": {
+        "ai_share_of_total_revenue_pct": 43.498524157216095,
+        "gaap_gross_margin_pct": 68.1321526591062,
+        "non_ai_revenue_usd_billion": 10.911
+      },
+      "Q2_FY2026": {
+        "ai_share_of_total_revenue_pct": 48.67715328796142,
+        "gaap_gross_margin_pct": 69.477622030919,
+        "non_ai_revenue_usd_billion": 11.387
+      },
+      "Q3_FY2026": {
+        "ai_share_of_total_revenue_pct": 56.43607853739312,
+        "gaap_gross_margin_pct": 69.12912709945591,
+        "non_ai_revenue_usd_billion": 12.891
+      }
+    },
+    "incremental_bridge": "For each period pair, delta gross profit = m_AI * delta AI revenue + m_other * delta non-AI revenue, with m_other constrained to 0%-100%. This yields a transparent interval for the gross margin attributable to incremental AI revenue under a constant-base contribution bridge; no unreported segment margin is inserted.",
+    "formula": "m_AI lower = (delta gross profit - delta non-AI revenue) / delta AI revenue; m_AI upper = delta gross profit / delta AI revenue, because all observed delta non-AI revenue is positive.",
+    "missing_data_policy": "No segment margin, software margin or AI margin point estimate is imputed."
+  },
+  "benchmark_and_alternatives": {
+    "prior_single_quarter_algebraic_bound": {
+      "lower_pct": 56.16392341283171,
+      "upper_pct": 98.16209990882481,
+      "result": "crossed 60.68% break-even"
+    },
+    "Q1_to_Q2_incremental_bound": {
+      "delta_ai_revenue_usd_billion": 2.4,
+      "delta_non_ai_revenue_usd_billion": 0.476,
+      "delta_gaap_gross_profit_usd_billion": 2.258,
+      "lower_pct": 74.24999999999991,
+      "upper_pct": 94.08333333333329,
+      "break_even_result": "ABOVE"
+    },
+    "Q2_to_Q3_incremental_bound": {
+      "delta_ai_revenue_usd_billion": 5.9,
+      "delta_non_ai_revenue_usd_billion": 1.504,
+      "delta_gaap_gross_profit_usd_billion": 5.041,
+      "lower_pct": 59.94915254237287,
+      "upper_pct": 85.44067796610172,
+      "break_even_result": "CROSSES",
+      "distance_of_lower_bound_to_break_even_percentage_points": -0.73517925486215
+    },
+    "Q1_to_Q3_cumulative_bound": {
+      "delta_ai_revenue_usd_billion": 8.3,
+      "delta_non_ai_revenue_usd_billion": 1.98,
+      "delta_gaap_gross_profit_usd_billion": 7.299,
+      "lower_pct": 64.08433734939757,
+      "upper_pct": 87.93975903614458,
+      "break_even_result": "ABOVE",
+      "distance_of_lower_bound_to_break_even_percentage_points": 3.40000555216255
+    }
+  },
+  "validation": {
+    "point_in_time": true,
+    "synthetic_data_used": false,
+    "silent_fallback_used": false,
+    "look_ahead": "Only realized Q1-Q3 FY2026 issuer-reported values available by 2026-09-11 are used; Q4 guidance is not used in the incremental-margin bridge.",
+    "benchmark": "Prior Q3 single-quarter algebraic margin bound 56.16%-98.16%.",
+    "alternative": "Adjacent-quarter and cumulative incremental contribution bounds using realized AI revenue, total revenue and GAAP gross profit."
+  },
+  "result": {
+    "status": "CONDITION",
+    "finding": "The cumulative Q1->Q3 incremental AI gross-margin lower bound is 64.08%, above the prior 60.68% purchase-commitment break-even, and Q1->Q2 is also fully above break-even at 74.25%-94.08%. However Q2->Q3 remains 59.95%-85.44%, crossing break-even by a narrow 0.74 percentage point at the lower edge. AI share of total revenue rose from 43.50% to 56.44% while consolidated GAAP gross margin stayed near 68.13%-69.48%, which is inconsistent with a large observed gross-margin collapse but does not identify structural AI segment margin. The evidence therefore materially narrows the prior uncertainty without proving every recent incremental AI dollar clears 60.68%."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is fundamental incremental-margin research, not a realized trading strategy."
+  },
+  "decision_rule": "Keep Broadcom FY2027 purchase-commitment coverage at CONDITION rather than applying a standalone valuation penalty. The realized Q1-Q3 bridge makes a sub-60.68% AI incremental margin less plausible on a cumulative basis, but Q2->Q3 still crosses the threshold. Re-evaluate after Q4 FY2026 realized revenue and gross profit; if the Q3->Q4 and rolling Q2->Q4 lower bounds are both >=60.68%, promote the gross-profit coverage leg toward USE, subject to cash-conversion evidence remaining separate.",
+  "limitations": [
+    "The incremental bridge assumes changes in gross profit can be decomposed between incremental AI revenue and incremental non-AI revenue with the latter's marginal gross margin constrained to 0%-100%; it does not identify gross-margin changes on the pre-existing revenue base.",
+    "AI revenue is issuer-reported but AI-specific gross profit is not disclosed.",
+    "The Q2->Q3 lower bound is only 0.74 percentage point below break-even, so modest base-margin shifts could change that edge result.",
+    "This study addresses gross-profit capacity only; FCF/cash coverage remains a separate unresolved leg from the prior research."
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "Broadcom Q4 FY2026 realized AI revenue, total revenue, GAAP gross profit and FCFを追加したQ3->Q4 / rolling Q2->Q4 bridgeで、60.68% gross-profit break-evenと1.0x cash coverageの両方を同時に満たせるか。"
+}

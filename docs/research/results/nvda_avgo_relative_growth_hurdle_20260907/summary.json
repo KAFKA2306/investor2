@@ -1,0 +1,52 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_relative_growth_hurdle_20260907",
+  "status": "CONDITION",
+  "as_of": "2026-09-04",
+  "hypothesis": "AVGOの現在の高い評価倍率をNVDAに対して正当化するために必要な5年GAAP EPS成長率の上乗せ幅は、比較可能なTTM GAAP EPSと同一terminal P/E前提から再利用可能な閾値として定量化できる。",
+  "decision_rule": {
+    "use_if": "比較可能なGAAP TTM EPSと同一時点の市場価格から、同一terminal P/Eで両社の5年価格IRRが一致するAVGOの必要EPS成長率を一意に計算でき、今後の会社固有forecastをこの閾値へ照合できる。",
+    "reject_if": "TTM EPSの定義または市場価格時点が比較不能で、成長率閾値を同一basisで計算できない。",
+    "condition_if": "閾値自体は有効だが、直近1四半期の成長率だけでは5年間の持続性を検証できず、live allocationには使えない。"
+  },
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/nvda_avgo_relative_irr_20260905/summary.json",
+    "prices_usd": {"source": "Alpaca Market Data IEX daily bar", "date": "2026-09-04", "NVDA": 230.19, "AVGO": 357.835},
+    "ttm_gaap_diluted_eps": {"NVDA": 7.91, "AVGO": 7.83},
+    "current_gaap_pe": {"NVDA": 29.10113780, "AVGO": 45.70051086, "AVGO_over_NVDA": 1.57040289}
+  },
+  "method": {
+    "horizon_years": 5,
+    "terminal_pe_rule": "same terminal P/E for NVDA and AVGO in the primary hurdle",
+    "formula": "(1+g_AVGO)/(1+g_NVDA) = ((P_AVGO/EPS_AVGO)/(P_NVDA/EPS_NVDA))^(1/5)",
+    "required_growth_factor_ratio": 1.094465855,
+    "interpretation": "AVGOの年間EPS成長factorはNVDAの1.094465855倍必要。"
+  },
+  "break_even_table": [
+    {"NVDA_eps_cagr": 0.10, "required_AVGO_eps_cagr": 0.20391244, "required_AVGO_minus_NVDA_pp": 10.391244},
+    {"NVDA_eps_cagr": 0.15, "required_AVGO_eps_cagr": 0.25863573, "required_AVGO_minus_NVDA_pp": 10.863573},
+    {"NVDA_eps_cagr": 0.20, "required_AVGO_eps_cagr": 0.31335903, "required_AVGO_minus_NVDA_pp": 11.335903},
+    {"NVDA_eps_cagr": 0.25, "required_AVGO_eps_cagr": 0.36808232, "required_AVGO_minus_NVDA_pp": 11.808232}
+  ],
+  "point_in_time_primary_evidence": {
+    "NVIDIA_Q2_FY2027": {"revenue_yoy_pct": 106, "gaap_operating_income_yoy_pct": 124, "gaap_diluted_eps_yoy_pct": 128, "next_quarter_revenue_guidance_usd_billion": 108.0, "source": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"},
+    "Broadcom_Q3_FY2026": {"revenue_yoy_pct": 86, "gaap_operating_income_yoy_pct": 171, "gaap_diluted_eps_yoy_pct": 215, "next_quarter_revenue_guidance_usd_billion": 34.8, "source": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"},
+    "observed_growth_lead_AVGO_minus_NVDA_pp": {"revenue": -20, "gaap_operating_income": 47, "gaap_diluted_eps": 87},
+    "interpretation": "直近四半期ではAVGOのGAAP operating income/EPS成長率は必要な約10-12pt/年の上乗せ幅を大きく上回るが、revenue成長率はNVDAを下回る。単一四半期は5年持続性の証拠ではない。"
+  },
+  "benchmark_comparison": {
+    "old_same_growth_model": "同一growthを置くと9/9 scenarioでNVDAがAVGOを上回ったためREJECT済み。",
+    "new_reusable_hurdle": "AVGOを採用候補にするには、同一terminal P/EならNVDAより約10.4-11.8 percentage points高い5年GAAP EPS CAGRを継続できる会社固有evidenceが必要。",
+    "allocation_action": "現時点では成長持続性が未検証なのでNVDA/AVGOのlive allocation authorityへ接続しない。"
+  },
+  "finding": "同一terminal P/Eで現在のvaluation gapを埋めるには、AVGOの5年GAAP EPS CAGRはNVDAの成長率が10-25%の範囲で約10.4-11.8pt/年高い必要がある。直近四半期のAVGO operating income/EPS成長率はこの閾値を上回るが、revenue成長では下回り、5年間の持続性は未検証。したがって成長率閾値は再利用するが、投資判断はCONDITIONとする。",
+  "reusable_decision": "今後のNVDA対AVGO valuation研究では同一growthを置かず、AVGOがNVDAより少なくとも約11pt/年高い5年GAAP EPS CAGRを維持できるかを会社固有のrevenue、margin、diluted sharesから検証する。",
+  "limitations": [
+    "terminal P/Eを同一とする相対hurdleであり、両社の事業構成差によるterminal multiple差は主分析に含めない。",
+    "直近四半期YoYは5年CAGRの代替ではない。",
+    "配当、buyback、tax、net debt/cash、bid-ask spreadは価格IRR比較に含めない。",
+    "NVIDIAとBroadcomの会社公表non-GAAP EPSは定義差があるため比較根拠に使用しない。"
+  ],
+  "next_hypothesis": "NVDAとAVGOのpoint-in-time revenue guidance、GAAP operating margin、diluted share countを使って会社別bear/base/bull 5年GAAP EPS trajectoryを構築したとき、AVGOはNVDAを約11pt/年以上上回るEPS CAGRをbase caseで維持できるか。"
+}

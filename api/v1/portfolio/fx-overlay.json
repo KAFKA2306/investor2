@@ -1,0 +1,5 @@
+{
+  "schema_version": "investor2.fx-overlay.v1",
+  "status": "UNVERIFIED",
+  "reason": "Live portfolio recommendation is unavailable: canonical realized daily swap history required by investor2#251 and the actual portfolio position snapshot required by investor2#252 are not yet materialized."
+}

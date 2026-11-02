@@ -1,0 +1,129 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_ttm_fcf_yield_parity_20260908",
+  "status": "CONDITION",
+  "hypothesis": "同一2026-09-04価格で、最新一次情報から再構築したTTM free cash flow per shareを使うと、NVDAとAVGOのfree cash flow yield差はGAAP earnings yield差より大幅に縮小し、GAAP earnings yield単独の相対valuation順位は資本配分判断として不十分になる。",
+  "decision_rule": {
+    "condition_if": "free cash flow yield差が25bp以下まで縮小する一方、既存canonical GAAP earnings yield差が100bp以上あり、価格・期間・企業一次情報のidentityが確認できる。",
+    "reject_if": "free cash flow yield差が25bpを超える、またはGAAP earnings yieldで見える相対差がfree cash flow基準でも概ね維持される。",
+    "use_if": "会社固有のpoint-in-time成長率、margin、share count、net debtを含む5年IRRでも同じ資本配分結論が維持される。"
+  },
+  "capital_allocation_importance": "既存GAAP earnings yieldではNVDAがAVGOより124.81bp高い。free cash flow yieldで差がほぼ消えるなら、現在利益の比率だけでNVDAを相対的に割安と扱わず、成長持続性、free cash flow margin、leverage、terminal valuationを資本配分の中心に置く必要がある。",
+  "canonical_price_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/nvda_avgo_relative_irr_20260905/summary.json",
+    "price_date": "2026-09-04",
+    "market_data": "Alpaca Market Data IEX daily bar",
+    "currency": "USD",
+    "NVDA_price": 230.19,
+    "AVGO_price": 357.835,
+    "NVDA_GAAP_earnings_yield_pct": 3.4363,
+    "AVGO_GAAP_earnings_yield_pct": 2.1882,
+    "GAAP_earnings_yield_gap_NVDA_minus_AVGO_percentage_points": 1.2481
+  },
+  "primary_financial_sources": {
+    "NVDA": [
+      "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/default.aspx",
+      "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx"
+    ],
+    "AVGO": [
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+      "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000076/avgo-08022026x8kxex99.htm"
+    ]
+  },
+  "method": {
+    "free_cash_flow_basis": "company-reported free cash flow; no cross-company non-GAAP EPS normalization is used",
+    "ttm_reconstruction": "latest completed fiscal year minus same prior-year year-to-date period plus current-year year-to-date period",
+    "free_cash_flow_per_share": "TTM free cash flow / latest quarter GAAP diluted weighted-average shares",
+    "free_cash_flow_yield": "TTM free cash flow per share / canonical 2026-09-04 price",
+    "risk_context": "cash and debt are compared with TTM free cash flow; this is not a substitute for full enterprise-value valuation",
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "reconstruction": {
+    "NVDA": {
+      "FY2026_free_cash_flow_USD_billion": 96.575,
+      "H1_FY2026_free_cash_flow_USD_billion": 39.584,
+      "H1_FY2027_free_cash_flow_USD_billion": 69.895,
+      "TTM_free_cash_flow_USD_billion": 126.886,
+      "FY2026_revenue_USD_billion": 215.938,
+      "H1_FY2026_revenue_USD_billion": 90.805,
+      "H1_FY2027_revenue_USD_billion": 177.837,
+      "TTM_revenue_USD_billion": 302.970,
+      "latest_GAAP_diluted_weighted_average_shares_billion": 24.285,
+      "cash_and_cash_equivalents_USD_billion": 22.443,
+      "marketable_debt_securities_USD_billion": 34.143,
+      "short_term_debt_USD_billion": 1.000,
+      "long_term_debt_USD_billion": 32.366
+    },
+    "AVGO": {
+      "FY2025_free_cash_flow_USD_billion": 26.914,
+      "first_three_quarters_FY2025_free_cash_flow_USD_billion": 19.448,
+      "first_three_quarters_FY2026_free_cash_flow_USD_billion": 31.937,
+      "TTM_free_cash_flow_USD_billion": 39.403,
+      "FY2025_revenue_USD_billion": 63.887,
+      "first_three_quarters_FY2025_revenue_USD_billion": 45.872,
+      "first_three_quarters_FY2026_revenue_USD_billion": 71.089,
+      "TTM_revenue_USD_billion": 89.104,
+      "latest_GAAP_diluted_weighted_average_shares_billion": 4.887,
+      "cash_and_cash_equivalents_USD_billion": 23.975,
+      "short_term_debt_USD_billion": 2.252,
+      "long_term_debt_USD_billion": 57.167
+    }
+  },
+  "results": {
+    "NVDA": {
+      "TTM_free_cash_flow_USD_billion": 126.886,
+      "TTM_free_cash_flow_per_share_USD": 5.22487132,
+      "free_cash_flow_yield_pct": 2.26980812,
+      "price_to_free_cash_flow_proxy_x": 44.05658741,
+      "TTM_free_cash_flow_margin_pct": 41.88071426,
+      "net_cash_excluding_marketable_equity_securities_USD_billion": 23.220,
+      "net_cash_to_TTM_free_cash_flow_x": 0.18299891
+    },
+    "AVGO": {
+      "TTM_free_cash_flow_USD_billion": 39.403,
+      "TTM_free_cash_flow_per_share_USD": 8.06281973,
+      "free_cash_flow_yield_pct": 2.25322278,
+      "price_to_free_cash_flow_proxy_x": 44.38087569,
+      "TTM_free_cash_flow_margin_pct": 44.22135931,
+      "net_debt_USD_billion": 35.444,
+      "net_debt_to_TTM_free_cash_flow_x": 0.89952542
+    },
+    "comparison": {
+      "GAAP_earnings_yield_gap_NVDA_minus_AVGO_basis_points": 124.81,
+      "free_cash_flow_yield_gap_NVDA_minus_AVGO_basis_points": 1.65853461,
+      "yield_gap_compression_pct": 98.67115246,
+      "free_cash_flow_margin_gap_AVGO_minus_NVDA_percentage_points": 2.34064505
+    }
+  },
+  "benchmark_comparison": {
+    "benchmark": "GAAP earnings yield from the existing canonical relative-IRR artifact",
+    "alternative_simple_measure": "TTM free cash flow yield reconstructed from issuer-reported cash flow",
+    "interpretation": "GAAP earnings yield suggests a 124.81bp advantage for NVDA, while TTM free cash flow yield is effectively tied at 2.2698% versus 2.2532%. The apparent current valuation gap therefore depends strongly on the earnings measure. AVGO's higher leverage prevents interpreting free cash flow yield parity as equal balance-sheet risk or equal investment attractiveness."
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "The preregistered condition is met: the free cash flow yield gap is 1.66bp, far below 25bp, while the canonical GAAP earnings yield gap is 124.81bp. Therefore GAAP earnings yield alone is not robust enough for relative capital allocation between NVDA and AVGO. Use free cash flow yield as an additional descriptive input, not as a standalone ranking. A full USE decision requires company-specific five-year IRR with growth, margins, share count, terminal multiple and leverage.",
+    "portfolio_weight_authority_changed": false,
+    "reusable_decision_artifact_added": true,
+    "valuation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false
+  },
+  "limitations": [
+    "The 2026-09-04 market prices are reused from the existing canonical Alpaca IEX artifact because the connected Alpaca endpoint returned upstream 502 during this run; no alternate price source was silently substituted.",
+    "NVIDIA and Broadcom define free cash flow in their own disclosures; both are operating cash flow less capital investment, but company-specific non-GAAP definitions are not guaranteed to be perfectly identical.",
+    "Latest-quarter diluted weighted-average shares are used as the per-share denominator rather than a fully reconstructed daily TTM weighted share count.",
+    "Free cash flow is sensitive to working-capital timing and should not be treated as normalized long-run owner earnings without further analysis.",
+    "This result does not estimate future revenue growth, future margins, terminal valuation or shareholder distributions and is not a buy/sell recommendation."
+  ],
+  "blocked_parallel_hypothesis": {
+    "hypothesis": "2016年以降のAlpaca SIP共通履歴を全corporate actions込みで再構築したとき、SMH60%/GLD20%/BIL20%はMaxDD 30%以下・ES95 10%以下を維持し、SMH80%/DBC20%より高いSharpeを維持するか。",
+    "status": "UNVERIFIED",
+    "reason": "Alpaca historical stock bars endpoint returned upstream HTTP 502 repeatedly for SIP and IEX queries; no alternate market source was used to fill the canonical series."
+  },
+  "next_high_value_hypothesis": "NVDAとAVGOについて、各社固有のpoint-in-time revenue growth、free cash flow margin、diluted share count、net debt assumptionsをbear/base/bullで固定し、5年後のprice-to-free-cash-flow multipleを同一gridで適用した5年equity IRRは、現在のfree cash flow yield parityから資本配分順位を分離できるか。"
+}

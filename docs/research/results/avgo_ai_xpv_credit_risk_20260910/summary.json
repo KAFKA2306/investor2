@@ -1,0 +1,129 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_ai_xpv_credit_risk_20260910",
+  "status": "CONDITION",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "BroadcomのAI XPV financing/leasing構造は、外部資本でAI rack購入を支える一方でBroadcomに残るlease backstopにより、現在のFCF conversionまたは相対expected returnをmaterially悪化させる。",
+  "why_it_matters": "BroadcomのAI成長が通常の半導体販売からfinancing/leasingを伴う構造へ広がると、売上成長だけでは資本効率を判断できない。backstopが大きければ、顧客default時の流動性・信用損失がAVGOの相対valuationを変え得る。",
+  "precommit_rule": {
+    "use": "一次情報で現在のFCF conversion悪化が観測される、または開示済みcredit exposureを合理的なexpected-lossへ変換した結果、5年expected IRRを0.5pt以上悪化させるかNVDA/AVGO順位を反転させる。",
+    "condition": "最大exposureはcash/FCFに対してmaterialだが、現在exposure・default probability・loss given default・回収価値が不足しexpected lossを検証できず、現時点のFCF conversion悪化も観測されない。",
+    "reject": "一次情報上、Broadcomにmaterialなbackstop/credit exposureが残らず、FCF conversion悪化も観測されない。",
+    "unverified": "backstop上限、期間、cash/FCF、market price、share basisのsource/period/unit/as-ofが不足する。"
+  },
+  "dependencies": {
+    "prior_rpo_artifact": "docs/research/results/avgo_ai_rpo_revenue_floor_20260910/summary.json",
+    "prior_valuation_artifact": "docs/research/results/avgo_interest_savings_deleveraging_20260910/summary.json",
+    "avgo_terminal_equity_value_per_share_usd_before_xpv_credit_loss": 657.3525862614696,
+    "avgo_diluted_shares_billion": 4.887,
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499
+  },
+  "primary_sources": {
+    "broadcom_q2_10q_subsequent_event": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-06-09, period ended 2026-05-03",
+      "source_url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+      "arrangement_date": "2026-06-08",
+      "structure": "Investor partner takes on certain AI-rack purchase agreements and related customer lease agreements. Broadcom backstops the customer's lease obligations over 5-year terms.",
+      "maximum_backstop_exposure_usd_billion": 29.0,
+      "issuer_mitigation": "On customer default, Broadcom may assume the lease or effect a sale of the AI racks, which can reduce maximum exposure."
+    },
+    "broadcom_ai_xpv_platform": {
+      "source": "Broadcom/Apollo/Blackstone AI XPV Platform announcement published 2026-06-09",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-apollo-and-blackstone-establish-landmark-strategic",
+      "initial_transaction_usd_billion": 35.0,
+      "initial_compute_capacity_gw": 1.0,
+      "platform_target_compute_capacity_gw": 20.0,
+      "initial_customer_context": "Anthropic capacity expansion through Fluidstack-based sites"
+    },
+    "broadcom_q3_fy2026": {
+      "source": "Broadcom Q3 FY2026 financial results published 2026-09-02",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "period_end": "2026-08-02",
+      "q3_revenue_usd_billion": 29.591,
+      "q3_free_cash_flow_usd_billion": 13.665,
+      "q3_free_cash_flow_margin_pct": 46.0,
+      "cash_and_cash_equivalents_usd_billion": 23.975
+    },
+    "market_price": {
+      "source": "Alpaca IEX latest trade",
+      "as_of": "2026-09-09T19:59:58.126009Z",
+      "currency": "USD",
+      "avgo_price_usd": 364.335,
+      "nvda_price_usd": 223.77
+    }
+  },
+  "method": {
+    "q3_fcf_simple_annualized_usd_billion": 54.66,
+    "avgo_market_cap_proxy_usd_billion": 1780.505145,
+    "max_backstop_as_pct_of_cash": 120.95933263816474,
+    "max_backstop_as_pct_of_simple_annualized_q3_fcf": 53.05525064032199,
+    "max_backstop_as_pct_of_market_cap_proxy": 1.6287512609237647,
+    "valuation_stress": "Because current exposure, default probability, loss given default and timing are not disclosed, no expected loss is invented. For scale only, apply 10%, 25%, 50% and 100% of the disclosed 29B USD maximum as a one-time terminal-equity haircut to the existing AVGO-favorable valuation. This is an upper-bound sensitivity, not a probability-weighted forecast."
+  },
+  "benchmark": {
+    "name": "existing AVGO-favorable valuation with no XPV credit loss",
+    "avgo_5y_expected_price_irr_pct": 12.52771403427877,
+    "nvda_5y_expected_price_irr_pct": 13.130737063859499,
+    "avgo_minus_nvda_pct_points": -0.6030230295807293
+  },
+  "alternatives": [
+    {
+      "loss_as_pct_of_max_exposure": 10.0,
+      "loss_usd_billion": 2.9,
+      "avgo_5y_expected_price_irr_pct": 12.507390293281073,
+      "irr_change_vs_benchmark_pct_points": -0.020323740997696405,
+      "avgo_minus_nvda_pct_points": -0.6233467705784257
+    },
+    {
+      "loss_as_pct_of_max_exposure": 25.0,
+      "loss_usd_billion": 7.25,
+      "avgo_5y_expected_price_irr_pct": 12.476877119241014,
+      "irr_change_vs_benchmark_pct_points": -0.050836915037756114,
+      "avgo_minus_nvda_pct_points": -0.6538599446184845
+    },
+    {
+      "loss_as_pct_of_max_exposure": 50.0,
+      "loss_usd_billion": 14.5,
+      "avgo_5y_expected_price_irr_pct": 12.42594812931197,
+      "irr_change_vs_benchmark_pct_points": -0.10176590496680049,
+      "avgo_minus_nvda_pct_points": -0.7047889345475289
+    },
+    {
+      "loss_as_pct_of_max_exposure": 100.0,
+      "loss_usd_billion": 29.0,
+      "avgo_5y_expected_price_irr_pct": 12.323812418099479,
+      "irr_change_vs_benchmark_pct_points": -0.2039016161792908,
+      "avgo_minus_nvda_pct_points": -0.806924645760021
+    }
+  ],
+  "result": {
+    "status": "CONDITION",
+    "finding": "AI XPVはBroadcomのAI-rack購入資金を外部投資家へ移す一方、5年lease obligationsについて最大29B USDのbackstopをBroadcomに残す。最大額はQ3 cashの約121%、Q3 FCF単純年率化の約53%で流動性tail riskとしてmaterial。ただしQ3 FCF marginは46%で現時点のFCF conversion悪化は観測されず、current exposure・default probability・loss given default・remedy後回収価値が未開示なのでexpected lossへ変換できない。29B USD全額をterminal equityから控除する非確率的上限stressでもAVGO 5年IRRの悪化は約0.204ptで、NVDA優位は0.807ptへ拡大するが順位は変わらない。",
+    "hypothesis_assessment": "『XPVが現在のFCF conversionをmaterially悪化させている』は現時点で支持されない。一方『外部資本化によりBroadcomの信用リスクが消えた』も誤り。baseline valuation penaltyは置かず、backstop exposureをconditionとして継続監視する。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time contingent-credit / valuation sensitivity。"
+  },
+  "decision_rule": "AI XPVをAVGOの無条件なFCF改善要因にも即時valuation penaltyにも使わない。最大backstop 29B USDはmaterialなcontingent credit exposureとして保持し、actual exposure、guarantee liability、customer payment performance、default probability、rack resale/recovery economics、FCF conversionが一次情報で更新されたときに再計算する。actual/expected lossが検証できるまではbaseline expected returnへ推測で控除しない。",
+  "limitations": [
+    "29B USDはmaximum exposureでありcurrent funded exposureやexpected lossではない。",
+    "backstopはAI racksのdeploymentに伴い増え、customer lease paymentsで減るため時点別exposure pathは未開示。",
+    "default時にlease assumptionまたはAI rack saleのremedyがあり、loss given defaultは29B USDより小さくなり得る。",
+    "Q3 FCF simple annualizationは規模比較であり会社予想ではない。",
+    "terminal-equity haircut stressはtimingとprobabilityを無視した上限感応度でありexpected-loss modelではない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "BroadcomのAI XPV backstopについて、次回10-Q/10-Kでactual guarantee liabilityまたはcurrent exposureが開示された時点で、customer default probabilityとrack recovery economicsを一次情報で分離し、probability-weighted expected lossがAVGO expected returnをmaterially変えるか検証する。開示待ちの間は、より意思決定価値の高い別テーマとしてAI semiconductor gross-margin / FCF conversionの増収局面での持続性をNVDAと比較する。"
+}

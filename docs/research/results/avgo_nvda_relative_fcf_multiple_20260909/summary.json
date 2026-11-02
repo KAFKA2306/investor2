@@ -1,0 +1,71 @@
+{
+  "as_of": "2026-09-09",
+  "status": "CONDITION",
+  "hypothesis": "If AVGO preserves its current trailing free-cash-flow valuation premium to NVDA at the terminal date, the AVGO 10% post-FY2028 growth probability required to match NVDA falls materially from the equal-terminal-multiple hurdle of 96.25978682%.",
+  "decision_rule": {
+    "condition": "Use only as a terminal-multiple sensitivity, not as a probability estimate. CONDITION if current relative trailing FCF multiple changes the required AVGO growth-scenario probability by at least 10 percentage points versus the equal-multiple canonical benchmark; otherwise REJECT.",
+    "benchmark_required_probability_pct": 96.25978682
+  },
+  "market_data": {
+    "source": "Alpaca IEX production market data",
+    "currency": "USD",
+    "NVDA_price": 226.415,
+    "AVGO_price": 369.685
+  },
+  "issuer_primary_data": {
+    "NVDA": {
+      "ttm_fcf_usd_bn": 126.886,
+      "calculation": "FY2026 FCF 96.575 - H1 FY2026 FCF 39.584 + H1 FY2027 FCF 69.895",
+      "latest_diluted_weighted_average_shares_bn": 24.285,
+      "source": "NVIDIA FY2026 and Q2 FY2027 results / SEC filings"
+    },
+    "AVGO": {
+      "ttm_fcf_usd_bn": 39.403,
+      "calculation": "FY2025 FCF 26.914 - first nine months FY2025 FCF 19.448 + first nine months FY2026 FCF 31.937",
+      "latest_diluted_weighted_average_shares_bn": 4.887,
+      "source": "Broadcom FY2025 and Q3 FY2026 results / SEC filings"
+    }
+  },
+  "observed_trailing_price_to_fcf": {
+    "NVDA_x": 43.33408158,
+    "AVGO_x": 45.85058485,
+    "AVGO_to_NVDA_ratio": 1.05807215,
+    "AVGO_premium_pct": 5.80721498
+  },
+  "canonical_equal_terminal_multiple_case": {
+    "terminal_price_to_fcf_x": [25, 35, 45],
+    "NVDA_irr_pct": [12.81307588, 20.66603648, 26.88606861],
+    "AVGO_zero_growth_irr_pct": [6.76468251, 14.19661217, 20.08316167],
+    "AVGO_ten_growth_irr_pct": [13.04808867, 20.91740859, 27.15039832],
+    "required_AVGO_ten_growth_probability_pct": 96.25978682
+  },
+  "relative_multiple_sensitivity": {
+    "assumption": "At the terminal date AVGO Price/FCF is 1.05807215 times NVDA Price/FCF, equal to the observed trailing relative multiple at this as-of state.",
+    "NVDA_terminal_price_to_fcf_x": [25, 35, 45],
+    "AVGO_terminal_price_to_fcf_x": [26.45180374, 37.03252524, 47.61324674],
+    "AVGO_zero_growth_irr_pct": [7.97685395, 15.49316332, 21.44654678],
+    "AVGO_ten_growth_irr_pct": [14.33159985, 22.29026547, 28.59402254],
+    "required_AVGO_ten_growth_probability_pct": 76.10409619,
+    "change_vs_equal_multiple_percentage_points": -20.15569063
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "Equal AVGO/NVDA terminal Price/FCF multiple: required probability 96.25978682%.",
+    "alternative": "Preserve observed AVGO/NVDA trailing Price/FCF ratio 1.05807215 at terminal: required probability 76.10409619%.",
+    "result": "The terminal-relative-multiple assumption changes the hurdle by 20.15569063 percentage points, exceeding the pre-specified 10-point materiality threshold."
+  },
+  "usage_rule": "CONDITION. Treat 96.25978682% as conditional on equal terminal multiples, not as a model-independent AVGO probability hurdle. Do not use 76.10409619% as a forecast probability. Use this artifact to require explicit relative-terminal-multiple sensitivity in AVGO/NVDA capital-allocation decisions until a point-in-time historical multiple distribution is validated.",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a valuation sensitivity study, not a realized return-series strategy backtest."
+  },
+  "limitations": [
+    "Current trailing Price/FCF is not evidence that the same relative multiple will persist five years forward.",
+    "Per-share trailing FCF uses the latest reported diluted weighted-average shares rather than an exact current basic share count, so the observed relative multiple is a valuation sensitivity input, not a canonical market-cap multiple.",
+    "NVIDIA and Broadcom define/report free cash flow on issuer-specific bases; the calculation uses each issuer's reported FCF and does not claim perfect accounting comparability.",
+    "No historical point-in-time relative multiple distribution has yet been validated, so this result cannot set the canonical terminal multiple."
+  ],
+  "next_research": "Build point-in-time annual AVGO and NVDA Price/FCF distributions using contemporaneous issuer-reported FCF and share counts, then test whether the relative terminal multiple ratio has a stable out-of-sample range."
+}

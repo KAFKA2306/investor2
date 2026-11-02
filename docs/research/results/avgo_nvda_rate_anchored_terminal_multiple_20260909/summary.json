@@ -1,0 +1,79 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_rate_anchored_terminal_multiple_20260909",
+  "status": "USE",
+  "as_of": "2026-09-09T04:01:52+09:00",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "現在の米10年国債利回りから得る単純なFCF-yield anchorをterminal Price/FCF sensitivityに追加すると、既存25x terminal multipleより10%以上低いmultipleとなり、AVGO/NVDAの5年期待リターンを2 percentage points以上動かすため、rate-anchored stressを再利用可能な必須感応度として採用すべきである。",
+  "decision_rule_precommitted": {
+    "USE": "rate-implied terminal multipleが25x benchmarkから絶対値10%以上乖離し、AVGO 50/50 scenario expected 5y price IRRを2 percentage points以上動かす。",
+    "CONDITION": "multiple乖離またはIRR変化のどちらか一方だけが閾値を超える。",
+    "REJECT": "両方とも閾値未満。",
+    "UNVERIFIED": "rate identity/date/unitまたはcanonical valuation inputが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json",
+    "docs/research/results/avgo_nvda_relative_fcf_multiple_20260909/summary.json"
+  ],
+  "primary_rate_source": {
+    "source": "U.S. Department of the Treasury Daily Treasury Par Yield Curve Rates",
+    "date": "2026-09-04",
+    "ten_year_nominal_yield_pct": 4.78,
+    "unit": "percent_per_year",
+    "url": "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?field_tdr_date_value=2026&type=daily_treasury_yield_curve"
+  },
+  "benchmark": {
+    "terminal_price_to_fcf_x": 25.0,
+    "note": "既存canonical sensitivityの最も低いterminal multiple。"
+  },
+  "rate_anchored_sensitivity": {
+    "definition": "1 / nominal_10y_treasury_yield",
+    "terminal_price_to_fcf_x": 20.92050209,
+    "difference_vs_25x_pct": -16.31799163,
+    "interpretation": "equity FCF yieldをTreasury nominal yieldと同一に置く単純stressであり、fair-value claimではない。equity risk premiumを要求すれば許容multipleはさらに低くなる。"
+  },
+  "five_year_price_irr": {
+    "at_25x_canonical": {
+      "NVDA_base_pct": 12.81307588,
+      "AVGO_post_FY2028_growth_0pct_pct": 6.76468251,
+      "AVGO_post_FY2028_growth_10pct_pct": 13.04808867,
+      "AVGO_50_50_mean_scenario_irr_pct": 9.90638559
+    },
+    "at_rate_anchor_20_92050209x": {
+      "NVDA_base_pct": 8.86439402,
+      "AVGO_post_FY2028_growth_0pct_pct": 3.02770644,
+      "AVGO_post_FY2028_growth_10pct_pct": 9.09118090,
+      "AVGO_50_50_mean_scenario_irr_pct": 6.05944367,
+      "AVGO_50_50_expected_terminal_value_annualized_irr_pct": 6.23227630,
+      "AVGO_mean_scenario_minus_NVDA_pp": -2.80495035
+    },
+    "AVGO_50_50_mean_scenario_irr_change_vs_25x_pp": -3.84694192
+  },
+  "result": {
+    "multiple_gap_threshold_pass": true,
+    "irr_change_threshold_pass": true,
+    "decision": "USE"
+  },
+  "usage_rule": "AVGO/NVDA forward valuationでは25x/35x/45xだけをterminal multiple sensitivityとせず、as-ofが明示された10年Treasury nominal yieldから1/yを計算したrate-anchored terminal Price/FCF stressも併記する。rate anchor自体をfair valueまたは売買シグナルとして扱わない。",
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "Sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "Expected_Shortfall": "NOT_APPLICABLE",
+    "reason": "realized security-return strategyではなくterminal valuation sensitivity studyのため。"
+  },
+  "limitations": [
+    "10年Treasury nominal yieldはequity discount rateではない。",
+    "FCF yieldとTreasury yieldの同一化はstress anchorであり、equity risk premium、growth、duration、capital structureを完全には表現しない。",
+    "2026-09-04の4.78%を使用しており、金利変化時には再計算が必要。",
+    "transaction cost、tax、slippageは売買戦略ではないため適用していない。"
+  ],
+  "implementation": {
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority": false,
+    "duplicated_financial_calculation_cross_repo": false
+  },
+  "next_hypothesis": "rate anchorを単一点ではなく10年Treasuryのpoint-in-time historical distributionとequity risk premium sensitivityへ拡張した場合でも、25x terminal multipleがdownside anchorとして楽観的という結論が維持されるか。"
+}

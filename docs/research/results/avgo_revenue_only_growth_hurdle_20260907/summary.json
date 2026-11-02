@@ -1,0 +1,76 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_revenue_only_growth_hurdle_20260907",
+  "status": "REJECT",
+  "as_of": "2026-09-07",
+  "hypothesis": "Broadcomの次四半期会社売上guidanceが示すNVDAに対する売上成長優位だけで、追加の相対GAAP margin拡大を仮定せず、同一terminal P/Eで必要な約11 percentage points/年の5年GAAP EPS CAGRハードルを満たせる。",
+  "decision_rule": {
+    "use_if": "次四半期guidanceから得られるAVGO/NVDAの売上growth-factor比が、既存の必要EPS growth-factor比1.094465855以上で、share count差を考慮しても不足しない。",
+    "reject_if": "売上growth-factor比が1.094465855を下回り、ハードル達成に追加の相対margin拡大またはより有利なshare count pathが必要。",
+    "unverified_if": "両社の比較可能な会社売上guidanceまたは既存のvaluation hurdleが確認できない。"
+  },
+  "canonical_context": {
+    "owner_repository": "KAFKA2306/investor2",
+    "valuation_hurdle_artifact": "docs/research/results/nvda_avgo_relative_growth_hurdle_20260907/summary.json",
+    "growth_quality_artifact": "docs/research/results/avgo_eps_growth_quality_20260907/summary.json",
+    "required_relative_eps_growth_factor": 1.094465855,
+    "required_relative_eps_cagr_hurdle": "AVGOはNVDAより約10.4-11.8 percentage points/年、実用上約11 points/年高い5年GAAP EPS CAGRが必要。"
+  },
+  "primary_sources": {
+    "NVIDIA_Q2_FY2027": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "Broadcom_Q3_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+  },
+  "point_in_time_inputs": {
+    "NVDA": {
+      "next_quarter_revenue_guidance_yoy_pct": 89.4537,
+      "current_gaap_net_margin_pct": 62.0322,
+      "diluted_share_count_yoy_pct": -1.0068
+    },
+    "AVGO": {
+      "next_quarter_revenue_guidance_yoy_pct": 93.1724,
+      "current_gaap_net_margin_pct": 44.2297,
+      "diluted_share_count_yoy_pct": 0.5556
+    }
+  },
+  "method": {
+    "identity": "EPS growth factor = revenue growth factor * net-margin growth factor / diluted-share growth factor.",
+    "primary_test": "net-margin growth factorを両社で同じ1.0、relative share-count growthを0と置き、会社guidanceの売上growth-factor比だけで必要EPS growth-factor比1.094465855に届くか検証する。",
+    "share_count_stress": "直近YoYのdiluted share-count差が毎年続く場合を追加比較する。これはforecastではなく、share-count差がハードルをどちら向きに動かすかを見るstress test。",
+    "margin_requirement": "現在の会社guidance売上growth-factor比を固定した場合、必要EPS growth-factor比の不足分を埋めるために必要なAVGO/NVDA relative net-margin growth factorを逆算する。"
+  },
+  "derived_metrics": {
+    "guidance_revenue_growth_factor_ratio_AVGO_over_NVDA": 1.0196285425,
+    "required_eps_growth_factor_ratio_AVGO_over_NVDA": 1.094465855,
+    "flat_relative_share_count": {
+      "required_AVGO_revenue_yoy_pct_if_NVDA_guidance_is_89_4537pct": 107.3506058,
+      "observed_AVGO_guidance_yoy_pct": 93.1724,
+      "revenue_growth_shortfall_pp": 14.1782058,
+      "required_annual_relative_net_margin_growth_factor_if_revenue_guidance_repeats": 1.0733966434,
+      "illustrative_AVGO_net_margin_after_5y_if_NVDA_margin_stays_at_current_and_only_AVGO_margin_closes_gap_pct": 63.0253343
+    },
+    "current_share_count_trend_stress": {
+      "AVGO_over_NVDA_share_count_growth_factor": 1.0157829023,
+      "required_AVGO_revenue_yoy_pct_if_NVDA_guidance_is_89_4537pct": 110.6232001,
+      "observed_AVGO_guidance_yoy_pct": 93.1724,
+      "revenue_growth_shortfall_pp": 17.4508001,
+      "required_annual_relative_net_margin_growth_factor_if_revenue_guidance_repeats": 1.0903379577,
+      "illustrative_AVGO_net_margin_after_5y_if_NVDA_margin_stays_at_current_and_only_AVGO_margin_closes_gap_pct": 68.1584413
+    }
+  },
+  "benchmark_comparison": {
+    "simple_same_growth_model": "REJECT済み。同一growthでは現在のvaluation差を説明できない。",
+    "current_revenue_guidance_only": "REJECT。AVGOの会社guidanceはNVDAより3.7187 points高い売上成長だが、growth-factor比は1.01963で必要な1.09447を大きく下回る。",
+    "flat_share_count_required_revenue": "margin差をこれ以上改善しないなら、NVDA売上成長89.4537%に対してAVGOは107.3506%が必要で、会社guidance 93.1724%より14.1782 points高い。",
+    "share_count_stress_required_revenue": "直近share-count差が続くstressではAVGOに110.6232%の売上成長が必要で、会社guidanceより17.4508 points高い。"
+  },
+  "finding": "AVGOの次四半期売上guidanceはNVDAを3.72 points上回るが、現在のvaluation gapを同一terminal P/Eで埋めるために必要な相対EPS growth-factor比1.09447に対し、売上growth-factor比は1.01963にとどまる。追加の相対GAAP margin拡大を仮定しない場合、flat share-countでもAVGOの必要売上成長率は107.35%でguidanceを14.18 points上回る。直近share-count差をstressすると必要売上成長率は110.62%、shortfallは17.45 points。したがって現在の売上guidanceだけで約11 points/年の5年EPS CAGRハードルを支えられるという仮説をREJECTする。",
+  "reusable_decision": "AVGOの高いvaluationをNVDAに対して擁護する際、次四半期の売上guidance優位3.72 pointsだけを5年EPS CAGR差の根拠に使わない。今後の会社固有forecastでは、AVGOが追加の相対GAAP margin拡大をどこまで維持できるか、または売上growth差を大幅に拡大できるかを明示的に示す必要がある。",
+  "implementation_action": "REJECT結果のdecision evidenceのみを保存する。forecast engine、collector、独自margin model、one-off scriptは追加しない。",
+  "limitations": [
+    "次四半期会社guidanceを5年間繰り返すforecastではない。primary testは売上だけでハードルを満たせるかという必要条件の検証。",
+    "GAAP net marginの将来pathは会社guidanceがないため予測していない。63.03%と68.16%は現在の売上growth差が5年間続き、NVDA marginが現状維持という限定条件で不足分を全てAVGO marginが埋める場合のillustrative requirementでありforecastではない。",
+    "直近share-count trend stressは継続を予測するものではない。buyback、stock compensation、M&Aにより変化し得る。",
+    "terminal P/Eを両社同一とする既存relative hurdleを前提にする。"
+  ],
+  "next_hypothesis": "AVGOの現在44.23%のGAAP net marginが、売上成長の正常化とともにどの水準まで維持可能かを過去のVMware統合後GAAP margin推移と費用構造からpoint-in-timeで検証すると、約11 points/年の5年EPS CAGRハードルを支える追加margin拡大余地は残っているか。"
+}

@@ -1,0 +1,64 @@
+{
+  "as_of": "2026-09-05",
+  "hypothesis": "A broad rise in commodity prices is followed about one year later by world utilities outperforming world equities strongly and reliably enough to use as an allocation signal.",
+  "precommitted_rule": {
+    "use": "No material counterexample is observed in the independently checkable recent period and the claimed 12-month lag is reproducible without choosing the lag after seeing returns.",
+    "reject": "A material counterexample is observed where broad commodities rise strongly and utilities materially underperform world equities about one year later, or the relationship requires ex-post lag selection."
+  },
+  "verdict": "REJECT",
+  "decision": "Do not use commodity-price strength with a fixed 12-month lag as a standalone timing or overweight signal for utilities. Treat it only as a narrative hypothesis until a full point-in-time long-run test with the exact claimed index definitions is reproduced.",
+  "primary_claim_source": {
+    "publisher": "Pictet Asset Management (Japan)",
+    "date": "2026-08-27",
+    "title": "グロイン｜金利急上昇時の株価調整と世界公益株式の投資機会",
+    "url": "https://www.pictet.co.jp/investment-information/fund-insight/monthly-update/gloin/20260827.html",
+    "note": "The official page identifies a segment on commodity prices and relative performance of world utilities but does not publish a machine-readable long-run regression or signal specification."
+  },
+  "canonical_real_data": [
+    {
+      "series": "Global Price Index of All Commodities",
+      "source": "International Monetary Fund via FRED",
+      "series_id": "PALLFNFINDEXA/PALLFNFINDEXM",
+      "unit": "Index, 2016=100",
+      "2021": 161.50262,
+      "2022": 215.91706,
+      "change_2022_pct": 33.692605110678684
+    },
+    {
+      "series": "MSCI World Utilities linked index return",
+      "source": "State Street SPDR MSCI World Utilities UCITS ETF official performance table",
+      "2023_return_pct": 0.28,
+      "note": "Official linked index return shown by State Street; index methodology changed to MSCI World Utilities 35/20 Capped Index effective 2020-11-30."
+    },
+    {
+      "series": "MSCI World Index gross return",
+      "source": "MSCI official factsheet",
+      "2023_return_pct": 24.42
+    }
+  ],
+  "observed_counterexample": {
+    "signal_year": 2022,
+    "commodity_change_pct": 33.692605110678684,
+    "following_year": 2023,
+    "utilities_return_pct": 0.28,
+    "world_return_pct": 24.42,
+    "utilities_minus_world_pp": -24.14,
+    "interpretation": "After a very strong broad-commodity rise in 2022, world utilities materially underperformed world equities in 2023 rather than outperforming one year later."
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "No timing signal / hold broad world equities",
+    "alternative": "Utilities overweight triggered mechanically 12 months after broad commodity strength",
+    "result": "The mechanical 12-month-lag rule fails on the 2022->2023 counterexample."
+  },
+  "limitations": [
+    "This is a falsification of the strong deterministic/timing-rule interpretation, not a full estimate of the long-run conditional expected return.",
+    "The exact Pictet chart construction, commodity index definition, lag definition and rebalancing rule are not machine-readable on the official page.",
+    "The State Street linked utilities index changed to the 35/20 capped variant after 2020-11-30; therefore this artifact must not be presented as an exact replication of a single unchanged MSCI World Utilities index back to 1998.",
+    "A weaker probabilistic relation remains UNVERIFIED until a full point-in-time monthly test over the exact source series is reproducible."
+  ],
+  "do_not_use": [
+    "Do not describe the one-year commodity-to-utilities relationship as an exceptionless law.",
+    "Do not convert current commodity strength directly into a utilities overweight without a separate valuation, rates and earnings test.",
+    "Do not optimize the lag ex post and then report it as a pre-specified predictive rule."
+  ]
+}

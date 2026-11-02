@@ -26,7 +26,7 @@
 | [CogAlpha](docs/paper/CogAlpha.md) | LLM-driven code-based alpha evolution | paper alpha-mining baselines | paper method | NOT_RUN | **BLOCKED** | [evidence](docs/paper/CogAlpha.md) |
 | [CryptoTrade](docs/paper/cryptotrade.md) | reflective on-chain/off-chain zero-shot cryptocurrency trading | traditional trading strategies and time-series baselines | paper method | NOT_RUN | **BLOCKED** | [evidence](docs/paper/cryptotrade.md) |
 | [Deep Hedging with Reinforcement Learning](docs/paper/deephedging.md) | cost-aware dynamic hedging of equity-index option exposure | no-hedge, momentum, volatility-targeting, long-SPY comparators | paper method | NOT_RUN | **BLOCKED** | [evidence](docs/paper/deephedging.md) |
-| [EDINET-Bench](docs/paper/edinet_bench.md) | Japanese filing NLP benchmark for fraud, earnings forecast, and industry prediction | Fraud Detection, Earnings Forecast, Industry Prediction | paper benchmark | NOT_RUN | **BLOCKED** | [evidence](docs/paper/edinet_bench.md) |
+| [EDINET-Bench](docs/paper/edinet_bench.md) | Japanese filing NLP benchmark for fraud, earnings forecast, and industry prediction | Fraud Detection, Earnings Forecast, Industry Prediction | official summary-only logistic baseline pinned to SakanaAI/EDINET-Bench commit 797fbb5 and dataset revision cf0bc74 | NOT_RUN | **BLOCKED** | [evidence](docs/research/results/edinet_bench_logistic/summary.json) |
 | [FactorMiner](docs/paper/FactorMiner.md) | symbolic failure memory and self-evolving alpha discovery | untouched-OOS survivor quality and compute per survivor | paper method | NOT_RUN | **BLOCKED** | [evidence](docs/paper/FactorMiner.md) |
 | [FinanceHarness](docs/paper/FinanceHarness.md) | finance-specific PIT research harness separated from the model | native rubric score with PIT/provenance hard gates | paper benchmark | NOT_RUN | **BLOCKED** | [evidence](docs/paper/FinanceHarness.md) |
 | [Financial Statement Analysis with Large Language Models](docs/paper/fsa_gpt4.md) | LLM forecasting from anonymized financial statements | paper-native earnings-direction accuracy/F1 on frozen split | paper GPT-4 protocol | NOT_RUN | **BLOCKED** | [evidence](docs/paper/fsa_gpt4.md) |
@@ -78,11 +78,25 @@
 ```bash
 task setup               # locked dependencies + prek
 task check               # canonical non-mutating quality gate
+task analytics:check     # canonical evidence -> Spark -> disposable Iceberg projection
 task run:newalphasearch  # frozen real-data hypothesis validation
 task dashboard:dev       # local evidence dashboard
 ```
 
 実行入口は `Taskfile.yml` を正準とします。別名CLIや並行pipelineは、実際の運用コストを下げる場合を除いて追加しません。
+
+### Spark / Iceberg analytical projection
+
+外部snapshot、仮説、OOS結果、benchmark contractを横断比較するため、正準JSON/NDJSONから **Apache Spark → Apache Iceberg** のローカル分析projectionを再構築できます。
+
+```text
+canonical research evidence
+  -> Spark
+  -> Iceberg research.evidence.*
+  -> cross-run analysis
+```
+
+Icebergは正本ではありません。projectionからcanonical ledgerへ書き戻さず、必要なときに `task analytics:check` で再生成します。詳細は [analytics/README.md](analytics/README.md) を参照してください。
 
 ## Research rules
 

@@ -1,0 +1,126 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "tokyo_electron_operating_income_guidance_accuracy_20260906",
+  "status": "CONDITION",
+  "hypothesis": "東京エレクトロンのforward operating income valuationでは、最新売上高guidanceだけを更新して年度初めのoperating marginを固定するより、会社が同時に公表する最新operating income guidanceを使う方が最終実績誤差を一貫して小さくできる。",
+  "decision_rule": {
+    "use_if": "FY2023-FY2026の完了4年度すべてでlatest explicit operating income guidanceの絶対誤差率が、latest revenue guidance × initial operating marginの単純benchmarkより小さく、平均絶対誤差率が5%未満。",
+    "condition_if": "use_ifを満たすが完了年度が4年以下なので、Tokyo Electronのvaluation input更新規則としてのみ利用し、他社や株価alphaへ一般化しない。",
+    "reject_if": "改善が3/4年度以下、またはlatest explicit operating income guidanceの平均絶対誤差率がrevenue-only benchmark以上。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_research": "docs/research/results/tokyo_electron_guidance_stage_accuracy_20260906/summary.json",
+    "verification_as_of": "2026-09-06",
+    "issuer": "Tokyo Electron Ltd.",
+    "primary_source_system": "Tokyo Electron Investor Relations financial results / earnings presentation materials",
+    "source_urls": [
+      "https://www.tel.com/ir/library/report/hq95qj00000007nc-att/fy22q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/a4fd9v000000004h-att/fy23q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/ll4pka00000000l9-att/fy24q4presentations-e.pdf",
+      "https://www.tel.com/ir/library/report/l8gqgo00000000gl-att/fy25q4presentations-e.pdf",
+      "https://www.tel.com/ir/irta3a00000006g5-att/fy26q4transcript-e.pdf",
+      "https://www.tel.com/ir/irta3a00000006g5-att/fy26q3presentations-e.pdf"
+    ],
+    "missing_value_policy": "公表済みのnet sales / operating income guidanceと確定実績だけを使う。marginを推測で補完せず、benchmarkでのみinitial operating marginを明示的に固定する。FY2027は通期forecast開示方式変更のため対象外。"
+  },
+  "method": {
+    "period": "FY2023-FY2026 completed fiscal years",
+    "target": "確定通期operating income",
+    "primary_model": "最終実績公表前のlatest confirmed explicit operating income guidance",
+    "benchmark": "latest confirmed revenue guidance × initial guidance operating margin",
+    "secondary_benchmark": "initial operating income guidanceを年度末まで固定",
+    "look_ahead": "なし。各guidanceは公表後のみ利用可能とする。",
+    "error_metric": "absolute percentage error relative to actual operating income",
+    "purpose": "売上高guidanceだけを更新してmarginを固定する簡易valuationより、会社の最新profit guidanceを同時更新する追加価値を測る。"
+  },
+  "measured_results": {
+    "test_years": 4,
+    "latest_explicit_beats_revenue_only_years": 4,
+    "initial_operating_income_guidance_mean_absolute_error_pct": 15.6606,
+    "revenue_only_frozen_initial_margin_mean_absolute_error_pct": 7.7721,
+    "latest_explicit_operating_income_guidance_mean_absolute_error_pct": 4.0416,
+    "latest_explicit_vs_revenue_only_mae_reduction_pct": 47.9978,
+    "detail": [
+      {
+        "fiscal_year": "FY2023",
+        "initial_revenue_billion_yen": 2350.0,
+        "initial_operating_income_billion_yen": 716.0,
+        "initial_operating_margin_pct": 30.4681,
+        "latest_revenue_billion_yen": 2170.0,
+        "latest_operating_income_billion_yen": 580.0,
+        "latest_timing": "2023-02-09 Q3",
+        "actual_operating_income_billion_yen": 617.723,
+        "revenue_only_frozen_initial_margin_operating_income_billion_yen": 661.1574,
+        "initial_operating_income_absolute_error_pct": 15.9096,
+        "revenue_only_frozen_margin_absolute_error_pct": 7.0314,
+        "latest_explicit_operating_income_absolute_error_pct": 6.1068,
+        "explicit_vs_revenue_only_error_improvement_points": 0.9246
+      },
+      {
+        "fiscal_year": "FY2024",
+        "initial_revenue_billion_yen": 1700.0,
+        "initial_operating_income_billion_yen": 393.0,
+        "initial_operating_margin_pct": 23.1176,
+        "latest_revenue_billion_yen": 1830.0,
+        "latest_operating_income_billion_yen": 445.0,
+        "latest_timing": "2024-02-09 Q3",
+        "actual_operating_income_billion_yen": 456.263,
+        "revenue_only_frozen_initial_margin_operating_income_billion_yen": 423.0529,
+        "initial_operating_income_absolute_error_pct": 13.8655,
+        "revenue_only_frozen_margin_absolute_error_pct": 7.2787,
+        "latest_explicit_operating_income_absolute_error_pct": 2.4685,
+        "explicit_vs_revenue_only_error_improvement_points": 4.8102
+      },
+      {
+        "fiscal_year": "FY2025",
+        "initial_revenue_billion_yen": 2200.0,
+        "initial_operating_income_billion_yen": 582.0,
+        "initial_operating_margin_pct": 26.4545,
+        "latest_revenue_billion_yen": 2400.0,
+        "latest_operating_income_billion_yen": 680.0,
+        "latest_timing": "2025-02-06 Q3; unchanged from Q2",
+        "actual_operating_income_billion_yen": 697.3,
+        "revenue_only_frozen_initial_margin_operating_income_billion_yen": 634.9091,
+        "initial_operating_income_absolute_error_pct": 16.5352,
+        "revenue_only_frozen_margin_absolute_error_pct": 8.9475,
+        "latest_explicit_operating_income_absolute_error_pct": 2.481,
+        "explicit_vs_revenue_only_error_improvement_points": 6.4665
+      },
+      {
+        "fiscal_year": "FY2026",
+        "initial_revenue_billion_yen": 2600.0,
+        "initial_operating_income_billion_yen": 727.0,
+        "initial_operating_margin_pct": 27.9615,
+        "latest_revenue_billion_yen": 2410.0,
+        "latest_operating_income_billion_yen": 593.0,
+        "latest_timing": "2026-02-06 Q3",
+        "actual_operating_income_billion_yen": 624.936,
+        "revenue_only_frozen_initial_margin_operating_income_billion_yen": 673.8731,
+        "initial_operating_income_absolute_error_pct": 16.3319,
+        "revenue_only_frozen_margin_absolute_error_pct": 7.8307,
+        "latest_explicit_operating_income_absolute_error_pct": 5.1103,
+        "explicit_vs_revenue_only_error_improvement_points": 2.7204
+      }
+    ]
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "売上高だけ最新guidanceへ更新し、operating marginは年度初めguidanceのまま固定する",
+    "alternative": "売上高とoperating incomeの両方を会社のlatest confirmed guidanceへ更新する",
+    "result": "alternativeは4/4年度でbenchmarkよりoperating income実績誤差が小さく、平均絶対誤差率は7.77%から4.04%へ47.998%低下した。"
+  },
+  "finding": {
+    "summary": "Tokyo Electronでは売上高guidanceだけの更新では不十分で、profitability情報も会社のlatest guidanceへ更新した方がFY2023-FY2026の4/4年度でoperating income予測誤差が小さかった。",
+    "production_action": "Tokyo Electronのforward valuationでは、latest confirmed revenue guidanceにinitial marginを掛けるsilent approximationを使わず、同時点のexplicit operating income guidanceがある場合はそれをcanonical inputとして優先する。",
+    "scope": "Tokyo Electron FY2023-FY2026のoperating income valuation inputに限定する。株価return予測や他社への一般化はしない。"
+  },
+  "reusable_decision": "Tokyo Electronのvaluationではnet salesだけでなくoperating income / operating marginもas-of付きでissuer guidanceへ同期し、古いmarginを暗黙に固定しない。",
+  "limitations": [
+    "完了年度は4件だけで標本が小さい。",
+    "latest guidanceは年度末に近く、forecast horizonが初回より短い。",
+    "operating incomeの精度改善を株価alphaとは解釈できない。",
+    "FY2027から通期forecastではなく該当半期forecast中心へ開示方式が変わっているため、このcontractをそのまま延長しない。",
+    "予定していたguidance revisionと株価relative returnの直接検証は、private J-Quants cacheのraw行をこのrunの実行環境から取得できずUNVERIFIEDのまま残した。"
+  ],
+  "next_hypothesis": "Tokyo Electron以外の主要半導体製造装置企業でも、latest explicit operating income guidanceがrevenue-only frozen-margin benchmarkよりfinal operating incomeを高精度に予測するかをpoint-in-timeで検証する。"
+}

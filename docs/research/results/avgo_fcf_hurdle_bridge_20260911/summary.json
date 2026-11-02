@@ -1,0 +1,85 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_fcf_hurdle_bridge_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "Q4 FY2026の保守的FCF run-rateを起点にすると、AVGOの現行valuationが要求する5-year FCF growth 20.5117%は、その後4年間の必要CAGRが15%前後まで低下し、過去実現FCF成長と整合する。",
+  "decision_rule": {
+    "use_if": "FY2026 Q1-Q3で最も低い実現FCF marginをQ4 revenue guidanceに適用した後の残存4年必要CAGRが、FY2023→FY2025実現FCF CAGR以下かつFY2023→FY2024の最弱単年成長率以下。",
+    "condition_if": "残存4年必要CAGRはFY2023→FY2025実現FCF CAGR以下だが、最弱単年成長率を上回る。",
+    "reject_if": "残存4年必要CAGRがFY2023→FY2025実現FCF CAGRを上回る。"
+  },
+  "capital_allocation_importance": "AVGOはNVDAより高いcash-flow valuation hurdleを要求している。Q4の近い将来のcash-generation step-upが実現した後に必要な中期成長率を分離することで、20.5117%を5年間毎年そのまま要求する誤読を避けつつ、premium valuationの持続条件を明確にする。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "prior_artifact": "docs/research/results/avgo_guidance_fcf_hurdle_20260911/summary.json",
+    "current_ttm_fcf_usd_b": 39.403,
+    "baseline_implied_5y_fcf_growth_pct": 20.511727,
+    "q4_fy2026_total_revenue_guidance_usd_b": 34.8,
+    "minimum_fy2026_q1_q3_fcf_margin_pct": 41.478950,
+    "median_fy2026_q1_q3_fcf_margin_pct": 46.179582,
+    "historical_fcf_usd_b": {
+      "fy2023": 17.633,
+      "fy2024": 19.414,
+      "fy2025": 26.900
+    },
+    "sources": [
+      "Broadcom official FY2023 financial results, 2023-12-07",
+      "Broadcom official FY2024 financial results, 2024-12-12",
+      "Broadcom official FY2025 financial results, 2025-12-11",
+      "Broadcom official Q1 FY2026 financial results, 2026-03-04",
+      "Broadcom official Q2 FY2026 financial results, 2026-06-03",
+      "Broadcom official Q3 FY2026 financial results, 2026-09-02"
+    ],
+    "fallback": "none"
+  },
+  "method": {
+    "target": "year-5 FCF target = current TTM FCF * (1 + canonical implied growth)^5.",
+    "bridge": "Q4 revenue guidance * selected realized FCF margin gives Q4 FCF proxy; multiply by 4 for a transparent annualized run-rate, then solve the CAGR required over the remaining four years to reach the canonical year-5 FCF target.",
+    "historical_benchmark": "Compare the required four-year CAGR with issuer-reported FY2023→FY2025 FCF CAGR and each observed annual growth step FY2023→FY2024 and FY2024→FY2025.",
+    "lookahead": "none for inputs available as of 2026-09-11; Q4 FY2026 remains guidance and is not treated as realized.",
+    "time_series_risk_metrics": "NOT_APPLICABLE: fundamental valuation-hurdle bridge, not a trading-strategy backtest."
+  },
+  "benchmarks": {
+    "simple_benchmark": "20.511727% CAGR applied mechanically to current TTM FCF for all five years",
+    "historical_fcf_cagr_fy2023_fy2025_pct": 23.513104,
+    "historical_fcf_growth_fy2023_fy2024_pct": 10.100380,
+    "historical_fcf_growth_fy2024_fy2025_pct": 38.559802
+  },
+  "results": {
+    "year5_fcf_target_usd_b": 100.155739,
+    "minimum_margin_q4_fcf_proxy_usd_b": 14.434675,
+    "minimum_margin_annualized_run_rate_usd_b": 57.738698,
+    "remaining_4y_required_cagr_pct": 14.763085,
+    "gap_vs_fy2023_fy2025_historical_cagr_pt": -8.750019,
+    "gap_vs_weakest_observed_annual_growth_pt": 4.662705,
+    "median_margin_remaining_4y_required_cagr_pct": 11.724045,
+    "stress_40pct_margin_remaining_4y_required_cagr_pct": 15.809491,
+    "stress_35pct_margin_remaining_4y_required_cagr_pct": 19.740796,
+    "margin_that_recreates_full_20_511727pct_remaining_hurdle_pct": 34.112957
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "FY2026最小実現FCF margin 41.478950%をQ4 revenue guidance 34.8B USDに適用すると年率FCF run-rateは57.739B USDとなり、canonical year-5 target 100.156B USDへ必要な残存4年CAGRは14.763%まで低下する。これはFY2023→FY2025実現FCF CAGR 23.513%を8.750pt下回る一方、FY2023→FY2024の最弱単年成長10.100%を4.663pt上回るためUSE条件には届かない。35% FCF margin stressでも必要CAGRは19.741%で元の20.512%を下回る。",
+    "capital_allocation_implication": "AVGOの20.5117% valuation hurdleを『毎年5年間そのまま必要』とは解釈しない。Q4 guidanceと過去最低FY2026 FCF marginが実現すれば、その後の必要成長率は約14.8%へ低下する。ただし過去には10.1%成長の年もあるため、premium valuationをfully supportedとは判断しない。"
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "専用model/config/workflow/one-off scriptは作成していないため削除対象なし。"
+  },
+  "limitations": [
+    "Q4 FY2026 revenue 34.8B USDは会社guidanceであり未実現。",
+    "Q4 FCF marginは会社guidanceではなくFY2026 Q1-Q3実現marginを適用したsensitivity。",
+    "FY2023→FY2025にはVMware取得後の事業構成変化が含まれ、将来organic FCF growthの純粋な定常benchmarkではない。",
+    "annualized Q4 run-rateは季節性を含む単一四半期の水準であり、FY2027通期FCFを保証しない。",
+    "AI semiconductor固有のFCF marginは非開示。"
+  ],
+  "next_high_value_hypothesis": "AVGOのyear-5 FCF target 100.156B USDを、AI semiconductor revenueの減速だけでなくinfrastructure software、FCF margin、purchase commitmentsを含むsegment-aware operating bridgeで満たせるか。"
+}

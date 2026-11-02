@@ -1,0 +1,292 @@
+{
+  "records": [
+    {
+      "effective_at": "2019-09",
+      "event_id": "ups-commercial-start-2019",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "WakeMed hospital campus, Raleigh, North Carolina"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "ups-flight-forward",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "effective_at": "2019-10-18",
+      "event_id": "wing-commercial-start-2019",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "Christiansburg, Virginia"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "wing-aviation",
+      "source_evidence_path": "raw/objects/76171208e35efb83da5133639c155308f7059942c1a8c31a7d32b3a78a0c8f33.html",
+      "source_id": "wing-christiansburg-commercial-start-2019",
+      "source_sha256": "76171208e35efb83da5133639c155308f7059942c1a8c31a7d32b3a78a0c8f33",
+      "source_url": "https://wing.com/news/wing-launches-americas-first-commercial"
+    },
+    {
+      "effective_at": "2020-08",
+      "event_id": "amazon-commercial-start-2020",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "Pendleton, Oregon"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "amazon-prime-air",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "effective_at": "2022-06",
+      "event_id": "zipline-commercial-start-2022",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "Charlotte, North Carolina"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "zipline",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "aircraft": "Flytrex UAS",
+      "effective_at": "2023-01",
+      "event_id": "causey-commercial-start-2023",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "Holly Springs, North Carolina",
+        "Raeford, North Carolina"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "causey-aviation-unmanned",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "deliveries_cumulative": 80000,
+      "deliveries_cumulative_qualifier": "over",
+      "effective_at": "2024-03",
+      "event_id": "causey-commercial-scale-2024-03",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "causey-aviation-unmanned",
+      "recipient_scope": "consumer homes in the U.S.",
+      "source_evidence_path": "raw/objects/20a462b34df6d465fff97ac06ef8246eac593cc31a41a510d90add5290a6be51.html",
+      "source_id": "faa-ipa-causey-operations",
+      "source_sha256": "20a462b34df6d465fff97ac06ef8246eac593cc31a41a510d90add5290a6be51",
+      "source_url": "https://www.faa.gov/uas/programs_partnerships/ipa"
+    },
+    {
+      "aircraft": "Prism V2",
+      "effective_at": "2024-11",
+      "event_id": "droneup-commercial-start-2024",
+      "event_type": "commercial_service_start",
+      "geography": [
+        "Murphy, Texas"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "droneup",
+      "source_evidence_path": "raw/objects/381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21.html",
+      "source_id": "faa-part135-package-delivery",
+      "source_sha256": "381665e05a70bcfa14b1cf73a826490462886adbf6b17b2460819d222b3cac21",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/package_delivery_drone"
+    },
+    {
+      "authorization_type": "OpSpec amendment supported by NEPA Written Re-evaluation / Record of Decision",
+      "authorized_max_operations_per_day": 400,
+      "authorized_operating_hours": "24 hours per day",
+      "effective_at": "2026-03-24",
+      "event_id": "zipline-pea-ridge-opspec-expansion-2026",
+      "event_type": "environmental_authorization",
+      "geography": [
+        "Pea Ridge, Arkansas and surrounding area"
+      ],
+      "holidays_authorized": true,
+      "mode": "drone_package_delivery",
+      "operation_status": "regulatory_authorization",
+      "operator_id": "zipline",
+      "prior_max_operations_per_day": 100,
+      "source_evidence_path": "raw/objects/7e125bd9c0f7648e5402d544da2f3f99005a14ae36885015d677d52e610d7d5e.html",
+      "source_id": "faa-nepa-drone-operations",
+      "source_sha256": "7e125bd9c0f7648e5402d544da2f3f99005a14ae36885015d677d52e610d7d5e",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/nepa_and_drones"
+    },
+    {
+      "deliveries_cumulative": 1000000,
+      "deliveries_cumulative_qualifier": "well over",
+      "effective_at": "2026-06-08",
+      "event_id": "wing-commercial-scale-2026-06-08",
+      "event_type": "commercial_operation_snapshot",
+      "geography": [
+        "Dallas-Fort Worth",
+        "Metro Atlanta",
+        "Greater Houston"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "wing-aviation",
+      "source_evidence_path": "raw/objects/bef889a95d19aba6b04b44217375fd68b6282d3c0468d7ea70be052728f2098c.html",
+      "source_id": "wing-commercial-scale-2026",
+      "source_sha256": "bef889a95d19aba6b04b44217375fd68b6282d3c0468d7ea70be052728f2098c",
+      "source_url": "https://wing.com/news/wing-and-walmart-seven-new-markets-drone-delivery"
+    },
+    {
+      "deliveries_cumulative": 2500000,
+      "deliveries_cumulative_qualifier": "more than",
+      "deliveries_last_year": 1000000,
+      "effective_at": "2026-07-14",
+      "event_id": "zipline-commercial-scale-2026-07-14",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "zipline",
+      "source_evidence_path": "raw/objects/b8322d627607f59a2f5abfdc6a53b3a493f52cca7a516785f2c9c010a6ae832f.html",
+      "source_id": "zipline-commercial-scale-2026",
+      "source_sha256": "b8322d627607f59a2f5abfdc6a53b3a493f52cca7a516785f2c9c010a6ae832f",
+      "source_url": "https://www.zipline.com/newsroom/zipline-accelerates-u-s-growth-with-13x-marketplace-expansion-new-leadership-hires-and-launches-in-austin-and-cleveland",
+      "us_flight_share_approx": 0.7,
+      "us_flight_share_qualifier": "roughly"
+    },
+    {
+      "authorization_type": "FAA Part 135 air carrier certification",
+      "effective_at": "2026-07-29",
+      "event_id": "doordash-air-part135-announcement-2026",
+      "event_type": "regulatory_authorization_announcement",
+      "mode": "drone_package_delivery",
+      "operation_status": "regulatory_authorization",
+      "operator_id": "doordash-air",
+      "operator_name": "DoorDash Air / DoorDash Labs",
+      "source_evidence_path": "raw/objects/03ab765db39c57b8caa9f4fcdd6441508f566bff73102e8b758947a79b746549.html",
+      "source_id": "doordash-air-part135-2026",
+      "source_sha256": "03ab765db39c57b8caa9f4fcdd6441508f566bff73102e8b758947a79b746549",
+      "source_url": "https://about.doordash.com/en-us/news/doordash-air"
+    },
+    {
+      "commercial_autonomous_miles_cumulative": 135000000,
+      "commercial_autonomous_miles_cumulative_qualifier": "more than",
+      "deliveries_cumulative": 2700000,
+      "deliveries_cumulative_qualifier": "more than",
+      "effective_at": "2026-08-17",
+      "event_id": "zipline-commercial-scale-2026-08-17",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "drone_package_delivery",
+      "operation_status": "commercial",
+      "operator_id": "zipline",
+      "source_evidence_path": "raw/objects/d5a09c27aafc312344e1620347051c2bb5ddd3238a5448f69aae9343acdd4896.html",
+      "source_id": "uber-zipline-partnership-2026",
+      "source_sha256": "d5a09c27aafc312344e1620347051c2bb5ddd3238a5448f69aae9343acdd4896",
+      "source_url": "https://investor.uber.com/news-events/news/press-release-details/2026/Uber-and-Zipline-Partner-to-Bring-Drone-Delivery-to-Millions-of-Americans/default.aspx"
+    },
+    {
+      "authorization_type": "NEPA Finding of No Significant Impact / Record of Decision",
+      "effective_at": "2026-08-18",
+      "event_id": "wing-houston-nepa-fonsi-2026",
+      "event_type": "environmental_authorization",
+      "geography": [
+        "Houston metropolitan area, Texas"
+      ],
+      "mode": "drone_package_delivery",
+      "operation_status": "regulatory_authorization",
+      "operator_id": "wing-aviation",
+      "source_evidence_path": "raw/objects/7e125bd9c0f7648e5402d544da2f3f99005a14ae36885015d677d52e610d7d5e.html",
+      "source_id": "faa-nepa-drone-operations",
+      "source_sha256": "7e125bd9c0f7648e5402d544da2f3f99005a14ae36885015d677d52e610d7d5e",
+      "source_url": "https://www.faa.gov/uas/advanced_operations/nepa_and_drones"
+    },
+    {
+      "effective_at": "2026-06-30",
+      "event_id": "aurora-current-2026",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "aurora",
+      "source_evidence_path": "raw/objects/0b4b79a4f805db235213f473e6e765632f0a2f5267cdcdb0983555a9ae76cc1a.html",
+      "source_id": "aurora-q2-2026",
+      "source_sha256": "0b4b79a4f805db235213f473e6e765632f0a2f5267cdcdb0983555a9ae76cc1a",
+      "source_url": "https://ir.aurora.tech/sec-filings/all-sec-filings/content/0001828108-26-000075/aurora26q2shareholderlet.htm"
+    },
+    {
+      "effective_at": "2026-01-27",
+      "event_id": "gatik-scale-2026",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "gatik",
+      "source_evidence_path": "raw/objects/ed0cf55407b6e1a609c4e277fbf2e1ea7aadb1a1244c5e1cc10c6de67726aec8.html",
+      "source_id": "gatik-2026-scale",
+      "source_sha256": "ed0cf55407b6e1a609c4e277fbf2e1ea7aadb1a1244c5e1cc10c6de67726aec8",
+      "source_url": "https://archive.gatik.ai/news/press-releases/gatik-becomes-first-us-company-to-operate-fully-driverless-trucks-at-scale-for-commercial-deliveries/"
+    },
+    {
+      "effective_at": "2024-12-01",
+      "event_id": "kodiak-launch-2024",
+      "event_type": "commercial_service_start",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "kodiak",
+      "source_evidence_path": "raw/objects/5be28d32731b1dead0709a328b33f57e7707c658a8897c8909e444e9f2287023.html",
+      "source_id": "kodiak-2025-commercial",
+      "source_sha256": "5be28d32731b1dead0709a328b33f57e7707c658a8897c8909e444e9f2287023",
+      "source_url": "https://kodiak.ai/news/kodiak-delivers-two-additional-driverless-trucks"
+    },
+    {
+      "effective_at": "2025-06-10",
+      "event_id": "kodiak-scale-2025",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "kodiak",
+      "source_evidence_path": "raw/objects/5be28d32731b1dead0709a328b33f57e7707c658a8897c8909e444e9f2287023.html",
+      "source_id": "kodiak-2025-commercial",
+      "source_sha256": "5be28d32731b1dead0709a328b33f57e7707c658a8897c8909e444e9f2287023",
+      "source_url": "https://kodiak.ai/news/kodiak-delivers-two-additional-driverless-trucks"
+    },
+    {
+      "effective_at": "2026-06-30",
+      "event_id": "kodiak-scale-2026-q2",
+      "event_type": "commercial_operation_snapshot",
+      "mode": "autonomous_trucking",
+      "operation_status": "commercial_driverless",
+      "operator_id": "kodiak",
+      "source_evidence_path": "raw/objects/507125d557abef95d197cad8742bad968fb1478c3a9239ab0e39ecd9e36398f4.html",
+      "source_id": "kodiak-q2-2026",
+      "source_sha256": "507125d557abef95d197cad8742bad968fb1478c3a9239ab0e39ecd9e36398f4",
+      "source_url": "https://investors.kodiak.ai/news-releases/news-release-details/kodiak-ai-reports-second-quarter-2026-results-and-advances"
+    },
+    {
+      "deliveries_per_hour": 40,
+      "deliveries_single_day": 500,
+      "effective_at": "2024-08-06",
+      "event_id": "droneup-capacity-test-2024",
+      "event_type": "capacity_test_snapshot",
+      "max_package_weight_lb": 10,
+      "mode": "drone_package_delivery",
+      "operation_status": "testing",
+      "operator_id": "droneup",
+      "pilot_to_drone_ratio": "one-to-many",
+      "source_evidence_path": "raw/objects/ed667a350a72dc6dcf9bc243be0461cc4a437252581f00566d4455398e447f55.html",
+      "source_id": "droneup-capacity-test-2024",
+      "source_sha256": "ed667a350a72dc6dcf9bc243be0461cc4a437252581f00566d4455398e447f55",
+      "source_url": "https://www.droneup.com/news/droneup-achieves-500-deliveries-per-day",
+      "test_context": "research and development facility capacity testing for commercial partners"
+    }
+  ],
+  "schema_version": 1
+}

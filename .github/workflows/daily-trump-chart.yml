@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: actions/setup-python@v6
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
         with:
           python-version: "3.12"
       - run: python -m pip install --disable-pip-version-check matplotlib pytest
@@ -44,7 +44,7 @@ jobs:
           assert {p.name for p in out.iterdir()} == {"summary.json", "trump_daily_transactions.png"}
           assert (out / "trump_daily_transactions.png").stat().st_size > 0
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6.0.0
         with:
           name: trump-daily-chart-${{ github.sha }}
           path: generated/trump-daily-chart

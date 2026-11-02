@@ -1,0 +1,106 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_ai_rpo_revenue_floor_20260910",
+  "status": "REJECT",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "Broadcomの2026-05-03時点remaining performance obligations 164.6B USDと12か月以内認識見込み30%を、AI固有の12か月売上floorとして扱い、AVGOのAI需要downsideをmaterially低減するvaluation creditに使える。",
+  "why_it_matters": "前回のaggregate customer concentration研究ではAVGO固有のmaterialな追加penaltyを支持できなかった。次にAI需要の契約的な下支えを直接使えるなら、NVDAとの相対valuationでdownsideを狭める再利用可能な根拠になる。逆にAIへ帰属できないRPOをfloor扱いすると、需要確度を過大評価する。",
+  "precommit_rule": {
+    "use": "RPOのうちAIに帰属する金額または割合、対象期間、解約不能性、認識条件が一次情報で特定でき、issuer開示と矛盾せずAI revenue downside floorとして再現可能に使える。",
+    "condition": "RPOが総売上のvisibility指標としては有用だがAI帰属が不明で、AI-specific floorには使えない。",
+    "reject": "issuerがRPOを将来売上の指標として扱うことを明示的に否定する、またはAI帰属が未開示で、12か月認識見込みをbinding AI revenue floorへ変換できない。",
+    "unverified": "RPO金額、期間、契約条件、AI帰属、source/as-ofが不足する。"
+  },
+  "dependencies": {
+    "prior_customer_concentration_artifact": "docs/research/results/avgo_nvda_customer_concentration_stress_20260910/summary.json",
+    "prior_relative_valuation_status": "NVDA expected-return advantage remains; aggregate customer concentration alone was REJECT as a material AVGO-specific penalty"
+  },
+  "primary_sources": {
+    "broadcom_q2_10q": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-06-09, period ended 2026-05-03",
+      "source_url": "https://investors.broadcom.com/static-files/f6369ec9-58c2-4697-9ad9-be2ae658352b",
+      "remaining_performance_obligations_usd_billion": 164.6,
+      "expected_recognition_next_12_months_pct": 30.0,
+      "mechanical_expected_recognition_next_12_months_usd_billion": 49.38,
+      "contract_scope": "semiconductor solutions and infrastructure software multi-year customer contracts with committed amounts; includes a long-term custom AI accelerator contract entered in Q2 FY2026",
+      "issuer_warning": "Broadcom states that the disclosed remaining performance obligations are not indicative of revenue for future periods. RPO also excludes contracts where the customer is not committed, including termination-for-convenience arrangements, and certain short-duration or usage-based arrangements.",
+      "ai_specific_rpo_amount_disclosed": false
+    },
+    "broadcom_q3_2026_results": {
+      "source": "Broadcom Q3 FY2026 financial results published 2026-09-02",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+      "q3_total_revenue_usd_billion": 29.591,
+      "q3_ai_semiconductor_revenue_usd_billion": 16.7,
+      "q4_total_revenue_guidance_usd_billion": 34.8,
+      "q4_ai_semiconductor_revenue_guidance_usd_billion": 21.7
+    },
+    "broadcom_ai_xpv_platform": {
+      "source": "Broadcom/Apollo/Blackstone AI XPV Platform announcement published 2026-06-09",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-apollo-and-blackstone-establish-landmark-strategic",
+      "initial_transaction_usd_billion": 35.0,
+      "initial_compute_capacity_gw": 1.0,
+      "platform_target_compute_capacity_gw": 20.0,
+      "note": "This financing/deployment platform is evidence of planned AI infrastructure deployment, not a disclosed Broadcom revenue guarantee or AI RPO amount."
+    }
+  },
+  "benchmark_and_alternatives": {
+    "benchmark": "Do not assign incremental AVGO valuation credit from RPO beyond already-observed revenue/guidance unless revenue identity and timing are attributable.",
+    "alternative_naive_floor": {
+      "definition": "Treat 30% of 164.6B USD RPO as a guaranteed 12-month revenue floor.",
+      "mechanical_floor_usd_billion": 49.38,
+      "fy2026_total_revenue_using_q1_q2_q3_actual_plus_q4_guidance_usd_billion": 105.889,
+      "mechanical_floor_as_pct_of_fy2026_total_revenue": 46.633739104156234,
+      "result": "REJECT",
+      "reason": "The 49.38B USD figure is an issuer recognition expectation across multiple contract types, not a guaranteed floor, and Broadcom explicitly says RPO is not indicative of future revenue."
+    },
+    "alternative_ai_floor": {
+      "definition": "Map the 49.38B USD 12-month expected RPO recognition to AI semiconductor demand.",
+      "q3_plus_q4_ai_revenue_actual_and_guidance_usd_billion": 38.4,
+      "rpo_12m_expected_recognition_divided_by_q3_plus_q4_ai_revenue": 1.2859375,
+      "result": "REJECT",
+      "reason": "The RPO pool includes infrastructure software and semiconductor contracts, while the filing does not disclose the AI-specific RPO amount or overlap. The ratio is shown only to demonstrate why an unsegmented mapping would create a large but unsupported AI floor."
+    },
+    "alternative_visibility_only": {
+      "definition": "Use RPO as evidence of contracted revenue visibility without converting it into an AI-specific floor or valuation credit.",
+      "result": "USE_AS_CONTEXT_ONLY",
+      "repository_status_mapping": "REJECT",
+      "reason": "This context is useful for research interpretation but does not satisfy the hypothesis requiring a binding AI-specific cash-flow floor."
+    }
+  },
+  "validation": {
+    "point_in_time": true,
+    "look_ahead": "No future contract realization is assumed. Q3 results are used only as later observed context and not to backfill the Q2 contract identity.",
+    "missing_data_policy": "AI-specific RPO amount, customer identity, contract-level revenue schedule, lease/purchase economics, and cancellation/default economics are not inferred.",
+    "synthetic_data_used": false,
+    "silent_fallback_used": false
+  },
+  "result": {
+    "status": "REJECT",
+    "finding": "Broadcom disclosed 164.6B USD of remaining performance obligations at 2026-05-03 and expected about 30% to be recognized over the following 12 months, mechanically 49.38B USD. However, the RPO spans semiconductor solutions and infrastructure software, the AI-specific amount is not disclosed, and Broadcom explicitly states that RPO is not indicative of revenue for future periods. Therefore the 30% recognition expectation cannot be promoted to a binding AI revenue floor or used as incremental AVGO valuation credit."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental contract-evidence validation, not a realized trading strategy."
+  },
+  "decision_rule": "Do not reduce AVGO downside or increase terminal valuation by treating aggregate RPO or its 12-month recognition expectation as an AI revenue floor. Reconsider only if Broadcom discloses an AI-specific committed amount, enforceable timing, material cancellation/default terms, and cash-flow economics that can be linked to the canonical valuation without guessing.",
+  "limitations": [
+    "Broadcom had not filed a Q3 FY2026 Form 10-Q as of this research check; the latest detailed RPO disclosure available was the Q2 Form 10-Q filed 2026-06-09.",
+    "The custom AI accelerator contract is included in RPO, but its amount is not separately disclosed.",
+    "The 35B USD initial AI XPV transaction is a financing/deployment platform amount and is not interchangeable with Broadcom revenue, RPO, or free cash flow.",
+    "Q4 AI semiconductor revenue guidance is issuer guidance, not observed revenue and not a contract floor."
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "BroadcomのAI XPV financing/leasing構造が、通常のchip saleよりworking capital、credit exposure、free-cash-flow conversionを悪化させるかを、契約・lease・guarantee開示と実績cash flowでpoint-in-timeに検証する。"
+}

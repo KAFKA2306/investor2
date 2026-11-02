@@ -1,0 +1,56 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gold_bil_blend_capital_efficiency_20260907",
+  "status": "CONDITION",
+  "hypothesis": "半導体集中portfolioでSMH60%/GLD20%/BIL20%の固定blendは、SMH80%/GLD20%とSMH80%/BIL20%の双方よりSharpe、Maximum Drawdown、95% Expected Shortfallを改善し、40% defensive sleeveの再利用可能なrisk-control候補になる。",
+  "decision_gate": {
+    "use_if": "60/20/20が両80/20 benchmarkよりSharpeが高く、Maximum Drawdownと95% Expected Shortfallがともに改善し、CAGRが最良80/20 benchmarkの75%以上を維持する。",
+    "reject_if": "Sharpeまたはtail-riskのいずれかで両benchmarkを支配できない、またはCAGRが最良80/20 benchmarkの75%未満。"
+  },
+  "canonical_input": {
+    "owner_repository": "KAFKA2306/investor2",
+    "source_artifact": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "assets": ["SMH", "GLD", "BIL"],
+    "currency": "USD",
+    "period": "2020-08-01..2026-08-31",
+    "monthly_returns": 73,
+    "fallback": "none"
+  },
+  "method": {
+    "rebalance": "monthly fixed weight",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns",
+    "lookahead": "none; comparison of validated realized fixed-weight portfolios"
+  },
+  "metrics": {
+    "SMH80_GLD20": {"CAGR": 0.33672534, "Vol": 0.26292236, "Sharpe": 1.24337587, "MaxDD": -0.34201565, "ES95": -0.12792343},
+    "SMH80_BIL20": {"CAGR": 0.30817722, "Vol": 0.25903681, "Sharpe": 1.17277618, "MaxDD": -0.32749770, "ES95": -0.12476619},
+    "SMH60_GLD20_BIL20": {"CAGR": 0.26681913, "Vol": 0.19907358, "Sharpe": 1.29580711, "MaxDD": -0.26652533, "ES95": -0.09636161}
+  },
+  "comparisons": {
+    "vs_GLD20": {"sharpe_delta": 0.05243124, "volatility_delta": -0.06384878, "max_drawdown_improvement": 0.07549032, "es95_improvement": 0.03156182, "cagr_delta": -0.06990621, "cagr_retention": 0.79238497},
+    "vs_BIL20": {"sharpe_delta": 0.12303093, "volatility_delta": -0.05996323, "max_drawdown_improvement": 0.06097237, "es95_improvement": 0.02840458, "cagr_delta": -0.04135809, "cagr_retention": 0.86580024}
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "60/20/20は両80/20 benchmarkよりSharpeが高く、Maximum Drawdownと95% Expected Shortfallを大きく改善した。最良CAGRの80/20 GLDに対してCAGRは約79.2%を維持し事前gateを通過した。ただし73か月のみで、2020年3月や2008年を含まないため恒久defaultにはしない。",
+    "scope": "高いexpected returnを最大化する配分ではなく、半導体exposureを維持しつつtail riskを下げたい場合のdefensive benchmarkとして使う。"
+  },
+  "reusable_decision": "半導体集中portfolioのrisk-control比較では、GLDか短期国債かの二者択一だけでなく、SMH60/GLD20/BIL20を固定blend benchmarkとして必ず含める。",
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "artifact_type": "decision/evaluation artifact",
+    "do_not_duplicate": ["market-data collector", "optimizer", "dynamic timing rule"]
+  },
+  "limitations": [
+    "73 monthly returnsのみで、COVID-19急落そのものと2008年金融危機を含まない。",
+    "BILは0-3 month Treasury ETF proxyで、SGOVと同一商品ではない。",
+    "税、bid-ask spread、実際の配当再投資日は含まない。",
+    "CAGR低下を許容するrisk-control用途の判定であり、最大成長目的のportfolioには直接適用しない。"
+  ],
+  "next_high_value_hypothesis": "SMH60/GLD20/BIL20の低volatilityを利用して、同じex-ante volatilityまでレバレッジしたrisk-matched portfolioは、SMH80/GLD20よりCAGR・Sharpeを改善しつつMaximum DrawdownとExpected Shortfallの優位を維持できるか。funding costとmarginを含めて検証する。"
+}

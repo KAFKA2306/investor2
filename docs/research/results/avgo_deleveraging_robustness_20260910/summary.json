@@ -1,0 +1,113 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_deleveraging_robustness_20260910",
+  "status": "USE",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGOの現在net debtを5年間固定する仮定がNVDA優位の主因なら、AVGOがterminalまでにnet debtを完全解消する上限stressではAVGOの5年expected IRRがNVDAへ追いつく。",
+  "precommit_rule": {
+    "use": "AVGOの実行可能なdeleveraging capacityを一次情報で確認し、完全net-debt解消というAVGO有利な上限stressでもNVDA expected IRR > AVGO expected IRRなら、deleveragingだけでは相対順位を逆転できないrobustness evidenceとしてUSE。",
+    "reject": "完全net-debt解消stressだけでAVGO expected IRR >= NVDA expected IRRになる。",
+    "unverified": "FCF、dividend、debt、cash、debt repaymentのperiod/unit/sourceが揃わない。"
+  },
+  "dependencies": {
+    "capital_structure_artifact": "docs/research/results/avgo_nvda_ev_fcf_capital_structure_20260910/summary.json",
+    "nvda_price_usd": 224.21,
+    "avgo_price_usd": 364.245,
+    "avgo_current_net_debt_usd_billion": 35.444,
+    "avgo_diluted_shares_billion": 4.887,
+    "nvda_conservative_net_cash_usd_billion": 23.220,
+    "avgo_favorable_terminal_growth_premium_bp": 42.65921661,
+    "avgo_favorable_terminal_multiple_ratio": 1.0780817
+  },
+  "primary_sources": {
+    "broadcom_q3_fy2026_results": {
+      "source": "Broadcom Inc. Q3 FY2026 financial results, 2026-09-02",
+      "period_end": "2026-08-02",
+      "currency": "USD",
+      "unit": "million",
+      "q3_free_cash_flow": 13665,
+      "nine_month_free_cash_flow": 31937,
+      "nine_month_dividends_paid": 9281,
+      "nine_month_repurchases_program": 8450,
+      "nine_month_debt_payments": 10528,
+      "nine_month_long_term_borrowing_proceeds": 4474,
+      "q3_cash_and_cash_equivalents": 23975,
+      "q3_total_debt": 59419,
+      "q3_net_debt": 35444,
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    "broadcom_q2_fy2026_10q_maturity_schedule": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-06-09",
+      "period_end": "2026-05-03",
+      "currency": "USD",
+      "unit": "million",
+      "scheduled_principal_2026_remainder": 2252,
+      "scheduled_principal_2027": 493,
+      "scheduled_principal_2028": 5127,
+      "scheduled_principal_2029": 4655,
+      "scheduled_principal_2030": 6406,
+      "scheduled_principal_thereafter": 47787,
+      "source_url": "https://investors.broadcom.com/static-files/f6369ec9-58c2-4697-9ad9-be2ae658352b"
+    }
+  },
+  "deleveraging_capacity": {
+    "nine_month_fcf_usd_billion": 31.937,
+    "annualized_fcf_usd_billion": 42.5826666667,
+    "nine_month_dividends_usd_billion": 9.281,
+    "annualized_dividends_usd_billion": 12.3746666667,
+    "annualized_fcf_after_dividends_before_buybacks_usd_billion": 30.208,
+    "implied_years_to_repay_current_net_debt_if_all_post_dividend_fcf_used_for_debt": 1.173332892,
+    "nine_month_repurchases_usd_billion": 8.45,
+    "annualized_fcf_after_dividends_and_current_buyback_pace_usd_billion": 18.9413333333,
+    "implied_years_to_repay_current_net_debt_after_dividends_and_current_buyback_pace": 1.871255147,
+    "nine_month_net_debt_paydown_cash_flow_usd_billion": 6.054,
+    "annualized_observed_net_debt_paydown_cash_flow_usd_billion": 8.072,
+    "implied_years_at_observed_net_debt_paydown_cash_flow": 4.39147671,
+    "interpretation": "現在FCFはnet debtを2-5年で大幅に減らし得る規模だが、FCFは配当・buyback・M&A・purchase commitmentsにも使われるため、完全返済を予測値にはしない。terminal net debt=0はAVGOに有利な上限stressとして扱う。"
+  },
+  "benchmark": {
+    "name": "current net debt fixed through terminal, AVGO-favorable +42.65921661bp stress",
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_5y_expected_price_irr_pct": 11.774268914109998,
+    "avgo_minus_nvda_pct_points": -1.312030662830832
+  },
+  "alternative": {
+    "name": "AVGO terminal net debt fully repaid to zero, same +42.65921661bp stress",
+    "avgo_terminal_net_debt_usd_billion": 0,
+    "avgo_terminal_equity_value_per_share_usd": 642.7340307768505,
+    "avgo_5y_expected_price_irr_pct": 12.028246735814152,
+    "nvda_5y_expected_price_irr_pct": 13.08629957694083,
+    "avgo_minus_nvda_pct_points": -1.058052841126678,
+    "irr_improvement_vs_fixed_net_debt_pct_points": 0.253977821704154
+  },
+  "result": {
+    "status": "USE",
+    "finding": "AVGOのcurrent net debt 35.444B USDをterminalまでに完全解消する極端にAVGO有利なstressでも、5年expected IRRは12.02825%でNVDA 13.08630%を1.05805pt下回る。したがってcurrent net debt固定仮定はNVDA優位の主因ではなく、deleveragingだけでは順位を逆転できない。",
+    "rejected_sub_hypothesis": "AVGOのcurrent net debtを固定したことだけがNVDA-over-AVGO rankingを作っている。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "realized trading strategyではなくpoint-in-time valuation robustness stress。"
+  },
+  "decision_rule": "AVGOのdeleveragingを相対valuationの再評価理由にはするが、deleveraging単独でNVDA-over-AVGO rankingを反転させない。現在価格・fundamentals・42.65921661bp AVGO-favorable growth stressでは、AVGO terminal net debt=0まで与えてもNVDA優位。価格、growth evidence、terminal multiple、またはNVDA capital structureが更新された場合に再計算する。",
+  "limitations": [
+    "annualized FCF/dividend/buyback/debt-paydown paceはFY2026最初の9か月実績を単純年率化したcapacity stressであり会社予想ではない。",
+    "Broadcom自身がFCFはdiscretionary expenditureに利用可能な残余cash flowを表さないと注意している。",
+    "2027-2028には大きなpurchase commitmentsがあり、post-dividend FCFを全額debt repaymentへ使えるとは仮定しない。",
+    "Q2 maturity scheduleとQ3 balance sheetには約3か月の時点差があり、Q3中のtender/repaymentで債務構成は変化している。",
+    "issuer-defined FCFは純粋なFCFFではないため、既存EV/FCFと同様にcapital-structure robustness stressであり完全なDCF authorityではない。"
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false
+  },
+  "next_hypothesis": "AVGOのdeleveragingを完全に織り込んでも残る約1.06ptのexpected-IRR差について、terminal multipleではなく最新priceとFCF growthのjoint break-even surfaceを作り、どの組み合わせで相対順位が反転するかを検証する。"
+}

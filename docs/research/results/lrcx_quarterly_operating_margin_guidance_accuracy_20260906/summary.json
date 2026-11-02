@@ -1,0 +1,89 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "lrcx_quarterly_operating_margin_guidance_accuracy_20260906",
+  "status": "CONDITION",
+  "hypothesis": "Lam Researchの次四半期operating income予測では、会社がRevenue guidanceと同時に公表するGAAP operating margin guidanceを使う方が、Revenue guidanceに当四半期の実績operating marginを固定して掛ける単純benchmarkより高精度である。",
+  "decision_rule": {
+    "use_if": "10四半期中8四半期以上でexplicit margin guidanceがstale-margin benchmarkよりoperating income絶対誤差率を改善し、平均誤差を10%以上削減し、worst-case errorも悪化させない。",
+    "condition_if": "平均誤差を10%以上削減しworst-case errorも改善するが、個別四半期の勝率が8/10未満。Lam Researchのquarterly valuation input更新規則としてのみ利用する。",
+    "reject_if": "平均誤差削減が10%未満、またはworst-case errorがstale-margin benchmarkより悪化する。"
+  },
+  "sources": {
+    "canonical_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "research_owner": "KAFKA2306/investor2",
+    "verification_as_of": "2026-09-06",
+    "issuer": "Lam Research Corporation",
+    "primary_source_system": "Lam Research Investor Relations quarterly financial results",
+    "source_urls": [
+      "https://investor.lamresearch.com/2024-01-24-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-December-24,-2023",
+      "https://investor.lamresearch.com/2024-04-24-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-March-31,-2024",
+      "https://investor.lamresearch.com/2024-07-31-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-June-30,-2024",
+      "https://investor.lamresearch.com/2024-10-23-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-September-29,-2024",
+      "https://investor.lamresearch.com/2025-01-29-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-December-29,-2024",
+      "https://investor.lamresearch.com/2025-04-23-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-March-30,-2025",
+      "https://investor.lamresearch.com/2025-07-30-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-June-29,-2025",
+      "https://investor.lamresearch.com/2025-10-22-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-September-28,-2025",
+      "https://investor.lamresearch.com/2026-01-28-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-December-28,-2025",
+      "https://investor.lamresearch.com/2026-04-22-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-March-29,-2026",
+      "https://investor.lamresearch.com/2026-07-29-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-June-28,-2026"
+    ],
+    "missing_value_policy": "各releaseで明示されたGAAP revenue guidance midpoint、GAAP operating margin guidance midpoint、当四半期GAAP operating margin、翌四半期確定GAAP revenue / operating marginだけを使う。補間、forward fill、non-GAAPへのsilent fallbackはしない。"
+  },
+  "method": {
+    "period": "2024-03 through 2026-06 target quarters, 10 completed quarterly forecasts",
+    "target": "翌四半期確定GAAP operating income",
+    "primary_model": "issuer revenue guidance midpoint × issuer GAAP operating margin guidance midpoint",
+    "benchmark": "issuer revenue guidance midpoint × guidance公表時点の当四半期実績GAAP operating margin",
+    "look_ahead": "なし。各予測は前四半期決算release公表後のみ利用可能とする。",
+    "error_metrics": [
+      "absolute operating margin error in percentage points",
+      "absolute percentage error of implied operating income"
+    ],
+    "purpose": "quarterly valuationで売上高だけforward更新しmarginを直近実績のまま固定する簡易法に対し、issuer自身の同時点margin guidanceを使う追加価値を測る。"
+  },
+  "measured_results": {
+    "observations": 10,
+    "guided_margin_mae_points": 0.75,
+    "stale_margin_mae_points": 1.07,
+    "guided_vs_stale_margin_mae_reduction_pct": 29.9065,
+    "guided_operating_income_mape_pct": 4.3934,
+    "stale_margin_operating_income_mape_pct": 5.0185,
+    "guided_vs_stale_operating_income_mape_reduction_pct": 12.4554,
+    "guided_beats_stale_operating_income_observations": 6,
+    "ties": 2,
+    "guided_worse_observations": 2,
+    "guided_worst_operating_income_error_pct": 5.7168,
+    "stale_worst_operating_income_error_pct": 9.2249,
+    "detail": [
+      {"target_quarter":"2024-03","revenue_guidance_billion_usd":3.7,"guided_gaap_operating_margin_pct":28.1,"stale_current_quarter_gaap_operating_margin_pct":28.1,"actual_revenue_billion_usd":3.793558,"actual_gaap_operating_margin_pct":27.9,"guided_operating_income_absolute_error_pct":1.7671,"stale_margin_operating_income_absolute_error_pct":1.7671},
+      {"target_quarter":"2024-06","revenue_guidance_billion_usd":3.8,"guided_gaap_operating_margin_pct":28.3,"stale_current_quarter_gaap_operating_margin_pct":27.9,"actual_revenue_billion_usd":3.871507,"actual_gaap_operating_margin_pct":29.1,"guided_operating_income_absolute_error_pct":4.5454,"stale_margin_operating_income_absolute_error_pct":5.8946},
+      {"target_quarter":"2024-09","revenue_guidance_billion_usd":4.05,"guided_gaap_operating_margin_pct":29.4,"stale_current_quarter_gaap_operating_margin_pct":29.1,"actual_revenue_billion_usd":4.167976,"actual_gaap_operating_margin_pct":30.3,"guided_operating_income_absolute_error_pct":5.7168,"stale_margin_operating_income_absolute_error_pct":6.6788},
+      {"target_quarter":"2024-12","revenue_guidance_billion_usd":4.3,"guided_gaap_operating_margin_pct":29.9,"stale_current_quarter_gaap_operating_margin_pct":30.3,"actual_revenue_billion_usd":4.376047,"actual_gaap_operating_margin_pct":30.5,"guided_operating_income_absolute_error_pct":3.6708,"stale_margin_operating_income_absolute_error_pct":2.3821},
+      {"target_quarter":"2025-03","revenue_guidance_billion_usd":4.65,"guided_gaap_operating_margin_pct":31.9,"stale_current_quarter_gaap_operating_margin_pct":30.5,"actual_revenue_billion_usd":4.720175,"actual_gaap_operating_margin_pct":33.1,"guided_operating_income_absolute_error_pct":5.0582,"stale_margin_operating_income_absolute_error_pct":9.2249},
+      {"target_quarter":"2025-06","revenue_guidance_billion_usd":5.0,"guided_gaap_operating_margin_pct":33.4,"stale_current_quarter_gaap_operating_margin_pct":33.1,"actual_revenue_billion_usd":5.171393,"actual_gaap_operating_margin_pct":33.7,"guided_operating_income_absolute_error_pct":4.175,"stale_margin_operating_income_absolute_error_pct":5.0357},
+      {"target_quarter":"2025-09","revenue_guidance_billion_usd":5.2,"guided_gaap_operating_margin_pct":33.9,"stale_current_quarter_gaap_operating_margin_pct":33.7,"actual_revenue_billion_usd":5.324173,"actual_gaap_operating_margin_pct":34.4,"guided_operating_income_absolute_error_pct":3.7518,"stale_margin_operating_income_absolute_error_pct":4.3197},
+      {"target_quarter":"2025-12","revenue_guidance_billion_usd":5.2,"guided_gaap_operating_margin_pct":32.9,"stale_current_quarter_gaap_operating_margin_pct":34.4,"actual_revenue_billion_usd":5.344791,"actual_gaap_operating_margin_pct":33.9,"guided_operating_income_absolute_error_pct":5.579,"stale_margin_operating_income_absolute_error_pct":1.274},
+      {"target_quarter":"2026-03","revenue_guidance_billion_usd":5.7,"guided_gaap_operating_margin_pct":33.9,"stale_current_quarter_gaap_operating_margin_pct":33.9,"actual_revenue_billion_usd":5.841488,"actual_gaap_operating_margin_pct":35.0,"guided_operating_income_absolute_error_pct":5.4889,"stale_margin_operating_income_absolute_error_pct":5.4889},
+      {"target_quarter":"2026-06","revenue_guidance_billion_usd":6.6,"guided_gaap_operating_margin_pct":36.5,"stale_current_quarter_gaap_operating_margin_pct":35.0,"actual_revenue_billion_usd":6.722238,"actual_gaap_operating_margin_pct":37.4,"guided_operating_income_absolute_error_pct":4.1811,"stale_margin_operating_income_absolute_error_pct":8.1188}
+    ]
+  },
+  "benchmark_and_alternative": {
+    "benchmark": "次四半期revenue guidanceだけ更新し、operating marginを当四半期実績のまま固定する",
+    "alternative": "revenueとoperating marginを同じ決算releaseのissuer guidanceへ同期して更新する",
+    "result": "alternativeはoperating margin MAEを1.07ptから0.75ptへ29.9%削減し、implied operating income MAPEを5.02%から4.39%へ12.5%削減した。ただし個別勝敗は6勝2分2敗で一貫性は不足した。"
+  },
+  "finding": {
+    "summary": "Lam Researchではquarterly forward valuationでissuer operating margin guidanceを使うと平均誤差とworst-case errorは改善したが、10四半期すべてで優位ではなかった。",
+    "production_action": "Lam Researchの次四半期valuationでexplicit GAAP operating margin guidanceが存在する場合は、revenue guidanceと同じas-ofで利用する。ただしmargin guidance単独をalpha signalや確定値として扱わずhistorical forecast error bandを付与する。",
+    "scope": "Lam Researchのquarterly forward operating income valuation inputに限定する。株価return予測や他社への一般化はしない。"
+  },
+  "reusable_decision": "LRCXではforward revenueとoperating marginを同一issuer releaseのas-ofで同期する。直近実績marginの暗黙固定はdefaultにしない。",
+  "limitations": [
+    "標本は10四半期で、複数cycleを十分に覆っていない。",
+    "2024-12と2025-12はstale-margin benchmarkの方が高精度だった。",
+    "revenue guidance midpointの誤差がoperating income誤差にも含まれる。",
+    "GAAP guidanceだけを比較し、non-GAAP guidanceは混在させていない。",
+    "operating income予測精度を株価alphaとは解釈できない。"
+  ],
+  "next_hypothesis": "Tokyo ElectronとLam Researchで共通して観測されたsame-as-of profitability updateの価値が、Applied MaterialsまたはAdvantestでも成立するかを同じpoint-in-time contractで検証する。"
+}

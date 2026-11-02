@@ -1,0 +1,65 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_volatility_weight_switch_20260906",
+  "status": "REJECT",
+  "hypothesis": "直近6か月のSMH実現volatilityが年率30%を超える月は翌月SMH60%/GLD20%/BIL20%、30%以下ならSMH80%/GLD10%/BIL10%へ切り替えるpoint-in-time ruleは、固定60/20/20のtail riskを大きく悪化させずにCAGRを回復し、固定60/20/20と固定80/10/10の双方よりSharpeを改善する。",
+  "decision_rule": {
+    "use_if": "10bpコスト込みでdynamicが固定60/20/20よりCAGRとSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化せず、固定80/10/10よりSharpeが高い。",
+    "reject_if": "固定60/20/20よりSharpe・Maximum Drawdown・95% Expected Shortfallのいずれかが悪化、または固定80/10/10よりSharpeが低い。"
+  },
+  "canonical_source": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+  "source_identity": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "symbols": ["SMH", "GLD", "BIL"],
+    "period": "2020-07 through 2026-08",
+    "oos_period": "2021-02 through 2026-08",
+    "oos_monthly_returns": 67,
+    "currency": "USD",
+    "fallback": "none",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05",
+    "dividend_method": "cash dividends with ex-date in month added to holding-period return; month-end reinvestment approximation"
+  },
+  "method": {
+    "signal": "trailing 6 completed monthly SMH total returns annualized sample volatility",
+    "threshold": 0.3,
+    "allocation_high_vol": {"SMH": 0.6, "GLD": 0.2, "BIL": 0.2},
+    "allocation_low_vol": {"SMH": 0.8, "GLD": 0.1, "BIL": 0.1},
+    "rebalance": "monthly, signal uses only prior completed months",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift",
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "mean of worst ceil(5% * N) monthly returns"
+  },
+  "center_result": {
+    "dynamic": {"CAGR": 0.25667893, "Vol": 0.23848474, "Sharpe": 1.08127927, "MaxDD": -0.33691811, "ES95": -0.11173245},
+    "fixed_60_20_20": {"CAGR": 0.25259574, "Vol": 0.20389718, "Sharpe": 1.21321562, "MaxDD": -0.26652533, "ES95": -0.09636161},
+    "fixed_80_10_10": {"CAGR": 0.29679596, "Vol": 0.26612284, "Sharpe": 1.11474074, "MaxDD": -0.33476427, "ES95": -0.12634460},
+    "fixed_80_GLD20": {"CAGR": 0.31341648, "Vol": 0.26902223, "Sharpe": 1.15395822, "MaxDD": -0.34201565, "ES95": -0.12792343},
+    "fixed_80_BIL20": {"CAGR": 0.28002273, "Vol": 0.26427520, "Sharpe": 1.07037174, "MaxDD": -0.32749770, "ES95": -0.12476619}
+  },
+  "execution": {
+    "months_high_vol_60pct_smh": 26,
+    "months_low_vol_80pct_smh": 41,
+    "allocation_switches": 11,
+    "cumulative_two_sided_turnover": 5.84436821
+  },
+  "cost_sensitivity": {
+    "0bp": {"CAGR": 0.25797142, "Sharpe": 1.08564246, "MaxDD": -0.33608219, "ES95": -0.11162283},
+    "10bp": {"CAGR": 0.25667893, "Sharpe": 1.08127927, "MaxDD": -0.33691811, "ES95": -0.11173245},
+    "20bp": {"CAGR": 0.25538738, "Sharpe": 1.07691158, "MaxDD": -0.33775323, "ES95": -0.11184207}
+  },
+  "sensitivity_note": "3/6/12か月lookbackと25/30/35/40%閾値も確認。一部の3か月設定は中心条件より良好だが、事前固定した6か月30%条件は失敗し、設定間で結果が不安定なため後付け採用しない。",
+  "finding": {
+    "summary": "dynamicは固定60/20/20よりCAGRを0.41ポイント回復したが、Sharpeは1.2132から1.0813へ低下し、Maximum Drawdownは-26.65%から-33.69%、ES95は-9.64%から-11.17%へ悪化した。固定80/10/10よりもCAGRとSharpeが低い。",
+    "production_action": "dynamic volatility allocationをportfolio weight authorityへ追加しない。",
+    "reusable_decision": "SMH比率を直近6か月volatilityの単純閾値で60/80%切替するルールは、固定60/20/20のrisk-adjusted優位を壊すため採用しない。"
+  },
+  "limitations": [
+    "2020-07開始でCOVID-19 2020年3月急落を含まない。",
+    "閾値30%は単純な事前固定値であり、最適化していない。",
+    "一部の別lookback/thresholdは良好だが、同じ73月系列上の探索なので独立OOS証拠ではない。",
+    "税・bid-ask spread・実際の分配金再投資日は含まない。"
+  ],
+  "next_hypothesis": "同じ価格系列の閾値探索を続けず、半導体の期待return側を一次情報で改善する。AI infrastructure/半導体企業のpoint-in-time earnings・free cash flow・valuationを横断し、固定60/20/20をrisk budgetとして、株式sleeve内部の銘柄選択がSMH単独よりOOS risk-adjusted returnを改善するか。"
+}

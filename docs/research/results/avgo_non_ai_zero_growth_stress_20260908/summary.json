@@ -1,0 +1,133 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_non_ai_zero_growth_stress_20260908",
+  "status": "CONDITION",
+  "as_of": "2026-09-08",
+  "hypothesis": "Broadcom FY2027 company revenue growth of 18.83753816% remains a viable near-term sensitivity anchor even if all non-AI revenue is flat year over year, because the required FY2027 AI semiconductor growth remains below 40% without relying on any unpublished Q4 segment mix or positive non-AI growth assumption.",
+  "capital_allocation_importance": "The prior AVGO near-term growth anchor depended on carrying forward observed non-AI semiconductor and infrastructure-software growth. This stress removes that favorable assumption and tests whether the relative NVDA/AVGO FCF-IRR comparison still has a plausible one-year AVGO growth input.",
+  "decision_rule": {
+    "USE": "Required FY2027 AI semiconductor growth is 30% or less when total non-AI revenue is flat, so the 18.83753816% company-growth anchor does not materially depend on non-AI growth.",
+    "CONDITION": "Required FY2027 AI semiconductor growth is above 30% but no more than 40% when total non-AI revenue is flat; retain only as a one-year sensitivity anchor, not issuer guidance or a multi-year forecast.",
+    "REJECT": "Required FY2027 AI semiconductor growth exceeds 40% under flat non-AI revenue, or the result requires an inferred Q4 segment mix.",
+    "UNVERIFIED": "Issuer-reported FY2026 total or AI semiconductor revenue, or the canonical FY2027 company-growth target, cannot be identified."
+  },
+  "canonical_owner": "KAFKA2306/investor2",
+  "sources": [
+    {
+      "issuer": "Broadcom Inc.",
+      "period": "Q3 FY2026 / Q4 FY2026 outlook",
+      "facts_usd_billions": {
+        "q4_total_revenue_guidance": 34.8,
+        "q4_ai_semiconductor_revenue_guidance": 21.7,
+        "fy2026_total_revenue_using_q1_q3_actual_plus_q4_guidance": 105.889,
+        "fy2026_ai_semiconductor_revenue_using_q1_q3_actual_plus_q4_guidance": 57.6
+      },
+      "q4_total_revenue_yoy_pct": 93.0,
+      "q4_ai_semiconductor_yoy_pct": 236.0,
+      "url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial"
+    },
+    {
+      "canonical_artifact": "docs/research/results/avgo_q4_segment_interval_ai_requirement_20260908/summary.json",
+      "facts": {
+        "target_fy2027_company_growth_pct": 18.83753816,
+        "fy2026_total_revenue_usd_billions": 105.889,
+        "fy2026_ai_semiconductor_usd_billions": 57.6,
+        "fy2026_total_non_ai_revenue_usd_billions": 48.289,
+        "prior_required_ai_growth_pct_interval": [25.73457944, 27.96653669]
+      }
+    }
+  ],
+  "method": {
+    "target_fy2027_company_growth_pct": 18.83753816,
+    "fy2026_total_revenue_usd_billions": 105.889,
+    "fy2026_ai_semiconductor_revenue_usd_billions": 57.6,
+    "fy2026_total_non_ai_revenue_usd_billions": 48.289,
+    "fy2027_target_revenue_usd_billions": 125.8358807822424,
+    "primary_stress": "Hold all non-AI revenue flat at 48.289 billion USD. Do not infer the undisclosed Q4 split between non-AI semiconductor and infrastructure software.",
+    "required_ai_growth_formula": "required AI growth = (FY2027 target company revenue - FY2027 total non-AI revenue) / FY2026 AI semiconductor revenue - 1",
+    "sensitivity_non_ai_growth_pct": [13.14348302, 9.46144068, 3.32968625, 0.0, -5.0, -10.0, -20.0],
+    "missing_data_policy": "No Q4 segment point estimate is created. OpenAI/Meta/Anthropic/Apollo/Blackstone deployment capacity is not converted from GW or infrastructure transaction value into Broadcom revenue without issuer-disclosed revenue recognition."
+  },
+  "results": {
+    "primary_flat_non_ai_case": {
+      "fy2027_non_ai_revenue_usd_billions": 48.289,
+      "fy2027_required_ai_revenue_usd_billions": 77.5468807822424,
+      "required_fy2027_ai_semiconductor_growth_pct": 34.63000136,
+      "decision_gate": "CONDITION"
+    },
+    "sensitivity": [
+      {
+        "non_ai_growth_pct": 13.14348302,
+        "required_ai_growth_pct": 23.61115324
+      },
+      {
+        "non_ai_growth_pct": 9.46144068,
+        "required_ai_growth_pct": 26.69799599
+      },
+      {
+        "non_ai_growth_pct": 3.32968625,
+        "required_ai_growth_pct": 31.83855658
+      },
+      {
+        "non_ai_growth_pct": 0.0,
+        "required_ai_growth_pct": 34.63000136
+      },
+      {
+        "non_ai_growth_pct": -5.0,
+        "required_ai_growth_pct": 38.82175483
+      },
+      {
+        "non_ai_growth_pct": -10.0,
+        "required_ai_growth_pct": 43.01350830
+      },
+      {
+        "non_ai_growth_pct": -20.0,
+        "required_ai_growth_pct": 51.39701525
+      }
+    ],
+    "interpretation": "The prior 18.83753816% one-year AVGO company-growth comparator does not require positive non-AI growth: with total non-AI revenue flat, AI semiconductor revenue must grow 34.63000136%. However, a 10% non-AI contraction raises required AI growth to 43.01350830%, so the anchor is not robust to a material non-AI downturn."
+  },
+  "benchmark_comparison": {
+    "prior_three_bucket_full_q4_interval": {
+      "required_ai_growth_pct_min": 25.73457944,
+      "required_ai_growth_pct_max": 27.96653669,
+      "assumption": "Observed Q1-Q3 non-AI semiconductor and software growth carried forward one year."
+    },
+    "flat_total_non_ai_stress": {
+      "required_ai_growth_pct": 34.63000136,
+      "increment_vs_prior_max_percentage_points": 6.66346467,
+      "assumption": "No positive non-AI growth and no Q4 segment-mix estimate."
+    }
+  },
+  "risk_metrics": {
+    "time_series_metrics": "NOT_APPLICABLE",
+    "reason": "This is a point-in-time fundamental forward sensitivity study, not a return-series backtest. Volatility, Sharpe, maximum drawdown and Expected Shortfall would not measure the hypothesis tested here.",
+    "material_risks": [
+      "AI semiconductor growth can decelerate faster than the stress range.",
+      "Non-AI semiconductor and infrastructure software can contract simultaneously.",
+      "Customer deployment timing can shift revenue between fiscal periods.",
+      "Broadcom has net debt in the prior canonical balance-sheet evidence, so equal FCF yield does not imply equal financial risk."
+    ]
+  },
+  "decision": {
+    "status": "CONDITION",
+    "use": "Keep 18.83753816% only as a one-year AVGO growth sensitivity input when explicitly paired with the required AI-growth condition.",
+    "do_not_use": [
+      "Do not treat 18.83753816% as Broadcom issuer guidance.",
+      "Do not extend it unchanged through FY2028-FY2030.",
+      "Do not convert GW deployments or the 35 billion USD AI-infrastructure transaction into Broadcom revenue without disclosed economics.",
+      "Do not make a portfolio-weight decision from this growth input alone."
+    ]
+  },
+  "implementation": {
+    "artifact_type": "canonical decision artifact",
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_authority_changed": false,
+    "cross_repository_financial_calculation_duplicated": false
+  },
+  "remaining_uncertainty": "The one-year comparator survives flat non-AI revenue but fails the <=40% gate once total non-AI revenue falls roughly 6.4% or more. The durability of AI semiconductor growth beyond FY2027 remains unverified because disclosed multi-GW commitments do not specify Broadcom revenue by fiscal year.",
+  "next_hypothesis": "Broadcom FY2027 company growth of 18.83753816% remains below the 40% required-AI-growth gate when non-AI revenue is stressed using observed historical drawdowns rather than arbitrary -5%/-10% scenarios; if not, the one-year comparator should be rejected for capital-allocation use."
+}

@@ -1,0 +1,156 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_nvda_company_beta_terminal_band_20260909",
+  "status": "CONDITION",
+  "as_of": "2026-09-09",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "AVGO/NVDAの実市場リターンから推定したcompany-specific betaをcurrent ERP-anchored terminal discount rateに反映すると、beta=1 benchmarkに対して5年expected returnまたは相対順位がmaterialに変わるためcompany-beta sensitivityは必要だが、単一rolling betaをcanonical inputにしてはならない。",
+  "capital_allocation_importance": "直前研究ではmarket beta=1を共通に置いてNVDA優位だった。company-specific betaで相対順位が反転するなら、共通discount rateだけでAVGO/NVDAの資本配分を判断するのは不十分である。",
+  "decision_rule": {
+    "USE": "12/24/35か月の全windowでcompany-specific betaを使った相対順位が一致し、beta=1 benchmarkからの相対spread変化がmaterialで、単一company-specific bandを再利用できる。",
+    "CONDITION": "company-specific betaは相対spreadを2 percentage points以上動かすか順位を反転させるが、window sensitivityまたは推定不確実性により単一betaをcanonical inputに固定できない。",
+    "REJECT": "company-specific betaを使ってもbeta=1 benchmarkからの相対spread変化が全windowで2 percentage points未満で、意思決定価値がない。",
+    "UNVERIFIED": "market data period、symbol identity、split treatment、market proxy、risk-free、ERP、terminal growth、canonical valuation dependencyが不足する。"
+  },
+  "canonical_dependencies": [
+    "docs/research/results/us_erp_history_terminal_multiple_distribution_20260909/summary.json",
+    "docs/research/results/avgo_nvda_live_price_hurdle_20260909/summary.json"
+  ],
+  "market_data": {
+    "provider": "Alpaca",
+    "feed": "IEX",
+    "currency": "USD",
+    "symbols": ["AVGO", "NVDA", "SPY"],
+    "frequency": "monthly close",
+    "period_requested": "2023-09-01/2026-09-08",
+    "period_used_for_35m_beta": "2023-09-01/2026-08-31",
+    "monthly_return_observations": 35,
+    "partial_month_handling": "2026-09のpartial monthly barはbeta推定から除外した。",
+    "market_proxy": "SPY",
+    "look_ahead_control": "各window末は2026-08-31に固定し、その時点までの観測monthly price returnだけを使用した。"
+  },
+  "corporate_action_normalization": {
+    "AVGO": {
+      "event": "10-for-1 forward stock split",
+      "completion_date": "2024-07-12",
+      "split_adjusted_trading_start": "2024-07-15",
+      "source": "Broadcom issuer IR",
+      "source_url": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2024-financial",
+      "treatment": "split前価格を1/10に正規化してreturn discontinuityを除去した。"
+    },
+    "NVDA": {
+      "event": "10-for-1 forward stock split",
+      "completion_date": "2024-06-07",
+      "split_adjusted_trading_start": "2024-06-10",
+      "source": "NVIDIA issuer IR",
+      "source_url": "https://investor.nvidia.com/news/press-release-details/2024/NVIDIA-Announces-Financial-Results-for-First-Quarter-Fiscal-2025/default.aspx",
+      "treatment": "split前価格を1/10に正規化してreturn discontinuityを除去した。"
+    }
+  },
+  "method": {
+    "beta_formula": "beta = covariance(stock monthly price return, SPY monthly price return) / variance(SPY monthly price return)",
+    "required_return_formula": "required return = 4.75% risk-free + beta * 4.14% implied ERP",
+    "terminal_growth_pct": 3.0,
+    "terminal_multiple_formula": "Price/FCF = 1 / (required return - terminal growth)",
+    "benchmark": "beta=1 market-wide ERP anchor",
+    "alternative": "raw company-specific rolling beta with 12/24/35 monthly-return windows",
+    "not_a_fair_value_model": "CAPM-like valuation sensitivityであり、company-specific fair valueやportfolio-weight authorityではない。"
+  },
+  "beta_estimation": {
+    "window_12m": {
+      "AVGO_beta": 2.68499201,
+      "NVDA_beta": 1.39551514
+    },
+    "window_24m": {
+      "AVGO_beta": 1.73853196,
+      "NVDA_beta": 1.60737328
+    },
+    "window_35m": {
+      "AVGO_beta": 1.56854719,
+      "NVDA_beta": 1.92063365,
+      "AVGO_r_squared": 0.19446472,
+      "NVDA_r_squared": 0.41459208,
+      "AVGO_beta_95pct_ci": [0.43790950, 2.69918487],
+      "NVDA_beta_95pct_ci": [1.11234344, 2.72892385]
+    }
+  },
+  "terminal_discount_sensitivity": {
+    "beta_1_benchmark": {
+      "AVGO_required_return_pct": 8.89,
+      "NVDA_required_return_pct": 8.89,
+      "AVGO_terminal_price_to_fcf_x": 16.97792869,
+      "NVDA_terminal_price_to_fcf_x": 16.97792869,
+      "NVDA_base_5y_price_irr_pct": 4.41151079,
+      "AVGO_0pct_growth_5y_price_irr_pct": -1.18643860,
+      "AVGO_10pct_growth_5y_price_irr_pct": 4.62902139,
+      "AVGO_50_50_mean_5y_price_irr_pct": 1.72129139,
+      "AVGO_mean_minus_NVDA_pp": -2.69021939
+    },
+    "window_12m": {
+      "AVGO_required_return_pct": 15.86586692,
+      "NVDA_required_return_pct": 10.52743267,
+      "AVGO_terminal_price_to_fcf_x": 7.77250384,
+      "NVDA_terminal_price_to_fcf_x": 13.28474187,
+      "NVDA_base_5y_price_irr_pct": -0.58725566,
+      "AVGO_0pct_growth_5y_price_irr_pct": -15.48149622,
+      "AVGO_10pct_growth_5y_price_irr_pct": -10.50734114,
+      "AVGO_50_50_mean_5y_price_irr_pct": -12.99441868,
+      "AVGO_mean_minus_NVDA_pp": -12.40716302
+    },
+    "window_24m": {
+      "AVGO_required_return_pct": 11.94752232,
+      "NVDA_required_return_pct": 11.40452538,
+      "AVGO_terminal_price_to_fcf_x": 11.17627835,
+      "NVDA_terminal_price_to_fcf_x": 11.89835184,
+      "NVDA_base_5y_price_irr_pct": -2.75465974,
+      "AVGO_0pct_growth_5y_price_irr_pct": -9.11356826,
+      "AVGO_10pct_growth_5y_price_irr_pct": -3.76464246,
+      "AVGO_50_50_mean_5y_price_irr_pct": -6.43910536,
+      "AVGO_mean_minus_NVDA_pp": -3.68444562
+    },
+    "window_35m": {
+      "AVGO_required_return_pct": 11.24378535,
+      "NVDA_required_return_pct": 12.70142330,
+      "AVGO_terminal_price_to_fcf_x": 12.13034981,
+      "NVDA_terminal_price_to_fcf_x": 10.30776587,
+      "NVDA_base_5y_price_irr_pct": -5.50597508,
+      "AVGO_0pct_growth_5y_price_irr_pct": -7.61227432,
+      "AVGO_10pct_growth_5y_price_irr_pct": -2.17499308,
+      "AVGO_50_50_mean_5y_price_irr_pct": -4.89363370,
+      "AVGO_mean_minus_NVDA_pp": 0.61234138
+    }
+  },
+  "benchmark_comparison": {
+    "beta_1_spread_pp": -2.69021939,
+    "12m_spread_change_vs_benchmark_pp": -9.71694363,
+    "24m_spread_change_vs_benchmark_pp": -0.99422623,
+    "35m_spread_change_vs_benchmark_pp": 3.30256077,
+    "rank_flip_at_35m": true,
+    "window_relative_beta_order_is_stable": false
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "raw company-specific betaは意思決定にmaterialで、35か月windowではbeta=1 benchmarkのNVDA優位 -2.69021939ptからAVGO優位 +0.61234138ptへ相対順位を反転させる。しかし12か月ではNVDA優位 -12.40716302pt、24か月では -3.68444562ptであり、relative beta ordering自体がwindowに依存する。35か月betaの95%信頼区間も広く、単一raw betaをcanonical cost of equityとして固定できない。",
+    "usage_rule": "AVGO/NVDA valuationではbeta=1 market-wide ERP anchorに加えて12/24/35か月のcompany-beta sensitivityを併記する。raw rolling betaのどれか1つをcanonical discount rate、売買シグナル、portfolio-weight authorityにしない。",
+    "portfolio_action": "売買・注文・portfolio weight変更は実行しない。"
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "estimation_uncertainty": "35m beta confidence intervalとR-squaredを保存した。",
+    "reason": "realized-return trading strategyではなくvaluation discount-rate calibration studyのため。"
+  },
+  "limitations": [
+    "Alpaca IEX feedはconsolidated SIPではない。",
+    "SPYは米国株式市場全体そのものではなくmarket proxyである。",
+    "monthly closeのprice returnを使い配当を含むtotal returnではない。",
+    "35 monthly returnsはcompany-specific betaを安定推定するには小標本でありconfidence intervalが広い。",
+    "AVGOはVMware買収後を含みbusiness mixが期間中に変化している。",
+    "rolling betaは非定常で、12mと35mでAVGO/NVDAのrelative beta orderingが反転する。",
+    "net debt/cash、capital structure、fundamental/shrunk betaはまだ反映していない。",
+    "Price/FCF formulaは既存簡略cash-flow-yield contractでありfull FCFE modelではない。"
+  ],
+  "next_hypothesis": "raw rolling betaをfundamentalまたはshrinkage betaへ置き換え、AVGO/NVDAのpoint-in-time net debt/cashとcapital structureを反映したterminal bandでも相対順位が安定するか。"
+}

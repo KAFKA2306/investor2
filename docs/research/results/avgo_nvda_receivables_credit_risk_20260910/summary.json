@@ -1,0 +1,80 @@
+{
+  "status": "CONDITION",
+  "hypothesis": "NVIDIA の extended payment terms は Broadcom より materially 大きい customer-financing / credit-risk exposure を作っている。",
+  "precommit": {
+    "USE": "NVIDIA の H1 DSO が Broadcom を 10 日以上上回り、かつ両社で比較可能な credit-loss allowance / realized loss evidence が NVIDIA の material な追加 expected-loss risk を支持する。",
+    "CONDITION": "DSO 差が 10 日以上あるが、両社で比較可能な credit-loss allowance / realized loss evidence が不足し expected loss を定量化できない。",
+    "REJECT": "DSO 差が 10 日未満、または customer-financing risk が相対的に material でない。",
+    "UNVERIFIED": "source / identity / period / unit のいずれかが不足する。"
+  },
+  "as_of": "2026-09-10",
+  "sources": {
+    "avgo": {
+      "form": "Broadcom Inc. Form 10-Q, two fiscal quarters ended 2026-05-03",
+      "sec_url": "https://www.sec.gov/Archives/edgar/data/1730168/000173016826000054/avgo-20260503.htm",
+      "revenue_h1_usd_b": 41.498,
+      "accounts_receivable_begin_usd_b": 7.145,
+      "accounts_receivable_end_usd_b": 10.830,
+      "factoring_h1_usd_b": 2.350,
+      "top_five_end_customer_revenue_share": 0.45
+    },
+    "nvda": {
+      "form": "NVIDIA Corporation Form 10-Q, six months ended 2026-07-26",
+      "sec_url": "https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+      "revenue_h1_usd_b": 177.836,
+      "accounts_receivable_begin_usd_b": 38.466,
+      "accounts_receivable_end_usd_b": 63.059,
+      "accounts_receivable_top_five_shares": [0.22, 0.14, 0.13, 0.11, 0.10],
+      "accounts_receivable_top_five_share_sum": 0.70,
+      "payment_terms_note": "NVIDIA states that accounts receivable increased partly because of extended payment terms on large multi-quarter agreements with certain investment-grade customers."
+    }
+  },
+  "method": {
+    "days_in_half_year": 182,
+    "dso_formula": "average net accounts receivable / H1 revenue * 182",
+    "warning": "DSO is a period-level diagnostic, not a default probability. Broadcom factoring changes observed receivable balances and must be shown separately."
+  },
+  "results": {
+    "avgo_average_accounts_receivable_usd_b": 8.9875,
+    "nvda_average_accounts_receivable_usd_b": 50.7625,
+    "avgo_h1_dso_days": 39.416960,
+    "nvda_h1_dso_days": 51.951095,
+    "nvda_minus_avgo_dso_days": 12.534136,
+    "avgo_average_ar_to_h1_revenue": 0.216577,
+    "nvda_average_ar_to_h1_revenue": 0.285446,
+    "nvda_minus_avgo_average_ar_to_h1_revenue_percentage_points": 6.886888,
+    "nvda_top_five_ar_concentration": 0.70
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "H1 DSO from average net receivables and reported H1 revenue for each issuer.",
+    "alternative_explanation": "NVIDIA's longer DSO can be a deliberate working-capital / customer-financing choice for investment-grade customers rather than evidence of expected credit loss.",
+    "factoring_caveat": "Broadcom sold 2.350B USD of receivables non-recourse in H1 FY2026, so its observed DSO is not directly equivalent to a no-factoring collection cycle."
+  },
+  "decision": {
+    "classification": "CONDITION",
+    "reason": "NVIDIA H1 DSO is about 12.53 days longer than Broadcom and 70% of NVIDIA ending receivables is concentrated in five direct customers, so customer-financing exposure is material enough to monitor. However, comparable issuer-level allowance / realized credit-loss evidence is not disclosed symmetrically, Broadcom factoring mechanically lowers observed receivables, and NVIDIA describes the longer terms as applying to investment-grade customers. Therefore the evidence supports a financing/timing risk flag but not a probability-weighted valuation penalty.",
+    "rule": "Do not add an expected-credit-loss penalty to NVDA valuation from DSO alone. Recalculate when comparable allowance, write-off/default, payment-performance, or factoring-adjusted receivables evidence is available. Keep DSO and concentration as monitoring diagnostics, not terminal FCF coefficients."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time fundamental credit/working-capital research, not a realized trading strategy."
+  },
+  "implementation": {
+    "owner_repository": "KAFKA2306/investor2",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repository_duplication": false
+  },
+  "limitations": [
+    "Broadcom does not provide a directly comparable top-customer accounts-receivable concentration disclosure in the cited filing.",
+    "Comparable allowance for credit losses / realized bad-debt losses are not available symmetrically from the cited quarterly filings.",
+    "Broadcom non-recourse factoring reduces receivables held on balance sheet and therefore affects DSO comparability.",
+    "NVIDIA extended payment terms are described for certain investment-grade customers, so longer DSO is not itself evidence of deterioration."
+  ],
+  "next_high_value_hypothesis": "Adjust Broadcom receivables for sold non-recourse receivables and construct a factoring-neutral collection-cycle range, then compare that range with NVIDIA's extended-term DSO to determine whether the 12.53-day gap survives financing normalization."
+}

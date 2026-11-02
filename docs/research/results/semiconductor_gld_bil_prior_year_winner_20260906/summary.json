@@ -1,0 +1,57 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "semiconductor_gld_bil_prior_year_winner_20260906",
+  "status": "REJECT",
+  "hypothesis": "前年のtotal returnが高かった方を翌年の20%防御sleeveとしてGLD/BILから選ぶ単純point-in-time ruleは、固定GLD20%、固定BIL20%、SMH100%をOOSのCAGR・Sharpe・Maximum Drawdown・95% Expected Shortfallで上回る。",
+  "decision_rule": {
+    "use_if": "2022-2025 OOSでdynamic ruleが固定GLD20%と固定BIL20%の双方よりCAGRとSharpeが高く、Maximum Drawdownと95% Expected Shortfallが悪化しない。",
+    "reject_if": "固定sleeveのいずれかにCAGRまたはSharpeで劣る、またはtail-risk指標が悪化する。"
+  },
+  "source": {
+    "market_data": "Alpaca Market Data API / IEX",
+    "symbols": ["SMH", "GLD", "BIL"],
+    "market_period": "2020-2025 calendar-year bars; 2026 incomplete year excluded",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "corporate_action_types": ["cash_dividend", "forward_split", "reverse_split"],
+    "currency": "USD",
+    "fallback": "none",
+    "split_adjustment": "SMH 2-for-1 forward split ex-date 2023-05-05 applied to 2023 holding-period return"
+  },
+  "method": {
+    "signal": "at each year-end compare prior calendar-year GLD total return with BIL total return; hold the winner as the next calendar year's 20% sleeve",
+    "portfolio": "80% SMH + 20% selected sleeve",
+    "oos_years": [2022, 2023, 2024, 2025],
+    "selected_sleeve": {"2022": "BIL", "2023": "BIL", "2024": "GLD", "2025": "GLD"},
+    "transaction_cost_bps": 10,
+    "switch_cost": "target sleeve switch changes 40% two-sided weight; 10bp implies 4bp portfolio cost, applied in 2024",
+    "risk_free_rate_for_sharpe": 0,
+    "expected_shortfall": "worst annual return because OOS N=4; intentionally treated as coarse"
+  },
+  "annual_total_returns": {
+    "SMH": {"2021": 0.42232186, "2022": -0.33456059, "2023": 0.73286755, "2024": 0.39113531, "2025": 0.49122792},
+    "GLD": {"2021": -0.04168185, "2022": -0.00754651, "2023": 0.12673151, "2024": 0.26680617, "2025": 0.63679537},
+    "BIL": {"2021": -0.00092881, "2022": 0.01371307, "2023": 0.04838608, "2024": 0.05067627, "2025": 0.04082534}
+  },
+  "oos_portfolio_returns": {
+    "dynamic": {"2022": -0.26490585, "2023": 0.59597126, "2024": 0.36586948, "2025": 0.52034141},
+    "fixed_GLD20": {"2022": -0.26915777, "2023": 0.61164034, "2024": 0.36626948, "2025": 0.52034141},
+    "fixed_BIL20": {"2022": -0.26490585, "2023": 0.59597126, "2024": 0.32304350, "2025": 0.40114740},
+    "SMH100": {"2022": -0.33456059, "2023": 0.73286755, "2024": 0.39113531, "2025": 0.49122792}
+  },
+  "oos_metrics": {
+    "dynamic": {"CAGR": 0.24933696, "Vol": 0.39137881, "Sharpe": 0.77755634, "MaxDD": -0.26490585, "ES95": -0.26490585},
+    "fixed_GLD20": {"CAGR": 0.25066880, "Vol": 0.39740435, "Sharpe": 0.77320082, "MaxDD": -0.26915777, "ES95": -0.26915777},
+    "fixed_BIL20": {"CAGR": 0.21438528, "Vol": 0.37069382, "Sharpe": 0.71167649, "MaxDD": -0.26490585, "ES95": -0.26490585},
+    "SMH100": {"CAGR": 0.24364613, "Vol": 0.45945195, "Sharpe": 0.69684664, "MaxDD": -0.33456059, "ES95": -0.33456059}
+  },
+  "finding": {
+    "summary": "前年勝者追随は4年OOSで3/4年のsleeve winnerを当て、固定BILとSMH100%よりCAGR・Sharpeを改善した。しかし固定GLD20%に対してSharpeは0.7776対0.7732と僅かに高いだけで、CAGRは24.93%対25.07%で下回った。採用条件を満たさないためREJECT。",
+    "production_action": "portfolio ruleやsignal codeを追加しない"
+  },
+  "limitations": [
+    "OOSは4年しかなく、年次データなのでMaximum Drawdownと95% Expected Shortfallは粗い。",
+    "固定benchmarkの月内・月次リバランスコストは再現しておらず、dynamic ruleの追加switch costだけを保守的に課した簡略比較。",
+    "前年winner ruleは実質金利などの経済状態を説明せず、単なるrelative momentumである。"
+  ],
+  "next_hypothesis": "GLD/BILの二者択一ではなく、SMH60%/GLD20%/BIL20%の固定blendに対して、半導体risk exposureを事前volatilityで60-80%の範囲だけ調整する単純walk-forward ruleが、長期OOSでCAGRを回復しつつtail riskを維持できるか。"
+}

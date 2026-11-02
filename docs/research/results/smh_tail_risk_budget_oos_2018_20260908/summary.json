@@ -1,0 +1,109 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_tail_risk_budget_oos_2018_20260908",
+  "status": "CONDITION",
+  "hypothesis": "2020-07以降のcanonical sampleでCONDITIONとなったSMH60%/GLD20%/BIL20%は、候補選定より前の2018年半導体調整でもMaximum Drawdown 30%以下・95% Expected Shortfall 10%以下を維持し、SMH80%/DBC20%よりSharpe、Maximum Drawdown、95% Expected Shortfallで劣後しない。",
+  "decision_rule": {
+    "condition_if": "2018-01..2018-11のpre-sample OOSで60/20/20がMaxDD<=30%かつES95<=10%を満たし、80/DBC20よりSharpe、MaxDD、ES95で劣後しない。",
+    "reject_if": "60/20/20が二重risk capを破る、または80/DBC20にSharpe、MaxDD、ES95のいずれかで劣後する。",
+    "use_if": "さらに長い2016年以降のcorporate-action-adjusted共通履歴または将来walk-forwardでも同じgateを維持する。"
+  },
+  "capital_allocation_importance": "30% MaxDD / 10% ES95のhard tail-risk budgetを使う場合、60/20/20をdefensive benchmarkとして残す根拠が2020-2026の同一sample内比較だけでなく、候補選定より前の実市場stressにも存在するかを確認する。",
+  "data": {
+    "market_data": "Alpaca Market Data API / SIP",
+    "market_query": {
+      "symbols": ["SMH", "GLD", "BIL", "DBC"],
+      "timeframe": "1Month",
+      "currency": "USD",
+      "feed": "sip"
+    },
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "evaluation_period": "2018-01 through 2018-11",
+    "starting_price_month": "2017-12",
+    "monthly_returns": 11,
+    "point_in_time_role": "pre-sample out-of-sample relative to the 2020-07..2026-08 discovery/evaluation sample",
+    "fallback": "none",
+    "missing_value_imputation": "none",
+    "corporate_action_handling": {
+      "BIL": "cash dividends on 2018-02-01 through 2018-11-01 were added to the corresponding monthly holding-period return; the 2017-11-30 reverse split occurred before the evaluation window",
+      "SMH": "no cash dividend or split inside 2018-01..2018-11",
+      "GLD": "no cash dividend or split inside 2018-01..2018-11",
+      "DBC": "no cash dividend or split inside 2018-01..2018-11"
+    }
+  },
+  "method": {
+    "rebalance": "monthly fixed target weights",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided turnover after asset returns and before reset to target weights",
+    "risk_free_rate": 0.0,
+    "volatility": "sample standard deviation of monthly portfolio returns * sqrt(12)",
+    "sharpe": "annualized arithmetic mean return / annualized volatility",
+    "maximum_drawdown": "minimum cumulative wealth / running peak - 1",
+    "expected_shortfall_95": "mean of worst ceil(5% * n) monthly returns; n=11 so one worst month"
+  },
+  "results": {
+    "SMH60_GLD20_BIL20": {
+      "CAGR_pct": -1.25135090,
+      "annualized_volatility_pct": 13.89832208,
+      "Sharpe": -0.02733147,
+      "maximum_drawdown_pct": -8.76892087,
+      "expected_shortfall_95_pct": -6.87068074,
+      "cumulative_return_pct": -1.14767246,
+      "risk_budget_pass": true
+    },
+    "SMH80_DBC20": {
+      "CAGR_pct": -2.28714470,
+      "annualized_volatility_pct": 19.21725829,
+      "Sharpe": -0.03211202,
+      "maximum_drawdown_pct": -11.91483970,
+      "expected_shortfall_95_pct": -10.88878915,
+      "cumulative_return_pct": -2.09856397,
+      "risk_budget_pass": false
+    },
+    "SMH80_GLD20": {
+      "CAGR_pct": -1.99656925,
+      "annualized_volatility_pct": 18.48298653,
+      "Sharpe": -0.02472697,
+      "maximum_drawdown_pct": -11.45329357,
+      "expected_shortfall_95_pct": -9.34347581,
+      "cumulative_return_pct": -1.83172212,
+      "risk_budget_pass": true
+    },
+    "SMH100": {
+      "CAGR_pct": -1.18167071,
+      "annualized_volatility_pct": 23.01979104,
+      "Sharpe": 0.05407230,
+      "maximum_drawdown_pct": -14.20965669,
+      "expected_shortfall_95_pct": -12.20291217,
+      "cumulative_return_pct": -1.08373377,
+      "risk_budget_pass": false
+    }
+  },
+  "benchmark_comparison": {
+    "primary_benchmark": "SMH80_DBC20",
+    "alternative_simple_benchmark": "SMH80_GLD20",
+    "vs_SMH80_DBC20": {
+      "CAGR_difference_percentage_points": 1.03579380,
+      "Sharpe_difference": 0.00478055,
+      "maximum_drawdown_improvement_percentage_points": 3.14591883,
+      "expected_shortfall_95_improvement_percentage_points": 4.01810841
+    },
+    "interpretation": "2018 pre-sample stressでは60/20/20が80/DBC20よりCAGR、Sharpe、Maximum Drawdown、ES95のすべてで改善した。80/GLD20も二重risk capを満たすため、60/20/20が唯一の防御配分という主張はしない。"
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "60/20/20は2018-01..2018-11のpre-sample OOSでMaxDD -8.7689%、ES95 -6.8707%と30%/10% capを維持し、80/DBC20よりSharpe、MaxDD、ES95で劣後しなかった。ただし11か月の単一stress windowであり、80/GLD20も同じrisk capを満たすためUSEには上げない。",
+    "portfolio_weight_authority_changed": false,
+    "reusable_allocation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false
+  },
+  "limitations": [
+    "評価期間は11か月で、独立した長期OOSではない。",
+    "ES95はn=11のため最悪1か月だけで決まる。",
+    "税、実際のbid-ask spread、slippageは含めず、既存研究と同じ10bp turnover costを使う。",
+    "2016年以降の完全な長期total return検証にはBILの2017-11-30 reverse split、SMHの2023-05-05 split、SMH/BIL/DBCの全cash distributionsを一貫して処理する必要がある。"
+  ],
+  "next_high_value_hypothesis": "2016年以降のAlpaca SIP共通履歴を全corporate actions込みで再構築したとき、SMH60%/GLD20%/BIL20%はMaxDD 30%以下・ES95 10%以下を維持し、SMH80%/DBC20%より高いSharpeを維持するか。"
+}

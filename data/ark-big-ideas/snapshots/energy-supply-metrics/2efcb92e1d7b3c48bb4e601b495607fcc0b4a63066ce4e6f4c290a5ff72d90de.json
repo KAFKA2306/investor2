@@ -1,0 +1,53 @@
+{
+  "observations": [
+    {
+      "as_of": "2026-10-26",
+      "geography": "US48",
+      "metric": "electricity_demand",
+      "period": "daily actual",
+      "product": "US48 electricity demand",
+      "provider": "U.S. Energy Information Administration",
+      "qualifier": "sum of complete hourly observations for the UTC day",
+      "source_url": "https://www.eia.gov/opendata/bulk/EBA.zip",
+      "unit": "megawatthours",
+      "value": 10684699.323
+    },
+    {
+      "as_of": "2026-10-25",
+      "geography": "US48",
+      "metric": "net_generation",
+      "period": "daily actual",
+      "product": "US48 net generation",
+      "provider": "U.S. Energy Information Administration",
+      "qualifier": "sum of complete hourly observations for the UTC day",
+      "source_url": "https://www.eia.gov/opendata/bulk/EBA.zip",
+      "unit": "megawatthours",
+      "value": 9814770.87
+    },
+    {
+      "as_of": "2026-09",
+      "geography": "United States and Puerto Rico where reported",
+      "metric": "operating_net_summer_capacity",
+      "period": "monthly reported inventory",
+      "product": "EIA-860M operating generators",
+      "provider": "U.S. Energy Information Administration",
+      "qualifier": "reported operating net summer capacity; not a forecast",
+      "source_url": "https://www.eia.gov/electricity/data/eia860m/xls/september_generator2026.xlsx",
+      "unit": "MW",
+      "value": 1324124.6
+    },
+    {
+      "as_of": "2026-09",
+      "geography": "United States and Puerto Rico where reported",
+      "metric": "planned_net_summer_capacity",
+      "period": "monthly reported inventory",
+      "product": "EIA-860M planned generators",
+      "provider": "U.S. Energy Information Administration",
+      "qualifier": "reported planned capacity; kept separate from operating capacity",
+      "source_url": "https://www.eia.gov/electricity/data/eia860m/xls/september_generator2026.xlsx",
+      "unit": "MW",
+      "value": 282834.4
+    }
+  ],
+  "schema_version": 1
+}

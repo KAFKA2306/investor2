@@ -1,0 +1,14 @@
+{
+  "artifacts": {
+    "fold0.npz": "6d5d6b81c7bf12ad568114b30d7ac881c51d7b0234781a056093af4acf147fc8",
+    "fold1.npz": "e333030b5cf5c07bdd2b8d6d362ca70651a458f3896ca1647deca6a0f7e02e8a"
+  },
+  "input_hashes": {
+    "model_contract_sha256": "00ef50c334d39d31f638b4632eb11139c32511a2c0f109f24771c271aae4a0ce",
+    "pit_universe_parquet_sha256": "522cd70d0abc327a55adcb521dd5d51856f71eec7a50f5f0b81409a1fce750e4",
+    "selected_price_panel_sha256": "2b91f57b4e78e10dd9e139125e896b03ea669748a8e4e7e7c1d6e2d592cbc1b8",
+    "source_manifest_sha256": "631e4de2248a992d9b4149b8363fe016d83cd4d8f967452eb61cd64979c52d1e"
+  },
+  "schema_version": "investor2.skfolio-characteristics-jquants-oos-artifacts.v1",
+  "summary_sha256": "94bfe7c5c79f0d6625eeec206d0dd29039702cd44c00c621c089657b88ba8d20"
+}

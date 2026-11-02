@@ -1,0 +1,105 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "avgo_commitment_demand_coverage_20260910",
+  "status": "CONDITION",
+  "as_of": "2026-09-10",
+  "owner_repository": "KAFKA2306/investor2",
+  "hypothesis": "Broadcomのpurchase commitmentsはcontracted demandで十分にカバーされており、gross commitment-to-revenue ratioだけではdownside riskを過大評価する。",
+  "why_it_matters": "前回のcapital-at-risk比較ではBroadcomのpurchase commitmentsがannualized H1 revenue比154.36%と大きく見えた。需要側のfirm commitmentsで十分に裏付けられているなら、そのgross比率を直接valuation penaltyへ使うべきではない。逆にnear-term coverageが不足するならinventory/capacity riskとして監視強度を上げる必要がある。",
+  "precommit_rule": {
+    "use": "最新filingでaggregate RPO / purchase commitmentsが1.25倍以上かつ前四半期より改善し、同一または十分近い期間のexpected RPO recognitionが対応するpurchase commitmentsを100%以上カバーし、scope差も小さい。",
+    "condition": "aggregate coverageは1.25倍以上で改善するが、near-term coverageが100%未満、またはRPOとpurchase commitmentsのscope/timingが一致せず一点のdownside offsetにできない。",
+    "reject": "aggregate RPO / purchase commitmentsが1.0倍未満、またはpurchase commitmentsがRPOより速く増え、需要coverage改善が確認できない。",
+    "unverified": "RPO、purchase commitments、period、contract scopeの一次情報が不足する。"
+  },
+  "dependencies": {
+    "prior_capital_at_risk_artifact": "docs/research/results/avgo_nvda_capital_at_risk_20260910/summary.json",
+    "prior_rpo_artifact": "docs/research/results/avgo_ai_rpo_revenue_floor_20260910/summary.json"
+  },
+  "primary_sources": {
+    "broadcom_q3_10q": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-09-10, period ended 2026-08-02",
+      "source_url": "https://investors.broadcom.com/static-files/96641754-401f-4090-a4ab-210728c83a28",
+      "purchase_commitments_usd_billion": 126.821,
+      "remaining_performance_obligations_usd_billion": 179.2,
+      "expected_rpo_recognition_next_12_months_pct": 25.0,
+      "expected_rpo_recognition_next_12_months_usd_billion": 44.8,
+      "purchase_commitments_due_remainder_fy2026_usd_billion": 1.110,
+      "purchase_commitments_due_fy2027_usd_billion": 52.674,
+      "purchase_commitments_remainder_fy2026_plus_fy2027_usd_billion": 53.784,
+      "purchase_commitment_definition": "Unconditional purchase commitments to purchase goods or services, primarily inventory, that are enforceable and legally binding; excludes agreements cancelable without penalty and unconditional purchase commitments with remaining term of one year or less.",
+      "rpo_scope": "Firmly committed amounts in certain multi-year semiconductor solutions and infrastructure software customer contracts; includes obligations under the long-term custom AI accelerator contract entered in Q2 FY2026.",
+      "issuer_rpo_warning": "Broadcom states that disclosed RPO is not indicative of revenue for future periods."
+    },
+    "broadcom_q2_10q": {
+      "source": "Broadcom Inc. Form 10-Q filed 2026-06-09, period ended 2026-05-03",
+      "source_url": "https://investors.broadcom.com/static-files/f6369ec9-58c2-4697-9ad9-be2ae658352b",
+      "purchase_commitments_usd_billion": 128.110,
+      "remaining_performance_obligations_usd_billion": 164.6,
+      "expected_rpo_recognition_next_12_months_pct": 30.0,
+      "expected_rpo_recognition_next_12_months_usd_billion": 49.38
+    }
+  },
+  "benchmark_and_alternatives": {
+    "benchmark_gross_commitment_view": {
+      "definition": "Treat purchase commitments as gross capital-at-risk without demand-side offset.",
+      "prior_q2_purchase_commitments_usd_billion": 128.110,
+      "prior_annualized_h1_revenue_usd_billion": 82.996,
+      "prior_commitments_to_annualized_revenue_pct": 154.35683647404694,
+      "interpretation": "Useful as a gross exposure diagnostic but not sufficient for expected loss."
+    },
+    "aggregate_contract_coverage": {
+      "q2_rpo_to_purchase_commitments_x": 1.2848333463429864,
+      "q3_rpo_to_purchase_commitments_x": 1.41301519464442,
+      "qoq_change_x": 0.1281818483014336,
+      "q2_to_q3_rpo_change_usd_billion": 14.6,
+      "q2_to_q3_rpo_change_pct": 8.869987849331707,
+      "q2_to_q3_purchase_commitments_change_usd_billion": -1.289,
+      "q2_to_q3_purchase_commitments_change_pct": -1.00616657559911,
+      "result": "SUPPORTS_COVERAGE_CONTEXT",
+      "repository_status_mapping": "CONDITION"
+    },
+    "near_term_cross_check": {
+      "next_12_month_expected_rpo_recognition_usd_billion": 44.8,
+      "purchase_commitments_remainder_fy2026_plus_fy2027_usd_billion": 53.784,
+      "mechanical_ratio_x": 0.8329614755317566,
+      "result": "DOES_NOT_PROVE_FULL_NEAR_TERM_COVERAGE",
+      "reason": "The periods are not identical and the contract scopes differ, so this is a conservative cross-check rather than a matched coverage ratio. It fails the precommitted 100% near-term coverage condition."
+    }
+  },
+  "validation": {
+    "point_in_time": true,
+    "look_ahead": "No future realization is assumed. Q2 and Q3 filings are compared only as information available at their respective filing dates.",
+    "synthetic_data_used": false,
+    "silent_fallback_used": false,
+    "missing_data_policy": "AI-specific RPO amount, product-vs-software RPO split, contract-level gross margin, purchase-commitment-to-customer-contract mapping, and matched payment schedules are not inferred."
+  },
+  "result": {
+    "status": "CONDITION",
+    "finding": "Q3 RPO increased to 179.2B USD while purchase commitments declined to 126.821B USD, improving aggregate RPO/purchase-commitment coverage from 1.285x to 1.413x. This weakens a naive interpretation of the 154.36% gross commitment/revenue ratio as standalone downside risk. However, expected RPO recognition over the next 12 months is 44.8B USD versus 53.784B USD of purchase commitments scheduled for the remainder of FY2026 plus FY2027, a mechanically lower 0.833x cross-check. Because periods and scopes do not match and RPO includes infrastructure software while purchase commitments are primarily inventory, the data do not prove full near-term economic coverage."
+  },
+  "risk_metrics": {
+    "volatility": "NOT_APPLICABLE",
+    "sharpe": "NOT_APPLICABLE",
+    "maximum_drawdown": "NOT_APPLICABLE",
+    "expected_shortfall": "NOT_APPLICABLE",
+    "reason": "This is point-in-time contractual fundamental research, not a realized trading strategy."
+  },
+  "decision_rule": "Do not convert Broadcom's gross purchase-commitment/revenue ratio into an expected-loss or valuation penalty by itself. Use aggregate RPO/purchase-commitment coverage as demand-side context, but require matched contract scope, timing and gross-margin/cash-flow economics before treating commitments as fully covered. Re-evaluate if RPO/purchase-commitment coverage falls below 1.0x, purchase commitments begin growing faster than RPO, or matched near-term demand coverage becomes available.",
+  "limitations": [
+    "RPO includes both semiconductor solutions and infrastructure software, while purchase commitments are primarily inventory-related.",
+    "The next-12-month RPO recognition window does not exactly match the remainder-FY2026-plus-FY2027 purchase-commitment payment window.",
+    "Broadcom does not disclose AI-specific RPO, contract-level gross margin, or a one-to-one mapping from customer contracts to purchase commitments.",
+    "RPO is not presented by Broadcom as indicative of future-period revenue."
+  ],
+  "implementation": {
+    "artifact_only": true,
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "cross_repo_duplicate_financial_logic": false,
+    "dedicated_code_retained": false
+  },
+  "next_hypothesis": "BroadcomのQ3 FY2026 purchase commitments 126.821B USDのうちFY2027に支払予定の52.674B USDが、Q4 FY2026およびFY2027のAI semiconductor revenue/gross profit trajectoryに対して過大なinventory pre-commitmentかを、gross-margin-adjusted cash coverageで検証する。"
+}

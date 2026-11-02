@@ -1,0 +1,95 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "smh_gold_bil_tail_efficiency_20260907",
+  "status": "CONDITION",
+  "hypothesis": "SMH60%/GLD20%/BIL20%の優位はSharpeだけではなく、CAGRをMaximum Drawdownと95% Expected Shortfallで割ったtail-adjusted capital efficiencyでもSMH80%/GLD20%とSMH80%/BIL20%を上回る。",
+  "decision_rule": {
+    "use_if": "60/20/20が両80/20 benchmarkよりCAGR/|Maximum Drawdown|とCAGR/|ES95|の双方で高く、既存Sharpe優位と矛盾しない。",
+    "reject_if": "tail-adjusted ratioのいずれかでどちらかの80/20 benchmarkに劣る。"
+  },
+  "canonical_source": "docs/research/results/semiconductor_gold_sleeve_long_horizon_20260906/summary.json",
+  "source_identity": {
+    "owner_repository": "KAFKA2306/investor2",
+    "market_data": "Alpaca Market Data API / IEX",
+    "corporate_actions": "Alpaca Corporate Actions API",
+    "symbols": ["SMH", "GLD", "BIL"],
+    "period": "2020-07 through 2026-08",
+    "monthly_returns": 73,
+    "currency": "USD",
+    "fallback": "none",
+    "transaction_cost_bps": 10,
+    "transaction_cost_basis": "two-sided absolute weight turnover after monthly drift"
+  },
+  "method": {
+    "inputs": "既存canonical artifactのCAGR、annualized volatility、Sharpe、Maximum Drawdown、95% Expected Shortfallをread-only再利用する。",
+    "calmar_like_ratio": "CAGR / abs(Maximum Drawdown)",
+    "cagr_to_es95": "CAGR / abs(ES95)",
+    "cagr_to_volatility": "CAGR / annualized volatility",
+    "note": "Calmar-like ratioは通常の36か月rolling Calmarではなく、同一73か月評価期間のCAGRとMaximum Drawdownによる比較指標。"
+  },
+  "benchmark_comparison": {
+    "SMH80_GLD20": {
+      "CAGR": 0.33672534,
+      "Vol": 0.26292236,
+      "Sharpe": 1.24337587,
+      "MaxDD": -0.34201565,
+      "ES95": -0.12792343,
+      "CAGR_to_abs_MaxDD": 0.98453197,
+      "CAGR_to_abs_ES95": 2.63224133,
+      "CAGR_to_Vol": 1.28070256
+    },
+    "SMH80_BIL20": {
+      "CAGR": 0.30817722,
+      "Vol": 0.25903681,
+      "Sharpe": 1.17277618,
+      "MaxDD": -0.32749770,
+      "ES95": -0.12476619,
+      "CAGR_to_abs_MaxDD": 0.94100575,
+      "CAGR_to_abs_ES95": 2.47003792,
+      "CAGR_to_Vol": 1.18970435
+    },
+    "SMH60_GLD20_BIL20": {
+      "CAGR": 0.26681913,
+      "Vol": 0.19907358,
+      "Sharpe": 1.29580711,
+      "MaxDD": -0.26652533,
+      "ES95": -0.09636161,
+      "CAGR_to_abs_MaxDD": 1.00110233,
+      "CAGR_to_abs_ES95": 2.76893599,
+      "CAGR_to_Vol": 1.34030407
+    }
+  },
+  "measured_deltas": {
+    "vs_SMH80_GLD20": {
+      "CAGR_to_abs_MaxDD": 0.01657037,
+      "CAGR_to_abs_ES95": 0.13669466,
+      "CAGR_to_Vol": 0.05960151,
+      "Sharpe": 0.05243124
+    },
+    "vs_SMH80_BIL20": {
+      "CAGR_to_abs_MaxDD": 0.06009658,
+      "CAGR_to_abs_ES95": 0.29889807,
+      "CAGR_to_Vol": 0.15059972,
+      "Sharpe": 0.12303093
+    }
+  },
+  "finding": {
+    "summary": "60/20/20はCAGR自体は両80/20より低いが、失ったreturn以上にvolatility、Maximum Drawdown、95% Expected Shortfallを削減しており、Sharpe以外のtail-adjusted capital-efficiency指標でも両benchmarkを上回った。",
+    "scope": "60/20/20をreturn最大化portfolioまたは固定default weightとして採用する根拠ではない。半導体集中risk-control研究で必ず比較すべきcanonical benchmarkとして扱う。",
+    "production_action": "既存のCONDITION判断を強化する。portfolio weight authorityは変更しない。"
+  },
+  "reusable_decision": "半導体集中portfolioの防御案はSharpeだけで比較せず、60/20/20をCAGR/|MaxDD|とCAGR/|ES95|でもbenchmarkに含める。60/20/20を上回れない複雑なrisk-control ruleは採用しない。",
+  "screening_note": {
+    "candidate": "DBMF managed-futures ETF",
+    "result": "UNVERIFIED_FOR_THIS_RUN",
+    "reason": "Alpaca IEX 1Month barsに2020-10..2020-12、2021-06など欠損月があり、補間禁止ルールのためportfolio比較へ使用しなかった。",
+    "alternative_checked": "DBC commodity ETFは2020-07..2026-09の月次barが連続し、cash distributionsもAlpaca Corporate Actionsで確認できたが、本研究の採否には使用していない。"
+  },
+  "limitations": [
+    "元データは73月次returnで、独立した長期out-of-sampleではない。",
+    "CAGR/|MaxDD|とCAGR/|ES95|は同一sampleから計算した記述統計で、信頼区間は付与していない。",
+    "60/20/20はSMH exposureを80%から60%へ下げるため、return最大化を目的とする投資家には適さない。",
+    "Calmar-like ratioは一般的なrolling Calmar Ratioそのものではない。"
+  ],
+  "next_hypothesis": "連続したcanonical total-return historyを取得できる非株式資産のうち、DBCのような広範コモディティをBILの一部と置換すると、借入なしで60/20/20のtail efficiencyを維持しながらCAGRを回復できるか。"
+}

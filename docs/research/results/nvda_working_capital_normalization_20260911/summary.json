@@ -1,0 +1,131 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_working_capital_normalization_20260911",
+  "status": "CONDITION",
+  "as_of": "2026-09-11",
+  "hypothesis": "NVIDIA Q2 FY2027のcash-conversion低下は主に一時的なaccounts-receivable buildであり、Q2 ending AR intensityをQ1 FY2027水準へ正規化すると、20% Data Center growth scenarioで必要なFCF marginに対するheadroomは十分に回復する。",
+  "decision_rule": {
+    "use_if": "Q1 revenue-scaled AR intensityへの正規化だけでfirst-half FY2027 FCF marginが20% growth scenarioのrequired FCF margin 38.421675%を5pt以上上回り、inventory/revenue ratioのQ1からQ2への悪化が2pt未満で、後続実績でAR回収またはFCF conversion改善が確認される。",
+    "condition_if": "AR normalizationで5pt以上のheadroomが得られ、inventory intensityも大幅悪化していないが、AR回収またはFCF conversion改善の後続実績がまだ観測されていない。",
+    "reject_if": "AR normalization後も20% growth scenarioのrequired FCF marginを満たさない、またはinventory/supply commitment増加がAR効果を上回る恒久的cash drainを示す。",
+    "unverified_if": "NVIDIAのQ1/Q2 revenue、AR、inventory、FCF、またはcanonical required FCF marginのidentityが不足する。"
+  },
+  "capital_allocation_importance": "前回研究ではNVDAの20% growth scenarioのFCF-margin headroomが+0.8812ptしかなくAVGOを下回った。cash conversion低下がworking-capital timingならvaluation margin of safetyを過小評価しているため、ARとinventoryを分解して再評価する。",
+  "canonical_inputs": {
+    "owner_repository": "KAFKA2306/investor2",
+    "upstream_fundamental_owner": "KAFKA2306/semiconductor-earnings-model",
+    "prior_artifact": "docs/research/results/nvda_avgo_growth_margin_cash_headroom_20260911/summary.json",
+    "required_fcf_margin_growth_20pct_pct": 38.421675,
+    "fy2027_h1_revenue_usd_b": 177.837,
+    "fy2027_h1_fcf_usd_b": 69.895,
+    "fy2027_h1_reported_fcf_margin_pct": 39.302845,
+    "q4_fy2026_revenue_usd_b": 68.127,
+    "q4_fy2026_ar_usd_b": 38.466,
+    "q4_fy2026_inventory_usd_b": 21.403,
+    "q1_fy2027_revenue_usd_b": 81.615,
+    "q1_fy2027_ar_usd_b": 40.710,
+    "q1_fy2027_inventory_usd_b": 25.797,
+    "q2_fy2027_revenue_usd_b": 96.221,
+    "q2_fy2027_ar_usd_b": 63.059,
+    "q2_fy2027_inventory_usd_b": 31.575,
+    "q1_customer_advances_usd_b": 0.297,
+    "q2_customer_advances_usd_b": 2.8,
+    "fy2027_h1_supply_and_capacity_commitments_usd_b": 279.0,
+    "fy2027_h1_working_capital_cash_flow_usd_b": {
+      "accounts_receivable": -24.590,
+      "inventories": -10.204,
+      "prepaid_and_other_assets": -6.480,
+      "accounts_payable": 4.125,
+      "accrued_and_other_current_liabilities": 8.015,
+      "other_long_term_liabilities": 1.970,
+      "net": -27.164
+    },
+    "fallback": "none"
+  },
+  "primary_sources": [
+    "NVIDIA Q1 FY2027 Form 10-Q, quarter ended 2026-04-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000052/nvda-20260426.htm",
+    "NVIDIA Q2 FY2027 Form 10-Q, quarter ended 2026-07-26: https://www.sec.gov/Archives/edgar/data/1045810/000104581026000075/nvda-20260726.htm",
+    "NVIDIA Q2 FY2027 financial results, 2026-08-26: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVIDIA Q4 FY2026 financial results, 2026-02-25: https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Fourth-Quarter-and-Fiscal-2026/"
+  ],
+  "method": {
+    "point_in_time": "Use only balance-sheet and cash-flow values reported through 2026-07-26 plus the existing canonical valuation hurdle. No future quarter is used.",
+    "ar_intensity": "Compute ending AR / same-quarter revenue and an approximate 90-day DSO proxy. Normalize Q2 ending AR to the Q1 FY2027 AR/revenue ratio without altering revenue, inventory, capex or any other cash-flow item.",
+    "inventory_check": "Compare ending inventory/revenue ratios for Q4 FY2026, Q1 FY2027 and Q2 FY2027 to distinguish proportional supply build from a sharp intensity deterioration.",
+    "normalized_fcf": "AR-normalized H1 FCF = reported H1 FCF + (actual Q2 ending AR - Q2 revenue * Q1 AR/revenue ratio). This is a sensitivity, not reported or guided FCF.",
+    "benchmark": "Compare reported and AR-normalized H1 FY2027 FCF margin with the canonical 20% growth required FCF margin and with H1 FY2026 realized FCF margin.",
+    "risk_metrics": "NOT_APPLICABLE: point-in-time working-capital/fundamental valuation diagnostic, not a trading-strategy backtest."
+  },
+  "results": {
+    "ar_intensity": {
+      "q4_fy2026_ar_to_revenue_pct": 56.462196,
+      "q1_fy2027_ar_to_revenue_pct": 49.880537,
+      "q2_fy2027_ar_to_revenue_pct": 65.535590,
+      "q4_fy2026_dso_proxy_days": 50.815976,
+      "q1_fy2027_dso_proxy_days": 44.892483,
+      "q2_fy2027_dso_proxy_days": 58.982031,
+      "q2_ar_if_q1_intensity_usd_b": 47.995551,
+      "q2_excess_ar_vs_q1_intensity_usd_b": 15.063449
+    },
+    "inventory_intensity": {
+      "q4_fy2026_inventory_to_revenue_pct": 31.416325,
+      "q1_fy2027_inventory_to_revenue_pct": 31.608160,
+      "q2_fy2027_inventory_to_revenue_pct": 32.815082,
+      "q2_minus_q1_pt": 1.206922,
+      "q2_excess_inventory_vs_q1_revenue_scaled_intensity_usd_b": 1.161312
+    },
+    "cash_conversion": {
+      "fy2027_h1_reported_fcf_margin_pct": 39.302845,
+      "headroom_vs_required_20pct_growth_reported_pt": 0.881170,
+      "ar_normalized_h1_fcf_usd_b": 84.958449,
+      "ar_normalized_h1_fcf_margin_pct": 47.773213,
+      "headroom_vs_required_20pct_growth_ar_normalized_pt": 9.351538,
+      "fy2026_h1_fcf_usd_b": 39.584,
+      "fy2026_h1_revenue_usd_b": 90.805,
+      "fy2026_h1_fcf_margin_pct": 43.592313,
+      "reported_fy2027_h1_minus_fy2026_h1_margin_pt": -4.289468,
+      "ar_normalized_fy2027_h1_minus_fy2026_h1_margin_pt": 4.180900
+    },
+    "customer_advance_context": {
+      "q1_customer_advances_usd_b": 0.297,
+      "q2_customer_advances_usd_b": 2.8,
+      "sequential_increase_usd_b": 2.503,
+      "interpretation": "Customer advances increased materially while AR also rose, showing mixed working-capital timing rather than a simple demand collapse."
+    },
+    "supply_commitment_context": {
+      "q1_supply_and_capacity_commitments_usd_b": 119.0,
+      "q2_supply_and_capacity_commitments_usd_b": 279.0,
+      "increase_usd_b": 160.0,
+      "interpretation": "Large multi-year supply commitments are a genuine forward cash/risk exposure and prevent treating all working-capital normalization as guaranteed cash release."
+    }
+  },
+  "benchmark_and_alternative": {
+    "simple_benchmark": "Reported H1 FY2027 FCF margin 39.302845% leaves only +0.881170pt headroom versus the 20% Data Center growth valuation requirement of 38.421675%.",
+    "alternative_hypothesis": "The margin weakness is primarily timing from extended customer payment terms rather than a structural loss of unit economics.",
+    "alternative_result": "SUPPORTED CONDITIONALLY: Q2 AR intensity rose from 49.88% to 65.54% of quarterly revenue while inventory intensity rose only 1.21pt. Normalizing Q2 AR to Q1 intensity increases H1 FCF margin to 47.773213%, creating +9.351538pt headroom. NVIDIA explicitly attributes H1 operating-cash-flow pressure partly to extended payment terms on large multi-quarter agreements."
+  },
+  "verdict": {
+    "status": "CONDITION",
+    "reason": "The observed cash-conversion deterioration is mechanically dominated by a sharp AR build. AR normalization alone raises H1 FCF-margin headroom from +0.8812pt to +9.3515pt, while inventory/revenue intensity increased only 1.21pt. However the cash has not yet been collected and supply/capacity commitments increased to 279B USD, so a durable recovery cannot yet be classified USE.",
+    "capital_allocation_implication": "Do not treat NVDA's H1 FY2027 reported FCF margin of 39.30% as a durable cash-conversion ceiling. For the 20% growth valuation scenario, monitor AR/revenue or DSO normalization: a return toward Q1 intensity would restore substantial margin-of-safety. At the same time, keep the 279B USD supply/capacity commitment as a separate downside condition rather than netting it away against expected receivable collection."
+  },
+  "implementation": {
+    "canonical_owner": "KAFKA2306/investor2",
+    "artifact_type": "working-capital normalized decision/evaluation artifact",
+    "new_model": false,
+    "new_dataset": false,
+    "new_collector": false,
+    "new_workflow": false,
+    "portfolio_weight_change": false,
+    "cross_repository_duplicate_calculation": false,
+    "delete_or_cleanup": "No dedicated code/config/workflow/one-off script created; no cleanup required."
+  },
+  "limitations": [
+    "AR-normalized FCF is a sensitivity, not issuer-reported or guided FCF; collection timing and eventual credit losses are not known.",
+    "AR/revenue is used as a transparent quarterly intensity proxy; the approximate 90-day DSO proxy is not a fully weighted trailing-sales DSO calculation.",
+    "NVIDIA states some investment-grade customers may receive payment terms from 90 days up to one year, so Q1 AR intensity is not guaranteed to be the future steady state.",
+    "Inventory intensity is stable relative to revenue, but absolute inventory and supply/capacity commitments are rising rapidly and can create future cash or write-down risk.",
+    "The 20% Data Center growth scenario is a canonical valuation sensitivity, not NVIDIA guidance."
+  ],
+  "next_high_value_hypothesis": "NVIDIAの279B USD supply/capacity commitmentsは、Data Center revenue run-rateとgross profit/cash generationに対して過大ではないか。AVGO purchase-commitment研究と同じcoverage frameworkで、期限別92B/87B/88B USD commitmentsをcash-generation capacityと比較する。"
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "research-result.v1",
+  "research_id": "nvda_avgo_guidance_anchored_fcf_irr_20260908",
+  "status": "CONDITION",
+  "hypothesis": "最新一次情報で更新した近接TTM売上高の伸びを企業別の成長アンカーにし、TTM free cash flow marginとdiluted share countをbear/base/bullで明示的にストレスし、同一terminal Price/FCF gridを適用すると、NVDAとAVGOの現在ほぼ同じfree cash flow yieldから5年equity IRR順位を分離できる。",
+  "decision_rule": {
+    "condition_if": "同一terminal Price/FCF 25x/35x/45xとbear/base/bullの9組で同じ企業が9/9勝つが、5年成長率はissuer long-term guidanceではなく最新quarter guidanceを基にしたstress anchorである。",
+    "reject_if": "winnerがscenario/multipleで頻繁に入れ替わる、またはbase 35xでIRR差が1 percentage point未満に留まる。",
+    "use_if": "独立した将来実績またはissuerの長期KPIで同じgrowth/margin/share-count orderingが検証され、balance-sheet riskを含めても順位が維持される。"
+  },
+  "capital_allocation_importance": "2026-09-04のTTM free cash flow yieldはNVDA 2.2698%、AVGO 2.2532%でほぼ同じ。一方、既存GAAP earnings-yield modelはNVDAを9/9シナリオで上位とした。企業別の近接成長とcash conversionを入れた時に順位が変わるなら、単一の現在利益指標でrelative allocationを固定してはいけない。",
+  "canonical_inputs": {
+    "price_date": "2026-09-04",
+    "currency": "USD",
+    "price_source": "KAFKA2306/investor2 canonical Alpaca Market Data IEX artifact",
+    "source_artifact": "docs/research/results/nvda_avgo_ttm_fcf_yield_parity_20260908/summary.json",
+    "NVDA": {"price": 230.19, "TTM_revenue_USD_billion": 302.970, "TTM_FCF_margin_pct": 41.88071426, "latest_diluted_shares_billion": 24.285, "net_cash_USD_billion": 23.220},
+    "AVGO": {"price": 357.835, "TTM_revenue_USD_billion": 89.104, "TTM_FCF_margin_pct": 44.22135931, "latest_diluted_shares_billion": 4.887, "net_debt_USD_billion": 35.444}
+  },
+  "primary_sources": {
+    "NVDA_Q2_FY2027": "https://investor.nvidia.com/news/press-release-details/2026/NVIDIA-Announces-Financial-Results-for-Second-Quarter-Fiscal-2027/default.aspx",
+    "NVDA_Q3_FY2026": "https://investor.nvidia.com/news/press-release-details/2025/NVIDIA-Announces-Financial-Results-for-Third-Quarter-Fiscal-2026/default.aspx",
+    "AVGO_Q3_FY2026": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "AVGO_Q4_FY2025": "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-fourth-quarter-and-fiscal-year-2025",
+    "NYSE_2026_calendar": "https://www.nyse.com/markets/hours-calendars"
+  },
+  "point_in_time_growth_anchor": {
+    "method": "next TTM revenue = current TTM revenue - corresponding prior-year quarter revenue + latest issuer revenue guidance; anchor = next TTM/current TTM - 1. This is a stress anchor, not a five-year issuer forecast.",
+    "NVDA": {"current_TTM_revenue_USD_billion": 302.970, "remove_Q3_FY2026_revenue_USD_billion": 57.006, "add_Q3_FY2027_guidance_USD_billion": 108.0, "next_TTM_revenue_USD_billion": 353.964, "anchor_growth_pct": 16.83136944},
+    "AVGO": {"current_TTM_revenue_USD_billion": 89.104, "remove_Q4_FY2025_revenue_USD_billion": 18.015, "add_Q4_FY2026_guidance_USD_billion": 34.8, "next_TTM_revenue_USD_billion": 105.889, "anchor_growth_pct": 18.83753816}
+  },
+  "scenario_contract": {
+    "bear": {"five_year_revenue_CAGR": "0.5 * company growth anchor", "FCF_margin": "current TTM margin - 5 percentage points", "diluted_share_count_CAGR_pct": 1.0},
+    "base": {"five_year_revenue_CAGR": "1.0 * company growth anchor", "FCF_margin": "current TTM margin", "diluted_share_count_CAGR_pct": 0.0},
+    "bull": {"five_year_revenue_CAGR": "1.5 * company growth anchor", "FCF_margin": "current TTM margin + 2 percentage points", "diluted_share_count_CAGR_pct": -1.0},
+    "terminal_price_to_FCF_grid_x": [25, 35, 45],
+    "terminal_price_formula": "year5 FCF per diluted share * terminal Price/FCF",
+    "five_year_price_IRR_formula": "(terminal price/current price)^(1/5)-1",
+    "dividends": "excluded",
+    "taxes": "excluded",
+    "fallback": "none",
+    "missing_value_imputation": "none"
+  },
+  "results": {
+    "bear": {
+      "NVDA": {"revenue_CAGR_pct": 8.41568472, "FCF_margin_pct": 36.88071426, "share_count_CAGR_pct": 1.0, "year5_FCF_per_share_USD": 6.55714155, "IRR_pct_at_25x": -6.56413234, "IRR_pct_at_35x": -0.06002648, "IRR_pct_at_45x": 5.09162898},
+      "AVGO": {"revenue_CAGR_pct": 9.41876908, "FCF_margin_pct": 39.22135931, "share_count_CAGR_pct": 1.0, "year5_FCF_per_share_USD": 10.67160539, "IRR_pct_at_25x": -5.70310557, "IRR_pct_at_35x": 0.86093668, "IRR_pct_at_45x": 6.06006549},
+      "AVGO_minus_NVDA_IRR_percentage_points": {"25x": 0.86102677, "35x": 0.92096316, "45x": 0.96843651}
+    },
+    "base": {
+      "NVDA": {"revenue_CAGR_pct": 16.83136944, "FCF_margin_pct": 41.88071426, "share_count_CAGR_pct": 0.0, "year5_FCF_per_share_USD": 11.37294491, "IRR_pct_at_25x": 4.31464832, "IRR_pct_at_35x": 11.57603019, "IRR_pct_at_45x": 17.32749524},
+      "AVGO": {"revenue_CAGR_pct": 18.83753816, "FCF_margin_pct": 44.22135931, "share_count_CAGR_pct": 0.0, "year5_FCF_per_share_USD": 19.10975774, "IRR_pct_at_25x": 5.95036926, "IRR_pct_at_35x": 13.32561427, "IRR_pct_at_45x": 19.16726601},
+      "AVGO_minus_NVDA_IRR_percentage_points": {"25x": 1.63572094, "35x": 1.74958409, "45x": 1.83977077}
+    },
+    "bull": {
+      "NVDA": {"revenue_CAGR_pct": 25.24705416, "FCF_margin_pct": 43.88071426, "share_count_CAGR_pct": -1.0, "year5_FCF_per_share_USD": 17.74176547, "IRR_pct_at_25x": 14.01712293, "IRR_pct_at_35x": 21.95389770, "IRR_pct_at_45x": 28.24031585},
+      "AVGO": {"revenue_CAGR_pct": 28.25630724, "FCF_margin_pct": 46.22135931, "share_count_CAGR_pct": -1.0, "year5_FCF_per_share_USD": 30.75496659, "IRR_pct_at_25x": 16.52912630, "IRR_pct_at_35x": 24.64076257, "IRR_pct_at_45x": 31.06568188},
+      "AVGO_minus_NVDA_IRR_percentage_points": {"25x": 2.51200337, "35x": 2.68686487, "45x": 2.82536603}
+    },
+    "grid_summary": {"scenarios": 9, "AVGO_wins": 9, "NVDA_wins": 0, "base_case_35x_IRR_NVDA_pct": 11.57603019, "base_case_35x_IRR_AVGO_pct": 13.32561427, "base_case_AVGO_minus_NVDA_percentage_points": 1.74958409}
+  },
+  "benchmark_comparison": {
+    "benchmark": "docs/research/results/nvda_avgo_relative_irr_20260905/summary.json",
+    "benchmark_result": "GAAP EPS, equal growth and equal terminal P/E produced NVDA wins in 9/9 scenarios.",
+    "alternative_result": "TTM FCF, company-specific guidance-anchored growth, FCF margin and share-count stress with equal terminal Price/FCF produces AVGO wins in 9/9 scenarios.",
+    "interpretation": "The relative ranking flips when the earnings basis and growth/cash-conversion assumptions change. Current valuation alone does not establish a robust winner; AVGO's 9/9 FCF-grid advantage is conditional on the stress anchor persisting and does not remove leverage risk."
+  },
+  "risk_context": {
+    "NVDA": "net cash excluding marketable equity securities is USD 23.220 billion in the canonical source artifact.",
+    "AVGO": "net debt is USD 35.444 billion, about 0.90x canonical TTM FCF.",
+    "treatment": "Net debt is not subtracted again from terminal equity value because company-reported FCF is a levered cash-flow measure and the terminal multiple is Price/FCF. Leverage is retained as a separate risk condition rather than double-counted in valuation."
+  },
+  "decision": {
+    "status": "CONDITION",
+    "reason": "AVGO wins all 9 guidance-anchored FCF scenarios and the base 35x case by 1.7496 percentage points of annualized five-year price IRR. However, the five-year growth paths are stress assumptions derived from one-quarter issuer guidance, not issuer long-term guidance, and the result reverses the prior GAAP equal-growth ranking. Use this artifact to require explicit growth/margin/leverage assumptions before relative allocation; do not make it a standalone portfolio-weight authority.",
+    "portfolio_weight_authority_changed": false,
+    "reusable_decision_artifact_added": true,
+    "valuation_rule_added": false,
+    "model_added": false,
+    "collector_added": false,
+    "workflow_added": false
+  },
+  "limitations": [
+    "The five-year revenue CAGR scenarios are explicit stress transformations of near-term issuer guidance; neither issuer supplied five-year revenue guidance.",
+    "Terminal Price/FCF is an equity multiple applied to company-reported levered FCF, so net debt is handled as a separate risk condition rather than deducted again.",
+    "Dividends, taxes, transaction costs and future acquisition financing are excluded.",
+    "Free cash flow can move materially with working-capital timing and company-specific definitions.",
+    "2026-09-04 prices are retained because NYSE was closed for Labor Day on 2026-09-07; no unverified 2026-09-08 price is inserted."
+  ],
+  "next_high_value_hypothesis": "NVDAとAVGOのAI関連売上成長を半導体需要・顧客集中・設備投資サイクルの一次情報で分解し、5年FCF growth anchorの持続率をpoint-in-timeで検証すると、今回のAVGO優位9/9が維持されるか。"
+}

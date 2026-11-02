@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/terminal-wealth-is-not-enough-what-exotic-options-teach-us-about-long-term-asset-allocation",
+      "article_url": "https://insight.factset.com/terminal-wealth-is-not-enough-what-exotic-options-teach-us-about-long-term-asset-allocation",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/terminal-wealth-is-not-enough-what-exotic-options-teach-us-about-long-term-asset-allocation",
+      "published_at": "2026-09-14T15:21:08Z",
+      "title": "Terminal Wealth Is Not Enough: What Exotic Options Teach Us About Long-Term Asset Allocation"
+    },
+    {
+      "article_id": "https://insight.factset.com/the-signal-to-pitch-workflow-advantage-ai-is-reshaping-how-banks-win-mandates",
+      "article_url": "https://insight.factset.com/the-signal-to-pitch-workflow-advantage-ai-is-reshaping-how-banks-win-mandates",
+      "author": "Jamil Sheppard",
+      "guid": "https://insight.factset.com/the-signal-to-pitch-workflow-advantage-ai-is-reshaping-how-banks-win-mandates",
+      "published_at": "2026-09-14T17:08:33Z",
+      "title": "The Signal-to-Pitch Workflow Advantage: AI Is Reshaping How Banks Win Mandates"
+    },
+    {
+      "article_id": "https://insight.factset.com/wildfire-risk-and-grid-resilience-in-the-western-u.s",
+      "article_url": "https://insight.factset.com/wildfire-risk-and-grid-resilience-in-the-western-u.s",
+      "author": "Nate Miller",
+      "guid": "https://insight.factset.com/wildfire-risk-and-grid-resilience-in-the-western-u.s",
+      "published_at": "2026-09-17T16:15:00Z",
+      "title": "Wildfire Risk and Grid Resilience in the Western U.S."
+    },
+    {
+      "article_id": "https://insight.factset.com/disclosure-issue-leads-to-unwind-and-attracts-additional-attention-to-the-insurance-industry",
+      "article_url": "https://insight.factset.com/disclosure-issue-leads-to-unwind-and-attracts-additional-attention-to-the-insurance-industry",
+      "author": "Stewart Johnson",
+      "guid": "https://insight.factset.com/disclosure-issue-leads-to-unwind-and-attracts-additional-attention-to-the-insurance-industry",
+      "published_at": "2026-09-18T15:06:41Z",
+      "title": "Disclosure Issue Leads to Unwind and Attracts Additional Attention to the Insurance Industry"
+    },
+    {
+      "article_id": "https://insight.factset.com/more-than-65-of-sp-500-earnings-calls-for-q2-cited-ai",
+      "article_url": "https://insight.factset.com/more-than-65-of-sp-500-earnings-calls-for-q2-cited-ai",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/more-than-65-of-sp-500-earnings-calls-for-q2-cited-ai",
+      "published_at": "2026-09-18T16:21:47Z",
+      "title": "More Than 65% of S&P 500 Earnings Calls for Q2 Cited “AI”"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-august-2026",
+      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-august-2026",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-august-2026",
+      "published_at": "2026-09-21T16:00:00Z",
+      "title": "U.S. Mergers & Acquisitions Monthly Review: August 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/hydropower-concerns-continue-in-the-west",
+      "article_url": "https://insight.factset.com/hydropower-concerns-continue-in-the-west",
+      "author": "Trevor Fugita",
+      "guid": "https://insight.factset.com/hydropower-concerns-continue-in-the-west",
+      "published_at": "2026-09-23T14:00:01Z",
+      "title": "Hydropower Concerns Continue in the West"
+    },
+    {
+      "article_id": "https://insight.factset.com/carbon-terravaults-impact-on-california-decarbonization-goals",
+      "article_url": "https://insight.factset.com/carbon-terravaults-impact-on-california-decarbonization-goals",
+      "author": "jamie.braun@factset.com (Jamison Braun)",
+      "guid": "https://insight.factset.com/carbon-terravaults-impact-on-california-decarbonization-goals",
+      "published_at": "2026-09-25T16:00:00Z",
+      "title": "Carbon TerraVault’s Impact on California Decarbonization Goals"
+    },
+    {
+      "article_id": "https://insight.factset.com/where-are-analysts-most-optimistic-on-ratings-for-sp-500-companies-heading-into-q4-3",
+      "article_url": "https://insight.factset.com/where-are-analysts-most-optimistic-on-ratings-for-sp-500-companies-heading-into-q4-3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/where-are-analysts-most-optimistic-on-ratings-for-sp-500-companies-heading-into-q4-3",
+      "published_at": "2026-09-25T17:20:13Z",
+      "title": "Where Are Analysts Most Optimistic on Ratings for S&P 500 Companies Heading into Q4?"
+    },
+    {
+      "article_id": "https://insight.factset.com/timing-signal-composites-with-macro-regime-predictions",
+      "article_url": "https://insight.factset.com/timing-signal-composites-with-macro-regime-predictions",
+      "author": "Jonas Svallin",
+      "guid": "https://insight.factset.com/timing-signal-composites-with-macro-regime-predictions",
+      "published_at": "2026-09-25T21:39:50Z",
+      "title": "Timing Signal Composites with Macro Regime Predictions"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}
