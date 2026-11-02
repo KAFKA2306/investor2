@@ -107,9 +107,7 @@ def write_plot(path: Path, result: dict[str, Any]) -> None:
     path.write_text("\n".join(parts) + "\n", encoding="utf-8")
 
 
-def run_with_price_diagnostics(
-    *, dates: pd.DatetimeIndex, codes: np.ndarray, **kwargs: Any
-) -> dict[str, Any]:
+def run_with_price_diagnostics(*, dates: pd.DatetimeIndex, codes: np.ndarray, **kwargs: Any) -> dict[str, Any]:
     try:
         return run_ablation(**kwargs)
     except UnpricedHeldAsset as exc:

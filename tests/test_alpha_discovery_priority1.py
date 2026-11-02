@@ -122,11 +122,13 @@ def test_small_end_to_end_ablation_keeps_budgets_equal() -> None:
 
 
 def test_sparse_standardization_does_not_turn_missing_data_into_a_trade_signal() -> None:
-    panel = pd.DataFrame({
-        "Date": pd.to_datetime(["2026-01-05"] * 3),
-        "Code": ["A", "B", "C"],
-        "momentum_5": [1.0, 3.0, np.nan],
-    })
+    panel = pd.DataFrame(
+        {
+            "Date": pd.to_datetime(["2026-01-05"] * 3),
+            "Code": ["A", "B", "C"],
+            "momentum_5": [1.0, 3.0, np.nan],
+        }
+    )
     sparse = cross_sectional_zscore(panel, ["momentum_5"], preserve_missing=True)
     dense = cross_sectional_zscore(panel, ["momentum_5"])
     assert np.isnan(sparse.loc[2, "momentum_5"])
@@ -146,14 +148,10 @@ def test_sparse_positions_use_only_observed_decision_day_data() -> None:
     scores = np.tile([1.0, 2.0, 3.0, 4.0], (5, 1))
     observed = np.full((5, 4), 0.01)
     observed[1, 3] = np.nan
-    first = make_sparse_weight_path(
-        scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
-    )
+    first = make_sparse_weight_path(scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0)
     changed_future = observed.copy()
     changed_future[2, 0] = 999.0
-    second = make_sparse_weight_path(
-        scores, changed_future, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
-    )
+    second = make_sparse_weight_path(scores, changed_future, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0)
     np.testing.assert_array_equal(first[1], second[1])
     assert first[1, 3] == 0.0
     assert first[1, 2] > 0.0
@@ -162,9 +160,7 @@ def test_sparse_positions_use_only_observed_decision_day_data() -> None:
 def test_sparse_valuation_fails_closed_on_missing_held_asset() -> None:
     scores = np.tile([1.0, 2.0, 3.0, 4.0], (5, 1))
     observed = np.full((5, 4), 0.01)
-    weights = make_sparse_weight_path(
-        scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0
-    )
+    weights = make_sparse_weight_path(scores, observed, start=1, end=4, n_long=1, n_short=1, beta=1.0, gamma=0.0)
     observed[2, 3] = np.nan
     with pytest.raises(AssertionError, match="unpriced held asset"):
         returns_for_sparse_valuation(weights, observed, start=1, end=4)

@@ -203,9 +203,7 @@ def make_sparse_weight_path(
     for t in range(start, end - 1):
         eligible = np.flatnonzero(np.isfinite(values[t]) & np.isfinite(observed[t]))
         if eligible.size < n_long + n_short:
-            raise AssertionError(
-                f"only {eligible.size} observable assets at decision row {t}; need {n_long + n_short}"
-            )
+            raise AssertionError(f"only {eligible.size} observable assets at decision row {t}; need {n_long + n_short}")
         ordered = eligible[np.argsort(values[t, eligible], kind="mergesort")]
         if n_short:
             weights[t, ordered[:n_short]] = -short_gross / n_short
@@ -224,9 +222,7 @@ class UnpricedHeldAsset(AssertionError):
         )
 
 
-def returns_for_sparse_valuation(
-    weights: np.ndarray, returns: np.ndarray, *, start: int, end: int
-) -> np.ndarray:
+def returns_for_sparse_valuation(weights: np.ndarray, returns: np.ndarray, *, start: int, end: int) -> np.ndarray:
     """Zero-fill only unheld missing returns; refuse to price an unobserved held asset."""
     observed = np.asarray(returns, dtype=np.float64)
     path = np.asarray(weights, dtype=np.float64)
@@ -315,9 +311,7 @@ def evaluate_arm(
                 beta=beta,
                 gamma=gamma,
             )
-            valuation_returns = returns_for_sparse_valuation(
-                weights, returns, start=oos_start, end=oos_end
-            )
+            valuation_returns = returns_for_sparse_valuation(weights, returns, start=oos_start, end=oos_end)
         portfolio_metrics, _ = evaluate_weights(
             weights,
             valuation_returns,
