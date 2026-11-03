@@ -40,10 +40,10 @@
       "logical_repo": "ai-consumer",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/c7ebb8a9a75418a72e7cc5792c5e4670184c49a1e61000770fe586fa2e6c59fb.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ai-consumer-metrics/747eb43c6e135bb78dd110e0f1b88992d8236b0492e7cad9708ad71587d5edaa.json",
         "feed_id": "ai-consumer-metrics",
-        "mirror_sha256": "c7ebb8a9a75418a72e7cc5792c5e4670184c49a1e61000770fe586fa2e6c59fb",
-        "mirror_snapshot_id": "dbd36e7ef47e17bb92a0",
+        "mirror_sha256": "747eb43c6e135bb78dd110e0f1b88992d8236b0492e7cad9708ad71587d5edaa",
+        "mirror_snapshot_id": "5163e9aed8fbb9e78c0b",
         "row_count": 18
       },
       "status": "ready",
@@ -72,10 +72,10 @@
       "logical_repo": "nuclear-power",
       "projection": {
         "adapter": "nuclear_capacity",
-        "artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/902182f2cccaa6d45f426e7da16c743b5f89db1623175684c3278b2ecd1e9ff8.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/nuclear-capacity/4035f9bcbdf18d771c6e81fcb2b6692774f429ebb55e9f29795310d84bb0b483.json",
         "feed_id": "nuclear-capacity",
-        "mirror_sha256": "902182f2cccaa6d45f426e7da16c743b5f89db1623175684c3278b2ecd1e9ff8",
-        "mirror_snapshot_id": "0bfbabb056fb74f03203",
+        "mirror_sha256": "4035f9bcbdf18d771c6e81fcb2b6692774f429ebb55e9f29795310d84bb0b483",
+        "mirror_snapshot_id": "b263f1fceccee3a0e943",
         "row_count": 8
       },
       "status": "ready",
@@ -88,10 +88,10 @@
       "logical_repo": "energy-supply",
       "projection": {
         "adapter": "ai_consumer_metrics",
-        "artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/2edd94d798c843462d4c67f3dfb541d71697fbccc2f2826d300af3bf4e9d3684.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/energy-supply-metrics/ea93949c801f44b683cc9a9a8dc4cbbe56301df04654b459ec1e2485f20d9789.json",
         "feed_id": "energy-supply-metrics",
-        "mirror_sha256": "2edd94d798c843462d4c67f3dfb541d71697fbccc2f2826d300af3bf4e9d3684",
-        "mirror_snapshot_id": "72a5ab2bd45f3d6e77fd",
+        "mirror_sha256": "ea93949c801f44b683cc9a9a8dc4cbbe56301df04654b459ec1e2485f20d9789",
+        "mirror_snapshot_id": "63ee7b51bb614b9078b9",
         "row_count": 4
       },
       "status": "ready",
@@ -148,11 +148,11 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/d03abbb6b893a313388df47826aa6614dca1ffb6c25d3ababd789d8a8b97940d.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/8093779512370420a78d76cd10fbde386b8ae26d487b8a7afce69b0e69027c01.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "d03abbb6b893a313388df47826aa6614dca1ffb6c25d3ababd789d8a8b97940d",
-        "mirror_snapshot_id": "e0fc974a53897b7af21a",
-        "row_count": 337
+        "mirror_sha256": "8093779512370420a78d76cd10fbde386b8ae26d487b8a7afce69b0e69027c01",
+        "mirror_snapshot_id": "c461d1baf169785cc732",
+        "row_count": 339
       },
       "status": "ready",
       "theme": "Bitcoin / Derivatives"
@@ -164,10 +164,10 @@
       "logical_repo": "tokenized-assets",
       "projection": {
         "adapter": "tokenized_assets_issuer",
-        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/41510a8c22fd324dbd4a25749f1455f7b2097153fae0e509125d6b51c1c20934.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/2930baddebe7c47de0d162e8ebd0a81a07e58666a9511a5b8d729eb261385907.json",
         "feed_id": "tokenized-assets-issuer",
-        "mirror_sha256": "41510a8c22fd324dbd4a25749f1455f7b2097153fae0e509125d6b51c1c20934",
-        "mirror_snapshot_id": "6f1f186aba95f945f1d0",
+        "mirror_sha256": "2930baddebe7c47de0d162e8ebd0a81a07e58666a9511a5b8d729eb261385907",
+        "mirror_snapshot_id": "7d7292aa6693c7a20b86",
         "row_count": 16
       },
       "status": "ready",
@@ -196,10 +196,10 @@
       "logical_repo": "factory",
       "projection": {
         "adapter": "robotics_deployments",
-        "artifact_path": "data/ark-big-ideas/snapshots/robotics-deployments/7ff6b11ebc45809b9849afbc4196b967cc580d86a1a42af12e4579e036e058f8.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/robotics-deployments/69ace51444af1d03d436c6df7a0f2b011753cabf8eb4ff930734c1326454f422.json",
         "feed_id": "robotics-deployments",
-        "mirror_sha256": "7ff6b11ebc45809b9849afbc4196b967cc580d86a1a42af12e4579e036e058f8",
-        "mirror_snapshot_id": "31502153a4daa56a89d7",
+        "mirror_sha256": "69ace51444af1d03d436c6df7a0f2b011753cabf8eb4ff930734c1326454f422",
+        "mirror_snapshot_id": "e565964a06700eec6c35",
         "row_count": 42
       },
       "status": "ready",
@@ -228,11 +228,11 @@
       "logical_repo": "space-launches",
       "projection": {
         "adapter": "space_launches_monthly",
-        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/c00cbd471aca829a06da4fd73add3b98354e324b135f01c07ee72dd8ea5fce50.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/space-launches-monthly-cadence/7e3b0ea5fb168137c71f0a872d829556079ae9a188b6a90267411e61f6cc4358.json",
         "feed_id": "space-launches-monthly-cadence",
-        "mirror_sha256": "c00cbd471aca829a06da4fd73add3b98354e324b135f01c07ee72dd8ea5fce50",
-        "mirror_snapshot_id": "c9db98be735bf0997df1",
-        "row_count": 34
+        "mirror_sha256": "7e3b0ea5fb168137c71f0a872d829556079ae9a188b6a90267411e61f6cc4358",
+        "mirror_snapshot_id": "4e4dfd83a8145f14d58f",
+        "row_count": 35
       },
       "status": "ready",
       "theme": "Reusable Rockets"
@@ -244,10 +244,10 @@
       "logical_repo": "ark-etf-holdings",
       "projection": {
         "adapter": "ark_etf_holdings_latest",
-        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/e8d844a766417669438e7a1395f4715ce9eab0195c56ffedf0ced2fbeb86c4f8.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/ark-etf-holdings-latest/c3d3474f7adecd575d7660bf0e1eafa0177833c8e00af3c21fa4d2f5d120e455.json",
         "feed_id": "ark-etf-holdings-latest",
-        "mirror_sha256": "e8d844a766417669438e7a1395f4715ce9eab0195c56ffedf0ced2fbeb86c4f8",
-        "mirror_snapshot_id": "c6f22b20117c35e8aa43",
+        "mirror_sha256": "c3d3474f7adecd575d7660bf0e1eafa0177833c8e00af3c21fa4d2f5d120e455",
+        "mirror_snapshot_id": "1061c7907fca9504e730",
         "row_count": 13
       },
       "status": "accumulating",
