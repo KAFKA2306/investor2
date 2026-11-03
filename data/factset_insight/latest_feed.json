@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
-      "article_url": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
-      "author": "Lucas Caminiti",
-      "guid": "https://insight.factset.com/modeling-iron-air-battery-arbitrage-in-u.s.-power-markets",
-      "published_at": "2026-10-16T21:45:00Z",
-      "title": "Modeling Iron-Air Battery Arbitrage in U.S. Power Markets"
-    },
-    {
       "article_id": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
       "article_url": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
       "author": "media_request@factset.com (John Butters)",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
       "published_at": "2026-10-30T18:08:03Z",
       "title": "S&P 500 Earnings Season Update: October 30, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "article_url": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "published_at": "2026-11-02T18:29:56Z",
+      "title": "Podcast: S&P 500 Q3 Earnings Update"
     }
   ],
   "feed_title": "FactSet Insight",
