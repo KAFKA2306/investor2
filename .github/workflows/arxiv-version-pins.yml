@@ -97,7 +97,7 @@ jobs:
           PY
 
       - name: Upload live version-pin evidence
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7.0.2
         with:
           name: arxiv-qfin-2021-version-pins-${{ github.sha }}
           path: |
