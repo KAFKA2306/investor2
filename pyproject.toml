@@ -20,7 +20,7 @@ dependencies = [
     "japanize-matplotlib",
     "matplotlib-fontja",
     "scikit-learn",
-    "skfolio==1.0.0",
+    "skfolio==1.12.5",
 ]
 
 [dependency-groups]
