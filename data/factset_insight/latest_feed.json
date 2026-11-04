@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
-      "article_url": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
-      "published_at": "2026-10-19T16:00:01Z",
-      "title": "Are “Magnificent 7” Companies Still Top Contributors to S&P 500 Earnings Growth for Q3?"
-    },
-    {
       "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
       "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
       "author": "insight@factset.com (FactSet Insight)",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
       "published_at": "2026-11-02T18:29:56Z",
       "title": "Podcast: S&P 500 Q3 Earnings Update"
+    },
+    {
+      "article_id": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "article_url": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "published_at": "2026-11-03T17:00:01Z",
+      "title": "“Mag 7” Now Reporting Lower Earnings Growth Than the Other 493 S&P 500 Companies for Q3"
     }
   ],
   "feed_title": "FactSet Insight",
