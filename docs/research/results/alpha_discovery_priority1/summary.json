@@ -28,7 +28,7 @@
       "validation_evaluator_calls": 24
     }
   },
-  "code_revision": "01a7d2cc69743c740c0bd9b850ef85710f68b7d7",
+  "code_revision": "51a2f8235d9ccb711a76d025edebb848215159db",
   "contract_sha256": "33109f5ae3ba123227ba3d3cd538ffb32e61c45419175c5149df2a866435adbc",
   "dataset_sha256": "64d615d29885e0e50401e01dbd195dfd5e969bdfdfbd1ed60c98540975d9f89f",
   "effective_split": {
