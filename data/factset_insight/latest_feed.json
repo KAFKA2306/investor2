@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
-      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
-      "author": "insight@factset.com (FactSet Insight)",
-      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
-      "published_at": "2026-10-20T16:00:00Z",
-      "title": "U.S. Mergers & Acquisitions Monthly Review: September 2026"
-    },
-    {
-      "article_id": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
-      "article_url": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
-      "author": "Georgi Mitov",
-      "guid": "https://insight.factset.com/why-ai-makes-your-portfolio-optimization-engine-more-important-not-less",
-      "published_at": "2026-10-21T15:25:18Z",
-      "title": "Why AI Makes Your Portfolio Optimization Engine More Important, Not Less"
-    },
-    {
       "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-23-2026",
       "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-23-2026",
       "author": "media_request@factset.com (John Butters)",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
       "published_at": "2026-11-03T17:00:01Z",
       "title": "“Mag 7” Now Reporting Lower Earnings Growth Than the Other 493 S&P 500 Companies for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "article_url": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "published_at": "2026-11-04T17:00:00Z",
+      "title": "Analysts Increasing Quarterly EPS Estimates for S&P 500 for 3rd Straight Quarter"
+    },
+    {
+      "article_id": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "article_url": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "published_at": "2026-11-04T21:12:48Z",
+      "title": "From Conversation to Application: When a Portfolio Workflow Should Become a Tool"
     }
   ],
   "feed_title": "FactSet Insight",
