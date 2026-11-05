@@ -148,11 +148,11 @@
       "logical_repo": "bitcoin-derivatives",
       "projection": {
         "adapter": "bitcoin_derivatives_daily",
-        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/dfb104f136f0a94a83c4aa46cf69a32d377757e9d06756d9e890bab85ec52708.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/bitcoin-derivatives-daily/23f1651ee7599697e7374c3d15a962fc6618e627d97ff9c0306975a33445cb97.json",
         "feed_id": "bitcoin-derivatives-daily",
-        "mirror_sha256": "dfb104f136f0a94a83c4aa46cf69a32d377757e9d06756d9e890bab85ec52708",
-        "mirror_snapshot_id": "1fe9c78d501333511fdb",
-        "row_count": 340
+        "mirror_sha256": "23f1651ee7599697e7374c3d15a962fc6618e627d97ff9c0306975a33445cb97",
+        "mirror_snapshot_id": "b28f0580d32f42ae8890",
+        "row_count": 341
       },
       "status": "ready",
       "theme": "Bitcoin / Derivatives"
@@ -164,10 +164,10 @@
       "logical_repo": "tokenized-assets",
       "projection": {
         "adapter": "tokenized_assets_issuer",
-        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/d9cb86cbea0cece8169880b39a74cce026058847386c221b1bf50fd33e1fa2cc.json",
+        "artifact_path": "data/ark-big-ideas/snapshots/tokenized-assets-issuer/3c189ebd392e506c2211e6b582f9b6dc80aaa204ce3f47f1b774206833e02538.json",
         "feed_id": "tokenized-assets-issuer",
-        "mirror_sha256": "d9cb86cbea0cece8169880b39a74cce026058847386c221b1bf50fd33e1fa2cc",
-        "mirror_snapshot_id": "64376db479e6d24e3c5b",
+        "mirror_sha256": "3c189ebd392e506c2211e6b582f9b6dc80aaa204ce3f47f1b774206833e02538",
+        "mirror_snapshot_id": "1b1ed68e9e70f5870a9a",
         "row_count": 16
       },
       "status": "ready",

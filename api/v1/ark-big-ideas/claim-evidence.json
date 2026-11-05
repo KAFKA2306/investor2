@@ -309,7 +309,7 @@
         "measurement_gap": "The Bitcoin Core network series remains blocked on a synced mainnet node, so network maturity and demand composition are only partially observed.",
         "observation": {
           "bitcoin_network": "blocked_external_evidence",
-          "derivatives_metric_rows": 340,
+          "derivatives_metric_rows": 341,
           "treasury_first": {
             "dimensions": {
               "effective_at": "2024-09-19",
@@ -352,7 +352,7 @@
           "thesis_state": "mixed"
         }
       },
-      "evidence_row_count": 349,
+      "evidence_row_count": 350,
       "measurement_variables": [
         "bitcoin_holdings",
         "funding_rate_sum",
@@ -385,8 +385,8 @@
             "feed_id": "tokenized-assets-issuer",
             "logical_repo": "tokenized-assets",
             "metric_id": "circulation_usdc",
-            "mirror_sha256": "d9cb86cbea0cece8169880b39a74cce026058847386c221b1bf50fd33e1fa2cc",
-            "mirror_snapshot_id": "64376db479e6d24e3c5b",
+            "mirror_sha256": "3c189ebd392e506c2211e6b582f9b6dc80aaa204ce3f47f1b774206833e02538",
+            "mirror_snapshot_id": "1b1ed68e9e70f5870a9a",
             "period": "2026-03-11",
             "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20March%2026.pdf",
             "unit": "USDC",
@@ -402,8 +402,8 @@
             "feed_id": "tokenized-assets-issuer",
             "logical_repo": "tokenized-assets",
             "metric_id": "circulation_usdc",
-            "mirror_sha256": "d9cb86cbea0cece8169880b39a74cce026058847386c221b1bf50fd33e1fa2cc",
-            "mirror_snapshot_id": "64376db479e6d24e3c5b",
+            "mirror_sha256": "3c189ebd392e506c2211e6b582f9b6dc80aaa204ce3f47f1b774206833e02538",
+            "mirror_snapshot_id": "1b1ed68e9e70f5870a9a",
             "period": "2026-06-30",
             "source_url": "https://6778953.fs1.hubspotusercontent-na1.net/hubfs/6778953/USDCAttestationReports/2026/2026%20USDC_Examination%20Report%20June%2026.pdf",
             "unit": "USDC",

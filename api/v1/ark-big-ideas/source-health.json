@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "fd217524019f1571fdfc8de07aa7fb8803fd4273f1a918c3549d5db4ba1b0b65",
+      "sha256": "5c2ee0a08dd029d5fa0b5996aa62e79f8310edec09e1173657688195a0cac4f2",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "d9cb86cbea0cece8169880b39a74cce026058847386c221b1bf50fd33e1fa2cc",
+      "sha256": "3c189ebd392e506c2211e6b582f9b6dc80aaa204ce3f47f1b774206833e02538",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [

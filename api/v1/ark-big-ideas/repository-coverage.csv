@@ -1,10 +1,10 @@
 theme,canonical_repo,real_data,primary_source_provenance,reproducible,scheduled_workflow,latest_workflow_passed,public_view,investor2_integration,evidence_commit
-The Great Acceleration,KAFKA2306/investor2,true,true,true,true,false,false,true,
+The Great Acceleration,KAFKA2306/investor2,true,true,true,true,true,false,true,
 AI Infrastructure,KAFKA2306/semiconductor-earnings-model,true,true,true,true,true,false,true,"""990eac423d1c1de1d81c22f74485543bc09cb3cc"""
 The AI Consumer Operating System,KAFKA2306/finAnalist,true,true,false,true,true,false,true,"""4b65b92eb7742855dd37364221f0ff00f904ee89"""
 AI Productivity,KAFKA2306/econalert,true,true,true,true,true,false,true,"""e269ec18f2842e9265336c61db0e46cf8073b70d"""
-Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""634eb0b32eb20006fec94de45f861aa38e768dfc"", ""d946b96841bbe21fe0a126e7a368b9ffc73d60b2""]"
-Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""1f1216259e579d920df93be59f28f2de1f2a10e5"""
+Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""634eb0b32eb20006fec94de45f861aa38e768dfc"", ""6c1babc33c1b103525955875ea62e94447d0a202""]"
+Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""721a08e4042b5ad013c203d9eb0a832b147ce9ac"""
 DeFi Applications,KAFKA2306/skew,true,true,false,true,false,false,true,"""1e5c2173bfde72a0b0d381eea1347ba0af09f07b"""
 Multiomics,KAFKA2306/multiomics,true,true,false,true,false,false,true,"""71eab6abc8d44efe522aa9346554af6c349a0a5f"""
 Reusable Rockets,KAFKA2306/trahist,true,true,true,true,true,false,true,"""cff0375315c82def110081a2217154a3d6be1703"""
