@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "15084d45eb101c97aa3b37d017c9f261880e3b4aa062046c9d630ee241a6fa06",
+      "sha256": "3cda34f9df6155e1615a08896c09d8e12656258a6025b9c64790ae06669babaa",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "cd8f8a53f08ae7b1c99b99d765015f0e7720bcd3939fc8cca87827e09e3c69c7",
+      "sha256": "76a6563abaf4f086ec7208b87f6ae8f2b85a4265a1f3cf58ee5225a021496b4c",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -297,7 +297,7 @@
       ]
     },
     {
-      "bytes": 2688,
+      "bytes": 2687,
       "canonical_url": "https://github.com/KAFKA2306/etf/blob/main/data/ark-views/latest.json",
       "current_repo": "KAFKA2306/etf",
       "issue_url": "https://github.com/KAFKA2306/etf/issues/9",
@@ -305,7 +305,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "e7238617cd1bd4cca6122af6193344d011c8483932acd2f391e7585836b68308",
+      "sha256": "eb5469a2a590904c253611c87b57d6a547938e3bff9a29c737db1c76173c4586",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [
