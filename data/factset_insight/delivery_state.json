@@ -2,6 +2,7 @@
   "delivered_article_ids": [
     "https://insight.factset.com/analysts-increasing-eps-estimates-for-sp-500-companies-for-2nd-straight-quarter",
     "https://insight.factset.com/are-magnificent-7-companies-still-top-contributors-to-sp-500-earnings-growth-for-q3",
+    "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
     "https://insight.factset.com/beyond-the-first-sign-of-a-softening-insurance-market",
     "https://insight.factset.com/consumer-price-index-cpi-for-august-2026-is-projected-to-rise-3.3-year-over-year",
     "https://insight.factset.com/convincing-is-not-the-same-as-accurate-what-financial-institutions-must-demand-from-ai",
@@ -29,7 +30,8 @@
     "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-july-2026",
     "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-september-2026",
     "https://insight.factset.com/u.s.-residential-electricity-prices-on-the-rise",
-    "https://insight.factset.com/unlocking-industry-momentum-in-diversified-firms"
+    "https://insight.factset.com/unlocking-industry-momentum-in-diversified-firms",
+    "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility"
   ],
   "schema_version": "investor2.factset-insight-delivery-state.v1"
 }
