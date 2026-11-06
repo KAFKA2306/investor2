@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "article_url": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "author": "insight@factset.com (Colin Devereaux)",
+      "guid": "https://insight.factset.com/back-to-the-future-tracking-lp-portfolio-composition-over-20-years",
+      "published_at": "2026-10-28T16:00:03Z",
+      "title": "Back to the Future: Tracking LP Portfolio Composition Over 20 Years"
+    },
+    {
+      "article_id": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "article_url": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/when-no-portfolio-satisfies-the-mandate-using-ai-to-diagnose-optimization-infeasibility",
+      "published_at": "2026-10-28T21:59:24Z",
+      "title": "When No Portfolio Satisfies the Mandate: Using AI to Diagnose Optimization Infeasibility"
+    },
+    {
+      "article_id": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "article_url": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "author": "Banu Nadarajah",
+      "guid": "https://insight.factset.com/metals-mining-global-drill-results-monitor",
+      "published_at": "2026-10-30T15:02:21Z",
+      "title": "Metals & Mining: Global Drill Results Monitor"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-october-30-2026",
+      "published_at": "2026-10-30T18:08:03Z",
+      "title": "S&P 500 Earnings Season Update: October 30, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "article_url": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/podcast-sp-500-q3-earnings-update-1",
+      "published_at": "2026-11-02T18:29:56Z",
+      "title": "Podcast: S&P 500 Q3 Earnings Update"
+    },
+    {
+      "article_id": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "article_url": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "published_at": "2026-11-03T17:00:01Z",
+      "title": "“Mag 7” Now Reporting Lower Earnings Growth Than the Other 493 S&P 500 Companies for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "article_url": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "published_at": "2026-11-04T17:00:00Z",
+      "title": "Analysts Increasing Quarterly EPS Estimates for S&P 500 for 3rd Straight Quarter"
+    },
+    {
+      "article_id": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "article_url": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "published_at": "2026-11-04T21:12:48Z",
+      "title": "From Conversation to Application: When a Portfolio Workflow Should Become a Tool"
+    },
+    {
+      "article_id": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "article_url": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "published_at": "2026-11-05T14:47:11Z",
+      "title": "Total Nonfarm Payrolls for October 2026 Are Projected to Rise By 65,000"
+    },
+    {
+      "article_id": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "article_url": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "author": "Kristina Bratanova-Cvetanova",
+      "guid": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "published_at": "2026-11-05T17:23:00Z",
+      "title": "Stress Testing Amid Rising Fears of an AI Bubble"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}
