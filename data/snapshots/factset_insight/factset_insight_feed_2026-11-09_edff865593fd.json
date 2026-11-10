@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "article_url": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
+      "published_at": "2026-11-03T17:00:01Z",
+      "title": "“Mag 7” Now Reporting Lower Earnings Growth Than the Other 493 S&P 500 Companies for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "article_url": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
+      "published_at": "2026-11-04T17:00:00Z",
+      "title": "Analysts Increasing Quarterly EPS Estimates for S&P 500 for 3rd Straight Quarter"
+    },
+    {
+      "article_id": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "article_url": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
+      "published_at": "2026-11-04T21:12:48Z",
+      "title": "From Conversation to Application: When a Portfolio Workflow Should Become a Tool"
+    },
+    {
+      "article_id": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "article_url": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/total-nonfarm-payrolls-for-october-2026-are-projected-to-rise-by-65000",
+      "published_at": "2026-11-05T14:47:11Z",
+      "title": "Total Nonfarm Payrolls for October 2026 Are Projected to Rise By 65,000"
+    },
+    {
+      "article_id": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "article_url": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "author": "Kristina Bratanova-Cvetanova",
+      "guid": "https://insight.factset.com/stress-testing-amid-rising-fears-of-an-ai-bubble",
+      "published_at": "2026-11-05T17:23:00Z",
+      "title": "Stress Testing Amid Rising Fears of an AI Bubble"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-etf-monthly-summary-october-2026-results",
+      "article_url": "https://insight.factset.com/u.s.-etf-monthly-summary-october-2026-results",
+      "author": "risk.acl@factset.com (Lois Gregson)",
+      "guid": "https://insight.factset.com/u.s.-etf-monthly-summary-october-2026-results",
+      "published_at": "2026-11-06T16:15:07Z",
+      "title": "U.S. ETF Monthly Summary: October 2026 Results"
+    },
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "published_at": "2026-11-06T19:10:19Z",
+      "title": "S&P 500 Earnings Season Update: November 6, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "article_url": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "published_at": "2026-11-09T14:45:15Z",
+      "title": "Consumer Price Index (CPI) for October 2026 is Projected to Rise 4.0% Year-Over-Year"
+    },
+    {
+      "article_id": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "article_url": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "published_at": "2026-11-09T17:00:01Z",
+      "title": "Lowest Forward 12-Month P/E Ratio For the S&P 500 in More Than 3 Years"
+    },
+    {
+      "article_id": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "article_url": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "author": "insight@factset.com (Jon Bowman)",
+      "guid": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "published_at": "2026-11-09T18:30:00Z",
+      "title": "2026 Election Results Could Signal Changes in Utility Regulation"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}
