@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "95bbeb19ca08b44e2b0a49f28db4febc93c2e4375929ec93dea2f5f04afdf3fd",
+      "sha256": "479975716523c0afc41deb3bd2f62e7d5c883509678874802143937aee224852",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -75,7 +75,7 @@
       "live_check": "ok",
       "logical_repo": "multiomics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
-      "sha256": "c55108823dfd3348e3b3bd0d2033ba15557a5378e1ec6f83e5864e372f5b9971",
+      "sha256": "a25e1154b0a3112c18598bf7af05455bb1a8953f2e803d202f729345531591ce",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
@@ -90,7 +90,7 @@
       ]
     },
     {
-      "bytes": 9032,
+      "bytes": 10019,
       "canonical_url": "https://github.com/KAFKA2306/uranium/blob/main/api/v1/nuclear-power/status-events-2026.json",
       "current_repo": "KAFKA2306/uranium",
       "issue_url": "https://github.com/KAFKA2306/uranium/issues/5",
@@ -98,7 +98,7 @@
       "live_check": "ok",
       "logical_repo": "nuclear-power",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/uranium/main/api/v1/nuclear-power/status-events-2026.json",
-      "sha256": "e204fc6e12bb848395405853f134d9646299733595aa93da4f648f18fb948a2f",
+      "sha256": "3a138d3580142c88add1e21318dc08f5afc6eb0f68b8e1fe51e56fd4b59ddfbe",
       "status": "ready",
       "theme": "Distributed Energy / Nuclear",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "6d8a94e1173d1386ca16b0fc67598a6c23640f052ce179b6b10f22dd8ee3688c",
+      "sha256": "bbcbaa6a7ed477b1ee3094dd88696209ee9395e90cb20e0ed2e4d6253192208a",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -181,7 +181,7 @@
       ]
     },
     {
-      "bytes": 1618,
+      "bytes": 1611,
       "canonical_url": "https://github.com/KAFKA2306/option/blob/main/api/v1/bitcoin-derivatives/index.json",
       "current_repo": "KAFKA2306/option",
       "issue_url": "https://github.com/KAFKA2306/option/issues/16",
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "6724289916f0ef75ba98da2c8e33a1c0c5d6261c66a147d4ace02d685874c20e",
+      "sha256": "15587801c1a5bdd5ca8b9d884e08c6045c2154e56d7fd5621e82f2ea161dab53",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "cb5af9e3f578dd0715f34886a994043aa634f2798a45a119acbb1aa7b79e5b80",
+      "sha256": "ef226d9537b09594a7b520187a8d691516ab243ffd05938d51ef2c4cacc3552f",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
@@ -254,7 +254,7 @@
       "live_check": "ok",
       "logical_repo": "factory",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/factory/main/api/v1/robotics/records.json",
-      "sha256": "69ace51444af1d03d436c6df7a0f2b011753cabf8eb4ff930734c1326454f422",
+      "sha256": "bc93556539d25131faeb7911fc140a68f534613d72c57113f3522c1a5a971075",
       "status": "ready",
       "theme": "Robotics",
       "top_level_keys": [
@@ -288,7 +288,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "f2ecbbfbd1edb2b252b056dd30207f09f9051ba76aea1b20857d3afdcadc75ea",
+      "sha256": "71eae8e6f5c4125dfdea145138fa771f7ceb7a4bb2485201bba096bbecbdfe10",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
@@ -305,7 +305,7 @@
       "live_check": "ok",
       "logical_repo": "ark-etf-holdings",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/etf/main/data/ark-views/latest.json",
-      "sha256": "2a398067e08be0b3b866979392331eabb3fd782cab5cd203b331bb8e1aed7110",
+      "sha256": "62367322986c93688d1457d13fafefa89027a24cd3894e12256a4a32edb1f0c6",
       "status": "accumulating",
       "theme": "ARK Portfolio Exposure",
       "top_level_keys": [
