@@ -25,10 +25,10 @@ jobs:
       ALPHACRAFTER_REASONING_EFFORT: "none"
     steps:
       - name: Checkout investor2
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Checkout pinned official AlphaCrafter
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: NJU-LINK/AlphaCrafter
           ref: c6dbc1ba4e0a4ecbc3ea1454c5290dbea4b36b0d
