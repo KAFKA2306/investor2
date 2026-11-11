@@ -1,12 +1,12 @@
 theme,canonical_repo,real_data,primary_source_provenance,reproducible,scheduled_workflow,latest_workflow_passed,public_view,investor2_integration,evidence_commit
 The Great Acceleration,KAFKA2306/investor2,true,true,true,true,false,false,true,
 AI Infrastructure,KAFKA2306/semiconductor-earnings-model,true,true,true,true,true,false,true,"""6c82b6966b6451d51c9dbdf816b5864b6fcf6356"""
-The AI Consumer Operating System,KAFKA2306/finAnalist,true,true,false,true,true,false,true,"""52814cc33aa472dcfe8da6429340b0e7c350a406"""
+The AI Consumer Operating System,KAFKA2306/finAnalist,true,true,false,true,true,false,true,"""a9fe7c1652a350f4b7831b36799a8674b86dc980"""
 AI Productivity,KAFKA2306/econalert,true,true,true,true,true,false,true,"""e269ec18f2842e9265336c61db0e46cf8073b70d"""
-Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""0a51da527f8032d1bced14dd0fdb3b43ee73497d"", ""60fb86c2890f39404291b2c3e6736dbaae146240""]"
-Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""2151b4ec3f591244e92a105df10f22711a91a000"""
+Bitcoin,KAFKA2306/btc_dashboard + KAFKA2306/mstr + KAFKA2306/option,false,false,false,false,false,false,false,"[""0a51da527f8032d1bced14dd0fdb3b43ee73497d"", ""8ef242b5d1f135e484b0d048d4f0958e4b3c212c""]"
+Tokenized Assets,KAFKA2306/fx,true,true,true,true,true,false,true,"""0574e914c87308a83ecd0886d66c1b82b4daaff5"""
 DeFi Applications,KAFKA2306/skew,true,true,false,true,false,false,true,"""1e5c2173bfde72a0b0d381eea1347ba0af09f07b"""
-Multiomics,KAFKA2306/multiomics,true,true,false,true,true,false,true,"""0da926c2e7897e4d5e1071f53f23bc1478529767"""
+Multiomics,KAFKA2306/multiomics,true,true,false,true,true,false,true,"""df4cd55b572169c6e2430f11c752b16a22f495f4"""
 Reusable Rockets,KAFKA2306/trahist,true,true,true,true,true,false,true,"""97a09c8b049328b9ef819c2dbc1a6c8699af1338"""
 Robotics,KAFKA2306/factory,true,true,true,true,true,false,true,"""1715e72f02378ad736955e842468316ba8404df0"""
 Distributed Energy,KAFKA2306/oil + KAFKA2306/uranium,true,true,false,true,true,false,true,"[""dff7da32e778244511081eaec641787deed94d67"", ""62d51cc969f72f03f9819cb786081307ad3acbd0""]"
