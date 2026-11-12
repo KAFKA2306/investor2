@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
-      "article_url": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/mag-7-now-reporting-lower-earnings-growth-than-the-other-493-sp-500-companies-for-q3",
-      "published_at": "2026-11-03T17:00:01Z",
-      "title": "“Mag 7” Now Reporting Lower Earnings Growth Than the Other 493 S&P 500 Companies for Q3"
-    },
-    {
-      "article_id": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
-      "article_url": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/analysts-increasing-quarterly-eps-estimates-for-sp-500-for-3rd-straight-quarter",
-      "published_at": "2026-11-04T17:00:00Z",
-      "title": "Analysts Increasing Quarterly EPS Estimates for S&P 500 for 3rd Straight Quarter"
-    },
-    {
       "article_id": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
       "article_url": "https://insight.factset.com/from-conversation-to-application-when-a-portfolio-workflow-should-become-a-tool",
       "author": "Georgi Mitov",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
       "published_at": "2026-11-09T18:30:00Z",
       "title": "2026 Election Results Could Signal Changes in Utility Regulation"
+    },
+    {
+      "article_id": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "article_url": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "published_at": "2026-11-11T17:00:00Z",
+      "title": "When Portfolio Construction Becomes Easier to Use, Compute Must Scale with It"
+    },
+    {
+      "article_id": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "article_url": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "author": "Svetoslav Radoev",
+      "guid": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "published_at": "2026-11-11T22:14:21Z",
+      "title": "Anthropic IPO: A Risk Perspective"
     }
   ],
   "feed_title": "FactSet Insight",
