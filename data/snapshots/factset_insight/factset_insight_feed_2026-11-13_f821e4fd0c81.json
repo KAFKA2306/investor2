@@ -1,0 +1,89 @@
+{
+  "article_count": 10,
+  "articles": [
+    {
+      "article_id": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "article_url": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/sp-500-earnings-season-update-november-6-2026",
+      "published_at": "2026-11-06T19:10:19Z",
+      "title": "S&P 500 Earnings Season Update: November 6, 2026"
+    },
+    {
+      "article_id": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "article_url": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
+      "published_at": "2026-11-09T14:45:15Z",
+      "title": "Consumer Price Index (CPI) for October 2026 is Projected to Rise 4.0% Year-Over-Year"
+    },
+    {
+      "article_id": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "article_url": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
+      "published_at": "2026-11-09T17:00:01Z",
+      "title": "Lowest Forward 12-Month P/E Ratio For the S&P 500 in More Than 3 Years"
+    },
+    {
+      "article_id": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "article_url": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "author": "insight@factset.com (Jon Bowman)",
+      "guid": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
+      "published_at": "2026-11-09T18:30:00Z",
+      "title": "2026 Election Results Could Signal Changes in Utility Regulation"
+    },
+    {
+      "article_id": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "article_url": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "author": "Georgi Mitov",
+      "guid": "https://insight.factset.com/when-portfolio-construction-becomes-easier-to-use-compute-must-scale-with-it",
+      "published_at": "2026-11-11T17:00:00Z",
+      "title": "When Portfolio Construction Becomes Easier to Use, Compute Must Scale with It"
+    },
+    {
+      "article_id": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "article_url": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "author": "Svetoslav Radoev",
+      "guid": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
+      "published_at": "2026-11-11T22:14:21Z",
+      "title": "Anthropic IPO: A Risk Perspective"
+    },
+    {
+      "article_id": "https://insight.factset.com/anthropic-valuation-hypothetical-market-impact-a-stress-test-perspective",
+      "article_url": "https://insight.factset.com/anthropic-valuation-hypothetical-market-impact-a-stress-test-perspective",
+      "author": "Kristina Bratanova-Cvetanova",
+      "guid": "https://insight.factset.com/anthropic-valuation-hypothetical-market-impact-a-stress-test-perspective",
+      "published_at": "2026-11-12T20:03:14Z",
+      "title": "Anthropic Valuation Hypothetical Market Impact: A Stress Test Perspective"
+    },
+    {
+      "article_id": "https://insight.factset.com/data-center-construction-increasingly-constrained-by-legal-barriers",
+      "article_url": "https://insight.factset.com/data-center-construction-increasingly-constrained-by-legal-barriers",
+      "author": "Eric Yussman",
+      "guid": "https://insight.factset.com/data-center-construction-increasingly-constrained-by-legal-barriers",
+      "published_at": "2026-11-12T21:00:00Z",
+      "title": "Data Center Construction Increasingly Constrained by Legal Barriers"
+    },
+    {
+      "article_id": "https://insight.factset.com/market-is-punishing-negative-eps-surprises-less-than-average-for-sp-500-companies-for-q3",
+      "article_url": "https://insight.factset.com/market-is-punishing-negative-eps-surprises-less-than-average-for-sp-500-companies-for-q3",
+      "author": "media_request@factset.com (John Butters)",
+      "guid": "https://insight.factset.com/market-is-punishing-negative-eps-surprises-less-than-average-for-sp-500-companies-for-q3",
+      "published_at": "2026-11-13T17:48:36Z",
+      "title": "Market Is Punishing Negative EPS Surprises Less Than Average for S&P 500 Companies for Q3"
+    },
+    {
+      "article_id": "https://insight.factset.com/duration-drives-the-rush-for-canadian-upstream-assets",
+      "article_url": "https://insight.factset.com/duration-drives-the-rush-for-canadian-upstream-assets",
+      "author": "Andrew Jeffries",
+      "guid": "https://insight.factset.com/duration-drives-the-rush-for-canadian-upstream-assets",
+      "published_at": "2026-11-13T21:02:15Z",
+      "title": "Duration Drives the Rush for Canadian Upstream Assets"
+    }
+  ],
+  "feed_title": "FactSet Insight",
+  "schema_version": "investor2.factset-insight-feed.v1",
+  "source": "FactSet Insight",
+  "source_feed_url": "https://insight.factset.com/rss.xml"
+}
