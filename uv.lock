@@ -395,7 +395,7 @@ requires-dist = [
     { name = "requests" },
     { name = "scikit-learn" },
     { name = "setuptools" },
-    { name = "skfolio", specifier = "==1.12.7" },
+    { name = "skfolio", specifier = "==1.12.16" },
     { name = "torch" },
     { name = "tqdm" },
 ]
@@ -1650,7 +1650,7 @@ wheels = [
 
 [[package]]
 name = "skfolio"
-version = "1.12.7"
+version = "1.12.16"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "clarabel" },
@@ -1661,9 +1661,9 @@ dependencies = [
     { name = "scikit-learn" },
     { name = "scipy" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/33/be/f662c9fd7f84ae22ae7e9b66d3aeb6f14f65328377bba069fbd0ada70876/skfolio-1.12.7.tar.gz", hash = "sha256:cdfd90328c2d90b325feada81f18223b14575a25c69e5124be4368c543a0c969", size = 1259726, upload-time = "2026-11-06T18:12:59.739Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/8a/7c/dca0657b8e6e293b2039980be9b7cce488e3027643e4c99c72b3d84eefa5/skfolio-1.12.16.tar.gz", hash = "sha256:0d735bc5afbfac00cadfcc3e4bb34cbebf8e8e2800ce267945ef43b65b0c2599", size = 1260948, upload-time = "2026-11-14T18:13:16.139Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/89/3e/e1965fddd65dece736c0b44c171f4180ab370fdb8e2c97bc90394965f585/skfolio-1.12.7-py3-none-any.whl", hash = "sha256:3bfcad64c1c8398fa8d8c46b0505d51c233344dbe6af1a103e4940b20a9a4e22", size = 1477907, upload-time = "2026-11-06T18:12:57.439Z" },
+    { url = "https://files.pythonhosted.org/packages/0b/07/9724d2f0e525e302439c97335694e65c3a65c43dbe4ccbcc681d21d3a934/skfolio-1.12.16-py3-none-any.whl", hash = "sha256:86cd9c9f53f45b08eb931ccd256f90992b79c27b6d8df47b3a7184fc44d438f5", size = 1479145, upload-time = "2026-11-14T18:13:14.315Z" },
 ]
 
 [[package]]
