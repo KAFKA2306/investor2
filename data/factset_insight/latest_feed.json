@@ -2,22 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
-      "article_url": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/consumer-price-index-cpi-for-october-2026-is-projected-to-rise-4.0-year-over-year",
-      "published_at": "2026-11-09T14:45:15Z",
-      "title": "Consumer Price Index (CPI) for October 2026 is Projected to Rise 4.0% Year-Over-Year"
-    },
-    {
-      "article_id": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
-      "article_url": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
-      "author": "media_request@factset.com (John Butters)",
-      "guid": "https://insight.factset.com/lowest-forward-12-month-p/e-ratio-for-the-sp-500-in-more-than-3-years",
-      "published_at": "2026-11-09T17:00:01Z",
-      "title": "Lowest Forward 12-Month P/E Ratio For the S&P 500 in More Than 3 Years"
-    },
-    {
       "article_id": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
       "article_url": "https://insight.factset.com/2026-election-results-could-signal-changes-in-utility-regulation",
       "author": "insight@factset.com (Jon Bowman)",
@@ -80,6 +64,22 @@
       "guid": "https://insight.factset.com/sp-500-companies-are-reporting-lowest-earnings-surprise-percentage-since-q4-2022",
       "published_at": "2026-11-16T17:00:00Z",
       "title": "S&P 500 Companies Are Reporting Lowest Earnings Surprise Percentage Since Q4 2022"
+    },
+    {
+      "article_id": "https://insight.factset.com/the-permian-basin-reliability-plan-status-of-the-765-kv-transmission-line-proceedings",
+      "article_url": "https://insight.factset.com/the-permian-basin-reliability-plan-status-of-the-765-kv-transmission-line-proceedings",
+      "author": "leo.kelser@factset.com (Leo Kelser)",
+      "guid": "https://insight.factset.com/the-permian-basin-reliability-plan-status-of-the-765-kv-transmission-line-proceedings",
+      "published_at": "2026-11-19T16:20:19Z",
+      "title": "The Permian Basin Reliability Plan: Status of the 765 kV Transmission Line Proceedings"
+    },
+    {
+      "article_id": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-october-2026",
+      "article_url": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-october-2026",
+      "author": "insight@factset.com (FactSet Insight)",
+      "guid": "https://insight.factset.com/u.s.-mergers-acquisitions-monthly-review-october-2026",
+      "published_at": "2026-11-19T16:44:58Z",
+      "title": "U.S. Mergers & Acquisitions Monthly Review: October 2026"
     }
   ],
   "feed_title": "FactSet Insight",
