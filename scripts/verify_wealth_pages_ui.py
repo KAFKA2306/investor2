@@ -33,10 +33,13 @@ def run() -> None:
 
         # Follow the user-visible navigation path; the browser renders the CSV.
         page.locator("#wealth-watch-link").click()
-        expect(page.locator("#artifact-title")).to_have_text(OBSERVATION_PATH, timeout=25000)
-        expect(page.locator("#render-target table tbody tr")).to_have_count(8, timeout=25000)
-        expect(page.locator("#render-target")).to_contain_text("lvmh_wj_2026q3")
-        expect(page.locator("#render-target")).to_contain_text("manhattan_condo_contracts_202610")
+        expect(page.locator("#artifact-title")).to_have_text(
+            OBSERVATION_PATH, timeout=25000
+        )
+        table = page.locator("#render-target")
+        expect(table.locator("table tbody tr")).to_have_count(8, timeout=25000)
+        expect(table).to_contain_text("lvmh_wj_2026q3")
+        expect(table).to_contain_text("manhattan_condo_contracts_202610")
 
         # The primary URL must be usable, not plain text inside a table.
         source = page.locator('#render-target a[href="' + SRC + '"]')
@@ -46,7 +49,9 @@ def run() -> None:
         assert page.locator("#section-filter").input_value() == "data"
         assert parse_qs(urlsplit(page.url).query).get("path") == [OBSERVATION_PATH]
 
-        manifest = page.evaluate("async () => (await fetch('manifest.json', { cache: 'no-store' })).json()")
+        manifest = page.evaluate(
+            "async () => (await fetch('manifest.json', { cache: 'no-store' })).json()"
+        )
         assert manifest["revision"] == expected, (expected, manifest["revision"])
         assert any(
             item["path"] == OBSERVATION_PATH and item["local_url"]
