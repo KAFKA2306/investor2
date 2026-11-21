@@ -26,9 +26,7 @@ def run() -> None:
         rows = page.locator("#render-target table tbody tr")
         expect(rows).to_have_count(8)
         expect(page.locator("#render-target")).to_contain_text("lvmh_wj_2026q3")
-        expect(page.locator("#render-target")).to_contain_text(
-            "manhattan_condo_contracts_202610"
-        )
+        expect(page.locator("#render-target")).to_contain_text("manhattan_condo_contracts_202610")
         source = page.locator("#render-target a[href*='lvmh.com']")
         expect(source.first).to_be_visible()
         expect(source.first).to_have_attribute("target", "_blank")
@@ -42,9 +40,7 @@ def run() -> None:
         page.set_viewport_size({"width": 390, "height": 844})
         expect(page.locator("#render-target table")).to_be_visible()
         page.screenshot(path=str(output / "wealth-mobile.png"), full_page=True)
-        (output / "wealth-result.txt").write_text(
-            f"PASS revision={revision} rows=8\n", encoding="utf-8"
-        )
+        (output / "wealth-result.txt").write_text(f"PASS revision={revision} rows=8\n", encoding="utf-8")
         browser.close()
 
 
