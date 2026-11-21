@@ -16,14 +16,7 @@ For persisted external data, preserve the provenance fields required by the owni
 - A failed hypothesis is a valid result.
 - Fail closed on missing acceptance-critical provenance, schema, or artifacts.
 - Do not substitute mocks, dummy values, cached examples, or silent fallback for acceptance-critical production data.
-
-## Market-narrative falsification
-
-For AI funding, credit, semiconductor valuation, investor positioning and hedges, use [the 2026-11-21 five-hypothesis decision contract](docs/research/ai-capital-capacity-20261121.md). Do not promote videos, news reports, or user-supplied model summaries to primary observations or reproduced results.
-
-Treat spread level and issuance quantity as different measurements; do not infer risk-on from narrowing OAS without issuance and real-activity evidence. Derive earnings implied by a forward P/E using consistent EPS periods and index membership. Separate sector rotation from cash liquidation. Recompute each long/short leg's capital contribution, costs, GLD ablation, and a pre-fixed forward OOS window before accepting hedge or alpha claims. Missing underlying portfolio records are `UNVERIFIED`, not a positive performance result.
-
-Reuse `econalert` as the official liquidity-series owner and this repository's existing input, hypothesis, evidence and decision ledgers. Do not create another liquidity collector or hosted workflow. Individual companies are research components; this study does not authorize individual-stock purchases or automated trades.
+- AI信用・半導体評価・機関投資家配分・GLDの研究は[5仮説の反証契約](docs/research/ai-capital-capacity-20261121.md)を使用する。ニュースを実証結果にせず、原データとOOSで判定する。
 
 ## Canonical execution
 
