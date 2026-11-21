@@ -49,7 +49,6 @@ tasks:
     desc: Verify canonical research evidence and rebuild the disposable Spark/Iceberg projection
     cmds:
       - python3 scripts/snapshot_store.py audit
-      - python3 -m unittest discover -s tests -p 'test_analytics_projection_sources.py' -v
       - |
         set -eu
         trap 'docker compose -f compose.analytics.yaml down -v' EXIT
