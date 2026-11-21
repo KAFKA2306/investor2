@@ -98,7 +98,7 @@ canonical research evidence
   -> cross-run analysis
 ```
 
-Icebergは正本ではありません。projectionからcanonical ledgerへ書き戻さず、必要なときに `task analytics:check` で再生成します。詳細は [analytics/README.md](analytics/README.md) を参照してください。
+Icebergは正本ではありません。projectionからcanonical ledgerへ書き戻さず、必要なときに `task analytics:check` で再生成します。詳細は [docs/ledger/analytics/README.md](docs/ledger/analytics/README.md) を参照してください。
 
 ## Research rules
 
@@ -118,7 +118,7 @@ Icebergは正本ではありません。projectionからcanonical ledgerへ書�
 | 研究全体を見る | [Evidence & Evolution Dashboard](https://kafka2306.github.io/investor2/) |
 | 仮説探索 | [Hypothesis Lab](docs/ledger/research/hypothesis-lab.md) |
 | 入力→検証→判断 | [Canonical investment flow](docs/ledger/architecture/canonical-investment-flow.md) |
-| 判断時点の固定 | [Decision ledger](data/decision_ledger/README.md) |
+| 判断時点の固定 | [Decision ledger](docs/ledger/decision-ledger/README.md) |
 | Alpha探索手順 | [Alpha discovery runbook](docs/ledger/specs/alpha_discovery_runbook.md) |
 | OOS判定 | [Time-tested alpha policy](docs/ledger/specs/time_tested_alpha_policy.md) |
 | 外部snapshot | [External snapshot store](docs/ledger/specs/external_snapshot_store.md) |

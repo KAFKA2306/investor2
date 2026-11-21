@@ -17,6 +17,8 @@ generated:
 - [論文の比較](paper/benchmark_comparison.md)
 - [データの来歴と再利用](specs/external_snapshot_store.md)
 - [外部データソース](data-sources/market-universe.md)
+- [分析用Spark/Iceberg投影](analytics/README.md)
+- [判断スナップショットの契約](decision-ledger/README.md)
 - [構造上の判断記録](adr/005-modular-external-data-sources.md)
 
 標準の操作入口としてリポジトリ直下の `README.md`・`AGENTS.md`、スキル定義の `SKILL.md` は残す。文書の新規作成・更新は `docs/ledger/` に置く。[移設記録 #460](https://github.com/KAFKA2306/investor2/issues/460)。
