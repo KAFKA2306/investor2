@@ -6,6 +6,7 @@ from __future__ import annotations
 import json
 import os
 from pathlib import Path
+from urllib.parse import parse_qs, urlsplit
 
 from playwright.sync_api import expect, sync_playwright
 
@@ -43,7 +44,7 @@ def run() -> None:
         expect(source.first).to_have_attribute("target", "_blank")
         expect(source.first).to_have_attribute("rel", "noopener noreferrer")
         assert page.locator("#section-filter").input_value() == "data"
-        assert OBSERVATION_PATH in page.url
+        assert parse_qs(urlsplit(page.url).query).get("path") == [OBSERVATION_PATH]
 
         manifest = page.evaluate("async () => (await fetch('manifest.json', { cache: 'no-store' })).json()")
         assert manifest["revision"] == expected, (expected, manifest["revision"])
