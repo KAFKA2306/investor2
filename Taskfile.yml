@@ -81,6 +81,7 @@ tasks:
   test:
     cmds:
       - bun run test
+      - uv run --no-sync python -m pytest -q tests/test_snapshot_store.py tests/test_build_pages_site.py
   run:newalphasearch:
     desc: Validate a frozen real-data MCP hypothesis capture and deep-dive candidates
     cmds:

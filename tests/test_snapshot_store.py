@@ -6,6 +6,9 @@ from pathlib import Path
 
 import pytest
 
+from scripts.validate_frozen_manifest import validate_manifest as validate_frozen_manifest
+from src.io.input_ledger.registry import load_source_registry as load_input_source_registry
+
 from scripts.snapshot_store import (
     audit_catalog,
     build_entry,
@@ -157,3 +160,59 @@ def test_latest_snapshot_selects_newest_observation(tmp_path: Path) -> None:
 
     result = latest_snapshot(reuse_key="example/latest", root=tmp_path, catalog_path=catalog_path)
     assert result["snapshot_id"] == "new"
+
+def test_input_registry_rejects_duplicate_source_ids(tmp_path: Path) -> None:
+    registry_path = tmp_path / "data/input_ledger/source_registry.json"
+    make_registry(registry_path)
+    write_json(
+        registry_path.with_name("source_registry.d") / "duplicate.json",
+        {"schema_version": "test", "sources": {"test_mcp": {"enabled": True}}},
+    )
+
+    with pytest.raises(AssertionError, match="duplicate source registry ids"):
+        load_input_source_registry(registry_path)
+
+
+def test_input_registry_rejects_fragment_schema_mismatch(tmp_path: Path) -> None:
+    registry_path = tmp_path / "data/input_ledger/source_registry.json"
+    make_registry(registry_path)
+    write_json(
+        registry_path.with_name("source_registry.d") / "wrong.json",
+        {"schema_version": "v2", "sources": {"another": {"enabled": True}}},
+    )
+
+    with pytest.raises(AssertionError, match="schema mismatch"):
+        load_input_source_registry(registry_path)
+
+
+def test_frozen_manifest_rejects_mutable_revision_and_nonclosed_policy() -> None:
+    manifest = {
+        "schema_version": 1,
+        "split_id": "example-v1",
+        "source": {
+            "dataset": "owner/dataset",
+            "config": "config",
+            "split": "train",
+            "revision": "a" * 40,
+            "parquet_path": "data/train.parquet",
+            "sha256": "b" * 64,
+            "row_count": 10,
+        },
+        "policy": {
+            "algorithm": "stratified_sha256_rank_v1",
+            "seed": 1,
+            "evaluation_fraction": 0.2,
+            "id_column": "doc_id",
+            "group_column": "industry",
+        },
+        "contract": {"source_change_policy": "fail_closed"},
+    }
+    assert validate_frozen_manifest(manifest) == []
+
+    manifest["source"]["revision"] = "main"
+    manifest["source"]["sha256"] = "bad-digest"
+    manifest["contract"]["source_change_policy"] = "refresh"
+    errors = validate_frozen_manifest(manifest)
+    assert any("40-character" in error for error in errors)
+    assert any("SHA-256" in error for error in errors)
+    assert "contract.source_change_policy must be fail_closed" in errors

@@ -79,6 +79,9 @@ Issue #31 の主要KPIは次の3つだけとする。実測値が存在しない
 - seller-flow evidenceからmargin call / forced liquidationを推測補完しない。
 - Decision Snapshotから自動で注文を発行しない。
 
-## Repository ratchet
+## 実行する検証
 
-`tests/test_repository_ratchet.py` は、この文書・README入口・`data/input_ledger/`・`data/hypothesis_lab/`・`data/decision_ledger/` が存在することと、削除した `weekly-repo-research.yml` が再混入しないことをfail-closeで検査する。
+- 開発時：`task check`。Bunの判断系テストと、外部入力・Pages生成の重点Pythonテストを実行する。
+- 入力台帳：`python scripts/audit_input_ledger.py` と `python scripts/snapshot_store.py audit`。改ざん、出典ID重複、schema不一致、未固定revisionは `tests/test_snapshot_store.py` の反例で検査する。
+- 仮説・判断の実行入口：`bun src/commands/hypothesis_lab_run.ts`。
+- 公開結果：`.github/workflows/pages.yml` と `.github/workflows/live-pages-smoke.yml`。CI合格だけで公開サイトの操作成功とみなさない。
