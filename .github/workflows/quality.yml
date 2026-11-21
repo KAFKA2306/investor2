@@ -52,7 +52,5 @@ jobs:
           bun ci
           uv lock --check
           uv sync --locked --only-group dev
-      - name: Show wealth browser checker formatting diff
-        run: uv run --no-sync ruff format --diff scripts/verify_wealth_pages_ui.py || true
       - name: Run canonical quality gate
         run: task check
