@@ -48,6 +48,10 @@ MCPは取得手段でありsource of truthそのものではない。MCP respons
 
 実践契約は [Hypothesis Lab](../research/hypothesis-lab.md) を参照する。
 
+## AI funding and market stress research
+
+AI関連の債券発行額、OAS、データセンター規制、半導体予想EPS、機関投資家配分、GLDとL50:S50の寄与を扱う際は、[5仮説の採否契約](../research/ai-capital-capacity-20261121.md)を使う。一次資料、取引時点の価格、競合する説明、長短の重み付け、コスト、固定20営業日OOSを確かめるまで、ニュースや再現台帳の要約を売買シグナルにしない。`econalert`の流動性観測を引用し、このrepositoryにマクロ値の並行正本や独立collectorを作らない。
+
 ## Human decision rule
 
 研究証拠が良好でも、人間の意思決定を後から書き換えられる状態では証拠チェーンが途切れる。
