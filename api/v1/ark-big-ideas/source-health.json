@@ -75,7 +75,7 @@
       "live_check": "ok",
       "logical_repo": "multiomics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
-      "sha256": "e510a440f70bb8ad5a902eec6e88af80b956a7878b5fb30ac40be045be5a3c68",
+      "sha256": "dcd6f544cecdac107bfe1fbf3d7cffea1ade9a4fb1ab123297c37ced522ae6f8",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "ea424c4d49b69f64b79d8e0621869cfe821be7279909d7916146a29caf012554",
+      "sha256": "25111e74da4a5a9a177b159ee55a3e090288496b699c250b56d025f894a2dd67",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "337557cbe475330b6edfecb19f0b5b5a85e1011cae116ea1f073ae8169959b1a",
+      "sha256": "ddc97124bd4138730da64ce57ee2abb8dd19339e945115f4f355e2423230fda0",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
@@ -288,7 +288,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "795b932c386b60fe8ee0d4951de7b914b0132a8fd02c79ba3b864dc02f3e586c",
+      "sha256": "033878653f0dc595f0e606917089af98d80e1b01402f43801295cb83afe198f4",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
