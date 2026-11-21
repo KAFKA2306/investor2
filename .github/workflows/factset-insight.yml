@@ -13,7 +13,6 @@ on:
       - "scripts/snapshot_store.py"
       - "tests/test_factset_insight_monitor.py"
       - "tests/test_factset_insight_delivery.py"
-      - "tests/test_snapshot_store.py"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
       - "docs/data-sources/factset-insight.md"
       - "docs/specs/agent-tasks/242.md"
