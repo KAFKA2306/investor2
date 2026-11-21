@@ -29,8 +29,8 @@ _TEXT_SUFFIXES = {
     ".sql",
 }
 _IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".svg", ".avif"}
-_RESEARCH_DOC_DIRS = {"research", "paper", "ark-big-ideas"}
-_CONTRACT_DOC_DIRS = {"adr", "architecture", "specs", "data-sources"}
+_RESEARCH_DOC_DIRS = {"research", "paper", "ark-big-ideas", "analytics"}
+_CONTRACT_DOC_DIRS = {"adr", "architecture", "specs", "data-sources", "decision-ledger"}
 
 
 def _viewer_for(path: Path, *, browser_renderable: bool) -> str:

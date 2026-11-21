@@ -131,3 +131,28 @@ def test_unclassified_docs_path_fails_closed(tmp_path: Path) -> None:
             repository="KAFKA2306/investor2",
             revision="r1",
         )
+
+def test_ledger_analytics_and_decision_notes_are_published(tmp_path: Path) -> None:
+    _write(tmp_path / "pages/index.html", "index")
+    _write(tmp_path / "pages/app.js", "app")
+    _write(tmp_path / "pages/styles.css", "css")
+    _write(tmp_path / "docs/ledger/analytics/README.md", "# Spark")
+    _write(tmp_path / "docs/ledger/decision-ledger/README.md", "# Decision")
+
+    output = tmp_path / "_site"
+    result = build_site(
+        source_root=tmp_path,
+        frontend_root=tmp_path / "pages",
+        output_root=output,
+        repository="KAFKA2306/investor2",
+        revision="ledger",
+    )
+    paths = {item["path"]: item for item in result["artifacts"]}
+    analytics = paths["docs/ledger/analytics/README.md"]
+    decision = paths["docs/ledger/decision-ledger/README.md"]
+    assert analytics["section"] == "research"
+    assert analytics["module"] == "analytics"
+    assert decision["section"] == "contracts"
+    assert decision["module"] == "decision-ledger"
+    assert (output / analytics["local_url"]).is_file()
+    assert (output / decision["local_url"]).is_file()
