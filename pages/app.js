@@ -200,7 +200,17 @@ function renderTable(rows, target) {
       const tr = document.createElement("tr");
       for (const value of values.slice(0, maxColumns)) {
         const td = document.createElement("td");
-        td.textContent = value;
+        // Evidence tables keep the provider URL usable without interpreting HTML.
+        if (/^https?:\/\/[^\s]+$/.test(value)) {
+          const link = document.createElement("a");
+          link.href = value;
+          link.textContent = value;
+          link.target = "_blank";
+          link.rel = "noopener noreferrer";
+          td.append(link);
+        } else {
+          td.textContent = value;
+        }
         tr.append(td);
       }
       tbody.append(tr);

@@ -109,6 +109,20 @@ jobs:
             exit 1
           fi
 
+      - name: Checkout the deployed revision for browser verification
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          ref: ${{ steps.revision.outputs.sha }}
+
+      - name: Click through wealth watch on production Pages
+        env:
+          EXPECTED_REVISION: ${{ steps.revision.outputs.sha }}
+        run: |
+          set -euo pipefail
+          python -m pip install --disable-pip-version-check playwright==1.58.0
+          python -m playwright install chromium
+          python scripts/verify_wealth_pages_ui.py
+
       - name: Upload production validation evidence
         if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
