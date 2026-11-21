@@ -46,6 +46,6 @@ Issue: https://github.com/KAFKA2306/investor2/issues/457
 
 ## データ契約
 
-[観測CSV](../../data/wealth-consumption/observations.csv)を唯一の今回の集約入力として、`observation_id`、`entity`、`metric`、`period`、`value`、`unit`、`yoy_change_pct`、`definition`、`source_date`、`source_url`、`verification`を保存した。資料の公表日とデータの対象期間を区別する。元資料の全文を再配布せず、原典リンクを保持する。`PRIMARY_VERIFIED`は参照した一次資料と値が一致する意味であり、将来の投資予測を検証済みとする意味ではない。
+[観測CSV](../../../data/wealth-consumption/observations.csv)を唯一の今回の集約入力として、`observation_id`、`entity`、`metric`、`period`、`value`、`unit`、`yoy_change_pct`、`definition`、`source_date`、`source_url`、`verification`を保存した。資料の公表日とデータの対象期間を区別する。元資料の全文を再配布せず、原典リンクを保持する。`PRIMARY_VERIFIED`は参照した一次資料と値が一致する意味であり、将来の投資予測を検証済みとする意味ではない。
 
 このプロジェクトのGitHub Pagesは既存の証拠ブラウザであり、CSVを表示するだけで数値を再計算しない。新しい値の取得・検証・コミットがなければ現状の値が残るため、表示日が新しくても更新済みとはみなさない。

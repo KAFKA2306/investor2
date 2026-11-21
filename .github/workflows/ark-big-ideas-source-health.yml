@@ -228,7 +228,7 @@ jobs:
             api/v1/ark-big-ideas \
             data/ark-big-ideas/snapshots \
             data/input_ledger/snapshot_catalog.ndjson \
-            docs/ark-big-ideas/repository-coverage.md
+            docs/ledger/ark-big-ideas/repository-coverage.md
           if git diff --cached --quiet; then
             echo 'No ARK evidence change.'
             exit 0

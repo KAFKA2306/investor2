@@ -5,14 +5,14 @@ on:
     paths:
       - "scripts/jquants_hf_pipeline.py"
       - "tests/test_jquants_hf_pipeline.py"
-      - "docs/specs/jquants-hf-pipeline.md"
+      - "docs/ledger/specs/jquants-hf-pipeline.md"
       - ".github/workflows/jquants-hf-publish.yml"
   push:
     branches: [main]
     paths:
       - "scripts/jquants_hf_pipeline.py"
       - "tests/test_jquants_hf_pipeline.py"
-      - "docs/specs/jquants-hf-pipeline.md"
+      - "docs/ledger/specs/jquants-hf-pipeline.md"
       - ".github/workflows/jquants-hf-publish.yml"
   workflow_dispatch:
     inputs:

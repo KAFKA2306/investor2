@@ -9,7 +9,7 @@ on:
       - "scripts/audit_input_ledger.py"
       - "scripts/snapshot_store.py"
       - "tests/test_snapshot_store.py"
-      - "docs/specs/external_snapshot_store.md"
+      - "docs/ledger/specs/external_snapshot_store.md"
       - ".github/workflows/input-ledger-integrity.yml"
   push:
     branches: [main]
@@ -20,7 +20,7 @@ on:
       - "scripts/audit_input_ledger.py"
       - "scripts/snapshot_store.py"
       - "tests/test_snapshot_store.py"
-      - "docs/specs/external_snapshot_store.md"
+      - "docs/ledger/specs/external_snapshot_store.md"
       - ".github/workflows/input-ledger-integrity.yml"
 
 permissions:

@@ -95,4 +95,4 @@ Only after this round trip passes should research workflows switch from full rea
 
 ## External publication remains separate
 
-`docs/specs/jquants-hf-pipeline.md` and `.github/workflows/jquants-hf-publish.yml` govern shared/external publication. Their distribution authorization gate is not removed by this personal-cache contract.
+`docs/ledger/specs/jquants-hf-pipeline.md` and `.github/workflows/jquants-hf-publish.yml` govern shared/external publication. Their distribution authorization gate is not removed by this personal-cache contract.

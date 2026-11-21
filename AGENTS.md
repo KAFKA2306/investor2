@@ -16,7 +16,7 @@ For persisted external data, preserve the provenance fields required by the owni
 - A failed hypothesis is a valid result.
 - Fail closed on missing acceptance-critical provenance, schema, or artifacts.
 - Do not substitute mocks, dummy values, cached examples, or silent fallback for acceptance-critical production data.
-- AI信用・半導体評価・機関投資家配分・GLDの研究は[5仮説の反証契約](docs/research/ai-capital-capacity-20261121.md)を使用する。ニュースを実証結果にせず、原データとOOSで判定する。
+- AI信用・半導体評価・機関投資家配分・GLDの研究は[5仮説の反証契約](docs/ledger/research/ai-capital-capacity-20261121.md)を使用する。ニュースを実証結果にせず、原データとOOSで判定する。
 
 ## Canonical execution
 

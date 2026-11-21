@@ -84,7 +84,7 @@ AIモデルの巨大化（LLMのパラメータ数増加、およびオンデバ
 
 DRAM市場の需給逼迫と価格動向を効率的にリターンに変えるための、3つの最適化アロケーション案を提示する。
 
-![AI Memory ETF Portfolio Allocation Comparison](etf_allocation_chart.png)
+![AI Memory ETF Portfolio Allocation Comparison](../../paper/etf_allocation_chart.png)
 
 
 ### 案A：メモリ・ピュアプレイ型（攻めの高ボラティリティ構成）

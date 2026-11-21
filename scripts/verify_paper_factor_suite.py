@@ -351,7 +351,7 @@ def render_markdown(report: dict[str, object]) -> str:
             "python scripts/verify_paper_factor_suite.py \\",
             "  --registry docs/research/paper_factor_registry.json \\",
             "  --json-output docs/research/multi_paper_oos_results.json \\",
-            "  --markdown-output docs/research/multi_paper_oos_summary.md",
+            "  --markdown-output docs/ledger/research/multi_paper_oos_summary.md",
             "",
             "python -m pytest -q tests/test_paper_factor_suite.py",
             "```",

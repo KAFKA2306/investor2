@@ -23,7 +23,7 @@ Fresh acquisition uses the existing source-specific Taskfile command.
 
 ## References
 
-- `docs/specs/external_snapshot_store.md`
+- `docs/ledger/specs/external_snapshot_store.md`
 - `data/input_ledger/`
 - `Taskfile.yml`
 - `AGENTS.md`

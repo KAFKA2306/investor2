@@ -10,15 +10,15 @@
 
 | Family | 2026年の位置づけ | #194 track | 論文が主張する強み | investor2での直接比較 | primary judgement | 現在 |
 |---|---|---|---|---|---|---|
-| [AlphaAgentEvo](./AlphaAgentEvo.md) | ICLR 2026 | alpha discovery / evolution | 探索履歴を保持するself-evolving agentic RL | 固定data・compute budgetで AAARTS baseline vs +evolution。生成数ではなく untouched-OOS survivor と下流成績を比較 | OOS survival + after-cost OOS performance | 未実証 |
-| [AlphaSchema](./AlphaSchema.md) | arXiv 2026-07 | alpha discovery / originality | formulaではなくstructured trading semanticsを探索 | 同一生成予算で semantic coverage、重複率、valid factor率、untouched-OOS survivalを比較 | surviving OOS candidate quality | 未実証 |
-| [AlphaCrafter](./AlphaCrafter.md) | arXiv 2026-05 | Japanese-equity alpha/trading | Miner → Screener → Trader のadaptive factor-to-execution pipeline | 日足cross-sectional semanticsが合うため、固定256-asset J-Quants PIT contractへ移植してAAARTSとhead-to-head | after-cost OOS Sharpe + return/DD/exposure gates | 未実証 |
-| [TiMi](./TiMi.md) | ICLR 2026 | trading / execution | strategy developmentとminute-level deploymentの分離 | 日足J-Quantsへ無理に落とさず、minute-level data・slippage・latencyを固定した別trackで比較 | after-cost risk-adjusted return + execution/risk gates | contract未凍結 |
-| [AlphaForgeBench](./AlphaForgeBench.md) | arXiv 2026-02 | alpha discovery / reproducibility | LLMをTraderではなくexecutable factorを作るQuant Researcherとして評価 | 同一prompt/taskの複数trialで executable率、artifact再現性、run variance、下流OOSを比較 | reproducible valid strategy rate + downstream OOS | 未実証 |
-| [QuantCode-Bench](./quantcode_bench.md) | arXiv 2026-04 | data / tooling / reproducibility | trading codeを実際に実行しsyntax→backtest→trade→semanticsで評価 | paper benchmarkを再現可能なら同一taskでstrategy generatorを比較。投資成績とは別gate | executable/semantic pass rate | 未実証 |
-| [FINSABER](./finsaber_long_run.md) | KDD 2026 Datasets & Benchmarks Oral（arXiv v1は2025） | trading / risk / regime evaluation | 20年・100+ symbolsで短期LLM優位性の崩壊とregime biasを検証 | 長期・複数regimeのPIT contractを別途freezeし、AAARTSのregime robustnessを直接比較 | long-horizon after-cost OOS + regime diagnostics | contract未凍結 |
-| [FinDeepForecast](./findeepforecast.md) | arXiv 2026-01 | causal / event / forecasting | 答え未確定の金融forecastを継続生成してlive評価 | prediction time、source snapshot、horizon、realized valueを固定したlive protocolで比較 | paper-native forecasting metric | 未実証 |
-| [FinanceHarness](./FinanceHarness.md) | arXiv 2026-07、v2 2026-08 | data / MCP / agent-tooling | finance-specific harnessとPIT benchmarkをmodelから分離 | 同一backboneで AAARTS research harness vs baseline。PIT違反・citation/provenanceもhard gate | FinanceGym/native rubric score + PIT integrity | 未実証 |
+| [AlphaAgentEvo](AlphaAgentEvo.md) | ICLR 2026 | alpha discovery / evolution | 探索履歴を保持するself-evolving agentic RL | 固定data・compute budgetで AAARTS baseline vs +evolution。生成数ではなく untouched-OOS survivor と下流成績を比較 | OOS survival + after-cost OOS performance | 未実証 |
+| [AlphaSchema](AlphaSchema.md) | arXiv 2026-07 | alpha discovery / originality | formulaではなくstructured trading semanticsを探索 | 同一生成予算で semantic coverage、重複率、valid factor率、untouched-OOS survivalを比較 | surviving OOS candidate quality | 未実証 |
+| [AlphaCrafter](AlphaCrafter.md) | arXiv 2026-05 | Japanese-equity alpha/trading | Miner → Screener → Trader のadaptive factor-to-execution pipeline | 日足cross-sectional semanticsが合うため、固定256-asset J-Quants PIT contractへ移植してAAARTSとhead-to-head | after-cost OOS Sharpe + return/DD/exposure gates | 未実証 |
+| [TiMi](TiMi.md) | ICLR 2026 | trading / execution | strategy developmentとminute-level deploymentの分離 | 日足J-Quantsへ無理に落とさず、minute-level data・slippage・latencyを固定した別trackで比較 | after-cost risk-adjusted return + execution/risk gates | contract未凍結 |
+| [AlphaForgeBench](AlphaForgeBench.md) | arXiv 2026-02 | alpha discovery / reproducibility | LLMをTraderではなくexecutable factorを作るQuant Researcherとして評価 | 同一prompt/taskの複数trialで executable率、artifact再現性、run variance、下流OOSを比較 | reproducible valid strategy rate + downstream OOS | 未実証 |
+| [QuantCode-Bench](quantcode_bench.md) | arXiv 2026-04 | data / tooling / reproducibility | trading codeを実際に実行しsyntax→backtest→trade→semanticsで評価 | paper benchmarkを再現可能なら同一taskでstrategy generatorを比較。投資成績とは別gate | executable/semantic pass rate | 未実証 |
+| [FINSABER](finsaber_long_run.md) | KDD 2026 Datasets & Benchmarks Oral（arXiv v1は2025） | trading / risk / regime evaluation | 20年・100+ symbolsで短期LLM優位性の崩壊とregime biasを検証 | 長期・複数regimeのPIT contractを別途freezeし、AAARTSのregime robustnessを直接比較 | long-horizon after-cost OOS + regime diagnostics | contract未凍結 |
+| [FinDeepForecast](findeepforecast.md) | arXiv 2026-01 | causal / event / forecasting | 答え未確定の金融forecastを継続生成してlive評価 | prediction time、source snapshot、horizon、realized valueを固定したlive protocolで比較 | paper-native forecasting metric | 未実証 |
+| [FinanceHarness](FinanceHarness.md) | arXiv 2026-07、v2 2026-08 | data / MCP / agent-tooling | finance-specific harnessとPIT benchmarkをmodelから分離 | 同一backboneで AAARTS research harness vs baseline。PIT違反・citation/provenanceもhard gate | FinanceGym/native rubric score + PIT integrity | 未実証 |
 
 ## 直接比較の優先順位
 
@@ -61,11 +61,11 @@ minute-level executionが本質なので、日足benchmarkへ変形して比較�
 
 以下は同じfrontierに既に存在するため重複ノートを追加しない。
 
-- [AlphaAgent](./AlphaAgent.md)
-- [QuantaAlpha](./quantaalpha.md)
-- [FactorMiner](./FactorMiner.md)
-- [Cognitive Alpha](./CogAlpha.md)
-- [FinMCP-Bench](./finmcp_bench.md)
+- [AlphaAgent](AlphaAgent.md)
+- [QuantaAlpha](quantaalpha.md)
+- [FactorMiner](FactorMiner.md)
+- [Cognitive Alpha](CogAlpha.md)
+- [FinMCP-Bench](finmcp_bench.md)
 
 Issue #194 のcanonical family registryへ今回の9 familyを追加し、最終的な公開比較は以下の形式に統一する。
 

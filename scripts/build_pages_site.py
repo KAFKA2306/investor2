@@ -67,6 +67,10 @@ def _media_type(path: Path) -> str:
 
 def _section_for(relative_path: PurePosixPath) -> str:
     parts = relative_path.parts
+    if len(parts) >= 3 and parts[0] == "docs" and parts[1] == "ledger":
+        return _module_for(PurePosixPath("docs", *parts[2:]))
+    if len(parts) >= 3 and parts[0] == "docs" and parts[1] == "ledger":
+        return _section_for(PurePosixPath("docs", *parts[2:]))
     root = parts[0]
     if root == "data":
         return "data"

@@ -34,4 +34,4 @@
 - `registry_existing`: `paper_factor_registry.json` に検証対象が存在する。
 - `data_pending`: 将来、データと固定OOS期間が揃ったらレジストリへ追加する状態。
 
-機械可読な正本は [2010s_paper_catalog.json](./2010s_paper_catalog.json)。スキーマ検査は `uv run --python 3.12 python scripts/validate_paper_catalog.py` で実行する。
+機械可読な正本は [2010s_paper_catalog.json](../../research/2010s_paper_catalog.json)。スキーマ検査は `uv run --python 3.12 python scripts/validate_paper_catalog.py` で実行する。

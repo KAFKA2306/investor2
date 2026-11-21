@@ -99,7 +99,7 @@ validation:
 
 operational_model:
   implementation_status: "Hypothesis registration, source capture, fixed OOS and human decision snapshot have separate owning state."
-  canonical_sources: ["docs/research/contracts/","docs/paper/","ontology/project.yaml"]
+  canonical_sources: ["docs/research/contracts/","docs/ledger/paper/","ontology/project.yaml"]
   objects: ["Hypothesis","DataCapture","FinancialFact","Experiment","FrozenOOS","Ablation","DecisionSnapshot","Evidence"]
   links:
     - ["Hypothesis","USES","DataCapture"]

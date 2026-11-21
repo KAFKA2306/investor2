@@ -67,7 +67,7 @@ def evidence_target(family: dict[str, Any]) -> str:
 
 
 def validate(root: Path, registry: dict[str, Any]) -> None:
-    paper_dir = root / "docs" / "paper"
+    paper_dir = root / "docs" / "ledger" / "paper"
     active_markdown = {path.relative_to(root).as_posix() for path in paper_dir.glob("*.md")}
     families = registry["families"]
     material = registry["repository_material"]
@@ -140,9 +140,9 @@ def validate(root: Path, registry: dict[str, Any]) -> None:
     missing = sorted(active_markdown - mapped)
     stale = sorted(mapped - active_markdown)
     if missing:
-        raise AssertionError(f"unmapped docs/paper markdown: {missing}")
+        raise AssertionError(f"unmapped docs/ledger/paper markdown: {missing}")
     if stale:
-        raise AssertionError(f"registry references inactive docs/paper markdown: {stale}")
+        raise AssertionError(f"registry references inactive docs/ledger/paper markdown: {stale}")
 
 
 def render(registry: dict[str, Any]) -> str:
@@ -170,11 +170,11 @@ def render(registry: dict[str, Any]) -> str:
         head_to_head = family["head_to_head"].replace("|", "\\|")
         metric = family["primary_metric"].replace("|", "\\|")
         evidence = evidence_target(family)
-        relative = page.removeprefix("docs/paper/")
+        relative = page.removeprefix("docs/ledger/paper/")
         if evidence == page:
             evidence_link = f"[{relative}](./{relative})"
         else:
-            evidence_link = f"[{Path(evidence).name}](../../{evidence})"
+            evidence_link = f"[{Path(evidence).name}](../../../{evidence})"
         lines.append(
             f"| {label} | {strength} | {representative} | {state} | {head_to_head} | {metric} | {verdict} | {evidence_link} |"
         )
@@ -279,7 +279,7 @@ def main() -> None:
             print(render_readme_block(registry), end="\n")
         return
 
-    output_path = args.output or root / "docs" / "paper" / "benchmark_comparison.md"
+    output_path = args.output or root / "docs" / "ledger" / "paper" / "benchmark_comparison.md"
     rendered = render(registry)
     if args.check:
         current = output_path.read_text(encoding="utf-8")

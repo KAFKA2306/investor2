@@ -99,7 +99,7 @@ python scripts/verify_post_publication_momentum.py \
 python -m pytest -q tests/test_post_publication_momentum.py
 ```
 
-The report is at `docs/research/post_publication_momentum_oos.md`.
+The report is at `docs/ledger/research/post_publication_momentum_oos.md`.
 
 ## Exception handling
 

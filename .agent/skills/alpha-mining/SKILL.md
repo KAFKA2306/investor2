@@ -16,8 +16,8 @@ LLMs may assist extraction, normalization, code generation, and hypothesis exten
 
 ## References
 
-- `docs/specs/alpha_discovery_runbook.md`
-- `docs/specs/time_tested_alpha_policy.md`
-- `docs/architecture/canonical-investment-flow.md`
+- `docs/ledger/specs/alpha_discovery_runbook.md`
+- `docs/ledger/specs/time_tested_alpha_policy.md`
+- `docs/ledger/architecture/canonical-investment-flow.md`
 - `.agent/skills/cache/SKILL.md`
 - `AGENTS.md`

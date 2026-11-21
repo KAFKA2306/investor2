@@ -19,9 +19,9 @@ def test_build_site_discovers_canonical_content_with_stable_sections(
     _write(tmp_path / "pages/index.html", "<script src='app.js'></script>")
     _write(tmp_path / "pages/app.js", "console.log('ok')")
     _write(tmp_path / "pages/styles.css", "body{}")
-    _write(tmp_path / "docs/research/results/alpha/report.md", "# result")
-    _write(tmp_path / "docs/research/hypothesis-lab.md", "# research")
-    _write(tmp_path / "docs/specs/evidence.md", "# contract")
+    _write(tmp_path / "docs/ledger/research/results/alpha/report.md", "# result")
+    _write(tmp_path / "docs/ledger/research/hypothesis-lab.md", "# research")
+    _write(tmp_path / "docs/ledger/specs/evidence.md", "# contract")
     _write(tmp_path / "data/new-domain/metrics.csv", "name,value\nalpha,1\n")
     _write(tmp_path / "generated/new-domain/chart.svg", "<svg></svg>")
     _write(tmp_path / "api/v1/new-domain/result.json", '{"ok": true}')
@@ -42,18 +42,18 @@ def test_build_site_discovers_canonical_content_with_stable_sections(
         "api/v1/new-domain/result.json",
         "data/new-domain/large.json",
         "data/new-domain/metrics.csv",
-        "docs/research/hypothesis-lab.md",
-        "docs/research/results/alpha/report.md",
-        "docs/specs/evidence.md",
+        "docs/ledger/research/hypothesis-lab.md",
+        "docs/ledger/research/results/alpha/report.md",
+        "docs/ledger/specs/evidence.md",
         "generated/new-domain/chart.svg",
     }
     assert manifest["section_order"] == list(SECTION_ORDER)
-    assert paths["docs/research/results/alpha/report.md"]["section"] == "results"
-    assert paths["docs/research/results/alpha/report.md"]["module"] == "alpha"
-    assert paths["docs/research/hypothesis-lab.md"]["section"] == "research"
-    assert paths["docs/research/hypothesis-lab.md"]["module"] == "research"
-    assert paths["docs/specs/evidence.md"]["section"] == "contracts"
-    assert paths["docs/specs/evidence.md"]["module"] == "specs"
+    assert paths["docs/ledger/research/results/alpha/report.md"]["section"] == "results"
+    assert paths["docs/ledger/research/results/alpha/report.md"]["module"] == "alpha"
+    assert paths["docs/ledger/research/hypothesis-lab.md"]["section"] == "research"
+    assert paths["docs/ledger/research/hypothesis-lab.md"]["module"] == "research"
+    assert paths["docs/ledger/specs/evidence.md"]["section"] == "contracts"
+    assert paths["docs/ledger/specs/evidence.md"]["module"] == "specs"
     assert paths["data/new-domain/metrics.csv"]["section"] == "data"
     assert paths["data/new-domain/metrics.csv"]["module"] == "new-domain"
     assert paths["generated/new-domain/chart.svg"]["section"] == "generated"
@@ -62,7 +62,7 @@ def test_build_site_discovers_canonical_content_with_stable_sections(
     assert paths["api/v1/new-domain/result.json"]["module"] == "api/v1/new-domain"
     assert paths["data/new-domain/metrics.csv"]["viewer"] == "table"
     assert paths["generated/new-domain/chart.svg"]["viewer"] == "image"
-    assert paths["docs/research/results/alpha/report.md"]["viewer"] == "text"
+    assert paths["docs/ledger/research/results/alpha/report.md"]["viewer"] == "text"
     assert paths["data/new-domain/large.json"]["viewer"] == "download"
     assert paths["data/new-domain/large.json"]["local_url"] is None
     assert manifest["totals"]["categories"] == {

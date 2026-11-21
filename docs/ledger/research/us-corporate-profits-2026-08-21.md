@@ -4,7 +4,7 @@
 **Collection workline:** https://github.com/KAFKA2306/econalert/issues/20  
 **Canonical machine-readable input after merge:** `KAFKA2306/econalert/api/v1/profit-distribution/`
 
-![U.S. corporate profit quantitative analysis](assets/us-corporate-profits-2026-08-21.svg)
+![U.S. corporate profit quantitative analysis](../../research/assets/us-corporate-profits-2026-08-21.svg)
 
 Repository asset SHA-256: `8e28cc02d77464f9c3c5ee8c9469fa20ca7a3f0e1f79d3898c7fae66e7cb918f`  
 The repository asset is a compact SVG generated from the verified values in this note. The earlier generative infographic is not used as canonical evidence because several labels were too compressed to preserve the exact statistical semantics.

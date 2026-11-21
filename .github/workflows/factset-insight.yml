@@ -14,8 +14,8 @@ on:
       - "tests/test_factset_insight_monitor.py"
       - "tests/test_factset_insight_delivery.py"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
-      - "docs/data-sources/factset-insight.md"
-      - "docs/specs/agent-tasks/242.md"
+      - "docs/ledger/data-sources/factset-insight.md"
+      - "docs/ledger/specs/agent-tasks/242.md"
       - ".github/workflows/factset-insight.yml"
   pull_request:
     paths:
@@ -27,8 +27,8 @@ on:
       - "tests/test_snapshot_store.py"
       - "data/factset_insight/delivery_state.json"
       - "data/input_ledger/source_registry.d/factset_insight_rss.json"
-      - "docs/data-sources/factset-insight.md"
-      - "docs/specs/agent-tasks/242.md"
+      - "docs/ledger/data-sources/factset-insight.md"
+      - "docs/ledger/specs/agent-tasks/242.md"
       - ".github/workflows/factset-insight.yml"
       - "data/input_ledger/**"
 

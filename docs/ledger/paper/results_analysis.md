@@ -62,7 +62,7 @@ Combined (AAARTS)      & 58.00                  & 0.67              \\ \hline
 \end{tabular}
 \end{table}
 
-![Ablation Study: Textual vs. Numerical Modalities](ablation_study_chart.png)
+![Ablation Study: Textual vs. Numerical Modalities](../../paper/ablation_study_chart.png)
 
 
 The ablation results lead to the following observations:

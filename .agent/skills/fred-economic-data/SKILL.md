@@ -17,5 +17,5 @@ Treat the series implemented in `src/io/sync_macro.ts` as the supported set. For
 - `src/io/sync_macro.ts`
 - `src/io/get.ts`
 - `.agent/skills/cache/SKILL.md`
-- `docs/specs/external_snapshot_store.md`
+- `docs/ledger/specs/external_snapshot_store.md`
 - `AGENTS.md`

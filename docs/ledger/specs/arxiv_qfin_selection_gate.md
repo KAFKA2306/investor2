@@ -15,7 +15,7 @@ The selector resolves this input through `scripts/snapshot_store.py` and verifie
 
 ## Relationship to the reproduction registry
 
-The repository also contains the curated reproduction registry at `docs/research/2021_arxiv_finance_registry.json` and its storage/state-machine contract in `docs/specs/paper_reproduction_store.md`.
+The repository also contains the curated reproduction registry at `docs/research/2021_arxiv_finance_registry.json` and its storage/state-machine contract in `docs/ledger/specs/paper_reproduction_store.md`.
 
 These artifacts have different roles:
 
