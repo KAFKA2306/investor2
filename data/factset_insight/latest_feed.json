@@ -2,14 +2,6 @@
   "article_count": 10,
   "articles": [
     {
-      "article_id": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
-      "article_url": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
-      "author": "Svetoslav Radoev",
-      "guid": "https://insight.factset.com/anthropic-ipo-a-risk-perspective",
-      "published_at": "2026-11-11T22:14:21Z",
-      "title": "Anthropic IPO: A Risk Perspective"
-    },
-    {
       "article_id": "https://insight.factset.com/anthropic-valuation-hypothetical-market-impact-a-stress-test-perspective",
       "article_url": "https://insight.factset.com/anthropic-valuation-hypothetical-market-impact-a-stress-test-perspective",
       "author": "Kristina Bratanova-Cvetanova",
@@ -80,6 +72,14 @@
       "guid": "https://insight.factset.com/pjm-finds-diminishing-respite-as-shoulder-season-prices-reach-record-highs",
       "published_at": "2026-11-20T20:44:27Z",
       "title": "PJM Finds Diminishing Respite as Shoulder-Season Prices Reach Record Highs"
+    },
+    {
+      "article_id": "https://insight.factset.com/recovery-period-comparing-the-effects-of-slowdowns-in-technology-investment",
+      "article_url": "https://insight.factset.com/recovery-period-comparing-the-effects-of-slowdowns-in-technology-investment",
+      "author": "insight@factset.com (Edward McCormick)",
+      "guid": "https://insight.factset.com/recovery-period-comparing-the-effects-of-slowdowns-in-technology-investment",
+      "published_at": "2026-11-23T17:00:00Z",
+      "title": "Recovery Period: Comparing the Effects of Slowdowns in Technology Investment"
     }
   ],
   "feed_title": "FactSet Insight",
