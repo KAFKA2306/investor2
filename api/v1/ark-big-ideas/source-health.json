@@ -57,7 +57,7 @@
       "live_check": "ok",
       "logical_repo": "ai-consumer",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-consumer/metrics.json",
-      "sha256": "ac241344ee6e96b0804123bf8eb4bf3e4fc77890f45a3a2a29418c73cf5d8e38",
+      "sha256": "85216ed8b55f8aaf74f206c4915f8d96c853463f9328c15cb69c8cce1c62384d",
       "status": "ready",
       "theme": "AI Consumer Operating System",
       "top_level_keys": [
@@ -75,7 +75,7 @@
       "live_check": "ok",
       "logical_repo": "multiomics",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/multiomics/main/api/v1/multiomics/index.json",
-      "sha256": "ab8e6f25edf9fb9dac6b74275c81f7d17cd85f3e43f70b84b945089b4d4fd4bb",
+      "sha256": "4e5eba47fd442a2fcaf2479a53f268b1d1e3c9f9d708ff4831c29b7a9778065d",
       "status": "ready",
       "theme": "Multiomics",
       "top_level_keys": [
@@ -167,7 +167,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-treasury",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/mstr/main/api/v1/bitcoin-treasury/index.json",
-      "sha256": "d0a64000903c326d265c893f30dbf04869d1d441228bd5a70c2abfa083585310",
+      "sha256": "bdb7613bc08f73e6b8ab65af8968b73a9c74dada0f79edce79e3f1fa4796f2f0",
       "status": "ready",
       "theme": "Bitcoin / Treasury",
       "top_level_keys": [
@@ -189,7 +189,7 @@
       "live_check": "ok",
       "logical_repo": "bitcoin-derivatives",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/option/main/api/v1/bitcoin-derivatives/index.json",
-      "sha256": "037a08ac501ff6b219e59cc26847fa70261a14583e6664e25e7b8a3aaffdfa09",
+      "sha256": "d0067c404522c0bbc2e6649caf4bea3c578aabf853d58dab142016fd3effba32",
       "status": "ready",
       "theme": "Bitcoin / Derivatives",
       "top_level_keys": [
@@ -212,7 +212,7 @@
       "live_check": "ok",
       "logical_repo": "tokenized-assets",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/fx/main/api/v1/tokenized-assets/issuer.json",
-      "sha256": "e7bf5ec5adc725bfd4882fb23fb05514aa57dfb82a33aa45794adf362b35682b",
+      "sha256": "5d0b5ee56107d58ce9053cf056bf58d22073ce81cb49afd0caa8e8924913c732",
       "status": "ready",
       "theme": "Tokenized Assets",
       "top_level_keys": [
@@ -288,7 +288,7 @@
       "live_check": "ok",
       "logical_repo": "space-launches",
       "raw_url": "https://raw.githubusercontent.com/KAFKA2306/trahist/main/api/v1/space-launches/launches.json",
-      "sha256": "cc484de51bf03bbce2a6b6932c54b379784b894a30016be9b128f6872b15c1ef",
+      "sha256": "cf1d9671138d257f9ef6ae53ea6561bf5388bae2510ba68ab435059de4d00f5e",
       "status": "ready",
       "theme": "Reusable Rockets",
       "top_level_keys": [
