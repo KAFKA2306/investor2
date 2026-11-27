@@ -1,16 +1,16 @@
 {
   "authority_rule": "KAFKA2306/finAnalist is authoritative. investor2 stores locator and health/hash metadata only; it does not copy AI economics observations.",
   "canonical_url": "https://github.com/KAFKA2306/finAnalist/blob/main/api/v1/ai-economics/index.json",
-  "content_digest": "cbfef14c8211a0ba2b3c90a15732e1ee7e9e650ea4be29164c3df0ea976ee31f",
-  "index_sha256": "1a1ed952a7c3651f478cb8870ebd66bed24cac717f45b9ab71d5e3be4fc2cfe4",
+  "content_digest": "2e5d9bb89464f0f9a6f3d4eca59b43148b00f14ea799989dd7acb5d01b443a4e",
+  "index_sha256": "169f2e3fb9c5a3621ef67bd9cd9365a0695741b54fcd6c90f18cc47df5c2d2f3",
   "issue_url": "https://github.com/KAFKA2306/finAnalist/issues/15",
   "live_check": "ok",
-  "manifest_sha256": "f149929add046f10d66b45daf44c2b252bbde67c405e9097d9337105c43deadd",
+  "manifest_sha256": "d57e228b6158493ec13a034f07f15cfada20ea91f5dfdf0eceed27e781c2e351",
   "manifest_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-economics/manifest.json",
   "observation_count": 41,
   "raw_url": "https://raw.githubusercontent.com/KAFKA2306/finAnalist/main/api/v1/ai-economics/index.json",
   "repository": "KAFKA2306/finAnalist",
   "schema_version": 1,
   "theme": "AI Economics",
-  "updated_at": "2026-11-26T03:37:31Z"
+  "updated_at": "2026-11-27T03:39:40Z"
 }
