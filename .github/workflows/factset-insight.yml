@@ -46,7 +46,7 @@ jobs:
     timeout-minutes: 30
     env:
       OLLAMA_VERSION: "0.32.14"
-      LOCAL_MODEL: "qwen3:1.7b"
+      LOCAL_MODEL: "qwen3:8b"
       OLLAMA_CONTEXT_LENGTH: "32768"
       OLLAMA_NO_CLOUD: "1"
     steps:

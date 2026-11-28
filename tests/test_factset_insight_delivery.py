@@ -81,6 +81,36 @@ class FactSetInsightDeliveryTest(unittest.TestCase):
                 {"summary_sentences": ["Revenue increased.", "Margins improved.", "One-off gains mattered."]}
             )
 
+    def test_english_summary_validation_failure_does_not_deliver_or_acknowledge(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            feed_path, state_path = write_inputs(Path(tmp), delivered=False)
+
+            def reject_english_summary(**_: Any) -> list[str]:
+                return delivery.validate_summary(
+                    {"summary_sentences": ["Revenue increased.", "Margins improved.", "One-off gains mattered."]}
+                )
+
+            with (
+                patch.object(delivery, "comment_already_exists", return_value=False),
+                patch.object(delivery, "download_article_html", return_value=b"article html"),
+                patch.object(delivery, "extract_article_text", return_value="article body"),
+                patch.object(delivery, "summarize_article", side_effect=reject_english_summary),
+                patch.object(delivery, "post_comment") as post_comment,
+            ):
+                with self.assertRaisesRegex(AssertionError, "must be Japanese"):
+                    delivery.deliver_pending(
+                        feed_path=feed_path,
+                        state_path=state_path,
+                        repository="KAFKA2306/investor2",
+                        issue_number=242,
+                        github_token="test-token",
+                        model="test-model",
+                        ollama_url="http://127.0.0.1:11434",
+                    )
+
+            post_comment.assert_not_called()
+            self.assertEqual(monitor.load_delivery_state(state_path)["delivered_article_ids"], [])
+
     def test_render_comment_preserves_original_timestamp_and_jst(self) -> None:
         rendered = delivery.render_comment(
             sample_article(),

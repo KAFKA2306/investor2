@@ -136,3 +136,8 @@ Icebergは正本ではありません。projectionからcanonical ledgerへ書�
 ## Positioning
 
 このrepositoryは研究・検証基盤です。未実証のalpha性能や将来収益を主張しません。価値は、研究結果を疑い、再実行し、どの証拠からどの判断に至ったかを後から反証できる状態にあります。
+
+## Ontology
+
+- [Shared causal-evidence core](https://raw.githubusercontent.com/KAFKA2306/know/main/ontology/causal-evidence-core.yaml)
+- [Project ontology manifest](ontology/project.yaml)

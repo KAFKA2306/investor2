@@ -26,7 +26,7 @@ from scripts.factset_insight_monitor import (
 
 DELIVERY_SCHEMA = "investor2.factset-insight-delivery.v1"
 DEFAULT_OLLAMA_URL = "http://127.0.0.1:11434"
-DEFAULT_MODEL = "qwen3:1.7b"
+DEFAULT_MODEL = "qwen3:8b"
 MAX_ARTICLE_BYTES = 2_000_000
 MAX_BODY_CHARS = 24_000
 MIN_BODY_CHARS = 500
@@ -167,7 +167,8 @@ def summarize_article(
 ) -> list[str]:
     schema = _summary_schema()
     prompt = (
-        "以下はFactSet Insightの記事本文です。投資判断向けに日本語3〜5文で要約してください。"
+        "以下はFactSet Insightの記事本文です。原文が英語の場合も、投資判断向けに日本語3〜5文で要約してください。"
+        "各文を必ず日本語にし、英語のまま回答しないでください。"
         "本文に明示される数値、比較条件、一時要因、会計上の特殊要因を優先してください。"
         "本文にない数値・因果・推奨を作らず、投資助言にしないでください。"
         "JSON Schemaに厳密に従ってください。\n\n"
